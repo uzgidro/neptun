@@ -24,15 +24,5 @@ import { RevenueStreamWidget } from './components/revenuestreamwidget';
         </div>
     `
 })
-export class Dashboard implements OnInit {
-
-    constructor(private router: Router) {}
-
-    ngOnInit() {
-        // Проверяем есть ли токен
-        const token = localStorage.getItem('token');
-        if (!token) {
-            this.router.navigate(['/login']);
-        }
-    }
+export class Dashboard {
 }

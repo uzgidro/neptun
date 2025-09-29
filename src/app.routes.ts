@@ -30,17 +30,21 @@ import { Documentation } from '@/pages/documentation/documentation';
 import { Landing } from '@/pages/landing/landing';
 import { Notfound } from '@/pages/notfound/notfound';
 
+// 1. Импортируем наш новый гард
+import { authGuard } from '@/core/guards/auth.guard';
+
 export const appRoutes: Routes = [
     {
         path: '',
-        redirectTo: 'auth/login',   // 👈 теперь главная страница ведёт на login
+        redirectTo: 'dashboard',   // 👈 Теперь по умолчанию пытаемся зайти на дашборд
         pathMatch: 'full'
     },
     {
         path: '',
         component: AppLayout,
+        canActivate: [authGuard], // 2. Защищаем все дочерние роуты этим гардом
         children: [
-            { path: 'dashboard', component: Dashboard }, // 👈 dashboard теперь доступен только по /dashboard
+            { path: 'dashboard', component: Dashboard },
             { path: 'uikit', loadChildren: () => import('./app/pages/uikit/uikit.routes') },
             { path: 'documentation', component: Documentation },
             { path: 'pages', loadChildren: () => import('./app/pages/pages.routes') }
