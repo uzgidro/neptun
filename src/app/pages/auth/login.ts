@@ -87,12 +87,13 @@ export class Login {
     signIn() {
         this.loading = true;
         this.errorMessage = null;
+
         this.authService
             .login(this.username, this.password)
             .pipe(finalize(() => (this.loading = false)))
             .subscribe({
                 next: (response) => {
-                    localStorage.setItem('token', response.access_token);
+                    //Не нужен при HttpOnly  localStorage.setItem('token', response.access_token);
                     this.router.navigate(['/']);
                 },
                 error: () => {
