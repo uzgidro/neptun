@@ -1,24 +1,64 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { MenuItem } from 'primeng/api';
-import { AppMenuitem } from './app.menuitem';
+import { MenuitemComponent } from '../menuitem/menuitem.component';
+import { MenuItems } from '@/core/interfaces/menuitems';
 
 @Component({
     selector: 'app-menu',
     standalone: true,
-    imports: [CommonModule, AppMenuitem, RouterModule],
-    template: `<ul class="layout-menu">
-        <ng-container *ngFor="let item of model; let i = index">
-            <li app-menuitem *ngIf="!item.separator" [item]="item" [index]="i" [root]="true"></li>
-            <li *ngIf="item.separator" class="menu-separator"></li>
-        </ng-container>
-    </ul> `
+    imports: [CommonModule, MenuitemComponent, RouterModule],
+    templateUrl: 'menu.component.html'
 })
-export class AppMenu {
-    model: MenuItem[] = [];
+export class MenuComponent implements OnInit {
+    model: MenuItems[] = [];
 
     ngOnInit() {
+        this.model = [
+            {
+                label: 'Кадры',
+                role: 'admin',
+                items: [
+                    { label: 'Пользователи', icon: 'pi pi-fw pi-user', routerLink: ['/users'] },
+                    { label: 'Роли', icon: 'pi pi-fw pi-briefcase', routerLink: ['/roles'] }
+                ]
+
+            },
+            {
+                label: 'Строительство',
+                role: ['admin', 'rais'],
+                items: [
+                    { label: '...', icon: 'pi pi-fw pi-objects-column', role: 'admin',routerLink: ['/pages/production'], },
+                ]
+            },
+            {
+                label: 'Выработка',
+                role: ['admin', 'rais'],
+                items: [
+                    { label: 'ГЭС', icon: 'pi pi-fw pi-objects-column', role: 'admin',routerLink: ['/users'], },
+                    { label: 'Водник', icon: 'pi pi-fw pi-objects-column', role: 'admin',routerLink: ['/users'], },
+                ]
+            },
+
+            {
+                label: 'Аварийное отключение',
+                role: ['admin', 'rais'],
+                items: [
+                    { label: '...', icon: 'pi pi-fw pi-objects-column', role: 'admin',routerLink: ['/users'], },
+                ]
+            },
+
+            {
+                label: 'Землятресение',
+                role: ['admin', 'rais'],
+                items: [
+                    { label: '...', icon: 'pi pi-fw pi-objects-column', role: 'admin',routerLink: ['/users'], },
+                ]
+            },
+        ];
+    }
+
+    oldMenu() {
         this.model = [
             {
                 label: 'Home',

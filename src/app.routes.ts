@@ -36,13 +36,13 @@ import { authGuard } from '@/core/guards/auth.guard';
 export const appRoutes: Routes = [
     {
         path: '',
-        redirectTo: 'dashboard',   // 👈 Теперь по умолчанию пытаемся зайти на дашборд
+        redirectTo: 'dashboard',
         pathMatch: 'full'
     },
     {
         path: '',
         component: AppLayout,
-        canActivate: [authGuard], // 2. Защищаем все дочерние роуты этим гардом
+        canActivate: [authGuard],
         children: [
             { path: 'dashboard', component: Dashboard },
             { path: 'uikit', loadChildren: () => import('./app/pages/uikit/uikit.routes') },
