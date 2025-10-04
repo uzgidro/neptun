@@ -19,4 +19,17 @@ export class JwtService {
     isAuthenticated(): boolean {
         return !!this.getToken();
     }
+
+    getDecodedToken(): any {
+        const token = this.getToken();
+        if (token) {
+            try {
+                return JSON.parse(atob(token.split('.')[1]));
+            } catch (e) {
+                console.error('Error decoding token:', e);
+                return null;
+            }
+        }
+        return null;
+    }
 }

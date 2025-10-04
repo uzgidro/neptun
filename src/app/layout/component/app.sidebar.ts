@@ -1,10 +1,10 @@
 import { Component, ElementRef } from '@angular/core';
-import { AppMenu } from './app.menu';
+import { MenuComponent } from './menu/menu.component';
 
 @Component({
     selector: 'app-sidebar',
     standalone: true,
-    imports: [AppMenu],
+    imports: [MenuComponent],
     template: ` <div class="layout-sidebar">
         <app-menu></app-menu>
     </div>`
