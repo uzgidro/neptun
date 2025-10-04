@@ -1,14 +1,10 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router, UrlTree } from '@angular/router';
+import { AuthService } from '@/core/services/auth.service';
 
 export const authGuard: CanActivateFn = (): boolean | UrlTree => {
+    const authService = inject(AuthService);
     const router = inject(Router);
-    const token = localStorage.getItem('token');
 
-    if (token) {
-        return true; // Пользователь авторизован, разрешаем доступ
-    }
-
-    // Пользователь не авторизован, перенаправляем на страницу входа
-    return router.createUrlTree(['/auth/login']);
+    return authService.isAuthenticated() ? true : router.createUrlTree(['/auth/login']);
 };

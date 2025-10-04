@@ -1,24 +1,32 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
-
-export interface AuthResponse {
-    access_token: string;
-    refresh_token: string;
-}
+import { inject, Injectable } from '@angular/core';
+import { finalize, Observable, tap } from 'rxjs';
+import { ApiService } from '@/core/services/api.service';
+import { JwtService } from '@/core/services/jwt.service';
+import { AuthResponse } from '@/core/interfaces/auth';
 
 @Injectable({
     providedIn: 'root'
 })
 export class AuthService {
-    // Замените URL на ваш реальный эндпоинт API
-    private apiUrl = 'https://prime.speedwagon.uz/auth/sign-in';
+    private apiService = inject(ApiService);
+    private jwtService = inject(JwtService);
 
-    constructor(private http: HttpClient) {}
+    signIn(name: string, password: string): Observable<AuthResponse> {
+        return this.apiService
+            .signIn(name, password)
+            .pipe(tap((response) => this.jwtService.saveToken(response.access_token)));
+    }
 
-    login(name: string, password: string): Observable<AuthResponse> {
-        return this.http.post<AuthResponse>(this.apiUrl, { name, password }, {
-            withCredentials: true // Нужно для отправки/получения cookie
-        });
+    signOut(): void {
+        this.apiService
+            .signOut()
+            .pipe(finalize(() => {
+                this.jwtService.destroyToken();
+            }))
+            .subscribe();
+    }
+
+    isAuthenticated(): boolean {
+        return this.jwtService.isAuthenticated();
     }
 }
