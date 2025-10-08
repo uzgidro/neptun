@@ -19,42 +19,35 @@ export class MenuComponent implements OnInit {
                 label: 'Кадры',
                 role: 'admin',
                 items: [
-                    { label: 'Пользователи', icon: 'pi pi-fw pi-user', routerLink: ['/users'] },
-                    { label: 'Роли', icon: 'pi pi-fw pi-briefcase', routerLink: ['/roles'] }
+                    { label: 'Пользователи', icon: 'pi pi-fw pi-user', role: 'admin', routerLink: ['/users'] },
+                    { label: 'Роли', icon: 'pi pi-fw pi-briefcase', role: 'admin', routerLink: ['/roles'] }
                 ]
-
             },
             {
                 label: 'Строительство',
                 role: ['admin', 'rais'],
-                items: [
-                    { label: '...', icon: 'pi pi-fw pi-objects-column', role: 'admin',routerLink: ['/pages/production'], },
-                ]
+                items: [{ label: '...', icon: 'pi pi-fw pi-objects-column', role: 'admin', routerLink: ['/pages/production'] }]
             },
             {
                 label: 'Выработка',
                 role: ['admin', 'rais'],
                 items: [
-                    { label: 'ГЭС', icon: 'pi pi-fw pi-objects-column', role: 'admin',routerLink: ['/pages/production'], },
-                    { label: 'Водник', icon: 'pi pi-fw pi-objects-column', role: 'admin',routerLink: ['/users'], },
+                    { label: 'ГЭС', icon: 'pi pi-fw pi-objects-column', role: 'admin', routerLink: ['/'] },
+                    { label: 'Водник', icon: 'pi pi-fw pi-objects-column', role: 'admin', routerLink: ['/'] }
                 ]
             },
 
             {
                 label: 'Аварийное отключение',
                 role: ['admin', 'rais'],
-                items: [
-                    { label: '...', icon: 'pi pi-fw pi-objects-column', role: 'admin',routerLink: ['/users'], },
-                ]
+                items: [{ label: '...', icon: 'pi pi-fw pi-objects-column', role: 'admin', routerLink: ['/'] }]
             },
 
             {
                 label: 'Землятресение',
                 role: ['admin', 'rais'],
-                items: [
-                    { label: '...', icon: 'pi pi-fw pi-objects-column', role: 'admin',routerLink: ['/users'], },
-                ]
-            },
+                items: [{ label: '...', icon: 'pi pi-fw pi-objects-column', role: 'admin', routerLink: ['/'] }]
+            }
         ];
     }
 

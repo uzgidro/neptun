@@ -8,3 +8,10 @@ export const authGuard: CanActivateFn = (): boolean | UrlTree => {
 
     return authService.isAuthenticated() ? true : router.createUrlTree(['/auth/login']);
 };
+
+export const adminGuard: CanActivateFn = (): boolean | UrlTree => {
+    const authService = inject(AuthService);
+    const router = inject(Router);
+
+    return authService.hasRole("admin") ? true : router.createUrlTree(['/notfound']);
+}

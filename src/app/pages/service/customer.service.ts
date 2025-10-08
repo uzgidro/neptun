@@ -22,7 +22,9 @@ export interface Customer {
     representative?: Representative;
 }
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class CustomerService {
     getData() {
         return [

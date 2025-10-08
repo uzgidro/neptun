@@ -7,6 +7,7 @@ const BASE_URL = 'https://prime.speedwagon.uz';
 const AUTH = '/auth';
 const SIGN_IN = '/sign-in';
 const SIGN_OUT = '/sign-out';
+const REFRESH = '/refresh'
 
 @Injectable({
     providedIn: 'root'
@@ -26,5 +27,9 @@ export class ApiService {
 
     signOut(): Observable<any> {
         return this.http.post(BASE_URL + AUTH + SIGN_OUT, null, { withCredentials: true });
+    }
+
+    refreshToken(): Observable<AuthResponse> {
+        return this.http.post<AuthResponse>(BASE_URL + AUTH + REFRESH, null, { withCredentials: true });
     }
 }

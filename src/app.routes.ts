@@ -31,7 +31,8 @@ import { Landing } from '@/pages/landing/landing';
 import { Notfound } from '@/pages/notfound/notfound';
 
 // 1. Импортируем наш новый гард
-import { authGuard } from '@/core/guards/auth.guard';
+import { adminGuard, authGuard } from '@/core/guards/auth.guard';
+import { Users } from '@/pages/users/users';
 
 export const appRoutes: Routes = [
     {
@@ -45,6 +46,7 @@ export const appRoutes: Routes = [
         canActivate: [authGuard],
         children: [
             { path: 'dashboard', component: Dashboard },
+            { path: 'users', component: Users, canActivate: [adminGuard] },
             { path: 'uikit', loadChildren: () => import('./app/pages/uikit/uikit.routes') },
             { path: 'documentation', component: Documentation },
             { path: 'pages', loadChildren: () => import('./app/pages/pages.routes') }
