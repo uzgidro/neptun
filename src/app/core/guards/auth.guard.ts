@@ -15,3 +15,10 @@ export const adminGuard: CanActivateFn = (): boolean | UrlTree => {
 
     return authService.hasRole("admin") ? true : router.createUrlTree(['/notfound']);
 }
+
+export const scGuard: CanActivateFn = (): boolean | UrlTree => {
+    const authService = inject(AuthService);
+    const router = inject(Router);
+
+    return authService.hasRole("sc") ? true : router.createUrlTree(['/notfound']);
+}

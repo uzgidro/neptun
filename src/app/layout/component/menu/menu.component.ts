@@ -17,36 +17,45 @@ export class MenuComponent implements OnInit {
         this.model = [
             {
                 label: 'Кадры',
-                role: 'admin',
+                role: ['admin'],
                 items: [
-                    { label: 'Пользователи', icon: 'pi pi-fw pi-user', role: 'admin', routerLink: ['/users'] },
-                    { label: 'Роли', icon: 'pi pi-fw pi-briefcase', role: 'admin', routerLink: ['/roles'] }
+                    { label: 'Пользователи', icon: 'pi pi-fw pi-user', role: ['admin'], routerLink: ['/users'] },
+                    { label: 'Роли', icon: 'pi pi-fw pi-briefcase', role: ['admin'], routerLink: ['/roles'] }
                 ]
             },
             {
                 label: 'Строительство',
-                role: ['admin', 'rais'],
-                items: [{ label: '...', icon: 'pi pi-fw pi-objects-column', role: 'admin', routerLink: ['/pages/production'] }]
+                role: ['rais', 'sc'],
+                items: [{ label: '...', icon: 'pi pi-fw pi-objects-column', role: ['rais', 'sc'], routerLink: ['/pages/production'] }]
             },
             {
                 label: 'Выработка',
-                role: ['admin', 'rais'],
+                role: ['rais', 'sc'],
                 items: [
-                    { label: 'ГЭС', icon: 'pi pi-fw pi-objects-column', role: 'admin', routerLink: ['/'] },
-                    { label: 'Водник', icon: 'pi pi-fw pi-objects-column', role: 'admin', routerLink: ['/'] }
+                    { label: 'ГЭС', icon: 'pi pi-fw pi-objects-column', role: ['rais', 'sc'], routerLink: ['/'] },
+                    { label: 'Водник', icon: 'pi pi-fw pi-objects-column', role: ['rais', 'sc'], routerLink: ['/'] }
                 ]
             },
 
             {
                 label: 'Аварийное отключение',
-                role: ['admin', 'rais'],
-                items: [{ label: '...', icon: 'pi pi-fw pi-objects-column', role: 'admin', routerLink: ['/'] }]
+                role: ['rais', 'sc'],
+                items: [{ label: '...', icon: 'pi pi-fw pi-objects-column', role: ['rais', 'sc'], routerLink: ['/'] }]
             },
 
             {
                 label: 'Землятресение',
-                role: ['admin', 'rais'],
-                items: [{ label: '...', icon: 'pi pi-fw pi-objects-column', role: 'admin', routerLink: ['/'] }]
+                role: ['rais', 'sc'],
+                items: [{ label: '...', icon: 'pi pi-fw pi-objects-column', role: ['rais', 'sc'], routerLink: ['/'] }]
+            },
+
+            {
+                label: 'Ситуационный центр',
+                role: ['sc'],
+                items: [
+                    { label: 'Категории', icon: 'pi pi-fw pi-tags', role: ['sc'], routerLink: ['/categories']},
+                    { label: 'Файлы', icon: 'pi pi-folder-open', role: ['sc'], routerLink: ['/files']}
+                ]
             }
         ];
     }

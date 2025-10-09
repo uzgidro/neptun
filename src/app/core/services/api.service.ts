@@ -4,6 +4,7 @@ import { AuthResponse } from '@/core/interfaces/auth';
 import { Observable } from 'rxjs';
 import { Roles } from '@/core/interfaces/roles';
 import { Users } from '@/core/interfaces/users';
+import { Categories } from '@/core/interfaces/categories';
 
 const BASE_URL = 'https://prime.speedwagon.uz';
 const AUTH = '/auth';
@@ -12,6 +13,8 @@ const SIGN_OUT = '/sign-out';
 const REFRESH = '/refresh'
 const ROLES = '/roles'
 const USERS = '/users'
+const FILES = '/files'
+const CATEGORIES = '/categories'
 
 @Injectable({
     providedIn: 'root'
@@ -51,5 +54,13 @@ export class ApiService {
 
     createUser(user: { name: string; password: string; roles: number[] }): Observable<any> {
         return this.http.post(BASE_URL + USERS, user);
+    }
+
+    getCategories(): Observable<Categories[]> {
+        return this.http.get<Categories[]>(BASE_URL + FILES + CATEGORIES);
+    }
+
+    createCategory(category: {name: string, description: string, parent_id: number}): Observable<any> {
+        return this.http.post(BASE_URL + FILES + CATEGORIES, category);
     }
 }
