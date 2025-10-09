@@ -15,7 +15,7 @@ export const appConfig: ApplicationConfig = {
         provideHttpClient(withFetch(), withInterceptors([authInterceptor])),
         provideAnimationsAsync(),
         providePrimeNG({ theme: { preset: Aura, options: { darkModeSelector: '.app-dark' } } }),
-        // importProvidersFrom(ReactiveFormsModule),
+        importProvidersFrom(ReactiveFormsModule),
         MessageService
     ]
 };

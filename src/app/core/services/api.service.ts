@@ -48,4 +48,8 @@ export class ApiService {
     createRole(name: string, description: string): Observable<any> {
         return this.http.post(BASE_URL + ROLES, { name, description });
     }
+
+    createUser(user: { name: string; password: string; roles: number[] }): Observable<any> {
+        return this.http.post(BASE_URL + USERS, user);
+    }
 }
