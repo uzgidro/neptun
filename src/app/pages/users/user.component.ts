@@ -6,10 +6,11 @@ import { ButtonDirective, ButtonIcon, ButtonLabel } from 'primeng/button';
 import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
 import { InputText } from 'primeng/inputtext';
+import { Chip } from 'primeng/chip';
 
 @Component({
     selector: 'app-users',
-    imports: [TableModule, ButtonDirective, IconField, InputIcon, InputText, ButtonLabel, ButtonIcon],
+    imports: [TableModule, ButtonDirective, IconField, InputIcon, InputText, ButtonLabel, ButtonIcon, Chip],
     templateUrl: './user.component.html',
     styleUrl: './user.component.scss'
 })

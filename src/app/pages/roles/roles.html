@@ -1,6 +1,7 @@
 <div class="card">
     <div class="font-semibold text-xl mb-4">Роли</div>
     <p-table
+        #rt
         [value]="roles"
         dataKey="id"
         [rows]="10"
@@ -8,12 +9,28 @@
         [rowHover]="true"
         [showGridlines]="true"
         [paginator]="true"
+        [globalFilterFields]="['name']"
     >
+        <ng-template #caption>
+            <div class="flex justify-between items-center flex-column sm:flex-row">
+                <p-iconfield>
+                    <p-inputicon>
+                        <i class="pi pi-search"></i>
+                    </p-inputicon>
+                    <input pInputText type="text" (input)="onGlobalFilter(rt, $event)" placeholder="Поиск" />
+                </p-iconfield>
+                <button pButton class="p-button-outlined">
+                    <i class="pi pi-user-plus" pButtonIcon></i>
+                    <span pButtonLabel>Новая роль</span>
+                </button>
+            </div>
+        </ng-template>
         <ng-template #header>
             <tr>
                 <th style="min-width: 12rem">
                     <div class="flex justify-between items-center">
                         Имя
+                        <p-columnFilter type="text" field="name" display="menu" placeholder="Search by name"></p-columnFilter>
                     </div>
                 </th>
                 <th style="min-width: 12rem">
@@ -31,6 +48,16 @@
                 <td>
                     {{ role.description }}
                 </td>
+            </tr>
+        </ng-template>
+        <ng-template #emptymessage>
+            <tr>
+                <td colspan="8">Ничего не найдено</td>
+            </tr>
+        </ng-template>
+        <ng-template #loadingbody>
+            <tr>
+                <td colspan="8">Идет загрузка. Ожидайте...</td>
             </tr>
         </ng-template>
     </p-table>
