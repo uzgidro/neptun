@@ -8,22 +8,17 @@ import { filter } from 'rxjs/operators';
 let isRefreshing = false;
 let refreshTokenSubject: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
 
-
-export const authInterceptor: HttpInterceptorFn = (
-    req: HttpRequest<unknown>,
-    next: HttpHandlerFn
-): Observable<HttpEvent<unknown>> => {
+export const authInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> => {
     const jwtService = inject(JwtService);
-    const authService = inject(AuthService)
+    const authService = inject(AuthService);
     const token = jwtService.getToken();
 
     if (token) {
         req = addToken(req, token);
     }
 
-    return next(req).pipe(
-        catchError((error) => {
-            if (error instanceof HttpErrorResponse && error.status === 401) {
+    return next(req).pipe(catchError((error) => {
+            if (error instanceof HttpErrorResponse && error.status === 401 && !req.url.includes('/refresh')) {
                 return handle401Error(req, next, authService);
             }
             return throwError(() => error);

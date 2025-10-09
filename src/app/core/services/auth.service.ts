@@ -14,17 +14,15 @@ export class AuthService {
     private router = inject(Router);
 
     signIn(name: string, password: string): Observable<AuthResponse> {
-        return this.apiService
-            .signIn(name, password)
-            .pipe(tap((response) => this.jwtService.saveToken(response.access_token)));
+        return this.apiService.signIn(name, password).pipe(tap((response) => this.jwtService.saveToken(response.access_token)));
     }
 
     signOut(): void {
         this.apiService
             .signOut()
-            .pipe(finalize(() => {
-                this.logout()
-            }))
+            .pipe(
+                finalize(() => this.logout())
+            )
             .subscribe();
     }
 
@@ -35,7 +33,6 @@ export class AuthService {
             })
         );
     }
-
 
     isAuthenticated(): boolean {
         return this.jwtService.isAuthenticated();
@@ -51,7 +48,7 @@ export class AuthService {
         const userRoles: string[] = decodedToken.roles;
 
         if (Array.isArray(expectedRole)) {
-            return expectedRole.some(role => userRoles.includes(role));
+            return expectedRole.some((role) => userRoles.includes(role));
         }
 
         return userRoles.includes(expectedRole);
