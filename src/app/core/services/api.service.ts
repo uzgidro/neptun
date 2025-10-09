@@ -44,4 +44,8 @@ export class ApiService {
     getUsers(): Observable<Users[]> {
         return this.http.get<Users[]>(BASE_URL + USERS);
     }
+
+    createRole(name: string, description: string): Observable<any> {
+        return this.http.post(BASE_URL + ROLES, { name, description });
+    }
 }

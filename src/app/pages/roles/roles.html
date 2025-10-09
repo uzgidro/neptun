@@ -19,7 +19,7 @@
                     </p-inputicon>
                     <input pInputText type="text" (input)="onGlobalFilter(rt, $event)" placeholder="Поиск" />
                 </p-iconfield>
-                <button pButton class="p-button-outlined">
+                <button pButton (click)="openDialog()">
                     <i class="pi pi-user-plus" pButtonIcon></i>
                     <span pButtonLabel>Новая роль</span>
                 </button>
@@ -30,7 +30,8 @@
                 <th style="min-width: 12rem">
                     <div class="flex justify-between items-center">
                         Имя
-                        <p-columnFilter type="text" field="name" display="menu" placeholder="Search by name"></p-columnFilter>
+                        <p-columnFilter type="text" field="name" display="menu"
+                                        placeholder="Search by name"></p-columnFilter>
                     </div>
                 </th>
                 <th style="min-width: 12rem">
@@ -62,3 +63,26 @@
         </ng-template>
     </p-table>
 </div>
+
+<p-dialog header="Новая роль" [(visible)]="displayDialog" [breakpoints]="{ '960px': '75vw' }"
+          [style]="{ width: '30vw' }" [modal]="true" (onHide)="closeDialog()">
+    <form [formGroup]="roleForm">
+        <div class="flex flex-col gap-4 p-fluid">
+            <div class="flex flex-col gap-2">
+                <label for="name">Роль</label>
+                <input pInputText id="name" type="text" formControlName="name" />
+                @if (submitted && roleForm.controls['name'].errors?.['required']) {
+                    <small class="p-error">Имя роли обязательно.</small>
+                }
+            </div>
+            <div class="flex flex-col gap-2">
+                <label for="description">Описание</label>
+                <input pInputText id="description" type="text" formControlName="description" />
+            </div>
+        </div>
+    </form>
+    <ng-template #footer>
+        <p-button label="Отмена" (click)="closeDialog()" styleClass="p-button-text" />
+        <p-button label="Сохранить" type="submit" (click)="saveRole()" />
+    </ng-template>
+</p-dialog>
