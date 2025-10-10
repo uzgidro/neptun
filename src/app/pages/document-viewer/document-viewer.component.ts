@@ -1,19 +1,24 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Tab, TabList, Tabs } from 'primeng/tabs';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
     selector: 'app-document-viewer',
     standalone: true,
     imports: [Tab, TabList, Tabs, PdfViewerModule],
     templateUrl: './document-viewer.component.html',
-    styleUrls: ['./document-viewer.component.scss']
+    styleUrl: './document-viewer.component.scss'
 })
-class DocumentViewerComponent {
+export class DocumentViewerComponent implements OnInit, OnDestroy {
+    private route = inject(ActivatedRoute);
+    private router = inject(Router);
+    private destroy$ = new Subject<void>();
+
+    showTabs = false;
     activeIndex = 0;
 
-    // Массив с путями к PDF для каждой вкладки
-    // ЗАМЕНИТЕ ЭТИ URL НА ВАШИ РЕАЛЬНЫЕ ССЫЛКИ
     pdfSources: string[] = [
         'https://vadimdez.github.io/ng2-pdf-viewer/assets/pdf-test.pdf', // 0: Норин
         'https://vadimdez.github.io/ng2-pdf-viewer/assets/pdf-test.pdf', // 1: Чаткал (замените на другой)
@@ -21,10 +26,40 @@ class DocumentViewerComponent {
         'https://vadimdez.github.io/ng2-pdf-viewer/assets/pdf-test.pdf' // 3: Оксув (замените на другой)
     ];
 
-    // Это свойство будет автоматически возвращать нужный URL
+    ngOnInit() {
+        this.route.queryParams.pipe(
+            takeUntil(this.destroy$)
+        ).subscribe((params) => {
+            const isConstruction = params['type'] === 'construction';
+            this.showTabs = isConstruction;
+
+            if (isConstruction) {
+                if (params['tabIndex']) {
+                    const tabIndex = parseInt(params['tabIndex'], 10);
+                    if (!isNaN(tabIndex) && tabIndex >= 0 && tabIndex < this.pdfSources.length) {
+                        this.activeIndex = tabIndex;
+                    }
+                } else {
+                    this.router.navigate([], {
+                        queryParams: { tabIndex: 0 },
+                        queryParamsHandling: 'merge',
+                        replaceUrl: true
+                    });
+                }
+            }
+        });
+    }
+
     get currentPdfSrc(): string {
         return this.pdfSources[this.activeIndex];
     }
-}
 
-export default DocumentViewerComponent;
+    onTabChange(index: number) {
+        this.router.navigate([], { queryParams: { tabIndex: index }, queryParamsHandling: 'merge' });
+    }
+
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
+    }
+}

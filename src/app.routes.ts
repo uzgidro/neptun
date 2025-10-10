@@ -36,7 +36,7 @@ import { User } from '@/pages/users/user.component';
 import { Role } from '@/pages/roles/roles';
 import { CategoriesComponent } from '@/pages/categories/categories.component';
 import { FilesComponent } from '@/pages/files/files.component';
-import DocumentViewerComponent from '@/pages/document-viewer/document-viewer.component';
+import { DocumentViewerComponent } from '@/pages/document-viewer/document-viewer.component';
 
 export const appRoutes: Routes = [
     {
