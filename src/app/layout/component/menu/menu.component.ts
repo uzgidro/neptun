@@ -35,7 +35,7 @@ export class MenuComponent implements OnInit {
                 label: 'Выработка',
                 role: ['admin', 'rais'],
                 items: [
-                    { label: 'ГЭС', icon: 'pi pi-fw pi-objects-column', role: 'admin',routerLink: ['/users'], },
+                    { label: 'ГЭС', icon: 'pi pi-fw pi-objects-column', role: 'admin',routerLink: ['/pages/production'], },
                     { label: 'Водник', icon: 'pi pi-fw pi-objects-column', role: 'admin',routerLink: ['/users'], },
                 ]
             },

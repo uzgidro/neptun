@@ -1,6 +1,6 @@
 <div class="card">
-    <div class="font-semibold text-xl mb-4">TabMenu</div>
-    <p-tabs [value]="0">
+    <div class="font-semibold text-xl mb-4">ОБЪЕКТЫ</div>
+    <p-tabs [(value)]="activeIndex">
         <p-tablist>
             <p-tab [value]="0" class="">Норин</p-tab>
             <p-tab [value]="1">Чаткал</p-tab>
@@ -8,18 +8,13 @@
             <p-tab [value]="3">Оксув</p-tab>
         </p-tablist>
     </p-tabs>
-</div>
-<div class="card">
-    <div class="font-semibold text-xl mb-4">Advanced</div>
-    <p-fileupload name="demo[]" (onUpload)="onUpload($event)" [multiple]="true" maxFileSize="1000000" mode="advanced">
-        <ng-template #empty>
-            <div>Drag and drop files to here to upload.</div>
-        </ng-template>
-    </p-fileupload>
 
-    <pdf-viewer src="assets/example.pdf"
-                [render-text]="true"
-                [original-size]="false"
-                style="width: 400px; height: 500px">
-    </pdf-viewer>
+    <div class="mt-4">
+        <pdf-viewer [src]="currentPdfSrc"
+                    [render-text]="true"
+                    [original-size]="false"
+                    style="display: block; width: 100%; height: 75vh;">
+        </pdf-viewer>
+    </div>
+
 </div>
