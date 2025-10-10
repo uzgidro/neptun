@@ -24,37 +24,42 @@ export class MenuComponent implements OnInit {
                 ]
             },
             {
-                label: 'Строительство',
-                role: ['rais', 'sc'],
-                items: [{ label: '...', icon: 'pi pi-fw pi-objects-column', role: ['rais', 'sc'], routerLink: ['/pages/production'] }]
-            },
-            {
-                label: 'Выработка',
-                role: ['rais', 'sc'],
-                items: [
-                    { label: 'ГЭС', icon: 'pi pi-fw pi-objects-column', role: ['rais', 'sc'], routerLink: ['/'] },
-                    { label: 'Водник', icon: 'pi pi-fw pi-objects-column', role: ['rais', 'sc'], routerLink: ['/'] }
-                ]
-            },
-
-            {
-                label: 'Аварийное отключение',
-                role: ['rais', 'sc'],
-                items: [{ label: '...', icon: 'pi pi-fw pi-objects-column', role: ['rais', 'sc'], routerLink: ['/'] }]
-            },
-
-            {
-                label: 'Землятресение',
-                role: ['rais', 'sc'],
-                items: [{ label: '...', icon: 'pi pi-fw pi-objects-column', role: ['rais', 'sc'], routerLink: ['/'] }]
-            },
-
-            {
                 label: 'Ситуационный центр',
-                role: ['sc'],
+                role: ['rais', 'sc'],
                 items: [
-                    { label: 'Категории', icon: 'pi pi-fw pi-tags', role: ['sc'], routerLink: ['/categories']},
-                    { label: 'Файлы', icon: 'pi pi-folder-open', role: ['sc'], routerLink: ['/files']}
+                    {
+                        label: 'Строительство',
+                        icon: 'pi pi-fw pi-hammer',
+                        role: ['rais', 'sc'],
+                        routerLink: ['/viewer'],
+                        queryParams: { type: 'construction' },
+                        routerLinkActiveOptions: { queryParams: 'exact' }
+                    },
+                    {
+                        label: 'Выработка',
+                        icon: 'pi pi-fw pi-spinner',
+                        role: ['rais', 'sc'],
+                        routerLink: ['/viewer'],
+                        queryParams: { type: 'production' },
+                        routerLinkActiveOptions: { queryParams: 'exact' }
+                    },
+                    {
+                        label: 'Аварийное отключение',
+                        icon: 'pi pi-fw pi-exclamation-triangle',
+                        role: ['rais', 'sc'],
+                        routerLink: ['/viewer'],
+                        queryParams: { type: 'shutdown' },
+                        routerLinkActiveOptions: { queryParams: 'exact' }
+                    },
+                    {
+                        label: 'Землетрясение',
+                        icon: 'pi pi-fw pi-globe',
+                        role: ['rais', 'sc'],
+                        url: 'https://soep.uz/',
+                        target: '_blank'
+                    },
+                    { label: 'Категории', icon: 'pi pi-fw pi-tags', role: ['sc'], routerLink: ['/categories'] },
+                    { label: 'Файлы', icon: 'pi pi-folder-open', role: ['sc'], routerLink: ['/files'] }
                 ]
             }
         ];

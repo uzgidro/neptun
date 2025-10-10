@@ -86,7 +86,19 @@ export class FilesComponent implements OnInit, OnDestroy {
     }
 
     deleteFile(id: number): void {
-        this.apiService.deleteFile(id).pipe(finalize(() => this.files.filter((value) => value.id !== id)));
+        this.apiService
+            .deleteFile(id)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: () => {
+                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Файл успешно удален' });
+                    this.files = this.files.filter((file) => file.id !== id); // Корректное удаление из массива
+                },
+                error: (err) => {
+                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось удалить файл' });
+                    console.error(err);
+                }
+            });
     }
 
     private loadLatestFiles(): void {

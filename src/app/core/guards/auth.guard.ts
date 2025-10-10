@@ -22,3 +22,11 @@ export const scGuard: CanActivateFn = (): boolean | UrlTree => {
 
     return authService.hasRole("sc") ? true : router.createUrlTree(['/notfound']);
 }
+
+export const raisGuard: CanActivateFn = (): boolean | UrlTree => {
+    const authService = inject(AuthService);
+    const router = inject(Router);
+
+    return authService.hasRole(["sc", "rais"]) ? true : router.createUrlTree(['/notfound']);
+}
+
