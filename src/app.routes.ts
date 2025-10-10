@@ -35,6 +35,7 @@ import { adminGuard, authGuard, scGuard } from '@/core/guards/auth.guard';
 import { User } from '@/pages/users/user.component';
 import { Role } from '@/pages/roles/roles';
 import { CategoriesComponent } from '@/pages/categories/categories.component';
+import { FilesComponent } from '@/pages/files/files.component';
 
 export const appRoutes: Routes = [
     {
@@ -51,6 +52,7 @@ export const appRoutes: Routes = [
             { path: 'users', component: User, canActivate: [adminGuard] },
             { path: 'roles', component: Role, canActivate: [adminGuard] },
             { path: 'categories', component: CategoriesComponent, canActivate: [scGuard] },
+            { path: 'files', component: FilesComponent, canActivate: [scGuard] },
             { path: 'uikit', loadChildren: () => import('./app/pages/uikit/uikit.routes') },
             { path: 'documentation', component: Documentation },
             { path: 'pages', loadChildren: () => import('./app/pages/pages.routes') }
