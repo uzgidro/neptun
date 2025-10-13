@@ -3,6 +3,7 @@ import { finalize, Observable, tap } from 'rxjs';
 import { ApiService } from '@/core/services/api.service';
 import { JwtService } from '@/core/services/jwt.service';
 import { AuthResponse } from '@/core/interfaces/auth';
+import { Router } from '@angular/router';
 
 @Injectable({
     providedIn: 'root'
@@ -10,6 +11,7 @@ import { AuthResponse } from '@/core/interfaces/auth';
 export class AuthService {
     private apiService = inject(ApiService);
     private jwtService = inject(JwtService);
+    private router = inject(Router);
 
     signIn(name: string, password: string): Observable<AuthResponse> {
         return this.apiService
@@ -22,6 +24,7 @@ export class AuthService {
             .signOut()
             .pipe(finalize(() => {
                 this.jwtService.destroyToken();
+                this.router.navigate(['/auth/login']);
             }))
             .subscribe();
     }
