@@ -16,56 +16,113 @@ export class MenuComponent implements OnInit {
     ngOnInit() {
         this.model = [
             {
-              items: [
-                  {
-                      label: 'Кадры',
-                      role: ['admin'],
-                      items: [
-                          { label: 'Пользователи', icon: 'pi pi-fw pi-user', role: ['admin'], routerLink: ['/users'] },
-                          { label: 'Роли', icon: 'pi pi-fw pi-briefcase', role: ['admin'], routerLink: ['/roles'] }
-                      ]
-                  },
-                  {
-                      label: 'Ситуационный центр',
-                      role: ['rais', 'sc'],
-                      items: [
-                          {
-                              label: 'Строительство',
-                              icon: 'pi pi-fw pi-hammer',
-                              role: ['rais', 'sc'],
-                              routerLink: ['/viewer'],
-                              queryParams: { type: 'construction' },
-                              routerLinkActiveOptions: { queryParams: 'exact' }
-                          },
-                          {
-                              label: 'Выработка',
-                              icon: 'pi pi-fw pi-spinner',
-                              role: ['rais', 'sc'],
-                              routerLink: ['/viewer'],
-                              queryParams: { type: 'production' },
-                              routerLinkActiveOptions: { queryParams: 'exact' }
-                          },
-                          {
-                              label: 'Аварийное отключение',
-                              icon: 'pi pi-fw pi-exclamation-triangle',
-                              role: ['rais', 'sc'],
-                              routerLink: ['/viewer'],
-                              queryParams: { type: 'shutdown' },
-                              routerLinkActiveOptions: { queryParams: 'exact' }
-                          },
-                          {
-                              label: 'Землетрясение',
-                              icon: 'pi pi-fw pi-globe',
-                              role: ['rais', 'sc'],
-                              url: 'https://soep.uz/',
-                              target: '_blank'
-                          },
-                          { label: 'Категории', icon: 'pi pi-fw pi-tags', role: ['sc'], routerLink: ['/categories'] },
-                          { label: 'Файлы', icon: 'pi pi-folder-open', role: ['sc'], routerLink: ['/files'] }
-                      ]
-                  }
-              ]
-            },
+                items: [
+                    {
+                        label: 'Главная',
+                        routerLink: ['/dashboard']
+                    },
+                    {
+                        label: 'Ситуационный центр',
+                        role: ['rais', 'sc'],
+                        items: [
+                            {
+                                label: 'Информация о ГЭС',
+                                role: ['rais', 'sc'],
+                                items: [
+                                    {
+                                        label: 'ГЭС',
+                                        role: ['rais', 'sc']
+                                    },
+                                    {
+                                        label: 'Малые и микро ГЭС',
+                                        role: ['rais', 'sc']
+                                    },
+                                    {
+                                        label: 'Солнце',
+                                        role: ['rais', 'sc']
+                                    },
+                                    {
+                                        label: 'Аварийные отключение',
+                                        role: ['rais', 'sc'],
+                                        routerLink: ['/viewer'],
+                                        queryParams: { type: 'shutdown' },
+                                        routerLinkActiveOptions: { queryParams: 'exact' }
+                                    },
+                                    {
+                                        label: 'Выработка',
+                                        role: ['rais', 'sc'],
+                                        routerLink: ['/viewer'],
+                                        queryParams: { type: 'production' },
+                                        routerLinkActiveOptions: { queryParams: 'exact' }
+                                    }
+                                ]
+                            },
+                            {
+                                label: 'Информация о водохранилищах',
+                                role: ['rais', 'sc'],
+                                items: [
+                                    {
+                                        label: 'Водохранилища',
+                                        role: ['rais', 'sc']
+                                    },
+                                    {
+                                        label: 'MODSNOW',
+                                        role: ['rais', 'sc']
+                                    },
+                                    {
+                                        label: 'Фильтрация',
+                                        role: ['rais', 'sc']
+                                    }
+                                ]
+                            },
+                            {
+                                label: 'Прочая информация',
+                                role: ['rais', 'sc'],
+                                items: [
+                                    {
+                                        label: 'События',
+                                        role: ['rais', 'sc']
+                                    },
+                                    {
+                                        label: 'Землетрясение',
+                                        role: ['rais', 'sc'],
+                                        url: 'https://soep.uz/',
+                                        target: '_blank'
+                                    }
+                                ]
+                            },
+                            {
+                                label: 'Строительство',
+                                role: ['rais', 'sc'],
+                                routerLink: ['/viewer'],
+                                queryParams: { type: 'construction' },
+                                routerLinkActiveOptions: { queryParams: 'exact' }
+                            },
+                            { label: 'Категории', role: ['sc'], routerLink: ['/categories'] },
+                            { label: 'Файлы', role: ['sc'], routerLink: ['/files'] }
+                        ]
+                    },
+                    {
+                        label: 'Кадровый персонал',
+                        role: ['admin', 'rais'],
+                        items: [
+                            { label: 'Организации', role: ['rais'] },
+                            { label: 'Пользователи', role: ['admin'], routerLink: ['/users'] },
+                            { label: 'Роли', role: ['admin'], routerLink: ['/roles'] }
+                        ]
+                    },
+                    {label: 'Встречи', role: ['rais'], items: []},
+                    {label: 'Звонки', role: ['rais'], items: []},
+                    {label: 'Переговоры', role: ['rais'], items: []},
+                    {label: 'Финансовый блок', role: ['rais'], items: []},
+                    {label: 'Постановления', role: ['rais'], items: []},
+                    {label: 'Почта', role: ['rais'], items: []},
+                    {label: 'Рапорты', role: ['rais'], items: []},
+                    {label: 'Контроль и инвентаризация', role: ['rais'], items: []},
+                    {label: 'Телефонный справочник', role: ['rais'], items: []},
+                    {label: 'СМИ', role: ['rais'], items: []},
+                ]
+            }
         ];
     }
 
