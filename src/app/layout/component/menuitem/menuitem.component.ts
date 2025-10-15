@@ -88,7 +88,7 @@ export class MenuitemComponent implements OnInit, OnDestroy {
 
     hasRole(expectedRole: string | string[] | undefined): boolean {
         if (expectedRole === undefined) {
-            return false
+            return true
         }
         return this.authService.hasRole(expectedRole);
     }
