@@ -2,7 +2,7 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Tab, TabList, Tabs } from 'primeng/tabs';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
+import { combineLatest, shareReplay, Subject, takeUntil } from 'rxjs';
 import { ApiService } from '@/core/services/api.service';
 import { LatestFiles } from '@/core/interfaces/latest-files';
 
@@ -27,53 +27,48 @@ export class DocumentViewerComponent implements OnInit, OnDestroy {
     fileUrl = '';
 
     ngOnInit() {
-        this.apiService.getLatestFiles().subscribe({
-            next: (data) => {
-                this.files = data;
-            }
-        });
-        this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe((params) => {
-            const isConstruction = params['type'] === 'construction';
-            this.showTabs = isConstruction;
+        const files$ = this.apiService.getLatestFiles().pipe(shareReplay(1));
 
-            if (isConstruction) {
-                let tabIndex = 0;
-                if (params['tabIndex']) {
-                    tabIndex = parseInt(params['tabIndex'], 10);
-                    if (!isNaN(tabIndex) && tabIndex >= 0 && tabIndex < this.files.length) {
-                        this.activeIndex = tabIndex;
+        const params$ = this.route.queryParams;
+
+        combineLatest([files$, params$])
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(([files, params]) => {
+                this.files = files;
+                const isConstruction = params['type'] === 'construction';
+                this.showTabs = isConstruction;
+
+                if (isConstruction) {
+                    let tabIndex = 0;
+                    if (params['tabIndex']) {
+                        tabIndex = parseInt(params['tabIndex'], 10);
+                        if (!isNaN(tabIndex) && tabIndex >= 0 && tabIndex < files.length) {
+                            this.activeIndex = tabIndex;
+                        }
+                    } else {
+                        this.router.navigate([], {
+                            queryParams: { tabIndex: 0 },
+                            queryParamsHandling: 'merge',
+                            replaceUrl: true
+                        });
                     }
-                } else {
-                    tabIndex = 0;
-                    this.router.navigate([], {
-                        queryParams: { tabIndex: 0 },
-                        queryParamsHandling: 'merge',
-                        replaceUrl: true
-                    });
+
+                    const categoryMap: { [key: number]: string } = {
+                        0: 'norin',
+                        1: 'chotqol',
+                        2: 'ufk',
+                        3: 'oqsuv'
+                    };
+                    const categoryName = categoryMap[tabIndex];
+                    const foundFile = files.find((file) => file.category_name.includes(categoryName));
+                    this.fileUrl = foundFile ? foundFile.url : '';
                 }
 
-                switch (tabIndex) {
-                    case 0:
-                        this.fileUrl = this.files.filter((value) => value.category_name.includes('norin'))[0].url;
-                        break;
-                    case 1:
-                        this.fileUrl = this.files.filter((value) => value.category_name.includes('chotqol'))[0].url;
-                        break;
-                    case 2:
-                        this.fileUrl = this.files.filter((value) => value.category_name.includes('ufk'))[0].url;
-                        break;
-                    case 3:
-                        this.fileUrl = this.files.filter((value) => value.category_name.includes('oqsuv'))[0].url;
-                        break;
+                if (params['type'] === 'production' || params['type'] === 'shutdown') {
+                    const foundFile = files.find((file) => file.category_name.includes(params['type']));
+                    this.fileUrl = foundFile ? foundFile.url : '';
                 }
-            }
-
-            if (params['type'] === 'production') {
-                this.fileUrl = this.files.filter((value) => value.category_name.includes('production'))[0].url;
-            } else if (params['type'] === 'shutdown') {
-                this.fileUrl = this.files.filter((value) => value.category_name.includes('shutdown'))[0].url;
-            }
-        });
+            });
     }
 
     onTabChange(index: number | string) {
