@@ -8,13 +8,13 @@ import { LayoutService } from '@/layout/service/layout.service';
     selector: 'app-revenue-stream-widget',
     imports: [ChartModule],
     template: `<div class="card mb-8!">
-        <div class="font-semibold text-xl mb-4">Холостой сброс</div>
-        <p-chart type="line" [data]="lineData" [options]="lineOptions"></p-chart>
+        <div class="font-semibold text-xl mb-4">Водные ресурсы</div>
+        <p-chart type="doughnut" [data]="pieData" [options]="pieOptions"></p-chart>
     </div>`
 })
 export class RevenueStreamWidget {
-    lineData: any;
-    lineOptions: any;
+    pieData: any;
+    pieOptions: any;
 
     subscription!: Subscription;
 
@@ -34,47 +34,38 @@ export class RevenueStreamWidget {
         const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
         const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
 
-        this.lineData = {
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        this.pieData = {
+            labels: ['Чарвак', 'Андижан', 'Тупаланг', 'Гисарак', 'Ахангаран', 'Сардоба'],
             datasets: [
                 {
-                    label: 'м3/с',
-                    data: [65, 59, 80, 81, 56, 55, 80],
-                    fill: false,
-                    backgroundColor: documentStyle.getPropertyValue('--p-primary-500'),
-                    borderColor: documentStyle.getPropertyValue('--p-primary-500'),
-                    tension: 0.4
-                },
+                    data: [871, 880, 932, 1073, 1037, 286],
+                    backgroundColor: [
+                        documentStyle.getPropertyValue('--p-indigo-500'),
+                        documentStyle.getPropertyValue('--p-purple-500'),
+                        documentStyle.getPropertyValue('--p-sky-500'),
+                        documentStyle.getPropertyValue('--p-teal-500'),
+                        documentStyle.getPropertyValue('--p-rose-500'),
+                        documentStyle.getPropertyValue('--p-lime-500')
+                    ],
+                    hoverBackgroundColor: [
+                        documentStyle.getPropertyValue('--p-indigo-400'),
+                        documentStyle.getPropertyValue('--p-purple-400'),
+                        documentStyle.getPropertyValue('--p-sky-400'),
+                        documentStyle.getPropertyValue('--p-teal-400'),
+                        documentStyle.getPropertyValue('--p-rose-400'),
+                        documentStyle.getPropertyValue('--p-lime-400')
+                    ]
+                }
             ]
         };
 
-        this.lineOptions = {
+        this.pieOptions = {
             maintainAspectRatio: false,
-            aspectRatio: 0.8,
             plugins: {
                 legend: {
                     labels: {
+                        usePointStyle: true,
                         color: textColor
-                    }
-                }
-            },
-            scales: {
-                x: {
-                    ticks: {
-                        color: textColorSecondary
-                    },
-                    grid: {
-                        color: surfaceBorder,
-                        drawBorder: false
-                    }
-                },
-                y: {
-                    ticks: {
-                        color: textColorSecondary
-                    },
-                    grid: {
-                        color: surfaceBorder,
-                        drawBorder: false
                     }
                 }
             }
