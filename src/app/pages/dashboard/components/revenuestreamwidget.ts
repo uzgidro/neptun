@@ -1,21 +1,20 @@
 import { Component } from '@angular/core';
 import { ChartModule } from 'primeng/chart';
 import { debounceTime, Subscription } from 'rxjs';
-import { LayoutService } from '../../../layout/service/layout.service';
+import { LayoutService } from '@/layout/service/layout.service';
 
 @Component({
     standalone: true,
     selector: 'app-revenue-stream-widget',
     imports: [ChartModule],
     template: `<div class="card mb-8!">
-        <div class="font-semibold text-xl mb-4">Revenue Stream</div>
-        <p-chart type="bar" [data]="chartData" [options]="chartOptions" class="h-100" />
+        <div class="font-semibold text-xl mb-4">Холостой сброс</div>
+        <p-chart type="line" [data]="lineData" [options]="lineOptions"></p-chart>
     </div>`
 })
 export class RevenueStreamWidget {
-    chartData: any;
-
-    chartOptions: any;
+    lineData: any;
+    lineOptions: any;
 
     subscription!: Subscription;
 
@@ -32,44 +31,24 @@ export class RevenueStreamWidget {
     initChart() {
         const documentStyle = getComputedStyle(document.documentElement);
         const textColor = documentStyle.getPropertyValue('--text-color');
-        const borderColor = documentStyle.getPropertyValue('--surface-border');
-        const textMutedColor = documentStyle.getPropertyValue('--text-color-secondary');
+        const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
+        const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
 
-        this.chartData = {
-            labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+        this.lineData = {
+            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
             datasets: [
                 {
-                    type: 'bar',
-                    label: 'Subscriptions',
-                    backgroundColor: documentStyle.getPropertyValue('--p-primary-400'),
-                    data: [4000, 10000, 15000, 4000],
-                    barThickness: 32
+                    label: 'м3/с',
+                    data: [65, 59, 80, 81, 56, 55, 80],
+                    fill: false,
+                    backgroundColor: documentStyle.getPropertyValue('--p-primary-500'),
+                    borderColor: documentStyle.getPropertyValue('--p-primary-500'),
+                    tension: 0.4
                 },
-                {
-                    type: 'bar',
-                    label: 'Advertising',
-                    backgroundColor: documentStyle.getPropertyValue('--p-primary-300'),
-                    data: [2100, 8400, 2400, 7500],
-                    barThickness: 32
-                },
-                {
-                    type: 'bar',
-                    label: 'Affiliate',
-                    backgroundColor: documentStyle.getPropertyValue('--p-primary-200'),
-                    data: [4100, 5200, 3400, 7400],
-                    borderRadius: {
-                        topLeft: 8,
-                        topRight: 8,
-                        bottomLeft: 0,
-                        bottomRight: 0
-                    },
-                    borderSkipped: false,
-                    barThickness: 32
-                }
             ]
         };
 
-        this.chartOptions = {
+        this.lineOptions = {
             maintainAspectRatio: false,
             aspectRatio: 0.8,
             plugins: {
@@ -81,24 +60,21 @@ export class RevenueStreamWidget {
             },
             scales: {
                 x: {
-                    stacked: true,
                     ticks: {
-                        color: textMutedColor
+                        color: textColorSecondary
                     },
                     grid: {
-                        color: 'transparent',
-                        borderColor: 'transparent'
+                        color: surfaceBorder,
+                        drawBorder: false
                     }
                 },
                 y: {
-                    stacked: true,
                     ticks: {
-                        color: textMutedColor
+                        color: textColorSecondary
                     },
                     grid: {
-                        color: borderColor,
-                        borderColor: 'transparent',
-                        drawTicks: false
+                        color: surfaceBorder,
+                        drawBorder: false
                     }
                 }
             }
