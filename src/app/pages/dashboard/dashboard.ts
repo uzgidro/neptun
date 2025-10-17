@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { NotificationsWidget } from './components/notificationswidget';
+import { Component } from '@angular/core';
+import { NotificationsWidget } from './components/notifications-widget/notificationswidget';
 import { StatsWidget } from './components/statswidget';
 import { RecentSalesWidget } from './components/recentsaleswidget';
 import { BestSellingWidget } from './components/bestsellingwidget';
@@ -24,5 +23,4 @@ import { RevenueStreamWidget } from './components/revenuestreamwidget';
         </div>
     `
 })
-export class Dashboard {
-}
+export class Dashboard {}
