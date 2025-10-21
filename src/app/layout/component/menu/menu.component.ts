@@ -22,6 +22,17 @@ export class MenuComponent implements OnInit {
                         routerLink: ['/dashboard']
                     },
                     {
+                        label: 'Кадровый персонал',
+                        role: ['admin', 'rais'],
+                        items: [
+                            { label: 'Организации', role: ['rais'] },
+                            { label: 'Дни рождения', role: ['rais'] },
+                            { label: 'Потеря личного состава', role: ['rais'] },
+                            { label: 'Пользователи', role: ['admin'], routerLink: ['/users'] },
+                            { label: 'Роли', role: ['admin'], routerLink: ['/roles'] }
+                        ]
+                    },
+                    {
                         label: 'Ситуационный центр',
                         role: ['rais', 'sc'],
                         items: [
@@ -103,24 +114,51 @@ export class MenuComponent implements OnInit {
                         ]
                     },
                     {
-                        label: 'Кадровый персонал',
-                        role: ['admin', 'rais'],
+                        label: 'Финансовый блок',
+                        role: ['rais'],
                         items: [
-                            { label: 'Организации', role: ['rais'] },
-                            { label: 'Пользователи', role: ['admin'], routerLink: ['/users'] },
-                            { label: 'Роли', role: ['admin'], routerLink: ['/roles'] }
+                            { label: 'Дебит / кредит', role: ['rais'] },
+                            { label: 'Инвестиции', role: ['rais'] },
+                            { label: 'Затраты на ремонт', role: ['rais'] },
+                            { label: 'Закупки', role: ['rais'] },
+                            { label: 'KPI', role: ['rais'] },
+                            { label: 'Заработная плата', role: ['rais'] },
+                            { label: 'Премирование', role: ['rais'] }
                         ]
                     },
-                    {label: 'Встречи', role: ['rais'], items: []},
-                    {label: 'Звонки', role: ['rais'], items: []},
-                    {label: 'Переговоры', role: ['rais'], items: []},
-                    {label: 'Финансовый блок', role: ['rais'], items: []},
-                    {label: 'Постановления', role: ['rais'], items: []},
-                    {label: 'Почта', role: ['rais'], items: []},
-                    {label: 'Рапорты', role: ['rais'], items: []},
-                    {label: 'Контроль и инвентаризация', role: ['rais'], items: []},
-                    {label: 'Телефонный справочник', role: ['rais'], items: []},
-                    {label: 'СМИ', role: ['rais'], items: []},
+                    {
+                        label: 'Планирование',
+                        role: ['rais'],
+                        items: [
+                            { label: 'Встречи', role: ['rais'] },
+                            { label: 'Созвоны', role: ['rais'] },
+                            { label: 'Переговоры', role: ['rais'] },
+                            { label: 'ВКС', role: ['rais'] }
+                        ]
+                    },
+                    {
+                        label: 'Почта',
+                        role: ['rais'],
+                        items: [
+                            { label: 'Приказы', role: ['rais'] },
+                            { label: 'Рапорты', role: ['rais'] },
+                            { label: 'Письма', role: ['rais'] },
+                            { label: 'Инструкции', role: ['rais'] },
+                            {
+                                label: 'Постановления',
+                                role: ['rais'],
+                                items: [
+                                    { label: 'Президент', role: ['rais'] },
+                                    { label: 'Кабинет министров', role: ['rais'] },
+                                    { label: 'Указы', role: ['rais'] },
+                                    { label: 'Приказы', role: ['rais'] },
+                                    { label: 'Совместные соглашения', role: ['rais'] }
+                                ]
+                            }
+                        ]
+                    },
+                    { label: 'Звонки', role: ['rais'] },
+                    { label: 'СМИ', role: ['rais'] }
                 ]
             }
         ];
