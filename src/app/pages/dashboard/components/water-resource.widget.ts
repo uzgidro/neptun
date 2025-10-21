@@ -5,14 +5,14 @@ import { LayoutService } from '@/layout/service/layout.service';
 
 @Component({
     standalone: true,
-    selector: 'app-revenue-stream-widget',
+    selector: 'app-water-resource-widget',
     imports: [ChartModule],
     template: `<div class="card mb-8!">
         <div class="font-semibold text-xl mb-4">Водные ресурсы</div>
         <p-chart type="doughnut" [data]="pieData" [options]="pieOptions"></p-chart>
     </div>`
 })
-export class RevenueStreamWidget {
+export class WaterResourceWidget {
     pieData: any;
     pieOptions: any;
 

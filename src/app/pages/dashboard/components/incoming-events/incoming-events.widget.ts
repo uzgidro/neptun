@@ -12,35 +12,11 @@ interface RecentEvent {
 
 @Component({
     standalone: true,
-    selector: 'app-recent-sales-widget',
+    selector: 'app-incoming-events-widget',
     imports: [CommonModule, TableModule, ButtonModule, RippleModule],
-    template: `<div class="card mb-8!">
-        <div class="font-semibold text-xl mb-4">Предстоящие мероприятия</div>
-        <p-table [value]="events" [paginator]="true" [rows]="5" sortField="date" [sortOrder]="1">
-            <ng-template #header>
-                <tr>
-                    <th style="width: 5rem"></th>
-                    <th>Название</th>
-                    <th>Дата</th>
-                    <th style="width: 8rem">Подробнее</th>
-                </tr>
-            </ng-template>
-            <ng-template #body let-event>
-                <tr>
-                    <td>
-                        <i class="pi text-xl" [ngClass]="getIconClass(event.type)"></i>
-                    </td>
-                    <td>{{ event.name }}</td>
-                    <td>{{ event.date | date: 'HH:mm dd.MM.yyyy' }}</td>
-                    <td>
-                        <button pButton pRipple type="button" icon="pi pi-search" class="p-button p-component p-button-text p-button-icon-only"></button>
-                    </td>
-                </tr>
-            </ng-template>
-        </p-table>
-    </div>`
+    templateUrl: './incoming-events.widget.html'
 })
-export class RecentSalesWidget implements OnInit {
+export class IncomingEventsWidget implements OnInit {
     events: RecentEvent[] = [];
 
     constructor() {}

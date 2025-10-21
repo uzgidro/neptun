@@ -7,7 +7,7 @@ import { DatePipe } from '@angular/common';
     standalone: true,
     selector: 'app-notifications-widget',
     imports: [ButtonModule, MenuModule, DatePipe],
-    templateUrl: 'notifications.widget.html'
+    templateUrl: './notifications.widget.html'
 })
 export class NotificationsWidget {
     today = new Date();
