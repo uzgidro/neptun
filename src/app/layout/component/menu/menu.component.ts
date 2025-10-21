@@ -167,7 +167,7 @@ export class MenuComponent implements OnInit {
                         icon: 'pi pi-fw pi-user',
                         items: [
                             {
-                                label: 'Login',
+                                label: 'LoginComponent',
                                 icon: 'pi pi-fw pi-sign-in',
                                 routerLink: ['/auth/login']
                             },
