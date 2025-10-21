@@ -14,20 +14,33 @@ import { ToastModule } from 'primeng/toast';
             <div class="col-span-full lg:col-span-6">
                 <div class="card">
                     <div class="font-semibold text-xl mb-4">Advanced</div>
-                    <p-fileupload name="demo[]" (onUpload)="onUpload($event)" [multiple]="true" accept="image/*" maxFileSize="1000000" mode="advanced" url="https://www.primefaces.org/cdn/api/upload.php">
+                    <p-fileupload name="demo[]" (onUpload)="onUpload($event)" [multiple]="true" maxFileSize="1000000" mode="advanced" url="https://www.primefaces.org/cdn/api/upload.php">
                         <ng-template #empty>
                             <div>Drag and drop files to here to upload.</div>
                         </ng-template>
                     </p-fileupload>
                 </div>
             </div>
+            <!--
             <div class="col-span-full lg:col-span-6">
                 <div class="card">
                     <div class="font-semibold text-xl mb-4">Basic</div>
                     <div class="flex flex-col gap-4 items-center justify-center">
-                        <p-fileupload #fu mode="basic" chooseLabel="Choose" chooseIcon="pi pi-upload" name="demo[]" url="https://www.primefaces.org/cdn/api/upload.php" accept="image/*" maxFileSize="1000000" (onUpload)="onUpload($event)" />
+                        <p-fileupload #fu mode="basic" chooseLabel="Choose" chooseIcon="pi pi-upload" name="demo[]" url="https://www.primefaces.org/cdn/api/upload.php" maxFileSize="1000000" (onUpload)="onUpload($event)" />
                         <p-button label="Upload" (onClick)="fu.upload()" severity="secondary" />
                     </div>
+                </div>
+            </div>
+            -->
+            <div class="col-span-full">
+                <div class="card">
+                    <div class="font-semibold text-xl mb-4">Uploaded Files</div>
+                    <div *ngIf="uploadedFiles.length === 0">No files uploaded yet.</div>
+                    <ul *ngIf="uploadedFiles.length > 0" class="list-disc pl-6">
+                        <li *ngFor="let file of uploadedFiles">
+                            {{ file.name }} - {{ file.size | number }} bytes
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>`,

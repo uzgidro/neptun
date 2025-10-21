@@ -1,24 +1,132 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { MenuItem } from 'primeng/api';
-import { AppMenuitem } from './app.menuitem';
+import { MenuitemComponent } from '../menuitem/menuitem.component';
+import { MenuItems } from '@/core/interfaces/menuitems';
 
 @Component({
     selector: 'app-menu',
     standalone: true,
-    imports: [CommonModule, AppMenuitem, RouterModule],
-    template: `<ul class="layout-menu">
-        <ng-container *ngFor="let item of model; let i = index">
-            <li app-menuitem *ngIf="!item.separator" [item]="item" [index]="i" [root]="true"></li>
-            <li *ngIf="item.separator" class="menu-separator"></li>
-        </ng-container>
-    </ul> `
+    imports: [CommonModule, MenuitemComponent, RouterModule],
+    templateUrl: 'menu.component.html'
 })
-export class AppMenu {
-    model: MenuItem[] = [];
+export class MenuComponent implements OnInit {
+    model: MenuItems[] = [];
 
     ngOnInit() {
+        this.model = [
+            {
+                items: [
+                    {
+                        label: 'Главная',
+                        routerLink: ['/dashboard']
+                    },
+                    {
+                        label: 'Ситуационный центр',
+                        role: ['rais', 'sc'],
+                        items: [
+                            {
+                                label: 'Информация о ГЭС',
+                                role: ['rais', 'sc'],
+                                items: [
+                                    {
+                                        label: 'ГЭС',
+                                        role: ['rais', 'sc']
+                                    },
+                                    {
+                                        label: 'Малые и микро ГЭС',
+                                        role: ['rais', 'sc']
+                                    },
+                                    {
+                                        label: 'Солнце',
+                                        role: ['rais', 'sc']
+                                    },
+                                    {
+                                        label: 'Аварийные отключение',
+                                        role: ['rais', 'sc'],
+                                        routerLink: ['/viewer'],
+                                        queryParams: { type: 'shutdown' },
+                                        routerLinkActiveOptions: { queryParams: 'exact' }
+                                    },
+                                    {
+                                        label: 'Выработка',
+                                        role: ['rais', 'sc'],
+                                        routerLink: ['/viewer'],
+                                        queryParams: { type: 'production' },
+                                        routerLinkActiveOptions: { queryParams: 'exact' }
+                                    }
+                                ]
+                            },
+                            {
+                                label: 'Информация о водохранилищах',
+                                role: ['rais', 'sc'],
+                                items: [
+                                    {
+                                        label: 'Водохранилища',
+                                        role: ['rais', 'sc']
+                                    },
+                                    {
+                                        label: 'MODSNOW',
+                                        role: ['rais', 'sc']
+                                    },
+                                    {
+                                        label: 'Фильтрация',
+                                        role: ['rais', 'sc']
+                                    }
+                                ]
+                            },
+                            {
+                                label: 'Прочая информация',
+                                role: ['rais', 'sc'],
+                                items: [
+                                    {
+                                        label: 'События',
+                                        role: ['rais', 'sc']
+                                    },
+                                    {
+                                        label: 'Землетрясение',
+                                        role: ['rais', 'sc'],
+                                        url: 'https://soep.uz/',
+                                        target: '_blank'
+                                    }
+                                ]
+                            },
+                            {
+                                label: 'Строительство',
+                                role: ['rais', 'sc'],
+                                routerLink: ['/viewer'],
+                                queryParams: { type: 'construction' },
+                                routerLinkActiveOptions: { queryParams: 'exact' }
+                            },
+                            { label: 'Категории', role: ['sc'], routerLink: ['/categories'] },
+                            { label: 'Файлы', role: ['sc'], routerLink: ['/files'] }
+                        ]
+                    },
+                    {
+                        label: 'Кадровый персонал',
+                        role: ['admin', 'rais'],
+                        items: [
+                            { label: 'Организации', role: ['rais'] },
+                            { label: 'Пользователи', role: ['admin'], routerLink: ['/users'] },
+                            { label: 'Роли', role: ['admin'], routerLink: ['/roles'] }
+                        ]
+                    },
+                    {label: 'Встречи', role: ['rais'], items: []},
+                    {label: 'Звонки', role: ['rais'], items: []},
+                    {label: 'Переговоры', role: ['rais'], items: []},
+                    {label: 'Финансовый блок', role: ['rais'], items: []},
+                    {label: 'Постановления', role: ['rais'], items: []},
+                    {label: 'Почта', role: ['rais'], items: []},
+                    {label: 'Рапорты', role: ['rais'], items: []},
+                    {label: 'Контроль и инвентаризация', role: ['rais'], items: []},
+                    {label: 'Телефонный справочник', role: ['rais'], items: []},
+                    {label: 'СМИ', role: ['rais'], items: []},
+                ]
+            }
+        ];
+    }
+
+    oldMenu() {
         this.model = [
             {
                 label: 'Home',

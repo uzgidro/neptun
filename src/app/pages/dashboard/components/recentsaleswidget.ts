@@ -1,47 +1,67 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RippleModule } from 'primeng/ripple';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
-import { Product, ProductService } from '../../service/product.service';
+
+interface RecentEvent {
+    name: string;
+    date: Date;
+    type: 'info' | 'warning' | 'success' | 'error';
+}
 
 @Component({
     standalone: true,
     selector: 'app-recent-sales-widget',
     imports: [CommonModule, TableModule, ButtonModule, RippleModule],
     template: `<div class="card mb-8!">
-        <div class="font-semibold text-xl mb-4">Recent Sales</div>
-        <p-table [value]="products" [paginator]="true" [rows]="5" responsiveLayout="scroll">
+        <div class="font-semibold text-xl mb-4">Предстоящие мероприятия</div>
+        <p-table [value]="events" [paginator]="true" [rows]="5" sortField="date" [sortOrder]="1">
             <ng-template #header>
                 <tr>
-                    <th>Image</th>
-                    <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
-                    <th pSortableColumn="price">Price <p-sortIcon field="price"></p-sortIcon></th>
-                    <th>View</th>
+                    <th style="width: 5rem"></th>
+                    <th>Название</th>
+                    <th>Дата</th>
+                    <th style="width: 8rem">Подробнее</th>
                 </tr>
             </ng-template>
-            <ng-template #body let-product>
+            <ng-template #body let-event>
                 <tr>
-                    <td style="width: 15%; min-width: 5rem;">
-                        <img src="https://primefaces.org/cdn/primevue/images/product/{{ product.image }}" class="shadow-lg" alt="{{ product.name }}" width="50" />
+                    <td>
+                        <i class="pi text-xl" [ngClass]="getIconClass(event.type)"></i>
                     </td>
-                    <td style="width: 35%; min-width: 7rem;">{{ product.name }}</td>
-                    <td style="width: 35%; min-width: 8rem;">{{ product.price | currency: 'USD' }}</td>
-                    <td style="width: 15%;">
+                    <td>{{ event.name }}</td>
+                    <td>{{ event.date | date: 'HH:mm dd.MM.yyyy' }}</td>
+                    <td>
                         <button pButton pRipple type="button" icon="pi pi-search" class="p-button p-component p-button-text p-button-icon-only"></button>
                     </td>
                 </tr>
             </ng-template>
         </p-table>
-    </div>`,
-    providers: [ProductService]
+    </div>`
 })
-export class RecentSalesWidget {
-    products!: Product[];
+export class RecentSalesWidget implements OnInit {
+    events: RecentEvent[] = [];
 
-    constructor(private productService: ProductService) {}
+    constructor() {}
 
     ngOnInit() {
-        this.productService.getProductsSmall().then((data) => (this.products = data));
+        this.events = [
+            { name: 'Аппаратное совещание', date: new Date(Date.now() + 1000 * 3600 * 2), type: 'info' },
+            { name: 'Выездной селектор в Джизаке', date: new Date(Date.now() + 1000 * 3600 * 8), type: 'info' },
+            { name: 'Открытие Нижнего Чаткала', date: new Date(Date.now() + 1000 * 3600 * 24), type: 'success' },
+            { name: 'Встреча с президентом', date: new Date(Date.now() + 1000 * 3600 * 48), type: 'success' },
+            { name: 'Собрание с индусами', date: new Date(Date.now() + 1000 * 3600 * 24 * 7), type: 'info' },
+            { name: 'Выезд на объект', date: new Date(Date.now() + 1000 * 3600 * 24 * 10), type: 'info' },
+        ];
+    }
+
+    getIconClass(type: RecentEvent['type']): object {
+        return {
+            'pi-info-circle text-blue-500': type === 'info',
+            'pi-exclamation-triangle text-orange-500': type === 'warning',
+            'pi-check-circle text-green-500': type === 'success',
+            'pi-times-circle text-red-500': type === 'error'
+        };
     }
 }

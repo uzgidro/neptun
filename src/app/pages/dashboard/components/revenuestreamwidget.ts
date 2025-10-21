@@ -1,21 +1,20 @@
 import { Component } from '@angular/core';
 import { ChartModule } from 'primeng/chart';
 import { debounceTime, Subscription } from 'rxjs';
-import { LayoutService } from '../../../layout/service/layout.service';
+import { LayoutService } from '@/layout/service/layout.service';
 
 @Component({
     standalone: true,
     selector: 'app-revenue-stream-widget',
     imports: [ChartModule],
     template: `<div class="card mb-8!">
-        <div class="font-semibold text-xl mb-4">Revenue Stream</div>
-        <p-chart type="bar" [data]="chartData" [options]="chartOptions" class="h-100" />
+        <div class="font-semibold text-xl mb-4">Водные ресурсы</div>
+        <p-chart type="doughnut" [data]="pieData" [options]="pieOptions"></p-chart>
     </div>`
 })
 export class RevenueStreamWidget {
-    chartData: any;
-
-    chartOptions: any;
+    pieData: any;
+    pieOptions: any;
 
     subscription!: Subscription;
 
@@ -32,73 +31,41 @@ export class RevenueStreamWidget {
     initChart() {
         const documentStyle = getComputedStyle(document.documentElement);
         const textColor = documentStyle.getPropertyValue('--text-color');
-        const borderColor = documentStyle.getPropertyValue('--surface-border');
-        const textMutedColor = documentStyle.getPropertyValue('--text-color-secondary');
+        const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
+        const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
 
-        this.chartData = {
-            labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+        this.pieData = {
+            labels: ['Чарвак', 'Андижан', 'Тупаланг', 'Гисарак', 'Ахангаран', 'Сардоба'],
             datasets: [
                 {
-                    type: 'bar',
-                    label: 'Subscriptions',
-                    backgroundColor: documentStyle.getPropertyValue('--p-primary-400'),
-                    data: [4000, 10000, 15000, 4000],
-                    barThickness: 32
-                },
-                {
-                    type: 'bar',
-                    label: 'Advertising',
-                    backgroundColor: documentStyle.getPropertyValue('--p-primary-300'),
-                    data: [2100, 8400, 2400, 7500],
-                    barThickness: 32
-                },
-                {
-                    type: 'bar',
-                    label: 'Affiliate',
-                    backgroundColor: documentStyle.getPropertyValue('--p-primary-200'),
-                    data: [4100, 5200, 3400, 7400],
-                    borderRadius: {
-                        topLeft: 8,
-                        topRight: 8,
-                        bottomLeft: 0,
-                        bottomRight: 0
-                    },
-                    borderSkipped: false,
-                    barThickness: 32
+                    data: [871, 880, 932, 1073, 1037, 286],
+                    backgroundColor: [
+                        documentStyle.getPropertyValue('--p-indigo-500'),
+                        documentStyle.getPropertyValue('--p-purple-500'),
+                        documentStyle.getPropertyValue('--p-sky-500'),
+                        documentStyle.getPropertyValue('--p-teal-500'),
+                        documentStyle.getPropertyValue('--p-rose-500'),
+                        documentStyle.getPropertyValue('--p-lime-500')
+                    ],
+                    hoverBackgroundColor: [
+                        documentStyle.getPropertyValue('--p-indigo-400'),
+                        documentStyle.getPropertyValue('--p-purple-400'),
+                        documentStyle.getPropertyValue('--p-sky-400'),
+                        documentStyle.getPropertyValue('--p-teal-400'),
+                        documentStyle.getPropertyValue('--p-rose-400'),
+                        documentStyle.getPropertyValue('--p-lime-400')
+                    ]
                 }
             ]
         };
 
-        this.chartOptions = {
+        this.pieOptions = {
             maintainAspectRatio: false,
-            aspectRatio: 0.8,
             plugins: {
                 legend: {
                     labels: {
+                        usePointStyle: true,
                         color: textColor
-                    }
-                }
-            },
-            scales: {
-                x: {
-                    stacked: true,
-                    ticks: {
-                        color: textMutedColor
-                    },
-                    grid: {
-                        color: 'transparent',
-                        borderColor: 'transparent'
-                    }
-                },
-                y: {
-                    stacked: true,
-                    ticks: {
-                        color: textMutedColor
-                    },
-                    grid: {
-                        color: borderColor,
-                        borderColor: 'transparent',
-                        drawTicks: false
                     }
                 }
             }

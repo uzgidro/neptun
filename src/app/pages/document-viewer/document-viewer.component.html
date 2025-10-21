@@ -1,0 +1,21 @@
+<div class="card">
+    @if (showTabs) {
+        <p-tabs [(value)]="activeIndex" (valueChange)="onTabChange($event)">
+            <p-tablist>
+                <p-tab [value]="0">Норин</p-tab>
+                <p-tab [value]="1">Чаткал</p-tab>
+                <p-tab [value]="2">ЮФК</p-tab>
+                <p-tab [value]="3">Оксув</p-tab>
+            </p-tablist>
+        </p-tabs>
+    }
+
+    <div class="mt-4">
+        <pdf-viewer [src]="fileUrl"
+                    [render-text]="true"
+                    [original-size]="false"
+                    style="display: block; width: 100%; height: 75vh;">
+        </pdf-viewer>
+    </div>
+
+</div>
