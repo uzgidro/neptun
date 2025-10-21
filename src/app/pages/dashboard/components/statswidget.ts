@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
             <div class="card mb-0">
                 <div class="flex justify-between mb-4">
                     <div>
-                        <span class="block text-muted-color font-medium mb-4">Личный состав</span>
+                        <span class="block text-muted-color font-medium mb-4">Работники</span>
                         <div class="text-surface-900 dark:text-surface-0 font-medium text-xl">3892</div>
                     </div>
                     <div class="flex items-center justify-center bg-blue-100 dark:bg-blue-400/10 rounded-border" style="width: 2.5rem; height: 2.5rem">
@@ -17,7 +17,7 @@ import { CommonModule } from '@angular/common';
                     </div>
                 </div>
                 <span class="text-primary font-medium">24 новых </span>
-                <span class="text-muted-color">За последний месяц</span>
+                <span class="text-muted-color">за последний месяц</span>
             </div>
         </div>
         <div class="col-span-12 lg:col-span-6 xl:col-span-3">
@@ -55,7 +55,7 @@ import { CommonModule } from '@angular/common';
                 <div class="flex justify-between mb-4">
                     <div>
                         <span class="block text-muted-color font-medium mb-4">Выработка</span>
-                        <div class="text-surface-900 dark:text-surface-0 font-medium text-xl">11.124 mln KWt/h</div>
+                        <div class="text-surface-900 dark:text-surface-0 font-medium text-xl">11.124 млн КВт/ч</div>
                     </div>
                     <div class="flex items-center justify-center bg-purple-100 dark:bg-purple-400/10 rounded-border" style="width: 2.5rem; height: 2.5rem">
                         <i class="pi pi-bolt text-purple-500 text-xl!"></i>
