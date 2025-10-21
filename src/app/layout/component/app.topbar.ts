@@ -17,7 +17,7 @@ import { LayoutService } from '../service/layout.service';
                     <i class="pi pi-bars"></i>
                 </button>
                 <a class="layout-topbar-logo" routerLink="/">
-                    <svg viewBox="0 0 54 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg viewBox="0 0 54 40" xmlns="http://www.w3.org/2000/svg">
                         <path
                             fill-rule="evenodd"
                             clip-rule="evenodd"
@@ -37,7 +37,7 @@ import { LayoutService } from '../service/layout.service';
                             />
                         </g>
                     </svg>
-                    <span>NEPTUN</span>
+                    <span>Планшет председателя</span>
                 </a>
             </div>
 
