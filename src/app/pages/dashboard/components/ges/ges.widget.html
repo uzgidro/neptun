@@ -1,25 +1,111 @@
 <div class="card mb-8!">
-    <div class="font-semibold text-xl mb-4">Предстоящие мероприятия</div>
-    <p-table [paginator]="true" [rows]="5" sortField="date" [sortOrder]="1">
+    <div class="flex flex-row justify-between items-center mb-4">
+        <span class="font-semibold text-xl">ГЭС</span>
+        <button pButton outlined (click)="expandAll()">
+            <i pButtonIcon class="pi pi-fw" [ngClass]="{ 'pi-minus': isExpanded || !isRowsHidden, 'pi-plus': !isExpanded }"></i>
+            <span pButtonLabel>{{ isExpanded || !isRowsHidden ? 'Свернуть' : 'Развернуть' }}</span>
+        </button>
+    </div>
+    <p-table [value]="products" dataKey="id" [tableStyle]="{ 'min-width': '60rem' }" [expandedRowKeys]="expandedRows"
+             [scrollable]="true" scrollHeight="450px">
+        <ng-template #caption>
+            <div class="flex table-header"></div>
+        </ng-template>
         <ng-template #header>
             <tr>
                 <th style="width: 5rem"></th>
-                <th>Название</th>
-                <th>Дата</th>
-                <th style="width: 8rem">Подробнее</th>
+                <th pSortableColumn="name">Название
+                    <p-sortIcon field="name" />
+                </th>
+                <th>Image</th>
+                <th pSortableColumn="price">Выработка
+                    <p-sortIcon field="price" />
+                </th>
+                <th pSortableColumn="category">Аггрегаты
+                    <p-sortIcon field="category" />
+                </th>
+                <th pSortableColumn="rating">Холостой сброс, м³/с
+                    <p-sortIcon field="rating" />
+                </th>
             </tr>
         </ng-template>
-        <ng-template #body let-event>
+        <ng-template #body let-product let-expanded="expanded">
             <tr>
                 <td>
-                    <i class="pi text-xl pi-user"></i>
+                    <p-button type="button" pRipple [pRowToggler]="product" [text]="true" [rounded]="true"
+                              [plain]="true" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" />
                 </td>
-                <td>Hello</td>
-                <td>15.09.2000</td>
+                <td>{{ product.name }}</td>
                 <td>
-                    <button pButton pRipple type="button" class="p-button p-component p-button-text p-button-icon-only">
-                        <i class="pi pi-search" pButtonIcon></i>
-                    </button>
+                    <img [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + product.image"
+                         [alt]="product.name" width="50" class="shadow-lg" />
+                </td>
+                <td>{{ product.price | currency: 'USD' }}</td>
+                <td>{{ product.category }}</td>
+                <td>
+                    <p-rating [ngModel]="product.rating" [readonly]="true" />
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template #expandedrow let-product>
+            <tr>
+                <td colspan="7">
+                    <div class="p-4">
+                            <h5>{{ product.name }}</h5>
+<!--                                <p>Адрес: г. Город, район, улица, дом</p>-->
+<!--                                <p>СТИР: 123456789</p>-->
+                                <p>Директоров Директор Директорович</p>
+                                <button pButton outlined class="mb-4">
+                                    <i pButtonIcon class="pi pi-phone"></i>
+                                    <span pButtonLabel>Позвонить</span>
+                                </button>
+                        <p-table [value]="product.orders" dataKey="id">
+                            <ng-template #header>
+                                <tr>
+                                    <th pSortableColumn="id">Id
+                                        <p-sortIcon field="price" />
+                                    </th>
+                                    <th pSortableColumn="customer">
+                                        Customer
+                                        <p-sortIcon field="customer" />
+                                    </th>
+                                    <th pSortableColumn="date">Date
+                                        <p-sortIcon field="date" />
+                                    </th>
+                                    <th pSortableColumn="amount">
+                                        Amount
+                                        <p-sortIcon field="amount" />
+                                    </th>
+                                    <th pSortableColumn="status">
+                                        Status
+                                        <p-sortIcon field="status" />
+                                    </th>
+                                    <th style="width: 4rem"></th>
+                                </tr>
+                            </ng-template>
+                            <ng-template #body let-order>
+                                <tr>
+                                    <td>{{ order.id }}</td>
+                                    <td>{{ order.customer }}</td>
+                                    <td>{{ order.date }}</td>
+                                    <td>
+                                        {{ order.amount | currency: 'USD' }}
+                                    </td>
+                                    <td>
+                                        <p-tag [value]="order.status" [severity]="getSeverity(order.status)" />
+                                    </td>
+                                    <td>
+                                        <p-button type="button" icon="pi pi-search" />
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template #emptymessage>
+                                <tr>
+                                    <td colspan="6">Нет данных</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
                 </td>
             </tr>
         </ng-template>
