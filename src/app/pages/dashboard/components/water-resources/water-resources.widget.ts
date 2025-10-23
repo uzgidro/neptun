@@ -1,18 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ChartModule } from 'primeng/chart';
 import { debounceTime, Subscription } from 'rxjs';
 import { LayoutService } from '@/layout/service/layout.service';
 
 @Component({
     standalone: true,
-    selector: 'app-water-resource-widget',
+    selector: 'app-water-resources-widget',
     imports: [ChartModule],
-    template: `<div class="card mb-8!">
-        <div class="font-semibold text-xl mb-4">Водные ресурсы</div>
-        <p-chart type="doughnut" [data]="pieData" [options]="pieOptions"></p-chart>
-    </div>`
+    templateUrl: './water-resources.widget.html'
 })
-export class WaterResourceWidget {
+export class WaterResourcesWidget implements OnInit, OnDestroy {
     pieData: any;
     pieOptions: any;
 
@@ -31,8 +28,6 @@ export class WaterResourceWidget {
     initChart() {
         const documentStyle = getComputedStyle(document.documentElement);
         const textColor = documentStyle.getPropertyValue('--text-color');
-        const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
-        const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
 
         this.pieData = {
             labels: ['Чарвак', 'Андижан', 'Тупаланг', 'Гисарак', 'Ахангаран', 'Сардоба'],

@@ -1,9 +1,8 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Button, ButtonDirective, ButtonIcon, ButtonLabel } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { TableModule } from 'primeng/table';
 import { NgClass } from '@angular/common';
-import { Product, ProductService } from '@/pages/service/product.service';
 import { ObjectUtils } from 'primeng/utils';
 import { FormsModule } from '@angular/forms';
 
@@ -29,17 +28,13 @@ interface ges {
     styleUrl: './ges.widget.scss'
 })
 export class GesWidget implements OnInit {
-    products: Product[] = [];
     cascades: ges[] = [];
 
     expandedRows: expandedRows = {};
 
     isExpanded: boolean = false;
 
-    private productService = inject(ProductService);
-
     ngOnInit(): void {
-        this.productService.getProductsWithOrdersSmall().then((data) => (this.products = data));
         this.cascades = [
             {
                 name: 'Урта Чирчик ГЭСлар каскади ФЛ',
@@ -131,10 +126,10 @@ export class GesWidget implements OnInit {
 
     expandAll() {
         if (ObjectUtils.isEmpty(this.expandedRows)) {
-            this.expandedRows = this.products.reduce(
+            this.expandedRows = this.cascades.reduce(
                 (acc, p) => {
-                    if (p.id) {
-                        acc[p.id] = true;
+                    if (p.name) {
+                        acc[p.name] = true;
                     }
                     return acc;
                 },

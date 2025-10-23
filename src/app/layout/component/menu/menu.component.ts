@@ -106,7 +106,7 @@ export class MenuComponent implements OnInit {
                                 label: 'Строительство',
                                 role: ['rais', 'sc'],
                                 routerLink: ['/viewer'],
-                                queryParams: { type: 'construction' },
+                                queryParams: { type: 'constructions' },
                                 routerLinkActiveOptions: { queryParams: 'exact' }
                             },
                             { label: 'Категории', role: ['sc'], routerLink: ['/categories'] },
