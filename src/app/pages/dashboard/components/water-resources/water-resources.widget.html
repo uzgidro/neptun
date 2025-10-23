@@ -1,4 +1,73 @@
 <div class="card mb-8!">
     <div class="font-semibold text-xl mb-4">Водные ресурсы</div>
-    <p-chart type="doughnut" [data]="pieData" [options]="pieOptions"></p-chart>
+    <p-table [value]="reservoirs" dataKey="name" [tableStyle]="{ 'min-width': '60rem' }"
+             [scrollable]="true" scrollHeight="450px">
+        <ng-template #caption>
+            <div class="flex table-header"></div>
+        </ng-template>
+        <ng-template #header>
+            <tr>
+                <th class="whitespace-nowrap" pSortableColumn="name">Название
+                    <p-sortIcon field="name" />
+                </th>
+                <th class="whitespace-nowrap" pSortableColumn="income">Приток, м³/с
+                    <p-sortIcon field="income" />
+                </th>
+                <th class="whitespace-nowrap" pSortableColumn="release">Попуск, м³/с
+                    <p-sortIcon field="release" />
+                </th>
+                <th class="whitespace-nowrap" pSortableColumn="level">Уровень, м
+                    <p-sortIcon field="level" />
+                </th>
+                <th class="whitespace-nowrap" pSortableColumn="volume">Объём, млн. м³
+                    <p-sortIcon field="volume" />
+                </th>
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-reservoir>
+            <tr>
+                <td>{{ reservoir.name }}</td>
+                <td>{{ reservoir.income }} (
+                    @if (reservoir.incomeDiff > 0) {
+                        <span class="text-lime-500">+{{reservoir.incomeDiff}}</span>
+                    } @else if (reservoir.incomeDiff < 0) {
+                        <span class="text-rose-500">{{reservoir.incomeDiff}}</span>
+                    } @else {
+                        {{reservoir.incomeDiff}}
+                    }
+                    )</td>
+                <td>{{ reservoir.release }} (
+                    @if (reservoir.releaseDiff > 0) {
+                        <span class="text-lime-500">+{{reservoir.releaseDiff}}</span>
+                    } @else if (reservoir.releaseDiff < 0) {
+                        <span class="text-rose-500">{{reservoir.releaseDiff}}</span>
+                    } @else {
+                        {{reservoir.releaseDiff}}
+                    }
+                    )</td>
+                <td>{{ reservoir.level }} (
+                    @if (reservoir.levelDiff > 0) {
+                        <span class="text-lime-500">+{{reservoir.levelDiff}}</span>
+                    } @else if (reservoir.levelDiff < 0) {
+                        <span class="text-rose-500">{{reservoir.levelDiff}}</span>
+                    } @else {
+                        {{reservoir.levelDiff}}
+                    }
+                    )</td>
+                <td>{{ reservoir.volume }} (
+                    @if (reservoir.volumeDiff > 0) {
+                        <span class="text-lime-500">+{{reservoir.volumeDiff}}</span>
+                    } @else if (reservoir.volumeDiff < 0) {
+                        <span class="text-rose-500">{{reservoir.volumeDiff}}</span>
+                    } @else {
+                        {{reservoir.volumeDiff}}
+                    }
+                    )</td>
+                <td>
+                    <p-button type="button" icon="pi pi-info-circle" severity="info" />
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
 </div>
