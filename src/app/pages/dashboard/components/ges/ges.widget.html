@@ -1,12 +1,13 @@
 <div class="card mb-8!">
     <div class="flex flex-row justify-between items-center mb-4">
-        <span class="font-semibold text-xl">ГЭС</span>
+        <span class="font-semibold text-xl">Гидроэлектростанции</span>
         <button pButton outlined (click)="expandAll()">
-            <i pButtonIcon class="pi pi-fw" [ngClass]="{ 'pi-minus': isExpanded || !isRowsHidden, 'pi-plus': !isExpanded }"></i>
+            <i pButtonIcon class="pi pi-fw"
+               [ngClass]="{ 'pi-minus': isExpanded || !isRowsHidden, 'pi-plus': !isExpanded }"></i>
             <span pButtonLabel>{{ isExpanded || !isRowsHidden ? 'Свернуть' : 'Развернуть' }}</span>
         </button>
     </div>
-    <p-table [value]="products" dataKey="id" [tableStyle]="{ 'min-width': '60rem' }" [expandedRowKeys]="expandedRows"
+    <p-table [value]="cascades" dataKey="name" [tableStyle]="{ 'min-width': '60rem' }" [expandedRowKeys]="expandedRows"
              [scrollable]="true" scrollHeight="450px">
         <ng-template #caption>
             <div class="flex table-header"></div>
@@ -14,89 +15,74 @@
         <ng-template #header>
             <tr>
                 <th style="width: 5rem"></th>
-                <th pSortableColumn="name">Название
+                <th class="whitespace-nowrap" pSortableColumn="name">Название
                     <p-sortIcon field="name" />
                 </th>
-                <th>Image</th>
-                <th pSortableColumn="price">Выработка
-                    <p-sortIcon field="price" />
+                <th class="whitespace-nowrap" pSortableColumn="prod">Выработка, млн. кВт*ч
+                    <p-sortIcon field="prod" />
                 </th>
-                <th pSortableColumn="category">Аггрегаты
-                    <p-sortIcon field="category" />
+                <th class="whitespace-nowrap" pSortableColumn="totalAgg">Аггрегаты
+                    <p-sortIcon field="totalAgg" />
                 </th>
-                <th pSortableColumn="rating">Холостой сброс, м³/с
-                    <p-sortIcon field="rating" />
+                <th class="whitespace-nowrap" pSortableColumn="idle">Холостой сброс, м³/с
+                    <p-sortIcon field="idle" />
                 </th>
+                <th></th>
             </tr>
         </ng-template>
-        <ng-template #body let-product let-expanded="expanded">
+        <ng-template #body let-cascade let-expanded="expanded">
             <tr>
                 <td>
-                    <p-button type="button" pRipple [pRowToggler]="product" [text]="true" [rounded]="true"
+                    <p-button type="button" pRipple [pRowToggler]="cascade" [text]="true" [rounded]="true"
                               [plain]="true" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" />
                 </td>
-                <td>{{ product.name }}</td>
-                <td>
-                    <img [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + product.image"
-                         [alt]="product.name" width="50" class="shadow-lg" />
-                </td>
-                <td>{{ product.price | currency: 'USD' }}</td>
-                <td>{{ product.category }}</td>
-                <td>
-                    <p-rating [ngModel]="product.rating" [readonly]="true" />
-                </td>
+                <td>{{ cascade.name }}</td>
+                <td>{{ cascade.prod }}</td>
+                <td><span>{{ cascade.totalAgg }}</span>/<span class="text-rose-500">{{ cascade.workingAgg }}</span>/<span class="text-lime-500">{{ cascade.pendingAgg }}</span>/<span class="text-orange-500">{{ cascade.repairingAgg }}</span></td>
+                <td>{{ cascade.idle }}</td>
+                <td><p-button type="button" icon="pi pi-info-circle" severity="info" /></td>
             </tr>
         </ng-template>
-        <ng-template #expandedrow let-product>
+        <ng-template #expandedrow let-cascade>
             <tr>
                 <td colspan="7">
                     <div class="p-4">
-                            <h5>{{ product.name }}</h5>
-<!--                                <p>Адрес: г. Город, район, улица, дом</p>-->
-<!--                                <p>СТИР: 123456789</p>-->
-                                <p>Директоров Директор Директорович</p>
-                                <button pButton outlined class="mb-4">
-                                    <i pButtonIcon class="pi pi-phone"></i>
-                                    <span pButtonLabel>Позвонить</span>
-                                </button>
-                        <p-table [value]="product.orders" dataKey="id">
+                        <h5>{{ cascade.name }}</h5>
+                        <!--                                <p>Адрес: г. Город, район, улица, дом</p>-->
+                        <!--                                <p>СТИР: 123456789</p>-->
+                        <p>Директоров Директор Директорович</p>
+                        <button pButton outlined class="mb-4">
+                            <i pButtonIcon class="pi pi-phone"></i>
+                            <span pButtonLabel>Позвонить</span>
+                        </button>
+                        <p-table [value]="cascade.ges" dataKey="name">
                             <ng-template #header>
                                 <tr>
-                                    <th pSortableColumn="id">Id
-                                        <p-sortIcon field="price" />
+                                    <th pSortableColumn="name">
+                                        Название
+                                        <p-sortIcon field="name" />
                                     </th>
-                                    <th pSortableColumn="customer">
-                                        Customer
-                                        <p-sortIcon field="customer" />
+                                    <th pSortableColumn="prod">Выработка, млн. кВт*ч
+                                        <p-sortIcon field="prod" />
                                     </th>
-                                    <th pSortableColumn="date">Date
-                                        <p-sortIcon field="date" />
+                                    <th pSortableColumn="totalAgg">
+                                        Аггрегаты
+                                        <p-sortIcon field="totalAgg" />
                                     </th>
-                                    <th pSortableColumn="amount">
-                                        Amount
-                                        <p-sortIcon field="amount" />
+                                    <th pSortableColumn="idle">
+                                        Холостой сброс, м³/с
+                                        <p-sortIcon field="idle" />
                                     </th>
-                                    <th pSortableColumn="status">
-                                        Status
-                                        <p-sortIcon field="status" />
-                                    </th>
-                                    <th style="width: 4rem"></th>
+                                    <th></th>
                                 </tr>
                             </ng-template>
-                            <ng-template #body let-order>
+                            <ng-template #body let-ges>
                                 <tr>
-                                    <td>{{ order.id }}</td>
-                                    <td>{{ order.customer }}</td>
-                                    <td>{{ order.date }}</td>
-                                    <td>
-                                        {{ order.amount | currency: 'USD' }}
-                                    </td>
-                                    <td>
-                                        <p-tag [value]="order.status" [severity]="getSeverity(order.status)" />
-                                    </td>
-                                    <td>
-                                        <p-button type="button" icon="pi pi-search" />
-                                    </td>
+                                    <td>{{ ges.name }}</td>
+                                    <td>{{ ges.prod }}</td>
+                                    <td><span>{{ ges.totalAgg }}</span>/<span class="text-rose-500">{{ ges.workingAgg }}</span>/<span class="text-lime-500">{{ ges.pendingAgg }}</span>/<span class="text-orange-500">{{ ges.repairingAgg }}</span></td>
+                                    <td>{{ ges.idle }}</td>
+                                    <td><p-button type="button" icon="pi pi-info-circle" severity="info" /></td>
                                 </tr>
                             </ng-template>
                             <ng-template #emptymessage>
