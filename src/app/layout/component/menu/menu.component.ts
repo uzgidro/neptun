@@ -22,7 +22,7 @@ export class MenuComponent implements OnInit {
                         routerLink: ['/dashboard']
                     },
                     {
-                        label: 'Кадровый персонал',
+                        label: 'Кадровый персонал (HRM)',
                         role: ['admin', 'rais'],
                         items: [
                             { label: 'Организации', role: ['rais'] },
@@ -79,6 +79,13 @@ export class MenuComponent implements OnInit {
                                     {
                                         label: 'MODSNOW',
                                         role: ['rais', 'sc']
+                                    },
+                                    {
+                                        label: 'Аварийные отключение',
+                                        role: ['rais', 'sc'],
+                                        routerLink: ['/viewer'],
+                                        queryParams: { type: 'shutdown' },
+                                        routerLinkActiveOptions: { queryParams: 'exact' }
                                     },
                                     {
                                         label: 'Фильтрация',
