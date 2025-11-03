@@ -3,7 +3,7 @@ import { StatsWidget } from './components/statswidget';
 import { IncomingEventsWidget } from './components/incoming-events/incoming-events.widget';
 import { WaterResourcesWidget } from '@/pages/dashboard/components/water-resources/water-resources.widget';
 import { ConstructionsWidget } from '@/pages/dashboard/components/constructions/constructions.widget';
-import { GesWidget } from '@/pages/dashboard/components/ges/ges.widget';
+import GesWidget from '@/pages/dashboard/components/ges/ges.widget';
 import { NotificationsWidget } from '@/pages/dashboard/components/notifications/notifications.widget';
 
 @Component({
