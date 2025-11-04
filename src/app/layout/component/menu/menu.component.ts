@@ -65,7 +65,12 @@ export class MenuComponent implements OnInit {
                                         routerLink: ['/viewer'],
                                         queryParams: { type: 'production' },
                                         routerLinkActiveOptions: { queryParams: 'exact' }
-                                    }
+                                    },
+                                    {
+                                        label: 'Холостой сброс',
+                                        role: ['rais', 'sc'],
+                                        routerLink: ['/discharge']
+                                    },
                                 ]
                             },
                             {

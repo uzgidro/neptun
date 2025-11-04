@@ -20,9 +20,7 @@ export class AuthService {
     signOut(): void {
         this.apiService
             .signOut()
-            .pipe(
-                finalize(() => this.logout())
-            )
+            .pipe(finalize(() => this.logout()))
             .subscribe();
     }
 
@@ -36,6 +34,10 @@ export class AuthService {
 
     isAuthenticated(): boolean {
         return this.jwtService.isAuthenticated();
+    }
+
+    isSc(): boolean {
+        return this.hasRole('sc');
     }
 
     hasRole(expectedRole: string | string[]): boolean {

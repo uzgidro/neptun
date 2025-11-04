@@ -1,0 +1,289 @@
+<div class="card">
+    <div class="font-semibold text-xl mb-4">Холостой водосброс</div>
+    <p-table
+        [value]="[]"
+        dataKey="id"
+        [loading]="loading"
+        [scrollable]="true"
+        [rowHover]="true"
+        [tableStyle]="{ 'min-width': '60rem' }"
+    >
+        <ng-template #caption>
+            @if (authService.isSc()) {
+                <button pButton (click)="openDialog()">
+                    <i pButtonIcon class="pi pi-plus"></i>
+                    <span pButtonLabel>Добавить</span>
+                </button>
+            }
+            <div class="flex table-header"></div>
+        </ng-template>
+        <ng-template #header>
+            <tr>
+                <th style="width: 5rem"></th>
+                <th pSortableColumn="name">Название
+                    <p-sortIcon field="name" />
+                </th>
+                <th pSortableColumn="started_at">Начало
+                    <p-sortIcon field="started_at" />
+                </th>
+                <th pSortableColumn="ended_at">Конец
+                    <p-sortIcon field="ended_at" />
+                </th>
+                <th pSortableColumn="flow_rate">Поток, м³/с
+                    <p-sortIcon field="flow_rate" />
+                </th>
+                <th pSortableColumn="total_volume">Объём, млн. м³
+                    <p-sortIcon field="total_volume" />
+                </th>
+                @if (authService.isSc()) {
+                    <th>Создал</th>
+                    <th>Подтвердил</th>
+                    <th>Действия</th>
+                }
+            </tr>
+        </ng-template>
+        <ng-template #body let-product let-expanded="expanded">
+            <tr>
+                <td>
+                    <p-button type="button" pRipple [pRowToggler]="product" [text]="true" [rounded]="true"
+                              [plain]="true" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" />
+                </td>
+                <td>{{ product.name }}</td>
+                <td>
+                    <img [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + product.image"
+                         [alt]="product.name" width="50" class="shadow-lg" />
+                </td>
+                <td>{{ product.price | currency: 'USD' }}</td>
+                <td>{{ product.category }}</td>
+                <td>
+                    <p-rating [readonly]="true" />
+                </td>
+                <td>
+                    <p-tag [value]="product.inventoryStatus" />
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template #expandedrow let-product>
+            <tr>
+                <td colspan="7">
+                    <div class="p-4">
+                        <h5>Orders for {{ product.name }}</h5>
+                        <p-table [value]="product.orders" dataKey="id">
+                            <ng-template #header>
+                                <tr>
+                                    <th pSortableColumn="id">Id
+                                        <p-sortIcon field="price" />
+                                    </th>
+                                    <th pSortableColumn="customer">
+                                        Customer
+                                        <p-sortIcon field="customer" />
+                                    </th>
+                                    <th pSortableColumn="date">Date
+                                        <p-sortIcon field="date" />
+                                    </th>
+                                    <th pSortableColumn="amount">
+                                        Amount
+                                        <p-sortIcon field="amount" />
+                                    </th>
+                                    <th pSortableColumn="status">
+                                        Status
+                                        <p-sortIcon field="status" />
+                                    </th>
+                                    <th style="width: 4rem"></th>
+                                </tr>
+                            </ng-template>
+                            <ng-template #body let-order>
+                                <tr>
+                                    <td>{{ order.id }}</td>
+                                    <td>{{ order.customer }}</td>
+                                    <td>{{ order.date }}</td>
+                                    <td>
+                                        {{ order.amount | currency: 'USD' }}
+                                    </td>
+                                    <td>
+                                        <p-tag [value]="order.status" />
+                                    </td>
+                                    <td>
+                                        <p-button type="button" icon="pi pi-search" />
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template #emptymessage>
+                                <tr>
+                                    <td colspan="4">Ничего не найдено</td>
+                                </tr>
+                            </ng-template>
+                            <ng-template #loadingbody>
+                                <tr>
+                                    <td colspan="4">Идет загрузка. Ожидайте...</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <!--    <p-table-->
+    <!--        #rt-->
+    <!--        [value]="roles"-->
+    <!--        dataKey="id"-->
+    <!--        [rows]="10"-->
+    <!--        [loading]="loading"-->
+    <!--        [rowHover]="true"-->
+    <!--        [showGridlines]="true"-->
+    <!--        [paginator]="true"-->
+    <!--        [globalFilterFields]="['name']"-->
+    <!--    >-->
+    <!--        <ng-template #caption>-->
+    <!--            <div class="flex justify-between items-center flex-column sm:flex-row">-->
+    <!--                <p-iconfield>-->
+    <!--                    <p-inputicon>-->
+    <!--                        <i class="pi pi-search"></i>-->
+    <!--                    </p-inputicon>-->
+    <!--                    <input pInputText type="text" (input)="onGlobalFilter(rt, $event)" placeholder="Поиск" />-->
+    <!--                </p-iconfield>-->
+    <!--                <button pButton (click)="openDialog()">-->
+    <!--                    <i class="pi pi-user-plus" pButtonIcon></i>-->
+    <!--                    <span pButtonLabel>Новая роль</span>-->
+    <!--                </button>-->
+    <!--            </div>-->
+    <!--        </ng-template>-->
+    <!--        <ng-template #header>-->
+    <!--            <tr>-->
+    <!--                <th style="min-width: 12rem">-->
+    <!--                    <div class="flex justify-between items-center">-->
+    <!--                        Имя-->
+    <!--                        <p-columnFilter type="text" field="name" display="menu"-->
+    <!--                                        placeholder="Search by name"></p-columnFilter>-->
+    <!--                    </div>-->
+    <!--                </th>-->
+    <!--                <th style="min-width: 12rem">-->
+    <!--                    <div class="flex justify-between items-center">-->
+    <!--                        Описание-->
+    <!--                    </div>-->
+    <!--                </th>-->
+    <!--            </tr>-->
+    <!--        </ng-template>-->
+    <!--        <ng-template #body let-role>-->
+    <!--            <tr>-->
+    <!--                <td>-->
+    <!--                    {{ role.name }}-->
+    <!--                </td>-->
+    <!--                <td>-->
+    <!--                    {{ role.description }}-->
+    <!--                </td>-->
+    <!--            </tr>-->
+    <!--        </ng-template>-->
+    <!--        <ng-template #emptymessage>-->
+    <!--            <tr>-->
+    <!--                <td colspan="8">Ничего не найдено</td>-->
+    <!--            </tr>-->
+    <!--        </ng-template>-->
+    <!--        <ng-template #loadingbody>-->
+    <!--            <tr>-->
+    <!--                <td colspan="8">Идет загрузка. Ожидайте...</td>-->
+    <!--            </tr>-->
+    <!--        </ng-template>-->
+    <!--    </p-table>-->
+</div>
+
+<p-dialog header="Новая запись, водосброс" [(visible)]="displayDialog" [breakpoints]="{ '960px': '75vw' }"
+          [style]="{ width: '30vw' }" [modal]="true" (onHide)="closeDialog()">
+    <form [formGroup]="waterDischargeForm">
+
+        <p-floatlabel class="w-full my-4" variant="on">
+            <p-select [options]="organizations"
+                      formControlName="organization"
+                      [showClear]="true"
+                      inputId="organization"
+                      optionLabel="name"
+                      [invalid]="submitted && waterDischargeForm.controls['organization'].invalid"
+                      [filter]="true"
+                      [group]="true"
+                      [appendTo]="'body'"
+                      class="w-full">
+                <ng-template let-group #group>
+                    <div class="flex items-center">
+                        <span>{{ group.name }}</span>
+                    </div>
+                </ng-template>
+            </p-select>
+            <label for="organization">Выберите объект</label>
+        </p-floatlabel>
+
+        @if (submitted && waterDischargeForm.controls['organization'].errors?.['required']) {
+            <p-message severity="error" variant="simple" size="small">Необходимо выбрать объект.</p-message>
+        }
+
+        <div class="grid xl:grid-cols-2 xl:gap-4">
+            <div>
+                <p-floatlabel class="w-full my-4" variant="on">
+                    <p-date-picker class="w-full"
+                                   inputId="started_at"
+                                   formControlName="started_at"
+                                   dateFormat="dd.mm.yy"
+                                   [invalid]="submitted && waterDischargeForm.controls['started_at'].invalid"
+                                   [appendTo]="'body'"
+                                   [showTime]="true"
+                                   [hourFormat]="'24'"
+                                   [maxDate]="maxDate" />
+                    <label for="started_at">Начало сброса</label>
+                </p-floatlabel>
+
+                @if (submitted && waterDischargeForm.controls['started_at'].errors?.['required']) {
+                    <p-message severity="error" variant="simple" size="small">Укажите начало сброса.</p-message>
+                }
+            </div>
+
+            <div>
+                <p-floatlabel class="w-full my-4" variant="on">
+                    <p-date-picker class="w-full"
+                                   inputId="ended_at"
+                                   formControlName="ended_at"
+                                   dateFormat="dd.mm.yy"
+                                   [appendTo]="'body'"
+                                   [showTime]="true"
+                                   [hourFormat]="'24'"
+                                   [maxDate]="maxDate" />
+                    <label for="ended_at">Конец сброса</label>
+                </p-floatlabel>
+            </div>
+        </div>
+
+        <p-floatlabel class="w-full my-4" variant="on">
+            <p-input-number class="w-full"
+                            inputId="flow_rate"
+                            [invalid]="submitted && waterDischargeForm.controls['flow_rate'].invalid"
+                            formControlName="flow_rate" />
+            <label for="flow_rate">Поток, м³/с</label>
+        </p-floatlabel>
+
+        @if (submitted && waterDischargeForm.controls['flow_rate'].errors?.['required']) {
+            <p-message severity="error" variant="simple" size="small">Укажите поток.</p-message>
+        }
+        @if (submitted && waterDischargeForm.controls['flow_rate'].errors?.['min']) {
+            <p-message severity="error" variant="simple" size="small">Поток не может быть отрицательным.</p-message>
+        }
+
+        <p-floatlabel class="w-full my-4" variant="on">
+        <textarea pInputTextarea
+                  id="reason"
+                  formControlName="reason"
+                  class="w-full"
+                  [invalid]="submitted && waterDischargeForm.controls['reason'].invalid"
+                  [autoResize]="true"
+                  rows="3"></textarea>
+            <label for="reason">Причина (обоснование)</label>
+        </p-floatlabel>
+
+        @if (submitted && waterDischargeForm.controls['reason'].errors?.['required']) {
+            <p-message severity="error" variant="simple" size="small">Укажите причину сброса.</p-message>
+        }
+
+    </form>
+    <ng-template #footer>
+        <p-button label="Отмена" (click)="closeDialog()" styleClass="p-button-text" />
+        <p-button label="Сохранить" type="submit" (click)="onSubmit()" />
+    </ng-template>
+</p-dialog>
