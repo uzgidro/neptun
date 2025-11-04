@@ -1,11 +1,12 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { AuthResponse } from '@/core/interfaces/auth';
 import { Observable } from 'rxjs';
 import { Roles } from '@/core/interfaces/roles';
 import { Users } from '@/core/interfaces/users';
 import { Categories } from '@/core/interfaces/categories';
 import { LatestFiles } from '@/core/interfaces/latest-files';
+import { Organization } from '@/core/interfaces/organizations';
 
 const BASE_URL = 'https://prime.speedwagon.uz';
 const AUTH = '/auth';
@@ -18,6 +19,7 @@ const FILES = '/files';
 const UPLOAD = '/upload';
 const LATEST = '/latest';
 const CATEGORIES = '/categories';
+const ORGANIZATIONS = '/organizations';
 
 @Injectable({
     providedIn: 'root'
@@ -81,5 +83,10 @@ export class ApiService {
 
     deleteFile(id: number): Observable<any> {
         return this.http.delete(BASE_URL + FILES + '/' + id.toString());
+    }
+
+    getCascades(): Observable<Organization[]> {
+        const params = new HttpParams().set('type', 'cascade');
+        return this.http.get<Organization[]>(BASE_URL + ORGANIZATIONS, { params: params });
     }
 }
