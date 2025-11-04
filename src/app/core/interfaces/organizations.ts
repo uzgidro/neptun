@@ -4,5 +4,5 @@ export interface Organization {
     parent_organization_id: number;
     parent_organization: string;
     types: string[];
-    children?: Organization[];
+    items?: Organization[];
 }
