@@ -30,12 +30,16 @@ export class DischargeComponent implements OnInit {
     organizations: Organization[] = [];
     loading = false;
     displayDialog = false;
-    maxDate = new Date();
     submitted: boolean = false;
     waterDischargeForm!: FormGroup;
     authService = inject(AuthService);
     private apiService = inject(ApiService);
     private messageService = inject(MessageService);
+
+
+    get maxDate(): Date {
+        return new Date();
+    }
 
     constructor(private fb: FormBuilder) {}
 
