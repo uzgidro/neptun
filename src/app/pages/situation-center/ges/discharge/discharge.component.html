@@ -1,12 +1,18 @@
 <div class="card">
     <div class="font-semibold text-xl mb-4">Холостой водосброс</div>
     <p-table
-        [value]="[]"
+        [value]="dischargeByCascades"
         dataKey="id"
+        stripedRows
         [loading]="loading"
         [scrollable]="true"
-        [rowHover]="true"
-        [tableStyle]="{ 'min-width': '60rem' }"
+        [rowHover]="false"
+        rowGroupMode="subheader"
+        groupRowsBy="name"
+        sortField="name"
+        sortMode="single"
+        scrollHeight="60vh"
+        [tableStyle]="{ 'min-width': '40rem' }"
     >
         <ng-template #caption>
             @if (authService.isSc()) {
@@ -19,173 +25,92 @@
         </ng-template>
         <ng-template #header>
             <tr>
-                <th style="width: 5rem"></th>
-                <th pSortableColumn="name">Название
-                    <p-sortIcon field="name" />
+                <th>Название
                 </th>
-                <th pSortableColumn="started_at">Начало
-                    <p-sortIcon field="started_at" />
+                <th>Сброс, млн. м³
                 </th>
-                <th pSortableColumn="ended_at">Конец
-                    <p-sortIcon field="ended_at" />
-                </th>
-                <th pSortableColumn="flow_rate">Поток, м³/с
-                    <p-sortIcon field="flow_rate" />
-                </th>
-                <th pSortableColumn="total_volume">Объём, млн. м³
-                    <p-sortIcon field="total_volume" />
-                </th>
-                @if (authService.isSc()) {
-                    <th>Создал</th>
-                    <th>Подтвердил</th>
-                    <th>Действия</th>
-                }
             </tr>
         </ng-template>
-        <ng-template #body let-product let-expanded="expanded">
-            <tr>
-                <td>
-                    <p-button type="button" pRipple [pRowToggler]="product" [text]="true" [rounded]="true"
-                              [plain]="true" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" />
-                </td>
-                <td>{{ product.name }}</td>
-                <td>
-                    <img [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + product.image"
-                         [alt]="product.name" width="50" class="shadow-lg" />
-                </td>
-                <td>{{ product.price | currency: 'USD' }}</td>
-                <td>{{ product.category }}</td>
-                <td>
-                    <p-rating [readonly]="true" />
-                </td>
-                <td>
-                    <p-tag [value]="product.inventoryStatus" />
-                </td>
+        <ng-template #groupheader let-cascade>
+            <tr pRowGroupHeader>
+                <td class="font-bold text-lg">{{ cascade.name }}</td>
+                <td class="font-bold text-lg">{{ cascade.total_volume }}</td>
             </tr>
         </ng-template>
-        <ng-template #expandedrow let-product>
+        <ng-template #body let-cascade>
             <tr>
-                <td colspan="7">
-                    <div class="p-4">
-                        <h5>Orders for {{ product.name }}</h5>
-                        <p-table [value]="product.orders" dataKey="id">
-                            <ng-template #header>
-                                <tr>
-                                    <th pSortableColumn="id">Id
-                                        <p-sortIcon field="price" />
-                                    </th>
-                                    <th pSortableColumn="customer">
-                                        Customer
-                                        <p-sortIcon field="customer" />
-                                    </th>
-                                    <th pSortableColumn="date">Date
-                                        <p-sortIcon field="date" />
-                                    </th>
-                                    <th pSortableColumn="amount">
-                                        Amount
-                                        <p-sortIcon field="amount" />
-                                    </th>
-                                    <th pSortableColumn="status">
-                                        Status
-                                        <p-sortIcon field="status" />
-                                    </th>
-                                    <th style="width: 4rem"></th>
-                                </tr>
-                            </ng-template>
-                            <ng-template #body let-order>
-                                <tr>
-                                    <td>{{ order.id }}</td>
-                                    <td>{{ order.customer }}</td>
-                                    <td>{{ order.date }}</td>
-                                    <td>
-                                        {{ order.amount | currency: 'USD' }}
-                                    </td>
-                                    <td>
-                                        <p-tag [value]="order.status" />
-                                    </td>
-                                    <td>
-                                        <p-button type="button" icon="pi pi-search" />
-                                    </td>
-                                </tr>
-                            </ng-template>
-                            <ng-template #emptymessage>
-                                <tr>
-                                    <td colspan="4">Ничего не найдено</td>
-                                </tr>
-                            </ng-template>
-                            <ng-template #loadingbody>
-                                <tr>
-                                    <td colspan="4">Идет загрузка. Ожидайте...</td>
-                                </tr>
-                            </ng-template>
-                        </p-table>
-                    </div>
+                <td colspan="2">
+                    <p-table
+                        [value]="cascade.hpps"
+                        dataKey="id"
+                        stripedRows
+                        [loading]="loading"
+                        [scrollable]="false"
+                        [rowHover]="false"
+                        rowGroupMode="subheader"
+                        groupRowsBy="name"
+                        sortField="name"
+                        sortMode="single"
+                    >
+                        <ng-template #body let-hpp>
+                            <tr>
+                                <td class="font-bold">{{ hpp.name }}</td>
+                                <td class="font-bold">{{ hpp.total_volume }}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <p-table
+                                        [value]="hpp.discharges"
+                                        dataKey="id"
+                                        stripedRows
+                                        [loading]="loading"
+                                        [scrollable]="false"
+                                        [rowHover]="true"
+                                        rowGroupMode="subheader"
+                                        groupRowsBy="started_at"
+                                        sortField="started_at"
+                                        sortMode="single"
+                                    >
+                                        <ng-template #header>
+                                            <tr>
+                                                <th>
+                                                    Начало
+                                                </th>
+                                                <th>
+                                                    Сброс, м³/с
+                                                </th>
+                                                <th>
+                                                    Прекращено
+                                                </th>
+                                                <th>
+                                                    Общий объём, млн. м³
+                                                </th>
+                                                <th>
+                                                    Причина
+                                                </th>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template #body let-discharge>
+                                            <tr>
+                                                <td>{{ discharge.started_at | date:'dd.MM.yyyy HH:mm' }}</td>
+                                                <td>{{ discharge.flow_rate }}</td>
+                                                <td>{{ discharge.ended_at | date:'dd.MM.yyyy HH:mm' }}</td>
+                                                <td>{{ discharge.total_volume }}</td>
+                                                <td>{{ discharge.reason }}</td>
+                                            </tr>
+
+
+                                        </ng-template>
+                                    </p-table>
+                                </td>
+                            </tr>
+
+                        </ng-template>
+                    </p-table>
                 </td>
             </tr>
         </ng-template>
     </p-table>
-    <!--    <p-table-->
-    <!--        #rt-->
-    <!--        [value]="roles"-->
-    <!--        dataKey="id"-->
-    <!--        [rows]="10"-->
-    <!--        [loading]="loading"-->
-    <!--        [rowHover]="true"-->
-    <!--        [showGridlines]="true"-->
-    <!--        [paginator]="true"-->
-    <!--        [globalFilterFields]="['name']"-->
-    <!--    >-->
-    <!--        <ng-template #caption>-->
-    <!--            <div class="flex justify-between items-center flex-column sm:flex-row">-->
-    <!--                <p-iconfield>-->
-    <!--                    <p-inputicon>-->
-    <!--                        <i class="pi pi-search"></i>-->
-    <!--                    </p-inputicon>-->
-    <!--                    <input pInputText type="text" (input)="onGlobalFilter(rt, $event)" placeholder="Поиск" />-->
-    <!--                </p-iconfield>-->
-    <!--                <button pButton (click)="openDialog()">-->
-    <!--                    <i class="pi pi-user-plus" pButtonIcon></i>-->
-    <!--                    <span pButtonLabel>Новая роль</span>-->
-    <!--                </button>-->
-    <!--            </div>-->
-    <!--        </ng-template>-->
-    <!--        <ng-template #header>-->
-    <!--            <tr>-->
-    <!--                <th style="min-width: 12rem">-->
-    <!--                    <div class="flex justify-between items-center">-->
-    <!--                        Имя-->
-    <!--                        <p-columnFilter type="text" field="name" display="menu"-->
-    <!--                                        placeholder="Search by name"></p-columnFilter>-->
-    <!--                    </div>-->
-    <!--                </th>-->
-    <!--                <th style="min-width: 12rem">-->
-    <!--                    <div class="flex justify-between items-center">-->
-    <!--                        Описание-->
-    <!--                    </div>-->
-    <!--                </th>-->
-    <!--            </tr>-->
-    <!--        </ng-template>-->
-    <!--        <ng-template #body let-role>-->
-    <!--            <tr>-->
-    <!--                <td>-->
-    <!--                    {{ role.name }}-->
-    <!--                </td>-->
-    <!--                <td>-->
-    <!--                    {{ role.description }}-->
-    <!--                </td>-->
-    <!--            </tr>-->
-    <!--        </ng-template>-->
-    <!--        <ng-template #emptymessage>-->
-    <!--            <tr>-->
-    <!--                <td colspan="8">Ничего не найдено</td>-->
-    <!--            </tr>-->
-    <!--        </ng-template>-->
-    <!--        <ng-template #loadingbody>-->
-    <!--            <tr>-->
-    <!--                <td colspan="8">Идет загрузка. Ожидайте...</td>-->
-    <!--            </tr>-->
-    <!--        </ng-template>-->
-    <!--    </p-table>-->
 </div>
 
 <p-dialog header="Новая запись, водосброс" [(visible)]="displayDialog" [breakpoints]="{ '960px': '75vw' }"

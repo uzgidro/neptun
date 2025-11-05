@@ -2,10 +2,6 @@ import { Component, inject, OnInit } from '@angular/core';
 import { Button, ButtonDirective, ButtonIcon, ButtonLabel } from 'primeng/button';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TableModule } from 'primeng/table';
-import { CurrencyPipe } from '@angular/common';
-import { Rating } from 'primeng/rating';
-import { Ripple } from 'primeng/ripple';
-import { Tag } from 'primeng/tag';
 import { AuthService } from '@/core/services/auth.service';
 import { Dialog } from 'primeng/dialog';
 import { ApiService } from '@/core/services/api.service';
@@ -19,10 +15,11 @@ import { Cascade, WaterDischargePayload } from '@/core/interfaces/discharge';
 import { MessageService } from 'primeng/api';
 import { Message } from 'primeng/message';
 import { dateRangeValidator } from '@/core/validators/date-range.validator';
+import { DatePipe } from '@angular/common';
 
 @Component({
     selector: 'app-discharge',
-    imports: [Button, ButtonDirective, ButtonIcon, ButtonLabel, ReactiveFormsModule, TableModule, CurrencyPipe, Rating, Ripple, Tag, Dialog, Select, FormsModule, FloatLabel, DatePicker, InputNumber, Textarea, Message],
+    imports: [Button, ButtonDirective, ButtonIcon, ButtonLabel, ReactiveFormsModule, TableModule, Dialog, Select, FormsModule, FloatLabel, DatePicker, InputNumber, Textarea, Message, DatePipe],
     templateUrl: './discharge.component.html',
     styleUrl: './discharge.component.scss'
 })
@@ -59,17 +56,12 @@ export class DischargeComponent implements OnInit {
 
         this.loading = true;
         this.apiService.getDischarges().subscribe({
-            next: (data) => {
+            next: (data: Cascade[]) => {
                 this.dischargeByCascades = data;
+                this.loading = false;
             },
-            error: () => {
-                this.messageService.add({
-                    severity: 'warning',
-                    summary: 'Ошибка',
-                    detail: 'Не удалось загрузить данные'
-                });
-            },
-            complete: () => {
+            error: (err) => {
+                console.error('Ошибка загрузки данных:', err);
                 this.loading = false;
             }
         });
