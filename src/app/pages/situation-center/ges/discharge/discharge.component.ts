@@ -17,6 +17,7 @@ import { Message } from 'primeng/message';
 import { dateRangeValidator } from '@/core/validators/date-range.validator';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { Ripple } from 'primeng/ripple';
+import { Tooltip } from 'primeng/tooltip';
 
 interface expandedRows {
     [key: string]: boolean;
@@ -24,7 +25,7 @@ interface expandedRows {
 
 @Component({
     selector: 'app-discharge',
-    imports: [Button, ButtonDirective, ButtonIcon, ButtonLabel, ReactiveFormsModule, TableModule, Dialog, Select, FormsModule, FloatLabel, DatePicker, InputNumber, Textarea, Message, DatePipe, DecimalPipe, Ripple],
+    imports: [Button, ButtonDirective, ButtonIcon, ButtonLabel, ReactiveFormsModule, TableModule, Dialog, Select, FormsModule, FloatLabel, DatePicker, InputNumber, Textarea, Message, DatePipe, DecimalPipe, Ripple, Tooltip],
     templateUrl: './discharge.component.html',
     styleUrl: './discharge.component.scss'
 })
@@ -64,6 +65,16 @@ export class DischargeComponent implements OnInit {
         this.apiService.getDischarges().subscribe({
             next: (data: Cascade[]) => {
                 this.dischargeByCascades = data;
+                const newExpandedRows: { [key: string]: boolean } = {};
+
+                data.forEach((cascade) => {
+                    newExpandedRows[cascade.id] = true;
+                    cascade.hpps.forEach((hpp) => {
+                        newExpandedRows[hpp.id] = true;
+                    });
+                });
+
+                this.expandedRows = newExpandedRows;
                 this.loading = false;
             },
             error: (err) => {
