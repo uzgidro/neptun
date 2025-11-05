@@ -120,15 +120,24 @@
                                                                 }
                                                             </td>
                                                             <td>
-                                                                <button pButton icon="pi pi-check"
+                                                                <button pButton
                                                                         class="p-button-text p-button-success"
-                                                                        pTooltip="Подтвердить"></button>
-                                                                <button pButton icon="pi pi-pencil"
+                                                                        pTooltip="Подтвердить"
+                                                                        (click)="approve(discharge)">
+                                                                    <i pButtonIcon class="pi pi-check"></i>
+                                                                </button>
+                                                                <button pButton
                                                                         class="p-button-text p-button-warning"
-                                                                        pTooltip="Изменить"></button>
-                                                                <button pButton icon="pi pi-trash"
+                                                                        pTooltip="Изменить"
+                                                                        (click)="edit(discharge)">
+                                                                    <i pButtonIcon class="pi pi-pencil"></i>
+                                                                </button>
+                                                                <button pButton
                                                                         class="p-button-text p-button-danger"
-                                                                        pTooltip="Удалить"></button>
+                                                                        pTooltip="Удалить"
+                                                                        (click)="delete(discharge)">
+                                                                    <i pButtonIcon class="pi pi-trash"></i>
+                                                                </button>
                                                             </td>
                                                         }
                                                     </tr>

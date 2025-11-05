@@ -11,7 +11,7 @@ import { FloatLabel } from 'primeng/floatlabel';
 import { DatePicker } from 'primeng/datepicker';
 import { InputNumber } from 'primeng/inputnumber';
 import { Textarea } from 'primeng/textarea';
-import { Cascade, WaterDischargePayload } from '@/core/interfaces/discharge';
+import { Cascade, DischargeModel, WaterDischargePayload } from '@/core/interfaces/discharge';
 import { MessageService } from 'primeng/api';
 import { Message } from 'primeng/message';
 import { dateRangeValidator } from '@/core/validators/date-range.validator';
@@ -36,6 +36,9 @@ export class DischargeComponent implements OnInit {
     loading = false;
     displayDialog = false;
     submitted: boolean = false;
+
+    isEditMode: boolean = false;
+
     waterDischargeForm!: FormGroup;
     authService = inject(AuthService);
     private apiService = inject(ApiService);
@@ -110,6 +113,18 @@ export class DischargeComponent implements OnInit {
         this.displayDialog = false;
         this.submitted = false;
     }
+
+    approve(model: DischargeModel): void {}
+
+    edit(model: DischargeModel): void {
+        this.isEditMode = true;
+        this.submitted = false;
+        this.displayDialog = true;
+        // this.waterDischargeForm.setValue()
+        console.log(model);
+    }
+
+    delete(model: DischargeModel): void {}
 
     onSubmit(): void {
         this.submitted = true;
