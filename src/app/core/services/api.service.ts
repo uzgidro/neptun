@@ -95,4 +95,8 @@ export class ApiService {
     addDischarge(payload: WaterDischargePayload): Observable<any> {
         return this.http.post(BASE_URL + DISCHARGES, payload);
     }
+
+    getDischarges(): Observable<any> {
+        return this.http.get(BASE_URL + DISCHARGES);
+    }
 }

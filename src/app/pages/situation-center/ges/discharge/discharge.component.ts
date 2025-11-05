@@ -55,6 +55,12 @@ export class DischargeComponent implements OnInit {
         });
 
         this.loading = true;
+        this.apiService.getDischarges().subscribe({
+            next: data => {
+                console.log(data);
+            }
+        })
+
         this.apiService.getCascades().subscribe({
             next: (data) => {
                 this.organizations = data;
