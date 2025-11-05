@@ -7,7 +7,7 @@ import { Users } from '@/core/interfaces/users';
 import { Categories } from '@/core/interfaces/categories';
 import { LatestFiles } from '@/core/interfaces/latest-files';
 import { Organization } from '@/core/interfaces/organizations';
-import { WaterDischargePayload } from '@/core/interfaces/discharge';
+import { Cascade, WaterDischargePayload } from '@/core/interfaces/discharge';
 
 const BASE_URL = 'https://prime.speedwagon.uz';
 const AUTH = '/auth';
@@ -96,7 +96,7 @@ export class ApiService {
         return this.http.post(BASE_URL + DISCHARGES, payload);
     }
 
-    getDischarges(): Observable<any> {
-        return this.http.get(BASE_URL + DISCHARGES);
+    getDischarges(): Observable<Cascade[]> {
+        return this.http.get<Cascade[]>(BASE_URL + DISCHARGES);
     }
 }
