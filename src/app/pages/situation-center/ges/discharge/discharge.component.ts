@@ -18,6 +18,7 @@ import { Textarea } from 'primeng/textarea';
 import { WaterDischargePayload } from '@/core/interfaces/discharge';
 import { MessageService } from 'primeng/api';
 import { Message } from 'primeng/message';
+import { dateRangeValidator } from '@/core/validators/date-range.validator';
 
 @Component({
     selector: 'app-discharge',
@@ -44,7 +45,9 @@ export class DischargeComponent implements OnInit {
             started_at: this.fb.control<Date | null>(null, [Validators.required]),
             ended_at: this.fb.control<Date | null>(null),
             flow_rate: this.fb.control<number | null>(null, [Validators.required, Validators.min(0)]),
-            reason: this.fb.control<string | null>(null, [Validators.required])
+            reason: this.fb.control<string | null>(null)
+        }, {
+            validators: [dateRangeValidator()]
         });
 
         this.loading = true;
@@ -80,9 +83,11 @@ export class DischargeComponent implements OnInit {
             organization_id: rawValue.organization!.id,
             started_at: rawValue.started_at!.toISOString(),
             flow_rate: rawValue.flow_rate!,
-            reason: rawValue.reason!
         };
 
+        if (rawValue.reason) {
+            payload.reason = rawValue.reason;
+        }
         if (rawValue.ended_at) {
             payload.ended_at = rawValue.ended_at.toISOString();
         }

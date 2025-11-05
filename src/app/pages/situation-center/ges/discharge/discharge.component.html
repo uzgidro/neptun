@@ -250,6 +250,11 @@
                 </p-floatlabel>
             </div>
         </div>
+        @if (submitted && waterDischargeForm.errors?.['endDateBeforeStart']) {
+            <p-message severity="error" variant="simple" size="small" class="block -mt-2 mb-3">
+                Конечная дата не может быть раньше начальной
+            </p-message>
+        }
 
         <p-floatlabel class="w-full my-4" variant="on">
             <p-input-number class="w-full"
@@ -271,15 +276,10 @@
                   id="reason"
                   formControlName="reason"
                   class="w-full"
-                  [invalid]="submitted && waterDischargeForm.controls['reason'].invalid"
                   [autoResize]="true"
                   rows="3"></textarea>
             <label for="reason">Причина (обоснование)</label>
         </p-floatlabel>
-
-        @if (submitted && waterDischargeForm.controls['reason'].errors?.['required']) {
-            <p-message severity="error" variant="simple" size="small">Укажите причину сброса.</p-message>
-        }
 
     </form>
     <ng-template #footer>

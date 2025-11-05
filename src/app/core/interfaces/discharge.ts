@@ -3,5 +3,5 @@ export interface WaterDischargePayload {
     started_at: string;
     ended_at?: string;
     flow_rate: number;
-    reason: string;
+    reason?: string;
 }
