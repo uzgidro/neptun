@@ -15,16 +15,22 @@ import { Cascade, WaterDischargePayload } from '@/core/interfaces/discharge';
 import { MessageService } from 'primeng/api';
 import { Message } from 'primeng/message';
 import { dateRangeValidator } from '@/core/validators/date-range.validator';
-import { DatePipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
+import { Ripple } from 'primeng/ripple';
+
+interface expandedRows {
+    [key: string]: boolean;
+}
 
 @Component({
     selector: 'app-discharge',
-    imports: [Button, ButtonDirective, ButtonIcon, ButtonLabel, ReactiveFormsModule, TableModule, Dialog, Select, FormsModule, FloatLabel, DatePicker, InputNumber, Textarea, Message, DatePipe],
+    imports: [Button, ButtonDirective, ButtonIcon, ButtonLabel, ReactiveFormsModule, TableModule, Dialog, Select, FormsModule, FloatLabel, DatePicker, InputNumber, Textarea, Message, DatePipe, DecimalPipe, Ripple],
     templateUrl: './discharge.component.html',
     styleUrl: './discharge.component.scss'
 })
 export class DischargeComponent implements OnInit {
     organizations: Organization[] = [];
+    expandedRows: expandedRows = {};
     dischargeByCascades: Cascade[] = [];
     loading = false;
     displayDialog = false;

@@ -48,22 +48,12 @@
                 <td colspan="7">
                     <div class="p-4">
                         <h5>{{ cascade.name }}</h5>
-                        <!--                                <p>Адрес: г. Город, район, улица, дом</p>-->
-                        <!--                                <p>СТИР: 123456789</p>-->
                         <p>{{ cascade.directorName }}</p>
-
-
-
 
                         <a pButton outlined class="mb-4" [href]="'tel:' + cascade.phoneNumber">
                             <i pButtonIcon class="pi pi-phone"></i>
                             <span pButtonLabel>Позвонить</span>
                         </a>
-
-
-
-
-
 
                         <p-table [value]="cascade.ges" dataKey="name">
                             <ng-template #header>
