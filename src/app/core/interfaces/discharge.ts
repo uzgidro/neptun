@@ -12,12 +12,14 @@ export interface WaterDischargePayload {
 export interface Cascade {
     id: number;
     name: string;
+    total_volume: number;
     hpps: Hpp[];
 }
 
 export interface Hpp {
     id: number;
     name: string;
+    total_volume: number;
     discharges: DischargeModel[]; // Массив сбросов
 }
 
