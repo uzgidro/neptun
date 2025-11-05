@@ -54,6 +54,16 @@ export class DischargeComponent implements OnInit {
         this.apiService.getCascades().subscribe({
             next: (data) => {
                 this.organizations = data;
+            },
+            error: () => {
+                this.messageService.add({
+                    severity: 'warning',
+                    summary: 'Ошибка',
+                    detail: 'Не удалось загрузить данные',
+                })
+            },
+            complete: () => {
+                this.loading = false;
             }
         });
     }
