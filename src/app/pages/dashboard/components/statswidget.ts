@@ -25,13 +25,13 @@ import { CommonModule } from '@angular/common';
                 <div class="flex justify-between mb-4">
                     <div>
                         <span class="block text-muted-color font-medium mb-4">Дебит</span>
-                        <div class="text-surface-900 dark:text-surface-0 font-medium text-xl">$1.580.000</div>
+                        <div class="text-surface-900 dark:text-surface-0 font-medium text-xl">1.580.000 UZS</div>
                     </div>
                     <div class="flex items-center justify-center bg-green-100 dark:bg-green-400/10 rounded-border" style="width: 2.5rem; height: 2.5rem">
-                        <i class="pi pi-dollar text-green-500 text-xl!"></i>
+                        <i class="pi pi-wallet text-green-500 text-xl!"></i>
                     </div>
                 </div>
-                <span class="text-primary font-medium">+$500.000 </span>
+                <span class="text-primary font-medium">+500.000 UZS </span>
                 <span class="text-muted-color">за прошедшую неделю</span>
             </div>
         </div>
@@ -40,13 +40,13 @@ import { CommonModule } from '@angular/common';
                 <div class="flex justify-between mb-4">
                     <div>
                         <span class="block text-muted-color font-medium mb-4">Кредит</span>
-                        <div class="text-surface-900 dark:text-surface-0 font-medium text-xl">$250.000</div>
+                        <div class="text-surface-900 dark:text-surface-0 font-medium text-xl">250.000 UZS</div>
                     </div>
                     <div class="flex items-center justify-center bg-rose-100 dark:bg-rose-400/10 rounded-border" style="width: 2.5rem; height: 2.5rem">
-                        <i class="pi pi-dollar text-rose-500 text-xl!"></i>
+                        <i class="pi pi-wallet text-rose-500 text-xl!"></i>
                     </div>
                 </div>
-                <span class="text-primary font-medium">+$150.000 </span>
+                <span class="text-primary font-medium">+150.000 UZS </span>
                 <span class="text-muted-color">за прошлую неделю</span>
             </div>
         </div>

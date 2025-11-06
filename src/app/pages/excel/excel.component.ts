@@ -11,39 +11,37 @@ import * as XLSX from 'xlsx';
 import { TableModule } from 'primeng/table';
 import { Select } from 'primeng/select';
 import { ApiService } from '@/core/services/api.service';
+import { Organization } from '@/core/interfaces/organizations';
+import { DatePicker } from 'primeng/datepicker';
 
 
 
 // Интерфейс для данных нашей таблицы
-export interface StudentData {
+export interface ShutdownData {
     id: number;
-    group: string; // Поле для группировки
-    school: string;
-    student: string;
-    class: string;
-    age: number | null;
+    organization: string;
+    event_date: string;
+    recovery_date: string;
+    description: string;
+    lost_power: number;
+    idle_discharge: number;
 }
 
 @Component({
     selector: 'app-excel',
     standalone: true,
-    imports: [CommonModule, InputTextModule, FormsModule, ButtonModule, DialogModule, ConfirmDialogModule, ToastModule, ReactiveFormsModule, TableModule, Select],
+    imports: [CommonModule, InputTextModule, FormsModule, ButtonModule, DialogModule, ConfirmDialogModule, ToastModule, ReactiveFormsModule, TableModule, Select, DatePicker],
     templateUrl: './excel.component.html',
     providers: [ConfirmationService, MessageService] // Добавляем сервисы для диалогов и уведомлений
 })
-class ExcelComponent implements OnInit {
+export class ExcelComponent implements OnInit {
     private apiService = inject(ApiService);
-    allStudents: StudentData[] = [];
-    allStudents2: StudentData[] = [];
-    allStudents3: StudentData[] = []; // Данные для третьей таблицы
-    groups: { name: string }[] = [];
+    shutdowns: ShutdownData[] = []; // Данные для таблицы
 
-    newStudent: Partial<StudentData> = { group: '', school: '', student: '', class: '', age: null };
-    newStudent2: Partial<StudentData> = { group: '', school: '', student: '', class: '', age: null };
-    newStudent3: Partial<StudentData> = { group: '', school: '', student: '', class: '', age: null }; // Данные для формы третьей таблицы
-    displayAddDialog = false;
-    displayAddDialog2 = false;
-    displayAddDialog3 = false; // Управление диалогом для третьей таблицы
+    organizations: Organization[] = [];
+
+    newEntry: Partial<ShutdownData> = {}; // Данные для формы
+    displayAddDialog = false; // Управление диалогом
 
     constructor(
         private confirmationService: ConfirmationService,
@@ -52,128 +50,48 @@ class ExcelComponent implements OnInit {
 
     ngOnInit() {
         this.apiService.getCascades().subscribe({
-            next: data => {
-                console.log(data);
+            next: (data) => {
+                this.organizations = data;
             }
-        })
+        });
         // Исходные данные, разделенные по группам
-        const initialTables = [
-            {
-                title: 'Общеобразовательные школы',
-                data: [
-                    { id: 1, school: 'Школа №17', student: 'Иванов Иван', class: '9А', age: 15 },
-                    { id: 2, school: 'Лицей "Интеллект"', student: 'Петрова Мария', class: '10Б', age: 16 }
-                ]
-            },
-            { title: 'Специализированные школы', data: [{ id: 1, school: 'Музыкальная школа', student: 'Бахов Себастьян', class: 'Сольфеджио', age: 14 }] },
-            { title: 'Спортивные секции', data: [] },
-            { title: 'Художественные кружки', data: [] },
-            { title: 'Научные лаборатории', data: [] },
-            { title: 'Волонтерские движения', data: [] }
-        ];
-
-        // Формируем единый массив данных и список групп
-        // this.allStudents = initialTables.flatMap((table) => table.data.map((student) => ({ ...student, group: table.title })));
-
-        // Инициализируем данные для второй таблицы (можно использовать другие данные)
-        // this.allStudents2 = [
-        //     { id: 101, group: 'Спортивные секции', school: 'Спортивная школа "Олимп"', student: 'Борисов Борис', class: 'Дзюдо', age: 16 },
-        //     { id: 102, group: 'Художественные кружки', school: 'Арт-студия "Палитра"', student: 'Александрова Александра', class: 'Живопись', age: 14 }
-        // ];
-
         // Инициализируем данные для третьей таблицы (можно использовать другие данные)
-        // this.allStudents3 = [
-        //     { id: 201, group: 'Научные лаборатории', school: 'Кванториум', student: 'Николаев Николай', class: 'Робототехника', age: 15 },
+        // this.shutdowns = [
+        //    { id: 1, organization: 'Андижон ГЭСлар каскади', event_date: '2024-05-20 10:00', recovery_date: '2024-05-20 12:30', description: 'Краткое замыкание', lost_power: 50, idle_discharge: 120 },
+        //   { id: 2, organization: 'Чорвоқ ГЭС', event_date: '2024-05-21 14:15', recovery_date: '2024-05-21 15:00', description: 'Плановое отключение', lost_power: 0, idle_discharge: 0 }
         // ];
-
-        this.groups = initialTables.map((table) => ({ name: table.title }));
     }
 
     showAddDialog() {
-        this.newStudent = { group: this.groups[0]?.name, school: '', student: '', class: '', age: null }; // Сбрасываем форму
+        this.newEntry = {}; // Сбрасываем форму
         this.displayAddDialog = true;
     }
 
-    showAddDialog2() {
-        this.newStudent2 = { group: this.groups[0]?.name, school: '', student: '', class: '', age: null }; // Сбрасываем форму для второй таблицы
-        this.displayAddDialog2 = true;
-    }
-
-    showAddDialog3() {
-        this.newStudent3 = { group: this.groups[0]?.name, school: '', student: '', class: '', age: null }; // Сбрасываем форму для третьей таблицы
-        this.displayAddDialog3 = true;
-    }
-
-    saveNewStudent() {
-        if (this.newStudent.group && this.newStudent.student && this.newStudent.school) {
-            const newId = this.allStudents.length > 0 ? Math.max(...this.allStudents.map((s) => s.id)) + 1 : 1;
-            this.allStudents.push({ ...this.newStudent, id: newId } as StudentData);
-            this.allStudents = [...this.allStudents]; // Обновляем ссылку для перерисовки таблицы
+    saveNewEntry() {
+        if (this.newEntry.organization && this.newEntry.description) {
+            const newId = this.shutdowns.length > 0 ? Math.max(...this.shutdowns.map((s) => s.id)) + 1 : 1;
+            this.shutdowns.push({ ...this.newEntry, id: newId } as ShutdownData);
+            this.shutdowns = [...this.shutdowns]; // Обновляем ссылку для перерисовки таблицы
             this.displayAddDialog = false;
-            this.messageService.add({ severity: 'success', summary: 'Успешно', detail: 'Ученик добавлен' });
+            this.messageService.add({ severity: 'success', summary: 'Успешно', detail: 'Запись добавлена' });
         }
     }
 
-    saveNewStudent2() {
-        if (this.newStudent2.group && this.newStudent2.student && this.newStudent2.school) {
-            const newId = this.allStudents2.length > 0 ? Math.max(...this.allStudents2.map((s) => s.id)) + 1 : 1;
-            this.allStudents2.push({ ...this.newStudent2, id: newId } as StudentData);
-            this.allStudents2 = [...this.allStudents2];
-            this.displayAddDialog2 = false;
-            this.messageService.add({ severity: 'success', summary: 'Успешно', detail: 'Ученик добавлен во вторую таблицу' });
-        }
-    }
-
-    saveNewStudent3() {
-        if (this.newStudent3.group && this.newStudent3.student && this.newStudent3.school) {
-            const newId = this.allStudents3.length > 0 ? Math.max(...this.allStudents3.map((s) => s.id)) + 1 : 1;
-            this.allStudents3.push({ ...this.newStudent3, id: newId } as StudentData);
-            this.allStudents3 = [...this.allStudents3];
-            this.displayAddDialog3 = false;
-            this.messageService.add({ severity: 'success', summary: 'Успешно', detail: 'Ученик добавлен в третью таблицу' });
-        }
-    }
-
-    deleteStudent(student: StudentData) {
+    deleteEntry(entry: ShutdownData) {
         this.confirmationService.confirm({
-            message: `Вы уверены, что хотите удалить ученика ${student.student}?`,
+            message: `Вы уверены, что хотите удалить запись №${entry.id}?`,
             header: 'Подтверждение удаления',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
-                this.allStudents = this.allStudents.filter((s) => s.id !== student.id);
-                this.messageService.add({ severity: 'info', summary: 'Успешно', detail: 'Ученик удален' });
+                this.shutdowns = this.shutdowns.filter((s) => s.id !== entry.id);
+                this.messageService.add({ severity: 'info', summary: 'Успешно', detail: 'Запись удалена' });
             }
         });
     }
 
-    deleteStudent2(student: StudentData) {
-        this.confirmationService.confirm({
-            message: `Вы уверены, что хотите удалить ученика ${student.student} из второй таблицы?`,
-            header: 'Подтверждение удаления',
-            icon: 'pi pi-exclamation-triangle',
-            accept: () => {
-                this.allStudents2 = this.allStudents2.filter((s) => s.id !== student.id);
-                this.messageService.add({ severity: 'info', summary: 'Успешно', detail: 'Ученик удален из второй таблицы' });
-            }
-        });
-    }
-
-    deleteStudent3(student: StudentData) {
-        this.confirmationService.confirm({
-            message: `Вы уверены, что хотите удалить ученика ${student.student} из третьей таблицы?`,
-            header: 'Подтверждение удаления',
-            icon: 'pi pi-exclamation-triangle',
-            accept: () => {
-                this.allStudents3 = this.allStudents3.filter((s) => s.id !== student.id);
-                this.messageService.add({ severity: 'info', summary: 'Успешно', detail: 'Ученик удален из третьей таблицы' });
-            }
-        });
-    }
-
-    exportCombinedToExcel(): void {
-        const title = 'Общий сводный список учеников';
-        // 1. Объединяем данные из обеих таблиц в один массив
-        const combinedData = [...this.allStudents, ...this.allStudents2, ...this.allStudents3];
+    exportToExcel(): void {
+        const title = 'Информация об аварийных отключениях';
+        const combinedData = this.shutdowns;
 
         if (combinedData.length === 0) {
             this.messageService.add({ severity: 'warn', summary: 'Нечего экспортировать', detail: 'Таблицы пусты' });
@@ -181,12 +99,13 @@ class ExcelComponent implements OnInit {
         }
 
         // Убираем ID и группу для чистоты экспорта
-        const dataToExport = combinedData.map(({ id, group, ...rest }) => ({
-            Группа: group, // Добавляем русское название колонки
-            Школа: rest.school,
-            Ученик: rest.student,
-            Класс: rest.class,
-            Возраст: rest.age
+        const dataToExport = combinedData.map(({ id, ...rest }) => ({
+            'Наименование объекта': rest.organization,
+            'Дата и время происшествия': rest.event_date,
+            'Дата и время восстановления': rest.recovery_date,
+            'Короткое описание аварии': rest.description,
+            'Непроизведенная электроэнергия (тыс. кВт*ч)': rest.lost_power,
+            'Количество холостого сброса воды (тыс. м3)': rest.idle_discharge
         }));
 
         const workbook: XLSX.WorkBook = XLSX.utils.book_new();
@@ -194,7 +113,7 @@ class ExcelComponent implements OnInit {
 
         // 2. Добавляем стилизованный заголовок
         XLSX.utils.sheet_add_aoa(worksheet, [[{ v: title, t: 's', s: { font: { bold: true, sz: 16, color: { rgb: 'FFFFFF' } }, fill: { fgColor: { rgb: '4F81BD' } } } }]], { origin: 'A1' });
-        worksheet['!merges'] = [{ s: { r: 0, c: 0 }, e: { r: 0, c: 4 } }]; // Объединяем ячейки для заголовка
+        worksheet['!merges'] = [{ s: { r: 0, c: 0 }, e: { r: 0, c: 6 } }]; // Объединяем ячейки для заголовка
 
         // 3. Добавляем данные таблицы со стилизованной шапкой
         XLSX.utils.sheet_add_json(worksheet, dataToExport, { origin: 'A3', skipHeader: false });
@@ -212,10 +131,10 @@ class ExcelComponent implements OnInit {
         }));
         worksheet['!cols'] = colWidths;
 
-        XLSX.utils.book_append_sheet(workbook, worksheet, 'Общий список');
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Аварийные отключения');
 
         const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-        this.saveAsExcelFile(excelBuffer, 'combined_students_list');
+        this.saveAsExcelFile(excelBuffer, 'shutdowns_report');
     }
 
     private saveAsExcelFile(buffer: any, fileName: string): void {
@@ -231,5 +150,3 @@ class ExcelComponent implements OnInit {
         // В данном случае дополнительная логика не требуется.
     }
 }
-
-export default ExcelComponent;
