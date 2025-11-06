@@ -123,7 +123,7 @@
                                                                 <button pButton
                                                                         class="p-button-text p-button-success"
                                                                         pTooltip="Подтвердить"
-                                                                        (click)="approve(discharge)">
+                                                                        (click)="openApprove(discharge.id)">
                                                                     <i pButtonIcon class="pi pi-check"></i>
                                                                 </button>
                                                                 <button pButton
@@ -135,7 +135,7 @@
                                                                 <button pButton
                                                                         class="p-button-text p-button-danger"
                                                                         pTooltip="Удалить"
-                                                                        (click)="delete(discharge)">
+                                                                        (click)="openDelete(discharge.id)">
                                                                     <i pButtonIcon class="pi pi-trash"></i>
                                                                 </button>
                                                             </td>
@@ -172,6 +172,17 @@
 
     </p-table>
 </div>
+
+<app-delete-confirmation
+    [(visible)]="showDeleteDialog"
+    (onConfirm)="doDelete()"
+    [message]="'Вы точно хотите удалить этот сброс?'"
+/>
+
+<app-approve-confirmation
+    [(visible)]="showApproveDialog"
+    (onConfirm)="doApprove()"
+/>
 
 <app-discharge-dialog
     [(display)]="displayDialog"

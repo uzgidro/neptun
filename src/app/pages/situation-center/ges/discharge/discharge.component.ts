@@ -9,6 +9,8 @@ import { DatePipe, DecimalPipe } from '@angular/common';
 import { Ripple } from 'primeng/ripple';
 import { Tooltip } from 'primeng/tooltip';
 import { DischargeDialogComponent } from '@/pages/situation-center/ges/discharge/discharge-dialog/discharge-dialog.component';
+import { DeleteConfirmationComponent } from '@/layout/component/dialog/delete-confirmation/delete-confirmation.component';
+import { ApproveConfirmationComponent } from '@/layout/component/dialog/approve-confirmation/approve-confirmation.component';
 
 interface expandedRows {
     [key: string]: boolean;
@@ -16,7 +18,7 @@ interface expandedRows {
 
 @Component({
     selector: 'app-discharge',
-    imports: [Button, ButtonDirective, ButtonIcon, ButtonLabel, ReactiveFormsModule, TableModule, FormsModule, DatePipe, DecimalPipe, Ripple, Tooltip, DischargeDialogComponent],
+    imports: [Button, ButtonDirective, ButtonIcon, ButtonLabel, ReactiveFormsModule, TableModule, FormsModule, DatePipe, DecimalPipe, Ripple, Tooltip, DischargeDialogComponent, DeleteConfirmationComponent, ApproveConfirmationComponent],
     templateUrl: './discharge.component.html',
     styleUrl: './discharge.component.scss'
 })
@@ -25,6 +27,11 @@ export class DischargeComponent implements OnInit {
     dischargeByCascades: Cascade[] = [];
     loading = false;
     displayDialog = false;
+
+    showDeleteDialog: boolean = false;
+    showApproveDialog: boolean = false;
+
+    selectedId: number | null = null;
 
     modelToEdit: DischargeModel | null = null;
     authService = inject(AuthService);
@@ -58,19 +65,43 @@ export class DischargeComponent implements OnInit {
         });
     }
 
+    openDelete(id: number): void {
+        this.selectedId = id; // Сохраняем ID
+        this.showDeleteDialog = true; // Открываем диалог
+    }
+
+    openApprove(id: number): void {
+        this.selectedId = id;
+        this.showApproveDialog = true;
+    }
+
     openDialog(): void {
         this.displayDialog = true;
         this.modelToEdit = null;
     }
 
-    approve(model: DischargeModel): void {}
+    doDelete(): void {
+        this.apiService.deleteDischarge(this.selectedId!).subscribe({
+            complete: () => {
+                this.selectedId = null;
+                this.loadDischarges();
+            }
+        });
+    }
+
+    doApprove(): void {
+        this.apiService.approveDischarge(this.selectedId!).subscribe({
+            complete: () => {
+                this.selectedId = null;
+                this.loadDischarges();
+            }
+        });
+    }
 
     edit(model: DischargeModel): void {
         this.modelToEdit = model;
         this.displayDialog = true;
     }
-
-    delete(model: DischargeModel): void {}
 
     onSaveSuccess(): void {
         this.loadDischarges();

@@ -103,4 +103,12 @@ export class ApiService {
     editDischarge(id: number, payload: WaterDischargePayload): Observable<any> {
         return this.http.patch(BASE_URL + DISCHARGES + '/' + id.toString(), payload);
     }
+
+    approveDischarge(id: number): Observable<any> {
+        return this.http.patch(BASE_URL + DISCHARGES + '/' + id.toString(), { approved: true });
+    }
+
+    deleteDischarge(id: number): Observable<any> {
+        return this.http.delete(BASE_URL + DISCHARGES + '/' + id.toString());
+    }
 }
