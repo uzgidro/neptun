@@ -99,4 +99,8 @@ export class ApiService {
     getDischarges(): Observable<Cascade[]> {
         return this.http.get<Cascade[]>(BASE_URL + DISCHARGES);
     }
+
+    editDischarge(id: number, payload: WaterDischargePayload): Observable<any> {
+        return this.http.patch(BASE_URL + DISCHARGES + '/' + id.toString(), payload);
+    }
 }

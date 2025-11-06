@@ -2,10 +2,10 @@ import { Organization } from '@/core/interfaces/organizations';
 import { UserShortInfo } from '@/core/interfaces/users';
 
 export interface WaterDischargePayload {
-    organization_id: number;
-    started_at: string;
+    organization_id?: number;
+    started_at?: string;
     ended_at?: string;
-    flow_rate: number;
+    flow_rate?: number;
     reason?: string;
 }
 

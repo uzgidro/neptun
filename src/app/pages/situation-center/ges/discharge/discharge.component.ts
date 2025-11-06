@@ -43,6 +43,7 @@ export class DischargeComponent implements OnInit {
     authService = inject(AuthService);
     private apiService = inject(ApiService);
     private messageService = inject(MessageService);
+    private modelToEdit: DischargeModel | null = null;
 
     get maxDate(): Date {
         return new Date();
@@ -112,16 +113,40 @@ export class DischargeComponent implements OnInit {
     closeDialog(): void {
         this.displayDialog = false;
         this.submitted = false;
+        this.isEditMode = false;
+        this.modelToEdit = null;
     }
 
     approve(model: DischargeModel): void {}
 
     edit(model: DischargeModel): void {
         this.isEditMode = true;
-        this.submitted = false;
-        this.displayDialog = true;
-        // this.waterDischargeForm.setValue()
-        console.log(model);
+        this.modelToEdit = model;
+        this.openDialog();
+    }
+
+    onDialogShow(): void {
+        if (!this.modelToEdit) {
+            return;
+        }
+
+        let organizationToSet: Organization | null = null;
+        if (this.modelToEdit.organization && this.organizations) {
+            for (const cascade of this.organizations) {
+                const foundOrg = cascade.items?.find(org => org.id === this.modelToEdit!.organization!.id);
+                if (foundOrg) {
+                    organizationToSet = foundOrg;
+                    break;
+                }
+            }
+        }
+        this.waterDischargeForm.patchValue({
+            organization: organizationToSet,
+            started_at: new Date(this.modelToEdit.started_at),
+            ended_at: this.modelToEdit.ended_at ? new Date(this.modelToEdit.ended_at) : null,
+            flow_rate: this.modelToEdit.flow_rate,
+            reason: this.modelToEdit.reason || ''
+        });
     }
 
     delete(model: DischargeModel): void {}
@@ -136,11 +161,7 @@ export class DischargeComponent implements OnInit {
 
         const rawValue = this.waterDischargeForm.getRawValue();
 
-        const payload: WaterDischargePayload = {
-            organization_id: rawValue.organization!.id,
-            started_at: rawValue.started_at!.toISOString(),
-            flow_rate: rawValue.flow_rate!
-        };
+        const payload: WaterDischargePayload = {};
 
         if (rawValue.reason) {
             payload.reason = rawValue.reason;
@@ -148,26 +169,61 @@ export class DischargeComponent implements OnInit {
         if (rawValue.ended_at) {
             payload.ended_at = rawValue.ended_at.toISOString();
         }
+        if (rawValue.flow_rate) {
+            payload.flow_rate = rawValue.flow_rate;
+        }
 
-        this.apiService.addDischarge(payload).subscribe({
-            next: () => {
-                this.messageService.add({
-                    severity: 'success',
-                    summary: 'Успешно',
-                    detail: 'Новая запись о водосбросе добавлена'
-                });
 
-                this.closeDialog();
-            },
-            error: (err) => {
-                console.error('Ошибка при добавлении записи:', err);
+        if (this.isEditMode) {
+            this.apiService.editDischarge(this.modelToEdit!.id, payload).subscribe({
+                next: () => {
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Успешно',
+                        detail: 'Обновлена запись о водосбросе'
+                    });
 
-                this.messageService.add({
-                    severity: 'error',
-                    summary: 'Ошибка сохранения',
-                    detail: err.error?.message || 'Не удалось сохранить данные'
-                });
+                    this.closeDialog();
+                },
+                error: (err) => {
+                    console.error('Ошибка при обновлении записи:', err);
+
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'Ошибка сохранения',
+                        detail: err.error?.message || 'Не удалось сохранить данные'
+                    });
+                }
+            });
+        } else {
+            if (rawValue.organization) {
+                payload.organization_id = rawValue.organization.id;
             }
-        });
+
+            if (rawValue.started_at) {
+                payload.flow_rate = rawValue.started_at!.toISOString();
+            }
+
+            this.apiService.addDischarge(payload).subscribe({
+                next: () => {
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Успешно',
+                        detail: 'Новая запись о водосбросе добавлена'
+                    });
+
+                    this.closeDialog();
+                },
+                error: (err) => {
+                    console.error('Ошибка при добавлении записи:', err);
+
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'Ошибка сохранения',
+                        detail: err.error?.message || 'Не удалось сохранить данные'
+                    });
+                }
+            });
+        }
     }
 }
