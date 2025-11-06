@@ -1,23 +1,14 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Button, ButtonDirective, ButtonIcon, ButtonLabel } from 'primeng/button';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { AuthService } from '@/core/services/auth.service';
-import { Dialog } from 'primeng/dialog';
 import { ApiService } from '@/core/services/api.service';
-import { Organization } from '@/core/interfaces/organizations';
-import { Select } from 'primeng/select';
-import { FloatLabel } from 'primeng/floatlabel';
-import { DatePicker } from 'primeng/datepicker';
-import { InputNumber } from 'primeng/inputnumber';
-import { Textarea } from 'primeng/textarea';
-import { Cascade, DischargeModel, WaterDischargePayload } from '@/core/interfaces/discharge';
-import { MessageService } from 'primeng/api';
-import { Message } from 'primeng/message';
-import { dateRangeValidator } from '@/core/validators/date-range.validator';
+import { Cascade, DischargeModel } from '@/core/interfaces/discharge';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { Ripple } from 'primeng/ripple';
 import { Tooltip } from 'primeng/tooltip';
+import { DischargeDialogComponent } from '@/pages/situation-center/ges/discharge/discharge-dialog/discharge-dialog.component';
 
 interface expandedRows {
     [key: string]: boolean;
@@ -25,47 +16,26 @@ interface expandedRows {
 
 @Component({
     selector: 'app-discharge',
-    imports: [Button, ButtonDirective, ButtonIcon, ButtonLabel, ReactiveFormsModule, TableModule, Dialog, Select, FormsModule, FloatLabel, DatePicker, InputNumber, Textarea, Message, DatePipe, DecimalPipe, Ripple, Tooltip],
+    imports: [Button, ButtonDirective, ButtonIcon, ButtonLabel, ReactiveFormsModule, TableModule, FormsModule, DatePipe, DecimalPipe, Ripple, Tooltip, DischargeDialogComponent],
     templateUrl: './discharge.component.html',
     styleUrl: './discharge.component.scss'
 })
 export class DischargeComponent implements OnInit {
-    organizations: Organization[] = [];
     expandedRows: expandedRows = {};
     dischargeByCascades: Cascade[] = [];
     loading = false;
     displayDialog = false;
-    submitted: boolean = false;
 
-    isEditMode: boolean = false;
-
-    waterDischargeForm!: FormGroup;
+    modelToEdit: DischargeModel | null = null;
     authService = inject(AuthService);
     private apiService = inject(ApiService);
-    private messageService = inject(MessageService);
-    private modelToEdit: DischargeModel | null = null;
-
-    get maxDate(): Date {
-        return new Date();
-    }
-
-    constructor(private fb: FormBuilder) {}
 
     ngOnInit() {
-        this.waterDischargeForm = this.fb.group(
-            {
-                organization: this.fb.control<Organization | null>(null, [Validators.required]),
-                started_at: this.fb.control<Date | null>(null, [Validators.required]),
-                ended_at: this.fb.control<Date | null>(null),
-                flow_rate: this.fb.control<number | null>(null, [Validators.required, Validators.min(0)]),
-                reason: this.fb.control<string | null>(null)
-            },
-            {
-                validators: [dateRangeValidator()]
-            }
-        );
-
         this.loading = true;
+        this.loadDischarges();
+    }
+
+    private loadDischarges() {
         this.apiService.getDischarges().subscribe({
             next: (data: Cascade[]) => {
                 this.dischargeByCascades = data;
@@ -86,144 +56,24 @@ export class DischargeComponent implements OnInit {
                 this.loading = false;
             }
         });
-
-        this.apiService.getCascades().subscribe({
-            next: (data) => {
-                this.organizations = data;
-            },
-            error: () => {
-                this.messageService.add({
-                    severity: 'warning',
-                    summary: 'Ошибка',
-                    detail: 'Не удалось загрузить данные'
-                });
-            },
-            complete: () => {
-                this.loading = false;
-            }
-        });
     }
 
     openDialog(): void {
-        this.submitted = false;
-        this.waterDischargeForm.reset();
         this.displayDialog = true;
-    }
-
-    closeDialog(): void {
-        this.displayDialog = false;
-        this.submitted = false;
-        this.isEditMode = false;
         this.modelToEdit = null;
     }
 
     approve(model: DischargeModel): void {}
 
     edit(model: DischargeModel): void {
-        this.isEditMode = true;
         this.modelToEdit = model;
-        this.openDialog();
-    }
-
-    onDialogShow(): void {
-        if (!this.modelToEdit) {
-            return;
-        }
-
-        let organizationToSet: Organization | null = null;
-        if (this.modelToEdit.organization && this.organizations) {
-            for (const cascade of this.organizations) {
-                const foundOrg = cascade.items?.find(org => org.id === this.modelToEdit!.organization!.id);
-                if (foundOrg) {
-                    organizationToSet = foundOrg;
-                    break;
-                }
-            }
-        }
-        this.waterDischargeForm.patchValue({
-            organization: organizationToSet,
-            started_at: new Date(this.modelToEdit.started_at),
-            ended_at: this.modelToEdit.ended_at ? new Date(this.modelToEdit.ended_at) : null,
-            flow_rate: this.modelToEdit.flow_rate,
-            reason: this.modelToEdit.reason || ''
-        });
+        this.displayDialog = true;
     }
 
     delete(model: DischargeModel): void {}
 
-    onSubmit(): void {
-        this.submitted = true;
-
-        if (this.waterDischargeForm.invalid) {
-            console.warn('Форма невалидна');
-            return;
-        }
-
-        const rawValue = this.waterDischargeForm.getRawValue();
-
-        const payload: WaterDischargePayload = {};
-
-        if (rawValue.reason) {
-            payload.reason = rawValue.reason;
-        }
-        if (rawValue.ended_at) {
-            payload.ended_at = rawValue.ended_at.toISOString();
-        }
-        if (rawValue.flow_rate) {
-            payload.flow_rate = rawValue.flow_rate;
-        }
-
-
-        if (this.isEditMode) {
-            this.apiService.editDischarge(this.modelToEdit!.id, payload).subscribe({
-                next: () => {
-                    this.messageService.add({
-                        severity: 'success',
-                        summary: 'Успешно',
-                        detail: 'Обновлена запись о водосбросе'
-                    });
-
-                    this.closeDialog();
-                },
-                error: (err) => {
-                    console.error('Ошибка при обновлении записи:', err);
-
-                    this.messageService.add({
-                        severity: 'error',
-                        summary: 'Ошибка сохранения',
-                        detail: err.error?.message || 'Не удалось сохранить данные'
-                    });
-                }
-            });
-        } else {
-            if (rawValue.organization) {
-                payload.organization_id = rawValue.organization.id;
-            }
-
-            if (rawValue.started_at) {
-                payload.flow_rate = rawValue.started_at!.toISOString();
-            }
-
-            this.apiService.addDischarge(payload).subscribe({
-                next: () => {
-                    this.messageService.add({
-                        severity: 'success',
-                        summary: 'Успешно',
-                        detail: 'Новая запись о водосбросе добавлена'
-                    });
-
-                    this.closeDialog();
-                },
-                error: (err) => {
-                    console.error('Ошибка при добавлении записи:', err);
-
-                    this.messageService.add({
-                        severity: 'error',
-                        summary: 'Ошибка сохранения',
-                        detail: err.error?.message || 'Не удалось сохранить данные'
-                    });
-                }
-            });
-        }
+    onSaveSuccess(): void {
+        this.loadDischarges();
+        this.modelToEdit = null;
     }
 }
