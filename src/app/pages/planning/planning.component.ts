@@ -8,6 +8,7 @@ import { TableModule } from 'primeng/table';
 import { CalendarEvent, EventService } from '@/core/services/event.service';
 import { DatePicker } from 'primeng/datepicker';
 
+
 @Component({
     selector: 'app-planning',
     standalone: true,
