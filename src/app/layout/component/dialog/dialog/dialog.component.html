@@ -1,0 +1,28 @@
+<p-dialog
+    [(visible)]="visible"
+    [header]="header"
+    [modal]="true"
+    styleClass="p-fluid"
+    [breakpoints]="{ '960px': '75vw' }"
+    [style]="{ width: '30vw' }"
+    (onHide)="onCancelClick()"
+>
+    <ng-template pTemplate="content">
+        <ng-content></ng-content>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <p-button
+            label="Отмена"
+            (click)="onCancelClick()"
+            styleClass="p-button-text"
+            [disabled]="submitting"
+        />
+        <p-button
+            [label]="saveLabel"
+            (click)="onSaveClick()"
+            [loading]="submitting"
+            [disabled]="form.invalid || submitting"
+        />
+    </ng-template>
+</p-dialog>

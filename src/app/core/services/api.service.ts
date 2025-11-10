@@ -9,7 +9,7 @@ import { LatestFiles } from '@/core/interfaces/latest-files';
 import { Organization } from '@/core/interfaces/organizations';
 import { Cascade, WaterDischargePayload } from '@/core/interfaces/discharge';
 
-const BASE_URL = 'https://prime.speedwagon.uz';
+export const BASE_URL = 'https://prime.speedwagon.uz';
 const AUTH = '/auth';
 const SIGN_IN = '/sign-in';
 const SIGN_OUT = '/sign-out';
@@ -27,7 +27,7 @@ const DISCHARGES = '/discharges';
     providedIn: 'root'
 })
 export class ApiService {
-    private http = inject(HttpClient);
+    protected http = inject(HttpClient);
 
     signIn(name: string, password: string): Observable<AuthResponse> {
         return this.http.post<AuthResponse>(

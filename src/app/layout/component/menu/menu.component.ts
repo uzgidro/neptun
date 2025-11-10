@@ -55,9 +55,7 @@ export class MenuComponent implements OnInit {
                                     {
                                         label: 'Аварийные отключение',
                                         role: ['rais', 'sc'],
-                                        routerLink: ['/viewer'],
-                                        queryParams: { type: 'shutdown' },
-                                        routerLinkActiveOptions: { queryParams: 'exact' }
+                                        routerLink: ['/shutdowns']
                                     },
                                     {
                                         label: 'Выработка',
@@ -70,7 +68,7 @@ export class MenuComponent implements OnInit {
                                         label: 'Холостой сброс',
                                         role: ['rais', 'sc'],
                                         routerLink: ['/discharge']
-                                    },
+                                    }
                                 ]
                             },
                             {
@@ -84,13 +82,6 @@ export class MenuComponent implements OnInit {
                                     {
                                         label: 'MODSNOW',
                                         role: ['rais', 'sc']
-                                    },
-                                    {
-                                        label: 'Аварийные отключение',
-                                        role: ['rais', 'sc'],
-                                        routerLink: ['/viewer'],
-                                        queryParams: { type: 'shutdown' },
-                                        routerLinkActiveOptions: { queryParams: 'exact' }
                                     },
                                     {
                                         label: 'Фильтрация',

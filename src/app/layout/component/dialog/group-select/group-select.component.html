@@ -1,0 +1,38 @@
+<div>
+    <p-floatlabel>
+        <p-select
+            [inputId]="uniqueId"
+            [options]="items"
+
+            [(ngModel)]="internalValue"
+            (onChange)="onValueChange($event.value)"
+            (onBlur)="onTouched()"
+
+            optionLabel="name"
+            [loading]="loading"
+
+            [disabled]="isDisabled || disable"
+
+            [showClear]="true"
+            [group]="true"
+            [filter]="true"
+            [appendTo]="'body'"
+            [style]="{ width: '100%' }"
+            [required]="true"
+
+            [ngClass]="{ 'ng-invalid ng-dirty': submitted && !internalValue }"
+        >
+            <ng-template let-group pTemplate="group">
+                <div class="flex items-center">
+                    <span>{{ group.name }}</span>
+                </div>
+            </ng-template>
+        </p-select>
+
+        <label [for]="uniqueId">{{ label }}</label>
+    </p-floatlabel>
+
+    @if (submitted && !internalValue) {
+        <p-message severity="error">{{ errorMessage }}</p-message>
+    }
+</div>

@@ -1,0 +1,55 @@
+<div class="card">
+    <div class="font-semibold text-xl mb-4">Холостой водосброс</div>
+<!--    <p-table-->
+<!--        [value]="[]"-->
+<!--        dataKey="id"-->
+<!--        stripedRows-->
+<!--        [loading]="loading"-->
+<!--        [scrollable]="true"-->
+<!--        scrollHeight="60rem"-->
+<!--        [tableStyle]="{ 'min-width': '60rem' }"-->
+<!--    >-->
+
+<!--    </p-table>-->
+
+    <p-button label="Создать Событие" icon="pi pi-plus" (click)="openNew()" />
+
+</div>
+
+<app-dialog
+    [(visible)]="isFormOpen"
+    [header]="isEditMode ? 'Редактировать Событие' : 'Новое Событие'"
+    [form]="incidentForm"
+    [submitting]="isLoading"
+    (save)="onSubmit()"
+    (cancel)="closeDialog()"
+>
+    <form [formGroup]="incidentForm" (ngSubmit)="onSubmit()">
+
+        <app-group-select
+            formControlName="organization"
+            [items]="organizations"
+            [loading]="orgsLoading"
+            [submitted]="submitted"
+            errorMessage="Выберите организацию">
+        </app-group-select>
+
+        <app-date-picker
+            label="Дата события"
+            formControlName="incident_time"
+            [submitted]="submitted"
+            errorMessage="Укажите дату"
+            class="mt-4">
+        </app-date-picker>
+
+        <app-textarea
+            label="Описание"
+            formControlName="description"
+            [submitted]="submitted"
+            [required]="false"
+            class="mt-4">
+        </app-textarea>
+
+    </form>
+
+</app-dialog>

@@ -1,0 +1,27 @@
+<div>
+    <p-floatlabel class="w-full">
+        <p-date-picker
+            class="w-full"
+            [inputId]="uniqueId"
+
+            [(ngModel)]="internalValue"
+            (onSelect)="onValueChange($event)"
+            (onBlur)="onTouched()"
+
+            [disabled]="isDisabled || isEditMode"
+            [maxDate]="maxDate"
+            [invalid]="submitted && !internalValue"
+
+            dateFormat="dd.mm.yy"
+            [showClear]="true"
+            [appendTo]="'body'"
+            [showTime]="true"
+            [hourFormat]="'24'"
+        />
+        <label [for]="uniqueId">{{ label }}</label>
+    </p-floatlabel>
+
+    @if (submitted && !internalValue) {
+        <p-message severity="error" variant="simple" size="small">{{ errorMessage }}</p-message>
+    }
+</div>

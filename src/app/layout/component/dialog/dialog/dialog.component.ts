@@ -1,0 +1,37 @@
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { Dialog } from 'primeng/dialog';
+import { PrimeTemplate } from 'primeng/api';
+import { Button } from 'primeng/button';
+
+@Component({
+    selector: 'app-dialog',
+    imports: [Dialog, PrimeTemplate, Button],
+    templateUrl: './dialog.component.html',
+    styleUrl: './dialog.component.scss'
+})
+export class DialogComponent {
+    // --- Входящие ---
+    @Input() visible: boolean = false;
+    @Input({ required: true }) header: string = '';
+    @Input({ required: true }) form: FormGroup = new FormGroup({});
+    @Input() submitting: boolean = false;
+    @Input() saveLabel: string = 'Сохранить';
+
+    // --- Исходящие ---
+    @Output() visibleChange = new EventEmitter<boolean>();
+    @Output() save = new EventEmitter<void>();
+    @Output() cancel = new EventEmitter<void>();
+
+    // Клик по "Сохранить"
+    onSaveClick() {
+        this.save.emit();
+    }
+
+    // Клик по "Отмена" или (onHide)
+    onCancelClick() {
+        this.visible = false;
+        this.visibleChange.emit(false);
+        this.cancel.emit();
+    }
+}
