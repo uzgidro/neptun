@@ -1,31 +1,45 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { TableModule } from 'primeng/table';
+import { Button } from 'primeng/button';
+import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
+import { DatePipe } from '@angular/common';
+import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
+import { GroupSelectComponent } from '@/layout/component/dialog/group-select/group-select.component';
+import { MessageService, PrimeTemplate } from 'primeng/api';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ApiService } from '@/core/services/api.service';
+import { TableModule } from 'primeng/table';
+import { TextareaComponent } from '@/layout/component/dialog/textarea/textarea.component';
 import { IncidentDto, IncidentPayload } from '@/core/interfaces/incidents';
-import { Organization } from '@/core/interfaces/organizations';
+import { ApiService } from '@/core/services/api.service';
 import { IncidentService } from '@/core/services/incident.service';
-import { MessageService } from 'primeng/api';
-import { IncidentComponent } from '@/pages/situation-center/ges/shutdown/incident/incident.component';
-import { GesShutdownComponent } from '@/pages/situation-center/ges/shutdown/ges-shutdown/ges-shutdown.component';
+import { Organization } from '@/core/interfaces/organizations';
 
 @Component({
-    selector: 'app-shutdown',
-    imports: [TableModule, ReactiveFormsModule, IncidentComponent, GesShutdownComponent],
-    templateUrl: './shutdown.component.html',
-    styleUrl: './shutdown.component.scss'
+  selector: 'app-ges-shutdown',
+  imports: [
+      Button,
+      DatePickerComponent,
+      DatePipe,
+      DialogComponent,
+      GroupSelectComponent,
+      PrimeTemplate,
+      ReactiveFormsModule,
+      TableModule,
+      TextareaComponent
+  ],
+  templateUrl: './ges-shutdown.component.html',
+  styleUrl: './ges-shutdown.component.scss'
 })
-export class ShutdownComponent implements OnInit {
+export class GesShutdownComponent implements OnInit {
     isFormOpen = false;
     submitted = false;
     isLoading = false;
     isEditMode = false;
 
-    incidentForm!: FormGroup;
+    form!: FormGroup;
 
     organizations: any[] = [];
     incidents: IncidentDto[] = [];
-    incidentsLoading: boolean = false;
+    loading: boolean = false;
     orgsLoading = false;
     private fb: FormBuilder = inject(FormBuilder);
     private api: ApiService = inject(ApiService);
@@ -33,7 +47,7 @@ export class ShutdownComponent implements OnInit {
     private messageService: MessageService = inject(MessageService);
 
     ngOnInit(): void {
-        this.incidentForm = this.fb.group({
+        this.form = this.fb.group({
             organization: this.fb.control<Organization | null>(null, [Validators.required]),
             incident_time: this.fb.control<Date | null>(null, [Validators.required]),
             description: this.fb.control<string | null>(null, [Validators.required])
@@ -51,7 +65,7 @@ export class ShutdownComponent implements OnInit {
     }
 
     private loadIncidents() {
-        this.incidentsLoading = true;
+        this.loading = true;
         this.incidentService.getIncidents().subscribe({
             next: (data) => {
                 this.incidents = data;
@@ -59,19 +73,19 @@ export class ShutdownComponent implements OnInit {
             error: (err) => {
                 this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: err.message });
             },
-            complete: () => (this.incidentsLoading = false)
+            complete: () => (this.loading = false)
         });
     }
 
     onSubmit() {
         this.submitted = true;
 
-        if (this.incidentForm.invalid) {
+        if (this.form.invalid) {
             return;
         }
 
         this.isLoading = true;
-        const rawPayload = this.incidentForm.getRawValue();
+        const rawPayload = this.form.getRawValue();
         const payload: IncidentPayload = {};
 
         if (rawPayload.organization) payload.organization_id = rawPayload.organization.id;
@@ -83,7 +97,7 @@ export class ShutdownComponent implements OnInit {
                 this.isLoading = false;
                 this.isFormOpen = false;
                 this.submitted = false;
-                this.incidentForm.reset();
+                this.form.reset();
                 this.messageService.add({ severity: 'success', summary: 'Инцидент добавлен' });
                 this.closeDialog();
             },
@@ -98,34 +112,13 @@ export class ShutdownComponent implements OnInit {
     closeDialog() {
         this.isFormOpen = false;
         this.submitted = false;
-        this.incidentForm.reset();
+        this.form.reset();
     }
 
     openNew() {
         this.isEditMode = false;
-        this.incidentForm.reset();
+        this.form.reset();
         this.submitted = false;
         this.isFormOpen = true;
     }
 }
-
-//     implements OnInit {
-//     loading: boolean = false;
-//
-//     authService: AuthService = inject(AuthService);
-//     private incidentService: IncidentService = inject(IncidentService);
-//     private messageService: MessageService = inject(MessageService);
-//
-//     ngOnInit() {
-//         this.loading = true;
-//         this.incidentService.getIncidents().subscribe({
-//             next: (data) => {
-//                 console.log(data);
-//             },
-//             error: (err) => {
-//                 this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: err.message });
-//             },
-//             complete: () => (this.loading = false)
-//         });
-//     }
-// }
