@@ -38,3 +38,30 @@ export interface DischargeModel {
     is_ongoing: boolean;
     approved: boolean | null;
 }
+
+
+export interface OrganizationInfo {
+    id: number;
+    name: string;
+    parent_organization_id: number | null;
+    types: string[];
+}
+
+export interface UserInfo {
+    id: number;
+    fio: string;
+}
+
+export interface IdleDischargeResponse {
+    id: number;
+    organization: OrganizationInfo;
+    created_by: UserInfo;
+    approved_by: UserInfo | null; // (Может быть null)
+    started_at: string; // <-- строка
+    ended_at: string | null; // <-- строка (может быть null)
+    flow_rate: number;
+    total_volume: number;
+    reason: string | null;
+    is_ongoing: boolean;
+    approved: boolean | null; // (В JSON `approved` - null, возможно, это boolean)
+}

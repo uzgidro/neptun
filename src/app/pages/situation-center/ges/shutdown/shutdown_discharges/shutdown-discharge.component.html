@@ -1,0 +1,40 @@
+<p-table
+    [value]="discharges"
+    dataKey="id"
+    stripedRows
+    [loading]="loading"
+    [scrollable]="true"
+    scrollHeight="60rem"
+    [tableStyle]="{ 'min-width': '60rem' }"
+    [sortField]="'incident_date'"
+    [sortOrder]="-1"
+>
+    <ng-template pTemplate="header">
+        <tr>
+            <th pSortableColumn="started_at">Начало</th>
+            <th pSortableColumn="ended_at">Конец</th>
+            <th pSortableColumn="flow_rate">Поток, м³/с</th>
+            <th pSortableColumn="total_volume">Объём, млн. м³</th>
+            <th pSortableColumn="reason">Причина</th>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-discharge>
+        <tr>
+            <td>{{ discharge.started_at | date:'dd.MM.yyyy HH:mm' }}</td>
+            <td>{{ discharge.ended_at ? (discharge.ended_at | date:'dd.MM.yyyy HH:mm') : '-' }}</td>
+            <td>{{ discharge.flow_rate | number: '1.0-2' }}</td>
+            <td>{{ discharge.total_volume | number: '1.2-2' }}</td>
+            <td>{{ discharge.reason || '-' }}</td>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+        <tr>
+            <td colspan="3" class="text-center">
+                Инциденты за выбранную дату не найдены.
+            </td>
+        </tr>
+    </ng-template>
+
+</p-table>

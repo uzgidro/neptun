@@ -3,7 +3,6 @@ import { Button, ButtonDirective, ButtonIcon, ButtonLabel } from 'primeng/button
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { AuthService } from '@/core/services/auth.service';
-import { ApiService } from '@/core/services/api.service';
 import { Cascade, DischargeModel } from '@/core/interfaces/discharge';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { Ripple } from 'primeng/ripple';
@@ -11,6 +10,7 @@ import { Tooltip } from 'primeng/tooltip';
 import { DischargeDialogComponent } from '@/pages/situation-center/ges/discharge/discharge-dialog/discharge-dialog.component';
 import { DeleteConfirmationComponent } from '@/layout/component/dialog/delete-confirmation/delete-confirmation.component';
 import { ApproveConfirmationComponent } from '@/layout/component/dialog/approve-confirmation/approve-confirmation.component';
+import { DischargeService } from '@/core/services/discharge.service';
 
 interface expandedRows {
     [key: string]: boolean;
@@ -35,7 +35,7 @@ export class DischargeComponent implements OnInit {
 
     modelToEdit: DischargeModel | null = null;
     authService = inject(AuthService);
-    private apiService = inject(ApiService);
+    private dischargeService = inject(DischargeService);
 
     ngOnInit() {
         this.loading = true;
@@ -43,7 +43,7 @@ export class DischargeComponent implements OnInit {
     }
 
     private loadDischarges() {
-        this.apiService.getDischarges().subscribe({
+        this.dischargeService.getDischarges().subscribe({
             next: (data: Cascade[]) => {
                 this.dischargeByCascades = data;
                 const newExpandedRows: { [key: string]: boolean } = {};
@@ -81,7 +81,7 @@ export class DischargeComponent implements OnInit {
     }
 
     doDelete(): void {
-        this.apiService.deleteDischarge(this.selectedId!).subscribe({
+        this.dischargeService.deleteDischarge(this.selectedId!).subscribe({
             complete: () => {
                 this.selectedId = null;
                 this.loadDischarges();
@@ -90,7 +90,7 @@ export class DischargeComponent implements OnInit {
     }
 
     doApprove(): void {
-        this.apiService.approveDischarge(this.selectedId!).subscribe({
+        this.dischargeService.approveDischarge(this.selectedId!).subscribe({
             complete: () => {
                 this.selectedId = null;
                 this.loadDischarges();

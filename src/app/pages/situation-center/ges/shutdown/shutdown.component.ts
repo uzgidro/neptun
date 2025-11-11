@@ -8,10 +8,13 @@ import { IncidentService } from '@/core/services/incident.service';
 import { MessageService } from 'primeng/api';
 import { IncidentComponent } from '@/pages/situation-center/ges/shutdown/incident/incident.component';
 import { GesShutdownComponent } from '@/pages/situation-center/ges/shutdown/ges-shutdown/ges-shutdown.component';
+import {
+    ShutdownDischargeComponent
+} from '@/pages/situation-center/ges/shutdown/shutdown_discharges/shutdown-discharge.component';
 
 @Component({
     selector: 'app-shutdown',
-    imports: [TableModule, ReactiveFormsModule, IncidentComponent, GesShutdownComponent],
+    imports: [TableModule, ReactiveFormsModule, IncidentComponent, GesShutdownComponent, ShutdownDischargeComponent],
     templateUrl: './shutdown.component.html',
     styleUrl: './shutdown.component.scss'
 })

@@ -7,7 +7,6 @@ import { Users } from '@/core/interfaces/users';
 import { Categories } from '@/core/interfaces/categories';
 import { LatestFiles } from '@/core/interfaces/latest-files';
 import { Organization } from '@/core/interfaces/organizations';
-import { Cascade, WaterDischargePayload } from '@/core/interfaces/discharge';
 
 export const BASE_URL = 'https://prime.speedwagon.uz';
 const AUTH = '/auth';
@@ -21,7 +20,6 @@ const UPLOAD = '/upload';
 const LATEST = '/latest';
 const CATEGORIES = '/categories';
 const ORGANIZATIONS = '/organizations';
-const DISCHARGES = '/discharges';
 
 @Injectable({
     providedIn: 'root'
@@ -90,25 +88,5 @@ export class ApiService {
     getCascades(): Observable<Organization[]> {
         const params = new HttpParams().set('type', 'cascade');
         return this.http.get<Organization[]>(BASE_URL + ORGANIZATIONS, { params: params });
-    }
-
-    addDischarge(payload: WaterDischargePayload): Observable<any> {
-        return this.http.post(BASE_URL + DISCHARGES, payload);
-    }
-
-    getDischarges(): Observable<Cascade[]> {
-        return this.http.get<Cascade[]>(BASE_URL + DISCHARGES);
-    }
-
-    editDischarge(id: number, payload: WaterDischargePayload): Observable<any> {
-        return this.http.patch(BASE_URL + DISCHARGES + '/' + id.toString(), payload);
-    }
-
-    approveDischarge(id: number): Observable<any> {
-        return this.http.patch(BASE_URL + DISCHARGES + '/' + id.toString(), { approved: true });
-    }
-
-    deleteDischarge(id: number): Observable<any> {
-        return this.http.delete(BASE_URL + DISCHARGES + '/' + id.toString());
     }
 }
