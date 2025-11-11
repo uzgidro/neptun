@@ -7,14 +7,15 @@ import { GroupSelectComponent } from '@/layout/component/dialog/group-select/gro
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
 import { TextareaComponent } from '@/layout/component/dialog/textarea/textarea.component';
 import { ApiService } from '@/core/services/api.service';
-import { IncidentPayload } from '@/core/interfaces/incidents';
+import { IncidentDto, IncidentPayload } from '@/core/interfaces/incidents';
 import { Organization } from '@/core/interfaces/organizations';
 import { IncidentService } from '@/core/services/incident.service';
 import { MessageService } from 'primeng/api';
+import { DatePipe } from '@angular/common';
 
 @Component({
     selector: 'app-shutdown',
-    imports: [TableModule, Button, DialogComponent, ReactiveFormsModule, GroupSelectComponent, DatePickerComponent, TextareaComponent],
+    imports: [TableModule, Button, DialogComponent, ReactiveFormsModule, GroupSelectComponent, DatePickerComponent, TextareaComponent, DatePipe],
     templateUrl: './shutdown.component.html',
     styleUrl: './shutdown.component.scss'
 })
@@ -27,6 +28,8 @@ export class ShutdownComponent implements OnInit {
     incidentForm!: FormGroup;
 
     organizations: any[] = [];
+    incidents: IncidentDto[] = [];
+    incidentsLoading: boolean = false;
     orgsLoading = false;
     private fb: FormBuilder = inject(FormBuilder);
     private api: ApiService = inject(ApiService);
@@ -40,11 +43,7 @@ export class ShutdownComponent implements OnInit {
             description: this.fb.control<string | null>(null, [Validators.required])
         });
 
-        this.incidentService.getIncidents().subscribe({
-            next: (data) => {
-                console.log(data);
-            }
-        });
+        this.loadIncidents();
 
         this.orgsLoading = true;
         this.api.getCascades().subscribe({
@@ -52,6 +51,19 @@ export class ShutdownComponent implements OnInit {
                 this.organizations = data;
             },
             complete: () => (this.orgsLoading = false)
+        });
+    }
+
+    private loadIncidents() {
+        this.incidentsLoading = true;
+        this.incidentService.getIncidents().subscribe({
+            next: (data) => {
+                this.incidents = data;
+            },
+            error: (err) => {
+                this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: err.message });
+            },
+            complete: () => (this.incidentsLoading = false)
         });
     }
 

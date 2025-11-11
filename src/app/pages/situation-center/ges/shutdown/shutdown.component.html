@@ -1,18 +1,58 @@
 <div class="card">
-    <div class="font-semibold text-xl mb-4">Холостой водосброс</div>
-<!--    <p-table-->
-<!--        [value]="[]"-->
-<!--        dataKey="id"-->
-<!--        stripedRows-->
-<!--        [loading]="loading"-->
-<!--        [scrollable]="true"-->
-<!--        scrollHeight="60rem"-->
-<!--        [tableStyle]="{ 'min-width': '60rem' }"-->
-<!--    >-->
-
-<!--    </p-table>-->
+    <div class="font-semibold text-xl mb-4">Аварийные отключение</div>
 
     <p-button label="Создать Событие" icon="pi pi-plus" (click)="openNew()" />
+    <p-table
+        [value]="incidents"
+        dataKey="id"
+        stripedRows
+        [loading]="incidentsLoading"
+        [scrollable]="true"
+        scrollHeight="60rem"
+        [tableStyle]="{ 'min-width': '60rem' }"
+
+        [sortField]="'incident_date'"
+        [sortOrder]="-1"
+    >
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="incident_date" style="width: 25%">
+                    Время инцидента <p-sortIcon field="incident_date"></p-sortIcon>
+                </th>
+
+                <th pSortableColumn="organization" style="width: 35%">
+                    Название объекта <p-sortIcon field="organization"></p-sortIcon>
+                </th>
+
+                <th style="width: 40%">
+                    Описание
+                </th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-incident>
+            <tr>
+                <td>
+                    {{ incident.incident_date | date: 'HH:mm dd.MM.yyyy' }}
+                </td>
+                <td>
+                    {{ incident.organization }}
+                </td>
+                <td>
+                    {{ incident.description }}
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="3" class="text-center">
+                    Инциденты за выбранную дату не найдены.
+                </td>
+            </tr>
+        </ng-template>
+
+    </p-table>
 
 </div>
 
