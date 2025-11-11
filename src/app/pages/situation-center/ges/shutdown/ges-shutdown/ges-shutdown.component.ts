@@ -11,11 +11,12 @@ import { ApiService } from '@/core/services/api.service';
 import { Organization } from '@/core/interfaces/organizations';
 import { GesShutdownService } from '@/core/services/ges-shutdown.service';
 import { InputNumberdComponent } from '@/layout/component/dialog/input-number/input-number.component';
-import { GesShutdownPayload } from '@/core/interfaces/ges-shutdown';
+import { GesShutdownDto, GesShutdownPayload } from '@/core/interfaces/ges-shutdown';
+import { DatePipe } from '@angular/common';
 
 @Component({
     selector: 'app-ges-shutdown',
-    imports: [Button, DatePickerComponent, DialogComponent, GroupSelectComponent, PrimeTemplate, ReactiveFormsModule, TableModule, TextareaComponent, InputNumberdComponent],
+    imports: [Button, DatePickerComponent, DialogComponent, GroupSelectComponent, PrimeTemplate, ReactiveFormsModule, TableModule, TextareaComponent, InputNumberdComponent, DatePipe],
     templateUrl: './ges-shutdown.component.html',
     styleUrl: './ges-shutdown.component.scss'
 })
@@ -28,7 +29,7 @@ export class GesShutdownComponent implements OnInit {
     form!: FormGroup;
 
     organizations: any[] = [];
-    shutdowns: any[] = [];
+    shutdowns: GesShutdownDto = { ges: [], mini: [], micro: [] };
     loading: boolean = false;
     orgsLoading = false;
     private fb: FormBuilder = inject(FormBuilder);
