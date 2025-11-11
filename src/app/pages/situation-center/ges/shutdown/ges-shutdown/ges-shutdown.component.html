@@ -1,7 +1,7 @@
 <p-button label="Создать Событие" icon="pi pi-plus" (click)="openNew()" />
 <p-table
-    [value]="incidents"
-    dataKey="incident_id"
+    [value]="shutdowns"
+    dataKey="shutdown_id"
     stripedRows
     [loading]="loading"
     [scrollable]="true"
@@ -13,11 +13,13 @@
     <ng-template pTemplate="header">
         <tr>
             <th pSortableColumn="incident_date" style="width: 25%">
-                Время инцидента <p-sortIcon field="incident_date"></p-sortIcon>
+                Время инцидента
+                <p-sortIcon field="incident_date"></p-sortIcon>
             </th>
 
             <th pSortableColumn="organization" style="width: 35%">
-                Название объекта <p-sortIcon field="organization"></p-sortIcon>
+                Название объекта
+                <p-sortIcon field="organization"></p-sortIcon>
             </th>
 
             <th style="width: 40%">
@@ -26,19 +28,19 @@
         </tr>
     </ng-template>
 
-    <ng-template pTemplate="body" let-incident>
-        <tr>
-            <td>
-                {{ incident.incident_date | date: 'HH:mm dd.MM.yyyy' }}
-            </td>
-            <td>
-                {{ incident.organization }}
-            </td>
-            <td>
-                {{ incident.description }}
-            </td>
-        </tr>
-    </ng-template>
+    <!--    <ng-template pTemplate="body" let-incident>-->
+    <!--        <tr>-->
+    <!--            <td>-->
+    <!--                {{ incident.incident_date | date: 'HH:mm dd.MM.yyyy' }}-->
+    <!--            </td>-->
+    <!--            <td>-->
+    <!--                {{ incident.organization }}-->
+    <!--            </td>-->
+    <!--            <td>-->
+    <!--                {{ incident.description }}-->
+    <!--            </td>-->
+    <!--        </tr>-->
+    <!--    </ng-template>-->
 
     <ng-template pTemplate="emptymessage">
         <tr>
@@ -71,20 +73,42 @@
         </app-group-select>
 
         <app-date-picker
-            label="Дата события"
-            formControlName="incident_time"
+            label="Начало аварии"
+            formControlName="start_time"
             [submitted]="submitted"
             errorMessage="Укажите дату"
             class="mt-4">
         </app-date-picker>
 
+        <app-date-picker
+            label="Конец аварии"
+            formControlName="end_time"
+            [submitted]="submitted"
+            [required]="false"
+            class="mt-4">
+        </app-date-picker>
+
         <app-textarea
-            label="Описание"
-            formControlName="description"
+            label="Причина"
+            formControlName="reason"
             [submitted]="submitted"
             [required]="false"
             class="mt-4">
         </app-textarea>
+
+        <app-input-number
+            label="Потерянная мощность"
+            formControlName="generation_loss"
+            [submitted]="submitted"
+            [required]="false"
+        ></app-input-number>
+
+        <app-input-number
+            label="Холостой сброс, тыс. м³"
+            formControlName="idle_discharge_volume"
+            [submitted]="submitted"
+            [required]="false"
+        ></app-input-number>
 
     </form>
 

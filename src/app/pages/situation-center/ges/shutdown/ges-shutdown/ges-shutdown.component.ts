@@ -1,33 +1,23 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Button } from 'primeng/button';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
-import { DatePipe } from '@angular/common';
 import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
 import { GroupSelectComponent } from '@/layout/component/dialog/group-select/group-select.component';
 import { MessageService, PrimeTemplate } from 'primeng/api';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { TextareaComponent } from '@/layout/component/dialog/textarea/textarea.component';
-import { IncidentDto, IncidentPayload } from '@/core/interfaces/incidents';
 import { ApiService } from '@/core/services/api.service';
-import { IncidentService } from '@/core/services/incident.service';
 import { Organization } from '@/core/interfaces/organizations';
+import { GesShutdownService } from '@/core/services/ges-shutdown.service';
+import { InputNumberdComponent } from '@/layout/component/dialog/input-number/input-number.component';
+import { GesShutdownPayload } from '@/core/interfaces/ges-shutdown';
 
 @Component({
-  selector: 'app-ges-shutdown',
-  imports: [
-      Button,
-      DatePickerComponent,
-      DatePipe,
-      DialogComponent,
-      GroupSelectComponent,
-      PrimeTemplate,
-      ReactiveFormsModule,
-      TableModule,
-      TextareaComponent
-  ],
-  templateUrl: './ges-shutdown.component.html',
-  styleUrl: './ges-shutdown.component.scss'
+    selector: 'app-ges-shutdown',
+    imports: [Button, DatePickerComponent, DialogComponent, GroupSelectComponent, PrimeTemplate, ReactiveFormsModule, TableModule, TextareaComponent, InputNumberdComponent],
+    templateUrl: './ges-shutdown.component.html',
+    styleUrl: './ges-shutdown.component.scss'
 })
 export class GesShutdownComponent implements OnInit {
     isFormOpen = false;
@@ -38,22 +28,25 @@ export class GesShutdownComponent implements OnInit {
     form!: FormGroup;
 
     organizations: any[] = [];
-    incidents: IncidentDto[] = [];
+    shutdowns: any[] = [];
     loading: boolean = false;
     orgsLoading = false;
     private fb: FormBuilder = inject(FormBuilder);
     private api: ApiService = inject(ApiService);
-    private incidentService: IncidentService = inject(IncidentService);
+    private gesShutdownService: GesShutdownService = inject(GesShutdownService);
     private messageService: MessageService = inject(MessageService);
 
     ngOnInit(): void {
         this.form = this.fb.group({
             organization: this.fb.control<Organization | null>(null, [Validators.required]),
-            incident_time: this.fb.control<Date | null>(null, [Validators.required]),
-            description: this.fb.control<string | null>(null, [Validators.required])
+            start_time: this.fb.control<Date | null>(null, [Validators.required]),
+            end_time: this.fb.control<Date | null>(null),
+            reason: this.fb.control<string | null>(null),
+            generation_loss: this.fb.control<number | null>(null),
+            idle_discharge_volume: this.fb.control<number | null>(null)
         });
 
-        this.loadIncidents();
+        this.loadShutdowns();
 
         this.orgsLoading = true;
         this.api.getCascades().subscribe({
@@ -64,11 +57,11 @@ export class GesShutdownComponent implements OnInit {
         });
     }
 
-    private loadIncidents() {
+    private loadShutdowns() {
         this.loading = true;
-        this.incidentService.getIncidents().subscribe({
+        this.gesShutdownService.getShutdowns().subscribe({
             next: (data) => {
-                this.incidents = data;
+                this.shutdowns = data;
             },
             error: (err) => {
                 this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: err.message });
@@ -86,25 +79,30 @@ export class GesShutdownComponent implements OnInit {
 
         this.isLoading = true;
         const rawPayload = this.form.getRawValue();
-        const payload: IncidentPayload = {};
+        const payload: GesShutdownPayload = {};
 
         if (rawPayload.organization) payload.organization_id = rawPayload.organization.id;
-        if (rawPayload.incident_time) payload.incident_time = rawPayload.incident_time.toISOString();
-        if (rawPayload.description) payload.description = rawPayload.description;
+        if (rawPayload.start_time) payload.start_time = rawPayload.start_time.toISOString();
+        if (rawPayload.end_time) payload.end_time = rawPayload.end_time.toISOString();
+        if (rawPayload.reason) payload.reason = rawPayload.reason;
+        if (rawPayload.generation_loss) payload.generation_loss = rawPayload.generation_loss;
+        if (rawPayload.idle_discharge_volume) payload.idle_discharge_volume = rawPayload.idle_discharge_volume;
 
-        this.incidentService.addIncident(payload).subscribe({
+        this.submitted = false;
+        this.isLoading = false;
+        this.gesShutdownService.addShutdown(payload).subscribe({
             next: () => {
-                this.isLoading = false;
                 this.isFormOpen = false;
-                this.submitted = false;
                 this.form.reset();
                 this.messageService.add({ severity: 'success', summary: 'Инцидент добавлен' });
                 this.closeDialog();
             },
             error: (err) => {
+                this.messageService.add({ severity: 'error', summary: 'Ошибка добавления инцидента', detail: err.message });
+            },
+            complete: () => {
                 this.submitted = false;
                 this.isLoading = false;
-                this.messageService.add({ severity: 'error', summary: 'Ошибка добавления инцидента', detail: err.message });
             }
         });
     }
@@ -113,6 +111,7 @@ export class GesShutdownComponent implements OnInit {
         this.isFormOpen = false;
         this.submitted = false;
         this.form.reset();
+        this.loadShutdowns();
     }
 
     openNew() {

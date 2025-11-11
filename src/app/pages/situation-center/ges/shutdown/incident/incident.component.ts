@@ -94,17 +94,17 @@ export class IncidentComponent implements OnInit {
 
         this.incidentService.addIncident(payload).subscribe({
             next: () => {
-                this.isLoading = false;
                 this.isFormOpen = false;
-                this.submitted = false;
                 this.form.reset();
                 this.messageService.add({ severity: 'success', summary: 'Инцидент добавлен' });
                 this.closeDialog();
             },
             error: (err) => {
-                this.submitted = false;
-                this.isLoading = false;
                 this.messageService.add({ severity: 'error', summary: 'Ошибка добавления инцидента', detail: err.message });
+            },
+            complete: () => {
+                this.isLoading = false;
+                this.submitted = false;
             }
         });
     }
@@ -113,6 +113,7 @@ export class IncidentComponent implements OnInit {
         this.isFormOpen = false;
         this.submitted = false;
         this.form.reset();
+        this.loadIncidents();
     }
 
     openNew() {
