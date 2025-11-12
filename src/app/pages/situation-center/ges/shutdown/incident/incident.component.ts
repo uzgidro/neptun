@@ -68,7 +68,8 @@ export class IncidentComponent implements OnInit, OnChanges {
 
     private loadIncidents() {
         this.loading = true;
-        this.incidentService.getIncidents().subscribe({
+        const dateToUse = this.date || new Date();
+        this.incidentService.getIncidents(dateToUse).subscribe({
             next: (data) => {
                 this.incidents = data;
             },

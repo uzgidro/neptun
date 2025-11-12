@@ -62,7 +62,8 @@ export class GesShutdownComponent implements OnInit, OnChanges {
 
     private loadShutdowns() {
         this.loading = true;
-        this.gesShutdownService.getShutdowns().subscribe({
+        const dateToUse = this.date || new Date();
+        this.gesShutdownService.getShutdowns(dateToUse).subscribe({
             next: (data) => {
                 this.shutdowns = data;
             },
