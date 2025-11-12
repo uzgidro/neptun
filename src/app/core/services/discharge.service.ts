@@ -21,9 +21,9 @@ export class DischargeService extends ApiService{
     }
 
     getFlatDischarges(endDate?: Date): Observable<IdleDischargeResponse[]> {
-        const params = new HttpParams();
+        let params = new HttpParams();
         if (endDate) {
-            params.set('date', endDate.toISOString());
+            params = params.set('end_date', this.dateToYMD(endDate));
         }
         return this.http.get<IdleDischargeResponse[]>(BASE_URL + DISCHARGES + FLAT, {params: params});
     }

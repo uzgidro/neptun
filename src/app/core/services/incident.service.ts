@@ -12,9 +12,9 @@ const INCIDENTS = '/incidents';
 })
 export class IncidentService extends ApiService {
     getIncidents(date?: Date): Observable<IncidentDto[]> {
-        const params = new HttpParams();
+        let params = new HttpParams();
         if (date) {
-            params.set('date', date.toISOString());
+            params = params.set('date', this.dateToYMD(date));
         }
         return this.http.get<IncidentResponse[]>(BASE_URL + INCIDENTS, { params: params }).pipe(
             map(responseArray => {

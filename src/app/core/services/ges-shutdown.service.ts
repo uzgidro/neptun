@@ -12,9 +12,9 @@ const SHUTDOWNS = '/shutdowns';
 })
 export class GesShutdownService extends ApiService {
     getShutdowns(date?: Date): Observable<GesShutdownDto> {
-        const params = new HttpParams();
+        let params = new HttpParams();
         if (date) {
-            params.set('date', date.toISOString());
+            params = params.set('date', this.dateToYMD(date));
         }
         return this.http.get<GesShutdownResponse>(BASE_URL + SHUTDOWNS, {params: params}).pipe(
             map(response => ({

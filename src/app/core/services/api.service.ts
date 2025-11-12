@@ -27,6 +27,13 @@ const ORGANIZATIONS = '/organizations';
 export class ApiService {
     protected http = inject(HttpClient);
 
+    protected dateToYMD(date: Date): string {
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
     signIn(name: string, password: string): Observable<AuthResponse> {
         return this.http.post<AuthResponse>(
             BASE_URL + AUTH + SIGN_IN,
