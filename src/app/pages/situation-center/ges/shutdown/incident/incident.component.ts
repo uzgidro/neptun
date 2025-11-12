@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { Button } from 'primeng/button';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
 import { DatePipe } from '@angular/common';
@@ -29,7 +29,9 @@ import { Organization } from '@/core/interfaces/organizations';
   templateUrl: './incident.component.html',
   styleUrl: './incident.component.scss'
 })
-export class IncidentComponent implements OnInit {
+export class IncidentComponent implements OnInit, OnChanges {
+    @Input() date: Date | null = null;
+
     isFormOpen = false;
     submitted = false;
     isLoading = false;
@@ -121,5 +123,11 @@ export class IncidentComponent implements OnInit {
         this.form.reset();
         this.submitted = false;
         this.isFormOpen = true;
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes['date'] && !changes['date'].firstChange) {
+            this.loadIncidents();
+        }
     }
 }

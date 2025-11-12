@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { MessageService, PrimeTemplate } from 'primeng/api';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -12,7 +12,9 @@ import { IdleDischargeResponse } from '@/core/interfaces/discharge';
     templateUrl: './shutdown-discharge.component.html',
     styleUrl: './shutdown-discharge.component.scss'
 })
-export class ShutdownDischargeComponent implements OnInit {
+export class ShutdownDischargeComponent implements OnInit, OnChanges {
+    @Input() date: Date | null = null;
+
     discharges: IdleDischargeResponse[] = [];
     loading: boolean = false;
     private dischargeService: DischargeService = inject(DischargeService);
@@ -24,7 +26,8 @@ export class ShutdownDischargeComponent implements OnInit {
 
     private loadDischarges() {
         this.loading = true;
-        this.dischargeService.getFlatDischarges(new Date()).subscribe({
+        const dateToUse = this.date || new Date();
+        this.dischargeService.getFlatDischarges(dateToUse).subscribe({
             next: (data) => {
                 this.discharges = data;
             },
@@ -33,5 +36,11 @@ export class ShutdownDischargeComponent implements OnInit {
             },
             complete: () => (this.loading = false)
         });
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes['date'] && !changes['date'].firstChange) {
+            this.loadDischarges();
+        }
     }
 }

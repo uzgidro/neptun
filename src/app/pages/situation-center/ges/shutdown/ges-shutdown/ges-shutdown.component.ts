@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { Button } from 'primeng/button';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
 import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
@@ -20,7 +20,9 @@ import { DatePipe } from '@angular/common';
     templateUrl: './ges-shutdown.component.html',
     styleUrl: './ges-shutdown.component.scss'
 })
-export class GesShutdownComponent implements OnInit {
+export class GesShutdownComponent implements OnInit, OnChanges {
+    @Input() date: Date | null = null;
+
     isFormOpen = false;
     submitted = false;
     isLoading = false;
@@ -120,5 +122,11 @@ export class GesShutdownComponent implements OnInit {
         this.form.reset();
         this.submitted = false;
         this.isFormOpen = true;
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes['date'] && !changes['date'].firstChange) {
+            this.loadShutdowns();
+        }
     }
 }
