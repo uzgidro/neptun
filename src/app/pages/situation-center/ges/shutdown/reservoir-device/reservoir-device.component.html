@@ -1,0 +1,210 @@
+<div class="card">
+    <div class="font-semibold text-xl mb-6">Гидротехнические сооружения и устройства водохранилищ</div>
+
+    <p-table
+        [value]="devices"
+        dataKey="id"
+        editMode="cell"
+        [tableStyle]="{ 'min-width': '80rem' }"
+        [loading]="loading"
+        [scrollable]="true"
+        scrollHeight="60rem"
+    >
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width: 15%">Организация</th>
+                <th style="width: 8%">Всего</th>
+                <th style="width: 8%">Установлено</th>
+                <th style="width: 8%">Рабочих</th>
+                <th style="width: 8%">Неисправных</th>
+                <th style="width: 8%">Активных</th>
+                <th style="width: 10%">Автоматизация</th>
+                <th style="width: 8%">Мезон 1</th>
+                <th style="width: 8%">Мезон 2</th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-device let-editing="editing" let-ri="rowIndex">
+            <tr [pEditableRow]="device">
+                <td>{{ device.organization_name }}</td>
+                <!-- count_total -->
+                <td [pEditableColumn]="device.count_total">
+                    <p-cellEditor>
+                        <ng-template pTemplate="input">
+                            <p-inputNumber
+                                [(ngModel)]="device.count_total"
+                                (onInput)="onCellEdit(device)"
+                                [showButtons]="true"
+                                [min]="0"
+                                mode="decimal"
+                                inputStyleClass="w-full"
+                            />
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                            {{ device.count_total }}
+                        </ng-template>
+                    </p-cellEditor>
+                </td>
+
+                <!-- count_installed -->
+                <td [pEditableColumn]="device.count_installed">
+                    <p-cellEditor>
+                        <ng-template pTemplate="input">
+                            <p-inputNumber
+                                [(ngModel)]="device.count_installed"
+                                (onInput)="onCellEdit(device)"
+                                [showButtons]="true"
+                                [min]="0"
+                                mode="decimal"
+                                inputStyleClass="w-full"
+                            />
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                            {{ device.count_installed }}
+                        </ng-template>
+                    </p-cellEditor>
+                </td>
+
+                <!-- count_operational -->
+                <td [pEditableColumn]="device.count_operational">
+                    <p-cellEditor>
+                        <ng-template pTemplate="input">
+                            <p-inputNumber
+                                [(ngModel)]="device.count_operational"
+                                (onInput)="onCellEdit(device)"
+                                [showButtons]="true"
+                                [min]="0"
+                                mode="decimal"
+                                inputStyleClass="w-full"
+                            />
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                            {{ device.count_operational }}
+                        </ng-template>
+                    </p-cellEditor>
+                </td>
+
+                <!-- count_faulty -->
+                <td [pEditableColumn]="device.count_faulty">
+                    <p-cellEditor>
+                        <ng-template pTemplate="input">
+                            <p-inputNumber
+                                [(ngModel)]="device.count_faulty"
+                                (onInput)="onCellEdit(device)"
+                                [showButtons]="true"
+                                [min]="0"
+                                mode="decimal"
+                                inputStyleClass="w-full"
+                            />
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                            {{ device.count_faulty }}
+                        </ng-template>
+                    </p-cellEditor>
+                </td>
+
+                <!-- count_active -->
+                <td [pEditableColumn]="device.count_active">
+                    <p-cellEditor>
+                        <ng-template pTemplate="input">
+                            <p-inputNumber
+                                [(ngModel)]="device.count_active"
+                                (onInput)="onCellEdit(device)"
+                                [showButtons]="true"
+                                [min]="0"
+                                mode="decimal"
+                                inputStyleClass="w-full"
+                            />
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                            {{ device.count_active }}
+                        </ng-template>
+                    </p-cellEditor>
+                </td>
+
+                <!-- count_automation_scope -->
+                <td [pEditableColumn]="device.count_automation_scope">
+                    <p-cellEditor>
+                        <ng-template pTemplate="input">
+                            <p-inputNumber
+                                [(ngModel)]="device.count_automation_scope"
+                                (onInput)="onCellEdit(device)"
+                                [showButtons]="true"
+                                [min]="0"
+                                mode="decimal"
+                                inputStyleClass="w-full"
+                            />
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                            {{ device.count_automation_scope }}
+                        </ng-template>
+                    </p-cellEditor>
+                </td>
+
+                <!-- criterion_1 -->
+                <td [pEditableColumn]="device.criterion_1">
+                    <p-cellEditor>
+                        <ng-template pTemplate="input">
+                            <p-inputNumber
+                                [(ngModel)]="device.criterion_1"
+                                (onInput)="onCellEdit(device)"
+                                [showButtons]="true"
+                                [min]="0"
+                                mode="decimal"
+                                inputStyleClass="w-full"
+                            />
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                            {{ device.criterion_1 ?? '-' }}
+                        </ng-template>
+                    </p-cellEditor>
+                </td>
+
+                <!-- criterion_2 -->
+                <td [pEditableColumn]="device.criterion_2">
+                    <p-cellEditor>
+                        <ng-template pTemplate="input">
+                            <p-inputNumber
+                                [(ngModel)]="device.criterion_2"
+                                (onInput)="onCellEdit(device)"
+                                [showButtons]="true"
+                                [min]="0"
+                                mode="decimal"
+                                inputStyleClass="w-full"
+                            />
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                            {{ device.criterion_2 ?? '-' }}
+                        </ng-template>
+                    </p-cellEditor>
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="10" class="text-center">
+                    Данные не найдены
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+    @if (hasChanges) {
+        <div class="flex gap-3 mt-6 justify-end">
+            <p-button
+                label="Сбросить"
+                icon="pi pi-times"
+                severity="secondary"
+                (click)="resetChanges()"
+                [disabled]="saving"
+            />
+            <p-button
+                label="Сохранить"
+                icon="pi pi-check"
+                (click)="saveChanges()"
+                [loading]="saving"
+            />
+        </div>
+    }
+</div>
