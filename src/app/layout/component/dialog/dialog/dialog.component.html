@@ -8,21 +8,23 @@
     (onHide)="onCancelClick()"
 >
     <ng-template pTemplate="content">
-        <ng-content></ng-content>
+            <ng-content></ng-content>
     </ng-template>
 
     <ng-template pTemplate="footer">
-        <p-button
-            label="Отмена"
-            (click)="onCancelClick()"
-            styleClass="p-button-text"
-            [disabled]="submitting"
-        />
-        <p-button
-            [label]="saveLabel"
-            (click)="onSaveClick()"
-            [loading]="submitting"
-            [disabled]="form.invalid || submitting"
-        />
+        <div class="flex gap-2">
+            <p-button
+                label="Отмена"
+                (click)="onCancelClick()"
+                styleClass="p-button-text"
+                [disabled]="submitting"
+            />
+            <p-button
+                [label]="saveLabel"
+                (click)="onSaveClick()"
+                [loading]="submitting"
+                [disabled]="form.invalid || submitting"
+            />
+        </div>
     </ng-template>
 </p-dialog>

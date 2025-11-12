@@ -1,5 +1,9 @@
-<p-button label="Создать Событие" icon="pi pi-plus" (click)="openNew()" />
+<div class="mb-6">
+    <p-button label="Создать Событие" icon="pi pi-plus" (click)="openNew()" />
+</div>
+
 <p-table
+    class="mb-6"
     [value]="shutdowns.ges"
     dataKey="id"
     stripedRows
@@ -80,6 +84,7 @@
 </p-table>
 
 <p-table
+    class="mb-6"
     [value]="shutdowns.micro"
     dataKey="id"
     stripedRows
@@ -160,6 +165,7 @@
 </p-table>
 
 <p-table
+    class="mb-6"
     [value]="shutdowns.mini"
     dataKey="id"
     stripedRows
@@ -263,24 +269,21 @@
             label="Начало аварии"
             formControlName="start_time"
             [submitted]="submitted"
-            errorMessage="Укажите дату"
-            class="mt-4">
+            errorMessage="Укажите дату">
         </app-date-picker>
 
         <app-date-picker
             label="Конец аварии"
             formControlName="end_time"
             [submitted]="submitted"
-            [required]="false"
-            class="mt-4">
+            [required]="false">
         </app-date-picker>
 
         <app-textarea
             label="Причина"
             formControlName="reason"
             [submitted]="submitted"
-            [required]="false"
-            class="mt-4">
+            [required]="false">
         </app-textarea>
 
         <app-input-number

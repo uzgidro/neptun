@@ -1,4 +1,4 @@
-<div>
+<div class="mb-4">
     <p-floatlabel class="w-full">
         <p-date-picker
             class="w-full"
@@ -22,6 +22,6 @@
     </p-floatlabel>
 
     @if (submitted && !internalValue) {
-        <p-message severity="error" variant="simple" size="small">{{ errorMessage }}</p-message>
+        <p-message class="mt-2" severity="error" variant="simple" size="small">{{ errorMessage }}</p-message>
     }
 </div>

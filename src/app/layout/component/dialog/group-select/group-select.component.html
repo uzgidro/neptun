@@ -1,4 +1,4 @@
-<div>
+<div class="mb-4">
     <p-floatlabel>
         <p-select
             [inputId]="uniqueId"
@@ -33,6 +33,6 @@
     </p-floatlabel>
 
     @if (submitted && !internalValue) {
-        <p-message severity="error">{{ errorMessage }}</p-message>
+        <p-message class="mt-2" severity="error" variant="simple" size="small">{{ errorMessage }}</p-message>
     }
 </div>

@@ -1,4 +1,4 @@
-<div>
+<div class="mb-4">
     <p-floatlabel class="w-full">
         <p-inputNumber
             [inputId]="uniqueId"
@@ -19,6 +19,6 @@
     </p-floatlabel>
 
     @if (submitted && required && internalValue == null) {
-        <p-message severity="error" variant="simple" size="small">{{ errorMessage }}</p-message>
+        <p-message class="mt-2" severity="error" variant="simple" size="small">{{ errorMessage }}</p-message>
     }
 </div>

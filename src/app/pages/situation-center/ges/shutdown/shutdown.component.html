@@ -14,10 +14,16 @@
         ></p-date-picker>
     </div>
 
-    <app-incident [date]="selectedDate"></app-incident>
+    <div class="mb-8">
+        <app-incident [date]="selectedDate"></app-incident>
+    </div>
 
-    <app-ges-shutdown [date]="selectedDate"></app-ges-shutdown>
+    <div class="mb-8">
+        <app-ges-shutdown [date]="selectedDate"></app-ges-shutdown>
+    </div>
 
-    <app-shutdown-discharge [date]="selectedDate"></app-shutdown-discharge>
+    <div>
+        <app-shutdown-discharge [date]="selectedDate"></app-shutdown-discharge>
+    </div>
 
 </div>

@@ -1,4 +1,4 @@
-<div>
+<div class="mb-4">
     <p-floatlabel class="w-full">
         <textarea
             pInputTextarea
@@ -20,6 +20,6 @@
     </p-floatlabel>
 
     @if (submitted && required && !internalValue) {
-        <p-message severity="error" variant="simple" size="small">{{ errorMessage }}</p-message>
+        <p-message class="mt-2" severity="error" variant="simple" size="small">{{ errorMessage }}</p-message>
     }
 </div>
