@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { AuthService } from '@/core/services/auth.service';
 import { Cascade, DischargeModel } from '@/core/interfaces/discharge';
-import { DatePipe, DecimalPipe } from '@angular/common';
+import { DatePipe, DecimalPipe, NgClass } from '@angular/common';
 import { Ripple } from 'primeng/ripple';
 import { Tooltip } from 'primeng/tooltip';
 import { DischargeDialogComponent } from '@/pages/situation-center/ges/discharge/discharge-dialog/discharge-dialog.component';
@@ -18,7 +18,7 @@ interface expandedRows {
 
 @Component({
     selector: 'app-discharge',
-    imports: [Button, ButtonDirective, ButtonIcon, ButtonLabel, ReactiveFormsModule, TableModule, FormsModule, DatePipe, DecimalPipe, Ripple, Tooltip, DischargeDialogComponent, DeleteConfirmationComponent, ApproveConfirmationComponent],
+    imports: [Button, ButtonDirective, ButtonIcon, ButtonLabel, ReactiveFormsModule, TableModule, FormsModule, DatePipe, DecimalPipe, Ripple, Tooltip, DischargeDialogComponent, DeleteConfirmationComponent, ApproveConfirmationComponent, NgClass],
     templateUrl: './discharge.component.html',
     styleUrl: './discharge.component.scss'
 })
@@ -37,6 +37,8 @@ export class DischargeComponent implements OnInit {
     authService = inject(AuthService);
     private dischargeService = inject(DischargeService);
 
+    isExpanded = false;
+
     ngOnInit() {
         this.loading = true;
         this.loadDischarges();
@@ -46,16 +48,6 @@ export class DischargeComponent implements OnInit {
         this.dischargeService.getDischarges().subscribe({
             next: (data: Cascade[]) => {
                 this.dischargeByCascades = data;
-                const newExpandedRows: { [key: string]: boolean } = {};
-
-                data.forEach((cascade) => {
-                    newExpandedRows[cascade.id] = true;
-                    cascade.hpps.forEach((hpp) => {
-                        newExpandedRows[hpp.id] = true;
-                    });
-                });
-
-                this.expandedRows = newExpandedRows;
                 this.loading = false;
             },
             error: (err) => {
@@ -63,6 +55,27 @@ export class DischargeComponent implements OnInit {
                 this.loading = false;
             }
         });
+    }
+
+    expandAll() {
+        this.isExpanded = !this.isExpanded;
+        if (this.isExpanded) {
+            this.expandAllRows();
+        } else {
+            this.expandedRows = {};
+        }
+    }
+
+    private expandAllRows() {
+        const newExpandedRows: { [key: string]: boolean } = {};
+        this.dischargeByCascades.forEach((cascade) => {
+            newExpandedRows[cascade.id] = true;
+            cascade.hpps.forEach((hpp) => {
+                newExpandedRows[hpp.id] = true;
+            });
+        });
+        this.expandedRows = newExpandedRows;
+        this.isExpanded = true;
     }
 
     openDelete(id: number): void {

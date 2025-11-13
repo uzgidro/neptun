@@ -11,7 +11,12 @@
         [tableStyle]="{ 'min-width': '60rem' }"
     >
         <ng-template pTemplate="caption">
-            <div class="flex justify-end items-center">
+            <div class="flex justify-between items-center">
+                <button pButton (click)="expandAll()">
+                    <i pButtonIcon class="pi pi-fw"
+                       [ngClass]="{ 'pi-minus': isExpanded, 'pi-plus': !isExpanded }"></i>
+                    <span pButtonLabel>{{ isExpanded ? 'Свернуть' : 'Развернуть' }}</span>
+                </button>
                 @if (authService.isSc()) {
                     <button pButton (click)="openDialog()">
                         <i pButtonIcon class="pi pi-plus"></i>
@@ -120,6 +125,13 @@
                                                                 }
                                                             </td>
                                                             <td>
+                                                                <a href="tel:YOUR_NUMBER_HERE">
+                                                                    <button pButton
+                                                                            class="p-button-text p-button-info"
+                                                                            pTooltip="Позвонить">
+                                                                        <i pButtonIcon class="pi pi-phone"></i>
+                                                                    </button>
+                                                                </a>
                                                                 <button pButton
                                                                         class="p-button-text p-button-success"
                                                                         pTooltip="Подтвердить"
