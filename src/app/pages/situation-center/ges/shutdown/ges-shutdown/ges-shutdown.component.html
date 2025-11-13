@@ -1,0 +1,379 @@
+@if (authService.isSc()) {
+    <div class="mb-6">
+        <p-button label="Создать Событие" icon="pi pi-plus" (click)="openNew()" />
+    </div>
+}
+
+<p-table
+    class="mb-6"
+    [value]="shutdowns.ges"
+    dataKey="id"
+    stripedRows
+    [loading]="loading"
+    [scrollable]="true"
+    scrollHeight="60rem"
+    [tableStyle]="{ 'min-width': '60rem' }"
+    [sortField]="'incident_date'"
+    [sortOrder]="-1"
+>
+    <ng-template #caption>
+        <div class="text-lg font-bold">ГЭСы</div>
+    </ng-template>
+    <ng-template pTemplate="header">
+        <tr>
+            <th pSortableColumn="organization_name" style="width: 25%">
+                Название ГЭС
+                <p-sortIcon field="organization_name"></p-sortIcon>
+            </th>
+
+            <th pSortableColumn="started_at" style="width: 35%">
+                Начало
+                <p-sortIcon field="started_at"></p-sortIcon>
+            </th>
+
+            <th pSortableColumn="ended_at" style="width: 35%">
+                Конец
+                <p-sortIcon field="ended_at"></p-sortIcon>
+            </th>
+
+            <th pSortableColumn="reason" style="width: 35%">
+                Причина
+                <p-sortIcon field="reason"></p-sortIcon>
+            </th>
+
+            <th pSortableColumn="generation_loss" style="width: 35%">
+                Потеряно мощности, к.Вт*ч
+                <p-sortIcon field="generation_loss"></p-sortIcon>
+            </th>
+            <th pSortableColumn="idle_discharge_voleme" style="width: 35%">
+                Холостой сброс, тыс. м³
+                <p-sortIcon field="idle_discharge_voleme"></p-sortIcon>
+            </th>
+
+            @if (authService.isSc()) {
+                <th style="width: 10%">Действия</th>
+            }
+        </tr>
+    </ng-template>
+
+        <ng-template pTemplate="body" let-shutdown>
+            <tr>
+                <td>
+                    {{ shutdown.organization_name }}
+                </td>
+                <td>
+                    {{ shutdown.started_at | date: 'HH:mm dd.MM.yyyy' }}
+                </td>
+                <td>
+                    {{ shutdown.ended_at | date: 'HH:mm dd.MM.yyyy' }}
+                </td>
+                <td>
+                    {{ shutdown.reason }}
+                </td>
+                <td>
+                    {{ shutdown.generation_loss }}
+                </td>
+                <td>
+                    {{ shutdown.idle_discharge_volume }}
+                </td>
+                @if (authService.isSc()) {
+                    <td>
+                        <p-button
+                            icon="pi pi-pencil"
+                            severity="info"
+                            [text]="true"
+                            [rounded]="true"
+                            (click)="editShutdown(shutdown)"
+                            pTooltip="Редактировать"
+                        />
+                        <p-button
+                            icon="pi pi-trash"
+                            severity="danger"
+                            [text]="true"
+                            [rounded]="true"
+                            (click)="deleteShutdown(shutdown.id)"
+                            pTooltip="Удалить"
+                        />
+                    </td>
+                }
+            </tr>
+        </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+        <tr>
+            <td [attr.colspan]="authService.isSc() ? 7 : 6" class="text-center">
+                Инциденты за выбранную дату не найдены.
+            </td>
+        </tr>
+    </ng-template>
+
+</p-table>
+
+<p-table
+    class="mb-6"
+    [value]="shutdowns.micro"
+    dataKey="id"
+    stripedRows
+    [loading]="loading"
+    [scrollable]="true"
+    scrollHeight="60rem"
+    [tableStyle]="{ 'min-width': '60rem' }"
+    [sortField]="'incident_date'"
+    [sortOrder]="-1"
+>
+    <ng-template #caption>
+        <div class="text-lg font-bold">Микро ГЭСы</div>
+    </ng-template>
+    <ng-template pTemplate="header">
+        <tr>
+            <th pSortableColumn="organization_name" style="width: 25%">
+                Название ГЭС
+                <p-sortIcon field="organization_name"></p-sortIcon>
+            </th>
+
+            <th pSortableColumn="started_at" style="width: 35%">
+                Начало
+                <p-sortIcon field="started_at"></p-sortIcon>
+            </th>
+
+            <th pSortableColumn="ended_at" style="width: 35%">
+                Конец
+                <p-sortIcon field="ended_at"></p-sortIcon>
+            </th>
+
+            <th pSortableColumn="reason" style="width: 35%">
+                Причина
+                <p-sortIcon field="reason"></p-sortIcon>
+            </th>
+
+            <th pSortableColumn="generation_loss" style="width: 35%">
+                Потеряно мощности, к.Вт*ч
+                <p-sortIcon field="generation_loss"></p-sortIcon>
+            </th>
+            <th pSortableColumn="idle_discharge_voleme" style="width: 35%">
+                Холостой сброс, тыс. м³
+                <p-sortIcon field="idle_discharge_voleme"></p-sortIcon>
+            </th>
+
+            @if (authService.isSc()) {
+                <th style="width: 10%">Действия</th>
+            }
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-shutdown>
+        <tr>
+            <td>
+                {{ shutdown.organization_name }}
+            </td>
+            <td>
+                {{ shutdown.started_at | date: 'HH:mm dd.MM.yyyy' }}
+            </td>
+            <td>
+                {{ shutdown.ended_at | date: 'HH:mm dd.MM.yyyy' }}
+            </td>
+            <td>
+                {{ shutdown.reason }}
+            </td>
+            <td>
+                {{ shutdown.generation_loss }}
+            </td>
+            <td>
+                {{ shutdown.idle_discharge_volume }}
+            </td>
+            @if (authService.isSc()) {
+                <td>
+                    <p-button
+                        icon="pi pi-pencil"
+                        severity="info"
+                        [text]="true"
+                        [rounded]="true"
+                        (click)="editShutdown(shutdown)"
+                        pTooltip="Редактировать"
+                    />
+                    <p-button
+                        icon="pi pi-trash"
+                        severity="danger"
+                        [text]="true"
+                        [rounded]="true"
+                        (click)="deleteShutdown(shutdown.id)"
+                        pTooltip="Удалить"
+                    />
+                </td>
+            }
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+        <tr>
+            <td [attr.colspan]="authService.isSc() ? 7 : 6" class="text-center">
+                Инциденты за выбранную дату не найдены.
+            </td>
+        </tr>
+    </ng-template>
+
+</p-table>
+
+<p-table
+    class="mb-6"
+    [value]="shutdowns.mini"
+    dataKey="id"
+    stripedRows
+    [loading]="loading"
+    [scrollable]="true"
+    scrollHeight="60rem"
+    [tableStyle]="{ 'min-width': '60rem' }"
+    [sortField]="'incident_date'"
+    [sortOrder]="-1"
+>
+    <ng-template #caption>
+        <div class="text-lg font-bold">Мини ГЭСы</div>
+    </ng-template>
+    <ng-template pTemplate="header">
+        <tr>
+            <th pSortableColumn="organization_name" style="width: 25%">
+                Название ГЭС
+                <p-sortIcon field="organization_name"></p-sortIcon>
+            </th>
+
+            <th pSortableColumn="started_at" style="width: 35%">
+                Начало
+                <p-sortIcon field="started_at"></p-sortIcon>
+            </th>
+
+            <th pSortableColumn="ended_at" style="width: 35%">
+                Конец
+                <p-sortIcon field="ended_at"></p-sortIcon>
+            </th>
+
+            <th pSortableColumn="reason" style="width: 35%">
+                Причина
+                <p-sortIcon field="reason"></p-sortIcon>
+            </th>
+
+            <th pSortableColumn="generation_loss" style="width: 35%">
+                Потеряно мощности, к.Вт*ч
+                <p-sortIcon field="generation_loss"></p-sortIcon>
+            </th>
+            <th pSortableColumn="idle_discharge_voleme" style="width: 35%">
+                Холостой сброс, тыс. м³
+                <p-sortIcon field="idle_discharge_voleme"></p-sortIcon>
+            </th>
+
+            @if (authService.isSc()) {
+                <th style="width: 10%">Действия</th>
+            }
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-shutdown>
+        <tr>
+            <td>
+                {{ shutdown.organization_name }}
+            </td>
+            <td>
+                {{ shutdown.started_at | date: 'HH:mm dd.MM.yyyy' }}
+            </td>
+            <td>
+                {{ shutdown.ended_at | date: 'HH:mm dd.MM.yyyy' }}
+            </td>
+            <td>
+                {{ shutdown.reason }}
+            </td>
+            <td>
+                {{ shutdown.generation_loss }}
+            </td>
+            <td>
+                {{ shutdown.idle_discharge_volume }}
+            </td>
+            @if (authService.isSc()) {
+                <td>
+                    <p-button
+                        icon="pi pi-pencil"
+                        severity="info"
+                        [text]="true"
+                        [rounded]="true"
+                        (click)="editShutdown(shutdown)"
+                        pTooltip="Редактировать"
+                    />
+                    <p-button
+                        icon="pi pi-trash"
+                        severity="danger"
+                        [text]="true"
+                        [rounded]="true"
+                        (click)="deleteShutdown(shutdown.id)"
+                        pTooltip="Удалить"
+                    />
+                </td>
+            }
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+        <tr>
+            <td [attr.colspan]="authService.isSc() ? 7 : 6" class="text-center">
+                Инциденты за выбранную дату не найдены.
+            </td>
+        </tr>
+    </ng-template>
+
+</p-table>
+
+<app-dialog
+    [(visible)]="isFormOpen"
+    [header]="isEditMode ? 'Редактировать Событие' : 'Новое Событие'"
+    [form]="form"
+    [submitting]="isLoading"
+    (save)="onSubmit()"
+    (cancel)="closeDialog()"
+>
+    <form class="p-4" [formGroup]="form" (ngSubmit)="onSubmit()">
+
+        <app-group-select
+
+            label="Объект"
+            formControlName="organization"
+            [items]="organizations"
+            [loading]="orgsLoading"
+            [submitted]="submitted"
+            errorMessage="Выберите организацию">
+        </app-group-select>
+
+        <app-date-picker
+            label="Начало аварии"
+            formControlName="start_time"
+            [submitted]="submitted"
+            errorMessage="Укажите дату">
+        </app-date-picker>
+
+        <app-date-picker
+            label="Конец аварии"
+            formControlName="end_time"
+            [submitted]="submitted"
+            [required]="false">
+        </app-date-picker>
+
+        <app-textarea
+            label="Причина"
+            formControlName="reason"
+            [submitted]="submitted"
+            [required]="false">
+        </app-textarea>
+
+        <app-input-number
+            label="Потерянная мощность"
+            formControlName="generation_loss"
+            [submitted]="submitted"
+            [required]="false"
+        ></app-input-number>
+
+        <app-input-number
+            label="Холостой сброс, тыс. м³"
+            formControlName="idle_discharge_volume"
+            [submitted]="submitted"
+            [required]="false"
+        ></app-input-number>
+
+    </form>
+
+</app-dialog>

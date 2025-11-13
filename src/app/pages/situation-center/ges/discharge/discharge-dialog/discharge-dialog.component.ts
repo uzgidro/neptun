@@ -1,6 +1,5 @@
 import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ApiService } from '@/core/services/api.service';
 import { MessageService, PrimeTemplate } from 'primeng/api';
 import { Organization } from '@/core/interfaces/organizations';
 import { DischargeModel, WaterDischargePayload } from '@/core/interfaces/discharge';
@@ -14,6 +13,7 @@ import { Textarea } from 'primeng/textarea';
 import { Button } from 'primeng/button';
 import { Message } from 'primeng/message';
 import { NgClass } from '@angular/common';
+import { DischargeService } from '@/core/services/discharge.service';
 
 @Component({
     selector: 'app-discharge-dialog',
@@ -33,7 +33,7 @@ export class DischargeDialogComponent implements OnInit, OnChanges {
     submitted: boolean = false;
     loading: boolean = false;
 
-    private apiService = inject(ApiService);
+    private dischargeService = inject(DischargeService);
     private messageService = inject(MessageService);
     private fb = inject(FormBuilder);
 
@@ -116,7 +116,7 @@ export class DischargeDialogComponent implements OnInit, OnChanges {
         if (rawValue.flow_rate) payload.flow_rate = rawValue.flow_rate;
 
         if (this.isEditMode) {
-            this.apiService.editDischarge(this.modelToEdit!.id, payload).subscribe({
+            this.dischargeService.editDischarge(this.modelToEdit!.id, payload).subscribe({
                 next: () => {
                     this.messageService.add({ severity: 'success', summary: 'Успешно', detail: 'Обновлена запись о водосбросе' });
                     this.save.emit();
@@ -130,7 +130,7 @@ export class DischargeDialogComponent implements OnInit, OnChanges {
             if (rawValue.organization) payload.organization_id = rawValue.organization.id;
             if (rawValue.started_at) payload.started_at = rawValue.started_at!.toISOString();
 
-            this.apiService.addDischarge(payload).subscribe({
+            this.dischargeService.addDischarge(payload).subscribe({
                 next: () => {
                     this.messageService.add({ severity: 'success', summary: 'Успешно', detail: 'Новая запись о водосбросе добавлена' });
                     this.save.emit();
@@ -144,7 +144,7 @@ export class DischargeDialogComponent implements OnInit, OnChanges {
     }
 
     private loadOrganizations() {
-        this.apiService.getCascades().subscribe({
+        this.dischargeService.getCascades().subscribe({
             next: (data) => {
                 this.organizations = data;
             },

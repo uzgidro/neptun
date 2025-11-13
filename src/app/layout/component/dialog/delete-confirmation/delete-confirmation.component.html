@@ -4,22 +4,24 @@
           [style]="{ width: '350px' }"
           [modal]="true">
 
-    <div class="flex items-center justify-center">
+    <div class="flex items-center p-4">
         <i class="pi pi-exclamation-triangle mr-4 text-red-500" style="font-size: 2rem"></i>
         <span>{{ message }}</span>
     </div>
 
     <ng-template #footer>
-        <p-button label="Нет"
-                  icon="pi pi-times"
-                  (click)="closeDialog()"
-                  text
-                  severity="secondary" />
-        <p-button label="Да, удалить"
-                  icon="pi pi-check"
-                  (click)="confirm()"
-                  severity="danger"
-                  outlined
-                  autofocus />
+        <div class="flex gap-2 p-3">
+            <p-button label="Нет"
+                      icon="pi pi-times"
+                      (click)="closeDialog()"
+                      text
+                      severity="secondary" />
+            <p-button label="Да, удалить"
+                      icon="pi pi-check"
+                      (click)="confirm()"
+                      severity="danger"
+                      outlined
+                      autofocus />
+        </div>
     </ng-template>
 </p-dialog>

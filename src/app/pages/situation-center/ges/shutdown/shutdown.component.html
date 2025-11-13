@@ -1,0 +1,37 @@
+<div class="card">
+    <div class="font-semibold text-xl mb-4">Аварийные отключение</div>
+
+    <div class="mb-4">
+        <label for="dateSelector" class="block mb-2">Дата:</label>
+        <p-date-picker
+            inputId="dateSelector"
+            [(ngModel)]="selectedDate"
+            [maxDate]="maxDate"
+            dateFormat="dd.mm.yy"
+            [showIcon]="true"
+            (onSelect)="onDateChange()"
+            placeholder="Выберите дату"
+        ></p-date-picker>
+    </div>
+
+    <div class="mb-8">
+        <app-incident [date]="selectedDate"></app-incident>
+    </div>
+
+    <div class="mb-8">
+        <app-ges-shutdown [date]="selectedDate"></app-ges-shutdown>
+    </div>
+
+    <div class="mb-8">
+        <app-reservoir-device></app-reservoir-device>
+    </div>
+
+    <div class="mb-8">
+        <app-shutdown-discharge [date]="selectedDate"></app-shutdown-discharge>
+    </div>
+
+    <div class="mb-8">
+        <app-visit [date]="selectedDate"></app-visit>
+    </div>
+
+</div>

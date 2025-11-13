@@ -55,9 +55,7 @@ export class MenuComponent implements OnInit {
                                     {
                                         label: 'Аварийные отключение',
                                         role: ['rais', 'sc'],
-                                        routerLink: ['/viewer'],
-                                        queryParams: { type: 'shutdown' },
-                                        routerLinkActiveOptions: { queryParams: 'exact' }
+                                        routerLink: ['/shutdowns']
                                     },
                                     {
                                         label: 'Выработка',
@@ -70,7 +68,7 @@ export class MenuComponent implements OnInit {
                                         label: 'Холостой сброс',
                                         role: ['rais', 'sc'],
                                         routerLink: ['/discharge']
-                                    },
+                                    }
                                 ]
                             },
                             {
@@ -84,13 +82,6 @@ export class MenuComponent implements OnInit {
                                     {
                                         label: 'MODSNOW',
                                         role: ['rais', 'sc']
-                                    },
-                                    {
-                                        label: 'Аварийные отключение',
-                                        role: ['rais', 'sc'],
-                                        routerLink: ['/viewer'],
-                                        queryParams: { type: 'shutdown' },
-                                        routerLinkActiveOptions: { queryParams: 'exact' }
                                     },
                                     {
                                         label: 'Фильтрация',
@@ -191,7 +182,7 @@ export class MenuComponent implements OnInit {
                 label: 'UI Components',
                 items: [
                     { label: 'Form Layout', icon: 'pi pi-fw pi-id-card', routerLink: ['/uikit/formlayout'] },
-                    { label: 'Input', icon: 'pi pi-fw pi-check-square', routerLink: ['/uikit/input'] },
+                    { label: 'Input', icon: 'pi pi-fw pi-check-square', routerLink: ['/uikit/input-number'] },
                     { label: 'Button', icon: 'pi pi-fw pi-mobile', class: 'rotated-icon', routerLink: ['/uikit/button'] },
                     { label: 'Table', icon: 'pi pi-fw pi-table', routerLink: ['/uikit/table'] },
                     { label: 'List', icon: 'pi pi-fw pi-list', routerLink: ['/uikit/list'] },
