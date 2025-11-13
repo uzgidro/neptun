@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +25,8 @@ export class JwtService {
         const token = this.getToken();
         if (token) {
             try {
-                return JSON.parse(atob(token.split('.')[1]));
+                // 2. Просто вызываем ее
+                return jwtDecode(token);
             } catch (e) {
                 console.error('Error decoding token:', e);
                 return null;
