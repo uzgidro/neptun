@@ -11,6 +11,7 @@ import { DischargeDialogComponent } from '@/pages/situation-center/ges/discharge
 import { DeleteConfirmationComponent } from '@/layout/component/dialog/delete-confirmation/delete-confirmation.component';
 import { ApproveConfirmationComponent } from '@/layout/component/dialog/approve-confirmation/approve-confirmation.component';
 import { DischargeService } from '@/core/services/discharge.service';
+import { ExportService } from '@/core/services/export.service';
 
 interface expandedRows {
     [key: string]: boolean;
@@ -36,6 +37,7 @@ export class DischargeComponent implements OnInit {
     modelToEdit: DischargeModel | null = null;
     authService = inject(AuthService);
     private dischargeService = inject(DischargeService);
+    private exportService = inject(ExportService);
 
     isExpanded = false;
 
@@ -76,6 +78,34 @@ export class DischargeComponent implements OnInit {
         });
         this.expandedRows = newExpandedRows;
         this.isExpanded = true;
+    }
+
+    exportExcel() {
+        const flatData = this.flattenDataForExport(this.dischargeByCascades);
+        this.exportService.exportToExcel(flatData, 'Холостой водосброс');
+    }
+
+    private flattenDataForExport(cascades: Cascade[]): any[] {
+        const flatData: any[] = [];
+        cascades.forEach(cascade => {
+            cascade.hpps.forEach(hpp => {
+                hpp.discharges.forEach(discharge => {
+                    flatData.push({
+                        'Каскад': cascade.name,
+                        'ГЭС': hpp.name,
+                        'Начало': discharge.started_at,
+                        'Конец': discharge.ended_at,
+                        'Поток, м³/с': discharge.flow_rate,
+                        'Объём, млн. м³': discharge.total_volume,
+                        'Причина': discharge.reason,
+                        'Создал': discharge.created_by?.fio,
+                        'Подтвердил': discharge.approved === true ? 'Да' : (discharge.approved === false ? 'Нет' : 'Ожидает'),
+                        'Кто подтвердил': discharge.updated_by?.fio
+                    });
+                });
+            });
+        });
+        return flatData;
     }
 
     openDelete(id: number): void {

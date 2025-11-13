@@ -12,11 +12,14 @@
     >
         <ng-template pTemplate="caption">
             <div class="flex justify-between items-center">
-                <button pButton (click)="expandAll()">
-                    <i pButtonIcon class="pi pi-fw"
-                       [ngClass]="{ 'pi-minus': isExpanded, 'pi-plus': !isExpanded }"></i>
-                    <span pButtonLabel>{{ isExpanded ? 'Свернуть' : 'Развернуть' }}</span>
-                </button>
+                <div class="flex gap-2">
+                    <button pButton (click)="expandAll()">
+                        <i pButtonIcon class="pi pi-fw"
+                           [ngClass]="{ 'pi-minus': isExpanded, 'pi-plus': !isExpanded }"></i>
+                        <span pButtonLabel>{{ isExpanded ? 'Свернуть' : 'Развернуть' }}</span>
+                    </button>
+                    <button pButton (click)="exportExcel()" icon="pi pi-file-excel" label="Экспорт в Excel"></button>
+                </div>
                 @if (authService.isSc()) {
                     <button pButton (click)="openDialog()">
                         <i pButtonIcon class="pi pi-plus"></i>

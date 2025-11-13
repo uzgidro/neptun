@@ -40,6 +40,10 @@ export class AuthService {
         return this.hasRole('sc');
     }
 
+    isAssistant(): boolean {
+        return this.hasRole('assistant');
+    }
+
     hasRole(expectedRole: string | string[]): boolean {
         const decodedToken = this.jwtService.getDecodedToken();
 
