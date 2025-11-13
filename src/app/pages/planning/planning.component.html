@@ -1,7 +1,9 @@
 <div class="card">
     <div class="flex justify-between items-center mb-4">
         <h5 class="font-semibold text-xl m-0">Планирование событий</h5>
-        <p-button label="Добавить событие" icon="pi pi-plus" (click)="showAddDialog()"></p-button>
+        @if (authService.isAssistant()) {
+            <p-button label="Добавить событие" icon="pi pi-plus" (click)="showAddDialog()"></p-button>
+        }
     </div>
 
     <p-table [value]="events()" [paginator]="true" [rows]="10" sortField="date" [sortOrder]="-1">

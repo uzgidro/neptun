@@ -7,7 +7,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
 import { CalendarEvent, EventService } from '@/core/services/event.service';
 import { DatePicker } from 'primeng/datepicker';
-
+import { AuthService } from '@/core/services/auth.service';
 
 @Component({
     selector: 'app-planning',
@@ -22,6 +22,7 @@ export class PlanningComponent implements OnInit {
     displayAddDialog = false;
     newEvent: Omit<CalendarEvent, 'id'> = { title: '', type: 'Встреча', date: new Date() };
     eventTypes = ['Встреча', 'Созвон', 'Переговоры', 'ВКС'];
+    authService: AuthService = inject(AuthService);
 
     ngOnInit() {}
 
