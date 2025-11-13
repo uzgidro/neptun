@@ -11,10 +11,11 @@ import { DatePicker } from 'primeng/datepicker';
 import {
     ReservoirDeviceComponent
 } from '@/pages/situation-center/ges/shutdown/reservoir-device/reservoir-device.component';
+import { VisitComponent } from '@/pages/situation-center/ges/shutdown/visit/visit.component';
 
 @Component({
     selector: 'app-shutdown',
-    imports: [TableModule, ReactiveFormsModule, FormsModule, IncidentComponent, GesShutdownComponent, ShutdownDischargeComponent, DatePicker, ReservoirDeviceComponent],
+    imports: [TableModule, ReactiveFormsModule, FormsModule, IncidentComponent, GesShutdownComponent, ShutdownDischargeComponent, DatePicker, ReservoirDeviceComponent, VisitComponent],
     templateUrl: './shutdown.component.html',
     styleUrl: './shutdown.component.scss'
 })
