@@ -1,5 +1,17 @@
 <div class="card">
     <div class="font-semibold text-xl mb-4">Холостой водосброс</div>
+    <div class="mb-4">
+        <label for="dateSelector" class="block mb-2">Дата:</label>
+        <p-date-picker
+            inputId="dateSelector"
+            [(ngModel)]="selectedDate"
+            [maxDate]="maxDate"
+            dateFormat="dd.mm.yy"
+            [showIcon]="true"
+            (onSelect)="onDateChange()"
+            placeholder="Выберите дату"
+        ></p-date-picker>
+    </div>
     <p-table
         [value]="dischargeByCascades"
         dataKey="id"
