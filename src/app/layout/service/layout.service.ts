@@ -26,7 +26,9 @@ interface MenuChangeEvent {
     providedIn: 'root'
 })
 export class LayoutService {
-    _config: layoutConfig = {
+    private readonly STORAGE_KEY = 'layout_config';
+
+    _config: layoutConfig = this.loadConfigFromStorage() || {
         preset: 'Aura',
         primary: 'sky',
         surface: null,
@@ -79,6 +81,9 @@ export class LayoutService {
     private initialized = false;
 
     constructor() {
+        // Apply initial theme immediately
+        this.toggleDarkMode(this._config);
+
         effect(() => {
             const config = this.layoutConfig();
             if (config) {
@@ -165,7 +170,28 @@ export class LayoutService {
 
     onConfigUpdate() {
         this._config = { ...this.layoutConfig() };
+        this.saveConfigToStorage(this._config);
         this.configUpdate.next(this.layoutConfig());
+    }
+
+    private loadConfigFromStorage(): layoutConfig | null {
+        try {
+            const stored = window.localStorage.getItem(this.STORAGE_KEY);
+            if (stored) {
+                return JSON.parse(stored);
+            }
+        } catch (error) {
+            console.error('Error loading theme config from localStorage:', error);
+        }
+        return null;
+    }
+
+    private saveConfigToStorage(config: layoutConfig): void {
+        try {
+            window.localStorage.setItem(this.STORAGE_KEY, JSON.stringify(config));
+        } catch (error) {
+            console.error('Error saving theme config to localStorage:', error);
+        }
     }
 
     onMenuStateChange(event: MenuChangeEvent) {

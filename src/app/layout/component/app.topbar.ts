@@ -5,13 +5,15 @@ import { CommonModule } from '@angular/common';
 import { StyleClassModule } from 'primeng/styleclass';
 import { ProfileMenu } from './app.profilemenu';
 import { LayoutService } from '../service/layout.service';
-import { Popover, PopoverModule } from 'primeng/popover';
+import { PopoverModule } from 'primeng/popover';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { FormsModule } from '@angular/forms';
 import { CalendarEvent, EventService } from '@/core/services/event.service';
 import { isSameDay } from 'date-fns';
 import { DatePicker } from 'primeng/datepicker';
+import { AppConfigurator } from '@/layout/component/app.configurator';
+import { ButtonDirective } from 'primeng/button';
 
 // Интерфейс для данных контакта
 interface Contact {
@@ -23,7 +25,7 @@ interface Contact {
 @Component({
     selector: 'app-topbar',
     standalone: true,
-    imports: [RouterModule, CommonModule, StyleClassModule, ProfileMenu, PopoverModule, TableModule, ToastModule, DatePicker, FormsModule],
+    imports: [RouterModule, CommonModule, StyleClassModule, ProfileMenu, PopoverModule, TableModule, ToastModule, DatePicker, FormsModule, AppConfigurator, ButtonDirective],
     providers: [MessageService], // Добавляем сервис для уведомлений
     template: ` <div class="layout-topbar">
         <div class="layout-topbar-logo-container">
@@ -57,20 +59,20 @@ interface Contact {
                 <button type="button" class="layout-topbar-action" (click)="toggleDarkMode()">
                     <i [ngClass]="{ 'pi ': true, 'pi-moon': layoutService.isDarkTheme(), 'pi-sun': !layoutService.isDarkTheme() }"></i>
                 </button>
-                <!--                <div class="relative">-->
-                <!--                    <button-->
-                <!--                        class="layout-topbar-action layout-topbar-action-highlight"-->
-                <!--                        pStyleClass="@next"-->
-                <!--                        enterFromClass="hidden"-->
-                <!--                        enterActiveClass="animate-scalein"-->
-                <!--                        leaveToClass="hidden"-->
-                <!--                        leaveActiveClass="animate-fadeout"-->
-                <!--                        [hideOnOutsideClick]="true"-->
-                <!--                    >-->
-                <!--                        <i class="pi pi-palette"></i>-->
-                <!--                    </button>-->
-                <!--                    <app-configurator />-->
-                <!--                </div>-->
+                <div class="hidden">
+                    <button
+                        class="layout-topbar-action layout-topbar-action-highlight"
+                        pStyleClass="@next"
+                        enterFromClass="hidden"
+                        enterActiveClass="animate-scalein"
+                        leaveToClass="hidden"
+                        leaveActiveClass="animate-fadeout"
+                        [hideOnOutsideClick]="true"
+                    >
+                        <i class="pi pi-palette"></i>
+                    </button>
+                    <app-configurator />
+                </div>
             </div>
 
             <button class="layout-topbar-menu-button layout-topbar-action" pStyleClass="@next" enterFromClass="hidden" enterActiveClass="animate-scalein" leaveToClass="hidden" leaveActiveClass="animate-fadeout" [hideOnOutsideClick]="true">
@@ -130,7 +132,7 @@ interface Contact {
                                     <td>
                                         <a pButton outlined class="p-button-sm" [href]="'tel:' + contact.phoneNumber">
                                             <i class="pi pi-phone text-green-500"></i>
-<!--                                            <span class="ml-2">Позвонить</span>-->
+                                            <!--                                            <span class="ml-2">Позвонить</span>-->
                                         </a>
                                     </td>
                                 </tr>
