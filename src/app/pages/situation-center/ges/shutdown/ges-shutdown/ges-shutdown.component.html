@@ -1,6 +1,8 @@
-<div class="mb-6">
-    <p-button label="Создать Событие" icon="pi pi-plus" (click)="openNew()" />
-</div>
+@if (authService.isSc()) {
+    <div class="mb-6">
+        <p-button label="Создать Событие" icon="pi pi-plus" (click)="openNew()" />
+    </div>
+}
 
 <p-table
     class="mb-6"
@@ -47,6 +49,10 @@
                 Холостой сброс, тыс. м³
                 <p-sortIcon field="idle_discharge_voleme"></p-sortIcon>
             </th>
+
+            @if (authService.isSc()) {
+                <th style="width: 10%">Действия</th>
+            }
         </tr>
     </ng-template>
 
@@ -70,12 +76,32 @@
                 <td>
                     {{ shutdown.idle_discharge_volume }}
                 </td>
+                @if (authService.isSc()) {
+                    <td>
+                        <p-button
+                            icon="pi pi-pencil"
+                            severity="info"
+                            [text]="true"
+                            [rounded]="true"
+                            (click)="editShutdown(shutdown)"
+                            pTooltip="Редактировать"
+                        />
+                        <p-button
+                            icon="pi pi-trash"
+                            severity="danger"
+                            [text]="true"
+                            [rounded]="true"
+                            (click)="deleteShutdown(shutdown.id)"
+                            pTooltip="Удалить"
+                        />
+                    </td>
+                }
             </tr>
         </ng-template>
 
     <ng-template pTemplate="emptymessage">
         <tr>
-            <td colspan="6" class="text-center">
+            <td [attr.colspan]="authService.isSc() ? 7 : 6" class="text-center">
                 Инциденты за выбранную дату не найдены.
             </td>
         </tr>
@@ -128,6 +154,10 @@
                 Холостой сброс, тыс. м³
                 <p-sortIcon field="idle_discharge_voleme"></p-sortIcon>
             </th>
+
+            @if (authService.isSc()) {
+                <th style="width: 10%">Действия</th>
+            }
         </tr>
     </ng-template>
 
@@ -151,12 +181,32 @@
             <td>
                 {{ shutdown.idle_discharge_volume }}
             </td>
+            @if (authService.isSc()) {
+                <td>
+                    <p-button
+                        icon="pi pi-pencil"
+                        severity="info"
+                        [text]="true"
+                        [rounded]="true"
+                        (click)="editShutdown(shutdown)"
+                        pTooltip="Редактировать"
+                    />
+                    <p-button
+                        icon="pi pi-trash"
+                        severity="danger"
+                        [text]="true"
+                        [rounded]="true"
+                        (click)="deleteShutdown(shutdown.id)"
+                        pTooltip="Удалить"
+                    />
+                </td>
+            }
         </tr>
     </ng-template>
 
     <ng-template pTemplate="emptymessage">
         <tr>
-            <td colspan="6" class="text-center">
+            <td [attr.colspan]="authService.isSc() ? 7 : 6" class="text-center">
                 Инциденты за выбранную дату не найдены.
             </td>
         </tr>
@@ -209,6 +259,10 @@
                 Холостой сброс, тыс. м³
                 <p-sortIcon field="idle_discharge_voleme"></p-sortIcon>
             </th>
+
+            @if (authService.isSc()) {
+                <th style="width: 10%">Действия</th>
+            }
         </tr>
     </ng-template>
 
@@ -232,12 +286,32 @@
             <td>
                 {{ shutdown.idle_discharge_volume }}
             </td>
+            @if (authService.isSc()) {
+                <td>
+                    <p-button
+                        icon="pi pi-pencil"
+                        severity="info"
+                        [text]="true"
+                        [rounded]="true"
+                        (click)="editShutdown(shutdown)"
+                        pTooltip="Редактировать"
+                    />
+                    <p-button
+                        icon="pi pi-trash"
+                        severity="danger"
+                        [text]="true"
+                        [rounded]="true"
+                        (click)="deleteShutdown(shutdown.id)"
+                        pTooltip="Удалить"
+                    />
+                </td>
+            }
         </tr>
     </ng-template>
 
     <ng-template pTemplate="emptymessage">
         <tr>
-            <td colspan="6" class="text-center">
+            <td [attr.colspan]="authService.isSc() ? 7 : 6" class="text-center">
                 Инциденты за выбранную дату не найдены.
             </td>
         </tr>

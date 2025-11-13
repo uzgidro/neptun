@@ -8,59 +8,50 @@ import { MessageService, PrimeTemplate } from 'primeng/api';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { TextareaComponent } from '@/layout/component/dialog/textarea/textarea.component';
-import { IncidentDto, IncidentPayload } from '@/core/interfaces/incidents';
+import { AddVisitRequest, EditVisitRequest, VisitDto } from '@/core/interfaces/visits';
 import { ApiService } from '@/core/services/api.service';
-import { IncidentService } from '@/core/services/incident.service';
+import { VisitService } from '@/core/services/visit.service';
 import { Organization } from '@/core/interfaces/organizations';
-import { AuthService } from '@/core/services/auth.service';
 import { TooltipModule } from 'primeng/tooltip';
+import { InputTextComponent } from '@/layout/component/dialog/input-text/input-text.component';
+import { AuthService } from '@/core/services/auth.service';
 
 @Component({
-  selector: 'app-incident',
-  imports: [
-      Button,
-      DatePickerComponent,
-      DatePipe,
-      DialogComponent,
-      GroupSelectComponent,
-      PrimeTemplate,
-      ReactiveFormsModule,
-      TableModule,
-      TextareaComponent,
-      TooltipModule
-  ],
-  templateUrl: './incident.component.html',
-  styleUrl: './incident.component.scss'
+    selector: 'app-visit',
+    imports: [Button, DatePickerComponent, DatePipe, DialogComponent, GroupSelectComponent, PrimeTemplate, ReactiveFormsModule, TableModule, TextareaComponent, TooltipModule, InputTextComponent],
+    templateUrl: './visit.component.html',
+    styleUrl: './visit.component.scss'
 })
-export class IncidentComponent implements OnInit, OnChanges {
+export class VisitComponent implements OnInit, OnChanges {
     @Input() date: Date | null = null;
 
     isFormOpen = false;
     submitted = false;
     isLoading = false;
     isEditMode = false;
-    currentIncidentId: number | null = null;
+    currentVisitId: number | null = null;
 
     form!: FormGroup;
 
     organizations: any[] = [];
-    incidents: IncidentDto[] = [];
+    visits: VisitDto[] = [];
     loading: boolean = false;
     orgsLoading = false;
     authService = inject(AuthService);
     private fb: FormBuilder = inject(FormBuilder);
     private api: ApiService = inject(ApiService);
-    private incidentService: IncidentService = inject(IncidentService);
+    private visitService: VisitService = inject(VisitService);
     private messageService: MessageService = inject(MessageService);
 
     ngOnInit(): void {
         this.form = this.fb.group({
             organization: this.fb.control<Organization | null>(null, [Validators.required]),
-            incident_time: this.fb.control<Date | null>(null, [Validators.required]),
-            description: this.fb.control<string | null>(null, [Validators.required])
+            visit_date: this.fb.control<Date | null>(null, [Validators.required]),
+            description: this.fb.control<string | null>(null, [Validators.required]),
+            responsible_name: this.fb.control<string | null>(null, [Validators.required])
         });
 
-        this.loadIncidents();
+        this.loadVisits();
 
         this.orgsLoading = true;
         this.api.getCascades().subscribe({
@@ -71,12 +62,12 @@ export class IncidentComponent implements OnInit, OnChanges {
         });
     }
 
-    private loadIncidents() {
+    private loadVisits() {
         this.loading = true;
         const dateToUse = this.date || new Date();
-        this.incidentService.getIncidents(dateToUse).subscribe({
+        this.visitService.getVisits(dateToUse).subscribe({
             next: (data) => {
-                this.incidents = data;
+                this.visits = data;
             },
             error: (err) => {
                 this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: err.message });
@@ -94,20 +85,22 @@ export class IncidentComponent implements OnInit, OnChanges {
 
         this.isLoading = true;
         const rawPayload = this.form.getRawValue();
-        const payload: IncidentPayload = {};
 
-        if (rawPayload.organization) payload.organization_id = rawPayload.organization.id;
-        if (rawPayload.incident_time) payload.incident_time = rawPayload.incident_time.toISOString();
-        if (rawPayload.description) payload.description = rawPayload.description;
+        if (this.isEditMode && this.currentVisitId) {
+            const payload: EditVisitRequest = {};
 
-        if (this.isEditMode && this.currentIncidentId) {
-            this.incidentService.editIncident(this.currentIncidentId, payload).subscribe({
+            if (rawPayload.organization) payload.organization_id = rawPayload.organization.id;
+            if (rawPayload.visit_date) payload.visit_date = rawPayload.visit_date.toISOString();
+            if (rawPayload.description) payload.description = rawPayload.description;
+            if (rawPayload.responsible_name) payload.responsible_name = rawPayload.responsible_name;
+
+            this.visitService.editVisit(this.currentVisitId, payload).subscribe({
                 next: () => {
-                    this.messageService.add({ severity: 'success', summary: 'Инцидент обновлен' });
+                    this.messageService.add({ severity: 'success', summary: 'Визит обновлен' });
                     this.closeDialog();
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка обновления инцидента', detail: err.message });
+                    this.messageService.add({ severity: 'error', summary: 'Ошибка обновления визита', detail: err.message });
                 },
                 complete: () => {
                     this.isLoading = false;
@@ -115,15 +108,20 @@ export class IncidentComponent implements OnInit, OnChanges {
                 }
             });
         } else {
-            this.incidentService.addIncident(payload).subscribe({
+            const payload: AddVisitRequest = {
+                organization_id: rawPayload.organization.id,
+                visit_date: rawPayload.visit_date.toISOString(),
+                description: rawPayload.description,
+                responsible_name: rawPayload.responsible_name
+            };
+
+            this.visitService.addVisit(payload).subscribe({
                 next: () => {
-                    this.isFormOpen = false;
-                    this.form.reset();
-                    this.messageService.add({ severity: 'success', summary: 'Инцидент добавлен' });
+                    this.messageService.add({ severity: 'success', summary: 'Визит добавлен' });
                     this.closeDialog();
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка добавления инцидента', detail: err.message });
+                    this.messageService.add({ severity: 'error', summary: 'Ошибка добавления визита', detail: err.message });
                 },
                 complete: () => {
                     this.isLoading = false;
@@ -137,27 +135,27 @@ export class IncidentComponent implements OnInit, OnChanges {
         this.isFormOpen = false;
         this.submitted = false;
         this.isEditMode = false;
-        this.currentIncidentId = null;
+        this.currentVisitId = null;
         this.form.reset();
-        this.loadIncidents();
+        this.loadVisits();
     }
 
     openNew() {
         this.isEditMode = false;
-        this.currentIncidentId = null;
+        this.currentVisitId = null;
         this.form.reset();
         this.submitted = false;
         this.isFormOpen = true;
     }
 
-    editIncident(incident: IncidentDto) {
+    editVisit(visit: VisitDto) {
         this.isEditMode = true;
-        this.currentIncidentId = incident.id;
+        this.currentVisitId = visit.id;
 
         let organizationToSet: any = null;
-        if (incident.organization_id && this.organizations) {
+        if (visit.organization_id && this.organizations) {
             for (const cascade of this.organizations) {
-                const foundOrg = cascade.items?.find((org: any) => org.id === incident.organization_id);
+                const foundOrg = cascade.items?.find((org: any) => org.id === visit.organization_id);
                 if (foundOrg) {
                     organizationToSet = foundOrg;
                     break;
@@ -167,22 +165,23 @@ export class IncidentComponent implements OnInit, OnChanges {
 
         this.form.patchValue({
             organization: organizationToSet,
-            incident_time: incident.incident_date,
-            description: incident.description
+            visit_date: visit.visit_date,
+            description: visit.description,
+            responsible_name: visit.responsible_name
         });
 
         this.isFormOpen = true;
     }
 
-    deleteIncident(incident: IncidentDto) {
-        if (confirm('Вы уверены, что хотите удалить этот инцидент?')) {
-            this.incidentService.deleteIncident(incident.id).subscribe({
+    deleteVisit(id: number) {
+        if (confirm('Вы уверены, что хотите удалить этот визит?')) {
+            this.visitService.deleteVisit(id).subscribe({
                 next: () => {
-                    this.messageService.add({ severity: 'success', summary: 'Инцидент удален' });
-                    this.loadIncidents();
+                    this.messageService.add({ severity: 'success', summary: 'Визит удален' });
+                    this.loadVisits();
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка удаления инцидента', detail: err.message });
+                    this.messageService.add({ severity: 'error', summary: 'Ошибка удаления визита', detail: err.message });
                 }
             });
         }
@@ -190,7 +189,7 @@ export class IncidentComponent implements OnInit, OnChanges {
 
     ngOnChanges(changes: SimpleChanges): void {
         if (changes['date'] && !changes['date'].firstChange) {
-            this.loadIncidents();
+            this.loadVisits();
         }
     }
 }

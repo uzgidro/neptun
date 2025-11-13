@@ -29,6 +29,14 @@ export class GesShutdownService extends ApiService {
         return this.http.post(BASE_URL + SHUTDOWNS, payload);
     }
 
+    editShutdown(id: number, payload: GesShutdownPayload): Observable<any> {
+        return this.http.patch(`${BASE_URL}${SHUTDOWNS}/${id}`, payload);
+    }
+
+    deleteShutdown(id: number): Observable<any> {
+        return this.http.delete(`${BASE_URL}${SHUTDOWNS}/${id}`);
+    }
+
     private transformToDto(shutdown: ShutdownResponse): ShutdownDto {
         return {
             ...shutdown,
