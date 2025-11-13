@@ -1,3 +1,9 @@
+@if (authService.isSc()) {
+    <div class="mb-6">
+        <p-button label="Добавить Водосброс" icon="pi pi-plus" (click)="openNew()" />
+    </div>
+}
+
 <p-table
     class="mt-6"
     [value]="discharges"
@@ -12,30 +18,106 @@
 >
     <ng-template pTemplate="header">
         <tr>
+            <th pSortableColumn="organization.name">Объект</th>
             <th pSortableColumn="started_at">Начало</th>
             <th pSortableColumn="ended_at">Конец</th>
             <th pSortableColumn="flow_rate">Поток, м³/с</th>
             <th pSortableColumn="total_volume">Объём, млн. м³</th>
             <th pSortableColumn="reason">Причина</th>
+            @if (authService.isSc()) {
+                <th style="width: 10%">Действия</th>
+            }
         </tr>
     </ng-template>
 
     <ng-template pTemplate="body" let-discharge>
         <tr>
+            <td>{{ discharge.organization.name }}</td>
             <td>{{ discharge.started_at | date:'dd.MM.yyyy HH:mm' }}</td>
             <td>{{ discharge.ended_at ? (discharge.ended_at | date:'dd.MM.yyyy HH:mm') : '-' }}</td>
             <td>{{ discharge.flow_rate | number: '1.0-2' }}</td>
             <td>{{ discharge.total_volume | number: '1.2-2' }}</td>
             <td>{{ discharge.reason || '-' }}</td>
+            @if (authService.isSc()) {
+                <td>
+                    <p-button
+                        icon="pi pi-pencil"
+                        severity="info"
+                        [text]="true"
+                        [rounded]="true"
+                        (click)="editDischarge(discharge)"
+                        pTooltip="Редактировать"
+                    />
+                    <p-button
+                        icon="pi pi-trash"
+                        severity="danger"
+                        [text]="true"
+                        [rounded]="true"
+                        (click)="deleteDischarge(discharge)"
+                        pTooltip="Удалить"
+                    />
+                </td>
+            }
         </tr>
     </ng-template>
 
     <ng-template pTemplate="emptymessage">
         <tr>
-            <td colspan="3" class="text-center">
-                Инциденты за выбранную дату не найдены.
+            <td [attr.colspan]="authService.isSc() ? 7 : 6" class="text-center">
+                Водосбросы за выбранную дату не найдены.
             </td>
         </tr>
     </ng-template>
 
 </p-table>
+
+<app-dialog
+    [(visible)]="isFormOpen"
+    [header]="isEditMode ? 'Редактировать Водосброс' : 'Новый Водосброс'"
+    [form]="form"
+    [submitting]="isLoading"
+    (save)="onSubmit()"
+    (cancel)="closeDialog()"
+>
+    <form class="p-4" [formGroup]="form" (ngSubmit)="onSubmit()">
+
+        <app-group-select
+            label="Объект"
+            formControlName="organization"
+            [items]="organizations"
+            [loading]="orgsLoading"
+            [submitted]="submitted"
+            errorMessage="Выберите организацию">
+        </app-group-select>
+
+        <app-date-picker
+            label="Начало водосброса"
+            formControlName="started_at"
+            [submitted]="submitted"
+            errorMessage="Укажите дату начала">
+        </app-date-picker>
+
+        <app-date-picker
+            label="Конец водосброса"
+            formControlName="ended_at"
+            [submitted]="submitted"
+            [required]="false">
+        </app-date-picker>
+
+        <app-input-number
+            label="Поток, м³/с"
+            formControlName="flow_rate"
+            [submitted]="submitted"
+            errorMessage="Укажите значение потока">
+        </app-input-number>
+
+        <app-textarea
+            label="Причина"
+            formControlName="reason"
+            [submitted]="submitted"
+            [required]="false">
+        </app-textarea>
+
+    </form>
+
+</app-dialog>

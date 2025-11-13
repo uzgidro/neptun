@@ -1,6 +1,8 @@
-<div class="mb-6">
-    <p-button label="Создать Событие" icon="pi pi-plus" (click)="openNew()" />
-</div>
+@if (authService.isSc()) {
+    <div class="mb-6">
+        <p-button label="Создать Событие" icon="pi pi-plus" (click)="openNew()" />
+    </div>
+}
 
 <p-table
     [value]="incidents"
@@ -26,6 +28,12 @@
             <th style="width: 40%">
                 Описание
             </th>
+
+            @if (authService.isSc()) {
+                <th style="width: 10%">
+                    Действия
+                </th>
+            }
         </tr>
     </ng-template>
 
@@ -40,12 +48,32 @@
             <td>
                 {{ incident.description }}
             </td>
+            @if (authService.isSc()) {
+                <td>
+                    <p-button
+                        icon="pi pi-pencil"
+                        severity="info"
+                        [text]="true"
+                        [rounded]="true"
+                        (click)="editIncident(incident)"
+                        pTooltip="Редактировать"
+                    />
+                    <p-button
+                        icon="pi pi-trash"
+                        severity="danger"
+                        [text]="true"
+                        [rounded]="true"
+                        (click)="deleteIncident(incident)"
+                        pTooltip="Удалить"
+                    />
+                </td>
+            }
         </tr>
     </ng-template>
 
     <ng-template pTemplate="emptymessage">
         <tr>
-            <td colspan="3" class="text-center">
+            <td [attr.colspan]="authService.isSc() ? 4 : 3" class="text-center">
                 Инциденты за выбранную дату не найдены.
             </td>
         </tr>

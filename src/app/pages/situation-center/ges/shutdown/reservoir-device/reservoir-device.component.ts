@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { ReservoirDeviceService } from '@/core/services/reservoir-device.service';
 import { PatchReservoirDeviceSummaryItem, PatchReservoirDeviceSummaryRequest, ReservoirDeviceSummaryResponse } from '@/core/interfaces/reservoir-device';
+import { AuthService } from '@/core/services/auth.service';
 
 @Component({
   selector: 'app-reservoir-device',
@@ -36,6 +37,7 @@ export class ReservoirDeviceComponent implements OnInit {
     'criterion_2'
   ];
 
+  authService = inject(AuthService);
   private reservoirDeviceService = inject(ReservoirDeviceService);
   private messageService = inject(MessageService);
 

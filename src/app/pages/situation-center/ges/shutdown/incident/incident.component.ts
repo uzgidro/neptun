@@ -12,6 +12,8 @@ import { IncidentDto, IncidentPayload } from '@/core/interfaces/incidents';
 import { ApiService } from '@/core/services/api.service';
 import { IncidentService } from '@/core/services/incident.service';
 import { Organization } from '@/core/interfaces/organizations';
+import { AuthService } from '@/core/services/auth.service';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-incident',
@@ -24,7 +26,8 @@ import { Organization } from '@/core/interfaces/organizations';
       PrimeTemplate,
       ReactiveFormsModule,
       TableModule,
-      TextareaComponent
+      TextareaComponent,
+      TooltipModule
   ],
   templateUrl: './incident.component.html',
   styleUrl: './incident.component.scss'
@@ -36,6 +39,7 @@ export class IncidentComponent implements OnInit, OnChanges {
     submitted = false;
     isLoading = false;
     isEditMode = false;
+    currentIncidentId: number | null = null;
 
     form!: FormGroup;
 
@@ -43,6 +47,7 @@ export class IncidentComponent implements OnInit, OnChanges {
     incidents: IncidentDto[] = [];
     loading: boolean = false;
     orgsLoading = false;
+    authService = inject(AuthService);
     private fb: FormBuilder = inject(FormBuilder);
     private api: ApiService = inject(ApiService);
     private incidentService: IncidentService = inject(IncidentService);
@@ -95,35 +100,92 @@ export class IncidentComponent implements OnInit, OnChanges {
         if (rawPayload.incident_time) payload.incident_time = rawPayload.incident_time.toISOString();
         if (rawPayload.description) payload.description = rawPayload.description;
 
-        this.incidentService.addIncident(payload).subscribe({
-            next: () => {
-                this.isFormOpen = false;
-                this.form.reset();
-                this.messageService.add({ severity: 'success', summary: 'Инцидент добавлен' });
-                this.closeDialog();
-            },
-            error: (err) => {
-                this.messageService.add({ severity: 'error', summary: 'Ошибка добавления инцидента', detail: err.message });
-            },
-            complete: () => {
-                this.isLoading = false;
-                this.submitted = false;
-            }
-        });
+        if (this.isEditMode && this.currentIncidentId) {
+            this.incidentService.editIncident(this.currentIncidentId, payload).subscribe({
+                next: () => {
+                    this.messageService.add({ severity: 'success', summary: 'Инцидент обновлен' });
+                    this.closeDialog();
+                },
+                error: (err) => {
+                    this.messageService.add({ severity: 'error', summary: 'Ошибка обновления инцидента', detail: err.message });
+                },
+                complete: () => {
+                    this.isLoading = false;
+                    this.submitted = false;
+                }
+            });
+        } else {
+            this.incidentService.addIncident(payload).subscribe({
+                next: () => {
+                    this.isFormOpen = false;
+                    this.form.reset();
+                    this.messageService.add({ severity: 'success', summary: 'Инцидент добавлен' });
+                    this.closeDialog();
+                },
+                error: (err) => {
+                    this.messageService.add({ severity: 'error', summary: 'Ошибка добавления инцидента', detail: err.message });
+                },
+                complete: () => {
+                    this.isLoading = false;
+                    this.submitted = false;
+                }
+            });
+        }
     }
 
     closeDialog() {
         this.isFormOpen = false;
         this.submitted = false;
+        this.isEditMode = false;
+        this.currentIncidentId = null;
         this.form.reset();
         this.loadIncidents();
     }
 
     openNew() {
         this.isEditMode = false;
+        this.currentIncidentId = null;
         this.form.reset();
         this.submitted = false;
         this.isFormOpen = true;
+    }
+
+    editIncident(incident: IncidentDto) {
+        this.isEditMode = true;
+        this.currentIncidentId = incident.id;
+
+        let organizationToSet: any = null;
+        if (incident.organization_id && this.organizations) {
+            for (const cascade of this.organizations) {
+                const foundOrg = cascade.items?.find((org: any) => org.id === incident.organization_id);
+                if (foundOrg) {
+                    organizationToSet = foundOrg;
+                    break;
+                }
+            }
+        }
+
+        this.form.patchValue({
+            organization: organizationToSet,
+            incident_time: incident.incident_date,
+            description: incident.description
+        });
+
+        this.isFormOpen = true;
+    }
+
+    deleteIncident(incident: IncidentDto) {
+        if (confirm('Вы уверены, что хотите удалить этот инцидент?')) {
+            this.incidentService.deleteIncident(incident.id).subscribe({
+                next: () => {
+                    this.messageService.add({ severity: 'success', summary: 'Инцидент удален' });
+                    this.loadIncidents();
+                },
+                error: (err) => {
+                    this.messageService.add({ severity: 'error', summary: 'Ошибка удаления инцидента', detail: err.message });
+                }
+            });
+        }
     }
 
     ngOnChanges(changes: SimpleChanges): void {

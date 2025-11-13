@@ -36,4 +36,12 @@ export class IncidentService extends ApiService {
     addIncident(payload: IncidentPayload): Observable<any> {
         return this.http.post(BASE_URL + INCIDENTS, payload);
     }
+
+    editIncident(id: number, payload: IncidentPayload): Observable<any> {
+        return this.http.patch(`${BASE_URL}${INCIDENTS}/${id}`, payload);
+    }
+
+    deleteIncident(id: number): Observable<any> {
+        return this.http.delete(`${BASE_URL}${INCIDENTS}/${id}`);
+    }
 }

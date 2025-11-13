@@ -14,6 +14,7 @@ import { VisitService } from '@/core/services/visit.service';
 import { Organization } from '@/core/interfaces/organizations';
 import { TooltipModule } from 'primeng/tooltip';
 import { InputTextComponent } from '@/layout/component/dialog/input-text/input-text.component';
+import { AuthService } from '@/core/services/auth.service';
 
 @Component({
     selector: 'app-visit',
@@ -36,6 +37,7 @@ export class VisitComponent implements OnInit, OnChanges {
     visits: VisitDto[] = [];
     loading: boolean = false;
     orgsLoading = false;
+    authService = inject(AuthService);
     private fb: FormBuilder = inject(FormBuilder);
     private api: ApiService = inject(ApiService);
     private visitService: VisitService = inject(VisitService);
@@ -150,10 +152,19 @@ export class VisitComponent implements OnInit, OnChanges {
         this.isEditMode = true;
         this.currentVisitId = visit.id;
 
-        const organization = this.organizations.find((org) => org.id === visit.organization_id);
+        let organizationToSet: any = null;
+        if (visit.organization_id && this.organizations) {
+            for (const cascade of this.organizations) {
+                const foundOrg = cascade.items?.find((org: any) => org.id === visit.organization_id);
+                if (foundOrg) {
+                    organizationToSet = foundOrg;
+                    break;
+                }
+            }
+        }
 
         this.form.patchValue({
-            organization: organization || null,
+            organization: organizationToSet,
             visit_date: visit.visit_date,
             description: visit.description,
             responsible_name: visit.responsible_name

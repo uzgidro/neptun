@@ -11,12 +11,14 @@ import { ApiService } from '@/core/services/api.service';
 import { Organization } from '@/core/interfaces/organizations';
 import { GesShutdownService } from '@/core/services/ges-shutdown.service';
 import { InputNumberdComponent } from '@/layout/component/dialog/input-number/input-number.component';
-import { GesShutdownDto, GesShutdownPayload } from '@/core/interfaces/ges-shutdown';
+import { GesShutdownDto, GesShutdownPayload, ShutdownDto } from '@/core/interfaces/ges-shutdown';
 import { DatePipe } from '@angular/common';
+import { AuthService } from '@/core/services/auth.service';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
     selector: 'app-ges-shutdown',
-    imports: [Button, DatePickerComponent, DialogComponent, GroupSelectComponent, PrimeTemplate, ReactiveFormsModule, TableModule, TextareaComponent, InputNumberdComponent, DatePipe],
+    imports: [Button, DatePickerComponent, DialogComponent, GroupSelectComponent, PrimeTemplate, ReactiveFormsModule, TableModule, TextareaComponent, InputNumberdComponent, DatePipe, TooltipModule],
     templateUrl: './ges-shutdown.component.html',
     styleUrl: './ges-shutdown.component.scss'
 })
@@ -27,6 +29,7 @@ export class GesShutdownComponent implements OnInit, OnChanges {
     submitted = false;
     isLoading = false;
     isEditMode = false;
+    currentShutdownId: number | null = null;
 
     form!: FormGroup;
 
@@ -34,6 +37,7 @@ export class GesShutdownComponent implements OnInit, OnChanges {
     shutdowns: GesShutdownDto = { ges: [], mini: [], micro: [] };
     loading: boolean = false;
     orgsLoading = false;
+    authService = inject(AuthService);
     private fb: FormBuilder = inject(FormBuilder);
     private api: ApiService = inject(ApiService);
     private gesShutdownService: GesShutdownService = inject(GesShutdownService);
@@ -92,37 +96,95 @@ export class GesShutdownComponent implements OnInit, OnChanges {
         if (rawPayload.generation_loss) payload.generation_loss = rawPayload.generation_loss;
         if (rawPayload.idle_discharge_volume) payload.idle_discharge_volume = rawPayload.idle_discharge_volume;
 
-        this.submitted = false;
-        this.isLoading = false;
-        this.gesShutdownService.addShutdown(payload).subscribe({
-            next: () => {
-                this.isFormOpen = false;
-                this.form.reset();
-                this.messageService.add({ severity: 'success', summary: 'Инцидент добавлен' });
-                this.closeDialog();
-            },
-            error: (err) => {
-                this.messageService.add({ severity: 'error', summary: 'Ошибка добавления инцидента', detail: err.message });
-            },
-            complete: () => {
-                this.submitted = false;
-                this.isLoading = false;
-            }
-        });
+        if (this.isEditMode && this.currentShutdownId) {
+            this.gesShutdownService.editShutdown(this.currentShutdownId, payload).subscribe({
+                next: () => {
+                    this.messageService.add({ severity: 'success', summary: 'Событие обновлено' });
+                    this.closeDialog();
+                },
+                error: (err) => {
+                    this.messageService.add({ severity: 'error', summary: 'Ошибка обновления события', detail: err.message });
+                },
+                complete: () => {
+                    this.isLoading = false;
+                    this.submitted = false;
+                }
+            });
+        } else {
+            this.gesShutdownService.addShutdown(payload).subscribe({
+                next: () => {
+                    this.isFormOpen = false;
+                    this.form.reset();
+                    this.messageService.add({ severity: 'success', summary: 'Событие добавлено' });
+                    this.closeDialog();
+                },
+                error: (err) => {
+                    this.messageService.add({ severity: 'error', summary: 'Ошибка добавления события', detail: err.message });
+                },
+                complete: () => {
+                    this.submitted = false;
+                    this.isLoading = false;
+                }
+            });
+        }
     }
 
     closeDialog() {
         this.isFormOpen = false;
         this.submitted = false;
+        this.isEditMode = false;
+        this.currentShutdownId = null;
         this.form.reset();
         this.loadShutdowns();
     }
 
     openNew() {
         this.isEditMode = false;
+        this.currentShutdownId = null;
         this.form.reset();
         this.submitted = false;
         this.isFormOpen = true;
+    }
+
+    editShutdown(shutdown: ShutdownDto) {
+        this.isEditMode = true;
+        this.currentShutdownId = shutdown.id;
+
+        let organizationToSet: any = null;
+        if (shutdown.organization_id && this.organizations) {
+            for (const cascade of this.organizations) {
+                const foundOrg = cascade.items?.find((org: any) => org.id === shutdown.organization_id);
+                if (foundOrg) {
+                    organizationToSet = foundOrg;
+                    break;
+                }
+            }
+        }
+
+        this.form.patchValue({
+            organization: organizationToSet,
+            start_time: shutdown.started_at,
+            end_time: shutdown.ended_at,
+            reason: shutdown.reason,
+            generation_loss: shutdown.generation_loss,
+            idle_discharge_volume: shutdown.idle_discharge_volume
+        });
+
+        this.isFormOpen = true;
+    }
+
+    deleteShutdown(id: number) {
+        if (confirm('Вы уверены, что хотите удалить это событие?')) {
+            this.gesShutdownService.deleteShutdown(id).subscribe({
+                next: () => {
+                    this.messageService.add({ severity: 'success', summary: 'Событие удалено' });
+                    this.loadShutdowns();
+                },
+                error: (err) => {
+                    this.messageService.add({ severity: 'error', summary: 'Ошибка удаления события', detail: err.message });
+                }
+            });
+        }
     }
 
     ngOnChanges(changes: SimpleChanges): void {
