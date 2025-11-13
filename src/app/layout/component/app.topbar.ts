@@ -8,17 +8,16 @@ import { LayoutService } from '../service/layout.service';
 import { Popover, PopoverModule } from 'primeng/popover';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
-import { DatePicker } from 'primeng/datepicker';
 import { FormsModule } from '@angular/forms';
 import { CalendarEvent, EventService } from '@/core/services/event.service';
 import { isSameDay } from 'date-fns';
+import { DatePicker } from 'primeng/datepicker';
 
-// Интерфейс для данных в таблице
-interface Product {
+// Интерфейс для данных контакта
+interface Contact {
     id?: string;
     name?: string;
-    price?: number;
-    image?: string;
+    phoneNumber?: string;
 }
 
 @Component({
@@ -113,24 +112,27 @@ interface Product {
 
                     <!-- Обновленная кнопка "Звонок" с Popover -->
                     <p-toast />
-                    <button type="button" class="layout-topbar-action" (click)="op.toggle($event)">
+                    <button type="button" class="layout-topbar-action" (click)="phonePopover.toggle($event)">
                         <i class="pi pi-phone"></i>
                         <span>Звонок</span>
                     </button>
-                    <p-popover #op [style]="{ width: '450px' }">
-                        <p-table [value]="products" selectionMode="single" [(selection)]="selectedProduct" dataKey="id" [rows]="5" [paginator]="true" (onRowSelect)="onProductSelect($event, op)">
+                    <p-popover #phonePopover [style]="{ width: '450px' }">
+                        <p-table [value]="contacts" dataKey="id" [rows]="5" [paginator]="true">
                             <ng-template pTemplate="header">
                                 <tr>
-                                    <th style="width: 50%">Имя</th>
-                                    <th>Фото</th>
-                                    <th style="width: 20%">Цена</th>
+                                    <th>Имя</th>
+                                    <th style="width: 8rem">Действие</th>
                                 </tr>
                             </ng-template>
-                            <ng-template pTemplate="body" let-product>
-                                <tr [pSelectableRow]="product" class="cursor-pointer">
-                                    <td>{{ product.name }}</td>
-                                    <td><img [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + product.image" [alt]="product.name" class="w-16 shadow-sm" /></td>
-                                    <td>{{ product.price | currency: 'USD' }}</td>
+                            <ng-template pTemplate="body" let-contact>
+                                <tr>
+                                    <td>{{ contact.name }}</td>
+                                    <td>
+                                        <a pButton outlined class="p-button-sm" [href]="'tel:' + contact.phoneNumber">
+                                            <i class="pi pi-phone text-green-500"></i>
+<!--                                            <span class="ml-2">Позвонить</span>-->
+                                        </a>
+                                    </td>
                                 </tr>
                             </ng-template>
                         </p-table>
@@ -144,8 +146,7 @@ interface Product {
 })
 export class AppTopbar implements OnInit {
     items!: MenuItem[];
-    products: Product[] = [];
-    selectedProduct: Product | null = null;
+    contacts: Contact[] = [];
 
     layoutService = inject(LayoutService);
     messageService = inject(MessageService);
@@ -157,14 +158,14 @@ export class AppTopbar implements OnInit {
 
     ngOnInit() {
         // Заполняем таблицу демонстрационными данными
-        this.products = [
-            { id: '1000', name: 'Black Watch', price: 72, image: 'black-watch.jpg' },
-            { id: '1001', name: 'Bamboo Watch', price: 65, image: 'bamboo-watch.jpg' },
-            { id: '1002', name: 'Blue Band', price: 79, image: 'blue-band.jpg' },
-            { id: '1003', name: 'Blue T-Shirt', price: 29, image: 'blue-t-shirt.jpg' },
-            { id: '1004', name: 'Bracelet', price: 15, image: 'bracelet.jpg' },
-            { id: '1005', name: 'Brown Purse', price: 120, image: 'brown-purse.jpg' },
-            { id: '1006', name: 'Chakra Bracelet', price: 32, image: 'chakra-bracelet.jpg' }
+        this.contacts = [
+            { id: '1000', name: 'Хамраев Сухроб Ахмеджанович', phoneNumber: '+998001112233' },
+            { id: '1001', name: 'Пулатова Сурайё Насимовна', phoneNumber: '+998002223344' },
+            { id: '1002', name: 'Олланазаров Бахром Отажанович', phoneNumber: '+998003334455' },
+            { id: '1003', name: 'Ибраимов Эрнес Меркезович', phoneNumber: '+998004445566' },
+            { id: '1004', name: 'Сунатов Иноят Сохибович', phoneNumber: '+998005556677' },
+            { id: '1005', name: 'Атаханов Махаммад Исмаилович', phoneNumber: '+998006667788' },
+            { id: '1006', name: 'Зокиров Авазбек Зокиржон угли', phoneNumber: '+998007778899' }
         ];
         this.onDateSelect(this.selectedDate);
     }
@@ -187,16 +188,5 @@ export class AppTopbar implements OnInit {
         return this.allEvents()
             .filter((event) => isSameDay(event.date, date))
             .sort((a, b) => a.date.getTime() - b.date.getTime());
-    }
-
-    onProductSelect(event: any, popover: Popover) {
-        // Показываем уведомление при выборе
-        this.messageService.add({
-            severity: 'info',
-            summary: 'Выбран контакт',
-            detail: event.data.name
-        });
-        // Закрываем всплывающее окно
-        popover.hide();
     }
 }
