@@ -1,5 +1,5 @@
-<div class="card mb-8!">
-    <div class="flex flex-row justify-between items-center mb-4">
+<div class="card mb-8!" >
+    <div class="flex flex-row justify-between items-center mb-4" >
         <span class="font-semibold text-xl">Гидроэлектростанции</span>
         <button pButton outlined (click)="expandAll()">
             <i pButtonIcon class="pi pi-fw"
@@ -7,18 +7,14 @@
             <span pButtonLabel>{{ isExpanded || !isRowsHidden ? 'Свернуть' : 'Развернуть' }}</span>
         </button>
     </div>
-    <p-table [value]="cascades" dataKey="name" [tableStyle]="{ 'min-width': '60rem' }" [expandedRowKeys]="expandedRows"
-             [scrollable]="true" scrollHeight="450px">
-        <ng-template #caption>
-            <div class="flex table-header"></div>
-        </ng-template>
+    <p-table [value]="cascades" dataKey="name" [expandedRowKeys]="expandedRows" scrollHeight="30rem">
         <ng-template #header>
             <tr>
                 <th style="width: 5rem"></th>
                 <th class="whitespace-nowrap" pSortableColumn="name">Название
                     <p-sortIcon field="name" />
                 </th>
-                <th class="whitespace-nowrap" pSortableColumn="prod">Выработка, млн. кВт*ч
+                <th class="whitespace-break-spaces" pSortableColumn="prod">Выработка, млн. кВт*ч
                     <p-sortIcon field="prod" />
                 </th>
                 <th class="whitespace-nowrap" pSortableColumn="totalAgg">Аггрегаты
@@ -36,7 +32,7 @@
                     <p-button type="button" pRipple [pRowToggler]="cascade" [text]="true" [rounded]="true"
                               [plain]="true" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" />
                 </td>
-                <td>{{ cascade.name }}</td>
+                <td class="whitespace-nowrap">{{ cascade.name }}</td>
                 <td>{{ cascade.prod }}</td>
                 <td><span>{{ cascade.totalAgg }}</span>/<span class="text-rose-500">{{ cascade.workingAgg }}</span>/<span class="text-lime-500">{{ cascade.pendingAgg }}</span>/<span class="text-orange-500">{{ cascade.repairingAgg }}</span></td>
                 <td>{{ cascade.idle }}</td>
@@ -46,16 +42,17 @@
         <ng-template #expandedrow let-cascade>
             <tr>
                 <td colspan="7">
-                    <div class="p-4">
+                    <div class="p-3">
                         <h5>{{ cascade.name }}</h5>
                         <p>{{ cascade.directorName }}</p>
 
-                        <a pButton outlined class="mb-4" [href]="'tel:' + cascade.phoneNumber">
+                        @if (cascade.phoneNumber) {
+                            <a pButton outlined class="p-button-sm mb-4" [href]="'tel:' + cascade.phoneNumber">
                             <i pButtonIcon class="pi pi-phone"></i>
                             <span pButtonLabel>Позвонить</span>
                         </a>
-
-                        <p-table [value]="cascade.ges" dataKey="name">
+                        }
+                        <p-table [value]="cascade.ges" dataKey="name" styleClass="p-datatable-sm">
                             <ng-template #header>
                                 <tr>
                                     <th pSortableColumn="name">

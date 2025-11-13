@@ -3,7 +3,6 @@ import { Documentation } from './documentation/documentation';
 import { Crud } from './crud/crud';
 import { Empty } from './empty/empty';
 import { ExcelComponent } from './excel/excel.component';
-import { OrganizationsComponent } from './organizations/organizations.component';
 import { PlanningComponent } from './planning/planning.component';
 
 export default [
@@ -11,7 +10,6 @@ export default [
     { path: 'crud', component: Crud },
     { path: 'empty', component: Empty },
     { path: 'excel', component: ExcelComponent },
-    { path: 'organizations', component: OrganizationsComponent },
     { path: 'planning', component: PlanningComponent },
     { path: '**', redirectTo: '/notfound' }
 ] as Routes;

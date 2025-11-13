@@ -25,7 +25,7 @@ export class MenuComponent implements OnInit {
                         label: 'Кадровый персонал (HRM)',
                         role: ['admin', 'rais'],
                         items: [
-                            { label: 'Организации', role: ['rais'], routerLink: ['/pages/organizations'] },
+                            { label: 'Организации', role: ['rais'], routerLink: ['/organizations'] },
                             { label: 'Дни рождения', role: ['rais'] },
                             { label: 'Потеря личного состава', role: ['rais'] },
                             { label: 'Пользователи', role: ['admin'], routerLink: ['/users'] },

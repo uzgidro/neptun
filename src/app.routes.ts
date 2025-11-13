@@ -13,6 +13,7 @@ import { FilesComponent } from '@/pages/files/files.component';
 import { DocumentViewerComponent } from '@/pages/document-viewer/document-viewer.component';
 import { DischargeComponent } from '@/pages/situation-center/ges/discharge/discharge.component';
 import { PlanningComponent } from '@/pages/planning/planning.component';
+import { TableExpandableRowGroupDemo } from '@/pages/organizations/table-expandable-row-group-demo';
 
 export const appRoutes: Routes = [
     {
@@ -33,6 +34,7 @@ export const appRoutes: Routes = [
             { path: 'viewer', component: DocumentViewerComponent, canActivate: [raisGuard] },
             { path: 'discharge', component: DischargeComponent, canActivate: [raisGuard] },
             { path: 'planning', component: PlanningComponent, canActivate: [raisGuard] },
+            { path: 'organizations', component: TableExpandableRowGroupDemo, canActivate: [scGuard] },
             { path: 'uikit', loadChildren: () => import('./app/pages/uikit/uikit.routes') },
             { path: 'documentation', component: Documentation },
             { path: 'pages', loadChildren: () => import('./app/pages/pages.routes') }
