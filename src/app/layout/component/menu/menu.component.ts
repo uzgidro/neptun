@@ -2,12 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MenuitemComponent } from '../menuitem/menuitem.component';
+import { WeatherWidget } from '@/pages/dashboard/components/weather/weather.widget';
 import { MenuItems } from '@/core/interfaces/menuitems';
 
 @Component({
     selector: 'app-menu',
     standalone: true,
-    imports: [CommonModule, MenuitemComponent, RouterModule],
+    imports: [CommonModule, MenuitemComponent, RouterModule, WeatherWidget],
     templateUrl: 'menu.component.html'
 })
 export class MenuComponent implements OnInit {

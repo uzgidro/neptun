@@ -1,7 +1,7 @@
 <div class="col-span-12">
-    <div class="card mb-0">
+    <div class="card">
         <div class="font-semibold text-xl mb-4">Предстоящие мероприятия</div>
-        <p-table [value]="events" [paginator]="true" [rows]="5" sortField="date" [sortOrder]="1">
+        <p-table [value]="events" sortField="date" [sortOrder]="1" styleClass="p-datatable-gridlines">
             <ng-template #header>
                 <tr>
                     <th style="width: 5rem"></th>
