@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Button, ButtonDirective, ButtonIcon, ButtonLabel } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { TableModule } from 'primeng/table';
@@ -35,6 +35,8 @@ class GesWidget implements OnInit {
     expandedRows: expandedRows = {};
 
     isExpanded: boolean = false;
+
+    @Output() expansionChange = new EventEmitter<boolean>();
 
     ngOnInit(): void {
         this.cascades = [
@@ -329,6 +331,7 @@ class GesWidget implements OnInit {
                 {} as { [key: string]: boolean }
             );
             this.isExpanded = true;
+            this.expansionChange.emit(true);
         } else {
             this.collapseAll();
         }
@@ -337,6 +340,18 @@ class GesWidget implements OnInit {
     collapseAll() {
         this.expandedRows = {};
         this.isExpanded = false;
+        this.expansionChange.emit(false);
+    }
+
+    onRowExpand() {
+        // Use setTimeout to ensure expandedRows is updated
+            const hasExpandedRows = !this.isRowsHidden;
+            this.expansionChange.emit(hasExpandedRows);
+    }
+
+    onRowCollapse() {
+            const hasExpandedRows = !this.isRowsHidden;
+            this.expansionChange.emit(hasExpandedRows);
     }
 }
 

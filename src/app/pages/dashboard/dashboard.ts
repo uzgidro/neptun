@@ -13,16 +13,35 @@ import { NotificationsWidget } from '@/pages/dashboard/components/notifications/
     template: `
         <div class="grid grid-cols-12 gap-8">
             <app-stats-widget class="contents" />
-            <div class="col-span-12 xl:col-span-6">
-                <app-ges-widget />
-                <app-constructions-widget />
-            </div>
-            <div class="col-span-12 xl:col-span-6">
-                <app-water-resources-widget />
-                <app-notifications-widget />
-            </div>
+            @if (gesExpanded) {
+                <app-ges-widget class="col-span-12" (expansionChange)="onGesExpansionChange($event)" />
+                <div class="col-span-12 xl:col-span-4">
+                    <app-constructions-widget />
+                </div>
+                <div class="col-span-12 xl:col-span-4">
+                    <app-water-resources-widget />
+                </div>
+                <div class="col-span-12 xl:col-span-4">
+                    <app-notifications-widget />
+                </div>
+            } @else {
+                <div class="col-span-12 xl:col-span-6">
+                    <app-ges-widget (expansionChange)="onGesExpansionChange($event)" />
+                    <app-constructions-widget />
+                </div>
+                <div class="col-span-12 xl:col-span-6">
+                    <app-water-resources-widget />
+                    <app-notifications-widget />
+                </div>
+            }
             <app-incoming-events-widget class="contents" />
         </div>
     `
 })
-export class Dashboard {}
+export class Dashboard {
+    gesExpanded = false;
+
+    onGesExpansionChange(expanded: boolean) {
+        this.gesExpanded = expanded;
+    }
+}

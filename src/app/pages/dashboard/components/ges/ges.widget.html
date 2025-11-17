@@ -7,7 +7,7 @@
             <span pButtonLabel>{{ isExpanded || !isRowsHidden ? 'Свернуть' : 'Развернуть' }}</span>
         </button>
     </div>
-    <p-table [value]="cascades" dataKey="name" scrollHeight="24rem" [expandedRowKeys]="expandedRows">
+    <p-table [value]="cascades" dataKey="name" scrollHeight="24rem" [expandedRowKeys]="expandedRows" (onRowExpand)="onRowExpand()" (onRowCollapse)="onRowCollapse()">
         <ng-template #header>
             <tr>
                 <th style="width: 5rem"></th>
