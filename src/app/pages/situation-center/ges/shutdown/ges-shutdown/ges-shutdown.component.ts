@@ -15,6 +15,7 @@ import { GesShutdownDto, GesShutdownPayload, ShutdownDto } from '@/core/interfac
 import { DatePipe } from '@angular/common';
 import { AuthService } from '@/core/services/auth.service';
 import { TooltipModule } from 'primeng/tooltip';
+import { OrganizationService } from '@/core/services/organization.service';
 
 @Component({
     selector: 'app-ges-shutdown',
@@ -39,7 +40,7 @@ export class GesShutdownComponent implements OnInit, OnChanges {
     orgsLoading = false;
     authService = inject(AuthService);
     private fb: FormBuilder = inject(FormBuilder);
-    private api: ApiService = inject(ApiService);
+    private organizationService: OrganizationService = inject(OrganizationService);
     private gesShutdownService: GesShutdownService = inject(GesShutdownService);
     private messageService: MessageService = inject(MessageService);
 
@@ -56,7 +57,7 @@ export class GesShutdownComponent implements OnInit, OnChanges {
         this.loadShutdowns();
 
         this.orgsLoading = true;
-        this.api.getCascades().subscribe({
+        this.organizationService.getCascades().subscribe({
             next: (data) => {
                 this.organizations = data;
             },
@@ -132,6 +133,7 @@ export class GesShutdownComponent implements OnInit, OnChanges {
     closeDialog() {
         this.isFormOpen = false;
         this.submitted = false;
+        this.isLoading = false;
         this.isEditMode = false;
         this.currentShutdownId = null;
         this.form.reset();
@@ -143,6 +145,7 @@ export class GesShutdownComponent implements OnInit, OnChanges {
         this.currentShutdownId = null;
         this.form.reset();
         this.submitted = false;
+        this.isLoading = false;
         this.isFormOpen = true;
     }
 

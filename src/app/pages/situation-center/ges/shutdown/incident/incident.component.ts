@@ -14,6 +14,7 @@ import { IncidentService } from '@/core/services/incident.service';
 import { Organization } from '@/core/interfaces/organizations';
 import { AuthService } from '@/core/services/auth.service';
 import { TooltipModule } from 'primeng/tooltip';
+import { OrganizationService } from '@/core/services/organization.service';
 
 @Component({
   selector: 'app-incident',
@@ -49,7 +50,7 @@ export class IncidentComponent implements OnInit, OnChanges {
     orgsLoading = false;
     authService = inject(AuthService);
     private fb: FormBuilder = inject(FormBuilder);
-    private api: ApiService = inject(ApiService);
+    private organizationService: OrganizationService = inject(OrganizationService);
     private incidentService: IncidentService = inject(IncidentService);
     private messageService: MessageService = inject(MessageService);
 
@@ -63,7 +64,7 @@ export class IncidentComponent implements OnInit, OnChanges {
         this.loadIncidents();
 
         this.orgsLoading = true;
-        this.api.getCascades().subscribe({
+        this.organizationService.getCascades().subscribe({
             next: (data) => {
                 this.organizations = data;
             },
@@ -136,6 +137,7 @@ export class IncidentComponent implements OnInit, OnChanges {
     closeDialog() {
         this.isFormOpen = false;
         this.submitted = false;
+        this.isLoading = false;
         this.isEditMode = false;
         this.currentIncidentId = null;
         this.form.reset();
@@ -147,6 +149,7 @@ export class IncidentComponent implements OnInit, OnChanges {
         this.currentIncidentId = null;
         this.form.reset();
         this.submitted = false;
+        this.isLoading = false;
         this.isFormOpen = true;
     }
 

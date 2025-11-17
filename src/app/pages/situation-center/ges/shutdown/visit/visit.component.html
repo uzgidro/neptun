@@ -98,14 +98,14 @@
 >
     <form class="p-4" [formGroup]="form" (ngSubmit)="onSubmit()">
 
-        <app-group-select
+        <app-select
             label="Объект"
             formControlName="organization"
             [items]="organizations"
             [loading]="orgsLoading"
             [submitted]="submitted"
             errorMessage="Выберите организацию">
-        </app-group-select>
+        </app-select>
 
         <app-date-picker
             label="Дата визита"

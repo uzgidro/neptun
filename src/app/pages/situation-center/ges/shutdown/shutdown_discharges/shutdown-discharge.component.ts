@@ -16,6 +16,7 @@ import { ApiService } from '@/core/services/api.service';
 import { AuthService } from '@/core/services/auth.service';
 import { dateRangeValidator } from '@/core/validators/date-range.validator';
 import { TooltipModule } from 'primeng/tooltip';
+import { OrganizationService } from '@/core/services/organization.service';
 
 @Component({
     selector: 'app-shutdown-discharge',
@@ -40,7 +41,7 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
 
     authService = inject(AuthService);
     private fb: FormBuilder = inject(FormBuilder);
-    private api: ApiService = inject(ApiService);
+    private organizationService: OrganizationService = inject(OrganizationService);
     private dischargeService: DischargeService = inject(DischargeService);
     private messageService: MessageService = inject(MessageService);
 
@@ -78,7 +79,7 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
 
     private loadOrganizations() {
         this.orgsLoading = true;
-        this.api.getCascades().subscribe({
+        this.organizationService.getCascades().subscribe({
             next: (data) => {
                 this.organizations = data;
             },

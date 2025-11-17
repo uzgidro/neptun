@@ -2,16 +2,14 @@ import { Component, inject, OnInit } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ApiService } from '@/core/services/api.service';
 import { MessageService } from 'primeng/api';
 import { IncidentComponent } from '@/pages/situation-center/ges/shutdown/incident/incident.component';
 import { GesShutdownComponent } from '@/pages/situation-center/ges/shutdown/ges-shutdown/ges-shutdown.component';
 import { ShutdownDischargeComponent } from '@/pages/situation-center/ges/shutdown/shutdown_discharges/shutdown-discharge.component';
 import { DatePicker } from 'primeng/datepicker';
-import {
-    ReservoirDeviceComponent
-} from '@/pages/situation-center/ges/shutdown/reservoir-device/reservoir-device.component';
+import { ReservoirDeviceComponent } from '@/pages/situation-center/ges/shutdown/reservoir-device/reservoir-device.component';
 import { VisitComponent } from '@/pages/situation-center/ges/shutdown/visit/visit.component';
+import { OrganizationService } from '@/core/services/organization.service';
 
 @Component({
     selector: 'app-shutdown',
@@ -25,7 +23,7 @@ export class ShutdownComponent implements OnInit {
     selectedDate: Date | null = null;
     maxDate: Date = new Date();
 
-    private api: ApiService = inject(ApiService);
+    private organizationService: OrganizationService = inject(OrganizationService);
     private messageService: MessageService = inject(MessageService);
     private router: Router = inject(Router);
     private route: ActivatedRoute = inject(ActivatedRoute);
@@ -42,7 +40,7 @@ export class ShutdownComponent implements OnInit {
         });
 
         this.orgsLoading = true;
-        this.api.getCascades().subscribe({
+        this.organizationService.getCascades().subscribe({
             next: (data) => {
                 this.organizations = data;
             },
