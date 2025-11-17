@@ -1,0 +1,25 @@
+<div class="col-span-12 md:col-span-6 lg:col-span-3">
+    <div class="card h-full">
+        <div class="flex items-center justify-between mb-4">
+            <div class="font-semibold text-xl"></div>
+        </div>
+
+        @if (weather) {
+            <div class="flex flex-col items-center text-center">
+                <i class="text-6xl mb-4" [ngClass]="weather.iconClass"></i>
+                <div class="text-4xl font-bold">{{ weather.temperature }}°C</div>
+                <div class="text-lg text-muted-color">{{ weather.description }}, {{ weather.city }}</div>
+                <div class="flex justify-around w-full mt-6 text-center">
+                    <div>
+                        <span class="font-semibold block">{{ weather.humidity }}%</span>
+                        <span class="text-muted-color text-sm">Влажность</span>
+                    </div>
+                    <div>
+                        <span class="font-semibold block">{{ weather.wind }} м/с</span>
+                        <span class="text-muted-color text-sm">Ветер</span>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

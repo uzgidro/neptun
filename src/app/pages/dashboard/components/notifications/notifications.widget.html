@@ -1,0 +1,72 @@
+<div class="card mb-8!">
+    <div class="flex items-center justify-between mb-6">
+        <div class="font-semibold text-xl">События</div>
+    </div>
+
+    <div class="overflow-y-auto" style="height: 20rem">
+        <span class="block text-muted-color font-medium mb-4">Сегодня, {{today | date:'dd.MM'}}</span>
+        <ul class="p-0 m-0 list-none mb-6">
+            <li class="flex items-center py-2 border-b border-surface">
+                <div class="w-12 h-12 flex items-center justify-center bg-green-100 dark:bg-green-400/10 rounded-full mr-4 shrink-0">
+                    <i class="pi pi-check-circle text-xl! text-green-500"></i>
+                </div>
+                <span class="text-surface-900 dark:text-surface-0 leading-normal"
+                >12:33:36 ГЭС-23 Г-2
+                        <span class="text-surface-700 dark:text-surface-100">пуск</span>
+                    </span>
+            </li>
+            <li class="flex items-center py-2 border-b border-surface">
+                <div class="w-12 h-12 flex items-center justify-center bg-red-100 dark:bg-red-400/10 rounded-full mr-4 shrink-0">
+                    <i class="pi pi-exclamation-circle text-xl! text-red-500"></i>
+                </div>
+                <span class="text-surface-900 dark:text-surface-0 leading-normal"
+                >12:30:46 ГЭС-23 Г-2
+                        <span class="text-surface-700 dark:text-surface-100">аварийное отключение</span>
+                    </span>
+            </li>
+        </ul>
+
+        <span class="block text-muted-color font-medium mb-4">{{yesterday | date:'dd.MM'}}</span>
+        <ul class="p-0 m-0 list-none mb-6">
+            <li class="flex items-center py-2 border-b border-surface">
+                <div class="w-12 h-12 flex items-center justify-center bg-green-100 dark:bg-green-400/10 rounded-full mr-4 shrink-0">
+                    <i class="pi pi-check-circle text-xl! text-green-500"></i>
+                </div>
+                <span class="text-surface-900 dark:text-surface-0 leading-normal"
+                >12:33:36 ГЭС-23 Г-2
+                        <span class="text-surface-700 dark:text-surface-100">пуск</span>
+                    </span>
+            </li>
+            <li class="flex items-center py-2 border-b border-surface">
+                <div class="w-12 h-12 flex items-center justify-center bg-red-100 dark:bg-red-400/10 rounded-full mr-4 shrink-0">
+                    <i class="pi pi-exclamation-circle text-xl! text-red-500"></i>
+                </div>
+                <span class="text-surface-900 dark:text-surface-0 leading-normal"
+                >12:30:46 ГЭС-23 Г-2
+                        <span class="text-surface-700 dark:text-surface-100">аварийное отключение</span>
+                    </span>
+            </li>
+        </ul>
+        <span class="block text-muted-color font-medium mb-4">{{third | date:'dd.MM'}}</span>
+        <ul class="p-0 m-0 list-none mb-6">
+            <li class="flex items-center py-2 border-b border-surface">
+                <div class="w-12 h-12 flex items-center justify-center bg-green-100 dark:bg-green-400/10 rounded-full mr-4 shrink-0">
+                    <i class="pi pi-check-circle text-xl! text-green-500"></i>
+                </div>
+                <span class="text-surface-900 dark:text-surface-0 leading-normal"
+                >12:33:36 ГЭС-23 Г-2
+                        <span class="text-surface-700 dark:text-surface-100">пуск</span>
+                    </span>
+            </li>
+            <li class="flex items-center py-2 border-b border-surface">
+                <div class="w-12 h-12 flex items-center justify-center bg-orange-100 dark:bg-orange-400/10 rounded-full mr-4 shrink-0">
+                    <i class="pi pi-times-circle text-xl! text-orange-500"></i>
+                </div>
+                <span class="text-surface-900 dark:text-surface-0 leading-normal"
+                >10:30:46 ГЭС-23 Г-2
+                        <span class="text-surface-700 dark:text-surface-100">остановка аггрегата</span>
+                    </span>
+            </li>
+        </ul>
+    </div>
+</div>

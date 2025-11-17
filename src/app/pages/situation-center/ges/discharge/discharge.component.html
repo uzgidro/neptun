@@ -1,0 +1,218 @@
+<div class="card">
+    <div class="font-semibold text-xl mb-4">Холостой водосброс</div>
+    <div class="mb-4">
+        <label for="dateSelector" class="block mb-2">Дата:</label>
+        <p-date-picker
+            inputId="dateSelector"
+            [(ngModel)]="selectedDate"
+            [maxDate]="maxDate"
+            dateFormat="dd.mm.yy"
+            [showIcon]="true"
+            (onSelect)="onDateChange()"
+            placeholder="Выберите дату"
+        ></p-date-picker>
+    </div>
+    <p-table
+        [value]="dischargeByCascades"
+        dataKey="id"
+        stripedRows
+        [loading]="loading"
+        [scrollable]="true"
+        scrollHeight="60vh"
+        [expandedRowKeys]="expandedRows"
+        [tableStyle]="{ 'min-width': '60rem' }"
+    >
+        <ng-template pTemplate="caption">
+            <div class="flex justify-between items-center">
+                <div class="flex gap-2">
+                    <button pButton (click)="expandAll()">
+                        <i pButtonIcon class="pi pi-fw"
+                           [ngClass]="{ 'pi-minus': isExpanded, 'pi-plus': !isExpanded }"></i>
+                        <span pButtonLabel>{{ isExpanded ? 'Свернуть' : 'Развернуть' }}</span>
+                    </button>
+                    <button pButton (click)="exportExcel()" icon="pi pi-file-excel" label="Экспорт в Excel"></button>
+                </div>
+                @if (authService.isSc()) {
+                    <button pButton (click)="openDialog()">
+                        <i pButtonIcon class="pi pi-plus"></i>
+                        <span pButtonLabel>Добавить</span>
+                    </button>
+                }
+            </div>
+        </ng-template>
+
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width: 3rem"></th>
+                <th pSortableColumn="name">Название Каскада
+                    <p-sortIcon field="name" />
+                </th>
+                <th pSortableColumn="total_volume">Общий объём по Каскаду
+                    <p-sortIcon field="total_volume" />
+                </th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-cascade let-expanded="expanded">
+            <tr>
+                <td>
+                    <p-button type="button" pRipple [pRowToggler]="cascade" [text]="true"
+                              [rounded]="true"
+                              [plain]="true"
+                              [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" />
+                </td>
+                <td class="font-bold">{{ cascade.name }}</td>
+                <td class="font-bold">{{ cascade.total_volume | number: '1.2-2' }} млн. м³</td>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="expandedrow" let-cascade>
+            <tr>
+                <td colspan="3">
+                    <div class="p-3">
+                        <p-table [value]="cascade.hpps" dataKey="id" [expandedRowKeys]="expandedRows">
+                            <ng-template #header>
+                                <tr>
+                                    <th style="width: 3rem"></th>
+                                    <th pSortableColumn="name">Название ГЭС
+                                        <p-sortIcon field="name" />
+                                    </th>
+                                    <th pSortableColumn="total_volume">Объём ГЭС
+                                        <p-sortIcon field="total_volume" />
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template #body let-hpp let-expandedHpp="expanded">
+                                <tr>
+                                    <td>
+                                        <p-button type="button" pRipple [pRowToggler]="hpp" [text]="true"
+                                                  [rounded]="true"
+                                                  [plain]="true"
+                                                  [icon]="expandedHpp ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" />
+                                    </td>
+                                    <td>{{ hpp.name }}</td>
+                                    <td>{{ hpp.total_volume | number: '1.2-2' }} млн. м³</td>
+                                </tr>
+                            </ng-template>
+
+                            <ng-template pTemplate="expandedrow" let-hpp>
+                                <tr>
+                                    <td colspan="3">
+                                        <div class="p-2">
+                                            <p-table [value]="hpp.discharges" dataKey="id" class="p-datatable-sm">
+                                                <ng-template #header>
+                                                    <tr>
+                                                        <th pSortableColumn="started_at">Начало</th>
+                                                        <th pSortableColumn="ended_at">Конец</th>
+                                                        <th pSortableColumn="flow_rate">Поток, м³/с</th>
+                                                        <th pSortableColumn="total_volume">Объём, млн. м³</th>
+                                                        <th pSortableColumn="reason">Причина</th>
+                                                        @if (authService.isSc()) {
+                                                            <th pSortableColumn="created_by.fio">Создал</th>
+                                                            <th>Подтвердил</th>
+                                                            <th>Действия</th>
+                                                        }
+                                                    </tr>
+                                                </ng-template>
+                                                <ng-template #body let-discharge>
+                                                    <tr>
+                                                        <td>{{ discharge.started_at | date:'dd.MM.yyyy HH:mm' }}</td>
+                                                        <td>{{ discharge.ended_at ? (discharge.ended_at | date:'dd.MM.yyyy HH:mm') : '-' }}</td>
+                                                        <td>{{ discharge.flow_rate | number: '1.0-2' }}</td>
+                                                        <td>{{ discharge.total_volume | number: '1.2-2' }}</td>
+                                                        <td>{{ discharge.reason || '-' }}</td>
+                                                        @if (authService.isSc()) {
+                                                            <td>{{ discharge.created_by?.fio || '-' }}</td>
+                                                            <td>
+                                                                @if (discharge.approved === true) {
+                                                                    <i class="pi pi-check-circle text-green-500"
+                                                                       pTooltip="Подтверждено"></i>
+                                                                    <span
+                                                                        class="ml-1">{{ discharge.updated_by?.fio || '' }}</span>
+                                                                } @else if (discharge.approved === false) {
+                                                                    <i class="pi pi-times-circle text-red-500"
+                                                                       pTooltip="Отклонено"></i>
+                                                                    <span
+                                                                        class="ml-1">{{ discharge.updated_by?.fio || '' }}</span>
+                                                                } @else {
+                                                                    <i class="pi pi-question-circle text-gray-500"
+                                                                       pTooltip="Ожидает"></i>
+                                                                }
+                                                            </td>
+                                                            <td>
+                                                                <a href="tel:YOUR_NUMBER_HERE">
+                                                                    <button pButton
+                                                                            class="p-button-text p-button-info"
+                                                                            pTooltip="Позвонить">
+                                                                        <i pButtonIcon class="pi pi-phone"></i>
+                                                                    </button>
+                                                                </a>
+                                                                <button pButton
+                                                                        class="p-button-text p-button-success"
+                                                                        pTooltip="Подтвердить"
+                                                                        (click)="openApprove(discharge.id)">
+                                                                    <i pButtonIcon class="pi pi-check"></i>
+                                                                </button>
+                                                                <button pButton
+                                                                        class="p-button-text p-button-warning"
+                                                                        pTooltip="Изменить"
+                                                                        (click)="edit(discharge)">
+                                                                    <i pButtonIcon class="pi pi-pencil"></i>
+                                                                </button>
+                                                                <button pButton
+                                                                        class="p-button-text p-button-danger"
+                                                                        pTooltip="Удалить"
+                                                                        (click)="openDelete(discharge.id)">
+                                                                    <i pButtonIcon class="pi pi-trash"></i>
+                                                                </button>
+                                                            </td>
+                                                        }
+                                                    </tr>
+                                                </ng-template>
+                                                <ng-template #empty>
+                                                    <tr>
+                                                        <td [attr.colspan]="authService.isSc() ? 8 : 5">Сбросов не
+                                                            найдено.
+                                                        </td>
+                                                    </tr>
+                                                </ng-template>
+                                            </p-table>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template #empty>
+                                <tr>
+                                    <td colspan="3">ГЭС не найдены.</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template #empty>
+            <tr>
+                <td colspan="3" class="text-center">Данные не найдены.</td>
+            </tr>
+        </ng-template>
+
+    </p-table>
+</div>
+
+<app-delete-confirmation
+    [(visible)]="showDeleteDialog"
+    (onConfirm)="doDelete()"
+    [message]="'Вы точно хотите удалить этот сброс?'"
+/>
+
+<app-approve-confirmation
+    [(visible)]="showApproveDialog"
+    (onConfirm)="doApprove()"
+/>
+
+<app-discharge-dialog
+    [(display)]="displayDialog"
+    [modelToEdit]="modelToEdit"
+    (save)="onSaveSuccess()"
+></app-discharge-dialog>

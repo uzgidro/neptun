@@ -35,7 +35,7 @@ export class DocumentViewerComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroy$))
             .subscribe(([files, params]) => {
                 this.files = files;
-                const isConstruction = params['type'] === 'construction';
+                const isConstruction = params['type'] === 'constructions';
                 this.showTabs = isConstruction;
 
                 if (isConstruction) {

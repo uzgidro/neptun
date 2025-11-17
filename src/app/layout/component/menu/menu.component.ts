@@ -2,12 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MenuitemComponent } from '../menuitem/menuitem.component';
+import { WeatherWidget } from '@/pages/dashboard/components/weather/weather.widget';
 import { MenuItems } from '@/core/interfaces/menuitems';
 
 @Component({
     selector: 'app-menu',
     standalone: true,
-    imports: [CommonModule, MenuitemComponent, RouterModule],
+    imports: [CommonModule, MenuitemComponent, RouterModule, WeatherWidget],
     templateUrl: 'menu.component.html'
 })
 export class MenuComponent implements OnInit {
@@ -20,6 +21,17 @@ export class MenuComponent implements OnInit {
                     {
                         label: 'Главная',
                         routerLink: ['/dashboard']
+                    },
+                    {
+                        label: 'Кадровый персонал (HRM)',
+                        role: ['admin', 'rais'],
+                        items: [
+                            { label: 'Организации', role: ['rais'], routerLink: ['/organizations'] },
+                            { label: 'Дни рождения', role: ['rais'] },
+                            { label: 'Потеря личного состава', role: ['rais'] },
+                            { label: 'Пользователи', role: ['admin'], routerLink: ['/users'] },
+                            { label: 'Роли', role: ['admin'], routerLink: ['/roles'] }
+                        ]
                     },
                     {
                         label: 'Ситуационный центр',
@@ -44,9 +56,7 @@ export class MenuComponent implements OnInit {
                                     {
                                         label: 'Аварийные отключение',
                                         role: ['rais', 'sc'],
-                                        routerLink: ['/viewer'],
-                                        queryParams: { type: 'shutdown' },
-                                        routerLinkActiveOptions: { queryParams: 'exact' }
+                                        routerLink: ['/shutdowns']
                                     },
                                     {
                                         label: 'Выработка',
@@ -54,6 +64,11 @@ export class MenuComponent implements OnInit {
                                         routerLink: ['/viewer'],
                                         queryParams: { type: 'production' },
                                         routerLinkActiveOptions: { queryParams: 'exact' }
+                                    },
+                                    {
+                                        label: 'Холостой сброс',
+                                        role: ['rais', 'sc'],
+                                        routerLink: ['/discharge']
                                     }
                                 ]
                             },
@@ -95,32 +110,65 @@ export class MenuComponent implements OnInit {
                                 label: 'Строительство',
                                 role: ['rais', 'sc'],
                                 routerLink: ['/viewer'],
-                                queryParams: { type: 'construction' },
+                                queryParams: { type: 'constructions' },
                                 routerLinkActiveOptions: { queryParams: 'exact' }
+                            },
+                            {
+                                label: 'Тестовая таблица (Excel)',
+                                role: ['rais', 'sc'],
+                                routerLink: ['/pages/excel']
                             },
                             { label: 'Категории', role: ['sc'], routerLink: ['/categories'] },
                             { label: 'Файлы', role: ['sc'], routerLink: ['/files'] }
                         ]
                     },
                     {
-                        label: 'Кадровый персонал',
-                        role: ['admin', 'rais'],
+                        label: 'Финансовый блок',
+                        role: ['rais'],
                         items: [
-                            { label: 'Организации', role: ['rais'] },
-                            { label: 'Пользователи', role: ['admin'], routerLink: ['/users'] },
-                            { label: 'Роли', role: ['admin'], routerLink: ['/roles'] }
+                            { label: 'Дебит / кредит', role: ['rais'] },
+                            { label: 'Инвестиции', role: ['rais'] },
+                            { label: 'Затраты на ремонт', role: ['rais'] },
+                            { label: 'Закупки', role: ['rais'] },
+                            { label: 'KPI', role: ['rais'] },
+                            { label: 'Заработная плата', role: ['rais'] },
+                            { label: 'Премирование', role: ['rais'] }
                         ]
                     },
-                    {label: 'Встречи', role: ['rais'], items: []},
-                    {label: 'Звонки', role: ['rais'], items: []},
-                    {label: 'Переговоры', role: ['rais'], items: []},
-                    {label: 'Финансовый блок', role: ['rais'], items: []},
-                    {label: 'Постановления', role: ['rais'], items: []},
-                    {label: 'Почта', role: ['rais'], items: []},
-                    {label: 'Рапорты', role: ['rais'], items: []},
-                    {label: 'Контроль и инвентаризация', role: ['rais'], items: []},
-                    {label: 'Телефонный справочник', role: ['rais'], items: []},
-                    {label: 'СМИ', role: ['rais'], items: []},
+                    {
+                        label: 'Планирование',
+                        role: ['rais'],
+                        items: [
+                            { label: 'Встречи', role: ['rais'], routerLink: ['/planning'], queryParams: { type: 'meeting' }, routerLinkActiveOptions: { queryParams: 'exact' } },
+                            { label: 'Созвоны', role: ['rais'], routerLink: ['/planning'], queryParams: { type: 'call' }, routerLinkActiveOptions: { queryParams: 'exact' } },
+                            { label: 'Переговоры', role: ['rais'], routerLink: ['/planning'], queryParams: { type: 'negotiation' },routerLinkActiveOptions: { queryParams: 'exact' } },
+                            { label: 'ВКС', role: ['rais'], routerLink: ['/planning'], queryParams: { type: 'vcs' },routerLinkActiveOptions: { queryParams: 'exact' } }
+
+                        ]
+                    },
+                    {
+                        label: 'Почта',
+                        role: ['rais'],
+                        items: [
+                            { label: 'Приказы', role: ['rais'] },
+                            { label: 'Рапорты', role: ['rais'] },
+                            { label: 'Письма', role: ['rais'] },
+                            { label: 'Инструкции', role: ['rais'] },
+                            {
+                                label: 'Постановления',
+                                role: ['rais'],
+                                items: [
+                                    { label: 'Президент', role: ['rais'] },
+                                    { label: 'Кабинет министров', role: ['rais'] },
+                                    { label: 'Указы', role: ['rais'] },
+                                    { label: 'Приказы', role: ['rais'] },
+                                    { label: 'Совместные соглашения', role: ['rais'] }
+                                ]
+                            }
+                        ]
+                    },
+                    { label: 'Звонки', role: ['rais'] },
+                    { label: 'СМИ', role: ['rais'] }
                 ]
             }
         ];
@@ -136,7 +184,7 @@ export class MenuComponent implements OnInit {
                 label: 'UI Components',
                 items: [
                     { label: 'Form Layout', icon: 'pi pi-fw pi-id-card', routerLink: ['/uikit/formlayout'] },
-                    { label: 'Input', icon: 'pi pi-fw pi-check-square', routerLink: ['/uikit/input'] },
+                    { label: 'Input', icon: 'pi pi-fw pi-check-square', routerLink: ['/uikit/input-number'] },
                     { label: 'Button', icon: 'pi pi-fw pi-mobile', class: 'rotated-icon', routerLink: ['/uikit/button'] },
                     { label: 'Table', icon: 'pi pi-fw pi-table', routerLink: ['/uikit/table'] },
                     { label: 'List', icon: 'pi pi-fw pi-list', routerLink: ['/uikit/list'] },
@@ -167,7 +215,7 @@ export class MenuComponent implements OnInit {
                         icon: 'pi pi-fw pi-user',
                         items: [
                             {
-                                label: 'Login',
+                                label: 'LoginComponent',
                                 icon: 'pi pi-fw pi-sign-in',
                                 routerLink: ['/auth/login']
                             },

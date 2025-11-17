@@ -1,0 +1,26 @@
+<p-dialog header="Подтверждение"
+          [(visible)]="visible"
+          (onHide)="closeDialog()"
+          [style]="{ width: '350px' }"
+          [modal]="true">
+
+    <div class="flex items-center p-4">
+        <i class="pi pi-question-circle mr-4 text-blue-500" style="font-size: 2rem"></i>
+        <span>{{ message }}</span>
+    </div>
+
+    <ng-template #footer>
+        <div class="flex gap-2 p-3">
+            <p-button label="Нет"
+                      icon="pi pi-times"
+                      (click)="closeDialog()"
+                      text
+                      severity="secondary" />
+            <p-button label="Да"
+                      icon="pi pi-check"
+                      (click)="confirm()"
+                      severity="success" outlined
+                      autofocus />
+        </div>
+    </ng-template>
+</p-dialog>

@@ -1,0 +1,120 @@
+@if (authService.isSc()) {
+    <div class="mb-6">
+        <p-button label="Создать Событие" icon="pi pi-plus" (click)="openNew()" />
+    </div>
+}
+
+<p-table
+    [value]="incidents"
+    dataKey="incident_id"
+    stripedRows
+    [loading]="loading"
+    [scrollable]="true"
+    scrollHeight="60rem"
+    [tableStyle]="{ 'min-width': '60rem' }"
+    [sortField]="'incident_date'"
+    [sortOrder]="-1"
+>
+    <ng-template pTemplate="header">
+        <tr>
+            <th pSortableColumn="incident_date" style="width: 25%">
+                Время инцидента <p-sortIcon field="incident_date"></p-sortIcon>
+            </th>
+
+            <th pSortableColumn="organization" style="width: 35%">
+                Название объекта <p-sortIcon field="organization"></p-sortIcon>
+            </th>
+
+            <th style="width: 40%">
+                Описание
+            </th>
+
+            @if (authService.isSc()) {
+                <th style="width: 10%">
+                    Действия
+                </th>
+            }
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-incident>
+        <tr>
+            <td>
+                {{ incident.incident_date | date: 'HH:mm dd.MM.yyyy' }}
+            </td>
+            <td>
+                {{ incident.organization }}
+            </td>
+            <td>
+                {{ incident.description }}
+            </td>
+            @if (authService.isSc()) {
+                <td>
+                    <p-button
+                        icon="pi pi-pencil"
+                        severity="info"
+                        [text]="true"
+                        [rounded]="true"
+                        (click)="editIncident(incident)"
+                        pTooltip="Редактировать"
+                    />
+                    <p-button
+                        icon="pi pi-trash"
+                        severity="danger"
+                        [text]="true"
+                        [rounded]="true"
+                        (click)="deleteIncident(incident)"
+                        pTooltip="Удалить"
+                    />
+                </td>
+            }
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+        <tr>
+            <td [attr.colspan]="authService.isSc() ? 4 : 3" class="text-center">
+                Инциденты за выбранную дату не найдены.
+            </td>
+        </tr>
+    </ng-template>
+
+</p-table>
+
+<app-dialog
+    [(visible)]="isFormOpen"
+    [header]="isEditMode ? 'Редактировать Событие' : 'Новое Событие'"
+    [form]="form"
+    [submitting]="isLoading"
+    (save)="onSubmit()"
+    (cancel)="closeDialog()"
+>
+    <form class="p-4" [formGroup]="form" (ngSubmit)="onSubmit()">
+
+        <app-group-select
+
+            label="Объект"
+            formControlName="organization"
+            [items]="organizations"
+            [loading]="orgsLoading"
+            [submitted]="submitted"
+            errorMessage="Выберите организацию">
+        </app-group-select>
+
+        <app-date-picker
+            label="Дата события"
+            formControlName="incident_time"
+            [submitted]="submitted"
+            errorMessage="Укажите дату">
+        </app-date-picker>
+
+        <app-textarea
+            label="Описание"
+            formControlName="description"
+            [submitted]="submitted"
+            [required]="false">
+        </app-textarea>
+
+    </form>
+
+</app-dialog>

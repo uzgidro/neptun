@@ -1,0 +1,25 @@
+<div class="mb-4">
+    <p-floatlabel class="w-full">
+        <textarea
+            pInputTextarea
+            [id]="uniqueId"
+            class="w-full"
+
+            [(ngModel)]="internalValue"
+            (ngModelChange)="onValueChange($event)"
+            (blur)="onTouched()"
+
+            [disabled]="isDisabled"
+            [rows]="rows"
+            [autoResize]="true"
+
+            [ngClass]="{ 'ng-invalid ng-dirty': submitted && required && !internalValue }"
+        ></textarea>
+
+        <label [for]="uniqueId">{{ label }}</label>
+    </p-floatlabel>
+
+    @if (submitted && required && !internalValue) {
+        <p-message class="mt-2" severity="error" variant="simple" size="small">{{ errorMessage }}</p-message>
+    }
+</div>

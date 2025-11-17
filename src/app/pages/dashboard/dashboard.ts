@@ -1,26 +1,47 @@
 import { Component } from '@angular/core';
-import { NotificationsWidget } from './components/notifications-widget/notificationswidget';
 import { StatsWidget } from './components/statswidget';
-import { RecentSalesWidget } from './components/recentsaleswidget';
-import { BestSellingWidget } from './components/bestsellingwidget';
-import { RevenueStreamWidget } from './components/revenuestreamwidget';
+import { IncomingEventsWidget } from './components/incoming-events/incoming-events.widget';
+import { WaterResourcesWidget } from '@/pages/dashboard/components/water-resources/water-resources.widget';
+import { ConstructionsWidget } from '@/pages/dashboard/components/constructions/constructions.widget';
+import GesWidget from '@/pages/dashboard/components/ges/ges.widget';
+import { NotificationsWidget } from '@/pages/dashboard/components/notifications/notifications.widget';
 
 @Component({
     selector: 'app-dashboard',
     standalone: true,
-    imports: [StatsWidget, RecentSalesWidget, BestSellingWidget, RevenueStreamWidget, NotificationsWidget],
+    imports: [StatsWidget, IncomingEventsWidget, WaterResourcesWidget, ConstructionsWidget, GesWidget, NotificationsWidget],
     template: `
         <div class="grid grid-cols-12 gap-8">
             <app-stats-widget class="contents" />
-            <div class="col-span-12 xl:col-span-6">
-                <app-recent-sales-widget />
-                <app-best-selling-widget />
-            </div>
-            <div class="col-span-12 xl:col-span-6">
-                <app-revenue-stream-widget />
-                <app-notifications-widget />
-            </div>
+            @if (gesExpanded) {
+                <app-ges-widget class="col-span-12" (expansionChange)="onGesExpansionChange($event)" />
+                <div class="col-span-12 xl:col-span-4">
+                    <app-constructions-widget />
+                </div>
+                <div class="col-span-12 xl:col-span-4">
+                    <app-water-resources-widget />
+                </div>
+                <div class="col-span-12 xl:col-span-4">
+                    <app-notifications-widget />
+                </div>
+            } @else {
+                <div class="col-span-12 xl:col-span-6">
+                    <app-ges-widget (expansionChange)="onGesExpansionChange($event)" />
+                    <app-constructions-widget />
+                </div>
+                <div class="col-span-12 xl:col-span-6">
+                    <app-water-resources-widget />
+                    <app-notifications-widget />
+                </div>
+            }
+            <app-incoming-events-widget class="contents" />
         </div>
     `
 })
-export class Dashboard {}
+export class Dashboard {
+    gesExpanded = false;
+
+    onGesExpansionChange(expanded: boolean) {
+        this.gesExpanded = expanded;
+    }
+}

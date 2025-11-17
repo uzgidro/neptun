@@ -1,0 +1,96 @@
+<div class="card mb-8!">
+    <div class="flex flex-row justify-between items-center mb-6" >
+        <span class="font-semibold text-xl">Гидроэлектростанции</span>
+        <button pButton outlined (click)="expandAll()">
+            <i pButtonIcon class="pi pi-fw"
+               [ngClass]="{ 'pi-minus': isExpanded || !isRowsHidden, 'pi-plus': !isExpanded }"></i>
+            <span pButtonLabel>{{ isExpanded || !isRowsHidden ? 'Свернуть' : 'Развернуть' }}</span>
+        </button>
+    </div>
+    <p-table [value]="cascades" dataKey="name" scrollHeight="24rem" [expandedRowKeys]="expandedRows" (onRowExpand)="onRowExpand()" (onRowCollapse)="onRowCollapse()">
+        <ng-template #header>
+            <tr>
+                <th style="width: 5rem"></th>
+                <th class="whitespace-nowrap" pSortableColumn="name">Название
+                    <p-sortIcon field="name" />
+                </th>
+                <th class="whitespace-break-spaces" pSortableColumn="prod">Выработка, млн. кВт*ч
+                    <p-sortIcon field="prod" />
+                </th>
+                <th class="whitespace-nowrap" pSortableColumn="totalAgg">Аггрегаты
+                    <p-sortIcon field="totalAgg" />
+                </th>
+                <th class="whitespace-nowrap" pSortableColumn="idle">Холостой сброс, м³/с
+                    <p-sortIcon field="idle" />
+                </th>
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-cascade let-expanded="expanded">
+            <tr>
+                <td>
+                    <p-button type="button" pRipple [pRowToggler]="cascade" [text]="true" [rounded]="true"
+                              [plain]="true" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" />
+                </td>
+                <td class="whitespace-nowrap">{{ cascade.name }}</td>
+                <td>{{ cascade.prod }}</td>
+                <td><span>{{ cascade.totalAgg }}</span>/<span class="text-rose-500">{{ cascade.workingAgg }}</span>/<span class="text-lime-500">{{ cascade.pendingAgg }}</span>/<span class="text-orange-500">{{ cascade.repairingAgg }}</span></td>
+                <td>{{ cascade.idle }}</td>
+                <td><p-button type="button" icon="pi pi-info-circle" severity="info" /></td>
+            </tr>
+        </ng-template>
+        <ng-template #expandedrow let-cascade>
+            <tr>
+                <td colspan="7">
+                    <div class="p-3">
+                        <h5>{{ cascade.name }}</h5>
+                        <p>{{ cascade.directorName }}</p>
+
+                        @if (cascade.phoneNumber) {
+                            <a pButton outlined class="p-button-sm mb-4" [href]="'tel:' + cascade.phoneNumber">
+                            <i pButtonIcon class="pi pi-phone"></i>
+                            <span pButtonLabel>Позвонить</span>
+                        </a>
+                        }
+                        <p-table [value]="cascade.ges" dataKey="name" styleClass="p-datatable-sm">
+                            <ng-template #header>
+                                <tr>
+                                    <th pSortableColumn="name">
+                                        Название
+                                        <p-sortIcon field="name" />
+                                    </th>
+                                    <th pSortableColumn="prod">Выработка, млн. кВт*ч
+                                        <p-sortIcon field="prod" />
+                                    </th>
+                                    <th pSortableColumn="totalAgg">
+                                        Аггрегаты
+                                        <p-sortIcon field="totalAgg" />
+                                    </th>
+                                    <th pSortableColumn="idle">
+                                        Холостой сброс, м³/с
+                                        <p-sortIcon field="idle" />
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </ng-template>
+                            <ng-template #body let-ges>
+                                <tr>
+                                    <td>{{ ges.name }}</td>
+                                    <td>{{ ges.prod }}</td>
+                                    <td><span>{{ ges.totalAgg }}</span>/<span class="text-rose-500">{{ ges.workingAgg }}</span>/<span class="text-lime-500">{{ ges.pendingAgg }}</span>/<span class="text-orange-500">{{ ges.repairingAgg }}</span></td>
+                                    <td>{{ ges.idle }}</td>
+                                    <td><p-button type="button" icon="pi pi-info-circle" severity="info" /></td>
+                                </tr>
+                            </ng-template>
+                            <ng-template #emptymessage>
+                                <tr>
+                                    <td colspan="6">Нет данных</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
