@@ -43,7 +43,7 @@
                 {{ incident.incident_date | date: 'HH:mm dd.MM.yyyy' }}
             </td>
             <td>
-                {{ incident.organization }}
+                {{ incident.organization || 'Все объекты' }}
             </td>
             <td>
                 {{ incident.description }}
