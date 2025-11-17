@@ -69,14 +69,16 @@
 </div>
 
 <p-dialog header="Новый пользователь" [(visible)]="displayDialog" [breakpoints]="{ '960px': '75vw' }"
-          [style]="{ width: '30vw' }" [modal]="true" (onHide)="closeDialog()">
+          [style]="{ width: '50vw' }" [modal]="true" (onHide)="closeDialog()">
     <form [formGroup]="userForm">
         <div class="flex flex-col gap-4 p-fluid">
+            <!-- Account Information -->
+            <div class="font-semibold text-lg mb-2">Информация об аккаунте</div>
             <div class="flex flex-col gap-2">
-                <label for="name">Имя</label>
-                <input pInputText id="name" type="text" formControlName="name" />
-                @if (submitted && userForm.controls['name'].errors?.['required']) {
-                    <small class="p-error">Имя обязательно.</small>
+                <label for="login">Логин</label>
+                <input pInputText id="login" type="text" formControlName="login" />
+                @if (submitted && userForm.controls['login'].errors?.['required']) {
+                    <small class="p-error">Логин обязателен.</small>
                 }
             </div>
             <div class="flex flex-col gap-2">
@@ -91,6 +93,77 @@
                 <p-multiSelect id="roles" [options]="allRoles" formControlName="roles" optionLabel="name"
                                placeholder="Выберите роли" [appendTo]="'body'"></p-multiSelect>
             </div>
+
+            <!-- Contact Information -->
+            <div class="font-semibold text-lg mb-2 mt-4">Контактная информация</div>
+
+            <app-input-text
+                formControlName="fio"
+                label="ФИО"
+                [submitted]="submitted"
+                errorMessage="ФИО обязательно"
+                [required]="true">
+            </app-input-text>
+
+            <app-input-text
+                formControlName="email"
+                label="Email"
+                type="email"
+                [submitted]="submitted"
+                [required]="false">
+            </app-input-text>
+
+            <app-input-text
+                formControlName="phone"
+                label="Телефон"
+                type="tel"
+                [submitted]="submitted"
+                [required]="false">
+            </app-input-text>
+
+            <app-input-text
+                formControlName="ip_phone"
+                label="IP телефон"
+                [submitted]="submitted"
+                [required]="false">
+            </app-input-text>
+
+            <app-date-picker
+                formControlName="dob"
+                label="Дата рождения"
+                [submitted]="submitted">
+            </app-date-picker>
+
+            <app-input-text
+                formControlName="external_organization_name"
+                label="Внешняя организация"
+                [submitted]="submitted"
+                [required]="false">
+            </app-input-text>
+
+            <app-input-number
+                formControlName="organization_id"
+                label="ID организации"
+                [submitted]="submitted"
+                [required]="false"
+                [showButtons]="false">
+            </app-input-number>
+
+            <app-input-number
+                formControlName="department_id"
+                label="ID отдела"
+                [submitted]="submitted"
+                [required]="false"
+                [showButtons]="false">
+            </app-input-number>
+
+            <app-input-number
+                formControlName="position_id"
+                label="ID должности"
+                [submitted]="submitted"
+                [required]="false"
+                [showButtons]="false">
+            </app-input-number>
         </div>
     </form>
     <ng-template pTemplate="footer">
