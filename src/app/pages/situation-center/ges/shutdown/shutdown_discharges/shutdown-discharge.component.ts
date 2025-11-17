@@ -134,7 +134,10 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
                 error: (err) => {
                     this.messageService.add({ severity: 'error', summary: 'Ошибка сохранения', detail: err.error?.message || 'Не удалось сохранить данные' });
                 },
-                complete: () => (this.isLoading = false)
+                complete: () => {
+                    this.loading = false;
+                    this.submitted = false;
+                }
             });
         } else {
             if (rawValue.organization) payload.organization_id = rawValue.organization.id;
@@ -148,7 +151,10 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
                 error: (err) => {
                     this.messageService.add({ severity: 'error', summary: 'Ошибка сохранения', detail: err.error?.message || 'Не удалось сохранить данные' });
                 },
-                complete: () => (this.isLoading = false)
+                complete: () => {
+                    this.loading = false;
+                    this.submitted = false;
+                }
             });
         }
     }
