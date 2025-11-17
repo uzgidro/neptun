@@ -5,12 +5,11 @@ import { WaterResourcesWidget } from '@/pages/dashboard/components/water-resourc
 import { ConstructionsWidget } from '@/pages/dashboard/components/constructions/constructions.widget';
 import GesWidget from '@/pages/dashboard/components/ges/ges.widget';
 import { NotificationsWidget } from '@/pages/dashboard/components/notifications/notifications.widget';
-import { WeatherWidget } from '@/pages/dashboard/components/weather/weather.widget';
 
 @Component({
     selector: 'app-dashboard',
     standalone: true,
-    imports: [StatsWidget, IncomingEventsWidget, WaterResourcesWidget, ConstructionsWidget, GesWidget, NotificationsWidget, WeatherWidget],
+    imports: [StatsWidget, IncomingEventsWidget, WaterResourcesWidget, ConstructionsWidget, GesWidget, NotificationsWidget],
     template: `
         <div class="grid grid-cols-12 gap-8">
             <app-stats-widget class="contents" />
@@ -23,7 +22,6 @@ import { WeatherWidget } from '@/pages/dashboard/components/weather/weather.widg
                 <app-notifications-widget />
             </div>
             <app-incoming-events-widget class="contents" />
-            <app-weather-widget />
         </div>
     `
 })
