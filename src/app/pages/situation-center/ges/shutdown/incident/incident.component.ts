@@ -169,15 +169,12 @@ export class IncidentComponent implements OnInit, OnChanges {
         this.isLoading = false;
 
         let organizationToSet: any = null;
-        const appliesToAll = !incident.organization_id;
+        const appliesToAll = !incident.id;
 
-        if (incident.organization_id && this.organizations) {
-            for (const cascade of this.organizations) {
-                const foundOrg = cascade.items?.find((org: any) => org.id === incident.organization_id);
-                if (foundOrg) {
-                    organizationToSet = foundOrg;
-                    break;
-                }
+        if (incident.id && this.organizations) {
+            const foundOrg = this.organizations.find((org: any) => org.id === incident.organization_id);
+            if (foundOrg) {
+                organizationToSet = foundOrg;
             }
         }
 

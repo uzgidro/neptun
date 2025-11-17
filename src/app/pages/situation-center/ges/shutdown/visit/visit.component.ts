@@ -155,13 +155,10 @@ export class VisitComponent implements OnInit, OnChanges {
         this.currentVisitId = visit.id;
 
         let organizationToSet: any = null;
-        if (visit.organization_id && this.organizations) {
-            for (const cascade of this.organizations) {
-                const foundOrg = cascade.items?.find((org: any) => org.id === visit.organization_id);
-                if (foundOrg) {
-                    organizationToSet = foundOrg;
-                    break;
-                }
+        if (visit.id && this.organizations) {
+            const foundOrg = this.organizations.find((org: any) => org.id === visit.organization_id);
+            if (foundOrg) {
+                organizationToSet = foundOrg;
             }
         }
 

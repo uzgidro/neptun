@@ -5,13 +5,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { IncidentComponent } from '@/pages/situation-center/ges/shutdown/incident/incident.component';
 import { GesShutdownComponent } from '@/pages/situation-center/ges/shutdown/ges-shutdown/ges-shutdown.component';
-import {
-    ShutdownDischargeComponent
-} from '@/pages/situation-center/ges/shutdown/shutdown_discharges/shutdown-discharge.component';
+import { ShutdownDischargeComponent } from '@/pages/situation-center/ges/shutdown/shutdown_discharges/shutdown-discharge.component';
 import { DatePicker } from 'primeng/datepicker';
-import {
-    ReservoirDeviceComponent
-} from '@/pages/situation-center/ges/shutdown/reservoir-device/reservoir-device.component';
+import { ReservoirDeviceComponent } from '@/pages/situation-center/ges/shutdown/reservoir-device/reservoir-device.component';
 import { VisitComponent } from '@/pages/situation-center/ges/shutdown/visit/visit.component';
 import { OrganizationService } from '@/core/services/organization.service';
 
