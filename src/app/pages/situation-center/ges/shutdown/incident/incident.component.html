@@ -92,7 +92,6 @@
     <form class="p-4" [formGroup]="form" (ngSubmit)="onSubmit()">
 
         <app-group-select
-
             label="Объект"
             formControlName="organization"
             [items]="organizations"
@@ -100,6 +99,15 @@
             [submitted]="submitted"
             errorMessage="Выберите организацию">
         </app-group-select>
+
+        <div class="flex items-center gap-2 mb-4 mt-2">
+            <p-checkbox
+                formControlName="applies_to_all"
+                [binary]="true"
+                inputId="applies_to_all"
+            />
+            <label for="applies_to_all" class="cursor-pointer">Применить ко всем объектам</label>
+        </div>
 
         <app-date-picker
             label="Дата события"

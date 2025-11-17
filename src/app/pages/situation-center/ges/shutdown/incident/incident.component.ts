@@ -9,29 +9,18 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { TableModule } from 'primeng/table';
 import { TextareaComponent } from '@/layout/component/dialog/textarea/textarea.component';
 import { IncidentDto, IncidentPayload } from '@/core/interfaces/incidents';
-import { ApiService } from '@/core/services/api.service';
 import { IncidentService } from '@/core/services/incident.service';
 import { Organization } from '@/core/interfaces/organizations';
 import { AuthService } from '@/core/services/auth.service';
 import { TooltipModule } from 'primeng/tooltip';
 import { OrganizationService } from '@/core/services/organization.service';
+import { Checkbox } from 'primeng/checkbox';
 
 @Component({
-  selector: 'app-incident',
-  imports: [
-      Button,
-      DatePickerComponent,
-      DatePipe,
-      DialogComponent,
-      GroupSelectComponent,
-      PrimeTemplate,
-      ReactiveFormsModule,
-      TableModule,
-      TextareaComponent,
-      TooltipModule
-  ],
-  templateUrl: './incident.component.html',
-  styleUrl: './incident.component.scss'
+    selector: 'app-incident',
+    imports: [Button, DatePickerComponent, DatePipe, DialogComponent, GroupSelectComponent, PrimeTemplate, ReactiveFormsModule, TableModule, TextareaComponent, TooltipModule, Checkbox],
+    templateUrl: './incident.component.html',
+    styleUrl: './incident.component.scss'
 })
 export class IncidentComponent implements OnInit, OnChanges {
     @Input() date: Date | null = null;
@@ -56,9 +45,24 @@ export class IncidentComponent implements OnInit, OnChanges {
 
     ngOnInit(): void {
         this.form = this.fb.group({
+            applies_to_all: this.fb.control<boolean>(false),
             organization: this.fb.control<Organization | null>(null, [Validators.required]),
             incident_time: this.fb.control<Date | null>(null, [Validators.required]),
             description: this.fb.control<string | null>(null, [Validators.required])
+        });
+
+        // Watch for changes to applies_to_all checkbox
+        this.form.get('applies_to_all')?.valueChanges.subscribe((appliesToAll) => {
+            const organizationControl = this.form.get('organization');
+            if (appliesToAll) {
+                organizationControl?.clearValidators();
+                organizationControl?.setValue(null);
+                organizationControl?.disable();
+            } else {
+                organizationControl?.setValidators([Validators.required]);
+                organizationControl?.enable();
+            }
+            organizationControl?.updateValueAndValidity();
         });
 
         this.loadIncidents();
@@ -156,8 +160,12 @@ export class IncidentComponent implements OnInit, OnChanges {
     editIncident(incident: IncidentDto) {
         this.isEditMode = true;
         this.currentIncidentId = incident.id;
+        this.submitted = false;
+        this.isLoading = false;
 
         let organizationToSet: any = null;
+        const appliesToAll = !incident.organization_id;
+
         if (incident.organization_id && this.organizations) {
             for (const cascade of this.organizations) {
                 const foundOrg = cascade.items?.find((org: any) => org.id === incident.organization_id);
@@ -169,6 +177,7 @@ export class IncidentComponent implements OnInit, OnChanges {
         }
 
         this.form.patchValue({
+            applies_to_all: appliesToAll,
             organization: organizationToSet,
             incident_time: incident.incident_date,
             description: incident.description
