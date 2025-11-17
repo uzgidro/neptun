@@ -4,13 +4,12 @@ import { FloatLabel } from 'primeng/floatlabel';
 import { Select } from 'primeng/select';
 import { NgClass } from '@angular/common';
 import { Message } from 'primeng/message';
-import { PrimeTemplate } from 'primeng/api';
 
-let nextId = 0
+let nextId = 0;
 
 @Component({
     selector: 'app-select',
-    imports: [FloatLabel, Select, FormsModule, NgClass, Message, PrimeTemplate, ReactiveFormsModule],
+    imports: [FloatLabel, Select, FormsModule, NgClass, Message, ReactiveFormsModule],
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,

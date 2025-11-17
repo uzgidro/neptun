@@ -7,7 +7,6 @@ import { MessageService, PrimeTemplate } from 'primeng/api';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { TextareaComponent } from '@/layout/component/dialog/textarea/textarea.component';
-import { ApiService } from '@/core/services/api.service';
 import { Organization } from '@/core/interfaces/organizations';
 import { GesShutdownService } from '@/core/services/ges-shutdown.service';
 import { InputNumberdComponent } from '@/layout/component/dialog/input-number/input-number.component';
@@ -105,6 +104,7 @@ export class GesShutdownComponent implements OnInit, OnChanges {
                 },
                 error: (err) => {
                     this.messageService.add({ severity: 'error', summary: 'Ошибка обновления события', detail: err.message });
+                    this.isLoading = false;
                 },
                 complete: () => {
                     this.isLoading = false;
@@ -121,6 +121,7 @@ export class GesShutdownComponent implements OnInit, OnChanges {
                 },
                 error: (err) => {
                     this.messageService.add({ severity: 'error', summary: 'Ошибка добавления события', detail: err.message });
+                    this.isLoading = false;
                 },
                 complete: () => {
                     this.submitted = false;
@@ -152,6 +153,8 @@ export class GesShutdownComponent implements OnInit, OnChanges {
     editShutdown(shutdown: ShutdownDto) {
         this.isEditMode = true;
         this.currentShutdownId = shutdown.id;
+        this.submitted = false;
+        this.isLoading = false;
 
         let organizationToSet: any = null;
         if (shutdown.organization_id && this.organizations) {

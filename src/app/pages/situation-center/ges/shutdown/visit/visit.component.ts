@@ -101,6 +101,7 @@ export class VisitComponent implements OnInit, OnChanges {
                 },
                 error: (err) => {
                     this.messageService.add({ severity: 'error', summary: 'Ошибка обновления визита', detail: err.message });
+                    this.isLoading = false;
                 },
                 complete: () => {
                     this.isLoading = false;
@@ -122,6 +123,7 @@ export class VisitComponent implements OnInit, OnChanges {
                 },
                 error: (err) => {
                     this.messageService.add({ severity: 'error', summary: 'Ошибка добавления визита', detail: err.message });
+                    this.isLoading = false;
                 },
                 complete: () => {
                     this.isLoading = false;
@@ -153,6 +155,8 @@ export class VisitComponent implements OnInit, OnChanges {
     editVisit(visit: VisitDto) {
         this.isEditMode = true;
         this.currentVisitId = visit.id;
+        this.submitted = false;
+        this.isLoading = false;
 
         let organizationToSet: any = null;
         if (visit.id && this.organizations) {

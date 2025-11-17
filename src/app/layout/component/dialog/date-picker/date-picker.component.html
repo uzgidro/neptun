@@ -6,9 +6,8 @@
 
             [(ngModel)]="internalValue"
             (onSelect)="onValueChange($event)"
-            (onBlur)="onTouched()"
+            (ngModelChange)="onValueChange($event)"
 
-            [disabled]="isDisabled || isEditMode"
             [invalid]="submitted && !internalValue"
 
             dateFormat="dd.mm.yy"

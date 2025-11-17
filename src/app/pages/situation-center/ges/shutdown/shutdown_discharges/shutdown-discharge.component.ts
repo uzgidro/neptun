@@ -168,6 +168,9 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
         this.submitted = false;
         this.isLoading = false;
 
+        // Reset form first to clear any previous state
+        this.form.reset();
+
         let organizationToSet: any = null;
         if (discharge.organization && this.organizations) {
             for (const cascade of this.organizations) {

@@ -27,7 +27,6 @@ export class DischargeService extends ApiService {
 
             params = params.set('start_date', this.dateToYMD(date));
             params = params.set('end_date', this.dateToYMD(endDate));
-            console.log(params);
         }
         return this.http.get<IdleDischargeResponse[]>(BASE_URL + DISCHARGES + FLAT, { params: params });
     }

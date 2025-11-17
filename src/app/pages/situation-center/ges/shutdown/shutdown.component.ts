@@ -10,6 +10,7 @@ import { DatePicker } from 'primeng/datepicker';
 import { ReservoirDeviceComponent } from '@/pages/situation-center/ges/shutdown/reservoir-device/reservoir-device.component';
 import { VisitComponent } from '@/pages/situation-center/ges/shutdown/visit/visit.component';
 import { OrganizationService } from '@/core/services/organization.service';
+import { TimeService } from '@/core/services/time.service';
 
 @Component({
     selector: 'app-shutdown',
@@ -26,6 +27,7 @@ export class ShutdownComponent implements OnInit {
 
     private organizationService: OrganizationService = inject(OrganizationService);
     private messageService: MessageService = inject(MessageService);
+    private timeService: TimeService = inject(TimeService);
     private router: Router = inject(Router);
     private route: ActivatedRoute = inject(ActivatedRoute);
 
@@ -60,7 +62,7 @@ export class ShutdownComponent implements OnInit {
         if (this.selectedDate) {
             this.router.navigate([], {
                 relativeTo: this.route,
-                queryParams: { date: this.selectedDate.toISOString() },
+                queryParams: { date: this.timeService.dateToYMD(this.selectedDate) },
                 queryParamsHandling: 'merge'
             });
         }
