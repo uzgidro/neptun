@@ -12,7 +12,6 @@ import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-
 import { InputNumberdComponent } from '@/layout/component/dialog/input-number/input-number.component';
 import { TextareaComponent } from '@/layout/component/dialog/textarea/textarea.component';
 import { Organization } from '@/core/interfaces/organizations';
-import { ApiService } from '@/core/services/api.service';
 import { AuthService } from '@/core/services/auth.service';
 import { dateRangeValidator } from '@/core/validators/date-range.validator';
 import { TooltipModule } from 'primeng/tooltip';
@@ -63,7 +62,7 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
         this.loadOrganizations();
     }
 
-    private loadDischarges() {
+    loadDischarges() {
         this.loading = true;
         const dateToUse = this.date || new Date();
         this.dischargeService.getFlatDischarges(dateToUse).subscribe({

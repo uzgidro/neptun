@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -22,6 +22,8 @@ import { OrganizationService } from '@/core/services/organization.service';
     styleUrl: './shutdown.component.scss'
 })
 export class ShutdownComponent implements OnInit {
+    @ViewChild(ShutdownDischargeComponent) shutdownDischargeComponent!: ShutdownDischargeComponent;
+
     organizations: any[] = [];
     orgsLoading = false;
     selectedDate: Date | null = null;
@@ -66,5 +68,9 @@ export class ShutdownComponent implements OnInit {
                 queryParamsHandling: 'merge'
             });
         }
+    }
+
+    onIncidentSaved(): void {
+        this.shutdownDischargeComponent?.loadDischarges();
     }
 }

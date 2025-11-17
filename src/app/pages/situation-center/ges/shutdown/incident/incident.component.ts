@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Button } from 'primeng/button';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
 import { DatePipe } from '@angular/common';
@@ -24,6 +24,7 @@ import { SelectComponent } from '@/layout/component/dialog/select/select.compone
 })
 export class IncidentComponent implements OnInit, OnChanges {
     @Input() date: Date | null = null;
+    @Output() incidentSaved = new EventEmitter<void>();
 
     isFormOpen = false;
     submitted = false;
@@ -109,10 +110,12 @@ export class IncidentComponent implements OnInit, OnChanges {
             this.incidentService.editIncident(this.currentIncidentId, payload).subscribe({
                 next: () => {
                     this.messageService.add({ severity: 'success', summary: 'Инцидент обновлен' });
+                    this.incidentSaved.emit();
                     this.closeDialog();
                 },
                 error: (err) => {
                     this.messageService.add({ severity: 'error', summary: 'Ошибка обновления инцидента', detail: err.message });
+                    this.isLoading = false;
                 },
                 complete: () => {
                     this.isLoading = false;
@@ -125,10 +128,12 @@ export class IncidentComponent implements OnInit, OnChanges {
                     this.isFormOpen = false;
                     this.form.reset();
                     this.messageService.add({ severity: 'success', summary: 'Инцидент добавлен' });
+                    this.incidentSaved.emit();
                     this.closeDialog();
                 },
                 error: (err) => {
                     this.messageService.add({ severity: 'error', summary: 'Ошибка добавления инцидента', detail: err.message });
+                    this.isLoading = false;
                 },
                 complete: () => {
                     this.isLoading = false;
