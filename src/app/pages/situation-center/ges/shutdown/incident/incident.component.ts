@@ -3,7 +3,6 @@ import { Button } from 'primeng/button';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
 import { DatePipe } from '@angular/common';
 import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
-import { GroupSelectComponent } from '@/layout/component/dialog/group-select/group-select.component';
 import { MessageService, PrimeTemplate } from 'primeng/api';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TableModule } from 'primeng/table';
@@ -15,10 +14,11 @@ import { AuthService } from '@/core/services/auth.service';
 import { TooltipModule } from 'primeng/tooltip';
 import { OrganizationService } from '@/core/services/organization.service';
 import { Checkbox } from 'primeng/checkbox';
+import { SelectComponent } from '@/layout/component/dialog/select/select.component';
 
 @Component({
     selector: 'app-incident',
-    imports: [Button, DatePickerComponent, DatePipe, DialogComponent, GroupSelectComponent, PrimeTemplate, ReactiveFormsModule, TableModule, TextareaComponent, TooltipModule, Checkbox],
+    imports: [Button, DatePickerComponent, DatePipe, DialogComponent, PrimeTemplate, ReactiveFormsModule, TableModule, TextareaComponent, TooltipModule, Checkbox, SelectComponent],
     templateUrl: './incident.component.html',
     styleUrl: './incident.component.scss'
 })
@@ -68,7 +68,7 @@ export class IncidentComponent implements OnInit, OnChanges {
         this.loadIncidents();
 
         this.orgsLoading = true;
-        this.organizationService.getCascades().subscribe({
+        this.organizationService.getOrganizationsFlat().subscribe({
             next: (data) => {
                 this.organizations = data;
             },
