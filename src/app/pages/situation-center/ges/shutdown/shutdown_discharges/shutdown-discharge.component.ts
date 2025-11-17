@@ -94,12 +94,14 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
         this.form.get('organization')?.enable();
         this.form.get('started_at')?.enable();
         this.submitted = false;
+        this.isLoading = false;
         this.isFormOpen = true;
     }
 
     closeDialog() {
         this.isFormOpen = false;
         this.submitted = false;
+        this.isLoading = false;
         this.isEditMode = false;
         this.currentDischargeId = null;
         // Re-enable all fields
@@ -119,6 +121,8 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
         const rawValue = this.form.getRawValue();
         const payload: WaterDischargePayload = {};
 
+        if (rawValue.organization) payload.organization_id = rawValue.organization.id;
+        if (rawValue.started_at) payload.started_at = rawValue.started_at.toISOString();
         if (rawValue.ended_at) payload.ended_at = rawValue.ended_at.toISOString();
         if (rawValue.flow_rate) payload.flow_rate = rawValue.flow_rate;
         if (rawValue.reason) payload.reason = rawValue.reason;
@@ -133,16 +137,14 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
                 },
                 error: (err) => {
                     this.messageService.add({ severity: 'error', summary: 'Ошибка сохранения', detail: err.error?.message || 'Не удалось сохранить данные' });
+                    this.isLoading = false;
                 },
                 complete: () => {
-                    this.loading = false;
+                    this.isLoading = false;
                     this.submitted = false;
                 }
             });
         } else {
-            if (rawValue.organization) payload.organization_id = rawValue.organization.id;
-            if (rawValue.started_at) payload.started_at = rawValue.started_at.toISOString();
-
             this.dischargeService.addDischarge(payload).subscribe({
                 next: () => {
                     this.messageService.add({ severity: 'success', summary: 'Успешно', detail: 'Новая запись о водосбросе добавлена' });
@@ -150,9 +152,10 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
                 },
                 error: (err) => {
                     this.messageService.add({ severity: 'error', summary: 'Ошибка сохранения', detail: err.error?.message || 'Не удалось сохранить данные' });
+                    this.isLoading = false;
                 },
                 complete: () => {
-                    this.loading = false;
+                    this.isLoading = false;
                     this.submitted = false;
                 }
             });
@@ -162,6 +165,8 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
     editDischarge(discharge: IdleDischargeResponse) {
         this.isEditMode = true;
         this.currentDischargeId = discharge.id;
+        this.submitted = false;
+        this.isLoading = false;
 
         let organizationToSet: any = null;
         if (discharge.organization && this.organizations) {
