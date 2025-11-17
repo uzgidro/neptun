@@ -177,8 +177,8 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
         });
 
         // Disable organization and started_at in edit mode
-        this.form.get('organization')?.disable();
-        this.form.get('started_at')?.disable();
+        this.form.get('organization')?.enable();
+        this.form.get('started_at')?.enable();
 
         this.isFormOpen = true;
     }
