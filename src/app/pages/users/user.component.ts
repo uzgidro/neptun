@@ -1,7 +1,8 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Table, TableModule } from 'primeng/table';
-import { Users } from '@/core/interfaces/users';
+import { Users, AddUserRequest } from '@/core/interfaces/users';
 import { ApiService } from '@/core/services/api.service';
+import { UserService } from '@/core/services/user.service';
 import { Button, ButtonDirective, ButtonIcon, ButtonLabel } from 'primeng/button';
 import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
@@ -14,10 +15,13 @@ import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
 import { Password } from 'primeng/password';
 import { MultiSelect } from 'primeng/multiselect';
+import { InputTextComponent } from '@/layout/component/dialog/input-text/input-text.component';
+import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
+import { InputNumberdComponent } from '@/layout/component/dialog/input-number/input-number.component';
 
 @Component({
     selector: 'app-users',
-    imports: [TableModule, ButtonDirective, IconField, InputIcon, InputText, ButtonLabel, ButtonIcon, Chip, Button, Dialog, ReactiveFormsModule, Password, MultiSelect],
+    imports: [TableModule, ButtonDirective, IconField, InputIcon, InputText, ButtonLabel, ButtonIcon, Chip, Button, Dialog, ReactiveFormsModule, Password, MultiSelect, InputTextComponent, DatePickerComponent, InputNumberdComponent],
     templateUrl: './user.component.html',
     styleUrl: './user.component.scss'
 })
@@ -30,6 +34,7 @@ export class User implements OnInit, OnDestroy {
     userForm: FormGroup;
 
     private apiService = inject(ApiService);
+    private userService = inject(UserService);
 
     private fb = inject(FormBuilder);
     private messageService = inject(MessageService);
@@ -37,9 +42,19 @@ export class User implements OnInit, OnDestroy {
 
     constructor() {
         this.userForm = this.fb.group({
-            name: ['', Validators.required],
+            login: ['', Validators.required],
             password: ['', Validators.required],
-            roles: [[]]
+            roles: [[]],
+            // NewContactRequest fields
+            fio: ['', Validators.required],
+            email: [''],
+            phone: [''],
+            ip_phone: [''],
+            dob: [''],
+            external_organization_name: [''],
+            organization_id: [null],
+            department_id: [null],
+            position_id: [null]
         });
     }
 
@@ -70,12 +85,24 @@ export class User implements OnInit, OnDestroy {
         }
 
         const formValue = this.userForm.value;
-        const payload = {
-            ...formValue,
-            roles: formValue.roles.map((role: Roles) => role.id)
+        const payload: AddUserRequest = {
+            login: formValue.login,
+            password: formValue.password,
+            role_ids: formValue.roles.map((role: Roles) => role.id),
+            contact: {
+                fio: formValue.fio,
+                email: formValue.email || null,
+                phone: formValue.phone || null,
+                ip_phone: formValue.ip_phone || null,
+                dob: formValue.dob ? this.apiService['dateToYMD'](formValue.dob) : null,
+                external_organization_name: formValue.external_organization_name || null,
+                organization_id: formValue.organization_id || null,
+                department_id: formValue.department_id || null,
+                position_id: formValue.position_id || null
+            }
         };
 
-        this.apiService
+        this.userService
             .createUser(payload)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
