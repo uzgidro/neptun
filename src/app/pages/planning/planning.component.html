@@ -32,14 +32,37 @@
             <label for="type">Тип события</label>
 <!--            <p-dropdown id="type" [options]="eventTypes" [(ngModel)]="newEvent.type"></p-dropdown>-->
         </div>
-        <div class="flex flex-col gap-2">
-            <label for="title">Название</label>
-            <input pInputText id="title" [(ngModel)]="newEvent.title" required autofocus />
-        </div>
-        <div class="flex flex-col gap-2">
-            <label for="date">Дата и время</label>
-            <p-date-picker id="date" [(ngModel)]="newEvent.date" [showTime]="true" hourFormat="24" dateFormat="yy-mm-dd" [showIcon]="true" [appendTo]="'body'" fluid></p-date-picker>
-        </div>
+        <app-input-text
+            label="Название события"
+            formControlName="responsible_name"
+            [submitted]="submitted"
+            errorMessage="Укажите название">
+        </app-input-text>
+
+        <app-date-picker
+            label="Дата события"
+            formControlName="incident_time"
+            [submitted]="submitted"
+            errorMessage="Укажите дату">
+        </app-date-picker>
+
+        <app-select
+            label="Ответственный"
+            formControlName="responsible_contact_id"
+            [items]="contacts"
+            [loading]="contactsLoading"
+            [submitted]="submitted"
+            errorMessage="Выберите ответственного">
+        </app-select>
+
+        <app-select
+            label="Организация"
+            formControlName="responsible_contact_id"
+            [items]="contacts"
+            [loading]="contactsLoading"
+            [submitted]="submitted"
+            errorMessage="Выберите ответственного">
+        </app-select>
     </div>
     <ng-template pTemplate="footer">
         <p-button label="Отмена" icon="pi pi-times" styleClass="p-button-text" (click)="displayAddDialog=false"></p-button>
