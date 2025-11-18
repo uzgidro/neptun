@@ -1,17 +1,16 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ApiService } from '@/core/services/api.service';
 import { MessageService } from 'primeng/api';
 import { IncidentComponent } from '@/pages/situation-center/ges/shutdown/incident/incident.component';
 import { GesShutdownComponent } from '@/pages/situation-center/ges/shutdown/ges-shutdown/ges-shutdown.component';
 import { ShutdownDischargeComponent } from '@/pages/situation-center/ges/shutdown/shutdown_discharges/shutdown-discharge.component';
 import { DatePicker } from 'primeng/datepicker';
-import {
-    ReservoirDeviceComponent
-} from '@/pages/situation-center/ges/shutdown/reservoir-device/reservoir-device.component';
+import { ReservoirDeviceComponent } from '@/pages/situation-center/ges/shutdown/reservoir-device/reservoir-device.component';
 import { VisitComponent } from '@/pages/situation-center/ges/shutdown/visit/visit.component';
+import { OrganizationService } from '@/core/services/organization.service';
+import { TimeService } from '@/core/services/time.service';
 
 @Component({
     selector: 'app-shutdown',
@@ -20,13 +19,15 @@ import { VisitComponent } from '@/pages/situation-center/ges/shutdown/visit/visi
     styleUrl: './shutdown.component.scss'
 })
 export class ShutdownComponent implements OnInit {
+    @ViewChild(ShutdownDischargeComponent) shutdownDischargeComponent!: ShutdownDischargeComponent;
+
     organizations: any[] = [];
     orgsLoading = false;
     selectedDate: Date | null = null;
-    maxDate: Date = new Date();
 
-    private api: ApiService = inject(ApiService);
+    private organizationService: OrganizationService = inject(OrganizationService);
     private messageService: MessageService = inject(MessageService);
+    private timeService: TimeService = inject(TimeService);
     private router: Router = inject(Router);
     private route: ActivatedRoute = inject(ActivatedRoute);
 
@@ -42,7 +43,7 @@ export class ShutdownComponent implements OnInit {
         });
 
         this.orgsLoading = true;
-        this.api.getCascades().subscribe({
+        this.organizationService.getCascades().subscribe({
             next: (data) => {
                 this.organizations = data;
             },
@@ -61,9 +62,13 @@ export class ShutdownComponent implements OnInit {
         if (this.selectedDate) {
             this.router.navigate([], {
                 relativeTo: this.route,
-                queryParams: { date: this.selectedDate.toISOString() },
+                queryParams: { date: this.timeService.dateToYMD(this.selectedDate) },
                 queryParamsHandling: 'merge'
             });
         }
+    }
+
+    onIncidentSaved(): void {
+        this.shutdownDischargeComponent?.loadDischarges();
     }
 }

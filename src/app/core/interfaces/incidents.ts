@@ -9,8 +9,8 @@ export interface IncidentResponse {
     incident_date: string;
     description: string;
     created_at: string;
-    organization_id: number;
-    organization: string;
+    organization_id?: number;
+    organization?: string;
     created_by_user_id: number;
     created_by_user: string;
 }
@@ -20,8 +20,8 @@ export interface IncidentDto {
     incident_date: Date;
     description: string;
     created_at: Date;
-    organization_id: number;
-    organization: string;
+    organization_id?: number;
+    organization?: string;
     created_by_user_id: number;
     created_by_user: string;
 }

@@ -9,6 +9,7 @@ import { LatestFiles } from '@/core/interfaces/latest-files';
 import { Organization } from '@/core/interfaces/organizations';
 
 export const BASE_URL = 'https://prime.speedwagon.uz';
+export const FLAT = '/flat'
 const AUTH = '/auth';
 const SIGN_IN = '/sign-in';
 const SIGN_OUT = '/sign-out';
@@ -86,10 +87,5 @@ export class ApiService {
 
     deleteFile(id: number): Observable<any> {
         return this.http.delete(BASE_URL + FILES + '/' + id.toString());
-    }
-
-    getCascades(): Observable<Organization[]> {
-        const params = new HttpParams().set('type', 'cascade');
-        return this.http.get<Organization[]>(BASE_URL + ORGANIZATIONS, { params: params });
     }
 }

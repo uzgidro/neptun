@@ -12,10 +12,10 @@ import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-
 import { InputNumberdComponent } from '@/layout/component/dialog/input-number/input-number.component';
 import { TextareaComponent } from '@/layout/component/dialog/textarea/textarea.component';
 import { Organization } from '@/core/interfaces/organizations';
-import { ApiService } from '@/core/services/api.service';
 import { AuthService } from '@/core/services/auth.service';
 import { dateRangeValidator } from '@/core/validators/date-range.validator';
 import { TooltipModule } from 'primeng/tooltip';
+import { OrganizationService } from '@/core/services/organization.service';
 
 @Component({
     selector: 'app-shutdown-discharge',
@@ -40,7 +40,7 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
 
     authService = inject(AuthService);
     private fb: FormBuilder = inject(FormBuilder);
-    private api: ApiService = inject(ApiService);
+    private organizationService: OrganizationService = inject(OrganizationService);
     private dischargeService: DischargeService = inject(DischargeService);
     private messageService: MessageService = inject(MessageService);
 
@@ -62,7 +62,7 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
         this.loadOrganizations();
     }
 
-    private loadDischarges() {
+    loadDischarges() {
         this.loading = true;
         const dateToUse = this.date || new Date();
         this.dischargeService.getFlatDischarges(dateToUse).subscribe({
@@ -78,7 +78,7 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
 
     private loadOrganizations() {
         this.orgsLoading = true;
-        this.api.getCascades().subscribe({
+        this.organizationService.getCascades().subscribe({
             next: (data) => {
                 this.organizations = data;
             },
@@ -94,12 +94,14 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
         this.form.get('organization')?.enable();
         this.form.get('started_at')?.enable();
         this.submitted = false;
+        this.isLoading = false;
         this.isFormOpen = true;
     }
 
     closeDialog() {
         this.isFormOpen = false;
         this.submitted = false;
+        this.isLoading = false;
         this.isEditMode = false;
         this.currentDischargeId = null;
         // Re-enable all fields
@@ -119,6 +121,8 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
         const rawValue = this.form.getRawValue();
         const payload: WaterDischargePayload = {};
 
+        if (rawValue.organization) payload.organization_id = rawValue.organization.id;
+        if (rawValue.started_at) payload.started_at = rawValue.started_at.toISOString();
         if (rawValue.ended_at) payload.ended_at = rawValue.ended_at.toISOString();
         if (rawValue.flow_rate) payload.flow_rate = rawValue.flow_rate;
         if (rawValue.reason) payload.reason = rawValue.reason;
@@ -133,13 +137,14 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
                 },
                 error: (err) => {
                     this.messageService.add({ severity: 'error', summary: 'Ошибка сохранения', detail: err.error?.message || 'Не удалось сохранить данные' });
+                    this.isLoading = false;
                 },
-                complete: () => (this.isLoading = false)
+                complete: () => {
+                    this.isLoading = false;
+                    this.submitted = false;
+                }
             });
         } else {
-            if (rawValue.organization) payload.organization_id = rawValue.organization.id;
-            if (rawValue.started_at) payload.started_at = rawValue.started_at.toISOString();
-
             this.dischargeService.addDischarge(payload).subscribe({
                 next: () => {
                     this.messageService.add({ severity: 'success', summary: 'Успешно', detail: 'Новая запись о водосбросе добавлена' });
@@ -147,8 +152,12 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
                 },
                 error: (err) => {
                     this.messageService.add({ severity: 'error', summary: 'Ошибка сохранения', detail: err.error?.message || 'Не удалось сохранить данные' });
+                    this.isLoading = false;
                 },
-                complete: () => (this.isLoading = false)
+                complete: () => {
+                    this.isLoading = false;
+                    this.submitted = false;
+                }
             });
         }
     }
@@ -156,6 +165,11 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
     editDischarge(discharge: IdleDischargeResponse) {
         this.isEditMode = true;
         this.currentDischargeId = discharge.id;
+        this.submitted = false;
+        this.isLoading = false;
+
+        // Reset form first to clear any previous state
+        this.form.reset();
 
         let organizationToSet: any = null;
         if (discharge.organization && this.organizations) {
@@ -177,8 +191,8 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
         });
 
         // Disable organization and started_at in edit mode
-        this.form.get('organization')?.disable();
-        this.form.get('started_at')?.disable();
+        this.form.get('organization')?.enable();
+        this.form.get('started_at')?.enable();
 
         this.isFormOpen = true;
     }

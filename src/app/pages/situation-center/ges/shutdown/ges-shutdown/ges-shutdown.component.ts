@@ -7,7 +7,6 @@ import { MessageService, PrimeTemplate } from 'primeng/api';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { TextareaComponent } from '@/layout/component/dialog/textarea/textarea.component';
-import { ApiService } from '@/core/services/api.service';
 import { Organization } from '@/core/interfaces/organizations';
 import { GesShutdownService } from '@/core/services/ges-shutdown.service';
 import { InputNumberdComponent } from '@/layout/component/dialog/input-number/input-number.component';
@@ -15,6 +14,7 @@ import { GesShutdownDto, GesShutdownPayload, ShutdownDto } from '@/core/interfac
 import { DatePipe } from '@angular/common';
 import { AuthService } from '@/core/services/auth.service';
 import { TooltipModule } from 'primeng/tooltip';
+import { OrganizationService } from '@/core/services/organization.service';
 
 @Component({
     selector: 'app-ges-shutdown',
@@ -39,7 +39,7 @@ export class GesShutdownComponent implements OnInit, OnChanges {
     orgsLoading = false;
     authService = inject(AuthService);
     private fb: FormBuilder = inject(FormBuilder);
-    private api: ApiService = inject(ApiService);
+    private organizationService: OrganizationService = inject(OrganizationService);
     private gesShutdownService: GesShutdownService = inject(GesShutdownService);
     private messageService: MessageService = inject(MessageService);
 
@@ -56,7 +56,7 @@ export class GesShutdownComponent implements OnInit, OnChanges {
         this.loadShutdowns();
 
         this.orgsLoading = true;
-        this.api.getCascades().subscribe({
+        this.organizationService.getCascades().subscribe({
             next: (data) => {
                 this.organizations = data;
             },
@@ -104,6 +104,7 @@ export class GesShutdownComponent implements OnInit, OnChanges {
                 },
                 error: (err) => {
                     this.messageService.add({ severity: 'error', summary: 'Ошибка обновления события', detail: err.message });
+                    this.isLoading = false;
                 },
                 complete: () => {
                     this.isLoading = false;
@@ -120,6 +121,7 @@ export class GesShutdownComponent implements OnInit, OnChanges {
                 },
                 error: (err) => {
                     this.messageService.add({ severity: 'error', summary: 'Ошибка добавления события', detail: err.message });
+                    this.isLoading = false;
                 },
                 complete: () => {
                     this.submitted = false;
@@ -132,6 +134,7 @@ export class GesShutdownComponent implements OnInit, OnChanges {
     closeDialog() {
         this.isFormOpen = false;
         this.submitted = false;
+        this.isLoading = false;
         this.isEditMode = false;
         this.currentShutdownId = null;
         this.form.reset();
@@ -143,12 +146,15 @@ export class GesShutdownComponent implements OnInit, OnChanges {
         this.currentShutdownId = null;
         this.form.reset();
         this.submitted = false;
+        this.isLoading = false;
         this.isFormOpen = true;
     }
 
     editShutdown(shutdown: ShutdownDto) {
         this.isEditMode = true;
         this.currentShutdownId = shutdown.id;
+        this.submitted = false;
+        this.isLoading = false;
 
         let organizationToSet: any = null;
         if (shutdown.organization_id && this.organizations) {

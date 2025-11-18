@@ -38,7 +38,6 @@ export class DatePickerComponent implements ControlValueAccessor {
     onChange = (value: any) => {};
     onTouched = () => {};
 
-
     writeValue(value: any): void {
         if (value && !(value instanceof Date)) {
             this.internalValue = new Date(value);

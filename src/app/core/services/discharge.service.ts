@@ -8,10 +8,9 @@ const DISCHARGES = '/discharges';
 const FLAT = '/flat';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
-export class DischargeService extends ApiService{
-
+export class DischargeService extends ApiService {
     addDischarge(payload: WaterDischargePayload): Observable<any> {
         return this.http.post(BASE_URL + DISCHARGES, payload);
     }
@@ -20,12 +19,13 @@ export class DischargeService extends ApiService{
         return this.http.get<Cascade[]>(BASE_URL + DISCHARGES);
     }
 
-    getFlatDischarges(endDate?: Date): Observable<IdleDischargeResponse[]> {
+    getFlatDischarges(date?: Date): Observable<IdleDischargeResponse[]> {
         let params = new HttpParams();
-        if (endDate) {
-            params = params.set('end_date', this.dateToYMD(endDate));
+        if (date) {
+            params = params.set('start_date', this.dateToYMD(date));
+            params = params.set('end_date', this.dateToYMD(date));
         }
-        return this.http.get<IdleDischargeResponse[]>(BASE_URL + DISCHARGES + FLAT, {params: params});
+        return this.http.get<IdleDischargeResponse[]>(BASE_URL + DISCHARGES + FLAT, { params: params });
     }
 
     editDischarge(id: number, payload: WaterDischargePayload): Observable<any> {
@@ -39,5 +39,4 @@ export class DischargeService extends ApiService{
     deleteDischarge(id: number): Observable<any> {
         return this.http.delete(BASE_URL + DISCHARGES + '/' + id.toString());
     }
-
 }

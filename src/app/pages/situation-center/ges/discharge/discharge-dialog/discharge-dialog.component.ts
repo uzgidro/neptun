@@ -14,6 +14,7 @@ import { Button } from 'primeng/button';
 import { Message } from 'primeng/message';
 import { NgClass } from '@angular/common';
 import { DischargeService } from '@/core/services/discharge.service';
+import { OrganizationService } from '@/core/services/organization.service';
 
 @Component({
     selector: 'app-discharge-dialog',
@@ -34,6 +35,7 @@ export class DischargeDialogComponent implements OnInit, OnChanges {
     loading: boolean = false;
 
     private dischargeService = inject(DischargeService);
+    private organizationService = inject(OrganizationService)
     private messageService = inject(MessageService);
     private fb = inject(FormBuilder);
 
@@ -144,7 +146,7 @@ export class DischargeDialogComponent implements OnInit, OnChanges {
     }
 
     private loadOrganizations() {
-        this.dischargeService.getCascades().subscribe({
+        this.organizationService.getCascades().subscribe({
             next: (data) => {
                 this.organizations = data;
             },

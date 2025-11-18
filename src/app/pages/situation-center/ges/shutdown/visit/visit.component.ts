@@ -3,22 +3,22 @@ import { Button } from 'primeng/button';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
 import { DatePipe } from '@angular/common';
 import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
-import { GroupSelectComponent } from '@/layout/component/dialog/group-select/group-select.component';
 import { MessageService, PrimeTemplate } from 'primeng/api';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { TextareaComponent } from '@/layout/component/dialog/textarea/textarea.component';
 import { AddVisitRequest, EditVisitRequest, VisitDto } from '@/core/interfaces/visits';
-import { ApiService } from '@/core/services/api.service';
 import { VisitService } from '@/core/services/visit.service';
 import { Organization } from '@/core/interfaces/organizations';
 import { TooltipModule } from 'primeng/tooltip';
 import { InputTextComponent } from '@/layout/component/dialog/input-text/input-text.component';
 import { AuthService } from '@/core/services/auth.service';
+import { OrganizationService } from '@/core/services/organization.service';
+import { SelectComponent } from '@/layout/component/dialog/select/select.component';
 
 @Component({
     selector: 'app-visit',
-    imports: [Button, DatePickerComponent, DatePipe, DialogComponent, GroupSelectComponent, PrimeTemplate, ReactiveFormsModule, TableModule, TextareaComponent, TooltipModule, InputTextComponent],
+    imports: [Button, DatePickerComponent, DatePipe, DialogComponent, PrimeTemplate, ReactiveFormsModule, TableModule, TextareaComponent, TooltipModule, InputTextComponent, SelectComponent],
     templateUrl: './visit.component.html',
     styleUrl: './visit.component.scss'
 })
@@ -39,7 +39,7 @@ export class VisitComponent implements OnInit, OnChanges {
     orgsLoading = false;
     authService = inject(AuthService);
     private fb: FormBuilder = inject(FormBuilder);
-    private api: ApiService = inject(ApiService);
+    private organizationService: OrganizationService = inject(OrganizationService);
     private visitService: VisitService = inject(VisitService);
     private messageService: MessageService = inject(MessageService);
 
@@ -54,7 +54,7 @@ export class VisitComponent implements OnInit, OnChanges {
         this.loadVisits();
 
         this.orgsLoading = true;
-        this.api.getCascades().subscribe({
+        this.organizationService.getOrganizationsFlat().subscribe({
             next: (data) => {
                 this.organizations = data;
             },
@@ -101,6 +101,7 @@ export class VisitComponent implements OnInit, OnChanges {
                 },
                 error: (err) => {
                     this.messageService.add({ severity: 'error', summary: 'Ошибка обновления визита', detail: err.message });
+                    this.isLoading = false;
                 },
                 complete: () => {
                     this.isLoading = false;
@@ -122,6 +123,7 @@ export class VisitComponent implements OnInit, OnChanges {
                 },
                 error: (err) => {
                     this.messageService.add({ severity: 'error', summary: 'Ошибка добавления визита', detail: err.message });
+                    this.isLoading = false;
                 },
                 complete: () => {
                     this.isLoading = false;
@@ -134,6 +136,7 @@ export class VisitComponent implements OnInit, OnChanges {
     closeDialog() {
         this.isFormOpen = false;
         this.submitted = false;
+        this.isLoading = false;
         this.isEditMode = false;
         this.currentVisitId = null;
         this.form.reset();
@@ -145,21 +148,21 @@ export class VisitComponent implements OnInit, OnChanges {
         this.currentVisitId = null;
         this.form.reset();
         this.submitted = false;
+        this.isLoading = false;
         this.isFormOpen = true;
     }
 
     editVisit(visit: VisitDto) {
         this.isEditMode = true;
         this.currentVisitId = visit.id;
+        this.submitted = false;
+        this.isLoading = false;
 
         let organizationToSet: any = null;
-        if (visit.organization_id && this.organizations) {
-            for (const cascade of this.organizations) {
-                const foundOrg = cascade.items?.find((org: any) => org.id === visit.organization_id);
-                if (foundOrg) {
-                    organizationToSet = foundOrg;
-                    break;
-                }
+        if (visit.id && this.organizations) {
+            const foundOrg = this.organizations.find((org: any) => org.id === visit.organization_id);
+            if (foundOrg) {
+                organizationToSet = foundOrg;
             }
         }
 

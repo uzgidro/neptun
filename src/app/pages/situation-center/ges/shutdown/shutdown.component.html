@@ -7,7 +7,6 @@
         <p-date-picker
             inputId="dateSelector"
             [(ngModel)]="selectedDate"
-            [maxDate]="maxDate"
             dateFormat="dd.mm.yy"
             [showIcon]="true"
             (onSelect)="onDateChange()"
@@ -16,7 +15,7 @@
     </div>
 
     <div class="mb-8">
-        <app-incident [date]="selectedDate"></app-incident>
+        <app-incident [date]="selectedDate" (incidentSaved)="onIncidentSaved()"></app-incident>
     </div>
 
     <div class="mb-8">

@@ -12,6 +12,8 @@
             [showButtons]="showButtons"
             [mode]="mode"
             [showClear]="true"
+            [minFractionDigits]="0"
+            [maxFractionDigits]="5"
 
             [ngClass]="{ 'ng-invalid ng-dirty': submitted && required && internalValue == null }"
         ></p-inputNumber>
