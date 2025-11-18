@@ -1,6 +1,6 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Table, TableModule } from 'primeng/table';
-import { Users, AddUserRequest } from '@/core/interfaces/users';
+import { AddUserRequest, EditUserRequest, Users } from '@/core/interfaces/users';
 import { ApiService } from '@/core/services/api.service';
 import { UserService } from '@/core/services/user.service';
 import { Button, ButtonDirective, ButtonIcon, ButtonLabel } from 'primeng/button';
@@ -18,10 +18,33 @@ import { MultiSelect } from 'primeng/multiselect';
 import { InputTextComponent } from '@/layout/component/dialog/input-text/input-text.component';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
 import { InputNumberdComponent } from '@/layout/component/dialog/input-number/input-number.component';
+import {
+    DeleteConfirmationComponent
+} from '@/layout/component/dialog/delete-confirmation/delete-confirmation.component';
+import { Tooltip } from 'primeng/tooltip';
 
 @Component({
     selector: 'app-users',
-    imports: [TableModule, ButtonDirective, IconField, InputIcon, InputText, ButtonLabel, ButtonIcon, Chip, Button, Dialog, ReactiveFormsModule, Password, MultiSelect, InputTextComponent, DatePickerComponent, InputNumberdComponent],
+    imports: [
+        TableModule,
+        ButtonDirective,
+        IconField,
+        InputIcon,
+        InputText,
+        ButtonLabel,
+        ButtonIcon,
+        Chip,
+        Button,
+        Dialog,
+        ReactiveFormsModule,
+        Password,
+        MultiSelect,
+        InputTextComponent,
+        DatePickerComponent,
+        InputNumberdComponent,
+        DeleteConfirmationComponent,
+        Tooltip
+    ],
     templateUrl: './user.component.html',
     styleUrl: './user.component.scss'
 })
@@ -30,7 +53,10 @@ export class User implements OnInit, OnDestroy {
     allRoles: Roles[] = [];
     loading: boolean = true;
     displayDialog: boolean = false;
+    displayDeleteDialog: boolean = false;
     submitted: boolean = false;
+    isEditMode: boolean = false;
+    selectedUser: Users | null = null;
     userForm: FormGroup;
 
     private apiService = inject(ApiService);
@@ -43,10 +69,10 @@ export class User implements OnInit, OnDestroy {
     constructor() {
         this.userForm = this.fb.group({
             login: ['', Validators.required],
-            password: ['', Validators.required],
+            password: [''],
             roles: [[]],
             // NewContactRequest fields
-            fio: ['', Validators.required],
+            fio: [''],
             email: [''],
             phone: [''],
             ip_phone: [''],
@@ -68,13 +94,61 @@ export class User implements OnInit, OnDestroy {
     }
 
     openDialog(): void {
+        this.isEditMode = false;
+        this.selectedUser = null;
         this.submitted = false;
         this.userForm.reset({ roles: [] });
+        this.userForm.get('login')?.enable();
+        this.userForm.get('password')?.setValidators([Validators.required]);
+        this.userForm.get('password')?.updateValueAndValidity();
+        this.userForm.get('fio')?.setValidators([Validators.required]);
+        this.userForm.get('fio')?.updateValueAndValidity();
+        this.displayDialog = true;
+    }
+
+    openEditDialog(user: Users): void {
+        this.isEditMode = true;
+        this.selectedUser = user;
+        this.submitted = false;
+
+        // Convert role_ids to role objects for multiselect
+        const selectedRoles = this.allRoles.filter((role) => user.role_ids?.includes(role.id));
+
+        // Parse date if present
+        let dobDate = null;
+        if (user.contact?.dob) {
+            dobDate = new Date(user.contact.dob);
+        }
+
+        this.userForm.patchValue({
+            login: user.login,
+            password: '',
+            roles: selectedRoles,
+            fio: user.contact?.fio || '',
+            email: user.contact?.email || '',
+            phone: user.contact?.phone || '',
+            ip_phone: user.contact?.ip_phone || '',
+            dob: dobDate,
+            external_organization_name: user.contact?.external_organization_name || '',
+            organization_id: user.contact?.organization_id || null,
+            department_id: user.contact?.department_id || null,
+            position_id: user.contact?.position_id || null
+        });
+
+        console.log(this.userForm.value);
+
+        this.userForm.get('login')?.enable();
+        this.userForm.get('password')?.clearValidators();
+        this.userForm.get('password')?.updateValueAndValidity();
+        this.userForm.get('fio')?.clearValidators();
+        this.userForm.get('fio')?.updateValueAndValidity();
         this.displayDialog = true;
     }
 
     closeDialog(): void {
         this.displayDialog = false;
+        this.isEditMode = false;
+        this.selectedUser = null;
     }
 
     saveUser() {
@@ -84,6 +158,14 @@ export class User implements OnInit, OnDestroy {
             return;
         }
 
+        if (this.isEditMode && this.selectedUser) {
+            this.updateUser();
+        } else {
+            this.createUser();
+        }
+    }
+
+    private createUser() {
         const formValue = this.userForm.value;
         const payload: AddUserRequest = {
             login: formValue.login,
@@ -118,9 +200,65 @@ export class User implements OnInit, OnDestroy {
             });
     }
 
+    private updateUser() {
+        if (!this.selectedUser) return;
+
+        const formValue = this.userForm.getRawValue();
+        const payload: EditUserRequest = {
+            login: formValue.login,
+            role_ids: formValue.roles.map((role: Roles) => role.id)
+        };
+
+        // Only include password if it was changed
+        if (formValue.password) {
+            payload.password = formValue.password;
+        }
+
+        this.userService
+            .editUser(this.selectedUser.id, payload)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: () => {
+                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Пользователь успешно обновлен' });
+                    this.loadUsers();
+                    this.closeDialog();
+                },
+                error: (err) => {
+                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось обновить пользователя' });
+                    console.error(err);
+                }
+            });
+    }
+
+    openDeleteDialog(user: Users): void {
+        this.selectedUser = user;
+        this.displayDeleteDialog = true;
+    }
+
+    confirmDelete(): void {
+        if (!this.selectedUser) return;
+
+        this.userService
+            .deleteUser(this.selectedUser.id)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: () => {
+                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Пользователь успешно удален' });
+                    this.loadUsers();
+                    this.displayDeleteDialog = false;
+                    this.selectedUser = null;
+                },
+                error: (err) => {
+                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось удалить пользователя' });
+                    console.error(err);
+                }
+            });
+    }
+
     private loadUsers(): void {
         this.apiService.getUsers().subscribe({
             next: (data) => {
+                console.log(data);
                 this.users = data;
             },
             error: (err) => console.log(err),
