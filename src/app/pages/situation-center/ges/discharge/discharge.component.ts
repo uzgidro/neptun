@@ -121,9 +121,9 @@ export class DischargeComponent implements OnInit {
                         'Поток, м³/с': discharge.flow_rate,
                         'Объём, млн. м³': discharge.total_volume,
                         Причина: discharge.reason,
-                        Создал: discharge.created_by?.fio,
+                        Создал: discharge.created_by?.name,
                         Подтвердил: discharge.approved === true ? 'Да' : discharge.approved === false ? 'Нет' : 'Ожидает',
-                        'Кто подтвердил': discharge.updated_by?.fio
+                        'Кто подтвердил': discharge.updated_by?.name
                     });
                 });
             });

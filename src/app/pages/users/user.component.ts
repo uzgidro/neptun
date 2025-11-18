@@ -72,7 +72,7 @@ export class User implements OnInit, OnDestroy {
             password: [''],
             roles: [[]],
             // NewContactRequest fields
-            fio: [''],
+            name: [''],
             email: [''],
             phone: [''],
             ip_phone: [''],
@@ -101,8 +101,8 @@ export class User implements OnInit, OnDestroy {
         this.userForm.get('login')?.enable();
         this.userForm.get('password')?.setValidators([Validators.required]);
         this.userForm.get('password')?.updateValueAndValidity();
-        this.userForm.get('fio')?.setValidators([Validators.required]);
-        this.userForm.get('fio')?.updateValueAndValidity();
+        this.userForm.get('name')?.setValidators([Validators.required]);
+        this.userForm.get('name')?.updateValueAndValidity();
         this.displayDialog = true;
     }
 
@@ -124,7 +124,7 @@ export class User implements OnInit, OnDestroy {
             login: user.login,
             password: '',
             roles: selectedRoles,
-            fio: user.contact?.fio || '',
+            name: user.contact?.name || '',
             email: user.contact?.email || '',
             phone: user.contact?.phone || '',
             ip_phone: user.contact?.ip_phone || '',
@@ -140,8 +140,8 @@ export class User implements OnInit, OnDestroy {
         this.userForm.get('login')?.enable();
         this.userForm.get('password')?.clearValidators();
         this.userForm.get('password')?.updateValueAndValidity();
-        this.userForm.get('fio')?.clearValidators();
-        this.userForm.get('fio')?.updateValueAndValidity();
+        this.userForm.get('name')?.clearValidators();
+        this.userForm.get('name')?.updateValueAndValidity();
         this.displayDialog = true;
     }
 
@@ -172,7 +172,7 @@ export class User implements OnInit, OnDestroy {
             password: formValue.password,
             role_ids: formValue.roles.map((role: Roles) => role.id),
             contact: {
-                fio: formValue.fio,
+                name: formValue.name,
                 email: formValue.email || null,
                 phone: formValue.phone || null,
                 ip_phone: formValue.ip_phone || null,

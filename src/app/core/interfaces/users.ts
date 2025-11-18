@@ -5,7 +5,7 @@ export interface Users {
     roles: string[];
     role_ids: number[];
     contact?: {
-        fio: string;
+        name: string;
         email?: string | null;
         phone?: string | null;
         ip_phone?: string | null;
@@ -19,11 +19,11 @@ export interface Users {
 
 export interface UserShortInfo {
     id: number;
-    fio: string | null;
+    name: string | null;
 }
 
 export interface NewContactRequest {
-    fio: string;
+    name: string;
     email?: string | null;
     phone?: string | null;
     ip_phone?: string | null;

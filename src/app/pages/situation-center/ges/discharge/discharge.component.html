@@ -108,7 +108,7 @@
                                                         <th pSortableColumn="total_volume">Объём, млн. м³</th>
                                                         <th pSortableColumn="reason">Причина</th>
                                                         @if (authService.isSc()) {
-                                                            <th pSortableColumn="created_by.fio">Создал</th>
+                                                            <th pSortableColumn="created_by.name">Создал</th>
                                                             <th>Подтвердил</th>
                                                             <th>Действия</th>
                                                         }
@@ -122,18 +122,18 @@
                                                         <td>{{ discharge.total_volume | number: '1.2-2' }}</td>
                                                         <td>{{ discharge.reason || '-' }}</td>
                                                         @if (authService.isSc()) {
-                                                            <td>{{ discharge.created_by?.fio || '-' }}</td>
+                                                            <td>{{ discharge.created_by?.name || '-' }}</td>
                                                             <td>
                                                                 @if (discharge.approved === true) {
                                                                     <i class="pi pi-check-circle text-green-500"
                                                                        pTooltip="Подтверждено"></i>
                                                                     <span
-                                                                        class="ml-1">{{ discharge.updated_by?.fio || '' }}</span>
+                                                                        class="ml-1">{{ discharge.updated_by?.name || '' }}</span>
                                                                 } @else if (discharge.approved === false) {
                                                                     <i class="pi pi-times-circle text-red-500"
                                                                        pTooltip="Отклонено"></i>
                                                                     <span
-                                                                        class="ml-1">{{ discharge.updated_by?.fio || '' }}</span>
+                                                                        class="ml-1">{{ discharge.updated_by?.name || '' }}</span>
                                                                 } @else {
                                                                     <i class="pi pi-question-circle text-gray-500"
                                                                        pTooltip="Ожидает"></i>
