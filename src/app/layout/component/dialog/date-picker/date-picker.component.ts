@@ -38,14 +38,7 @@ export class DatePickerComponent implements ControlValueAccessor {
     onChange = (value: any) => {};
     onTouched = () => {};
 
-
-    fuck(fn: any) {
-        console.log(fn);
-    }
-
-
     writeValue(value: any): void {
-        console.log('write value: ' +value);
         if (value && !(value instanceof Date)) {
             this.internalValue = new Date(value);
         } else {
@@ -54,22 +47,18 @@ export class DatePickerComponent implements ControlValueAccessor {
     }
 
     registerOnChange(fn: any): void {
-        console.log('register on change'+fn);
         this.onChange = fn;
     }
 
     registerOnTouched(fn: any): void {
-        console.log('reg on touch'+fn);
         this.onTouched = fn;
     }
 
     setDisabledState(isDisabled: boolean): void {
-        console.log('set disabled'+isDisabled);
         this.isDisabled = isDisabled;
     }
 
     onValueChange(newValue: Date) {
-        console.log('on value change'+newValue);
         this.internalValue = newValue;
         this.onChange(newValue);
         this.onTouched();
