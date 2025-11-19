@@ -49,7 +49,7 @@ export interface OrganizationInfo {
 
 export interface UserInfo {
     id: number;
-    fio: string;
+    name: string;
 }
 
 export interface IdleDischargeResponse {
