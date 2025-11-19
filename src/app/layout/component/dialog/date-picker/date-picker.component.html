@@ -13,9 +13,10 @@
             dateFormat="dd.mm.yy"
             [showClear]="true"
             [appendTo]="'body'"
-            [showTime]="true"
+            [showTime]="showTime"
             [hourFormat]="'24'"
-        />
+        >
+        </p-date-picker>
         <label [for]="uniqueId">{{ label }}</label>
     </p-floatlabel>
 

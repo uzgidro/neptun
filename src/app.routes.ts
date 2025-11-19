@@ -14,6 +14,7 @@ import { PlanningComponent } from '@/pages/planning/planning.component';
 import { ShutdownComponent } from '@/pages/situation-center/ges/shutdown/shutdown.component';
 import { PositionComponent } from '@/pages/hrm/position/position.component';
 import { DepartmentComponent } from '@/pages/hrm/department/department.component';
+import { EmployeeComponent } from '@/pages/hrm/employee/employee.component';
 
 export const appRoutes: Routes = [
     {
@@ -33,6 +34,7 @@ export const appRoutes: Routes = [
             { path: 'files', component: FilesComponent, canActivate: [scGuard] },
             { path: 'positions', component: PositionComponent, canActivate: [adminGuard] },
             { path: 'departments', component: DepartmentComponent, canActivate: [adminGuard] },
+            { path: 'employees', component: EmployeeComponent, canActivate: [adminGuard] },
             { path: 'viewer', component: DocumentViewerComponent, canActivate: [raisGuard] },
             { path: 'discharge', component: DischargeComponent, canActivate: [raisGuard] },
             { path: 'planning', component: PlanningComponent, canActivate: [raisGuard] },

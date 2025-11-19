@@ -27,25 +27,9 @@
         </ng-template>
         <ng-template #header>
             <tr>
-                <th style="min-width: 12rem">
-                    <div class="flex justify-between items-center">
-                        Название
-                        <p-columnFilter type="text" field="name" display="menu"
-                                        placeholder="Поиск по названию"></p-columnFilter>
-                    </div>
-                </th>
-                <th style="min-width: 15rem">
-                    <div class="flex justify-between items-center">
-                        Описание
-                        <p-columnFilter type="text" field="description" display="menu"
-                                        placeholder="Поиск по описанию"></p-columnFilter>
-                    </div>
-                </th>
-                <th style="width: 10rem">
-                    <div class="flex justify-center items-center">
-                        Действия
-                    </div>
-                </th>
+                <th style="min-width: 12rem">Название</th>
+                <th style="min-width: 15rem">Описание</th>
+                <th style="width: 10rem">Действия</th>
             </tr>
         </ng-template>
         <ng-template #body let-position>
