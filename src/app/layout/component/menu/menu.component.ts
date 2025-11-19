@@ -29,6 +29,7 @@ export class MenuComponent implements OnInit {
                             { label: 'Организации', role: ['rais'], routerLink: ['/organizations'] },
                             { label: 'Дни рождения', role: ['rais'] },
                             { label: 'Потеря личного состава', role: ['rais'] },
+                            { label: 'Должности', role: ['admin'], routerLink: ['/positions'] },
                             { label: 'Пользователи', role: ['admin'], routerLink: ['/users'] },
                             { label: 'Роли', role: ['admin'], routerLink: ['/roles'] }
                         ]
@@ -141,9 +142,8 @@ export class MenuComponent implements OnInit {
                         items: [
                             { label: 'Встречи', role: ['rais'], routerLink: ['/planning'], queryParams: { type: 'meeting' }, routerLinkActiveOptions: { queryParams: 'exact' } },
                             { label: 'Созвоны', role: ['rais'], routerLink: ['/planning'], queryParams: { type: 'call' }, routerLinkActiveOptions: { queryParams: 'exact' } },
-                            { label: 'Переговоры', role: ['rais'], routerLink: ['/planning'], queryParams: { type: 'negotiation' },routerLinkActiveOptions: { queryParams: 'exact' } },
-                            { label: 'ВКС', role: ['rais'], routerLink: ['/planning'], queryParams: { type: 'vcs' },routerLinkActiveOptions: { queryParams: 'exact' } }
-
+                            { label: 'Переговоры', role: ['rais'], routerLink: ['/planning'], queryParams: { type: 'negotiation' }, routerLinkActiveOptions: { queryParams: 'exact' } },
+                            { label: 'ВКС', role: ['rais'], routerLink: ['/planning'], queryParams: { type: 'vcs' }, routerLinkActiveOptions: { queryParams: 'exact' } }
                         ]
                     },
                     {

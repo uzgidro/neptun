@@ -12,6 +12,7 @@ import { DocumentViewerComponent } from '@/pages/document-viewer/document-viewer
 import { DischargeComponent } from '@/pages/situation-center/ges/discharge/discharge.component';
 import { PlanningComponent } from '@/pages/planning/planning.component';
 import { ShutdownComponent } from '@/pages/situation-center/ges/shutdown/shutdown.component';
+import { PositionComponent } from '@/pages/hrm/position/position.component';
 
 export const appRoutes: Routes = [
     {
@@ -29,6 +30,7 @@ export const appRoutes: Routes = [
             { path: 'roles', component: Role, canActivate: [adminGuard] },
             { path: 'categories', component: CategoriesComponent, canActivate: [scGuard] },
             { path: 'files', component: FilesComponent, canActivate: [scGuard] },
+            { path: 'positions', component: PositionComponent, canActivate: [adminGuard] },
             { path: 'viewer', component: DocumentViewerComponent, canActivate: [raisGuard] },
             { path: 'discharge', component: DischargeComponent, canActivate: [raisGuard] },
             { path: 'planning', component: PlanningComponent, canActivate: [raisGuard] },
