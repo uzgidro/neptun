@@ -16,6 +16,9 @@
     [sortField]="'incident_date'"
     [sortOrder]="-1"
 >
+    <ng-template #caption>
+        <div class="text-lg font-bold">Холостые водосбросы</div>
+    </ng-template>
     <ng-template pTemplate="header">
         <tr>
             <th pSortableColumn="organization.name">Объект</th>

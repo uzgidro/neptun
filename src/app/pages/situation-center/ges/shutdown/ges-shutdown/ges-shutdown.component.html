@@ -17,7 +17,7 @@
     [sortOrder]="-1"
 >
     <ng-template #caption>
-        <div class="text-lg font-bold">ГЭСы</div>
+        <div class="text-lg font-bold">ГЭСы - Аварийные отключения</div>
     </ng-template>
     <ng-template pTemplate="header">
         <tr>
@@ -51,7 +51,7 @@
             </th>
 
             @if (authService.isSc()) {
-                <th>Действия</th>
+                <th style="width: 10%">Действия</th>
             }
         </tr>
     </ng-template>
@@ -102,7 +102,7 @@
     <ng-template pTemplate="emptymessage">
         <tr>
             <td [attr.colspan]="authService.isSc() ? 7 : 6" class="text-center">
-                Инциденты за выбранную дату не найдены.
+                Аварийные отключения за выбранную дату не найдены.
             </td>
         </tr>
     </ng-template>
@@ -122,7 +122,7 @@
     [sortOrder]="-1"
 >
     <ng-template #caption>
-        <div class="text-lg font-bold">Микро ГЭС</div>
+        <div class="text-lg font-bold">Микро ГЭСы - Аварийные отключения</div>
     </ng-template>
     <ng-template pTemplate="header">
         <tr>
@@ -156,7 +156,7 @@
             </th>
 
             @if (authService.isSc()) {
-                <th>Действия</th>
+                <th style="width: 10%">Действия</th>
             }
         </tr>
     </ng-template>
@@ -207,7 +207,7 @@
     <ng-template pTemplate="emptymessage">
         <tr>
             <td [attr.colspan]="authService.isSc() ? 7 : 6" class="text-center">
-                Инциденты за выбранную дату не найдены.
+                Аварийные отключения за выбранную дату не найдены.
             </td>
         </tr>
     </ng-template>
@@ -227,7 +227,7 @@
     [sortOrder]="-1"
 >
     <ng-template #caption>
-        <div class="text-lg font-bold">Мини ГЭСы</div>
+        <div class="text-lg font-bold">Мини ГЭСы - Аварийные отключения</div>
     </ng-template>
     <ng-template pTemplate="header">
         <tr>
@@ -261,7 +261,7 @@
             </th>
 
             @if (authService.isSc()) {
-                <th>Действия</th>
+                <th style="width: 10%">Действия</th>
             }
         </tr>
     </ng-template>
@@ -312,7 +312,7 @@
     <ng-template pTemplate="emptymessage">
         <tr>
             <td [attr.colspan]="authService.isSc() ? 7 : 6" class="text-center">
-                Инциденты за выбранную дату не найдены.
+                Аварийные отключения за выбранную дату не найдены.
             </td>
         </tr>
     </ng-template>
