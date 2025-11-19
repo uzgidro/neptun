@@ -86,6 +86,7 @@ export class EmployeeComponent implements OnInit, OnDestroy {
         this.isEditMode = true;
         this.selectedContact = contact;
         this.submitted = false;
+        this.contactForm.reset();
 
         // Find objects for select components
         const selectedOrg = this.organizations.find((org) => org.id === contact.organization?.id);

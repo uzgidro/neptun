@@ -79,6 +79,7 @@
     </p-table>
 </div>
 
+@if (displayDialog) {
 <app-dialog
     [(visible)]="displayDialog"
     [header]="isEditMode ? 'Редактировать сотрудника' : 'Новый сотрудник'"
@@ -161,6 +162,7 @@
         </app-input-text>
     </form>
 </app-dialog>
+}
 
 <app-delete-confirmation
     [(visible)]="displayDeleteDialog"
