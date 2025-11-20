@@ -7,21 +7,22 @@
             <span pButtonLabel>{{ isExpanded || !isRowsHidden ? 'Свернуть' : 'Развернуть' }}</span>
         </button>
     </div>
-    <p-table [value]="cascades" dataKey="name" scrollHeight="24rem" [expandedRowKeys]="expandedRows" (onRowExpand)="onRowExpand()" (onRowCollapse)="onRowCollapse()">
+    <p-table [value]="cascades" dataKey="name" scrollHeight="24rem" [loading]="loading" [expandedRowKeys]="expandedRows"
+             (onRowExpand)="onRowExpand()" (onRowCollapse)="onRowCollapse()">
         <ng-template #header>
             <tr>
                 <th style="width: 5rem"></th>
                 <th class="whitespace-nowrap" pSortableColumn="name">Название
                     <p-sortIcon field="name" />
                 </th>
-                <th class="whitespace-break-spaces" pSortableColumn="prod">Выработка, млн. кВт*ч
-                    <p-sortIcon field="prod" />
+                <th class="whitespace-break-spaces" pSortableColumn="ascue_metrics.active">Мощность, МВт
+                    <p-sortIcon field="ascue_metrics.active" />
                 </th>
-                <th class="whitespace-nowrap" pSortableColumn="totalAgg">Аггрегаты
-                    <p-sortIcon field="totalAgg" />
+                <th class="whitespace-nowrap" pSortableColumn="ascue_metrics.active_agg_count">Аггрегаты
+                    <p-sortIcon field="ascue_metrics.active_agg_count" />
                 </th>
-                <th class="whitespace-nowrap" pSortableColumn="idle">Холостой сброс, м³/с
-                    <p-sortIcon field="idle" />
+                <th class="whitespace-nowrap" pSortableColumn="current_discharge">Холостой сброс, м³/с
+                    <p-sortIcon field="current_discharge" />
                 </th>
                 <th></th>
             </tr>
@@ -33,9 +34,14 @@
                               [plain]="true" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" />
                 </td>
                 <td class="whitespace-nowrap">{{ cascade.name }}</td>
-                <td>{{ cascade.prod }}</td>
-                <td><span>{{ cascade.totalAgg }}</span>/<span class="text-rose-500">{{ cascade.workingAgg }}</span>/<span class="text-lime-500">{{ cascade.pendingAgg }}</span>/<span class="text-orange-500">{{ cascade.repairingAgg }}</span></td>
-                <td>{{ cascade.idle }}</td>
+                <td>{{ ((cascade.ascue_metrics?.active ?? 0) / 1000) | number:'1.2-2' }}</td>
+                <td>
+                    <span>{{ (cascade.ascue_metrics?.active_agg_count ?? 0) + (cascade.ascue_metrics?.pending_agg_count ?? 0) + (cascade.ascue_metrics?.repair_agg_count ?? 0) }}</span>/<span
+                    class="text-red-500">{{ cascade.ascue_metrics?.active_agg_count ?? 0 }}</span>/<span
+                    class="text-green-500">{{ cascade.ascue_metrics?.pending_agg_count ?? 0 }}</span>/<span
+                    class="text-yellow-500">{{ cascade.ascue_metrics?.repair_agg_count ?? 0 }}</span>
+                </td>
+                <td>{{ cascade.current_discharge ?? 0 }}</td>
                 <td><p-button type="button" icon="pi pi-info-circle" severity="info" /></td>
             </tr>
         </ng-template>
@@ -52,23 +58,23 @@
                             <span pButtonLabel>Позвонить</span>
                         </a>
                         }
-                        <p-table [value]="cascade.ges" dataKey="name" styleClass="p-datatable-sm">
+                        <p-table [value]="cascade.items" dataKey="name" styleClass="p-datatable-sm">
                             <ng-template #header>
                                 <tr>
                                     <th pSortableColumn="name">
                                         Название
                                         <p-sortIcon field="name" />
                                     </th>
-                                    <th pSortableColumn="prod">Выработка, млн. кВт*ч
-                                        <p-sortIcon field="prod" />
+                                    <th pSortableColumn="ascue_metrics.active">Активная энергия, МВт*ч
+                                        <p-sortIcon field="ascue_metrics.active" />
                                     </th>
-                                    <th pSortableColumn="totalAgg">
+                                    <th pSortableColumn="ascue_metrics.active_agg_count">
                                         Аггрегаты
-                                        <p-sortIcon field="totalAgg" />
+                                        <p-sortIcon field="ascue_metrics.active_agg_count" />
                                     </th>
-                                    <th pSortableColumn="idle">
+                                    <th pSortableColumn="current_discharge">
                                         Холостой сброс, м³/с
-                                        <p-sortIcon field="idle" />
+                                        <p-sortIcon field="current_discharge" />
                                     </th>
                                     <th></th>
                                 </tr>
@@ -76,9 +82,14 @@
                             <ng-template #body let-ges>
                                 <tr>
                                     <td>{{ ges.name }}</td>
-                                    <td>{{ ges.prod }}</td>
-                                    <td><span>{{ ges.totalAgg }}</span>/<span class="text-rose-500">{{ ges.workingAgg }}</span>/<span class="text-lime-500">{{ ges.pendingAgg }}</span>/<span class="text-orange-500">{{ ges.repairingAgg }}</span></td>
-                                    <td>{{ ges.idle }}</td>
+                                    <td>{{ ((ges.ascue_metrics?.active ?? 0) / 1000) | number:'1.2-2' }}</td>
+                                    <td>
+                                        <span>{{ (ges.ascue_metrics?.active_agg_count ?? 0) + (ges.ascue_metrics?.pending_agg_count ?? 0) + (ges.ascue_metrics?.repair_agg_count ?? 0) }}</span>/<span
+                                        class="text-red-500">{{ ges.ascue_metrics?.active_agg_count ?? 0 }}</span>/<span
+                                        class="text-green-500">{{ ges.ascue_metrics?.pending_agg_count ?? 0 }}</span>/<span
+                                        class="text-yellow-500">{{ ges.ascue_metrics?.repair_agg_count ?? 0 }}</span>
+                                    </td>
+                                    <td>{{ ges.current_discharge ?? 0 }}</td>
                                     <td><p-button type="button" icon="pi pi-info-circle" severity="info" /></td>
                                 </tr>
                             </ng-template>
