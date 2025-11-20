@@ -12,6 +12,7 @@
         <ng-template #header>
             <tr>
                 <th style="width: 5rem"></th>
+                <th style="width: 2rem"></th>
                 <th class="whitespace-nowrap" pSortableColumn="name">Название
                     <p-sortIcon field="name" />
                 </th>
@@ -33,8 +34,12 @@
                     <p-button type="button" pRipple [pRowToggler]="cascade" [text]="true" [rounded]="true"
                               [plain]="true" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" />
                 </td>
+                <td>
+                    <span class="inline-block w-2 h-2 rounded-full"
+                          [ngClass]="cascade.ascue_metrics ? 'bg-green-500' : 'bg-red-500'"></span>
+                </td>
                 <td class="whitespace-nowrap">{{ cascade.name }}</td>
-                <td>{{ ((cascade.ascue_metrics?.active ?? 0) / 1000) | number:'1.2-2' }}</td>
+                <td>{{ (cascade.ascue_metrics?.active ?? 0) | number:'1.2-2' }}</td>
                 <td>
                     <span>{{ (cascade.ascue_metrics?.active_agg_count ?? 0) + (cascade.ascue_metrics?.pending_agg_count ?? 0) + (cascade.ascue_metrics?.repair_agg_count ?? 0) }}</span>/<span
                     class="text-red-500">{{ cascade.ascue_metrics?.active_agg_count ?? 0 }}</span>/<span
@@ -47,20 +52,37 @@
         </ng-template>
         <ng-template #expandedrow let-cascade>
             <tr>
-                <td colspan="7">
-                    <div class="p-3">
-                        <h5>{{ cascade.name }}</h5>
-                        <p>{{ cascade.directorName }}</p>
-
-                        @if (cascade.phoneNumber) {
-                            <a pButton outlined class="p-button-sm mb-4" [href]="'tel:' + cascade.phoneNumber">
-                            <i pButtonIcon class="pi pi-phone"></i>
-                            <span pButtonLabel>Позвонить</span>
-                        </a>
-                        }
+                <td colspan="8">
+                    <h5 class="pl-10">{{ cascade.name }}</h5>
+                </td>
+            </tr>
+            @for (contact of cascade.contacts; track contact.id) {
+                <tr>
+                    <td colspan="8">
+                        <p class="pl-10 font-bold">{{ contact.position?.description ?? '' }}</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="8">
+                        <div class="pl-10">
+                            <p>{{ contact.name }}</p>
+                            @if (contact.phone) {
+                                <a pButton outlined class="p-button-sm mb-4" [href]="'tel:' + contact.phone">
+                                    <i pButtonIcon class="pi pi-phone"></i>
+                                    <span pButtonLabel>Позвонить</span>
+                                </a>
+                            }
+                        </div>
+                    </td>
+                </tr>
+            }
+            <tr>
+                <td colspan="8">
+                    <div class="pl-10">
                         <p-table [value]="cascade.items" dataKey="name" styleClass="p-datatable-sm">
                             <ng-template #header>
                                 <tr>
+                                    <th style="width: 2rem"></th>
                                     <th pSortableColumn="name">
                                         Название
                                         <p-sortIcon field="name" />
@@ -81,8 +103,12 @@
                             </ng-template>
                             <ng-template #body let-ges>
                                 <tr>
+                                    <td>
+                                        <span class="inline-block w-2 h-2 rounded-full"
+                                              [ngClass]="ges.ascue_metrics ? 'bg-green-500' : 'bg-red-500'"></span>
+                                    </td>
                                     <td>{{ ges.name }}</td>
-                                    <td>{{ ((ges.ascue_metrics?.active ?? 0) / 1000) | number:'1.2-2' }}</td>
+                                    <td>{{ (ges.ascue_metrics?.active ?? 0) | number:'1.2-2' }}</td>
                                     <td>
                                         <span>{{ (ges.ascue_metrics?.active_agg_count ?? 0) + (ges.ascue_metrics?.pending_agg_count ?? 0) + (ges.ascue_metrics?.repair_agg_count ?? 0) }}</span>/<span
                                         class="text-red-500">{{ ges.ascue_metrics?.active_agg_count ?? 0 }}</span>/<span
@@ -95,7 +121,7 @@
                             </ng-template>
                             <ng-template #emptymessage>
                                 <tr>
-                                    <td colspan="6">Нет данных</td>
+                                    <td colspan="7">Нет данных</td>
                                 </tr>
                             </ng-template>
                         </p-table>
