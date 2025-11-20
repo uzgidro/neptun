@@ -109,9 +109,7 @@ export class MenuComponent implements OnInit {
                             {
                                 label: 'Строительство',
                                 role: ['rais', 'sc'],
-                                routerLink: ['/viewer'],
-                                queryParams: { type: 'constructions' },
-                                routerLinkActiveOptions: { queryParams: 'exact' }
+                                routerLink: ['/construction']
                             },
                             {
                                 label: 'Тестовая таблица (Excel)',

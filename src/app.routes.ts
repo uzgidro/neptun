@@ -12,6 +12,7 @@ import { DocumentViewerComponent } from '@/pages/document-viewer/document-viewer
 import { DischargeComponent } from '@/pages/situation-center/ges/discharge/discharge.component';
 import { PlanningComponent } from '@/pages/planning/planning.component';
 import { ShutdownComponent } from '@/pages/situation-center/ges/shutdown/shutdown.component';
+import { ConstructionComponent } from '@/pages/situation-center/construction/construction.component';
 
 export const appRoutes: Routes = [
     {
@@ -32,7 +33,8 @@ export const appRoutes: Routes = [
             { path: 'viewer', component: DocumentViewerComponent, canActivate: [raisGuard] },
             { path: 'discharge', component: DischargeComponent, canActivate: [raisGuard] },
             { path: 'planning', component: PlanningComponent, canActivate: [raisGuard] },
-            { path: 'shutdowns', component: ShutdownComponent, canActivate: [raisGuard] }
+            { path: 'shutdowns', component: ShutdownComponent, canActivate: [raisGuard] },
+            { path: 'construction', component: ConstructionComponent, canActivate: [raisGuard] }
             // { path: 'uikit', loadChildren: () => import('./app/pages/uikit/uikit.routes') },
             // { path: 'documentation', component: Documentation },
             // { path: 'pages', loadChildren: () => import('./app/pages/pages.routes') }

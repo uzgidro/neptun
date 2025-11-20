@@ -26,6 +26,10 @@ export class DatePickerComponent implements ControlValueAccessor {
     @Input() isEditMode: boolean = false;
     @Input() maxDate: Date = new Date();
     @Input() errorMessage: string = 'Это поле обязательно';
+    @Input() showTime: boolean = true;
+    @Input() required: boolean = true;
+    @Input() disabled: boolean = false;
+
 
     uniqueId: string;
     internalValue: Date | null = null;
