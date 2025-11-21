@@ -1,0 +1,97 @@
+<div class="card">
+    <h3 class="text-center mb-3">Строительство Каскада Оксув ГЭС</h3>
+    <h5 class="text-center mb-3">РАБАТ ГЭС</h5>
+    <form [formGroup]="form" class="mb-4">
+        <div class="w-full md:w-1/4">
+            <app-date-picker
+                label="Выберите дату"
+                formControlName="started_at"
+                [showTime]="false"
+                [submitted]="submitted"
+                errorMessage="Укажите дату">
+            </app-date-picker>
+        </div>
+    </form>
+
+    <p-table
+        [value]="rows"
+        dataKey="id"
+        [scrollable]="true"
+        scrollHeight="70vh"
+        [tableStyle]="{ 'min-width': '1200px' }">
+
+        <ng-template pTemplate="header">
+            <tr class="section-row">
+                <th style="width: 280px;">Наименование работ</th>
+                <th>Ед. изм</th>
+                <th>По проекту</th>
+                <th>Факт</th>
+                <th>%</th>
+                <th>Остаток</th>
+                <th>План на сентябрь</th>
+                <th>План</th>
+                <th>Факт</th>
+                <th>%</th>
+
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-row>
+            @if (row.isSection) {
+                <tr class="font-bold bg-surface-100 dark:bg-surface-800">
+                    <td [colSpan]="11">{{ row.name }}</td>
+                </tr>
+            } @else {
+                <tr>
+                    <td>{{ row.name }}</td>
+                    <td>{{ row.unit }}</td>
+                    <td>
+                        <input
+                            type="number"
+                            class="table-input"
+                            [(ngModel)]="row.project" (ngModelChange)="onCalculationChange(row)" />
+                    </td>
+                    <td>
+                        <input
+                            type="number"
+                            class="table-input"
+                            [(ngModel)]="row.fact" (ngModelChange)="onCalculationChange(row)" />
+                    </td>
+                    <td class="font-bold" [ngClass]="getPercentColorClass(row.percent)">{{ row.percent }}</td>
+                    <td>
+                        <input
+                            type="number"
+                            class="table-input"
+                            [(ngModel)]="row.left" readonly />
+                    </td>
+                    <td>
+                        <input
+                            type="number"
+                            class="table-input"
+                            [(ngModel)]="row.planSept" />
+                    </td>
+                    <td>
+                        <input
+                            type="number"
+                            class="table-input"
+                            [(ngModel)]="row.plan_daily" (ngModelChange)="onCalculationChange(row)" />
+                    </td>
+                    <td>
+                        <input
+                            type="number"
+                            class="table-input"
+                            [(ngModel)]="row.fact_daily" (ngModelChange)="onCalculationChange(row)" />
+                    </td>
+                    <td class="font-bold" [ngClass]="getPercentColorClass(row.percent_daily)">
+                        {{ row.percent_daily }}
+                    </td>
+                </tr>
+            }
+        </ng-template>
+
+    </p-table>
+
+    <div class="flex justify mt-4">
+        <p-button label="Сохранить в Excel" icon="pi pi-file-excel" styleClass="p-button-outlined p-button-success" (click)="exportToExcel()"></p-button>
+    </div>
+</div>
