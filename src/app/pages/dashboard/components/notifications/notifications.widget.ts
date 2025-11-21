@@ -1,20 +1,20 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
-import { DatePipe, KeyValuePipe, NgClass } from '@angular/common';
+import { DatePipe, NgClass } from '@angular/common';
 import { PastEventsService } from '@/core/services/past-events.service';
-import { Event, EventType } from '@/core/interfaces/past-events';
+import { DateGroup, EventType } from '@/core/interfaces/past-events';
 
 @Component({
     standalone: true,
     selector: 'app-notifications-widget',
-    imports: [ButtonModule, MenuModule, DatePipe, KeyValuePipe, NgClass],
+    imports: [ButtonModule, MenuModule, DatePipe, NgClass],
     templateUrl: './notifications.widget.html'
 })
 export class NotificationsWidget implements OnInit {
     private pastEventsService = inject(PastEventsService);
 
-    eventsByDate: Record<string, Event[]> = {};
+    eventsByDate: DateGroup[] = [];
     loading = false;
     expandedEvents = new Set<string>();
 
@@ -40,7 +40,7 @@ export class NotificationsWidget implements OnInit {
     }
 
     shouldShowExpandButton(description: string): boolean {
-        return description.length > 80;
+        return description.length > 90;
     }
 
     loadPastEvents() {
