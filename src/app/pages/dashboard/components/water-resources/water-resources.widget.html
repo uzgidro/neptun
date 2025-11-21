@@ -1,71 +1,75 @@
 <div class="card mb-8!">
     <div class="font-semibold text-xl mb-4">Водохранилища</div>
-    <p-table [value]="reservoirs" dataKey="name" [scrollable]="true" scrollHeight="25rem">
+    <p-table [value]="reservoirs" dataKey="organization_id" [scrollable]="true" scrollHeight="25rem"
+             [loading]="loading">
         <ng-template #header>
             <tr>
-                <th class="whitespace-nowrap" pSortableColumn="name">Название
-                    <p-sortIcon field="name" />
+                <th class="whitespace-nowrap" pSortableColumn="organization_name">Название
+                    <p-sortIcon field="organization_name" />
                 </th>
-                <th class="whitespace-nowrap" pSortableColumn="income">Приток, м³/с
-                    <p-sortIcon field="income" />
+                <th class="whitespace-nowrap" pSortableColumn="reservoir_metrics.current.income">Приток, м³/с
+                    <p-sortIcon field="reservoir_metrics.current.income" />
                 </th>
-                <th class="whitespace-nowrap" pSortableColumn="release">Попуск, м³/с
-                    <p-sortIcon field="release" />
+                <th class="whitespace-nowrap" pSortableColumn="reservoir_metrics.current.release">Попуск, м³/с
+                    <p-sortIcon field="reservoir_metrics.current.release" />
                 </th>
-                <th class="whitespace-nowrap" pSortableColumn="level">Уровень, м
-                    <p-sortIcon field="level" />
+                <th class="whitespace-nowrap" pSortableColumn="reservoir_metrics.current.level">Уровень, м
+                    <p-sortIcon field="reservoir_metrics.current.level" />
                 </th>
-                <th class="whitespace-nowrap" pSortableColumn="volume">Объём, млн. м³
-                    <p-sortIcon field="volume" />
+                <th class="whitespace-nowrap" pSortableColumn="reservoir_metrics.current.volume">Объём, млн. м³
+                    <p-sortIcon field="reservoir_metrics.current.volume" />
                 </th>
-                <th></th>
             </tr>
         </ng-template>
         <ng-template #body let-reservoir>
             <tr>
-                <td>{{ reservoir.name }}</td>
-                <td>{{ reservoir.income }} (
-                    @if (reservoir.incomeDiff > 0) {
-                        <span class="text-lime-500">+{{ reservoir.incomeDiff }}</span>
-                    } @else if (reservoir.incomeDiff < 0) {
-                        <span class="text-rose-500">{{ reservoir.incomeDiff }}</span>
+                <td>{{ reservoir.organization_name }}</td>
+                <td>{{ reservoir.reservoir_metrics.current.income }} (
+                    @if (reservoir.reservoir_metrics.diff.income > 0) {
+                        <span
+                            class="text-lime-500">+{{ reservoir.reservoir_metrics.diff.income | number:'1.2-2' }}</span>
+                    } @else if (reservoir.reservoir_metrics.diff.income < 0) {
+                        <span
+                            class="text-rose-500">{{ reservoir.reservoir_metrics.diff.income | number:'1.2-2' }}</span>
                     } @else {
-                        {{ reservoir.incomeDiff }}
+                        {{ reservoir.reservoir_metrics.diff.income | number:'1.2-2' }}
                     }
                     )
                 </td>
-                <td>{{ reservoir.release }} (
-                    @if (reservoir.releaseDiff > 0) {
-                        <span class="text-lime-500">+{{ reservoir.releaseDiff }}</span>
-                    } @else if (reservoir.releaseDiff < 0) {
-                        <span class="text-rose-500">{{ reservoir.releaseDiff }}</span>
+                <td>{{ reservoir.reservoir_metrics.current.release }} (
+                    @if (reservoir.reservoir_metrics.diff.release > 0) {
+                        <span
+                            class="text-lime-500">+{{ reservoir.reservoir_metrics.diff.release | number:'1.2-2' }}</span>
+                    } @else if (reservoir.reservoir_metrics.diff.release < 0) {
+                        <span
+                            class="text-rose-500">{{ reservoir.reservoir_metrics.diff.release | number:'1.2-2' }}</span>
                     } @else {
-                        {{ reservoir.releaseDiff }}
+                        {{ reservoir.reservoir_metrics.diff.release | number:'1.2-2' }}
                     }
                     )
                 </td>
-                <td>{{ reservoir.level }} (
-                    @if (reservoir.levelDiff > 0) {
-                        <span class="text-lime-500">+{{ reservoir.levelDiff }}</span>
-                    } @else if (reservoir.levelDiff < 0) {
-                        <span class="text-rose-500">{{ reservoir.levelDiff }}</span>
+                <td>{{ reservoir.reservoir_metrics.current.level }} (
+                    @if (reservoir.reservoir_metrics.diff.level > 0) {
+                        <span
+                            class="text-lime-500">+{{ reservoir.reservoir_metrics.diff.level | number:'1.2-2' }}</span>
+                    } @else if (reservoir.reservoir_metrics.diff.level < 0) {
+                        <span class="text-rose-500">{{ reservoir.reservoir_metrics.diff.level | number:'1.2-2' }}</span>
                     } @else {
-                        {{ reservoir.levelDiff }}
+                        {{ reservoir.reservoir_metrics.diff.level | number:'1.2-2' }}
                     }
                     )
                 </td>
-                <td>{{ reservoir.volume }} (
-                    @if (reservoir.volumeDiff > 0) {
-                        <span class="text-lime-500">+{{ reservoir.volumeDiff }}</span>
-                    } @else if (reservoir.volumeDiff < 0) {
-                        <span class="text-rose-500">{{ reservoir.volumeDiff }}</span>
+                <td>{{ reservoir.reservoir_metrics.current.volume }} (
+                    @if (reservoir.reservoir_metrics.diff.volume > 0) {
+                        <span
+                            class="text-lime-500">+{{ reservoir.reservoir_metrics.diff.volume | number:'1.2-2' }}</span>
+                    } @else if (reservoir.reservoir_metrics.diff.volume < 0) {
+                        <span
+                            class="text-rose-500">{{ reservoir.reservoir_metrics.diff.volume | number:'1.2-2' }}</span>
                     } @else {
-                        {{ reservoir.volumeDiff }}
+                        {{ reservoir.reservoir_metrics.diff.volume | number:'1.2-2' }}
                     }
                     )
-                </td>
-                <td>
-                    <p-button type="button" icon="pi pi-info-circle" severity="info" />
                 </td>
             </tr>
         </ng-template>

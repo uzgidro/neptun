@@ -3,12 +3,12 @@
         <span class="font-semibold text-xl">Гидроэлектростанции</span>
         <button pButton outlined (click)="expandAll()">
             <i pButtonIcon class="pi pi-fw"
-               [ngClass]="{ 'pi-minus': isExpanded || !isRowsHidden, 'pi-plus': !isExpanded }"></i>
-            <span pButtonLabel>{{ isExpanded || !isRowsHidden ? 'Свернуть' : 'Развернуть' }}</span>
+               [ngClass]="{ 'pi-window-minimize': expanded, 'pi-window-maximize': !expanded }"></i>
+            <span pButtonLabel>{{ expanded ? 'Свернуть' : 'Развернуть' }}</span>
         </button>
     </div>
-    <p-table [value]="cascades" dataKey="name" scrollHeight="24rem" [loading]="loading" [expandedRowKeys]="expandedRows"
-             (onRowExpand)="onRowExpand()" (onRowCollapse)="onRowCollapse()">
+    <p-table [value]="cascades" dataKey="name" [scrollable]="true" scrollHeight="24rem" [loading]="loading"
+             [expandedRowKeys]="expandedRows">
         <ng-template #header>
             <tr>
                 <th style="width: 5rem"></th>

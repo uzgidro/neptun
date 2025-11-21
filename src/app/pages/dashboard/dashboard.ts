@@ -14,7 +14,7 @@ import { NotificationsWidget } from '@/pages/dashboard/components/notifications/
         <div class="grid grid-cols-12 gap-8">
             <app-stats-widget class="contents" />
             @if (gesExpanded) {
-                <app-ges-widget class="col-span-12" (expansionChange)="onGesExpansionChange($event)" />
+                <app-ges-widget class="col-span-12" (expansionChange)="onGesExpansionChange($event)" [expanded]="gesExpanded" />
                 <div class="col-span-12 xl:col-span-4">
                     <app-constructions-widget />
                 </div>
