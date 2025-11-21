@@ -14,7 +14,7 @@
                     class="block text-muted-color font-medium mb-4 sticky top-0 bg-surface-0 dark:bg-surface-900 py-2 z-10">{{ dateGroup.key | date:'dd.MM' }}</span>
                 <ul class="p-0 m-0 list-none mb-6">
                     @for (event of dateGroup.value; track event.date) {
-                        <li class="flex items-start py-2 border-b border-surface">
+                        <li class="flex items-start py-2 pr-2.5 border-b border-surface">
                             <div class="w-12 h-12 flex items-center justify-center rounded-full mr-4 shrink-0"
                                  [ngClass]="getEventColorClass(event.type)">
                                 <i class="pi text-xl!"
@@ -27,17 +27,19 @@
                                         {{ event.organization_name }}
                                     }
                                 </div>
-                                <div class="text-surface-700 dark:text-surface-100"
-                                     [ngClass]="{'line-clamp-2': !isEventExpanded(event.date)}">
+                                <div class="text-muted-color"
+                                     [ngClass]="{'line-clamp-2': !isEventExpanded(event.date) && shouldShowExpandButton(event.description)}">
                                     {{ event.description }}
                                 </div>
                             </div>
-                            <button pButton
-                                    type="button"
-                                    [icon]="isEventExpanded(event.date) ? 'pi pi-chevron-up' : 'pi pi-chevron-down'"
-                                    class="p-button-text p-button-rounded p-button-sm ml-2"
-                                    (click)="toggleEventExpansion(event.date)">
-                            </button>
+                            @if (shouldShowExpandButton(event.description)) {
+                                <button pButton
+                                        type="button"
+                                        [icon]="isEventExpanded(event.date) ? 'pi pi-chevron-up' : 'pi pi-chevron-down'"
+                                        class="p-button-text p-button-rounded p-button-sm ml-2"
+                                        (click)="toggleEventExpansion(event.date)">
+                                </button>
+                            }
                         </li>
                     }
                 </ul>

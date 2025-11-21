@@ -39,6 +39,10 @@ export class NotificationsWidget implements OnInit {
         return this.expandedEvents.has(eventDate);
     }
 
+    shouldShowExpandButton(description: string): boolean {
+        return description.length > 80;
+    }
+
     loadPastEvents() {
         this.loading = true;
         this.pastEventsService.getPastEvents().subscribe({
