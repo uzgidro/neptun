@@ -16,6 +16,7 @@ export class NotificationsWidget implements OnInit {
 
     eventsByDate: Record<string, Event[]> = {};
     loading = false;
+    expandedEvents = new Set<string>();
 
     items = [
         { label: 'Add New', icon: 'pi pi-fw pi-plus' },
@@ -24,6 +25,18 @@ export class NotificationsWidget implements OnInit {
 
     ngOnInit() {
         this.loadPastEvents();
+    }
+
+    toggleEventExpansion(eventDate: string) {
+        if (this.expandedEvents.has(eventDate)) {
+            this.expandedEvents.delete(eventDate);
+        } else {
+            this.expandedEvents.add(eventDate);
+        }
+    }
+
+    isEventExpanded(eventDate: string): boolean {
+        return this.expandedEvents.has(eventDate);
     }
 
     loadPastEvents() {
