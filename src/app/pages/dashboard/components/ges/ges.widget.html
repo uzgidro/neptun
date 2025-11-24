@@ -28,9 +28,9 @@
             </tr>
         </ng-template>
         <ng-template #body let-cascade let-expanded="expanded">
-            <tr>
+            <tr [pRowToggler]="cascade" class="cursor-pointer">
                 <td>
-                    <p-button type="button" pRipple [pRowToggler]="cascade" [text]="true" [rounded]="true"
+                    <p-button type="button" pRipple [text]="true" [rounded]="true"
                               [plain]="true" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" />
                 </td>
                 <td>

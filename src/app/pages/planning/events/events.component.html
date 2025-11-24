@@ -1,0 +1,297 @@
+<div class="card">
+    <div class="flex justify-between items-center mb-4">
+        <h2 class="text-2xl font-bold">Все события</h2>
+        <p-button
+            label="Создать событие"
+            icon="pi pi-plus"
+            (onClick)="openCreateDialog()"
+        ></p-button>
+    </div>
+
+    <!-- Filters -->
+    <!--    <div class="mb-4 p-4 bg-gray-50 rounded">-->
+    <!--        <div class="grid grid-cols-1 md:grid-cols-5 gap-3">-->
+    <!--            <app-select-->
+    <!--                [items]="eventStatuses"-->
+    <!--                optionLabel="name"-->
+    <!--                placeholder="Статус"-->
+    <!--                formControlName="statusId"-->
+    <!--            ></app-select>-->
+
+    <!--            <p-dropdown-->
+    <!--                [options]="eventTypes"-->
+    <!--                optionLabel="name"-->
+    <!--                placeholder="Тип"-->
+    <!--                [formControl]="filterForm.controls['typeId']"-->
+    <!--                [showClear]="true"-->
+    <!--            ></p-dropdown>-->
+
+    <!--            <p-dropdown-->
+    <!--                [options]="organizations"-->
+    <!--                optionLabel="name"-->
+    <!--                placeholder="Организация"-->
+    <!--                [formControl]="filterForm.controls['organizationId']"-->
+    <!--                [showClear]="true"-->
+    <!--            ></p-dropdown>-->
+
+    <!--            <p-calendar-->
+    <!--                placeholder="Дата от"-->
+    <!--                [formControl]="filterForm.controls['dateFrom']"-->
+    <!--                dateFormat="dd.mm.yy"-->
+    <!--                [showIcon]="true"-->
+    <!--                [showClear]="true"-->
+    <!--            ></p-calendar>-->
+
+    <!--            <p-calendar-->
+    <!--                placeholder="Дата до"-->
+    <!--                [formControl]="filterForm.controls['dateTo']"-->
+    <!--                dateFormat="dd.mm.yy"-->
+    <!--                [showIcon]="true"-->
+    <!--                [showClear]="true"-->
+    <!--            ></p-calendar>-->
+    <!--        </div>-->
+
+    <!--        <div class="flex gap-2 mt-3">-->
+    <!--            <p-button-->
+    <!--                label="Применить"-->
+    <!--                icon="pi pi-filter"-->
+    <!--                (onClick)="applyFilters()"-->
+    <!--                [outlined]="true"-->
+    <!--            ></p-button>-->
+    <!--            <p-button-->
+    <!--                label="Очистить"-->
+    <!--                icon="pi pi-times"-->
+    <!--                (onClick)="clearFilters()"-->
+    <!--                [outlined]="true"-->
+    <!--                severity="secondary"-->
+    <!--            ></p-button>-->
+    <!--        </div>-->
+    <!--    </div>-->
+
+    <!-- Data Table -->
+    <p-table
+        [value]="events()"
+        [loading]="loading()"
+        [paginator]="true"
+        [rows]="10"
+        [rowsPerPageOptions]="[10, 25, 50]"
+        [showCurrentPageReport]="true"
+        [scrollable]="true"
+        currentPageReportTemplate="Показано {first} - {last} из {totalRecords}"
+        [globalFilterFields]="['name', 'description', 'location', 'responsible_contact.name']"
+    >
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="name">Название
+                    <p-sortIcon field="name"></p-sortIcon>
+                </th>
+                <th pSortableColumn="event_type.name">Тип
+                    <p-sortIcon field="event_type.name"></p-sortIcon>
+                </th>
+                <th pSortableColumn="event_status.name">Статус
+                    <p-sortIcon field="event_status.name"></p-sortIcon>
+                </th>
+                <th pSortableColumn="event_date">Дата
+                    <p-sortIcon field="event_date"></p-sortIcon>
+                </th>
+                <th>Место</th>
+                <th>Организация</th>
+                <th>Ответственный</th>
+                <th>Файлы</th>
+                <th style="width: 150px">Действия</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-event>
+            <tr>
+                <td>{{ event.name }}</td>
+                <td>
+                    <p-tag
+                        [value]="event.event_type?.name || 'N/A'"
+                        severity="info"
+                    ></p-tag>
+                </td>
+                <td>
+                    <p-tag
+                        [value]="event.event_status?.name || 'N/A'"
+                        [severity]="getStatusSeverity(event.event_status_id)"
+                    ></p-tag>
+                </td>
+                <td>{{ formatDate(event.event_date) }}</td>
+                <td>{{ event.location || '—' }}</td>
+                <td>{{ event.organization?.name || '—' }}</td>
+                <td>{{ event.responsible_contact?.name || '—' }}</td>
+                <td>
+                    @if (event.files && event.files.length > 0) {
+                        <span>{{ event.files.length }} файл(ов)</span>
+                    }
+                    @if (!event.files || event.files.length === 0) {
+                        <span>—</span>
+                    }
+                </td>
+                <td>
+                    <div class="flex gap-2">
+                        <p-button
+                            icon="pi pi-pencil"
+                            [rounded]="true"
+                            [text]="true"
+                            (onClick)="openEditDialog(event)"
+                            pTooltip="Редактировать"
+                        ></p-button>
+                        <p-button
+                            icon="pi pi-trash"
+                            [rounded]="true"
+                            [text]="true"
+                            severity="danger"
+                            (onClick)="deleteEvent(event)"
+                            pTooltip="Удалить"
+                        ></p-button>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="9" class="text-center py-4">Событий не найдено</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<!-- Create/Edit Dialog -->
+<app-dialog
+    [header]="isEditMode() ? 'Редактировать событие' : 'Создать событие'"
+    [(visible)]="displayDialog"
+    [form]="eventForm"
+    [saveLabel]="isEditMode() ? 'Сохранить' : 'Создать'"
+    (save)="onSubmit()"
+    (cancel)="closeDialog()"
+>
+    <form class="p-4" [formGroup]="eventForm" (ngSubmit)="onSubmit()">
+        <div class="grid grid-cols-1 gap-4">
+            <!-- Name -->
+            <app-input-text
+                label="Название"
+                formControlName="name"
+                [submitted]="submitted"
+                [required]="true"
+                errorMessage="Название обязательно для заполнения"
+            ></app-input-text>
+
+            <!-- Description -->
+            <app-textarea
+                label="Описание"
+                formControlName="description"
+                [rows]="3"
+                [required]="false"
+            ></app-textarea>
+
+            <!-- Location -->
+            <app-input-text
+                label="Место"
+                formControlName="location"
+                [required]="false"
+            ></app-input-text>
+
+            <!-- Event Date -->
+            <app-date-picker
+                label="Дата и время"
+                formControlName="event_date"
+                [submitted]="submitted"
+                [showTime]="true"
+                errorMessage="Дата обязательна для заполнения"
+            ></app-date-picker>
+
+            <!-- Event Type -->
+            <app-select
+                label="Тип события"
+                formControlName="event_type_id"
+                [items]="eventTypes"
+                [submitted]="submitted"
+                errorMessage="Тип события обязателен для заполнения"
+            ></app-select>
+
+            <!-- Event Status (only for edit) -->
+            @if (isEditMode()) {
+                <app-select
+                    label="Статус события"
+                    formControlName="event_status_id"
+                    [items]="eventStatuses"
+                    [submitted]="false"
+                ></app-select>
+            }
+
+            <!-- Organization -->
+            <app-select
+                label="Организация"
+                formControlName="organization_id"
+                [items]="organizations"
+                [submitted]="false"
+            ></app-select>
+
+            <!-- Responsible Contact -->
+            <div class="field">
+                <div class="flex justify-between items-center mb-2">
+                    <label class="font-semibold">
+                        Ответственное лицо <span class="text-red-500">*</span>
+                    </label>
+                    <p-button
+                        [label]="showCreateContact ? 'Выбрать существующего' : 'Создать нового'"
+                        icon="pi pi-refresh"
+                        (onClick)="toggleContactMode()"
+                        [text]="true"
+                        size="small"
+                    ></p-button>
+                </div>
+
+                <!-- Autocomplete for existing contact -->
+                @if (!showCreateContact) {
+                    <p-autoComplete
+                        formControlName="responsible_contact"
+                        [suggestions]="filteredContacts"
+                        (completeMethod)="searchContacts($event)"
+                        optionLabel="name"
+                        placeholder="Начните вводить имя"
+                        [dropdown]="true"
+                        class="w-full"
+                        [appendTo]="'body'"
+                        [class.ng-invalid]="submitted && !showCreateContact"
+                    ></p-autoComplete>
+                }
+
+                <!-- Create new contact -->
+                @if (showCreateContact) {
+                    <div class="grid grid-cols-2 gap-3">
+                        <app-input-text
+                            label="ФИО"
+                            formControlName="responsible_fio"
+                            [submitted]="submitted"
+                            [required]="true"
+                            errorMessage="ФИО обязательно"
+                        ></app-input-text>
+                        <app-input-text
+                            label="Телефон"
+                            formControlName="responsible_phone"
+                            [submitted]="submitted"
+                            [required]="true"
+                            errorMessage="Телефон обязателен"
+                        ></app-input-text>
+                    </div>
+                }
+            </div>
+
+            <!-- File Upload -->
+            <app-file-upload
+                label="Файлы"
+                [selectedFiles]="selectedFiles"
+                (filesSelected)="onFileSelect($event)"
+                (fileRemoved)="removeFile($event)"
+            ></app-file-upload>
+        </div>
+    </form>
+</app-dialog>
+
+<!-- Toast for notifications -->
+<p-toast></p-toast>
+
+<!-- Confirmation dialog -->
+<p-confirmDialog></p-confirmDialog>

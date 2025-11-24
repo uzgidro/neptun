@@ -19,7 +19,7 @@
     </div>
 
     <div class="mb-8">
-        <app-ges-shutdown [date]="selectedDate"></app-ges-shutdown>
+        <app-ges-shutdown [date]="selectedDate" (shutdownSaved)="onShutdownSaved()"></app-ges-shutdown>
     </div>
 
     <div class="mb-8">

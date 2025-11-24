@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Button } from 'primeng/button';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
 import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
@@ -24,6 +24,7 @@ import { OrganizationService } from '@/core/services/organization.service';
 })
 export class GesShutdownComponent implements OnInit, OnChanges {
     @Input() date: Date | null = null;
+    @Output() shutdownSaved = new EventEmitter<void>();
 
     isFormOpen = false;
     submitted = false;
@@ -101,6 +102,7 @@ export class GesShutdownComponent implements OnInit, OnChanges {
                 next: () => {
                     this.messageService.add({ severity: 'success', summary: 'Событие обновлено' });
                     this.closeDialog();
+                    this.shutdownSaved.emit();
                 },
                 error: (err) => {
                     this.messageService.add({ severity: 'error', summary: 'Ошибка обновления события', detail: err.message });
@@ -118,6 +120,7 @@ export class GesShutdownComponent implements OnInit, OnChanges {
                     this.form.reset();
                     this.messageService.add({ severity: 'success', summary: 'Событие добавлено' });
                     this.closeDialog();
+                    this.shutdownSaved.emit();
                 },
                 error: (err) => {
                     this.messageService.add({ severity: 'error', summary: 'Ошибка добавления события', detail: err.message });
@@ -185,6 +188,7 @@ export class GesShutdownComponent implements OnInit, OnChanges {
                 next: () => {
                     this.messageService.add({ severity: 'success', summary: 'Событие удалено' });
                     this.loadShutdowns();
+                    this.shutdownSaved.emit();
                 },
                 error: (err) => {
                     this.messageService.add({ severity: 'error', summary: 'Ошибка удаления события', detail: err.message });
