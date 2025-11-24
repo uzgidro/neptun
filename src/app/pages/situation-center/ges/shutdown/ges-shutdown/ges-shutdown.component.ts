@@ -11,14 +11,14 @@ import { Organization } from '@/core/interfaces/organizations';
 import { GesShutdownService } from '@/core/services/ges-shutdown.service';
 import { InputNumberdComponent } from '@/layout/component/dialog/input-number/input-number.component';
 import { GesShutdownDto, GesShutdownPayload, ShutdownDto } from '@/core/interfaces/ges-shutdown';
-import { DatePipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import { AuthService } from '@/core/services/auth.service';
 import { TooltipModule } from 'primeng/tooltip';
 import { OrganizationService } from '@/core/services/organization.service';
 
 @Component({
     selector: 'app-ges-shutdown',
-    imports: [Button, DatePickerComponent, DialogComponent, GroupSelectComponent, PrimeTemplate, ReactiveFormsModule, TableModule, TextareaComponent, InputNumberdComponent, DatePipe, TooltipModule],
+    imports: [Button, DatePickerComponent, DialogComponent, GroupSelectComponent, PrimeTemplate, ReactiveFormsModule, TableModule, TextareaComponent, InputNumberdComponent, DatePipe, TooltipModule, DecimalPipe],
     templateUrl: './ges-shutdown.component.html',
     styleUrl: './ges-shutdown.component.scss'
 })
