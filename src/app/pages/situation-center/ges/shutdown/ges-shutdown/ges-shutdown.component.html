@@ -74,7 +74,7 @@
                     {{ shutdown.generation_loss }}
                 </td>
                 <td>
-                    {{ shutdown.idle_discharge_volume }}
+                    {{ shutdown.idle_discharge_volume | number: '1.0-2' }}
                 </td>
                 @if (authService.isSc()) {
                     <td>
@@ -179,7 +179,7 @@
                 {{ shutdown.generation_loss }}
             </td>
             <td>
-                {{ shutdown.idle_discharge_volume }}
+                {{ shutdown.idle_discharge_volume | number: '1.0-2' }}
             </td>
             @if (authService.isSc()) {
                 <td>
@@ -284,7 +284,7 @@
                 {{ shutdown.generation_loss }}
             </td>
             <td>
-                {{ shutdown.idle_discharge_volume }}
+                {{ shutdown.idle_discharge_volume | number: '1.0-2' }}
             </td>
             @if (authService.isSc()) {
                 <td>
