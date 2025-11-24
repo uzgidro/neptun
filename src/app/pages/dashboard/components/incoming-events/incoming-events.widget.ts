@@ -1,43 +1,69 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { RippleModule } from 'primeng/ripple';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
+import { TooltipModule } from 'primeng/tooltip';
 import { CommonModule } from '@angular/common';
-
-interface RecentEvent {
-    name: string;
-    date: Date;
-    type: 'info' | 'warning' | 'success' | 'error';
-}
+import { EventManagementService } from '@/core/services/event-management.service';
+import { Event } from '@/core/interfaces/event-management';
+import { Router } from '@angular/router';
 
 @Component({
     standalone: true,
     selector: 'app-incoming-events-widget',
-    imports: [CommonModule, TableModule, ButtonModule, RippleModule],
+    imports: [CommonModule, TableModule, ButtonModule, RippleModule, TooltipModule],
     templateUrl: './incoming-events.widget.html'
 })
 export class IncomingEventsWidget implements OnInit {
-    events: RecentEvent[] = [];
+    private eventService = inject(EventManagementService);
+    private router = inject(Router);
 
-    constructor() {}
+    events: Event[] = [];
+    loading = false;
 
     ngOnInit() {
-        this.events = [
-            { name: 'Аппаратное совещание', date: new Date(Date.now() + 1000 * 3600 * 2), type: 'info' },
-            { name: 'Выездной селектор в Джизаке', date: new Date(Date.now() + 1000 * 3600 * 8), type: 'info' },
-            { name: 'Открытие Нижнего Чаткала', date: new Date(Date.now() + 1000 * 3600 * 24), type: 'success' },
-            { name: 'Встреча с президентом', date: new Date(Date.now() + 1000 * 3600 * 48), type: 'success' },
-            { name: 'Собрание с индусами', date: new Date(Date.now() + 1000 * 3600 * 24 * 7), type: 'info' },
-            { name: 'Выезд на объект', date: new Date(Date.now() + 1000 * 3600 * 24 * 10), type: 'info' },
-        ];
+        this.loadIncomingEvents();
     }
 
-    getIconClass(type: RecentEvent['type']): object {
-        return {
-            'pi-info-circle text-blue-500': type === 'info',
-            'pi-exclamation-triangle text-orange-500': type === 'warning',
-            'pi-check-circle text-green-500': type === 'success',
-            'pi-times-circle text-red-500': type === 'error'
-        };
+    loadIncomingEvents() {
+        this.loading = true;
+        const now = new Date();
+        const start_date = now.toISOString();
+
+        this.eventService.getEvents({ start_date }).subscribe({
+            next: (events) => {
+                this.events = events;
+                this.loading = false;
+            },
+            error: (err) => {
+                console.error('Failed to load incoming events:', err);
+                this.loading = false;
+            }
+        });
+    }
+
+    getIconClass(eventTypeId: number): object {
+        // Map event type IDs to icon classes
+        // Adjust these mappings based on your actual event type IDs
+        switch (eventTypeId) {
+            case 1: // Selector
+                return { 'pi-calendar text-blue-500': true };
+            case 2: // VKS
+                return { 'pi-camera text-green-500': true };
+            case 3: // Negotiation
+                return { 'pi-comments text-orange-500': true };
+            case 4: // Meeting
+                return { 'pi-users text-purple-500': true };
+            case 6: // Ride
+                return { 'pi-car text-red-500': true };
+            case 7: // Guests / Visit
+                return { 'pi-building text-gray-500': true };
+            default:
+                return { 'pi-calendar text-gray-500': true };
+        }
+    }
+
+    viewEventDetails(eventId: number) {
+        this.router.navigate(['/event-management', eventId]);
     }
 }

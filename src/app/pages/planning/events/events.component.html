@@ -253,6 +253,7 @@
                         placeholder="Начните вводить имя"
                         [dropdown]="true"
                         class="w-full"
+                        [appendTo]="'body'"
                         [class.ng-invalid]="submitted && !showCreateContact"
                     ></p-autoComplete>
                 }

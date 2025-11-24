@@ -13,7 +13,7 @@ export class EventManagementService extends ApiService {
     /**
      * Get all events with optional filters
      */
-    getEvents(filters?: { statusId?: number; typeId?: number; organizationId?: number; dateFrom?: string; dateTo?: string }): Observable<Event[]> {
+    getEvents(filters?: { statusId?: number; typeId?: number; organizationId?: number; start_date?: string; end_date?: string }): Observable<Event[]> {
         let url = `${BASE_URL}/events`;
         const params: string[] = [];
 
@@ -21,8 +21,8 @@ export class EventManagementService extends ApiService {
             if (filters.statusId) params.push(`status_id=${filters.statusId}`);
             if (filters.typeId) params.push(`type_id=${filters.typeId}`);
             if (filters.organizationId) params.push(`organization_id=${filters.organizationId}`);
-            if (filters.dateFrom) params.push(`date_from=${filters.dateFrom}`);
-            if (filters.dateTo) params.push(`date_to=${filters.dateTo}`);
+            if (filters.start_date) params.push(`start_date=${filters.start_date}`);
+            if (filters.end_date) params.push(`end_date=${filters.end_date}`);
         }
 
         if (params.length > 0) {
