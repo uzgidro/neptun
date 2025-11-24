@@ -1,11 +1,14 @@
+import { Contact } from '@/core/interfaces/contact';
+import { AscueMetricsDto } from '@/core/interfaces/ascue';
+
 export interface Organization {
-    // children: boolean;
-    children: Organization[];
     id: number;
     name: string;
-    parent_organization_id: number;
-    parent_organization_name?: string;
-    parent_organization: string;
-    types: string[];
+    parent_organization_id?: number | null;
+    parent_organization?: string | null;
+    types?: string[];
     items?: Organization[];
+    current_discharge?: number | null;
+    contacts: Contact[];
+    ascue_metrics?: AscueMetricsDto;
 }
