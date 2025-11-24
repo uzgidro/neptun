@@ -12,12 +12,20 @@
         </p-date-picker>
         <div class="p-4 border-t border-surface">
             <div class="font-semibold mb-2">
-                События на {{ selectedDate | date: 'dd.MM.yyyy' }}
-                :
+                События на {{ selectedDate | date: 'dd.MM.yyyy' }}:
             </div>
-            @if (selectedDayEvents().length > 0) {
+            @if (loading) {
+                <div class="text-center p-4">
+                    <i class="pi pi-spin pi-spinner text-xl"></i>
+                </div>
+            } @else if (selectedDayEvents().length > 0) {
                 @for (event of selectedDayEvents(); track event.id) {
-                    <div class="mb-2">{{ event.title }} ({{ event.date | date: 'HH:mm' }})</div>
+                    <div class="mb-2 flex items-center justify-between">
+                        <span>{{ event.name }} ({{ event.event_date | date: 'HH:mm' }})</span>
+                        @if (event.event_type) {
+                            <span class="text-xs text-surface-500 ml-2">{{ event.event_type.name || '' }}</span>
+                        }
+                    </div>
                 }
             } @else {
                 <div>Нет событий</div>
