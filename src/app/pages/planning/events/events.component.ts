@@ -80,7 +80,6 @@ export class EventsComponent implements OnInit, OnDestroy {
 
     // Contact autocomplete
     filteredContacts: Contact[] = [];
-    selectedContact: Contact | null = null;
     showCreateContact = false;
 
     // Files
@@ -223,7 +222,6 @@ export class EventsComponent implements OnInit, OnDestroy {
         this.selectedEvent = null;
         this.eventForm.reset();
         this.selectedFiles = [];
-        this.selectedContact = null;
         this.showCreateContact = false;
         this.submitted = false;
         this.displayDialog.set(true);
@@ -258,7 +256,6 @@ export class EventsComponent implements OnInit, OnDestroy {
 
         // Set contact
         if (event.responsible_contact) {
-            this.selectedContact = event.responsible_contact;
             this.eventForm.patchValue({
                 responsible_contact: event.responsible_contact
             });
@@ -295,7 +292,6 @@ export class EventsComponent implements OnInit, OnDestroy {
 
         if (this.showCreateContact) {
             // Creating new - clear contact selection and add validators
-            this.selectedContact = null;
             this.eventForm.get('responsible_contact')?.clearValidators();
             this.eventForm.get('responsible_fio')?.setValidators([Validators.required]);
             this.eventForm.get('responsible_phone')?.setValidators([Validators.required]);
@@ -439,8 +435,8 @@ export class EventsComponent implements OnInit, OnDestroy {
         }
 
         // Contact - either existing or new
-        if (!this.showCreateContact && this.selectedContact) {
-            formData.append('responsible_contact_id', this.selectedContact.id.toString());
+        if (!this.showCreateContact) {
+            formData.append('responsible_contact_id', formValue.responsible_contact.id);
         } else if (this.showCreateContact) {
             formData.append('responsible_fio', formValue.responsible_fio);
             formData.append('responsible_phone', formValue.responsible_phone);

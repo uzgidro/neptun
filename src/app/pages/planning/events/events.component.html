@@ -211,13 +211,14 @@
             ></app-select>
 
             <!-- Event Status (only for edit) -->
-            <app-select
-                *ngIf="isEditMode()"
-                label="Статус события"
-                formControlName="event_status_id"
-                [items]="eventStatuses"
-                [submitted]="false"
-            ></app-select>
+            @if (isEditMode()) {
+                <app-select
+                    label="Статус события"
+                    formControlName="event_status_id"
+                    [items]="eventStatuses"
+                    [submitted]="false"
+                ></app-select>
+            }
 
             <!-- Organization -->
             <app-select
@@ -243,43 +244,38 @@
                 </div>
 
                 <!-- Autocomplete for existing contact -->
-                <div *ngIf="!showCreateContact">
+                @if (!showCreateContact) {
                     <p-autoComplete
                         formControlName="responsible_contact"
                         [suggestions]="filteredContacts"
                         (completeMethod)="searchContacts($event)"
-                        field="name"
+                        optionLabel="name"
                         placeholder="Начните вводить имя"
-                        [(ngModel)]="selectedContact"
                         [dropdown]="true"
                         class="w-full"
-                        [class.ng-invalid]="submitted && !showCreateContact && !selectedContact"
+                        [class.ng-invalid]="submitted && !showCreateContact"
                     ></p-autoComplete>
-                    <small
-                        *ngIf="submitted && !showCreateContact && !selectedContact"
-                        class="text-red-500"
-                    >
-                        Выберите ответственное лицо
-                    </small>
-                </div>
+                }
 
                 <!-- Create new contact -->
-                <div *ngIf="showCreateContact" class="grid grid-cols-2 gap-3">
-                    <app-input-text
-                        label="ФИО"
-                        formControlName="responsible_fio"
-                        [submitted]="submitted"
-                        [required]="true"
-                        errorMessage="ФИО обязательно"
-                    ></app-input-text>
-                    <app-input-text
-                        label="Телефон"
-                        formControlName="responsible_phone"
-                        [submitted]="submitted"
-                        [required]="true"
-                        errorMessage="Телефон обязателен"
-                    ></app-input-text>
-                </div>
+                @if (showCreateContact) {
+                    <div class="grid grid-cols-2 gap-3">
+                        <app-input-text
+                            label="ФИО"
+                            formControlName="responsible_fio"
+                            [submitted]="submitted"
+                            [required]="true"
+                            errorMessage="ФИО обязательно"
+                        ></app-input-text>
+                        <app-input-text
+                            label="Телефон"
+                            formControlName="responsible_phone"
+                            [submitted]="submitted"
+                            [required]="true"
+                            errorMessage="Телефон обязателен"
+                        ></app-input-text>
+                    </div>
+                }
             </div>
 
             <!-- File Upload -->
@@ -288,7 +284,7 @@
 
                 <!-- Desktop/Tablet: Drag & Drop -->
                 <div class="hidden md:block">
-                    <p-fileUpload
+                    <p-fileupload
                         mode="basic"
                         [multiple]="true"
                         [auto]="false"
@@ -296,12 +292,12 @@
                         chooseLabel="Выбрать файлы или перетащите сюда"
                         (onSelect)="onFileSelect($event)"
                         [maxFileSize]="1073741824"
-                    ></p-fileUpload>
+                    ></p-fileupload>
                 </div>
 
                 <!-- Mobile: Button only -->
                 <div class="block md:hidden">
-                    <p-fileUpload
+                    <p-fileupload
                         mode="basic"
                         [multiple]="true"
                         [auto]="false"
@@ -309,31 +305,32 @@
                         chooseLabel="Выбрать файлы"
                         (onSelect)="onFileSelect($event)"
                         [maxFileSize]="1073741824"
-                    ></p-fileUpload>
+                    ></p-fileupload>
                 </div>
 
                 <!-- Selected files list -->
-                <div *ngIf="selectedFiles.length > 0" class="mt-3">
-                    <div class="font-semibold mb-2">Выбранные файлы:</div>
-                    <div class="flex flex-col gap-2">
-                        <div
-                            *ngFor="let file of selectedFiles; let i = index"
-                            class="flex justify-between items-center p-2 bg-gray-100 rounded"
-                        >
+                @if (selectedFiles.length > 0) {
+                    <div class="mt-3">
+                        <div class="font-semibold mb-2">Выбранные файлы:</div>
+                        <div class="flex flex-col gap-2">
+                            @for (file of selectedFiles; track file; let i = $index) {
+                                <div class="flex justify-between items-center p-2 rounded">
                             <span class="text-sm">
                                 {{ file.name }} ({{ (file.size / 1024 / 1024).toFixed(2) }} MB)
                             </span>
-                            <p-button
-                                icon="pi pi-times"
-                                [rounded]="true"
-                                [text]="true"
-                                severity="danger"
-                                size="small"
-                                (onClick)="removeFile(i)"
-                            ></p-button>
+                                    <p-button
+                                        icon="pi pi-times"
+                                        [rounded]="true"
+                                        [text]="true"
+                                        severity="danger"
+                                        size="small"
+                                        (onClick)="removeFile(i)"
+                                    ></p-button>
+                                </div>
+                            }
                         </div>
                     </div>
-                </div>
+                }
             </div>
         </div>
     </form>
