@@ -20,6 +20,7 @@ import { TimeService } from '@/core/services/time.service';
 })
 export class ShutdownComponent implements OnInit {
     @ViewChild(ShutdownDischargeComponent) shutdownDischargeComponent!: ShutdownDischargeComponent;
+    @ViewChild(GesShutdownComponent) gesShutdownComponent!: GesShutdownComponent;
 
     organizations: any[] = [];
     orgsLoading = false;
@@ -69,6 +70,10 @@ export class ShutdownComponent implements OnInit {
     }
 
     onIncidentSaved(): void {
+        this.shutdownDischargeComponent?.loadDischarges();
+    }
+
+    onShutdownSaved(): void {
         this.shutdownDischargeComponent?.loadDischarges();
     }
 }
