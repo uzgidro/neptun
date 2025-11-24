@@ -1,0 +1,27 @@
+<button type="button" class="layout-topbar-action" (click)="calendarPopover.toggle($event)">
+    <i class="pi pi-calendar"></i>
+    <span>Календарь</span>
+</button>
+<p-popover #calendarPopover [style]="{ width: '350px' }">
+    <ng-template pTemplate="content">
+        <p-date-picker [(ngModel)]="selectedDate" (onSelect)="onDateSelect($event)" [inline]="true" fluid>
+            <ng-template pTemplate="date" let-date>
+                <span
+                    [ngClass]="{ 'bg-primary text-primary-contrast rounded-full !w-8 !h-8 flex items-center justify-center': hasEvents(date.day, date.month, date.year) }">{{ date.day }}</span>
+            </ng-template>
+        </p-date-picker>
+        <div class="p-4 border-t border-surface">
+            <div class="font-semibold mb-2">
+                События на {{ selectedDate | date: 'dd.MM.yyyy' }}
+                :
+            </div>
+            @if (selectedDayEvents().length > 0) {
+                @for (event of selectedDayEvents(); track event.id) {
+                    <div class="mb-2">{{ event.title }} ({{ event.date | date: 'HH:mm' }})</div>
+                }
+            } @else {
+                <div>Нет событий</div>
+            }
+        </div>
+    </ng-template>
+</p-popover>

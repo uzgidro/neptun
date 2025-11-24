@@ -1,10 +1,7 @@
-import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ApiService } from './api.service';
-import { Event, EventType, EventStatus } from '../interfaces/event-management';
-
-const BASE_URL = 'https://prime.speedwagon.uz';
+import { ApiService, BASE_URL } from './api.service';
+import { Event, EventStatus, EventType } from '../interfaces/event-management';
 
 @Injectable({
     providedIn: 'root'
