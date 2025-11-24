@@ -1,12 +1,12 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Dialog } from 'primeng/dialog';
 import { PrimeTemplate } from 'primeng/api';
 import { Button } from 'primeng/button';
 
 @Component({
     selector: 'app-dialog',
-    imports: [Dialog, PrimeTemplate, Button],
+    imports: [Dialog, PrimeTemplate, Button, ReactiveFormsModule],
     templateUrl: './dialog.component.html',
     styleUrl: './dialog.component.scss'
 })

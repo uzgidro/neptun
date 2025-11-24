@@ -27,6 +27,6 @@ export const raisGuard: CanActivateFn = (): boolean | UrlTree => {
     const authService = inject(AuthService);
     const router = inject(Router);
 
-    return authService.hasRole(["sc", "rais"]) ? true : router.createUrlTree(['/notfound']);
+    return authService.hasRole(['sc', 'assistant', 'rais']) ? true : router.createUrlTree(['/notfound']);
 }
 
