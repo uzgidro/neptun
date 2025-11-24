@@ -1,12 +1,11 @@
-import { Component, OnInit, OnDestroy, inject, signal } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Subject, takeUntil, forkJoin } from 'rxjs';
+import { forkJoin, Subject, takeUntil } from 'rxjs';
 
 // PrimeNG Components
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
-import { FileUploadModule } from 'primeng/fileupload';
 import { TagModule } from 'primeng/tag';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
@@ -18,15 +17,16 @@ import { InputTextComponent } from '@/layout/component/dialog/input-text/input-t
 import { TextareaComponent } from '@/layout/component/dialog/textarea/textarea.component';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
 import { SelectComponent } from '@/layout/component/dialog/select/select.component';
+import { FileUploadComponent } from '@/layout/component/dialog/file-upload/file-upload.component';
 
 // Services
 import { EventManagementService } from '@/core/services/event-management.service';
 import { ContactService } from '@/core/services/contact.service';
 import { OrganizationService } from '@/core/services/organization.service';
-import { MessageService, ConfirmationService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 // Interfaces
-import { Event, EventType, EventStatus, EventFilters } from '@/core/interfaces/event-management';
+import { Event, EventFilters, EventStatus, EventType } from '@/core/interfaces/event-management';
 import { Contact } from '@/core/interfaces/contact';
 import { Organization } from '@/core/interfaces/organizations';
 import { Tooltip } from 'primeng/tooltip';
@@ -39,7 +39,6 @@ import { Tooltip } from 'primeng/tooltip';
         ReactiveFormsModule,
         TableModule,
         ButtonModule,
-        FileUploadModule,
         TagModule,
         ConfirmDialogModule,
         ToastModule,
@@ -49,6 +48,7 @@ import { Tooltip } from 'primeng/tooltip';
         TextareaComponent,
         DatePickerComponent,
         SelectComponent,
+        FileUploadComponent,
         Tooltip
     ],
     providers: [MessageService, ConfirmationService],
@@ -312,8 +312,8 @@ export class EventsComponent implements OnInit, OnDestroy {
     /**
      * Handle file selection
      */
-    onFileSelect(event: any) {
-        this.selectedFiles = Array.from(event.files || event.currentFiles || []);
+    onFileSelect(files: File[]) {
+        this.selectedFiles = files;
     }
 
     /**
