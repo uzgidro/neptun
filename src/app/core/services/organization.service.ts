@@ -4,14 +4,12 @@ import { Organization } from '@/core/interfaces/organizations';
 import { HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-const ORGANIZATIONS = '/organizations'
-const CASCADES = '/cascades'
+const ORGANIZATIONS = '/organizations';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
-export class OrganizationService extends ApiService{
-
+export class OrganizationService extends ApiService {
     getOrganizationsFlat(): Observable<Organization[]> {
         return this.http.get<Organization[]>(`${BASE_URL}${ORGANIZATIONS}${FLAT}`);
     }
@@ -19,10 +17,5 @@ export class OrganizationService extends ApiService{
     getCascades(): Observable<Organization[]> {
         const params = new HttpParams().set('type', 'cascade');
         return this.http.get<Organization[]>(BASE_URL + ORGANIZATIONS, { params: params });
-    }
-
-    // For Dashboard cascades with contacts and ascue metrics
-    getOrganizationsCascades(): Observable<Organization[]> {
-        return this.http.get<Organization[]>(BASE_URL + ORGANIZATIONS + CASCADES);
     }
 }
