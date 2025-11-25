@@ -1,3 +1,5 @@
+import { UserShortInfo } from '@/core/interfaces/users';
+
 export interface IncidentPayload {
     organization_id?: number;
     incident_time?: string;
@@ -11,8 +13,7 @@ export interface IncidentResponse {
     created_at: string;
     organization_id?: number;
     organization?: string;
-    created_by_user_id: number;
-    created_by_user: string;
+    created_by: UserShortInfo;
 }
 
 export interface IncidentDto {
@@ -22,6 +23,5 @@ export interface IncidentDto {
     created_at: Date;
     organization_id?: number;
     organization?: string;
-    created_by_user_id: number;
-    created_by_user: string;
+    created_by: UserShortInfo;
 }
