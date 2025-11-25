@@ -114,11 +114,6 @@ export class MenuComponent implements OnInit {
                                 role: ['rais', 'sc'],
                                 routerLink: ['/construction']
                             },
-                            {
-                                label: 'Тестовая таблица (Excel)',
-                                role: ['rais', 'sc'],
-                                routerLink: ['/pages/excel']
-                            },
                             { label: 'Категории', role: ['sc'], routerLink: ['/categories'] },
                             { label: 'Файлы', role: ['sc'], routerLink: ['/files'] }
                         ]
