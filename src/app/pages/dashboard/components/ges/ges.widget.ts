@@ -4,8 +4,8 @@ import { Ripple } from 'primeng/ripple';
 import { TableModule } from 'primeng/table';
 import { DecimalPipe, NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { OrganizationService } from '@/core/services/organization.service';
 import { Organization } from '@/core/interfaces/organizations';
+import { DashboardService } from '@/core/services/dashboard.service';
 
 interface expandedRows {
     [key: string]: boolean;
@@ -24,14 +24,14 @@ class GesWidget implements OnInit {
 
     loading: boolean = false;
 
-    private organizationService: OrganizationService = inject(OrganizationService);
+    private dashboardService: DashboardService = inject(DashboardService);
 
     @Input() expanded: boolean = false;
     @Output() expansionChange = new EventEmitter<boolean>();
 
     ngOnInit(): void {
         this.loading = true;
-        this.organizationService.getOrganizationsCascades().subscribe({
+        this.dashboardService.getOrganizationsCascades().subscribe({
             next: (res) => {
                 this.cascades = res;
             },
