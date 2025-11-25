@@ -1,6 +1,6 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Table, TableModule } from 'primeng/table';
-import { Contact, AddContactRequest, EditContactRequest } from '@/core/interfaces/contact';
+import { AddContactRequest, Contact, EditContactRequest } from '@/core/interfaces/contact';
 import { ContactService } from '@/core/services/contact.service';
 import { OrganizationService } from '@/core/services/organization.service';
 import { DepartmentService } from '@/core/services/department.service';
