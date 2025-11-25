@@ -1,25 +1,53 @@
 <div class="col-span-12">
     <div class="card">
         <div class="font-semibold text-xl mb-4">Предстоящие мероприятия</div>
-        <p-table [value]="events" sortField="date" [sortOrder]="1" styleClass="p-datatable-gridlines">
+        <p-table [value]="events" sortField="event_date" [sortOrder]="1" styleClass="p-datatable-gridlines"
+                 [loading]="loading">
             <ng-template #header>
                 <tr>
                     <th style="width: 5rem"></th>
-                    <th>Название</th>
-                    <th>Дата</th>
-                    <th style="width: 8rem">Подробнее</th>
+                    <th pSortableColumn="name">Название
+                        <p-sortIcon field="name" />
+                    </th>
+                    <th pSortableColumn="event_type.name">Тип
+                        <p-sortIcon field="event_type.name" />
+                    </th>
+                    <th pSortableColumn="event_date">Дата
+                        <p-sortIcon field="event_date" />
+                    </th>
+                    <th pSortableColumn="location">Место
+                        <p-sortIcon field="location" />
+                    </th>
+                    <th pSortableColumn="responsible_contact">Ответственный
+                        <p-sortIcon field="responsible_contact" />
+                    </th>
                 </tr>
             </ng-template>
             <ng-template #body let-event>
                 <tr>
                     <td>
-                        <i class="pi text-xl" [ngClass]="getIconClass(event.type)"></i>
+                        <i class="pi text-xl" [ngClass]="getIconClass(event.event_type_id)"></i>
                     </td>
                     <td>{{ event.name }}</td>
-                    <td>{{ event.date | date: 'HH:mm dd.MM.yyyy' }}</td>
+                    <td>{{ event.event_type?.name || '-' }}</td>
+                    <td>{{ event.event_date | date: 'dd.MM.yyyy HH:mm' }}</td>
+                    <td>{{ event.location || event.organization?.name || '-' }}</td>
                     <td>
-                        <button pButton pRipple type="button" icon="pi pi-search" class="p-button p-component p-button-text p-button-icon-only"></button>
+                        <div class="flex items-center gap-4">
+                            <span>{{ event.responsible_contact?.name || '-' }}</span>
+                            @if (event.responsible_contact?.phone) {
+                                <a pButton outlined [href]="'tel:' + event.responsible_contact.phone"
+                                   class="p-button-sm p-button-icon-only" pTooltip="Позвонить" tooltipPosition="top">
+                                    <i pButtonIcon class="pi pi-phone"></i>
+                                </a>
+                            }
+                        </div>
                     </td>
+                </tr>
+            </ng-template>
+            <ng-template #emptymessage>
+                <tr>
+                    <td colspan="6" class="text-center">Нет предстоящих мероприятий</td>
                 </tr>
             </ng-template>
         </p-table>

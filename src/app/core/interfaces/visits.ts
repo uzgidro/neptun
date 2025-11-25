@@ -1,3 +1,5 @@
+import { UserShortInfo } from '@/core/interfaces/users';
+
 export interface AddVisitRequest {
     organization_id: number;
     visit_date: string;
@@ -20,8 +22,7 @@ export interface VisitResponse {
     description: string;
     responsible_name: string;
     created_at: string; // <-- строка
-    created_by_user_id: number;
-    created_by_user: string;
+    created_by: UserShortInfo;
 }
 
 export interface VisitDto {
@@ -32,6 +33,5 @@ export interface VisitDto {
     description: string;
     responsible_name: string;
     created_at: Date;
-    created_by_user_id: number;
-    created_by_user: string;
+    created_by: UserShortInfo;
 }

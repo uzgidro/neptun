@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Button } from 'primeng/button';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
 import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
@@ -11,19 +11,20 @@ import { Organization } from '@/core/interfaces/organizations';
 import { GesShutdownService } from '@/core/services/ges-shutdown.service';
 import { InputNumberdComponent } from '@/layout/component/dialog/input-number/input-number.component';
 import { GesShutdownDto, GesShutdownPayload, ShutdownDto } from '@/core/interfaces/ges-shutdown';
-import { DatePipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import { AuthService } from '@/core/services/auth.service';
 import { TooltipModule } from 'primeng/tooltip';
 import { OrganizationService } from '@/core/services/organization.service';
 
 @Component({
     selector: 'app-ges-shutdown',
-    imports: [Button, DatePickerComponent, DialogComponent, GroupSelectComponent, PrimeTemplate, ReactiveFormsModule, TableModule, TextareaComponent, InputNumberdComponent, DatePipe, TooltipModule],
+    imports: [Button, DatePickerComponent, DialogComponent, GroupSelectComponent, PrimeTemplate, ReactiveFormsModule, TableModule, TextareaComponent, InputNumberdComponent, DatePipe, TooltipModule, DecimalPipe],
     templateUrl: './ges-shutdown.component.html',
     styleUrl: './ges-shutdown.component.scss'
 })
 export class GesShutdownComponent implements OnInit, OnChanges {
     @Input() date: Date | null = null;
+    @Output() shutdownSaved = new EventEmitter<void>();
 
     isFormOpen = false;
     submitted = false;
@@ -101,6 +102,7 @@ export class GesShutdownComponent implements OnInit, OnChanges {
                 next: () => {
                     this.messageService.add({ severity: 'success', summary: 'Событие обновлено' });
                     this.closeDialog();
+                    this.shutdownSaved.emit();
                 },
                 error: (err) => {
                     this.messageService.add({ severity: 'error', summary: 'Ошибка обновления события', detail: err.message });
@@ -118,6 +120,7 @@ export class GesShutdownComponent implements OnInit, OnChanges {
                     this.form.reset();
                     this.messageService.add({ severity: 'success', summary: 'Событие добавлено' });
                     this.closeDialog();
+                    this.shutdownSaved.emit();
                 },
                 error: (err) => {
                     this.messageService.add({ severity: 'error', summary: 'Ошибка добавления события', detail: err.message });
@@ -185,6 +188,7 @@ export class GesShutdownComponent implements OnInit, OnChanges {
                 next: () => {
                     this.messageService.add({ severity: 'success', summary: 'Событие удалено' });
                     this.loadShutdowns();
+                    this.shutdownSaved.emit();
                 },
                 error: (err) => {
                     this.messageService.add({ severity: 'error', summary: 'Ошибка удаления события', detail: err.message });

@@ -15,6 +15,7 @@ import { ShutdownComponent } from '@/pages/situation-center/ges/shutdown/shutdow
 import { PositionComponent } from '@/pages/hrm/position/position.component';
 import { DepartmentComponent } from '@/pages/hrm/department/department.component';
 import { EmployeeComponent } from '@/pages/hrm/employee/employee.component';
+import { EventsComponent } from '@/pages/planning/events/events.component';
 import { ConstructionComponent } from '@/pages/situation-center/construction/construction.component';
 
 export const appRoutes: Routes = [
@@ -40,10 +41,12 @@ export const appRoutes: Routes = [
             { path: 'discharge', component: DischargeComponent, canActivate: [raisGuard] },
             { path: 'planning', component: PlanningComponent, canActivate: [raisGuard] },
             { path: 'shutdowns', component: ShutdownComponent, canActivate: [raisGuard] },
-            { path: 'construction', component: ConstructionComponent, canActivate: [raisGuard] }
+            { path: 'construction', component: ConstructionComponent, canActivate: [raisGuard] },
             // { path: 'uikit', loadChildren: () => import('./app/pages/uikit/uikit.routes') },
             // { path: 'documentation', component: Documentation },
             // { path: 'pages', loadChildren: () => import('./app/pages/pages.routes') }
+            { path: 'planning/events', component: EventsComponent, canActivate: [raisGuard] },
+            { path: 'shutdowns', component: ShutdownComponent, canActivate: [raisGuard] }
         ]
     },
     // { path: 'landing', component: Landing },

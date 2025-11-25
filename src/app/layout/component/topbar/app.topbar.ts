@@ -1,19 +1,17 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MenuItem, MessageService } from 'primeng/api';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { StyleClassModule } from 'primeng/styleclass';
-import { ProfileMenu } from './app.profilemenu';
-import { LayoutService } from '../service/layout.service';
+import { ProfileMenu } from '../app.profilemenu';
+import { LayoutService } from '../../service/layout.service';
 import { PopoverModule } from 'primeng/popover';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { FormsModule } from '@angular/forms';
-import { CalendarEvent, EventService } from '@/core/services/event.service';
-import { isSameDay } from 'date-fns';
-import { DatePicker } from 'primeng/datepicker';
 import { AppConfigurator } from '@/layout/component/app.configurator';
 import { ButtonDirective } from 'primeng/button';
+import { TopbarCalendarComponent } from '@/layout/component/topbar/topbar-calendar/topbar-calendar.component';
 
 // Интерфейс для данных контакта
 interface Contact {
@@ -25,7 +23,7 @@ interface Contact {
 @Component({
     selector: 'app-topbar',
     standalone: true,
-    imports: [RouterModule, CommonModule, StyleClassModule, ProfileMenu, PopoverModule, TableModule, ToastModule, DatePicker, FormsModule, AppConfigurator, ButtonDirective],
+    imports: [RouterModule, CommonModule, StyleClassModule, ProfileMenu, PopoverModule, TableModule, ToastModule, FormsModule, AppConfigurator, ButtonDirective, TopbarCalendarComponent],
     providers: [MessageService], // Добавляем сервис для уведомлений
     template: ` <div class="layout-topbar">
         <div class="layout-topbar-logo-container">
@@ -81,32 +79,7 @@ interface Contact {
 
             <div class="layout-topbar-menu hidden lg:block">
                 <div class="layout-topbar-menu-content">
-                    <button type="button" class="layout-topbar-action" (click)="calendarPopover.toggle($event)">
-                        <i class="pi pi-calendar"></i>
-                        <span>Календарь</span>
-                    </button>
-                    <p-popover #calendarPopover [style]="{ width: '350px' }">
-                        <ng-template pTemplate="content">
-                            <p-date-picker [(ngModel)]="selectedDate" (onSelect)="onDateSelect($event)" [inline]="true" fluid>
-                                <ng-template pTemplate="date" let-date>
-                                    <span [ngClass]="{ 'bg-primary text-primary-contrast rounded-full !w-8 !h-8 flex items-center justify-center': hasEvents(date.day, date.month, date.year) }">{{ date.day }}</span>
-                                </ng-template>
-                            </p-date-picker>
-                            <div class="p-4 border-t border-surface">
-                                <div class="font-semibold mb-2">
-                                    События на {{ selectedDate | date: 'dd.MM.yyyy' }}
-                                    :
-                                </div>
-                                @if (selectedDayEvents().length > 0) {
-                                    @for (event of selectedDayEvents(); track event.id) {
-                                        <div class="mb-2">{{ event.title }} ({{ event.date | date: 'HH:mm' }})</div>
-                                    }
-                                } @else {
-                                    <div>Нет событий</div>
-                                }
-                            </div>
-                        </ng-template>
-                    </p-popover>
+                    <app-topbar-calendar></app-topbar-calendar>
                     <button type="button" class="layout-topbar-action">
                         <i class="pi pi-inbox"></i>
                         <span>Messages</span>
@@ -152,11 +125,6 @@ export class AppTopbar implements OnInit {
 
     layoutService = inject(LayoutService);
     messageService = inject(MessageService);
-    eventService = inject(EventService);
-
-    allEvents = this.eventService.getEvents();
-    selectedDate: Date = new Date();
-    selectedDayEvents = signal<CalendarEvent[]>([]);
 
     ngOnInit() {
         // Заполняем таблицу демонстрационными данными
@@ -169,26 +137,9 @@ export class AppTopbar implements OnInit {
             { id: '1005', name: 'Атаханов Махаммад Исмаилович', phoneNumber: '+998006667788' },
             { id: '1006', name: 'Зокиров Авазбек Зокиржон угли', phoneNumber: '+998007778899' }
         ];
-        this.onDateSelect(this.selectedDate);
     }
 
     toggleDarkMode() {
         this.layoutService.layoutConfig.update((state) => ({ ...state, darkTheme: !state.darkTheme }));
-    }
-
-    hasEvents(day: number, month: number, year: number): boolean {
-        const date = new Date(year, month, day);
-        return this.allEvents().some((event) => isSameDay(event.date, date));
-    }
-
-    onDateSelect(date: Date) {
-        this.selectedDate = date;
-        this.selectedDayEvents.set(this.getEventsForDate(date));
-    }
-
-    private getEventsForDate(date: Date): CalendarEvent[] {
-        return this.allEvents()
-            .filter((event) => isSameDay(event.date, date))
-            .sort((a, b) => a.date.getTime() - b.date.getTime());
     }
 }

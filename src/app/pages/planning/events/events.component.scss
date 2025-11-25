@@ -1,0 +1,110 @@
+:host {
+    ::ng-deep {
+        // Table styling
+        .p-datatable {
+            .p-datatable-thead > tr > th {
+                background-color: var(--surface-50);
+                font-weight: 600;
+            }
+
+            .p-datatable-tbody > tr {
+                transition: background-color 0.2s;
+
+                &:hover {
+                    background-color: var(--surface-hover);
+                }
+            }
+        }
+
+        // Dialog styling
+        .p-dialog {
+            .p-dialog-header {
+                padding: 1.5rem;
+            }
+
+            .p-dialog-content {
+                padding: 0 1.5rem 1.5rem;
+            }
+        }
+
+        // Form field styling
+        .field {
+            label {
+                color: var(--text-color);
+                font-size: 0.875rem;
+
+                .text-red-500 {
+                    color: #ef4444;
+                }
+            }
+
+            input, textarea, .p-dropdown, .p-calendar, .p-autocomplete {
+                width: 100%;
+            }
+
+            small.text-red-500 {
+                display: block;
+                margin-top: 0.25rem;
+                color: #ef4444;
+                font-size: 0.75rem;
+            }
+        }
+
+        // File upload styling
+        .p-fileupload {
+            .p-fileupload-buttonbar {
+                background-color: transparent;
+                border: 2px dashed var(--surface-border);
+                border-radius: 8px;
+                padding: 2rem;
+                text-align: center;
+                transition: border-color 0.2s, background-color 0.2s;
+
+                &:hover {
+                    border-color: var(--primary-color);
+                    background-color: var(--surface-hover);
+                }
+            }
+
+            .p-fileupload-content {
+                display: none;
+            }
+        }
+
+        // Mobile responsive adjustments
+        @media (max-width: 768px) {
+            .p-dialog {
+                width: 95vw !important;
+                max-width: 95vw !important;
+            }
+
+            .p-datatable {
+                font-size: 0.875rem;
+
+                .p-datatable-tbody > tr > td {
+                    padding: 0.5rem;
+                }
+            }
+        }
+
+        // Tag styling for status
+        .p-tag {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+        }
+
+        // Button group styling
+        .flex.gap-2 {
+            gap: 0.5rem;
+        }
+
+        // Autocomplete dropdown
+        .p-autocomplete-panel {
+            .p-autocomplete-items {
+                .p-autocomplete-item {
+                    padding: 0.75rem 1rem;
+                }
+            }
+        }
+    }
+}
