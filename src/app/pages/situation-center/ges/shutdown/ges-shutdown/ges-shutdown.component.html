@@ -50,6 +50,11 @@
                 <p-sortIcon field="idle_discharge_voleme"></p-sortIcon>
             </th>
 
+            <th pSortableColumn="created_by.name">
+                Создал
+                <p-sortIcon field="created_by.name"></p-sortIcon>
+            </th>
+
             @if (authService.isSc()) {
                 <th style="width: 10%">Действия</th>
             }
@@ -76,6 +81,9 @@
                 <td>
                     {{ shutdown.idle_discharge_volume | number: '1.0-2' }}
                 </td>
+                <td>
+                    {{ shutdown.created_by?.name }}
+                </td>
                 @if (authService.isSc()) {
                     <td>
                         <p-button
@@ -101,7 +109,7 @@
 
     <ng-template pTemplate="emptymessage">
         <tr>
-            <td [attr.colspan]="authService.isSc() ? 7 : 6" class="text-center">
+            <td [attr.colspan]="authService.isSc() ? 8 : 7" class="text-center">
                 Аварийные отключения за выбранную дату не найдены.
             </td>
         </tr>
@@ -155,6 +163,11 @@
                 <p-sortIcon field="idle_discharge_voleme"></p-sortIcon>
             </th>
 
+            <th pSortableColumn="created_by.name">
+                Создал
+                <p-sortIcon field="created_by.name"></p-sortIcon>
+            </th>
+
             @if (authService.isSc()) {
                 <th style="width: 10%">Действия</th>
             }
@@ -181,6 +194,9 @@
             <td>
                 {{ shutdown.idle_discharge_volume | number: '1.0-2' }}
             </td>
+            <td>
+                {{ shutdown.created_by?.name }}
+            </td>
             @if (authService.isSc()) {
                 <td>
                     <p-button
@@ -206,7 +222,7 @@
 
     <ng-template pTemplate="emptymessage">
         <tr>
-            <td [attr.colspan]="authService.isSc() ? 7 : 6" class="text-center">
+            <td [attr.colspan]="authService.isSc() ? 8 : 7" class="text-center">
                 Аварийные отключения за выбранную дату не найдены.
             </td>
         </tr>
@@ -260,6 +276,11 @@
                 <p-sortIcon field="idle_discharge_voleme"></p-sortIcon>
             </th>
 
+            <th pSortableColumn="created_by.name">
+                Создал
+                <p-sortIcon field="created_by.name"></p-sortIcon>
+            </th>
+
             @if (authService.isSc()) {
                 <th style="width: 10%">Действия</th>
             }
@@ -286,6 +307,9 @@
             <td>
                 {{ shutdown.idle_discharge_volume | number: '1.0-2' }}
             </td>
+            <td>
+                {{ shutdown.created_by?.name }}
+            </td>
             @if (authService.isSc()) {
                 <td>
                     <p-button
@@ -311,7 +335,7 @@
 
     <ng-template pTemplate="emptymessage">
         <tr>
-            <td [attr.colspan]="authService.isSc() ? 7 : 6" class="text-center">
+            <td [attr.colspan]="authService.isSc() ? 8 : 7" class="text-center">
                 Аварийные отключения за выбранную дату не найдены.
             </td>
         </tr>

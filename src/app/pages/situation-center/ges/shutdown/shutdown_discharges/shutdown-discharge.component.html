@@ -27,6 +27,7 @@
             <th pSortableColumn="flow_rate">Поток, м³/с</th>
             <th pSortableColumn="total_volume">Объём, млн. м³</th>
             <th pSortableColumn="reason">Причина</th>
+            <th pSortableColumn="created_by.name">Создал</th>
             @if (authService.isSc()) {
                 <th style="width: 10%">Действия</th>
             }
@@ -41,6 +42,7 @@
             <td>{{ discharge.flow_rate | number: '1.0-2' }}</td>
             <td>{{ discharge.total_volume | number: '1.2-2' }}</td>
             <td>{{ discharge.reason || '-' }}</td>
+            <td>{{ discharge.created_by?.name }}</td>
             @if (authService.isSc()) {
                 <td>
                     <p-button
@@ -66,7 +68,7 @@
 
     <ng-template pTemplate="emptymessage">
         <tr>
-            <td [attr.colspan]="authService.isSc() ? 7 : 6" class="text-center">
+            <td [attr.colspan]="authService.isSc() ? 8 : 7" class="text-center">
                 Водосбросы за выбранную дату не найдены.
             </td>
         </tr>

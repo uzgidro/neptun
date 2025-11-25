@@ -32,6 +32,10 @@
                 Описание
             </th>
 
+            <th style="width: 15%">
+                Создал
+            </th>
+
             @if (authService.isSc()) {
                 <th style="width: 10%">
                     Действия
@@ -50,6 +54,9 @@
             </td>
             <td>
                 {{ incident.description }}
+            </td>
+            <td>
+                {{ incident.created_by?.name }}
             </td>
             @if (authService.isSc()) {
                 <td>
@@ -76,7 +83,7 @@
 
     <ng-template pTemplate="emptymessage">
         <tr>
-            <td [attr.colspan]="authService.isSc() ? 4 : 3" class="text-center">
+            <td [attr.colspan]="authService.isSc() ? 5 : 4" class="text-center">
                 Инциденты за выбранную дату не найдены.
             </td>
         </tr>

@@ -1,3 +1,5 @@
+import { UserShortInfo } from '@/core/interfaces/users';
+
 export interface GesShutdownPayload {
     organization_id?: number;
     start_time?: string;
@@ -14,8 +16,7 @@ export interface ShutdownResponse {
     started_at: string;
     ended_at: string | null;
     reason: string | null;
-    created_by_user: string;
-    created_by_user_id: number;
+    created_by: UserShortInfo;
     generation_loss: number | null;
     created_at: string;
     idle_discharge_volume: number | null;
@@ -34,8 +35,7 @@ export interface ShutdownDto {
     started_at: Date;
     ended_at: Date | null;
     reason: string | null;
-    created_by_user: string;
-    created_by_user_id: number;
+    created_by: UserShortInfo;
     generation_loss: number | null;
     created_at: Date;
     idle_discharge_volume: number | null;
