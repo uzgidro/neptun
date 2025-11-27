@@ -31,7 +31,7 @@ interface Contact {
                 <i class="pi pi-bars"></i>
             </button>
             <a class="layout-topbar-logo" routerLink="/">
-                <img ngSrc="/images/logo-x.png" alt="" width="52" height="48" />
+                <img ngSrc="/images/logo-x.png" alt="" width="52" height="22" />
                 <span>Планшет председателя</span>
             </a>
         </div>
