@@ -9,11 +9,12 @@ import { RippleModule } from 'primeng/ripple';
 import { AppFloatingConfigurator } from '@/layout/component/app.floatingconfigurator';
 import { AuthService } from '@/core/services/auth.service';
 import { finalize } from 'rxjs';
+import { NgOptimizedImage } from '@angular/common';
 
 @Component({
     selector: 'app-login',
     standalone: true,
-    imports: [ButtonModule, CheckboxModule, InputTextModule, PasswordModule, FormsModule, RouterModule, RippleModule, AppFloatingConfigurator],
+    imports: [ButtonModule, CheckboxModule, InputTextModule, PasswordModule, FormsModule, RouterModule, RippleModule, AppFloatingConfigurator, NgOptimizedImage],
     templateUrl: 'login.component.html'
 })
 export class LoginComponent {
