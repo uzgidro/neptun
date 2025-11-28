@@ -1,4 +1,4 @@
-import { Injectable, effect, signal, computed } from '@angular/core';
+import { computed, effect, Injectable, signal } from '@angular/core';
 import { Subject } from 'rxjs';
 
 export interface layoutConfig {
@@ -26,12 +26,10 @@ interface MenuChangeEvent {
     providedIn: 'root'
 })
 export class LayoutService {
-    private readonly STORAGE_KEY = 'layout_config';
-
-    _config: layoutConfig = this.loadConfigFromStorage() || {
+    _config: layoutConfig = {
         preset: 'Aura',
         primary: 'sky',
-        surface: null,
+        surface: 'slate',
         darkTheme: true,
         menuMode: 'static'
     };
@@ -170,28 +168,7 @@ export class LayoutService {
 
     onConfigUpdate() {
         this._config = { ...this.layoutConfig() };
-        this.saveConfigToStorage(this._config);
         this.configUpdate.next(this.layoutConfig());
-    }
-
-    private loadConfigFromStorage(): layoutConfig | null {
-        try {
-            const stored = window.localStorage.getItem(this.STORAGE_KEY);
-            if (stored) {
-                return JSON.parse(stored);
-            }
-        } catch (error) {
-            console.error('Error loading theme config from localStorage:', error);
-        }
-        return null;
-    }
-
-    private saveConfigToStorage(config: layoutConfig): void {
-        try {
-            window.localStorage.setItem(this.STORAGE_KEY, JSON.stringify(config));
-        } catch (error) {
-            console.error('Error saving theme config to localStorage:', error);
-        }
     }
 
     onMenuStateChange(event: MenuChangeEvent) {
