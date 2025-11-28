@@ -25,9 +25,10 @@ export class FileUploadComponent {
     @Output() removeFile = new EventEmitter<number>();
 
     onFileSelect(event: any) {
-        const files = Array.from(event.files || event.currentFiles || []) as File[];
-        this.filesSelected.emit(files);
-        this.filesChange.emit(files);
+        const newFiles = Array.from(event.files || event.currentFiles || []) as File[];
+        const updatedFiles = [...this.files, ...newFiles];
+        this.filesSelected.emit(updatedFiles);
+        this.filesChange.emit(updatedFiles);
     }
 
     onRemoveFile(index: number) {
@@ -36,6 +37,10 @@ export class FileUploadComponent {
     }
 
     formatFileSize(bytes: number): string {
-        return (bytes / 1024 / 1024).toFixed(2);
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
     }
 }
