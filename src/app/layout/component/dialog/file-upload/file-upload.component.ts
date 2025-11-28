@@ -61,20 +61,32 @@ export class FileUploadComponent {
 
         try {
             const clipboardItems = await navigator.clipboard.read();
+            let hasFiles = false;
+
             for (const clipboardItem of clipboardItems) {
                 for (const type of clipboardItem.types) {
-                    if (type.startsWith('image/')) {
-                        const blob = await clipboardItem.getType(type);
-                        const file = new File([blob], `clipboard-${Date.now()}.png`, { type });
-                        this.addClipboardFile(file);
-                    }
+                    // Handle any file type
+                    const blob = await clipboardItem.getType(type);
+                    const extension = this.getExtensionFromMimeType(type);
+                    const fileName = `clipboard-${Date.now()}${extension}`;
+                    const file = new File([blob], fileName, { type });
+                    this.addClipboardFile(file);
+                    hasFiles = true;
                 }
+            }
+
+            if (!hasFiles) {
+                this.messageService.add({
+                    severity: 'warn',
+                    summary: 'Буфер обмена пуст',
+                    detail: 'В буфере обмена нет файлов'
+                });
             }
         } catch (err) {
             this.messageService.add({
                 severity: 'error',
                 summary: 'Ошибка',
-                detail: 'Не удалось получить изображение из буфера обмена'
+                detail: 'Не удалось получить файл из буфера обмена'
             });
         }
     }
@@ -83,13 +95,23 @@ export class FileUploadComponent {
         if (!clipboardData) return;
 
         const items = clipboardData.items;
+        const files = clipboardData.files;
+
+        // Try to get files from DataTransferItemList first
         for (let i = 0; i < items.length; i++) {
             const item = items[i];
-            if (item.type.startsWith('image/')) {
+            if (item.kind === 'file') {
                 const file = item.getAsFile();
                 if (file) {
                     this.addClipboardFile(file);
                 }
+            }
+        }
+
+        // Fallback to FileList if no files found
+        if (items.length === 0 && files.length > 0) {
+            for (let i = 0; i < files.length; i++) {
+                this.addClipboardFile(files[i]);
             }
         }
     }
@@ -108,11 +130,34 @@ export class FileUploadComponent {
         const updatedFiles = [...this.files, file];
         this.filesSelected.emit(updatedFiles);
         this.filesChange.emit(updatedFiles);
+    }
 
-        this.messageService.add({
-            severity: 'success',
-            summary: 'Изображение добавлено',
-            detail: `${file.name} (${this.formatFileSize(file.size)})`
-        });
+    private getExtensionFromMimeType(mimeType: string): string {
+        const mimeToExt: { [key: string]: string } = {
+            'image/png': '.png',
+            'image/jpeg': '.jpg',
+            'image/jpg': '.jpg',
+            'image/gif': '.gif',
+            'image/webp': '.webp',
+            'image/svg+xml': '.svg',
+            'application/pdf': '.pdf',
+            'application/msword': '.doc',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document': '.docx',
+            'application/vnd.ms-excel': '.xls',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': '.xlsx',
+            'application/vnd.ms-powerpoint': '.ppt',
+            'application/vnd.openxmlformats-officedocument.presentationml.presentation': '.pptx',
+            'text/plain': '.txt',
+            'text/csv': '.csv',
+            'application/zip': '.zip',
+            'application/x-rar-compressed': '.rar',
+            'application/x-7z-compressed': '.7z',
+            'video/mp4': '.mp4',
+            'video/mpeg': '.mpeg',
+            'audio/mpeg': '.mp3',
+            'audio/wav': '.wav'
+        };
+
+        return mimeToExt[mimeType] || '.bin';
     }
 }
