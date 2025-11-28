@@ -7,7 +7,7 @@ import { MessageService, PrimeTemplate } from 'primeng/api';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { TextareaComponent } from '@/layout/component/dialog/textarea/textarea.component';
-import { AddVisitRequest, EditVisitRequest, VisitDto } from '@/core/interfaces/visits';
+import { VisitDto } from '@/core/interfaces/visits';
 import { VisitService } from '@/core/services/visit.service';
 import { Organization } from '@/core/interfaces/organizations';
 import { TooltipModule } from 'primeng/tooltip';
@@ -185,7 +185,7 @@ export class VisitComponent implements OnInit, OnChanges {
         this.isLoading = false;
         this.selectedFiles = [];
         // Initialize with all existing file IDs
-        this.existingFilesToKeep = visit.files?.map(f => f.id) || [];
+        this.existingFilesToKeep = visit.files?.map((f) => f.id) || [];
 
         let organizationToSet: any = null;
         if (visit.id && this.organizations) {
@@ -215,10 +215,10 @@ export class VisitComponent implements OnInit, OnChanges {
     }
 
     removeExistingFile(fileId: number) {
-        this.existingFilesToKeep = this.existingFilesToKeep.filter(id => id !== fileId);
+        this.existingFilesToKeep = this.existingFilesToKeep.filter((id) => id !== fileId);
         // Also remove from current visit's files for UI update
         if (this.currentVisit?.files) {
-            this.currentVisit.files = this.currentVisit.files.filter(f => f.id !== fileId);
+            this.currentVisit.files = this.currentVisit.files.filter((f) => f.id !== fileId);
         }
     }
 

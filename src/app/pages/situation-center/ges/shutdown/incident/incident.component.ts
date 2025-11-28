@@ -201,9 +201,7 @@ export class IncidentComponent implements OnInit, OnChanges {
         this.isLoading = false;
         this.selectedFiles = [];
         // Initialize with all existing file IDs
-        this.existingFilesToKeep = incident.files?.map(f => f.id) || [];
-
-        console.log(incident);
+        this.existingFilesToKeep = incident.files?.map((f) => f.id) || [];
 
         let organizationToSet: any = null;
         const appliesToAll = !incident.id;
@@ -235,10 +233,10 @@ export class IncidentComponent implements OnInit, OnChanges {
     }
 
     removeExistingFile(fileId: number) {
-        this.existingFilesToKeep = this.existingFilesToKeep.filter(id => id !== fileId);
+        this.existingFilesToKeep = this.existingFilesToKeep.filter((id) => id !== fileId);
         // Also remove from current incident's files for UI update
         if (this.currentIncident?.files) {
-            this.currentIncident.files = this.currentIncident.files.filter(f => f.id !== fileId);
+            this.currentIncident.files = this.currentIncident.files.filter((f) => f.id !== fileId);
         }
     }
 

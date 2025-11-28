@@ -1,6 +1,6 @@
 @if (authService.isSc()) {
     <div class="mb-6">
-        <p-button label="Создать Событие" icon="pi pi-plus" (click)="openNew()" />
+        <p-button label="Добавить аварийное отключение" icon="pi pi-plus" (click)="openNew()" />
     </div>
 }
 
@@ -65,65 +65,65 @@
         </tr>
     </ng-template>
 
-        <ng-template pTemplate="body" let-shutdown>
-            <tr>
-                <td>
-                    {{ shutdown.organization_name }}
-                </td>
-                <td>
-                    {{ shutdown.started_at | date: 'HH:mm dd.MM.yyyy' }}
-                </td>
-                <td>
-                    {{ shutdown.ended_at | date: 'HH:mm dd.MM.yyyy' }}
-                </td>
-                <td>
-                    {{ shutdown.reason }}
-                </td>
-                <td>
-                    {{ shutdown.generation_loss }}
-                </td>
-                <td>
-                    {{ shutdown.idle_discharge_volume | number: '1.0-2' }}
-                </td>
-                <td>
-                    {{ shutdown.created_by?.name }}
-                </td>
-                <td>
-                    @if (shutdown.files && shutdown.files.length > 0) {
-                        <p-button
-                            [label]="shutdown.files.length.toString()"
-                            icon="pi pi-paperclip"
-                            severity="secondary"
-                            [text]="true"
-                            (click)="showFiles(shutdown)"
-                            pTooltip="Просмотр файлов"
-                        />
-                    } @else {
-                        <span class="text-color-secondary">—</span>
-                    }
-                </td>
-                @if (authService.isSc()) {
-                    <td>
-                        <p-button
-                            icon="pi pi-pencil"
-                            severity="info"
-                            [text]="true"
-                            [rounded]="true"
-                            (click)="editShutdown(shutdown)"
-                            pTooltip="Редактировать"
-                        />
-                        <p-button
-                            icon="pi pi-trash"
-                            severity="danger"
-                            [text]="true"
-                            [rounded]="true"
-                            (click)="deleteShutdown(shutdown.id)"
-                            pTooltip="Удалить"
-                        />
-                    </td>
+    <ng-template pTemplate="body" let-shutdown>
+        <tr>
+            <td>
+                {{ shutdown.organization_name }}
+            </td>
+            <td>
+                {{ shutdown.started_at | date: 'HH:mm dd.MM.yyyy' }}
+            </td>
+            <td>
+                {{ shutdown.ended_at | date: 'HH:mm dd.MM.yyyy' }}
+            </td>
+            <td>
+                {{ shutdown.reason }}
+            </td>
+            <td>
+                {{ shutdown.generation_loss }}
+            </td>
+            <td>
+                {{ shutdown.idle_discharge_volume | number: '1.0-2' }}
+            </td>
+            <td>
+                {{ shutdown.created_by?.name }}
+            </td>
+            <td>
+                @if (shutdown.files && shutdown.files.length > 0) {
+                    <p-button
+                        [label]="shutdown.files.length.toString()"
+                        icon="pi pi-paperclip"
+                        severity="secondary"
+                        [text]="true"
+                        (click)="showFiles(shutdown)"
+                        pTooltip="Просмотр файлов"
+                    />
+                } @else {
+                    <span class="text-color-secondary">—</span>
                 }
-            </tr>
-        </ng-template>
+            </td>
+            @if (authService.isSc()) {
+                <td>
+                    <p-button
+                        icon="pi pi-pencil"
+                        severity="info"
+                        [text]="true"
+                        [rounded]="true"
+                        (click)="editShutdown(shutdown)"
+                        pTooltip="Редактировать"
+                    />
+                    <p-button
+                        icon="pi pi-trash"
+                        severity="danger"
+                        [text]="true"
+                        [rounded]="true"
+                        (click)="deleteShutdown(shutdown.id)"
+                        pTooltip="Удалить"
+                    />
+                </td>
+            }
+        </tr>
+    </ng-template>
 
     <ng-template pTemplate="emptymessage">
         <tr>
@@ -442,15 +442,15 @@
             label="Потерянная мощность"
             formControlName="generation_loss"
             [submitted]="submitted"
-            [required]="false"
-        ></app-input-number>
+            [required]="false">
+        </app-input-number>
 
         <app-input-number
             label="Холостой сброс, тыс. м³"
             formControlName="idle_discharge_volume"
             [submitted]="submitted"
-            [required]="false"
-        ></app-input-number>
+            [required]="false">
+        </app-input-number>
 
         @if (isEditMode && currentShutdown?.files && (currentShutdown?.files?.length ?? 0) > 0) {
             <div class="mb-4">

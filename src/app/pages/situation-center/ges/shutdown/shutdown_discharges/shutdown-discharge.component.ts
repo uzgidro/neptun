@@ -4,7 +4,7 @@ import { MessageService, PrimeTemplate } from 'primeng/api';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { DischargeService } from '@/core/services/discharge.service';
-import { IdleDischargeResponse, WaterDischargePayload } from '@/core/interfaces/discharge';
+import { IdleDischargeResponse } from '@/core/interfaces/discharge';
 import { Button } from 'primeng/button';
 import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
 import { GroupSelectComponent } from '@/layout/component/dialog/group-select/group-select.component';
@@ -21,7 +21,22 @@ import { FileViewerComponent } from '@/layout/component/dialog/file-viewer/file-
 
 @Component({
     selector: 'app-shutdown-discharge',
-    imports: [DatePipe, PrimeTemplate, ReactiveFormsModule, TableModule, DecimalPipe, Button, DialogComponent, GroupSelectComponent, DatePickerComponent, InputNumberdComponent, TextareaComponent, TooltipModule, FileUploadComponent, FileViewerComponent],
+    imports: [
+        DatePipe,
+        PrimeTemplate,
+        ReactiveFormsModule,
+        TableModule,
+        DecimalPipe,
+        Button,
+        DialogComponent,
+        GroupSelectComponent,
+        DatePickerComponent,
+        InputNumberdComponent,
+        TextareaComponent,
+        TooltipModule,
+        FileUploadComponent,
+        FileViewerComponent
+    ],
     templateUrl: './shutdown-discharge.component.html',
     styleUrl: './shutdown-discharge.component.scss'
 })
@@ -205,7 +220,7 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
         this.isLoading = false;
         this.selectedFiles = [];
         // Initialize with all existing file IDs
-        this.existingFilesToKeep = discharge.files?.map(f => f.id) || [];
+        this.existingFilesToKeep = discharge.files?.map((f) => f.id) || [];
 
         // Reset form first to clear any previous state
         this.form.reset();
@@ -246,10 +261,10 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
     }
 
     removeExistingFile(fileId: number) {
-        this.existingFilesToKeep = this.existingFilesToKeep.filter(id => id !== fileId);
+        this.existingFilesToKeep = this.existingFilesToKeep.filter((id) => id !== fileId);
         // Also remove from current discharge's files for UI update
         if (this.currentDischarge?.files) {
-            this.currentDischarge.files = this.currentDischarge.files.filter(f => f.id !== fileId);
+            this.currentDischarge.files = this.currentDischarge.files.filter((f) => f.id !== fileId);
         }
     }
 
@@ -263,7 +278,7 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
         const k = 1024;
         const sizes = ['Bytes', 'KB', 'MB', 'GB'];
         const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+        return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
     }
 
     deleteDischarge(discharge: IdleDischargeResponse) {
