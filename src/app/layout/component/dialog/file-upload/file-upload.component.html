@@ -1,32 +1,53 @@
 <div class="mb-4">
     <label class="block mb-2 font-semibold">{{ label }}</label>
 
-    <div class="hidden md:block">
-        <p-fileupload
-            mode="basic"
-            [multiple]="multiple"
-            [auto]="false"
-            [showUploadButton]="showUploadButton"
-            chooseLabel="Выбрать файлы или перетащите сюда"
-            (onSelect)="onFileSelect($event)"
-            [maxFileSize]="maxFileSize"
-            [accept]="accept"
-        ></p-fileupload>
+    <div class="flex gap-2 flex-wrap">
+        <!-- Desktop: File upload -->
+        <div class="hidden md:block">
+            <p-fileupload
+                mode="basic"
+                [multiple]="multiple"
+                [auto]="false"
+                [showUploadButton]="showUploadButton"
+                chooseLabel="Выбрать файлы или перетащите сюда"
+                (onSelect)="onFileSelect($event)"
+                [maxFileSize]="maxFileSize"
+                [accept]="accept"
+            ></p-fileupload>
+        </div>
+
+        <!-- Mobile: Button only -->
+        <div class="block md:hidden">
+            <p-fileupload
+                mode="basic"
+                [multiple]="multiple"
+                [auto]="false"
+                [showUploadButton]="showUploadButton"
+                chooseLabel="Выбрать файлы"
+                (onSelect)="onFileSelect($event)"
+                [maxFileSize]="maxFileSize"
+                [accept]="accept"
+            ></p-fileupload>
+        </div>
+
+        <!-- Clipboard paste button -->
+        @if (enableClipboard) {
+            <p-button
+                label="Вставить из буфера обмена"
+                icon="pi pi-clipboard"
+                severity="secondary"
+                [outlined]="true"
+                (onClick)="pasteFromClipboard()"
+                pTooltip="Ctrl+V или нажмите, чтобы вставить файл из буфера обмена"
+            />
+        }
     </div>
 
-    <!-- Mobile: Button only -->
-    <div class="block md:hidden">
-        <p-fileupload
-            mode="basic"
-            [multiple]="multiple"
-            [auto]="false"
-            [showUploadButton]="showUploadButton"
-            chooseLabel="Выбрать файлы"
-            (onSelect)="onFileSelect($event)"
-            [maxFileSize]="maxFileSize"
-            [accept]="accept"
-        ></p-fileupload>
-    </div>
+    @if (enableClipboard) {
+        <div class="mt-2 text-sm text-color-secondary">
+            <i class="pi pi-info-circle"></i> Вы можете вставить файл нажав Ctrl+V
+        </div>
+    }
 
     <!-- Selected files list -->
     @if (files.length > 0) {
