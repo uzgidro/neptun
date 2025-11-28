@@ -7,7 +7,7 @@ import { MessageService, PrimeTemplate } from 'primeng/api';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { TextareaComponent } from '@/layout/component/dialog/textarea/textarea.component';
-import { AddVisitRequest, EditVisitRequest, VisitDto } from '@/core/interfaces/visits';
+import { VisitDto } from '@/core/interfaces/visits';
 import { VisitService } from '@/core/services/visit.service';
 import { Organization } from '@/core/interfaces/organizations';
 import { TooltipModule } from 'primeng/tooltip';
@@ -15,10 +15,12 @@ import { InputTextComponent } from '@/layout/component/dialog/input-text/input-t
 import { AuthService } from '@/core/services/auth.service';
 import { OrganizationService } from '@/core/services/organization.service';
 import { SelectComponent } from '@/layout/component/dialog/select/select.component';
+import { FileUploadComponent } from '@/layout/component/dialog/file-upload/file-upload.component';
+import { FileViewerComponent } from '@/layout/component/dialog/file-viewer/file-viewer.component';
 
 @Component({
     selector: 'app-visit',
-    imports: [Button, DatePickerComponent, DatePipe, DialogComponent, PrimeTemplate, ReactiveFormsModule, TableModule, TextareaComponent, TooltipModule, InputTextComponent, SelectComponent],
+    imports: [Button, DatePickerComponent, DatePipe, DialogComponent, PrimeTemplate, ReactiveFormsModule, TableModule, TextareaComponent, TooltipModule, InputTextComponent, SelectComponent, FileUploadComponent, FileViewerComponent],
     templateUrl: './visit.component.html',
     styleUrl: './visit.component.scss'
 })
@@ -42,6 +44,13 @@ export class VisitComponent implements OnInit, OnChanges {
     private organizationService: OrganizationService = inject(OrganizationService);
     private visitService: VisitService = inject(VisitService);
     private messageService: MessageService = inject(MessageService);
+
+    // File handling
+    selectedFiles: File[] = [];
+    currentVisit: VisitDto | null = null;
+    showFilesDialog: boolean = false;
+    selectedVisitForFiles: VisitDto | null = null;
+    existingFilesToKeep: number[] = [];
 
     ngOnInit(): void {
         this.form = this.fb.group({
@@ -85,16 +94,33 @@ export class VisitComponent implements OnInit, OnChanges {
 
         this.isLoading = true;
         const rawPayload = this.form.getRawValue();
+        const formData = new FormData();
+
+        if (rawPayload.organization) {
+            formData.append('organization_id', rawPayload.organization.id.toString());
+        }
+        if (rawPayload.visit_date) {
+            formData.append('visit_date', rawPayload.visit_date.toISOString());
+        }
+        if (rawPayload.description) {
+            formData.append('description', rawPayload.description);
+        }
+        if (rawPayload.responsible_name) {
+            formData.append('responsible_name', rawPayload.responsible_name);
+        }
+
+        // Add new files
+        this.selectedFiles.forEach((file) => {
+            formData.append('files', file, file.name);
+        });
+
+        // Add existing file IDs to keep (in edit mode)
+        if (this.isEditMode) {
+            formData.append('file_ids', this.existingFilesToKeep.join(','));
+        }
 
         if (this.isEditMode && this.currentVisitId) {
-            const payload: EditVisitRequest = {};
-
-            if (rawPayload.organization) payload.organization_id = rawPayload.organization.id;
-            if (rawPayload.visit_date) payload.visit_date = rawPayload.visit_date.toISOString();
-            if (rawPayload.description) payload.description = rawPayload.description;
-            if (rawPayload.responsible_name) payload.responsible_name = rawPayload.responsible_name;
-
-            this.visitService.editVisit(this.currentVisitId, payload).subscribe({
+            this.visitService.editVisit(this.currentVisitId, formData).subscribe({
                 next: () => {
                     this.messageService.add({ severity: 'success', summary: 'Визит обновлен' });
                     this.closeDialog();
@@ -109,14 +135,7 @@ export class VisitComponent implements OnInit, OnChanges {
                 }
             });
         } else {
-            const payload: AddVisitRequest = {
-                organization_id: rawPayload.organization.id,
-                visit_date: rawPayload.visit_date.toISOString(),
-                description: rawPayload.description,
-                responsible_name: rawPayload.responsible_name
-            };
-
-            this.visitService.addVisit(payload).subscribe({
+            this.visitService.addVisit(formData).subscribe({
                 next: () => {
                     this.messageService.add({ severity: 'success', summary: 'Визит добавлен' });
                     this.closeDialog();
@@ -139,6 +158,9 @@ export class VisitComponent implements OnInit, OnChanges {
         this.isLoading = false;
         this.isEditMode = false;
         this.currentVisitId = null;
+        this.currentVisit = null;
+        this.selectedFiles = [];
+        this.existingFilesToKeep = [];
         this.form.reset();
         this.loadVisits();
     }
@@ -146,7 +168,10 @@ export class VisitComponent implements OnInit, OnChanges {
     openNew() {
         this.isEditMode = false;
         this.currentVisitId = null;
+        this.currentVisit = null;
         this.form.reset();
+        this.selectedFiles = [];
+        this.existingFilesToKeep = [];
         this.submitted = false;
         this.isLoading = false;
         this.isFormOpen = true;
@@ -155,8 +180,12 @@ export class VisitComponent implements OnInit, OnChanges {
     editVisit(visit: VisitDto) {
         this.isEditMode = true;
         this.currentVisitId = visit.id;
+        this.currentVisit = visit;
         this.submitted = false;
         this.isLoading = false;
+        this.selectedFiles = [];
+        // Initialize with all existing file IDs
+        this.existingFilesToKeep = visit.files?.map((f) => f.id) || [];
 
         let organizationToSet: any = null;
         if (visit.id && this.organizations) {
@@ -174,6 +203,36 @@ export class VisitComponent implements OnInit, OnChanges {
         });
 
         this.isFormOpen = true;
+    }
+
+    // File handling methods
+    onFileSelect(files: File[]) {
+        this.selectedFiles = files;
+    }
+
+    removeFile(index: number) {
+        this.selectedFiles.splice(index, 1);
+    }
+
+    removeExistingFile(fileId: number) {
+        this.existingFilesToKeep = this.existingFilesToKeep.filter((id) => id !== fileId);
+        // Also remove from current visit's files for UI update
+        if (this.currentVisit?.files) {
+            this.currentVisit.files = this.currentVisit.files.filter((f) => f.id !== fileId);
+        }
+    }
+
+    showFiles(visit: VisitDto) {
+        this.selectedVisitForFiles = visit;
+        this.showFilesDialog = true;
+    }
+
+    formatFileSize(bytes: number): string {
+        if (!bytes || bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
     }
 
     deleteVisit(id: number) {

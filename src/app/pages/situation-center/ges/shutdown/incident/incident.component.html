@@ -1,6 +1,6 @@
 @if (authService.isSc()) {
     <div class="mb-6">
-        <p-button label="Создать Событие" icon="pi pi-plus" (click)="openNew()" />
+        <p-button label="Добавить инцидент" icon="pi pi-plus" (click)="openNew()" />
     </div>
 }
 
@@ -36,6 +36,10 @@
                 Создал
             </th>
 
+            <th style="width: 10%">
+                Файлы
+            </th>
+
             @if (authService.isSc()) {
                 <th style="width: 10%">
                     Действия
@@ -57,6 +61,20 @@
             </td>
             <td>
                 {{ incident.created_by?.name }}
+            </td>
+            <td>
+                @if (incident.files && incident.files.length > 0) {
+                    <p-button
+                        [label]="incident.files.length.toString()"
+                        icon="pi pi-paperclip"
+                        severity="secondary"
+                        [text]="true"
+                        (click)="showFiles(incident)"
+                        pTooltip="Просмотр файлов"
+                    />
+                } @else {
+                    <span class="text-color-secondary">—</span>
+                }
             </td>
             @if (authService.isSc()) {
                 <td>
@@ -83,7 +101,7 @@
 
     <ng-template pTemplate="emptymessage">
         <tr>
-            <td [attr.colspan]="authService.isSc() ? 5 : 4" class="text-center">
+            <td [attr.colspan]="authService.isSc() ? 6 : 5" class="text-center">
                 Инциденты за выбранную дату не найдены.
             </td>
         </tr>
@@ -133,6 +151,48 @@
             [required]="false">
         </app-textarea>
 
+        @if (isEditMode && currentIncident?.files && (currentIncident?.files?.length ?? 0) > 0) {
+            <div class="mb-4">
+                <label class="block text-sm font-medium mb-2">Существующие файлы</label>
+                <div class="flex flex-col gap-2">
+                    @for (file of currentIncident?.files; track file.id) {
+                        <div class="flex justify-between items-center p-2 rounded"
+                             style="background-color: var(--surface-50);">
+                            <div class="flex items-center gap-2">
+                                <i class="pi pi-file"></i>
+                                <span class="text-sm">{{ file.file_name }}</span>
+                                <span class="text-sm"
+                                      style="color: var(--text-color-secondary);">({{ formatFileSize(file.size_bytes) }}
+                                    )</span>
+                            </div>
+                            <p-button
+                                icon="pi pi-times"
+                                [rounded]="true"
+                                [text]="true"
+                                severity="danger"
+                                size="small"
+                                (onClick)="removeExistingFile(file.id)"
+                                pTooltip="Удалить файл"
+                            />
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+
+        <app-file-upload
+            [label]="isEditMode ? 'Добавить новые файлы' : 'Прикрепить файлы'"
+            [files]="selectedFiles"
+            (filesChange)="onFileSelect($event)"
+            (removeFile)="removeFile($event)">
+        </app-file-upload>
+
     </form>
 
 </app-dialog>
+
+<app-file-viewer
+    [(visible)]="showFilesDialog"
+    [header]="'Файлы инцидента'"
+    [files]="selectedIncidentForFiles?.files || []">
+</app-file-viewer>

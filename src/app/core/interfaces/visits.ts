@@ -1,4 +1,5 @@
 import { UserShortInfo } from '@/core/interfaces/users';
+import { FileResponse } from '@/core/interfaces/files';
 
 export interface AddVisitRequest {
     organization_id: number;
@@ -23,6 +24,7 @@ export interface VisitResponse {
     responsible_name: string;
     created_at: string; // <-- строка
     created_by: UserShortInfo;
+    files?: FileResponse[];
 }
 
 export interface VisitDto {
@@ -34,4 +36,5 @@ export interface VisitDto {
     responsible_name: string;
     created_at: Date;
     created_by: UserShortInfo;
+    files?: FileResponse[];
 }

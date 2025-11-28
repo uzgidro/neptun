@@ -7,7 +7,7 @@ import { MessageService, PrimeTemplate } from 'primeng/api';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { TextareaComponent } from '@/layout/component/dialog/textarea/textarea.component';
-import { IncidentDto, IncidentPayload } from '@/core/interfaces/incidents';
+import { IncidentDto } from '@/core/interfaces/incidents';
 import { IncidentService } from '@/core/services/incident.service';
 import { Organization } from '@/core/interfaces/organizations';
 import { AuthService } from '@/core/services/auth.service';
@@ -15,10 +15,12 @@ import { TooltipModule } from 'primeng/tooltip';
 import { OrganizationService } from '@/core/services/organization.service';
 import { Checkbox } from 'primeng/checkbox';
 import { SelectComponent } from '@/layout/component/dialog/select/select.component';
+import { FileUploadComponent } from '@/layout/component/dialog/file-upload/file-upload.component';
+import { FileViewerComponent } from '@/layout/component/dialog/file-viewer/file-viewer.component';
 
 @Component({
     selector: 'app-incident',
-    imports: [Button, DatePickerComponent, DatePipe, DialogComponent, PrimeTemplate, ReactiveFormsModule, TableModule, TextareaComponent, TooltipModule, Checkbox, SelectComponent],
+    imports: [Button, DatePickerComponent, DatePipe, DialogComponent, PrimeTemplate, ReactiveFormsModule, TableModule, TextareaComponent, TooltipModule, Checkbox, SelectComponent, FileUploadComponent, FileViewerComponent],
     templateUrl: './incident.component.html',
     styleUrl: './incident.component.scss'
 })
@@ -43,6 +45,13 @@ export class IncidentComponent implements OnInit, OnChanges {
     private organizationService: OrganizationService = inject(OrganizationService);
     private incidentService: IncidentService = inject(IncidentService);
     private messageService: MessageService = inject(MessageService);
+
+    // File handling
+    selectedFiles: File[] = [];
+    currentIncident: IncidentDto | null = null;
+    showFilesDialog: boolean = false;
+    selectedIncidentForFiles: IncidentDto | null = null;
+    existingFilesToKeep: number[] = [];
 
     ngOnInit(): void {
         this.form = this.fb.group({
@@ -100,14 +109,30 @@ export class IncidentComponent implements OnInit, OnChanges {
 
         this.isLoading = true;
         const rawPayload = this.form.getRawValue();
-        const payload: IncidentPayload = {};
+        const formData = new FormData();
 
-        if (rawPayload.organization) payload.organization_id = rawPayload.organization.id;
-        if (rawPayload.incident_time) payload.incident_time = rawPayload.incident_time.toISOString();
-        if (rawPayload.description) payload.description = rawPayload.description;
+        if (rawPayload.organization) {
+            formData.append('organization_id', rawPayload.organization.id.toString());
+        }
+        if (rawPayload.incident_time) {
+            formData.append('incident_time', rawPayload.incident_time.toISOString());
+        }
+        if (rawPayload.description) {
+            formData.append('description', rawPayload.description);
+        }
+
+        // Add new files
+        this.selectedFiles.forEach((file) => {
+            formData.append('files', file, file.name);
+        });
+
+        // Add existing file IDs to keep (in edit mode)
+        if (this.isEditMode) {
+            formData.append('file_ids', this.existingFilesToKeep.join(','));
+        }
 
         if (this.isEditMode && this.currentIncidentId) {
-            this.incidentService.editIncident(this.currentIncidentId, payload).subscribe({
+            this.incidentService.editIncident(this.currentIncidentId, formData).subscribe({
                 next: () => {
                     this.messageService.add({ severity: 'success', summary: 'Инцидент обновлен' });
                     this.incidentSaved.emit();
@@ -123,7 +148,7 @@ export class IncidentComponent implements OnInit, OnChanges {
                 }
             });
         } else {
-            this.incidentService.addIncident(payload).subscribe({
+            this.incidentService.addIncident(formData).subscribe({
                 next: () => {
                     this.isFormOpen = false;
                     this.form.reset();
@@ -149,6 +174,9 @@ export class IncidentComponent implements OnInit, OnChanges {
         this.isLoading = false;
         this.isEditMode = false;
         this.currentIncidentId = null;
+        this.currentIncident = null;
+        this.selectedFiles = [];
+        this.existingFilesToKeep = [];
         this.form.reset();
         this.loadIncidents();
     }
@@ -156,7 +184,10 @@ export class IncidentComponent implements OnInit, OnChanges {
     openNew() {
         this.isEditMode = false;
         this.currentIncidentId = null;
+        this.currentIncident = null;
         this.form.reset();
+        this.selectedFiles = [];
+        this.existingFilesToKeep = [];
         this.submitted = false;
         this.isLoading = false;
         this.isFormOpen = true;
@@ -165,8 +196,12 @@ export class IncidentComponent implements OnInit, OnChanges {
     editIncident(incident: IncidentDto) {
         this.isEditMode = true;
         this.currentIncidentId = incident.id;
+        this.currentIncident = incident;
         this.submitted = false;
         this.isLoading = false;
+        this.selectedFiles = [];
+        // Initialize with all existing file IDs
+        this.existingFilesToKeep = incident.files?.map((f) => f.id) || [];
 
         let organizationToSet: any = null;
         const appliesToAll = !incident.id;
@@ -186,6 +221,36 @@ export class IncidentComponent implements OnInit, OnChanges {
         });
 
         this.isFormOpen = true;
+    }
+
+    // File handling methods
+    onFileSelect(files: File[]) {
+        this.selectedFiles = files;
+    }
+
+    removeFile(index: number) {
+        this.selectedFiles.splice(index, 1);
+    }
+
+    removeExistingFile(fileId: number) {
+        this.existingFilesToKeep = this.existingFilesToKeep.filter((id) => id !== fileId);
+        // Also remove from current incident's files for UI update
+        if (this.currentIncident?.files) {
+            this.currentIncident.files = this.currentIncident.files.filter((f) => f.id !== fileId);
+        }
+    }
+
+    showFiles(incident: IncidentDto) {
+        this.selectedIncidentForFiles = incident;
+        this.showFilesDialog = true;
+    }
+
+    formatFileSize(bytes: number): string {
+        if (!bytes || bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
     }
 
     deleteIncident(incident: IncidentDto) {

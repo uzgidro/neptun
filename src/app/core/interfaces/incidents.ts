@@ -1,4 +1,5 @@
 import { UserShortInfo } from '@/core/interfaces/users';
+import { FileResponse } from '@/core/interfaces/files';
 
 export interface IncidentPayload {
     organization_id?: number;
@@ -14,6 +15,7 @@ export interface IncidentResponse {
     organization_id?: number;
     organization?: string;
     created_by: UserShortInfo;
+    files?: FileResponse[];
 }
 
 export interface IncidentDto {
@@ -24,4 +26,5 @@ export interface IncidentDto {
     organization_id?: number;
     organization?: string;
     created_by: UserShortInfo;
+    files?: FileResponse[];
 }

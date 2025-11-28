@@ -20,7 +20,7 @@
         <label [for]="uniqueId">{{ label }}</label>
     </p-floatlabel>
 
-    @if (submitted && !internalValue) {
+    @if (submitted && required && !internalValue) {
         <p-message class="mt-2" severity="error" variant="simple" size="small">{{ errorMessage }}</p-message>
     }
 </div>

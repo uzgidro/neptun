@@ -11,8 +11,8 @@ const FLAT = '/flat';
     providedIn: 'root'
 })
 export class DischargeService extends ApiService {
-    addDischarge(payload: WaterDischargePayload): Observable<any> {
-        return this.http.post(BASE_URL + DISCHARGES, payload);
+    addDischarge(formData: FormData): Observable<any> {
+        return this.http.post(BASE_URL + DISCHARGES, formData);
     }
 
     getDischarges(): Observable<Cascade[]> {
@@ -28,8 +28,8 @@ export class DischargeService extends ApiService {
         return this.http.get<IdleDischargeResponse[]>(BASE_URL + DISCHARGES + FLAT, { params: params });
     }
 
-    editDischarge(id: number, payload: WaterDischargePayload): Observable<any> {
-        return this.http.patch(BASE_URL + DISCHARGES + '/' + id.toString(), payload);
+    editDischarge(id: number, formData: FormData): Observable<any> {
+        return this.http.patch(BASE_URL + DISCHARGES + '/' + id.toString(), formData);
     }
 
     approveDischarge(id: number): Observable<any> {

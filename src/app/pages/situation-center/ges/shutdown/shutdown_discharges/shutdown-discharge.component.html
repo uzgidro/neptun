@@ -1,6 +1,6 @@
 @if (authService.isSc()) {
     <div class="mb-6">
-        <p-button label="Добавить Водосброс" icon="pi pi-plus" (click)="openNew()" />
+        <p-button label="Добавить водосброс" icon="pi pi-plus" (click)="openNew()" />
     </div>
 }
 
@@ -28,6 +28,7 @@
             <th pSortableColumn="total_volume">Объём, млн. м³</th>
             <th pSortableColumn="reason">Причина</th>
             <th pSortableColumn="created_by.name">Создал</th>
+            <th style="width: 10%">Файлы</th>
             @if (authService.isSc()) {
                 <th style="width: 10%">Действия</th>
             }
@@ -43,6 +44,20 @@
             <td>{{ discharge.total_volume | number: '1.2-2' }}</td>
             <td>{{ discharge.reason || '-' }}</td>
             <td>{{ discharge.created_by?.name }}</td>
+            <td>
+                @if (discharge.files && discharge.files.length > 0) {
+                    <p-button
+                        [label]="discharge.files.length.toString()"
+                        icon="pi pi-paperclip"
+                        severity="secondary"
+                        [text]="true"
+                        (click)="showFiles(discharge)"
+                        pTooltip="Просмотр файлов"
+                    />
+                } @else {
+                    <span class="text-color-secondary">—</span>
+                }
+            </td>
             @if (authService.isSc()) {
                 <td>
                     <p-button
@@ -68,7 +83,7 @@
 
     <ng-template pTemplate="emptymessage">
         <tr>
-            <td [attr.colspan]="authService.isSc() ? 8 : 7" class="text-center">
+            <td [attr.colspan]="authService.isSc() ? 9 : 8" class="text-center">
                 Водосбросы за выбранную дату не найдены.
             </td>
         </tr>
@@ -123,6 +138,48 @@
             [required]="false">
         </app-textarea>
 
+        @if (isEditMode && currentDischarge?.files && (currentDischarge?.files?.length ?? 0) > 0) {
+            <div class="mb-4">
+                <label class="block text-sm font-medium mb-2">Существующие файлы</label>
+                <div class="flex flex-col gap-2">
+                    @for (file of currentDischarge?.files; track file.id) {
+                        <div class="flex justify-between items-center p-2 rounded"
+                             style="background-color: var(--surface-50);">
+                            <div class="flex items-center gap-2">
+                                <i class="pi pi-file"></i>
+                                <span class="text-sm">{{ file.file_name }}</span>
+                                <span class="text-sm"
+                                      style="color: var(--text-color-secondary);">({{ formatFileSize(file.size_bytes) }}
+                                    )</span>
+                            </div>
+                            <p-button
+                                icon="pi pi-times"
+                                [rounded]="true"
+                                [text]="true"
+                                severity="danger"
+                                size="small"
+                                (onClick)="removeExistingFile(file.id)"
+                                pTooltip="Удалить файл"
+                            />
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+
+        <app-file-upload
+            [label]="isEditMode ? 'Добавить новые файлы' : 'Прикрепить файлы'"
+            [files]="selectedFiles"
+            (filesChange)="onFileSelect($event)"
+            (removeFile)="removeFile($event)">
+        </app-file-upload>
+
     </form>
 
 </app-dialog>
+
+<app-file-viewer
+    [(visible)]="showFilesDialog"
+    [header]="'Файлы водосброса'"
+    [files]="selectedDischargeForFiles?.files || []">
+</app-file-viewer>
