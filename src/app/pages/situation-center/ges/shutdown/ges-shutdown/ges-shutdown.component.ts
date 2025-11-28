@@ -51,6 +51,7 @@ export class GesShutdownComponent implements OnInit, OnChanges {
     currentShutdown: ShutdownDto | null = null;
     showFilesDialog: boolean = false;
     selectedShutdownForFiles: ShutdownDto | null = null;
+    existingFilesToKeep: number[] = [];
 
     ngOnInit(): void {
         this.form = this.fb.group({
@@ -117,10 +118,15 @@ export class GesShutdownComponent implements OnInit, OnChanges {
             formData.append('idle_discharge_volume', rawPayload.idle_discharge_volume.toString());
         }
 
-        // Add files
+        // Add new files
         this.selectedFiles.forEach((file) => {
             formData.append('files', file, file.name);
         });
+
+        // Add existing file IDs to keep (in edit mode)
+        if (this.isEditMode) {
+            formData.append('file_ids', this.existingFilesToKeep.join(','));
+        }
 
         if (this.isEditMode && this.currentShutdownId) {
             this.gesShutdownService.editShutdown(this.currentShutdownId, formData).subscribe({
@@ -165,6 +171,9 @@ export class GesShutdownComponent implements OnInit, OnChanges {
         this.isLoading = false;
         this.isEditMode = false;
         this.currentShutdownId = null;
+        this.currentShutdown = null;
+        this.selectedFiles = [];
+        this.existingFilesToKeep = [];
         this.form.reset();
         this.loadShutdowns();
     }
@@ -175,6 +184,7 @@ export class GesShutdownComponent implements OnInit, OnChanges {
         this.currentShutdown = null;
         this.form.reset();
         this.selectedFiles = [];
+        this.existingFilesToKeep = [];
         this.submitted = false;
         this.isLoading = false;
         this.isFormOpen = true;
@@ -187,6 +197,8 @@ export class GesShutdownComponent implements OnInit, OnChanges {
         this.submitted = false;
         this.isLoading = false;
         this.selectedFiles = [];
+        // Initialize with all existing file IDs
+        this.existingFilesToKeep = shutdown.files?.map(f => f.id) || [];
 
         let organizationToSet: any = null;
         if (shutdown.organization_id && this.organizations) {
@@ -220,13 +232,21 @@ export class GesShutdownComponent implements OnInit, OnChanges {
         this.selectedFiles.splice(index, 1);
     }
 
+    removeExistingFile(fileId: number) {
+        this.existingFilesToKeep = this.existingFilesToKeep.filter(id => id !== fileId);
+        // Also remove from current shutdown's files for UI update
+        if (this.currentShutdown?.files) {
+            this.currentShutdown.files = this.currentShutdown.files.filter(f => f.id !== fileId);
+        }
+    }
+
     showFiles(shutdown: ShutdownDto) {
         this.selectedShutdownForFiles = shutdown;
         this.showFilesDialog = true;
     }
 
     formatFileSize(bytes: number): string {
-        if (bytes === 0) return '0 Bytes';
+        if (!bytes || bytes === 0) return '0 Bytes';
         const k = 1024;
         const sizes = ['Bytes', 'KB', 'MB', 'GB'];
         const i = Math.floor(Math.log(bytes) / Math.log(k));
