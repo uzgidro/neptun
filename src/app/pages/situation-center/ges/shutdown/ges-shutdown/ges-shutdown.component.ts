@@ -15,10 +15,12 @@ import { DatePipe, DecimalPipe } from '@angular/common';
 import { AuthService } from '@/core/services/auth.service';
 import { TooltipModule } from 'primeng/tooltip';
 import { OrganizationService } from '@/core/services/organization.service';
+import { FileUploadComponent } from '@/layout/component/dialog/file-upload/file-upload.component';
+import { FileViewerComponent } from '@/layout/component/dialog/file-viewer/file-viewer.component';
 
 @Component({
     selector: 'app-ges-shutdown',
-    imports: [Button, DatePickerComponent, DialogComponent, GroupSelectComponent, PrimeTemplate, ReactiveFormsModule, TableModule, TextareaComponent, InputNumberdComponent, DatePipe, TooltipModule, DecimalPipe],
+    imports: [Button, DatePickerComponent, DialogComponent, GroupSelectComponent, PrimeTemplate, ReactiveFormsModule, TableModule, TextareaComponent, InputNumberdComponent, DatePipe, TooltipModule, DecimalPipe, FileUploadComponent, FileViewerComponent],
     templateUrl: './ges-shutdown.component.html',
     styleUrl: './ges-shutdown.component.scss'
 })
@@ -43,6 +45,12 @@ export class GesShutdownComponent implements OnInit, OnChanges {
     private organizationService: OrganizationService = inject(OrganizationService);
     private gesShutdownService: GesShutdownService = inject(GesShutdownService);
     private messageService: MessageService = inject(MessageService);
+
+    // File handling
+    selectedFiles: File[] = [];
+    currentShutdown: ShutdownDto | null = null;
+    showFilesDialog: boolean = false;
+    selectedShutdownForFiles: ShutdownDto | null = null;
 
     ngOnInit(): void {
         this.form = this.fb.group({
@@ -88,17 +96,34 @@ export class GesShutdownComponent implements OnInit, OnChanges {
 
         this.isLoading = true;
         const rawPayload = this.form.getRawValue();
-        const payload: GesShutdownPayload = {};
+        const formData = new FormData();
 
-        if (rawPayload.organization) payload.organization_id = rawPayload.organization.id;
-        if (rawPayload.start_time) payload.start_time = rawPayload.start_time.toISOString();
-        if (rawPayload.end_time) payload.end_time = rawPayload.end_time.toISOString();
-        if (rawPayload.reason) payload.reason = rawPayload.reason;
-        if (rawPayload.generation_loss) payload.generation_loss = rawPayload.generation_loss;
-        if (rawPayload.idle_discharge_volume) payload.idle_discharge_volume = rawPayload.idle_discharge_volume;
+        if (rawPayload.organization) {
+            formData.append('organization_id', rawPayload.organization.id.toString());
+        }
+        if (rawPayload.start_time) {
+            formData.append('start_time', rawPayload.start_time.toISOString());
+        }
+        if (rawPayload.end_time) {
+            formData.append('end_time', rawPayload.end_time.toISOString());
+        }
+        if (rawPayload.reason) {
+            formData.append('reason', rawPayload.reason);
+        }
+        if (rawPayload.generation_loss) {
+            formData.append('generation_loss', rawPayload.generation_loss.toString());
+        }
+        if (rawPayload.idle_discharge_volume) {
+            formData.append('idle_discharge_volume', rawPayload.idle_discharge_volume.toString());
+        }
+
+        // Add files
+        this.selectedFiles.forEach((file) => {
+            formData.append('files', file, file.name);
+        });
 
         if (this.isEditMode && this.currentShutdownId) {
-            this.gesShutdownService.editShutdown(this.currentShutdownId, payload).subscribe({
+            this.gesShutdownService.editShutdown(this.currentShutdownId, formData).subscribe({
                 next: () => {
                     this.messageService.add({ severity: 'success', summary: 'Событие обновлено' });
                     this.closeDialog();
@@ -114,7 +139,7 @@ export class GesShutdownComponent implements OnInit, OnChanges {
                 }
             });
         } else {
-            this.gesShutdownService.addShutdown(payload).subscribe({
+            this.gesShutdownService.addShutdown(formData).subscribe({
                 next: () => {
                     this.isFormOpen = false;
                     this.form.reset();
@@ -147,7 +172,9 @@ export class GesShutdownComponent implements OnInit, OnChanges {
     openNew() {
         this.isEditMode = false;
         this.currentShutdownId = null;
+        this.currentShutdown = null;
         this.form.reset();
+        this.selectedFiles = [];
         this.submitted = false;
         this.isLoading = false;
         this.isFormOpen = true;
@@ -156,8 +183,10 @@ export class GesShutdownComponent implements OnInit, OnChanges {
     editShutdown(shutdown: ShutdownDto) {
         this.isEditMode = true;
         this.currentShutdownId = shutdown.id;
+        this.currentShutdown = shutdown;
         this.submitted = false;
         this.isLoading = false;
+        this.selectedFiles = [];
 
         let organizationToSet: any = null;
         if (shutdown.organization_id && this.organizations) {
@@ -180,6 +209,28 @@ export class GesShutdownComponent implements OnInit, OnChanges {
         });
 
         this.isFormOpen = true;
+    }
+
+    // File handling methods
+    onFileSelect(files: File[]) {
+        this.selectedFiles = files;
+    }
+
+    removeFile(index: number) {
+        this.selectedFiles.splice(index, 1);
+    }
+
+    showFiles(shutdown: ShutdownDto) {
+        this.selectedShutdownForFiles = shutdown;
+        this.showFilesDialog = true;
+    }
+
+    formatFileSize(bytes: number): string {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
     }
 
     deleteShutdown(id: number) {

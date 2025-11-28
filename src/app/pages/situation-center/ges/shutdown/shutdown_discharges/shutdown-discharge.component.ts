@@ -16,10 +16,12 @@ import { AuthService } from '@/core/services/auth.service';
 import { dateRangeValidator } from '@/core/validators/date-range.validator';
 import { TooltipModule } from 'primeng/tooltip';
 import { OrganizationService } from '@/core/services/organization.service';
+import { FileUploadComponent } from '@/layout/component/dialog/file-upload/file-upload.component';
+import { FileViewerComponent } from '@/layout/component/dialog/file-viewer/file-viewer.component';
 
 @Component({
     selector: 'app-shutdown-discharge',
-    imports: [DatePipe, PrimeTemplate, ReactiveFormsModule, TableModule, DecimalPipe, Button, DialogComponent, GroupSelectComponent, DatePickerComponent, InputNumberdComponent, TextareaComponent, TooltipModule],
+    imports: [DatePipe, PrimeTemplate, ReactiveFormsModule, TableModule, DecimalPipe, Button, DialogComponent, GroupSelectComponent, DatePickerComponent, InputNumberdComponent, TextareaComponent, TooltipModule, FileUploadComponent, FileViewerComponent],
     templateUrl: './shutdown-discharge.component.html',
     styleUrl: './shutdown-discharge.component.scss'
 })
@@ -43,6 +45,12 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
     private organizationService: OrganizationService = inject(OrganizationService);
     private dischargeService: DischargeService = inject(DischargeService);
     private messageService: MessageService = inject(MessageService);
+
+    // File handling
+    selectedFiles: File[] = [];
+    currentDischarge: IdleDischargeResponse | null = null;
+    showFilesDialog: boolean = false;
+    selectedDischargeForFiles: IdleDischargeResponse | null = null;
 
     ngOnInit(): void {
         this.form = this.fb.group(
@@ -89,7 +97,9 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
     openNew() {
         this.isEditMode = false;
         this.currentDischargeId = null;
+        this.currentDischarge = null;
         this.form.reset();
+        this.selectedFiles = [];
         // Re-enable all fields
         this.form.get('organization')?.enable();
         this.form.get('started_at')?.enable();
@@ -119,18 +129,33 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
         }
 
         const rawValue = this.form.getRawValue();
-        const payload: WaterDischargePayload = {};
+        const formData = new FormData();
 
-        if (rawValue.organization) payload.organization_id = rawValue.organization.id;
-        if (rawValue.started_at) payload.started_at = rawValue.started_at.toISOString();
-        if (rawValue.ended_at) payload.ended_at = rawValue.ended_at.toISOString();
-        if (rawValue.flow_rate) payload.flow_rate = rawValue.flow_rate;
-        if (rawValue.reason) payload.reason = rawValue.reason;
+        if (rawValue.organization) {
+            formData.append('organization_id', rawValue.organization.id.toString());
+        }
+        if (rawValue.started_at) {
+            formData.append('started_at', rawValue.started_at.toISOString());
+        }
+        if (rawValue.ended_at) {
+            formData.append('ended_at', rawValue.ended_at.toISOString());
+        }
+        if (rawValue.flow_rate) {
+            formData.append('flow_rate', rawValue.flow_rate.toString());
+        }
+        if (rawValue.reason) {
+            formData.append('reason', rawValue.reason);
+        }
+
+        // Add files
+        this.selectedFiles.forEach((file) => {
+            formData.append('files', file, file.name);
+        });
 
         this.isLoading = true;
 
         if (this.isEditMode && this.currentDischargeId) {
-            this.dischargeService.editDischarge(this.currentDischargeId, payload).subscribe({
+            this.dischargeService.editDischarge(this.currentDischargeId, formData).subscribe({
                 next: () => {
                     this.messageService.add({ severity: 'success', summary: 'Успешно', detail: 'Запись о водосбросе обновлена' });
                     this.closeDialog();
@@ -145,7 +170,7 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
                 }
             });
         } else {
-            this.dischargeService.addDischarge(payload).subscribe({
+            this.dischargeService.addDischarge(formData).subscribe({
                 next: () => {
                     this.messageService.add({ severity: 'success', summary: 'Успешно', detail: 'Новая запись о водосбросе добавлена' });
                     this.closeDialog();
@@ -165,8 +190,10 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
     editDischarge(discharge: IdleDischargeResponse) {
         this.isEditMode = true;
         this.currentDischargeId = discharge.id;
+        this.currentDischarge = discharge;
         this.submitted = false;
         this.isLoading = false;
+        this.selectedFiles = [];
 
         // Reset form first to clear any previous state
         this.form.reset();
@@ -195,6 +222,28 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
         this.form.get('started_at')?.enable();
 
         this.isFormOpen = true;
+    }
+
+    // File handling methods
+    onFileSelect(files: File[]) {
+        this.selectedFiles = files;
+    }
+
+    removeFile(index: number) {
+        this.selectedFiles.splice(index, 1);
+    }
+
+    showFiles(discharge: IdleDischargeResponse) {
+        this.selectedDischargeForFiles = discharge;
+        this.showFilesDialog = true;
+    }
+
+    formatFileSize(bytes: number): string {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
     }
 
     deleteDischarge(discharge: IdleDischargeResponse) {

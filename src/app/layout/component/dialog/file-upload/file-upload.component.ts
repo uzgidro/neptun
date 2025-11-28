@@ -17,17 +17,22 @@ export class FileUploadComponent {
     @Input() accept: string = ''; // e.g., "image/*,.pdf"
     @Input() showUploadButton: boolean = false;
     @Input() selectedFiles: File[] = [];
+    @Input() files: File[] = [];
 
     @Output() filesSelected = new EventEmitter<File[]>();
+    @Output() filesChange = new EventEmitter<File[]>();
     @Output() fileRemoved = new EventEmitter<number>();
+    @Output() removeFile = new EventEmitter<number>();
 
     onFileSelect(event: any) {
         const files = Array.from(event.files || event.currentFiles || []) as File[];
         this.filesSelected.emit(files);
+        this.filesChange.emit(files);
     }
 
-    removeFile(index: number) {
+    onRemoveFile(index: number) {
         this.fileRemoved.emit(index);
+        this.removeFile.emit(index);
     }
 
     formatFileSize(bytes: number): string {

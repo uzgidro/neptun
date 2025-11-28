@@ -33,12 +33,12 @@ export class VisitService extends ApiService {
     );
   }
 
-  addVisit(payload: AddVisitRequest): Observable<any> {
-    return this.http.post(BASE_URL + VISITS, payload);
+  addVisit(formData: FormData): Observable<any> {
+    return this.http.post(BASE_URL + VISITS, formData);
   }
 
-  editVisit(id: number, payload: EditVisitRequest): Observable<any> {
-    return this.http.patch(`${BASE_URL}${VISITS}/${id}`, payload);
+  editVisit(id: number, formData: FormData): Observable<any> {
+    return this.http.patch(`${BASE_URL}${VISITS}/${id}`, formData);
   }
 
   deleteVisit(id: number): Observable<any> {

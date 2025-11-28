@@ -1,6 +1,15 @@
 import { Organization } from '@/core/interfaces/organizations';
 import { UserShortInfo } from '@/core/interfaces/users';
 
+export interface DischargeFile {
+    id: number;
+    filename: string;
+    object_key: string;
+    mime_type: string;
+    size: number;
+    created_at: string;
+}
+
 export interface WaterDischargePayload {
     organization_id?: number;
     started_at?: string;
@@ -37,6 +46,7 @@ export interface DischargeModel {
     reason: string | null;
     is_ongoing: boolean;
     approved: boolean | null;
+    files?: DischargeFile[];
 }
 
 
@@ -64,4 +74,5 @@ export interface IdleDischargeResponse {
     reason: string | null;
     is_ongoing: boolean;
     approved: boolean | null; // (В JSON `approved` - null, возможно, это boolean)
+    files?: DischargeFile[];
 }

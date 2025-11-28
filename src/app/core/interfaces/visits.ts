@@ -1,5 +1,14 @@
 import { UserShortInfo } from '@/core/interfaces/users';
 
+export interface VisitFile {
+    id: number;
+    filename: string;
+    object_key: string;
+    mime_type: string;
+    size: number;
+    created_at: string;
+}
+
 export interface AddVisitRequest {
     organization_id: number;
     visit_date: string;
@@ -23,6 +32,7 @@ export interface VisitResponse {
     responsible_name: string;
     created_at: string; // <-- строка
     created_by: UserShortInfo;
+    files?: VisitFile[];
 }
 
 export interface VisitDto {
@@ -34,4 +44,5 @@ export interface VisitDto {
     responsible_name: string;
     created_at: Date;
     created_by: UserShortInfo;
+    files?: VisitFile[];
 }

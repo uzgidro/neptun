@@ -111,14 +111,14 @@ export class DischargeDialogComponent implements OnInit, OnChanges {
         }
 
         const rawValue = this.waterDischargeForm.getRawValue();
-        const payload: WaterDischargePayload = {};
+        const formData = new FormData();
 
-        if (rawValue.reason) payload.reason = rawValue.reason;
-        if (rawValue.ended_at) payload.ended_at = rawValue.ended_at.toISOString();
-        if (rawValue.flow_rate) payload.flow_rate = rawValue.flow_rate;
+        if (rawValue.reason) formData.append('reason', rawValue.reason);
+        if (rawValue.ended_at) formData.append('ended_at', rawValue.ended_at.toISOString());
+        if (rawValue.flow_rate) formData.append('flow_rate', rawValue.flow_rate.toString());
 
         if (this.isEditMode) {
-            this.dischargeService.editDischarge(this.modelToEdit!.id, payload).subscribe({
+            this.dischargeService.editDischarge(this.modelToEdit!.id, formData).subscribe({
                 next: () => {
                     this.messageService.add({ severity: 'success', summary: 'Успешно', detail: 'Обновлена запись о водосбросе' });
                     this.save.emit();
@@ -129,10 +129,10 @@ export class DischargeDialogComponent implements OnInit, OnChanges {
                 }
             });
         } else {
-            if (rawValue.organization) payload.organization_id = rawValue.organization.id;
-            if (rawValue.started_at) payload.started_at = rawValue.started_at!.toISOString();
+            if (rawValue.organization) formData.append('organization_id', rawValue.organization.id.toString());
+            if (rawValue.started_at) formData.append('started_at', rawValue.started_at!.toISOString());
 
-            this.dischargeService.addDischarge(payload).subscribe({
+            this.dischargeService.addDischarge(formData).subscribe({
                 next: () => {
                     this.messageService.add({ severity: 'success', summary: 'Успешно', detail: 'Новая запись о водосбросе добавлена' });
                     this.save.emit();

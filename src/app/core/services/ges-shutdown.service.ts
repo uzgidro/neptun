@@ -25,12 +25,12 @@ export class GesShutdownService extends ApiService {
         );
     }
 
-    addShutdown(payload: GesShutdownPayload): Observable<any> {
-        return this.http.post(BASE_URL + SHUTDOWNS, payload);
+    addShutdown(formData: FormData): Observable<any> {
+        return this.http.post(BASE_URL + SHUTDOWNS, formData);
     }
 
-    editShutdown(id: number, payload: GesShutdownPayload): Observable<any> {
-        return this.http.patch(`${BASE_URL}${SHUTDOWNS}/${id}`, payload);
+    editShutdown(id: number, formData: FormData): Observable<any> {
+        return this.http.patch(`${BASE_URL}${SHUTDOWNS}/${id}`, formData);
     }
 
     deleteShutdown(id: number): Observable<any> {

@@ -1,5 +1,14 @@
 import { UserShortInfo } from '@/core/interfaces/users';
 
+export interface ShutdownFile {
+    id: number;
+    filename: string;
+    object_key: string;
+    mime_type: string;
+    size: number;
+    created_at: string;
+}
+
 export interface GesShutdownPayload {
     organization_id?: number;
     start_time?: string;
@@ -20,6 +29,7 @@ export interface ShutdownResponse {
     generation_loss: number | null;
     created_at: string;
     idle_discharge_volume: number | null;
+    files?: ShutdownFile[];
 }
 
 export interface GesShutdownResponse {
@@ -39,6 +49,7 @@ export interface ShutdownDto {
     generation_loss: number | null;
     created_at: Date;
     idle_discharge_volume: number | null;
+    files?: ShutdownFile[];
 }
 
 export interface GesShutdownDto {

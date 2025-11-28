@@ -36,6 +36,10 @@
                 Создал
             </th>
 
+            <th style="width: 10%">
+                Файлы
+            </th>
+
             @if (authService.isSc()) {
                 <th style="width: 10%">
                     Действия
@@ -57,6 +61,20 @@
             </td>
             <td>
                 {{ incident.created_by?.name }}
+            </td>
+            <td>
+                @if (incident.files && incident.files.length > 0) {
+                    <p-button
+                        [label]="incident.files.length.toString()"
+                        icon="pi pi-paperclip"
+                        severity="secondary"
+                        [text]="true"
+                        (click)="showFiles(incident)"
+                        pTooltip="Просмотр файлов"
+                    />
+                } @else {
+                    <span class="text-color-secondary">—</span>
+                }
             </td>
             @if (authService.isSc()) {
                 <td>
@@ -83,7 +101,7 @@
 
     <ng-template pTemplate="emptymessage">
         <tr>
-            <td [attr.colspan]="authService.isSc() ? 5 : 4" class="text-center">
+            <td [attr.colspan]="authService.isSc() ? 6 : 5" class="text-center">
                 Инциденты за выбранную дату не найдены.
             </td>
         </tr>
@@ -133,6 +151,34 @@
             [required]="false">
         </app-textarea>
 
+        @if (isEditMode && currentIncident?.files && (currentIncident?.files?.length ?? 0) > 0) {
+            <div class="mb-4">
+                <label class="block text-sm font-medium mb-2">Существующие файлы</label>
+                <div class="existing-files">
+                    @for (file of currentIncident?.files; track file.id) {
+                        <div class="file-item">
+                            <i class="pi pi-file"></i>
+                            <span>{{ file.filename }}</span>
+                            <span class="file-size">({{ formatFileSize(file.size) }})</span>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+
+        <app-file-upload
+            [label]="isEditMode ? 'Добавить новые файлы' : 'Прикрепить файлы'"
+            [files]="selectedFiles"
+            (filesChange)="onFileSelect($event)"
+            (removeFile)="removeFile($event)">
+        </app-file-upload>
+
     </form>
 
 </app-dialog>
+
+<app-file-viewer
+    [(visible)]="showFilesDialog"
+    [header]="'Файлы инцидента'"
+    [files]="selectedIncidentForFiles?.files || []">
+</app-file-viewer>
