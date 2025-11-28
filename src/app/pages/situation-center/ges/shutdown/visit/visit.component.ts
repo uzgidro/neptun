@@ -50,6 +50,7 @@ export class VisitComponent implements OnInit, OnChanges {
     currentVisit: VisitDto | null = null;
     showFilesDialog: boolean = false;
     selectedVisitForFiles: VisitDto | null = null;
+    existingFilesToKeep: number[] = [];
 
     ngOnInit(): void {
         this.form = this.fb.group({
@@ -108,10 +109,15 @@ export class VisitComponent implements OnInit, OnChanges {
             formData.append('responsible_name', rawPayload.responsible_name);
         }
 
-        // Add files
+        // Add new files
         this.selectedFiles.forEach((file) => {
             formData.append('files', file, file.name);
         });
+
+        // Add existing file IDs to keep (in edit mode)
+        if (this.isEditMode) {
+            formData.append('file_ids', this.existingFilesToKeep.join(','));
+        }
 
         if (this.isEditMode && this.currentVisitId) {
             this.visitService.editVisit(this.currentVisitId, formData).subscribe({
@@ -152,6 +158,9 @@ export class VisitComponent implements OnInit, OnChanges {
         this.isLoading = false;
         this.isEditMode = false;
         this.currentVisitId = null;
+        this.currentVisit = null;
+        this.selectedFiles = [];
+        this.existingFilesToKeep = [];
         this.form.reset();
         this.loadVisits();
     }
@@ -162,6 +171,7 @@ export class VisitComponent implements OnInit, OnChanges {
         this.currentVisit = null;
         this.form.reset();
         this.selectedFiles = [];
+        this.existingFilesToKeep = [];
         this.submitted = false;
         this.isLoading = false;
         this.isFormOpen = true;
@@ -174,6 +184,8 @@ export class VisitComponent implements OnInit, OnChanges {
         this.submitted = false;
         this.isLoading = false;
         this.selectedFiles = [];
+        // Initialize with all existing file IDs
+        this.existingFilesToKeep = visit.files?.map(f => f.id) || [];
 
         let organizationToSet: any = null;
         if (visit.id && this.organizations) {
@@ -202,13 +214,21 @@ export class VisitComponent implements OnInit, OnChanges {
         this.selectedFiles.splice(index, 1);
     }
 
+    removeExistingFile(fileId: number) {
+        this.existingFilesToKeep = this.existingFilesToKeep.filter(id => id !== fileId);
+        // Also remove from current visit's files for UI update
+        if (this.currentVisit?.files) {
+            this.currentVisit.files = this.currentVisit.files.filter(f => f.id !== fileId);
+        }
+    }
+
     showFiles(visit: VisitDto) {
         this.selectedVisitForFiles = visit;
         this.showFilesDialog = true;
     }
 
     formatFileSize(bytes: number): string {
-        if (bytes === 0) return '0 Bytes';
+        if (!bytes || bytes === 0) return '0 Bytes';
         const k = 1024;
         const sizes = ['Bytes', 'KB', 'MB', 'GB'];
         const i = Math.floor(Math.log(bytes) / Math.log(k));

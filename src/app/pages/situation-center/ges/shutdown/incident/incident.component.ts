@@ -51,6 +51,7 @@ export class IncidentComponent implements OnInit, OnChanges {
     currentIncident: IncidentDto | null = null;
     showFilesDialog: boolean = false;
     selectedIncidentForFiles: IncidentDto | null = null;
+    existingFilesToKeep: number[] = [];
 
     ngOnInit(): void {
         this.form = this.fb.group({
@@ -120,10 +121,15 @@ export class IncidentComponent implements OnInit, OnChanges {
             formData.append('description', rawPayload.description);
         }
 
-        // Add files
+        // Add new files
         this.selectedFiles.forEach((file) => {
             formData.append('files', file, file.name);
         });
+
+        // Add existing file IDs to keep (in edit mode)
+        if (this.isEditMode) {
+            formData.append('file_ids', this.existingFilesToKeep.join(','));
+        }
 
         if (this.isEditMode && this.currentIncidentId) {
             this.incidentService.editIncident(this.currentIncidentId, formData).subscribe({
@@ -168,6 +174,9 @@ export class IncidentComponent implements OnInit, OnChanges {
         this.isLoading = false;
         this.isEditMode = false;
         this.currentIncidentId = null;
+        this.currentIncident = null;
+        this.selectedFiles = [];
+        this.existingFilesToKeep = [];
         this.form.reset();
         this.loadIncidents();
     }
@@ -178,6 +187,7 @@ export class IncidentComponent implements OnInit, OnChanges {
         this.currentIncident = null;
         this.form.reset();
         this.selectedFiles = [];
+        this.existingFilesToKeep = [];
         this.submitted = false;
         this.isLoading = false;
         this.isFormOpen = true;
@@ -190,6 +200,8 @@ export class IncidentComponent implements OnInit, OnChanges {
         this.submitted = false;
         this.isLoading = false;
         this.selectedFiles = [];
+        // Initialize with all existing file IDs
+        this.existingFilesToKeep = incident.files?.map(f => f.id) || [];
 
         console.log(incident);
 
@@ -222,13 +234,21 @@ export class IncidentComponent implements OnInit, OnChanges {
         this.selectedFiles.splice(index, 1);
     }
 
+    removeExistingFile(fileId: number) {
+        this.existingFilesToKeep = this.existingFilesToKeep.filter(id => id !== fileId);
+        // Also remove from current incident's files for UI update
+        if (this.currentIncident?.files) {
+            this.currentIncident.files = this.currentIncident.files.filter(f => f.id !== fileId);
+        }
+    }
+
     showFiles(incident: IncidentDto) {
         this.selectedIncidentForFiles = incident;
         this.showFilesDialog = true;
     }
 
     formatFileSize(bytes: number): string {
-        if (bytes === 0) return '0 Bytes';
+        if (!bytes || bytes === 0) return '0 Bytes';
         const k = 1024;
         const sizes = ['Bytes', 'KB', 'MB', 'GB'];
         const i = Math.floor(Math.log(bytes) / Math.log(k));

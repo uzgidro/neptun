@@ -160,12 +160,26 @@
         @if (isEditMode && currentVisit?.files && (currentVisit?.files?.length ?? 0) > 0) {
             <div class="mb-4">
                 <label class="block text-sm font-medium mb-2">Существующие файлы</label>
-                <div class="existing-files">
+                <div class="flex flex-col gap-2">
                     @for (file of currentVisit?.files; track file.id) {
-                        <div class="file-item">
-                            <i class="pi pi-file"></i>
-                            <span>{{ file.file_name }}</span>
-                            <span class="file-size">({{ formatFileSize(file.size_bytes) }})</span>
+                        <div class="flex justify-between items-center p-2 rounded"
+                             style="background-color: var(--surface-50);">
+                            <div class="flex items-center gap-2">
+                                <i class="pi pi-file"></i>
+                                <span class="text-sm">{{ file.file_name }}</span>
+                                <span class="text-sm"
+                                      style="color: var(--text-color-secondary);">({{ formatFileSize(file.size_bytes) }}
+                                    )</span>
+                            </div>
+                            <p-button
+                                icon="pi pi-times"
+                                [rounded]="true"
+                                [text]="true"
+                                severity="danger"
+                                size="small"
+                                (onClick)="removeExistingFile(file.id)"
+                                pTooltip="Удалить файл"
+                            />
                         </div>
                     }
                 </div>

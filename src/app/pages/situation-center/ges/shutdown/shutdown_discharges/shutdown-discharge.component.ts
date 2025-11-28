@@ -51,6 +51,7 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
     currentDischarge: IdleDischargeResponse | null = null;
     showFilesDialog: boolean = false;
     selectedDischargeForFiles: IdleDischargeResponse | null = null;
+    existingFilesToKeep: number[] = [];
 
     ngOnInit(): void {
         this.form = this.fb.group(
@@ -100,6 +101,7 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
         this.currentDischarge = null;
         this.form.reset();
         this.selectedFiles = [];
+        this.existingFilesToKeep = [];
         // Re-enable all fields
         this.form.get('organization')?.enable();
         this.form.get('started_at')?.enable();
@@ -114,6 +116,9 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
         this.isLoading = false;
         this.isEditMode = false;
         this.currentDischargeId = null;
+        this.currentDischarge = null;
+        this.selectedFiles = [];
+        this.existingFilesToKeep = [];
         // Re-enable all fields
         this.form.get('organization')?.enable();
         this.form.get('started_at')?.enable();
@@ -147,10 +152,15 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
             formData.append('reason', rawValue.reason);
         }
 
-        // Add files
+        // Add new files
         this.selectedFiles.forEach((file) => {
             formData.append('files', file, file.name);
         });
+
+        // Add existing file IDs to keep (in edit mode)
+        if (this.isEditMode) {
+            formData.append('file_ids', this.existingFilesToKeep.join(','));
+        }
 
         this.isLoading = true;
 
@@ -194,6 +204,8 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
         this.submitted = false;
         this.isLoading = false;
         this.selectedFiles = [];
+        // Initialize with all existing file IDs
+        this.existingFilesToKeep = discharge.files?.map(f => f.id) || [];
 
         // Reset form first to clear any previous state
         this.form.reset();
@@ -233,13 +245,21 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
         this.selectedFiles.splice(index, 1);
     }
 
+    removeExistingFile(fileId: number) {
+        this.existingFilesToKeep = this.existingFilesToKeep.filter(id => id !== fileId);
+        // Also remove from current discharge's files for UI update
+        if (this.currentDischarge?.files) {
+            this.currentDischarge.files = this.currentDischarge.files.filter(f => f.id !== fileId);
+        }
+    }
+
     showFiles(discharge: IdleDischargeResponse) {
         this.selectedDischargeForFiles = discharge;
         this.showFilesDialog = true;
     }
 
     formatFileSize(bytes: number): string {
-        if (bytes === 0) return '0 Bytes';
+        if (!bytes || bytes === 0) return '0 Bytes';
         const k = 1024;
         const sizes = ['Bytes', 'KB', 'MB', 'GB'];
         const i = Math.floor(Math.log(bytes) / Math.log(k));
