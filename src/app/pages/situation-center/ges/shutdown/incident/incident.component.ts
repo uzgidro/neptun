@@ -191,6 +191,8 @@ export class IncidentComponent implements OnInit, OnChanges {
         this.isLoading = false;
         this.selectedFiles = [];
 
+        console.log(incident);
+
         let organizationToSet: any = null;
         const appliesToAll = !incident.id;
 

@@ -1,13 +1,5 @@
 import { UserShortInfo } from '@/core/interfaces/users';
-
-export interface ShutdownFile {
-    id: number;
-    filename: string;
-    object_key: string;
-    mime_type: string;
-    size: number;
-    created_at: string;
-}
+import { FileResponse } from '@/core/interfaces/files';
 
 export interface GesShutdownPayload {
     organization_id?: number;
@@ -29,7 +21,7 @@ export interface ShutdownResponse {
     generation_loss: number | null;
     created_at: string;
     idle_discharge_volume: number | null;
-    files?: ShutdownFile[];
+    files?: FileResponse[];
 }
 
 export interface GesShutdownResponse {
@@ -49,7 +41,7 @@ export interface ShutdownDto {
     generation_loss: number | null;
     created_at: Date;
     idle_discharge_volume: number | null;
-    files?: ShutdownFile[];
+    files?: FileResponse[];
 }
 
 export interface GesShutdownDto {

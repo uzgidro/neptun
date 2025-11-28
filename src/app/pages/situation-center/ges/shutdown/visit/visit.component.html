@@ -164,8 +164,8 @@
                     @for (file of currentVisit?.files; track file.id) {
                         <div class="file-item">
                             <i class="pi pi-file"></i>
-                            <span>{{ file.filename }}</span>
-                            <span class="file-size">({{ formatFileSize(file.size) }})</span>
+                            <span>{{ file.file_name }}</span>
+                            <span class="file-size">({{ formatFileSize(file.size_bytes) }})</span>
                         </div>
                     }
                 </div>
