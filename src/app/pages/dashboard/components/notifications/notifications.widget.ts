@@ -3,7 +3,7 @@ import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
 import { DatePipe, NgClass } from '@angular/common';
 import { PastEventsService } from '@/core/services/past-events.service';
-import { DateGroup, EventType } from '@/core/interfaces/past-events';
+import { DateGroup, Event, EventType } from '@/core/interfaces/past-events';
 
 @Component({
     standalone: true,
@@ -57,7 +57,20 @@ export class NotificationsWidget implements OnInit {
         });
     }
 
-    getEventIcon(type: EventType): string {
+    getEventIcon(type: EventType, event?: Event): string {
+        // Check for entity_type first
+        if (event?.entity_type) {
+            const entityIcons: Record<string, string> = {
+                shutdown: 'pi-wrench',
+                discharge: 'pi-comment',
+                incident: 'pi-exclamation-triangle'
+            };
+            if (entityIcons[event.entity_type]) {
+                return entityIcons[event.entity_type];
+            }
+        }
+
+        // Fallback to type-based icons
         const icons: Record<EventType, string> = {
             success: 'pi-check-circle',
             danger: 'pi-exclamation-circle',
@@ -65,6 +78,10 @@ export class NotificationsWidget implements OnInit {
             info: 'pi-info-circle'
         };
         return icons[type] || 'pi-info-circle';
+    }
+
+    getEntityIconRotation(entityType?: string): string {
+        return entityType === 'discharge' ? 'rotate-135' : '';
     }
 
     getEventColorClass(type: EventType): string {

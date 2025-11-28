@@ -18,7 +18,7 @@
                             <div class="w-12 h-12 flex items-center justify-center rounded-full mr-4 shrink-0"
                                  [ngClass]="getEventColorClass(event.type)">
                                 <i class="pi text-xl!"
-                                   [ngClass]="[getEventIcon(event.type), getEventIconColor(event.type)]"></i>
+                                   [ngClass]="[getEventIcon(event.type, event), getEventIconColor(event.type), getEntityIconRotation(event.entity_type)]"></i>
                             </div>
                             <div class="flex-1">
                                 <div class="text-surface-900 dark:text-surface-0 leading-normal">
