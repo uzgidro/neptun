@@ -7,7 +7,7 @@ import { MessageService, PrimeTemplate } from 'primeng/api';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { TextareaComponent } from '@/layout/component/dialog/textarea/textarea.component';
-import { IncidentDto, IncidentPayload } from '@/core/interfaces/incidents';
+import { IncidentDto } from '@/core/interfaces/incidents';
 import { IncidentService } from '@/core/services/incident.service';
 import { Organization } from '@/core/interfaces/organizations';
 import { AuthService } from '@/core/services/auth.service';

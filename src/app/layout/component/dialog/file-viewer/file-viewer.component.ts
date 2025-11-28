@@ -8,22 +8,23 @@ import { ButtonModule } from 'primeng/button';
     standalone: true,
     imports: [CommonModule, DialogModule, ButtonModule],
     template: `
-        <p-dialog [(visible)]="visible" [header]="header" [modal]="true" [style]="{ width: '40vw' }" [breakpoints]="{ '960px': '75vw' }" (onHide)="visibleChange.emit(false)">
+        <p-dialog [(visible)]="visible" [header]="header" [modal]="true" [style]="{ width: '40vw' }" [breakpoints]="{ '960px': '75vw', '640px': '90vw' }" (onHide)="visibleChange.emit(false)">
             <div class="file-list">
                 @if (files && files.length > 0) {
                     <ul>
-                        @for (file of files; track file.id) {
+                        @for (file of files; track file.id || $index) {
                             <li class="file-item">
                                 <i class="pi pi-file"></i>
                                 <a [href]="getFileUrl(file)" target="_blank" rel="noopener noreferrer">
-                                    {{ file.filename }}
+                                    {{ file.file_name || 'Файл' }}
                                 </a>
-                                <span class="file-size">({{ formatFileSize(file.size) }})</span>
+                                @if (file.size) {
+                                    <span class="file-size">({{ formatFileSize(file.size) }})</span>
+                                }
                             </li>
                         }
                     </ul>
-                }
-                @if (!files || files.length === 0) {
+                } @else {
                     <p class="no-files">Нет прикрепленных файлов</p>
                 }
             </div>
@@ -81,8 +82,10 @@ export class FileViewerComponent {
     @Output() visibleChange = new EventEmitter<boolean>();
 
     getFileUrl(file: any): string {
-        // Use url if available, otherwise construct from id
-        return file.url || `/api/files/${file.id}`;
+        // Use url if available, otherwise construct from object_key or id
+        if (file.url) return file.url;
+        if (file.object_key) return `${window.location.origin}/api/files/${file.object_key}`;
+        return `/api/files/${file.id}`;
     }
 
     formatFileSize(bytes: number): string {
