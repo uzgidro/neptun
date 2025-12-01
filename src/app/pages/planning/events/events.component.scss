@@ -16,17 +16,6 @@
             }
         }
 
-        // Dialog styling
-        .p-dialog {
-            .p-dialog-header {
-                padding: 1.5rem;
-            }
-
-            .p-dialog-content {
-                padding: 0 1.5rem 1.5rem;
-            }
-        }
-
         // Form field styling
         .field {
             label {
@@ -47,27 +36,6 @@
                 margin-top: 0.25rem;
                 color: #ef4444;
                 font-size: 0.75rem;
-            }
-        }
-
-        // File upload styling
-        .p-fileupload {
-            .p-fileupload-buttonbar {
-                background-color: transparent;
-                border: 2px dashed var(--surface-border);
-                border-radius: 8px;
-                padding: 2rem;
-                text-align: center;
-                transition: border-color 0.2s, background-color 0.2s;
-
-                &:hover {
-                    border-color: var(--primary-color);
-                    background-color: var(--surface-hover);
-                }
-            }
-
-            .p-fileupload-content {
-                display: none;
             }
         }
 

@@ -17,10 +17,27 @@ import { TooltipModule } from 'primeng/tooltip';
 import { OrganizationService } from '@/core/services/organization.service';
 import { FileUploadComponent } from '@/layout/component/dialog/file-upload/file-upload.component';
 import { FileViewerComponent } from '@/layout/component/dialog/file-viewer/file-viewer.component';
+import { FileListComponent } from '@/layout/component/dialog/file-list/file-list.component';
 
 @Component({
     selector: 'app-ges-shutdown',
-    imports: [Button, DatePickerComponent, DialogComponent, GroupSelectComponent, PrimeTemplate, ReactiveFormsModule, TableModule, TextareaComponent, InputNumberdComponent, DatePipe, TooltipModule, DecimalPipe, FileUploadComponent, FileViewerComponent],
+    imports: [
+        Button,
+        DatePickerComponent,
+        DialogComponent,
+        GroupSelectComponent,
+        PrimeTemplate,
+        ReactiveFormsModule,
+        TableModule,
+        TextareaComponent,
+        InputNumberdComponent,
+        DatePipe,
+        TooltipModule,
+        DecimalPipe,
+        FileUploadComponent,
+        FileViewerComponent,
+        FileListComponent
+    ],
     templateUrl: './ges-shutdown.component.html',
     styleUrl: './ges-shutdown.component.scss'
 })
@@ -198,7 +215,7 @@ export class GesShutdownComponent implements OnInit, OnChanges {
         this.isLoading = false;
         this.selectedFiles = [];
         // Initialize with all existing file IDs
-        this.existingFilesToKeep = shutdown.files?.map(f => f.id) || [];
+        this.existingFilesToKeep = shutdown.files?.map((f) => f.id) || [];
 
         let organizationToSet: any = null;
         if (shutdown.organization_id && this.organizations) {
@@ -233,10 +250,10 @@ export class GesShutdownComponent implements OnInit, OnChanges {
     }
 
     removeExistingFile(fileId: number) {
-        this.existingFilesToKeep = this.existingFilesToKeep.filter(id => id !== fileId);
+        this.existingFilesToKeep = this.existingFilesToKeep.filter((id) => id !== fileId);
         // Also remove from current shutdown's files for UI update
         if (this.currentShutdown?.files) {
-            this.currentShutdown.files = this.currentShutdown.files.filter(f => f.id !== fileId);
+            this.currentShutdown.files = this.currentShutdown.files.filter((f) => f.id !== fileId);
         }
     }
 
@@ -250,7 +267,7 @@ export class GesShutdownComponent implements OnInit, OnChanges {
         const k = 1024;
         const sizes = ['Bytes', 'KB', 'MB', 'GB'];
         const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+        return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
     }
 
     deleteShutdown(id: number) {

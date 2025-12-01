@@ -17,10 +17,11 @@ import { Checkbox } from 'primeng/checkbox';
 import { SelectComponent } from '@/layout/component/dialog/select/select.component';
 import { FileUploadComponent } from '@/layout/component/dialog/file-upload/file-upload.component';
 import { FileViewerComponent } from '@/layout/component/dialog/file-viewer/file-viewer.component';
+import { FileListComponent } from '@/layout/component/dialog/file-list/file-list.component';
 
 @Component({
     selector: 'app-incident',
-    imports: [Button, DatePickerComponent, DatePipe, DialogComponent, PrimeTemplate, ReactiveFormsModule, TableModule, TextareaComponent, TooltipModule, Checkbox, SelectComponent, FileUploadComponent, FileViewerComponent],
+    imports: [Button, DatePickerComponent, DatePipe, DialogComponent, PrimeTemplate, ReactiveFormsModule, TableModule, TextareaComponent, TooltipModule, Checkbox, SelectComponent, FileUploadComponent, FileViewerComponent, FileListComponent],
     templateUrl: './incident.component.html',
     styleUrl: './incident.component.scss'
 })

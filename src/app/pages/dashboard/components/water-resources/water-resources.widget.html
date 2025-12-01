@@ -1,7 +1,7 @@
 <div class="card mb-8!">
     <div class="font-semibold text-xl mb-4">Водохранилища</div>
     <p-table [value]="reservoirs" dataKey="organization_id" [scrollable]="true" scrollHeight="25rem"
-             [loading]="loading">
+             [loading]="loading" class="p-datatable-lg">
         <ng-template #header>
             <tr>
                 <th class="whitespace-nowrap" pSortableColumn="organization_name">Название
@@ -23,8 +23,8 @@
         </ng-template>
         <ng-template #body let-reservoir>
             <tr>
-                <td>{{ reservoir.organization_name }}</td>
-                <td>{{ reservoir.reservoir_metrics.current.income }} (
+                <td class="whitespace-nowrap">{{ reservoir.organization_name }}</td>
+                <td class="whitespace-nowrap">{{ reservoir.reservoir_metrics.current.income }} (
                     @if (reservoir.reservoir_metrics.diff.income > 0) {
                         <span
                             class="text-lime-500">+{{ reservoir.reservoir_metrics.diff.income | number:'1.2-2' }}</span>
@@ -36,7 +36,7 @@
                     }
                     )
                 </td>
-                <td>{{ reservoir.reservoir_metrics.current.release }} (
+                <td class="whitespace-nowrap">{{ reservoir.reservoir_metrics.current.release }} (
                     @if (reservoir.reservoir_metrics.diff.release > 0) {
                         <span
                             class="text-lime-500">+{{ reservoir.reservoir_metrics.diff.release | number:'1.2-2' }}</span>
@@ -48,7 +48,7 @@
                     }
                     )
                 </td>
-                <td>{{ reservoir.reservoir_metrics.current.level }} (
+                <td class="whitespace-nowrap">{{ reservoir.reservoir_metrics.current.level }} (
                     @if (reservoir.reservoir_metrics.diff.level > 0) {
                         <span
                             class="text-lime-500">+{{ reservoir.reservoir_metrics.diff.level | number:'1.2-2' }}</span>
@@ -59,7 +59,7 @@
                     }
                     )
                 </td>
-                <td>{{ reservoir.reservoir_metrics.current.volume }} (
+                <td class="whitespace-nowrap">{{ reservoir.reservoir_metrics.current.volume }} (
                     @if (reservoir.reservoir_metrics.diff.volume > 0) {
                         <span
                             class="text-lime-500">+{{ reservoir.reservoir_metrics.diff.volume | number:'1.2-2' }}</span>

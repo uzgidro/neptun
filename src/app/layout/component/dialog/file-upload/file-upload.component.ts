@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FileUpload } from 'primeng/fileupload';
 import { Button } from 'primeng/button';
@@ -12,7 +12,7 @@ import { TooltipModule } from 'primeng/tooltip';
     templateUrl: './file-upload.component.html',
     styleUrl: './file-upload.component.scss'
 })
-export class FileUploadComponent {
+export class FileUploadComponent implements OnChanges {
     @Input() label: string = 'Файлы';
     @Input() multiple: boolean = true;
     @Input() maxFileSize: number = 1073741824; // 1GB default
@@ -27,7 +27,16 @@ export class FileUploadComponent {
     @Output() fileRemoved = new EventEmitter<number>();
     @Output() removeFile = new EventEmitter<number>();
 
+    @ViewChild(FileUpload) fileUploadComponent?: FileUpload;
+
     constructor(private messageService: MessageService) {}
+
+    ngOnChanges(changes: SimpleChanges) {
+        // Clear PrimeNG file upload component when files array is cleared
+        if (changes['files'] && changes['files'].currentValue?.length === 0 && this.fileUploadComponent) {
+            this.fileUploadComponent.clear();
+        }
+    }
 
     onFileSelect(event: any) {
         const newFiles = Array.from(event.files || event.currentFiles || []) as File[];
@@ -36,9 +45,17 @@ export class FileUploadComponent {
         this.filesChange.emit(updatedFiles);
     }
 
+    onRemoveWidget(event: any) {
+        this.onRemoveFile(this.files.findIndex((value) => value == event.file));
+    }
+
     onRemoveFile(index: number) {
         this.fileRemoved.emit(index);
         this.removeFile.emit(index);
+    }
+
+    onRemoveTemplatingFile(event: Event, file: any, removeFileCallback: Function, index: number) {
+        removeFileCallback(event, index);
     }
 
     formatFileSize(bytes: number): string {
@@ -159,5 +176,52 @@ export class FileUploadComponent {
         };
 
         return mimeToExt[mimeType] || '.bin';
+    }
+
+    isImageFile(file: File): boolean {
+        return file.type.startsWith('image/');
+    }
+
+    getFileIcon(file: File): string {
+        const fileName = file.name.toLowerCase();
+        const fileType = file.type.toLowerCase();
+
+        // Word documents
+        if (fileType.includes('word') || fileName.endsWith('.doc') || fileName.endsWith('.docx')) {
+            return 'pi pi-file-word text-blue-500';
+        }
+
+        // Excel spreadsheets
+        if (fileType.includes('excel') || fileType.includes('spreadsheet') || fileName.endsWith('.xls') || fileName.endsWith('.xlsx')) {
+            return 'pi pi-file-excel text-green-500';
+        }
+
+        // PDF files
+        if (fileType.includes('pdf') || fileName.endsWith('.pdf')) {
+            return 'pi pi-file-pdf text-red-500';
+        }
+
+        // Video files
+        if (fileType.startsWith('video/') || fileName.match(/\.(mp4|avi|mov|wmv|flv|mkv)$/)) {
+            return 'pi pi-video text-purple-500';
+        }
+
+        // Audio files
+        if (fileType.startsWith('audio/') || fileName.match(/\.(mp3|wav|ogg|flac|aac)$/)) {
+            return 'pi pi-volume-up text-orange-500';
+        }
+
+        // Archive files
+        if (fileName.match(/\.(zip|rar|7z|tar|gz)$/)) {
+            return 'pi pi-box text-yellow-600';
+        }
+
+        // Text files
+        if (fileType.startsWith('text/') || fileName.endsWith('.txt')) {
+            return 'pi pi-align-left text-gray-500';
+        }
+
+        // Default file icon
+        return 'pi pi-file text-gray-400';
     }
 }

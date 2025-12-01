@@ -122,10 +122,16 @@
                 <td>{{ event.responsible_contact?.name || '—' }}</td>
                 <td>
                     @if (event.files && event.files.length > 0) {
-                        <span>{{ event.files.length }} файл(ов)</span>
-                    }
-                    @if (!event.files || event.files.length === 0) {
-                        <span>—</span>
+                        <p-button
+                            [label]="event.files.length.toString()"
+                            icon="pi pi-paperclip"
+                            severity="secondary"
+                            [text]="true"
+                            (click)="showFiles(event)"
+                            pTooltip="Просмотр файлов"
+                        />
+                    } @else {
+                        <span class="text-color-secondary">—</span>
                     }
                 </td>
                 <td>
@@ -279,16 +285,30 @@
                 }
             </div>
 
-            <!-- File Upload -->
+            <!-- Existing Files (Edit Mode) -->
+            @if (isEditMode() && selectedEvent?.files && (selectedEvent?.files?.length ?? 0) > 0) {
+                <app-file-list
+                    [files]="selectedEvent?.files || []"
+                    (removeFile)="removeExistingFile($event)">
+                </app-file-list>
+            }
+
             <app-file-upload
-                label="Файлы"
-                [selectedFiles]="selectedFiles"
-                (filesSelected)="onFileSelect($event)"
-                (fileRemoved)="removeFile($event)"
-            ></app-file-upload>
+                [label]="isEditMode() ? 'Добавить новые файлы' : 'Прикрепить файлы'"
+                [files]="selectedFiles"
+                (filesChange)="onFileSelect($event)"
+                (removeFile)="removeFile($event)">
+            </app-file-upload>
         </div>
     </form>
 </app-dialog>
+
+<!-- File Viewer Dialog -->
+<app-file-viewer
+    [(visible)]="showFilesDialog"
+    [header]="'Файлы события'"
+    [files]="selectedEventForFiles?.files || []">
+</app-file-viewer>
 
 <!-- Toast for notifications -->
 <p-toast></p-toast>

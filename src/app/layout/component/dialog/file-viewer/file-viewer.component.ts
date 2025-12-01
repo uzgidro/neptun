@@ -8,22 +8,40 @@ import { ButtonModule } from 'primeng/button';
     standalone: true,
     imports: [CommonModule, DialogModule, ButtonModule],
     template: `
-        <p-dialog [(visible)]="visible" [header]="header" [modal]="true" [style]="{ width: '40vw' }" [breakpoints]="{ '960px': '75vw', '640px': '90vw' }" (onHide)="visibleChange.emit(false)">
+        <p-dialog [(visible)]="visible" [header]="header" [modal]="true" [style]="{ width: '50vw' }" [breakpoints]="{ '960px': '75vw', '640px': '90vw' }" (onHide)="visibleChange.emit(false)">
             <div class="file-list">
                 @if (files && files.length > 0) {
-                    <ul>
+                    <div class="flex flex-col gap-2">
                         @for (file of files; track file.id || $index) {
-                            <li class="file-item">
-                                <i class="pi pi-file"></i>
-                                <a [href]="getFileUrl(file)" target="_blank" rel="noopener noreferrer">
-                                    {{ file.file_name || 'Файл' }}
-                                </a>
-                                @if (file.size) {
-                                    <span class="file-size">({{ formatFileSize(file.size) }})</span>
-                                }
-                            </li>
+                            <a [href]="getFileUrl(file)" target="_blank" rel="noopener noreferrer" class="file-item-link">
+                                <div class="flex items-center gap-4 p-3 rounded-border border border-surface transition-colors">
+                                    <!-- Left: Icon or Image -->
+                                    <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center">
+                                        @if (isImageFile(file.file_name)) {
+                                            <img [src]="getFileUrl(file)" [alt]="file.file_name" class="w-12 h-12 rounded object-contain" />
+                                        } @else {
+                                            <i [class]="getFileIcon(file.file_name)" class="text-3xl"></i>
+                                        }
+                                    </div>
+
+                                    <!-- Middle: File name and size -->
+                                    <div class="flex-1 min-w-0">
+                                        <div class="font-semibold text-ellipsis whitespace-nowrap overflow-hidden">
+                                            {{ file.file_name || 'Файл' }}
+                                        </div>
+                                        @if (file.size_bytes) {
+                                            <div class="text-sm text-color-secondary">{{ formatFileSize(file.size_bytes) }}</div>
+                                        }
+                                    </div>
+
+                                    <!-- Right: Download icon -->
+                                    <div class="flex-shrink-0">
+                                        <i class="pi pi-external-link text-primary-500 px-4"></i>
+                                    </div>
+                                </div>
+                            </a>
                         }
-                    </ul>
+                    </div>
                 } @else {
                     <p class="no-files">Нет прикрепленных файлов</p>
                 }
@@ -33,39 +51,15 @@ import { ButtonModule } from 'primeng/button';
     styles: [
         `
             .file-list {
-                padding: 1rem 0;
+                padding: 0.5rem 0;
             }
-            .file-list ul {
-                list-style: none;
-                padding: 0;
-                margin: 0;
-            }
-            .file-item {
-                padding: 0.5rem;
-                margin-bottom: 0.5rem;
-                border-radius: 4px;
-                background: var(--surface-50);
-                display: flex;
-                align-items: center;
-                gap: 0.5rem;
-            }
-            .file-item i {
-                color: var(--primary-color);
-                font-size: 1.2rem;
-            }
-            .file-item a {
-                flex: 1;
-                color: var(--primary-color);
+            .file-item-link {
                 text-decoration: none;
-                word-break: break-all;
+                color: inherit;
+                display: block;
             }
-            .file-item a:hover {
-                text-decoration: underline;
-            }
-            .file-size {
-                color: var(--text-color-secondary);
-                font-size: 0.875rem;
-                white-space: nowrap;
+            .file-item-link:hover {
+                text-decoration: none;
             }
             .no-files {
                 text-align: center;
@@ -94,5 +88,53 @@ export class FileViewerComponent {
         const sizes = ['Bytes', 'KB', 'MB', 'GB'];
         const i = Math.floor(Math.log(bytes) / Math.log(k));
         return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
+    }
+
+    isImageFile(fileName: string): boolean {
+        const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.bmp'];
+        const lowerFileName = fileName.toLowerCase();
+        return imageExtensions.some((ext) => lowerFileName.endsWith(ext));
+    }
+
+    getFileIcon(fileName: string): string {
+        const lowerFileName = fileName.toLowerCase();
+
+        // Word documents
+        if (lowerFileName.endsWith('.doc') || lowerFileName.endsWith('.docx')) {
+            return 'pi pi-file-word text-blue-500';
+        }
+
+        // Excel spreadsheets
+        if (lowerFileName.endsWith('.xls') || lowerFileName.endsWith('.xlsx')) {
+            return 'pi pi-file-excel text-green-500';
+        }
+
+        // PDF files
+        if (lowerFileName.endsWith('.pdf')) {
+            return 'pi pi-file-pdf text-red-500';
+        }
+
+        // Video files
+        if (lowerFileName.match(/\.(mp4|avi|mov|wmv|flv|mkv)$/)) {
+            return 'pi pi-video text-purple-500';
+        }
+
+        // Audio files
+        if (lowerFileName.match(/\.(mp3|wav|ogg|flac|aac)$/)) {
+            return 'pi pi-volume-up text-orange-500';
+        }
+
+        // Archive files
+        if (lowerFileName.match(/\.(zip|rar|7z|tar|gz)$/)) {
+            return 'pi pi-box text-yellow-600';
+        }
+
+        // Text files
+        if (lowerFileName.endsWith('.txt')) {
+            return 'pi pi-align-left text-gray-500';
+        }
+
+        // Default file icon
+        return 'pi pi-file text-gray-400';
     }
 }
