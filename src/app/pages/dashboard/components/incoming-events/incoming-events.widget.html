@@ -31,7 +31,7 @@
                     <td>{{ event.name }}</td>
                     <td>{{ event.event_type?.name || '-' }}</td>
                     <td>{{ event.event_date | date: 'dd.MM.yyyy HH:mm' }}</td>
-                    <td>{{ event.location || event.organization?.name || '-' }}</td>
+                    <td>{{ getLocationDisplay(event) }}</td>
                     <td>
                         <div class="flex items-center gap-4">
                             <span>{{ event.responsible_contact?.name || '-' }}</span>

@@ -63,6 +63,20 @@ export class IncomingEventsWidget implements OnInit {
         }
     }
 
+    getLocationDisplay(event: Event): string {
+        const parts: string[] = [];
+
+        if (event.organization?.name) {
+            parts.push(event.organization.name);
+        }
+
+        if (event.location) {
+            parts.push(event.location);
+        }
+
+        return parts.length > 0 ? parts.join(' - ') : '-';
+    }
+
     viewEventDetails(eventId: number) {
         this.router.navigate(['/event-management', eventId]);
     }
