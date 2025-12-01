@@ -46,8 +46,8 @@
                                 <div class="mt-4 flex flex-col gap-2 w-full">
                                     @for (file of getMediaFiles(event); track file.id) {
                                         @if (isImageFile(file.file_name)) {
-                                            <img [src]="getFileUrl(file)" [alt]="file.file_name"
-                                                 class="w-full rounded-border object-cover max-h-96" />
+                                            <img [src]="file.url" [alt]="file.file_name"
+                                                 class="w-full rounded-border object-contain" />
                                         }
                                         <!--                                        @else if (isVideoFile(file.file_name)) {-->
                                             <!--                                            <video [src]="getFileUrl(file)" controls-->
