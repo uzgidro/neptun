@@ -25,10 +25,11 @@ export interface EventStatus {
  */
 export interface EventFile {
     id: number;
-    filename: string;
+    file_name: string;
     object_key: string;
     mime_type: string;
-    size: number;
+    size_bytes: number;
+    file_path?: string;
     created_at: string;
 }
 

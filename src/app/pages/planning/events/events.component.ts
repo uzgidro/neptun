@@ -18,6 +18,8 @@ import { TextareaComponent } from '@/layout/component/dialog/textarea/textarea.c
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
 import { SelectComponent } from '@/layout/component/dialog/select/select.component';
 import { FileUploadComponent } from '@/layout/component/dialog/file-upload/file-upload.component';
+import { FileListComponent } from '@/layout/component/dialog/file-list/file-list.component';
+import { FileViewerComponent } from '@/layout/component/dialog/file-viewer/file-viewer.component';
 
 // Services
 import { EventManagementService } from '@/core/services/event-management.service';
@@ -49,6 +51,8 @@ import { Tooltip } from 'primeng/tooltip';
         DatePickerComponent,
         SelectComponent,
         FileUploadComponent,
+        FileListComponent,
+        FileViewerComponent,
         Tooltip
     ],
     providers: [MessageService, ConfirmationService],
@@ -84,6 +88,11 @@ export class EventsComponent implements OnInit, OnDestroy {
 
     // Files
     selectedFiles: File[] = [];
+    existingFilesToKeep: number[] = [];
+
+    // File viewer
+    showFilesDialog = false;
+    selectedEventForFiles: Event | null = null;
 
     // Form
     eventForm: FormGroup;
@@ -222,6 +231,7 @@ export class EventsComponent implements OnInit, OnDestroy {
         this.selectedEvent = null;
         this.eventForm.reset();
         this.selectedFiles = [];
+        this.existingFilesToKeep = [];
         this.showCreateContact = false;
         this.submitted = false;
         this.displayDialog.set(true);
@@ -233,6 +243,8 @@ export class EventsComponent implements OnInit, OnDestroy {
     closeDialog() {
         this.displayDialog.set(false);
         this.submitted = false;
+        this.selectedFiles = [];
+        this.existingFilesToKeep = [];
     }
 
     /**
@@ -262,6 +274,7 @@ export class EventsComponent implements OnInit, OnDestroy {
         }
 
         this.selectedFiles = [];
+        this.existingFilesToKeep = event.files?.map((f) => f.id) || [];
         this.displayDialog.set(true);
     }
 
@@ -321,6 +334,36 @@ export class EventsComponent implements OnInit, OnDestroy {
      */
     removeFile(index: number) {
         this.selectedFiles.splice(index, 1);
+    }
+
+    /**
+     * Remove existing file
+     */
+    removeExistingFile(fileId: number) {
+        this.existingFilesToKeep = this.existingFilesToKeep.filter((id) => id !== fileId);
+        // Also remove from selected event's files for UI update
+        if (this.selectedEvent?.files) {
+            this.selectedEvent.files = this.selectedEvent.files.filter((f) => f.id !== fileId);
+        }
+    }
+
+    /**
+     * Show files dialog
+     */
+    showFiles(event: Event) {
+        this.selectedEventForFiles = event;
+        this.showFilesDialog = true;
+    }
+
+    /**
+     * Format file size
+     */
+    formatFileSize(bytes: number): string {
+        if (!bytes || bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
     }
 
     /**
@@ -384,6 +427,8 @@ export class EventsComponent implements OnInit, OnDestroy {
 
         const formData = this.buildFormData();
 
+        console.log(formData);
+
         this.eventService
             .updateEvent(this.selectedEvent.id, formData)
             .pipe(takeUntil(this.destroy$))
@@ -442,10 +487,15 @@ export class EventsComponent implements OnInit, OnDestroy {
             formData.append('responsible_phone', formValue.responsible_phone);
         }
 
-        // Files
+        // Files - only for new files
         this.selectedFiles.forEach((file) => {
             formData.append('files', file, file.name);
         });
+
+        // Existing files to keep (only in edit mode)
+        if (this.isEditMode()) {
+            formData.append('file_ids', this.existingFilesToKeep.join(','));
+        }
 
         return formData;
     }
