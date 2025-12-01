@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FileUpload } from 'primeng/fileupload';
 import { Button } from 'primeng/button';
@@ -12,7 +12,7 @@ import { TooltipModule } from 'primeng/tooltip';
     templateUrl: './file-upload.component.html',
     styleUrl: './file-upload.component.scss'
 })
-export class FileUploadComponent {
+export class FileUploadComponent implements OnChanges {
     @Input() label: string = 'Файлы';
     @Input() multiple: boolean = true;
     @Input() maxFileSize: number = 1073741824; // 1GB default
@@ -27,7 +27,16 @@ export class FileUploadComponent {
     @Output() fileRemoved = new EventEmitter<number>();
     @Output() removeFile = new EventEmitter<number>();
 
+    @ViewChild(FileUpload) fileUploadComponent?: FileUpload;
+
     constructor(private messageService: MessageService) {}
+
+    ngOnChanges(changes: SimpleChanges) {
+        // Clear PrimeNG file upload component when files array is cleared
+        if (changes['files'] && changes['files'].currentValue?.length === 0 && this.fileUploadComponent) {
+            this.fileUploadComponent.clear();
+        }
+    }
 
     onFileSelect(event: any) {
         const newFiles = Array.from(event.files || event.currentFiles || []) as File[];
