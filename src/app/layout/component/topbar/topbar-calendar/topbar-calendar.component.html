@@ -20,11 +20,24 @@
                 </div>
             } @else if (selectedDayEvents().length > 0) {
                 @for (event of selectedDayEvents(); track event.id) {
-                    <div class="mb-2 flex items-center justify-between">
-                        <span>{{ event.name }} ({{ event.event_date | date: 'HH:mm' }})</span>
-                        @if (event.event_type) {
-                            <span class="text-xs text-surface-500 ml-2">{{ event.event_type.name || '' }}</span>
-                        }
+                    <div (click)="openEventDetails(event.id); calendarPopover.toggle($event)"
+                         class="mb-2 flex items-center justify-between gap-2">
+                        <div class="flex-1 min-w-0">
+                            <div class="font-medium text-ellipsis overflow-hidden whitespace-nowrap">
+                                {{ event.name }} ({{ event.event_date | date: 'HH:mm' }})
+                            </div>
+                            @if (event.event_type) {
+                                <div class="text-xs text-surface-500">{{ event.event_type.name || '' }}</div>
+                            }
+                        </div>
+                        <button pButton
+                                type="button"
+                                class="p-button-text p-button-rounded p-button-sm"
+                                (click)="openEventDetails(event.id)"
+                                pTooltip="Подробнее"
+                                tooltipPosition="left">
+                            <i class="pi pi-info-circle" pButtonIcon></i>
+                        </button>
                     </div>
                 }
             } @else {
@@ -33,3 +46,106 @@
         </div>
     </ng-template>
 </p-popover>
+
+<p-dialog [(visible)]="eventDialogVisible" [header]="eventDialogHeader" [modal]="true" [style]="{ width: '600px' }"
+          [breakpoints]="{ '960px': '75vw', '640px': '90vw' }">
+    @if (loadingEventDetails) {
+        <div class="flex items-center justify-center p-8">
+            <i class="pi pi-spin pi-spinner text-4xl"></i>
+        </div>
+    } @else if (selectedEventDetails) {
+        <div class="flex flex-col gap-4">
+            <div>
+                <div class="font-semibold text-surface-500 mb-1">Название</div>
+                <div>{{ selectedEventDetails.name }}</div>
+            </div>
+
+            @if (selectedEventDetails.description) {
+                <div>
+                    <div class="font-semibold text-surface-500 mb-1">Описание</div>
+                    <div class="whitespace-pre-wrap">{{ selectedEventDetails.description }}</div>
+                </div>
+            }
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <div class="font-semibold text-surface-500 mb-1">Дата и время</div>
+                    <div>{{ selectedEventDetails.event_date | date: 'dd.MM.yyyy HH:mm' }}</div>
+                </div>
+
+                @if (selectedEventDetails.event_type) {
+                    <div>
+                        <div class="font-semibold text-surface-500 mb-1">Тип</div>
+                        <div>{{ selectedEventDetails.event_type.name }}</div>
+                    </div>
+                }
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                @if (selectedEventDetails.location || selectedEventDetails.organization) {
+                    <div>
+                        <div class="font-semibold text-surface-500 mb-1">Место</div>
+                        <div>{{ getLocationDisplay(selectedEventDetails) }}</div>
+                    </div>
+                }
+
+                @if (selectedEventDetails.event_status) {
+                    <div>
+                        <div class="font-semibold text-surface-500 mb-1">Статус</div>
+                        <div>{{ selectedEventDetails.event_status.name }}</div>
+                    </div>
+                }
+            </div>
+
+            @if (selectedEventDetails.responsible_contact) {
+                <div>
+                    <div class="font-semibold text-surface-500 mb-1">Ответственный</div>
+                    <div class="flex items-center gap-2">
+                        <span>{{ selectedEventDetails.responsible_contact.name }}</span>
+                        @if (selectedEventDetails.responsible_contact.phone) {
+                            <a [href]="'tel:' + selectedEventDetails.responsible_contact.phone"
+                               class="text-primary hover:underline">
+                                {{ selectedEventDetails.responsible_contact.phone }}
+                            </a>
+                        }
+                    </div>
+                </div>
+            }
+
+            @if (selectedEventDetails.files && selectedEventDetails.files.length > 0) {
+                <div>
+                    <div class="font-semibold text-surface-500 mb-2">Файлы ({{ selectedEventDetails.files.length }})
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        @for (file of selectedEventDetails.files; track file.id) {
+                            <a [href]="file.url" target="_blank" rel="noopener noreferrer"
+                               class="flex items-center gap-3 p-3 rounded-border border border-surface transition-colors hover:bg-surface-50 dark:hover:bg-surface-800">
+                                <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center">
+                                    @if (isImageFile(file.file_name)) {
+                                        <img [src]="file.url" [alt]="file.file_name"
+                                             class="w-10 h-10 rounded object-contain" />
+                                    } @else if (isVideoFile(file.file_name)) {
+                                        <video [src]="file.url" class="w-10 h-10 rounded object-cover"
+                                               muted></video>
+                                    } @else {
+                                        <i [class]="getFileIcon(file.file_name)" class="text-2xl"></i>
+                                    }
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <div class="font-medium text-ellipsis whitespace-nowrap overflow-hidden">
+                                        {{ file.file_name }}
+                                    </div>
+                                    @if (file.size_bytes) {
+                                        <div class="text-sm text-surface-500">{{ formatFileSize(file.size_bytes) }}
+                                        </div>
+                                    }
+                                </div>
+                                <i class="pi pi-external-link text-primary-500"></i>
+                            </a>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</p-dialog>
