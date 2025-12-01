@@ -7,7 +7,7 @@
         <div *ngIf="errorMessage" class="text-red-500">{{ errorMessage }}</div>
 
         <div *ngIf="weather && !loading">
-            <div class="text-900 font-medium text-xl mb-2">{{ weather.city }}</div>
+            <div class="text-900 font-medium text-xl mb-2"><i class="pi pi-map-marker"></i> {{ weather.city }}</div>
             <i [class]="weather.iconClass" style="font-size: 3rem;"></i>
             <div class="text-900 font-bold text-5xl my-3">{{ weather.temperature }}°C</div>
             <div class="text-900 font-medium mb-3">{{ weather.description }}</div>
@@ -19,7 +19,7 @@
                 </div>
                 <div class="col-span-1 flex align-items-center justify-content-center">
                     <i class="pi pi-wind mr-2"></i>
-                    <span>Ветер: {{ weather.wind }} м/с</span>
+                    <span>Ветер:<br> {{ weather.wind }} м/с</span>
                 </div>
             </div>
         </div>

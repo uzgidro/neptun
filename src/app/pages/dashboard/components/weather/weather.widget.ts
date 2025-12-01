@@ -28,23 +28,23 @@ export class WeatherWidget implements OnInit {
     private weatherService = inject(WeatherService);
 
     ngOnInit() {
-        this.locationService.getCurrentPosition().pipe(
-            finalize(() => this.loading = false)
-        ).subscribe({
-            next: (position) => {
-                this.loadWeather(position.coords.latitude, position.coords.longitude);
-            },
-            error: (error) => {
-                console.error('Ошибка получения местоположения:', error);
-                this.errorMessage = 'Не удалось определить ваше местоположение.';
-            }
-        });
+        this.locationService
+            .getCurrentPosition()
+            .pipe(finalize(() => (this.loading = false)))
+            .subscribe({
+                next: (position) => {
+                    this.loadWeather(position.coords.latitude, position.coords.longitude);
+                },
+                error: (error) => {
+                    console.error('Ошибка получения местоположения:', error);
+                    this.errorMessage = 'Не удалось определить ваше местоположение.';
+                }
+            });
     }
 
     private loadWeather(lat: number, lon: number) {
         this.weatherService.getWeatherByCoords(lat, lon).subscribe({
             next: (data) => {
-                console.log('Weather: ' + data);
                 this.weather = {
                     city: data.name,
                     temperature: Math.round(data.main.temp),
@@ -80,7 +80,7 @@ export class WeatherWidget implements OnInit {
             '13d': 'pi pi-cloud-snow text-blue-200',
             '13n': 'pi pi-cloud-snow text-blue-200',
             '50d': 'pi pi-bars text-gray-500', // Туман
-            '50n': 'pi pi-bars text-gray-500', // Туман
+            '50n': 'pi pi-bars text-gray-500' // Туман
         };
         return iconMap[iconCode] || 'pi pi-question';
     }
