@@ -1,4 +1,5 @@
 import { UserShortInfo } from '@/core/interfaces/users';
+import { FileResponse } from '@/core/interfaces/files';
 
 export interface GesShutdownPayload {
     organization_id?: number;
@@ -20,6 +21,7 @@ export interface ShutdownResponse {
     generation_loss: number | null;
     created_at: string;
     idle_discharge_volume: number | null;
+    files?: FileResponse[];
 }
 
 export interface GesShutdownResponse {
@@ -39,6 +41,7 @@ export interface ShutdownDto {
     generation_loss: number | null;
     created_at: Date;
     idle_discharge_volume: number | null;
+    files?: FileResponse[];
 }
 
 export interface GesShutdownDto {

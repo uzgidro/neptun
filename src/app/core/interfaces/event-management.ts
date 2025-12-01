@@ -1,6 +1,7 @@
 import { Contact } from './contact';
 import { Organization } from './organizations';
 import { Users } from '@/core/interfaces/users';
+import { FileResponse } from '@/core/interfaces/files';
 
 /**
  * Event Type (Meeting, Training, Inspection, Maintenance)
@@ -25,10 +26,11 @@ export interface EventStatus {
  */
 export interface EventFile {
     id: number;
-    filename: string;
+    file_name: string;
     object_key: string;
     mime_type: string;
-    size: number;
+    size_bytes: number;
+    file_path?: string;
     created_at: string;
 }
 
@@ -62,7 +64,7 @@ export interface Event {
     updated_by?: Users | null;
 
     // Files
-    files?: EventFile[];
+    files?: FileResponse[];
 
     // Audit timestamps
     created_at: string;

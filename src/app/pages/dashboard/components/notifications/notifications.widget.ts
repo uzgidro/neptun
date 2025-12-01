@@ -3,12 +3,14 @@ import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
 import { DatePipe, NgClass } from '@angular/common';
 import { PastEventsService } from '@/core/services/past-events.service';
-import { DateGroup, EventType } from '@/core/interfaces/past-events';
+import { DateGroup, Event, EventType } from '@/core/interfaces/past-events';
+import { FileResponse } from '@/core/interfaces/files';
+import { Dialog } from 'primeng/dialog';
 
 @Component({
     standalone: true,
     selector: 'app-notifications-widget',
-    imports: [ButtonModule, MenuModule, DatePipe, NgClass],
+    imports: [ButtonModule, MenuModule, DatePipe, NgClass, Dialog],
     templateUrl: './notifications.widget.html'
 })
 export class NotificationsWidget implements OnInit {
@@ -17,6 +19,10 @@ export class NotificationsWidget implements OnInit {
     eventsByDate: DateGroup[] = [];
     loading = false;
     expandedEvents = new Set<string>();
+
+    imageViewerVisible = false;
+    imageViewerHeader = '';
+    selectedImageUrl = '';
 
     items = [
         { label: 'Add New', icon: 'pi pi-fw pi-plus' },
@@ -39,15 +45,41 @@ export class NotificationsWidget implements OnInit {
         return this.expandedEvents.has(eventDate);
     }
 
-    shouldShowExpandButton(description: string): boolean {
-        return description.length > 90;
+    getEventKey(event: Event): string {
+        return event.date + event.entity_type + event.entity_id + event.organization_id;
+    }
+
+    shouldShowExpandButton(event: Event): boolean {
+        return event.description.length > 120 || this.hasMediaFiles(event);
+    }
+
+    hasMediaFiles(event: Event): boolean {
+        if (!event.files || event.files.length === 0) return false;
+        return event.files.some((file) => this.isImageFile(file.file_name) || this.isVideoFile(file.file_name));
+    }
+
+    getMediaFiles(event: Event): FileResponse[] {
+        if (!event.files) return [];
+        return event.files.filter((file) => this.isImageFile(file.file_name) || this.isVideoFile(file.file_name));
+    }
+
+    isImageFile(fileName: string): boolean {
+        const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.bmp'];
+        const lowerFileName = fileName.toLowerCase();
+        return imageExtensions.some((ext) => lowerFileName.endsWith(ext));
+    }
+
+    isVideoFile(fileName: string): boolean {
+        const videoExtensions = ['.mp4', '.avi', '.mov', '.wmv', '.flv', '.mkv', '.webm', '.mpeg', '.mpg'];
+        const lowerFileName = fileName.toLowerCase();
+        return videoExtensions.some((ext) => lowerFileName.endsWith(ext));
     }
 
     loadPastEvents() {
         this.loading = true;
         this.pastEventsService.getPastEvents().subscribe({
             next: (response) => {
-                this.eventsByDate = response.events_by_date;
+                this.eventsByDate = response;
                 this.loading = false;
             },
             error: (error) => {
@@ -57,7 +89,20 @@ export class NotificationsWidget implements OnInit {
         });
     }
 
-    getEventIcon(type: EventType): string {
+    getEventIcon(type: EventType, event?: Event): string {
+        // Check for entity_type first
+        if (event?.entity_type) {
+            const entityIcons: Record<string, string> = {
+                shutdown: 'pi-wrench',
+                discharge: 'pi-comment',
+                incident: 'pi-exclamation-triangle'
+            };
+            if (entityIcons[event.entity_type]) {
+                return entityIcons[event.entity_type];
+            }
+        }
+
+        // Fallback to type-based icons
         const icons: Record<EventType, string> = {
             success: 'pi-check-circle',
             danger: 'pi-exclamation-circle',
@@ -65,6 +110,10 @@ export class NotificationsWidget implements OnInit {
             info: 'pi-info-circle'
         };
         return icons[type] || 'pi-info-circle';
+    }
+
+    getEntityIconRotation(entityType?: string): string {
+        return entityType === 'discharge' ? 'rotate-135' : '';
     }
 
     getEventColorClass(type: EventType): string {
@@ -85,5 +134,11 @@ export class NotificationsWidget implements OnInit {
             info: 'text-blue-500'
         };
         return colors[type] || 'text-blue-500';
+    }
+
+    openImageViewer(imageUrl: string, fileName: string) {
+        this.selectedImageUrl = imageUrl;
+        this.imageViewerHeader = fileName;
+        this.imageViewerVisible = true;
     }
 }

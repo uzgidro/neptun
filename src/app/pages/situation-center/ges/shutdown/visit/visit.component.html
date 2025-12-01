@@ -1,6 +1,6 @@
 @if (authService.isSc()) {
     <div class="mb-6">
-        <p-button label="Создать Визит" icon="pi pi-plus" (click)="openNew()" />
+        <p-button label="Добавить визит" icon="pi pi-plus" (click)="openNew()" />
     </div>
 }
 
@@ -41,6 +41,10 @@
                 <p-sortIcon field="created_by_user"></p-sortIcon>
             </th>
 
+            <th style="width: 10%">
+                Файлы
+            </th>
+
             @if (authService.isSc()) {
                 <th style="width: 10%">
                     Действия
@@ -65,6 +69,20 @@
             </td>
             <td>
                 {{ visit.created_by?.name }}
+            </td>
+            <td>
+                @if (visit.files && visit.files.length > 0) {
+                    <p-button
+                        [label]="visit.files.length.toString()"
+                        icon="pi pi-paperclip"
+                        severity="secondary"
+                        [text]="true"
+                        (click)="showFiles(visit)"
+                        pTooltip="Просмотр файлов"
+                    />
+                } @else {
+                    <span class="text-color-secondary">—</span>
+                }
             </td>
             @if (authService.isSc()) {
                 <td>
@@ -91,7 +109,7 @@
 
     <ng-template pTemplate="emptymessage">
         <tr>
-            <td [attr.colspan]="authService.isSc() ? 6 : 5" class="text-center">
+            <td [attr.colspan]="authService.isSc() ? 7 : 6" class="text-center">
                 Визиты за выбранную дату не найдены.
             </td>
         </tr>
@@ -139,6 +157,26 @@
             errorMessage="Укажите описание">
         </app-textarea>
 
+        @if (isEditMode && currentVisit?.files && (currentVisit?.files?.length ?? 0) > 0) {
+            <app-file-list
+                [files]="currentVisit?.files || []"
+                (removeFile)="removeExistingFile($event)">
+            </app-file-list>
+        }
+
+        <app-file-upload
+            [label]="isEditMode ? 'Добавить новые файлы' : 'Прикрепить файлы'"
+            [files]="selectedFiles"
+            (filesChange)="onFileSelect($event)"
+            (removeFile)="removeFile($event)">
+        </app-file-upload>
+
     </form>
 
 </app-dialog>
+
+<app-file-viewer
+    [(visible)]="showFilesDialog"
+    [header]="'Файлы визита'"
+    [files]="selectedVisitForFiles?.files || []">
+</app-file-viewer>

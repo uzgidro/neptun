@@ -21,6 +21,7 @@
                     <th pSortableColumn="responsible_contact">Ответственный
                         <p-sortIcon field="responsible_contact" />
                     </th>
+                    <th style="width: 8rem">Файлы</th>
                 </tr>
             </ng-template>
             <ng-template #body let-event>
@@ -31,7 +32,7 @@
                     <td>{{ event.name }}</td>
                     <td>{{ event.event_type?.name || '-' }}</td>
                     <td>{{ event.event_date | date: 'dd.MM.yyyy HH:mm' }}</td>
-                    <td>{{ event.location || event.organization?.name || '-' }}</td>
+                    <td>{{ getLocationDisplay(event) }}</td>
                     <td>
                         <div class="flex items-center gap-4">
                             <span>{{ event.responsible_contact?.name || '-' }}</span>
@@ -43,13 +44,27 @@
                             }
                         </div>
                     </td>
+                    <td>
+                        @if (event.files && event.files.length > 0) {
+                            <button pButton type="button" outlined class="p-button-sm"
+                                    (click)="openFileViewer(event)"
+                                    pTooltip="Просмотр файлов" tooltipPosition="top">
+                                <i class="pi pi-paperclip mr-2"></i>
+                                <span>{{ event.files.length }}</span>
+                            </button>
+                        } @else {
+                            <span class="text-color-secondary">-</span>
+                        }
+                    </td>
                 </tr>
             </ng-template>
             <ng-template #emptymessage>
                 <tr>
-                    <td colspan="6" class="text-center">Нет предстоящих мероприятий</td>
+                    <td colspan="7" class="text-center">Нет предстоящих мероприятий</td>
                 </tr>
             </ng-template>
         </p-table>
     </div>
 </div>
+
+<app-file-viewer [(visible)]="fileViewerVisible" [header]="fileViewerHeader" [files]="selectedFiles" />

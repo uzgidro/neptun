@@ -1,6 +1,6 @@
 @if (authService.isSc()) {
     <div class="mb-6">
-        <p-button label="Добавить Водосброс" icon="pi pi-plus" (click)="openNew()" />
+        <p-button label="Добавить водосброс" icon="pi pi-plus" (click)="openNew()" />
     </div>
 }
 
@@ -28,6 +28,7 @@
             <th pSortableColumn="total_volume">Объём, млн. м³</th>
             <th pSortableColumn="reason">Причина</th>
             <th pSortableColumn="created_by.name">Создал</th>
+            <th style="width: 10%">Файлы</th>
             @if (authService.isSc()) {
                 <th style="width: 10%">Действия</th>
             }
@@ -43,6 +44,20 @@
             <td>{{ discharge.total_volume | number: '1.2-2' }}</td>
             <td>{{ discharge.reason || '-' }}</td>
             <td>{{ discharge.created_by?.name }}</td>
+            <td>
+                @if (discharge.files && discharge.files.length > 0) {
+                    <p-button
+                        [label]="discharge.files.length.toString()"
+                        icon="pi pi-paperclip"
+                        severity="secondary"
+                        [text]="true"
+                        (click)="showFiles(discharge)"
+                        pTooltip="Просмотр файлов"
+                    />
+                } @else {
+                    <span class="text-color-secondary">—</span>
+                }
+            </td>
             @if (authService.isSc()) {
                 <td>
                     <p-button
@@ -68,7 +83,7 @@
 
     <ng-template pTemplate="emptymessage">
         <tr>
-            <td [attr.colspan]="authService.isSc() ? 8 : 7" class="text-center">
+            <td [attr.colspan]="authService.isSc() ? 9 : 8" class="text-center">
                 Водосбросы за выбранную дату не найдены.
             </td>
         </tr>
@@ -123,6 +138,26 @@
             [required]="false">
         </app-textarea>
 
+        @if (isEditMode && currentDischarge?.files && (currentDischarge?.files?.length ?? 0) > 0) {
+            <app-file-list
+                [files]="currentDischarge?.files || []"
+                (removeFile)="removeExistingFile($event)">
+            </app-file-list>
+        }
+
+        <app-file-upload
+            [label]="isEditMode ? 'Добавить новые файлы' : 'Прикрепить файлы'"
+            [files]="selectedFiles"
+            (filesChange)="onFileSelect($event)"
+            (removeFile)="removeFile($event)">
+        </app-file-upload>
+
     </form>
 
 </app-dialog>
+
+<app-file-viewer
+    [(visible)]="showFilesDialog"
+    [header]="'Файлы водосброса'"
+    [files]="selectedDischargeForFiles?.files || []">
+</app-file-viewer>
