@@ -5,11 +5,12 @@ import { DatePipe, NgClass } from '@angular/common';
 import { PastEventsService } from '@/core/services/past-events.service';
 import { DateGroup, Event, EventType } from '@/core/interfaces/past-events';
 import { FileResponse } from '@/core/interfaces/files';
+import { Dialog } from 'primeng/dialog';
 
 @Component({
     standalone: true,
     selector: 'app-notifications-widget',
-    imports: [ButtonModule, MenuModule, DatePipe, NgClass],
+    imports: [ButtonModule, MenuModule, DatePipe, NgClass, Dialog],
     templateUrl: './notifications.widget.html'
 })
 export class NotificationsWidget implements OnInit {
@@ -18,6 +19,10 @@ export class NotificationsWidget implements OnInit {
     eventsByDate: DateGroup[] = [];
     loading = false;
     expandedEvents = new Set<string>();
+
+    imageViewerVisible = false;
+    imageViewerHeader = '';
+    selectedImageUrl = '';
 
     items = [
         { label: 'Add New', icon: 'pi pi-fw pi-plus' },
@@ -129,5 +134,11 @@ export class NotificationsWidget implements OnInit {
             info: 'text-blue-500'
         };
         return colors[type] || 'text-blue-500';
+    }
+
+    openImageViewer(imageUrl: string, fileName: string) {
+        this.selectedImageUrl = imageUrl;
+        this.imageViewerHeader = fileName;
+        this.imageViewerVisible = true;
     }
 }

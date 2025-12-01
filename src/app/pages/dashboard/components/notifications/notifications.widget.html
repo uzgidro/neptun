@@ -14,7 +14,8 @@
                     class="block text-muted-color font-medium mb-4 sticky top-0 bg-surface-0 dark:bg-surface-900 py-2 z-10">{{ dateGroup.date | date:'dd.MM' }}</span>
                 <ul class="p-0 m-0 list-none mb-6">
                     @for (event of dateGroup.events; track $index) {
-                        <li class="flex flex-col py-2 pr-2.5 border-b border-surface">
+                        <li class="flex flex-col py-2 pr-2.5 border-b border-surface"
+                            (click)="toggleEventExpansion(getEventKey(event))">
                             <div class="flex items-start">
                                 <div class="w-12 h-12 flex items-center justify-center rounded-full mr-4 shrink-0"
                                      [ngClass]="getEventColorClass(event.type)">
@@ -47,7 +48,8 @@
                                     @for (file of getMediaFiles(event); track file.id) {
                                         @if (isImageFile(file.file_name)) {
                                             <img [src]="file.url" [alt]="file.file_name"
-                                                 class="w-full rounded-border object-contain" />
+                                                 (click)="openImageViewer(file.url, file.file_name)"
+                                                 class="w-full rounded-border object-contain cursor-pointer hover:opacity-90 transition-opacity" />
                                         }
                                         <!--                                        @else if (isVideoFile(file.file_name)) {-->
                                             <!--                                            <video [src]="getFileUrl(file)" controls-->
@@ -68,3 +70,12 @@
         }
     </div>
 </div>
+
+<p-dialog [(visible)]="imageViewerVisible" [header]="imageViewerHeader" [modal]="true"
+          [style]="{ width: '90vw', maxWidth: '1200px' }"
+          [contentStyle]="{ padding: 0 }">
+    <div class="flex items-center justify-center bg-surface-50 dark:bg-surface-900">
+        <img [src]="selectedImageUrl" [alt]="imageViewerHeader"
+             class="max-w-full max-h-[80vh] object-fill" />
+    </div>
+</p-dialog>
