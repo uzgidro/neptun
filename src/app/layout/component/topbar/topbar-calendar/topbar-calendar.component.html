@@ -20,7 +20,8 @@
                 </div>
             } @else if (selectedDayEvents().length > 0) {
                 @for (event of selectedDayEvents(); track event.id) {
-                    <div (click)="openEventDetails(event.id)" class="mb-2 flex items-center justify-between gap-2">
+                    <div (click)="openEventDetails(event.id); calendarPopover.toggle($event)"
+                         class="mb-2 flex items-center justify-between gap-2">
                         <div class="flex-1 min-w-0">
                             <div class="font-medium text-ellipsis overflow-hidden whitespace-nowrap">
                                 {{ event.name }} ({{ event.event_date | date: 'HH:mm' }})
