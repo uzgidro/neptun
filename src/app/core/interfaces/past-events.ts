@@ -17,7 +17,3 @@ export interface DateGroup {
     date: string;
     events: Event[];
 }
-
-export interface PastEventsResponse {
-    events_by_date: DateGroup[];
-}

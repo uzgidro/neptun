@@ -4,6 +4,7 @@ import { MenuModule } from 'primeng/menu';
 import { DatePipe, NgClass } from '@angular/common';
 import { PastEventsService } from '@/core/services/past-events.service';
 import { DateGroup, Event, EventType } from '@/core/interfaces/past-events';
+import { FileResponse } from '@/core/interfaces/files';
 
 @Component({
     standalone: true,
@@ -39,8 +40,42 @@ export class NotificationsWidget implements OnInit {
         return this.expandedEvents.has(eventDate);
     }
 
-    shouldShowExpandButton(description: string): boolean {
-        return description.length > 90;
+    getEventKey(event: Event): string {
+        return event.date+event.entity_type+event.entity_id+event.organization_id
+    }
+
+    shouldShowExpandButton(event: Event): boolean {
+        return event.description.length > 90 || this.hasMediaFiles(event);
+    }
+
+    hasMediaFiles(event: Event): boolean {
+        if (!event.files || event.files.length === 0) return false;
+        return event.files.some(file =>
+            this.isImageFile(file.file_name) || this.isVideoFile(file.file_name)
+        );
+    }
+
+    getMediaFiles(event: Event): FileResponse[] {
+        if (!event.files) return [];
+        return event.files.filter(file =>
+            this.isImageFile(file.file_name) || this.isVideoFile(file.file_name)
+        );
+    }
+
+    isImageFile(fileName: string): boolean {
+        const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.bmp'];
+        const lowerFileName = fileName.toLowerCase();
+        return imageExtensions.some((ext) => lowerFileName.endsWith(ext));
+    }
+
+    isVideoFile(fileName: string): boolean {
+        const videoExtensions = ['.mp4', '.avi', '.mov', '.wmv', '.flv', '.mkv', '.webm', '.mpeg', '.mpg'];
+        const lowerFileName = fileName.toLowerCase();
+        return videoExtensions.some((ext) => lowerFileName.endsWith(ext));
+    }
+
+    getFileUrl(file: FileResponse): string {
+        return file.url;
     }
 
     loadPastEvents() {

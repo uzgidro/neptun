@@ -14,31 +14,48 @@
                     class="block text-muted-color font-medium mb-4 sticky top-0 bg-surface-0 dark:bg-surface-900 py-2 z-10">{{ dateGroup.date | date:'dd.MM' }}</span>
                 <ul class="p-0 m-0 list-none mb-6">
                     @for (event of dateGroup.events; track $index) {
-                        <li class="flex items-start py-2 pr-2.5 border-b border-surface">
-                            <div class="w-12 h-12 flex items-center justify-center rounded-full mr-4 shrink-0"
-                                 [ngClass]="getEventColorClass(event.type)">
-                                <i class="pi text-xl!"
-                                   [ngClass]="[getEventIcon(event.type, event), getEventIconColor(event.type), getEntityIconRotation(event.entity_type)]"></i>
+                        <li class="flex flex-col py-2 pr-2.5 border-b border-surface">
+                            <div class="flex items-start">
+                                <div class="w-12 h-12 flex items-center justify-center rounded-full mr-4 shrink-0"
+                                     [ngClass]="getEventColorClass(event.type)">
+                                    <i class="pi text-xl!"
+                                       [ngClass]="[getEventIcon(event.type, event), getEventIconColor(event.type), getEntityIconRotation(event.entity_type)]"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="text-surface-900 dark:text-surface-0 leading-normal">
+                                        {{ event.date | date:'HH:mm' }}
+                                        @if (event.organization_name) {
+                                            {{ event.organization_name }}
+                                        }
+                                    </div>
+                                    <div class="text-muted-color"
+                                         [ngClass]="{'line-clamp-2': !isEventExpanded(getEventKey(event)) && shouldShowExpandButton(event)}">
+                                        {{ event.description }}
+                                    </div>
+                                </div>
+                                @if (shouldShowExpandButton(event)) {
+                                    <button pButton
+                                            type="button"
+                                            [icon]="isEventExpanded(getEventKey(event)) ? 'pi pi-chevron-up' : 'pi pi-chevron-down'"
+                                            class="p-button-text p-button-rounded p-button-sm ml-2"
+                                            (click)="toggleEventExpansion(getEventKey(event))">
+                                    </button>
+                                }
                             </div>
-                            <div class="flex-1">
-                                <div class="text-surface-900 dark:text-surface-0 leading-normal">
-                                    {{ event.date | date:'HH:mm' }}
-                                    @if (event.organization_name) {
-                                        {{ event.organization_name }}
+                            @if (isEventExpanded(getEventKey(event)) && hasMediaFiles(event)) {
+                                <div class="mt-4 flex flex-col gap-2 w-full">
+                                    @for (file of getMediaFiles(event); track file.id) {
+                                        @if (isImageFile(file.file_name)) {
+                                            <img [src]="getFileUrl(file)" [alt]="file.file_name"
+                                                 class="w-full rounded-border object-cover max-h-96" />
+                                        }
+                                        <!--                                        @else if (isVideoFile(file.file_name)) {-->
+                                            <!--                                            <video [src]="getFileUrl(file)" controls-->
+                                            <!--                                                   class="w-full rounded-border max-h-96">-->
+                                            <!--                                            </video>-->
+                                            <!--                                        }-->
                                     }
                                 </div>
-                                <div class="text-muted-color"
-                                     [ngClass]="{'line-clamp-2': !isEventExpanded(event.date) && shouldShowExpandButton(event.description)}">
-                                    {{ event.description }}
-                                </div>
-                            </div>
-                            @if (shouldShowExpandButton(event.description)) {
-                                <button pButton
-                                        type="button"
-                                        [icon]="isEventExpanded(event.date) ? 'pi pi-chevron-up' : 'pi pi-chevron-down'"
-                                        class="p-button-text p-button-rounded p-button-sm ml-2"
-                                        (click)="toggleEventExpansion(event.date)">
-                                </button>
                             }
                         </li>
                     }
