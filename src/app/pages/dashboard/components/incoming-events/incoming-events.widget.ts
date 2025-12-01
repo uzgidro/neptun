@@ -7,11 +7,13 @@ import { CommonModule } from '@angular/common';
 import { EventManagementService } from '@/core/services/event-management.service';
 import { Event } from '@/core/interfaces/event-management';
 import { Router } from '@angular/router';
+import { FileViewerComponent } from '@/layout/component/dialog/file-viewer/file-viewer.component';
+import { FileResponse } from '@/core/interfaces/files';
 
 @Component({
     standalone: true,
     selector: 'app-incoming-events-widget',
-    imports: [CommonModule, TableModule, ButtonModule, RippleModule, TooltipModule],
+    imports: [CommonModule, TableModule, ButtonModule, RippleModule, TooltipModule, FileViewerComponent],
     templateUrl: './incoming-events.widget.html'
 })
 export class IncomingEventsWidget implements OnInit {
@@ -20,6 +22,10 @@ export class IncomingEventsWidget implements OnInit {
 
     events: Event[] = [];
     loading = false;
+
+    fileViewerVisible = false;
+    fileViewerHeader = '';
+    selectedFiles: FileResponse[] = [];
 
     ngOnInit() {
         this.loadIncomingEvents();
@@ -75,6 +81,12 @@ export class IncomingEventsWidget implements OnInit {
         }
 
         return parts.length > 0 ? parts.join(' - ') : '-';
+    }
+
+    openFileViewer(event: Event) {
+        this.selectedFiles = event.files || [];
+        this.fileViewerHeader = `Файлы: ${event.name}`;
+        this.fileViewerVisible = true;
     }
 
     viewEventDetails(eventId: number) {
