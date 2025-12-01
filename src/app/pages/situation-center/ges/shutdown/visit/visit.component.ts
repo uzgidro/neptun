@@ -17,10 +17,26 @@ import { OrganizationService } from '@/core/services/organization.service';
 import { SelectComponent } from '@/layout/component/dialog/select/select.component';
 import { FileUploadComponent } from '@/layout/component/dialog/file-upload/file-upload.component';
 import { FileViewerComponent } from '@/layout/component/dialog/file-viewer/file-viewer.component';
+import { FileListComponent } from '@/layout/component/dialog/file-list/file-list.component';
 
 @Component({
     selector: 'app-visit',
-    imports: [Button, DatePickerComponent, DatePipe, DialogComponent, PrimeTemplate, ReactiveFormsModule, TableModule, TextareaComponent, TooltipModule, InputTextComponent, SelectComponent, FileUploadComponent, FileViewerComponent],
+    imports: [
+        Button,
+        DatePickerComponent,
+        DatePipe,
+        DialogComponent,
+        PrimeTemplate,
+        ReactiveFormsModule,
+        TableModule,
+        TextareaComponent,
+        TooltipModule,
+        InputTextComponent,
+        SelectComponent,
+        FileUploadComponent,
+        FileViewerComponent,
+        FileListComponent
+    ],
     templateUrl: './visit.component.html',
     styleUrl: './visit.component.scss'
 })

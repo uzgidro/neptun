@@ -18,6 +18,7 @@ import { TooltipModule } from 'primeng/tooltip';
 import { OrganizationService } from '@/core/services/organization.service';
 import { FileUploadComponent } from '@/layout/component/dialog/file-upload/file-upload.component';
 import { FileViewerComponent } from '@/layout/component/dialog/file-viewer/file-viewer.component';
+import { FileListComponent } from '@/layout/component/dialog/file-list/file-list.component';
 
 @Component({
     selector: 'app-shutdown-discharge',
@@ -35,7 +36,8 @@ import { FileViewerComponent } from '@/layout/component/dialog/file-viewer/file-
         TextareaComponent,
         TooltipModule,
         FileUploadComponent,
-        FileViewerComponent
+        FileViewerComponent,
+        FileListComponent
     ],
     templateUrl: './shutdown-discharge.component.html',
     styleUrl: './shutdown-discharge.component.scss'
