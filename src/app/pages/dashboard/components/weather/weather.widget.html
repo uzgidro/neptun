@@ -1,25 +1,27 @@
-<div class="col-span-12 md:col-span-6 lg:col-span-3">
-    <div class="card h-full">
-        <div class="flex items-center justify-between mb-4">
-            <div class="font-semibold text-xl"></div>
-        </div>
+<div class="card">
+    <div class="flex align-items-center justify-content-between mb-3">
+<!--        <div class="text-900 font-medium">Погода</div>-->
+    </div>
+    <div class="text-center">
+        <div *ngIf="loading" class="text-gray-500">Загрузка погоды...</div>
+        <div *ngIf="errorMessage" class="text-red-500">{{ errorMessage }}</div>
 
-        @if (weather) {
-            <div class="flex flex-col items-center text-center">
-                <i class="text-6xl mb-4" [ngClass]="weather.iconClass"></i>
-                <div class="text-4xl font-bold">{{ weather.temperature }}°C</div>
-                <div class="text-lg text-muted-color">{{ weather.description }}, {{ weather.city }}</div>
-                <div class="flex justify-around w-full mt-6 text-center">
-                    <div>
-                        <span class="font-semibold block">{{ weather.humidity }}%</span>
-                        <span class="text-muted-color text-sm">Влажность</span>
-                    </div>
-                    <div>
-                        <span class="font-semibold block">{{ weather.wind }} м/с</span>
-                        <span class="text-muted-color text-sm">Ветер</span>
-                    </div>
+        <div *ngIf="weather && !loading">
+            <div class="text-900 font-medium text-xl mb-2"><i class="pi pi-map-marker"></i> {{ weather.city }}</div>
+            <i [class]="weather.iconClass" style="font-size: 3rem;"></i>
+            <div class="text-900 font-bold text-5xl my-3">{{ weather.temperature }}°C</div>
+            <div class="text-900 font-medium mb-3">{{ weather.description }}</div>
+
+            <div class="grid grid-cols-2 gap-2 text-sm">
+                <div class="col-span-1 flex align-items-center justify-content-center">
+                    <i class="pi pi-tint mr-2"></i>
+                    <span>Влажность: {{ weather.humidity }}%</span>
+                </div>
+                <div class="col-span-1 flex align-items-center justify-content-center">
+                    <i class="pi pi-wind mr-2"></i>
+                    <span>Ветер:<br> {{ weather.wind }} м/с</span>
                 </div>
             </div>
-        }
+        </div>
     </div>
 </div>

@@ -22,7 +22,7 @@ export class LocationService {
         );
     }
 
-    private getCurrentPosition(): Observable<GeolocationPosition> {
+    getCurrentPosition(): Observable<GeolocationPosition> {
         return new Observable((observer: Observer<GeolocationPosition>) => {
             if ('geolocation' in navigator) {
                 navigator.geolocation.getCurrentPosition(
