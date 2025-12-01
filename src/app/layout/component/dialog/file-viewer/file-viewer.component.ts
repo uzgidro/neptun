@@ -93,7 +93,7 @@ export class FileViewerComponent {
     isImageFile(fileName: string): boolean {
         const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.bmp'];
         const lowerFileName = fileName.toLowerCase();
-        return imageExtensions.some(ext => lowerFileName.endsWith(ext));
+        return imageExtensions.some((ext) => lowerFileName.endsWith(ext));
     }
 
     getFileIcon(fileName: string): string {
