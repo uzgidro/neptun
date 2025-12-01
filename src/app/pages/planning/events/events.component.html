@@ -293,9 +293,8 @@
                 </app-file-list>
             }
 
-            <!-- File Upload -->
             <app-file-upload
-                [label]="isEditMode() ? 'Добавить новые файлы' : 'Файлы'"
+                [label]="isEditMode() ? 'Добавить новые файлы' : 'Прикрепить файлы'"
                 [files]="selectedFiles"
                 (filesChange)="onFileSelect($event)"
                 (removeFile)="removeFile($event)">
