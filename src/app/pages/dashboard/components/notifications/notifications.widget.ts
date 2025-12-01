@@ -47,7 +47,7 @@ export class NotificationsWidget implements OnInit {
         this.loading = true;
         this.pastEventsService.getPastEvents().subscribe({
             next: (response) => {
-                this.eventsByDate = response.events_by_date;
+                this.eventsByDate = response;
                 this.loading = false;
             },
             error: (error) => {
