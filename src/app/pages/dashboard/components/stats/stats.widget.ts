@@ -15,23 +15,9 @@ import { EmployeesComponent } from '@/pages/dashboard/components/stats/employees
     templateUrl: './stats.widget.html'
 })
 export class StatsWidget implements OnInit {
-    // Amounts in UZS
-    debitAmountUZS: number = 1580000;
-    creditAmountUZS: number = 250000;
-
-    // Amounts in USD
-    debitAmountUSD: number = 0;
-    creditAmountUSD: number = 0;
-
-    // Flag to toggle currency
-    showInUSD: boolean = false;
-
     dc?: DCInfo;
 
     private dcService: DebitCreditTempService = inject(DebitCreditTempService);
-
-    // Exchange rate (for example, in a real application it's better to get it from an API)
-    private usdExchangeRate: number = 12650;
 
     ngOnInit() {
         this.dcService.getDC().subscribe({
@@ -39,15 +25,5 @@ export class StatsWidget implements OnInit {
                 this.dc = data;
             }
         });
-        this.convertAmountsToUSD();
-    }
-
-    convertAmountsToUSD() {
-        this.debitAmountUSD = this.debitAmountUZS / this.usdExchangeRate;
-        this.creditAmountUSD = this.creditAmountUZS / this.usdExchangeRate;
-    }
-
-    toggleCurrency() {
-        this.showInUSD = !this.showInUSD;
     }
 }
