@@ -22,8 +22,7 @@
     </div>
 </div>
 
-<p-dialog header="Дебит - Детали" [(visible)]="showDialog" [modal]="true" [style]="{width: '70vw'}"
-          [dismissableMask]="true">
+<app-dialog header="Дебит за {{dc?.currentDate | date:'dd.MM.yyyy'}}" [(visible)]="showDialog" [width]="'70vw'">
     <p-table [value]="dc?.items || []" dataKey="name" rowGroupMode="subheader" groupRowsBy="name">
         <ng-template pTemplate="header">
             <tr>
@@ -44,8 +43,8 @@
                     }
                 </td>
                 <td>{{ item.name }}</td>
-                <td class="text-right">{{ item.debit.yearStartValue | number: '1.0-1' }} млн</td>
-                <td class="text-right font-semibold">{{ item.debit.currentValue | number: '1.0-1' }} млн</td>
+                <td class="text-right">{{ item.debit.yearStartValue | number: '1.0-1' }} млн UZS</td>
+                <td class="text-right font-semibold">{{ item.debit.currentValue | number: '1.0-1' }} млн UZS</td>
                 <td class="text-right">
                     <span [class]="item.debit.diff > 0 ? 'text-green-500' : item.debit.diff < 0 ? 'text-red-500' : ''">
                         {{ item.debit.diff > 0 ? '+' : '' }}{{ item.debit.diff | number: '1.0-0' }}%
@@ -71,9 +70,11 @@
                                 <tr>
                                     <td></td>
                                     <td>{{ subItem.name }}</td>
-                                    <td class="text-right">{{ subItem.debit.yearStartValue | number: '1.0-1' }} млн</td>
+                                    <td class="text-right">{{ subItem.debit.yearStartValue | number: '1.0-1' }} млн
+                                        UZS
+                                    </td>
                                     <td class="text-right font-semibold">{{ subItem.debit.currentValue | number: '1.0-1' }}
-                                        млн
+                                        млн UZS
                                     </td>
                                     <td class="text-right">
                                         <span
@@ -90,4 +91,4 @@
             </tr>
         </ng-template>
     </p-table>
-</p-dialog>
+</app-dialog>

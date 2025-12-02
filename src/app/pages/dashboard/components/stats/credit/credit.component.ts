@@ -1,12 +1,16 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { ButtonDirective } from 'primeng/button';
-import { DecimalPipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import { DCInfo } from '@/core/interfaces/debit-credit';
 import { CurrencyService } from '@/core/services/currency.service';
+import { DialogModule } from 'primeng/dialog';
+import { TableModule } from 'primeng/table';
+import { Ripple } from 'primeng/ripple';
+import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
 
 @Component({
     selector: 'app-credit',
-    imports: [ButtonDirective, DecimalPipe],
+    imports: [ButtonDirective, DecimalPipe, DialogModule, TableModule, Ripple, DatePipe, DialogComponent],
     templateUrl: './credit.component.html',
     styleUrl: './credit.component.scss'
 })
@@ -15,6 +19,7 @@ export class CreditComponent implements OnInit {
 
     showInUSD: boolean = false;
     convertedValue: number = 0;
+    showDialog: boolean = false;
     private currency: number = 0;
     private currencyService: CurrencyService = inject(CurrencyService);
 
@@ -43,5 +48,9 @@ export class CreditComponent implements OnInit {
         if (this.showInUSD && this.credit > 0) {
             this.convertedValue = this.credit / this.currency;
         }
+    }
+
+    openDialog() {
+        this.showDialog = true;
     }
 }

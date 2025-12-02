@@ -1,15 +1,16 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { ButtonDirective } from 'primeng/button';
-import { DecimalPipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import { DCInfo } from '@/core/interfaces/debit-credit';
 import { CurrencyService } from '@/core/services/currency.service';
 import { DialogModule } from 'primeng/dialog';
 import { TableModule } from 'primeng/table';
 import { Ripple } from 'primeng/ripple';
+import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
 
 @Component({
     selector: 'app-debit',
-    imports: [ButtonDirective, DecimalPipe, DialogModule, TableModule, Ripple],
+    imports: [ButtonDirective, DecimalPipe, DialogModule, TableModule, Ripple, DatePipe, DialogComponent],
     templateUrl: './debit.component.html',
     styleUrl: './debit.component.scss'
 })

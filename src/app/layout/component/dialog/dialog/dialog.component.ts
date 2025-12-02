@@ -14,9 +14,10 @@ export class DialogComponent {
     // --- Входящие ---
     @Input() visible: boolean = false;
     @Input({ required: true }) header: string = '';
-    @Input({ required: true }) form: FormGroup = new FormGroup({});
+    @Input() form: FormGroup = new FormGroup({});
     @Input() submitting: boolean = false;
     @Input() saveLabel: string = 'Сохранить';
+    @Input() width: string = '30vw';
 
     // --- Исходящие ---
     @Output() visibleChange = new EventEmitter<boolean>();
