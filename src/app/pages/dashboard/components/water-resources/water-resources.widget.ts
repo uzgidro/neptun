@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { ChartModule } from 'primeng/chart';
 import { TableModule } from 'primeng/table';
 import { DashboardService } from '@/core/services/dashboard.service';
@@ -6,12 +6,12 @@ import { Reservoir } from '@/core/interfaces/reservoir';
 import { DecimalPipe, NgClass } from '@angular/common';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
 import { FormsModule } from '@angular/forms';
-import { ButtonDirective, ButtonIcon, ButtonLabel } from 'primeng/button';
+import { ButtonDirective, ButtonIcon } from 'primeng/button';
 
 @Component({
     standalone: true,
     selector: 'app-water-resources-widget',
-    imports: [ChartModule, TableModule, DecimalPipe, DatePickerComponent, FormsModule, ButtonDirective, ButtonIcon, ButtonLabel, NgClass],
+    imports: [ChartModule, TableModule, DecimalPipe, DatePickerComponent, FormsModule, ButtonDirective, ButtonIcon, NgClass],
     templateUrl: './water-resources.widget.html'
 })
 export class WaterResourcesWidget implements OnInit {
@@ -20,6 +20,9 @@ export class WaterResourcesWidget implements OnInit {
     reservoirs: Reservoir[] = [];
     loading = false;
     selectedDate: Date = new Date();
+
+    @Input() expanded: boolean = false;
+    @Output() expansionChange = new EventEmitter<boolean>();
 
     ngOnInit() {
         this.loadReservoirs();
@@ -45,5 +48,10 @@ export class WaterResourcesWidget implements OnInit {
         } else {
             this.loadReservoirs();
         }
+    }
+
+    expandAll() {
+        this.expanded = !this.expanded;
+        this.expansionChange.emit(this.expanded);
     }
 }

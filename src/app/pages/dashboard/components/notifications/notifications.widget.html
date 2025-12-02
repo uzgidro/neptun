@@ -1,6 +1,10 @@
-<div class="card mb-8!">
+<div class="card h-full">
     <div class="flex items-center justify-between mb-6">
         <div class="font-semibold text-xl">События</div>
+        <button pButton outlined (click)="expandAll()">
+            <i pButtonIcon class="pi pi-fw text-sm"
+               [ngClass]="{ 'pi-window-minimize': expanded, 'pi-window-maximize': !expanded }"></i>
+        </button>
     </div>
 
     <div class="overflow-y-auto" style="height: 20rem">
@@ -45,10 +49,10 @@
                             </div>
                             @if (isEventExpanded(getEventKey(event)) && hasMediaFiles(event)) {
                                 <div class="mt-4 flex flex-col gap-2 w-full">
-                                    @for (file of getMediaFiles(event); track file.id) {
+                                    @for (file of getMediaFiles(event); track file.id; let i = $index) {
                                         @if (isImageFile(file.file_name)) {
                                             <img [src]="file.url" [alt]="file.file_name"
-                                                 (click)="openImageViewer(file.url, file.file_name)"
+                                                 (click)="openImageViewer(event, i)"
                                                  class="w-full rounded-border object-contain cursor-pointer hover:opacity-90 transition-opacity" />
                                         }
                                         <!--                                        @else if (isVideoFile(file.file_name)) {-->
@@ -71,11 +75,11 @@
     </div>
 </div>
 
-<p-dialog [(visible)]="imageViewerVisible" [header]="imageViewerHeader" [modal]="true"
-          [style]="{ width: '90vw', maxWidth: '1200px' }"
-          [contentStyle]="{ padding: 0 }">
-    <div class="flex items-center justify-center bg-surface-50 dark:bg-surface-900">
-        <img [src]="selectedImageUrl" [alt]="imageViewerHeader"
-             class="max-w-full max-h-[80vh] object-fill" />
-    </div>
-</p-dialog>
+@if (imageViewerVisible) {
+    <app-dialog [(visible)]="imageViewerVisible" [header]="imageViewerHeader" [width]="'90vw'">
+        <div class="flex items-center justify-center bg-surface-50 dark:bg-surface-900">
+            <img [src]="selectedImageUrl" [alt]="imageViewerHeader"
+                 class="max-w-full max-h-[80vh] object-fill" />
+        </div>
+    </app-dialog>
+}

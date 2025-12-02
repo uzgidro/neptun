@@ -1,16 +1,17 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { ButtonModule } from 'primeng/button';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { ButtonDirective, ButtonIcon, ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
 import { DatePipe, NgClass } from '@angular/common';
 import { PastEventsService } from '@/core/services/past-events.service';
 import { DateGroup, Event, EventType } from '@/core/interfaces/past-events';
 import { FileResponse } from '@/core/interfaces/files';
 import { Dialog } from 'primeng/dialog';
+import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
 
 @Component({
     standalone: true,
     selector: 'app-notifications-widget',
-    imports: [ButtonModule, MenuModule, DatePipe, NgClass, Dialog],
+    imports: [ButtonModule, MenuModule, DatePipe, NgClass, Dialog, ButtonDirective, ButtonIcon, DialogComponent],
     templateUrl: './notifications.widget.html'
 })
 export class NotificationsWidget implements OnInit {
@@ -19,6 +20,9 @@ export class NotificationsWidget implements OnInit {
     eventsByDate: DateGroup[] = [];
     loading = false;
     expandedEvents = new Set<string>();
+
+    @Input() expanded: boolean = false;
+    @Output() expansionChange = new EventEmitter<boolean>();
 
     imageViewerVisible = false;
     imageViewerHeader = '';
@@ -136,9 +140,16 @@ export class NotificationsWidget implements OnInit {
         return colors[type] || 'text-blue-500';
     }
 
-    openImageViewer(imageUrl: string, fileName: string) {
-        this.selectedImageUrl = imageUrl;
-        this.imageViewerHeader = fileName;
-        this.imageViewerVisible = true;
+    openImageViewer(event: Event, index: number) {
+        if (event.files) {
+            this.selectedImageUrl = event.files[index].url;
+            this.imageViewerHeader = `${event.organization_name}`;
+            this.imageViewerVisible = true;
+        }
+    }
+
+    expandAll() {
+        this.expanded = !this.expanded;
+        this.expansionChange.emit(this.expanded);
     }
 }
