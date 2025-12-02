@@ -1,10 +1,10 @@
-<div class="card mb-0">
+<div class="card mb-0 cursor-pointer" (click)="openDialog()">
     <div class="flex justify-between items-center mb-2">
         <span class="text-muted-color font-medium">Дебит</span>
         <div class="flex items-center gap-2">
             <button pButton type="button" icon="pi pi-dollar"
                     class="p-button-text p-button-plain p-button-rounded"
-                    (click)="toggleCurrency()"></button>
+                    (click)="toggleCurrency(); $event.stopPropagation()"></button>
             <div class="flex items-center justify-center bg-green-100 dark:bg-green-400/10 rounded-border"
                  style="width: 2.5rem; height: 2.5rem">
                 <i class="pi pi-wallet text-green-500 text-xl!"></i>
@@ -21,3 +21,73 @@
         <span class="text-muted-color">с начал года</span>
     </div>
 </div>
+
+<p-dialog header="Дебит - Детали" [(visible)]="showDialog" [modal]="true" [style]="{width: '70vw'}"
+          [dismissableMask]="true">
+    <p-table [value]="dc?.items || []" dataKey="name" rowGroupMode="subheader" groupRowsBy="name">
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width: 3rem"></th>
+                <th>Название</th>
+                <th class="text-right">Начало года</th>
+                <th class="text-right">Текущее значение</th>
+                <th class="text-right">Изменение</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="groupheader" let-item let-rowIndex="rowIndex" let-expanded="expanded">
+            <tr>
+                <td>
+                    @if (item.items && item.items.length > 0) {
+                        <button type="button" pButton pRipple [pRowToggler]="item"
+                                class="p-button-text p-button-rounded p-button-plain"
+                                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                    }
+                </td>
+                <td>{{ item.name }}</td>
+                <td class="text-right">{{ item.debit.yearStartValue | number: '1.0-1' }} млн</td>
+                <td class="text-right font-semibold">{{ item.debit.currentValue | number: '1.0-1' }} млн</td>
+                <td class="text-right">
+                    <span [class]="item.debit.diff > 0 ? 'text-green-500' : item.debit.diff < 0 ? 'text-red-500' : ''">
+                        {{ item.debit.diff > 0 ? '+' : '' }}{{ item.debit.diff | number: '1.0-0' }}%
+                    </span>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="expandedrow" let-item>
+            <tr>
+                <td colspan="5">
+                    <div class="">
+                        <p-table [value]="item.items || []" dataKey="name">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th></th>
+                                    <th>Подкатегория</th>
+                                    <th class="text-right">Начало года</th>
+                                    <th class="text-right">Текущее значение</th>
+                                    <th class="text-right">Изменение</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-subItem>
+                                <tr>
+                                    <td></td>
+                                    <td>{{ subItem.name }}</td>
+                                    <td class="text-right">{{ subItem.debit.yearStartValue | number: '1.0-1' }} млн</td>
+                                    <td class="text-right font-semibold">{{ subItem.debit.currentValue | number: '1.0-1' }}
+                                        млн
+                                    </td>
+                                    <td class="text-right">
+                                        <span
+                                            [class]="subItem.debit.diff > 0 ? 'text-green-500' : subItem.debit.diff < 0 ? 'text-red-500' : ''">
+                                            {{ subItem.debit.diff > 0 ? '+' : '' }}{{ subItem.debit.diff | number: '1.0-0' }}
+                                            %
+                                        </span>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-dialog>
