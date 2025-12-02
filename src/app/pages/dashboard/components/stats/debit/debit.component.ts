@@ -1,12 +1,12 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { ButtonDirective } from 'primeng/button';
-import { CurrencyPipe, DecimalPipe } from '@angular/common';
+import { DecimalPipe } from '@angular/common';
 import { DCInfo } from '@/core/interfaces/debit-credit';
 import { CurrencyService } from '@/core/services/currency.service';
 
 @Component({
     selector: 'app-debit',
-    imports: [ButtonDirective, CurrencyPipe, DecimalPipe],
+    imports: [ButtonDirective, DecimalPipe],
     templateUrl: './debit.component.html',
     styleUrl: './debit.component.scss'
 })

@@ -1,6 +1,5 @@
-import { inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { catchError, map, Observable, of, shareReplay } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { API_V3, ApiService, BASE_URL } from '@/core/services/api.service';
 
 const CURRENCY = '/currency';
