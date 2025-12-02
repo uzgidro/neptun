@@ -5,13 +5,14 @@ import { DatePipe, NgClass } from '@angular/common';
 import { PastEventsService } from '@/core/services/past-events.service';
 import { DateGroup, Event, EventType } from '@/core/interfaces/past-events';
 import { FileResponse } from '@/core/interfaces/files';
-import { Dialog } from 'primeng/dialog';
 import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
+import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     standalone: true,
     selector: 'app-notifications-widget',
-    imports: [ButtonModule, MenuModule, DatePipe, NgClass, Dialog, ButtonDirective, ButtonIcon, DialogComponent],
+    imports: [ButtonModule, MenuModule, DatePipe, NgClass, ButtonDirective, ButtonIcon, DialogComponent, DatePickerComponent, FormsModule],
     templateUrl: './notifications.widget.html'
 })
 export class NotificationsWidget implements OnInit {
@@ -20,6 +21,7 @@ export class NotificationsWidget implements OnInit {
     eventsByDate: DateGroup[] = [];
     loading = false;
     expandedEvents = new Set<string>();
+    selectedDate: Date = new Date();
 
     @Input() expanded: boolean = false;
     @Output() expansionChange = new EventEmitter<boolean>();
@@ -79,9 +81,9 @@ export class NotificationsWidget implements OnInit {
         return videoExtensions.some((ext) => lowerFileName.endsWith(ext));
     }
 
-    loadPastEvents() {
+    loadPastEvents(date?: Date) {
         this.loading = true;
-        this.pastEventsService.getPastEvents().subscribe({
+        this.pastEventsService.getPastEvents(date).subscribe({
             next: (response) => {
                 this.eventsByDate = response;
                 this.loading = false;
@@ -91,6 +93,14 @@ export class NotificationsWidget implements OnInit {
                 this.loading = false;
             }
         });
+    }
+
+    onDateChange(date: Date | null) {
+        if (date) {
+            this.loadPastEvents(date);
+        } else {
+            this.loadPastEvents();
+        }
     }
 
     getEventIcon(type: EventType, event?: Event): string {
