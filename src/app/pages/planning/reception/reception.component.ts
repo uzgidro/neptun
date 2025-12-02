@@ -116,6 +116,44 @@ export class ReceptionComponent implements OnInit {
         }
     }
 
+    approveReception(reception: Reception): void {
+        this.receptionService.updateReception(reception.id, { status: 'true' }).subscribe({
+            next: () => {
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Прием одобрен'
+                });
+                this.loadReceptions();
+            },
+            error: (err) => {
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Ошибка одобрения приема',
+                    detail: err.message
+                });
+            }
+        });
+    }
+
+    rejectReception(reception: Reception): void {
+        this.receptionService.updateReception(reception.id, { status: 'false' }).subscribe({
+            next: () => {
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Прием отклонен'
+                });
+                this.loadReceptions();
+            },
+            error: (err) => {
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Ошибка отклонения приема',
+                    detail: err.message
+                });
+            }
+        });
+    }
+
     saveReception(): void {
         this.submitted = true;
 

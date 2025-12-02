@@ -1,0 +1,25 @@
+<button type="button" class="layout-topbar-action" (click)="phonePopover.toggle($event)">
+    <i class="pi pi-phone"></i>
+    <span>Звонок</span>
+</button>
+<p-popover #phonePopover [style]="{ width: '450px' }">
+    <p-table [value]="contacts" dataKey="id" [rows]="5" [paginator]="true">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Имя</th>
+                <th style="width: 8rem">Действие</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-contact>
+            <tr>
+                <td>{{ contact.contact.name }}</td>
+                <td>
+                    <a pButton outlined class="p-button-sm" [href]="'tel:' + contact.contact.phone">
+                        <i class="pi pi-phone text-green-500"></i>
+                        <!--                                            <span class="ml-2">Позвонить</span>-->
+                    </a>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-popover>
