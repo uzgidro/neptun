@@ -23,6 +23,7 @@ export interface Reservoir {
     organization_id: number;
     organization_name: string;
     contacts: Contact[];
+    current_discharge: number;
     reservoir_metrics: ReservoirMetrics;
 }
 
