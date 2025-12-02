@@ -11,10 +11,10 @@ import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.compone
 @Component({
     selector: 'app-credit',
     imports: [ButtonDirective, DecimalPipe, DialogModule, TableModule, Ripple, DatePipe, DialogComponent],
-    templateUrl: './credit.component.html',
-    styleUrl: './credit.component.scss'
+    templateUrl: './credit-widget.component.html',
+    styleUrl: './credit-widget.component.scss'
 })
-export class CreditComponent implements OnInit {
+export class CreditWidget implements OnInit {
     @Input({ required: true }) dc?: DCInfo;
 
     showInUSD: boolean = false;

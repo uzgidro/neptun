@@ -11,10 +11,10 @@ import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.compone
 @Component({
     selector: 'app-debit',
     imports: [ButtonDirective, DecimalPipe, DialogModule, TableModule, Ripple, DatePipe, DialogComponent],
-    templateUrl: './debit.component.html',
-    styleUrl: './debit.component.scss'
+    templateUrl: './debit-widget.component.html',
+    styleUrl: './debit-widget.component.scss'
 })
-export class DebitComponent implements OnInit {
+export class DebitWidget implements OnInit {
     @Input({ required: true }) dc?: DCInfo;
 
     showInUSD: boolean = false;
