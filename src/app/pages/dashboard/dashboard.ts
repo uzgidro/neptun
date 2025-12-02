@@ -13,29 +13,13 @@ import GesWidget from '@/pages/dashboard/components/ges/ges.widget';
         <div class="grid grid-cols-12 gap-8">
             <app-stats-widget class="contents col-span-12 order-first" />
 
-            <app-ges-widget
-                [class]="getWidgetClass('ges') + ' h-full'"
-                [expanded]="expandedWidgetId === 'ges'"
-                (expansionChange)="onExpansionChange('ges', $event)"
-            />
+            <app-ges-widget [class]="getWidgetClass('ges') + ' h-full'" [expanded]="expandedWidgetId === 'ges'" (expansionChange)="onExpansionChange('ges', $event)" />
 
-            <app-water-resources-widget
-                [class]="getWidgetClass('water') + ' h-full'"
-                [expanded]="expandedWidgetId === 'water'"
-                (expansionChange)="onExpansionChange('water', $event)"
-            />
+            <app-water-resources-widget [class]="getWidgetClass('water') + ' h-full'" [expanded]="expandedWidgetId === 'water'" (expansionChange)="onExpansionChange('water', $event)" />
 
-            <app-incoming-events-widget
-                [class]="getWidgetClass('events') + ' h-full'"
-                [expanded]="expandedWidgetId === 'events'"
-                (expansionChange)="onExpansionChange('events', $event)"
-            />
+            <app-incoming-events-widget [class]="getWidgetClass('events') + ' h-full'" [expanded]="expandedWidgetId === 'events'" (expansionChange)="onExpansionChange('events', $event)" />
 
-            <app-notifications-widget
-                [class]="getWidgetClass('notifications') + ' h-full'"
-                [expanded]="expandedWidgetId === 'notifications'"
-                (expansionChange)="onExpansionChange('notifications', $event)"
-            />
+            <app-notifications-widget [class]="getWidgetClass('notifications') + ' h-full'" [expanded]="expandedWidgetId === 'notifications'" (expansionChange)="onExpansionChange('notifications', $event)" />
         </div>
     `
 })
