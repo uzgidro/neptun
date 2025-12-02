@@ -19,6 +19,7 @@ import { OrganizationService } from '@/core/services/organization.service';
 import { FileUploadComponent } from '@/layout/component/dialog/file-upload/file-upload.component';
 import { FileViewerComponent } from '@/layout/component/dialog/file-viewer/file-viewer.component';
 import { FileListComponent } from '@/layout/component/dialog/file-list/file-list.component';
+import { SelectComponent } from '@/layout/component/dialog/select/select.component';
 
 @Component({
     selector: 'app-shutdown-discharge',
@@ -37,7 +38,8 @@ import { FileListComponent } from '@/layout/component/dialog/file-list/file-list
         TooltipModule,
         FileUploadComponent,
         FileViewerComponent,
-        FileListComponent
+        FileListComponent,
+        SelectComponent
     ],
     templateUrl: './shutdown-discharge.component.html',
     styleUrl: './shutdown-discharge.component.scss'
@@ -104,7 +106,7 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
 
     private loadOrganizations() {
         this.orgsLoading = true;
-        this.organizationService.getCascades().subscribe({
+        this.organizationService.getOrganizationsFlat().subscribe({
             next: (data) => {
                 this.organizations = data;
             },
