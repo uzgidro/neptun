@@ -1,0 +1,106 @@
+<div class="card mb-0 cursor-pointer" (click)="openDialog()">
+    <div class="flex justify-between items-center mb-2">
+        <span class="text-muted-color font-medium">Кредит</span>
+        <div class="flex items-center gap-2">
+            <button pButton type="button" icon="pi pi-dollar"
+                    class="p-button-text p-button-plain p-button-rounded"
+                    (click)="toggleCurrency(); $event.stopPropagation()"></button>
+            <div class="flex items-center justify-center bg-red-100 dark:bg-red-400/10 rounded-border"
+                 style="width: 2.5rem; height: 2.5rem">
+                <i class="pi pi-credit-card text-red-500 text-xl!"></i>
+            </div>
+        </div>
+    </div>
+    <div class="text-surface-900 dark:text-surface-0 font-medium text-xl mb-1">
+        {{ displayValue | number: '1.0-1' }} млн {{ showInUSD ? '$' : 'UZS' }}
+    </div>
+    <div class="flex gap-1.5">
+        <span class="text-primary font-medium">
+            {{ dc?.credit?.diff && dc?.credit?.diff! > 0 ? '+' : '' }}{{ dc?.credit?.diff ?? 0 | number: '1.0-0' }}%
+        </span>
+        <span class="text-muted-color">с начал года</span>
+    </div>
+</div>
+
+<app-dialog
+    header="Кредит за {{dc?.currentDate | date:'dd.MM.yyyy'}}"
+    [(visible)]="showDialog"
+    [width]="'70vw'"
+    [showFooter]="false"
+    [showConvertButton]="true"
+    [convertLabel]="convertButtonLabel"
+    (convert)="toggleDialogCurrency()">
+    <p-table [value]="dc?.items || []" dataKey="name" rowGroupMode="subheader" groupRowsBy="name">
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width: 3rem"></th>
+                <th style="width: 40%">Название</th>
+                <th class="text-right" style="width: 20%">Начало года</th>
+                <th class="text-right" style="width: 20%">Текущее значение</th>
+                <th class="text-right" style="width: 20%">Изменение</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="groupheader" let-item let-expanded="expanded">
+            <tr>
+                <td>
+                    @if (item.items && item.items.length > 0) {
+                        <button type="button" pButton pRipple [pRowToggler]="item"
+                                class="p-button-text p-button-rounded p-button-plain"
+                                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                    }
+                </td>
+                <td>{{ item.name }}</td>
+                <td class="text-right">{{ convertValue(item.credit.yearStartValue) | number: '1.0-1' }}
+                    млн {{ dialogShowInUSD ? '$' : 'UZS' }}
+                </td>
+                <td class="text-right font-semibold">{{ convertValue(item.credit.currentValue) | number: '1.0-1' }}
+                    млн {{ dialogShowInUSD ? '$' : 'UZS' }}
+                </td>
+                <td class="text-right">
+                    <span
+                        [class]="item.credit.diff > 0 ? 'text-green-500' : item.credit.diff < 0 ? 'text-red-500' : ''">
+                        {{ item.credit.diff > 0 ? '+' : '' }}{{ item.credit.diff | number: '1.0-0' }}%
+                    </span>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="expandedrow" let-item>
+            <tr>
+                <td colspan="5">
+                    <div class="">
+                        <p-table [value]="item.items || []" dataKey="name">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th style="width: 3rem"></th>
+                                    <th style="width: 40%">Подкатегория</th>
+                                    <th class="text-right" style="width: 20%">Начало года</th>
+                                    <th class="text-right" style="width: 20%">Текущее значение</th>
+                                    <th class="text-right" style="width: 20%">Изменение</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-subItem>
+                                <tr>
+                                    <td></td>
+                                    <td>{{ subItem.name }}</td>
+                                    <td class="text-right">{{ convertValue(subItem.credit.yearStartValue) | number: '1.0-1' }}
+                                        млн {{ dialogShowInUSD ? '$' : 'UZS' }}
+                                    </td>
+                                    <td class="text-right font-semibold">{{ convertValue(subItem.credit.currentValue) | number: '1.0-1' }}
+                                        млн {{ dialogShowInUSD ? '$' : 'UZS' }}
+                                    </td>
+                                    <td class="text-right">
+                                        <span
+                                            [class]="subItem.credit.diff > 0 ? 'text-green-500' : subItem.credit.diff < 0 ? 'text-red-500' : ''">
+                                            {{ subItem.credit.diff > 0 ? '+' : '' }}{{ subItem.credit.diff | number: '1.0-0' }}
+                                            %
+                                        </span>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</app-dialog>

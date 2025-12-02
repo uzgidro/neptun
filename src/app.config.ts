@@ -1,5 +1,5 @@
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
-import { ApplicationConfig, importProvidersFrom } from '@angular/core';
+import { ApplicationConfig, importProvidersFrom, LOCALE_ID } from '@angular/core';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideRouter, withEnabledBlockingInitialNavigation, withInMemoryScrolling } from '@angular/router';
 import Aura from '@primeuix/themes/aura';
@@ -8,6 +8,10 @@ import { appRoutes } from './app.routes';
 import { authInterceptor } from '@/core/interceptor/auth.interceptor';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
+import { registerLocaleData } from '@angular/common';
+import localeRu from '@angular/common/locales/ru';
+
+registerLocaleData(localeRu);
 
 export const appConfig: ApplicationConfig = {
     providers: [
@@ -16,6 +20,7 @@ export const appConfig: ApplicationConfig = {
         provideAnimationsAsync(),
         providePrimeNG({ theme: { preset: Aura, options: { darkModeSelector: '.app-dark' } } }),
         importProvidersFrom(ReactiveFormsModule),
-        MessageService
+        MessageService,
+        { provide: LOCALE_ID, useValue: 'ru' }
     ]
 };

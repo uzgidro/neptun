@@ -1,15 +1,15 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { AuthResponse } from '@/core/interfaces/auth';
 import { Observable } from 'rxjs';
 import { Roles } from '@/core/interfaces/roles';
 import { Users } from '@/core/interfaces/users';
 import { Categories } from '@/core/interfaces/categories';
 import { LatestFiles } from '@/core/interfaces/latest-files';
-import { Organization } from '@/core/interfaces/organizations';
 
 export const BASE_URL = 'https://prime.speedwagon.uz';
-export const FLAT = '/flat'
+export const FLAT = '/flat';
+export const API_V3 = '/api/v3';
 const AUTH = '/auth';
 const SIGN_IN = '/sign-in';
 const SIGN_OUT = '/sign-out';
@@ -20,7 +20,6 @@ const FILES = '/files';
 const UPLOAD = '/upload';
 const LATEST = '/latest';
 const CATEGORIES = '/categories';
-const ORGANIZATIONS = '/organizations';
 
 @Injectable({
     providedIn: 'root'

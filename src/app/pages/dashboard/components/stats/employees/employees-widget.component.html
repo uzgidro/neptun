@@ -1,0 +1,43 @@
+<div class="card mb-0 cursor-pointer" (click)="openDialog()">
+    <div class="flex justify-between items-center mb-2">
+        <span class="text-muted-color font-medium">HRM</span>
+        <div class="flex items-center justify-center bg-blue-100 dark:bg-blue-400/10 rounded-border"
+             style="width: 2.5rem; height: 2.5rem">
+            <i class="pi pi-users text-blue-500 text-xl!"></i>
+        </div>
+    </div>
+    <div class="text-surface-900 dark:text-surface-0 font-medium text-xl mb-1">
+        {{ totalEmployees | number: '1.0-0' }} сотрудников
+    </div>
+    <div class="flex gap-1.5">
+        <span class="text-primary font-medium">28</span>
+        <span class="text-muted-color"> вакантных мест</span>
+    </div>
+</div>
+
+<app-dialog
+    header="Организации"
+    [(visible)]="showDialog"
+    [width]="'70vw'"
+    [showFooter]="false">
+    <p-table [value]="organizations" dataKey="name">
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width: 70%">Название организации</th>
+                <th class="text-right" style="width: 30%">Количество сотрудников</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-org>
+            <tr>
+                <td>{{ org.name }}</td>
+                <td class="text-right font-semibold">{{ org.value | number: '1.0-0' }}</td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="footer">
+            <tr>
+                <td class="font-semibold">Всего:</td>
+                <td class="text-right font-semibold text-primary">{{ totalEmployees | number: '1.0-0' }}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</app-dialog>
