@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { StatsWidget } from './components/statswidget';
+import { StatsWidget } from './components/stats/stats.widget';
 import { IncomingEventsWidget } from './components/incoming-events/incoming-events.widget';
 import { WaterResourcesWidget } from '@/pages/dashboard/components/water-resources/water-resources.widget';
 import { ConstructionsWidget } from '@/pages/dashboard/components/constructions/constructions.widget';

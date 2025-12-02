@@ -9,7 +9,8 @@ import { LatestFiles } from '@/core/interfaces/latest-files';
 import { Organization } from '@/core/interfaces/organizations';
 
 export const BASE_URL = 'https://prime.speedwagon.uz';
-export const FLAT = '/flat'
+export const FLAT = '/flat';
+export const API_V3 = '/api/v3';
 const AUTH = '/auth';
 const SIGN_IN = '/sign-in';
 const SIGN_OUT = '/sign-out';

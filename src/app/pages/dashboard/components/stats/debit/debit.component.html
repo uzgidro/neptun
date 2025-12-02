@@ -1,0 +1,30 @@
+<div class="card mb-0">
+    <div class="flex justify-between mb-4">
+        <div>
+            <span class="block text-muted-color font-medium mb-3">Дебит</span>
+            @if (showInUSD) {
+                <div
+                    class="text-surface-900 dark:text-surface-0 font-medium text-xl">{{ displayValue | number: '1.0-1' }}
+                    млн $
+                </div>
+            } @else {
+                <div
+                    class="text-surface-900 dark:text-surface-0 font-medium text-xl">{{ displayValue | number: '1.0-1' }}
+                    млн UZS
+                </div>
+            }
+        </div>
+        <div class="flex items-start">
+            <button pButton type="button" icon="pi pi-dollar" class="p-button-text p-button-plain p-button-rounded"
+                    (click)="toggleCurrency()"></button>
+            <div class="flex items-center justify-center bg-green-100 dark:bg-green-400/10 rounded-border ml-2"
+                 style="width: 2.5rem; height: 2.5rem">
+                <i class="pi pi-wallet text-green-500 text-xl!"></i>
+            </div>
+        </div>
+    </div>
+    <span
+        class="text-primary font-medium">{{ dc?.debit?.diff && dc?.debit?.diff! > 0 ? '+' : '' }}{{ dc?.debit?.diff ?? 0 | number: '1.0-0' }}
+        % </span>
+    <span class="text-muted-color">с начал года</span>
+</div>
