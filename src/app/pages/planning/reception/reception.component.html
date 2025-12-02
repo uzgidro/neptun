@@ -1,0 +1,158 @@
+<div class="card">
+    <p-table
+        #rt
+        [value]="receptions()"
+        dataKey="id"
+        [rows]="10"
+        [loading]="loading()"
+        [paginator]="true"
+        [rowsPerPageOptions]="[10, 25, 50]"
+        [showCurrentPageReport]="true"
+        currentPageReportTemplate="Показано {first} - {last} из {totalRecords} записей"
+        [globalFilterFields]="['name', 'visitor', 'description', 'status']"
+        [rowHover]="true"
+        [showGridlines]="true"
+        class="p-datatable-sm"
+    >
+        <ng-template #caption>
+            <div class="flex flex-wrap align-items-center justify-content-between gap-2">
+                <span class="text-xl text-900 font-bold">Приемы</span>
+                <div class="flex gap-2">
+                    <p-iconfield iconPosition="left">
+                        <p-inputicon class="pi pi-search" />
+                        <input
+                            pInputText
+                            type="text"
+                            (input)="onGlobalFilter(rt, $event)"
+                            placeholder="Поиск..."
+                            class="w-full"
+                        />
+                    </p-iconfield>
+                    <p-button
+                        label="Добавить"
+                        icon="pi pi-plus"
+                        (onClick)="openNew()"
+                        severity="success"
+                    />
+                </div>
+            </div>
+        </ng-template>
+
+        <ng-template #header>
+            <tr>
+                <th pSortableColumn="name" style="min-width: 12rem">
+                    Название
+                    <p-sortIcon field="name" />
+                </th>
+                <th pSortableColumn="date" style="min-width: 10rem">
+                    Дата
+                    <p-sortIcon field="date" />
+                </th>
+                <th pSortableColumn="visitor" style="min-width: 12rem">
+                    Посетитель
+                    <p-sortIcon field="visitor" />
+                </th>
+                <th pSortableColumn="description" style="min-width: 15rem">
+                    Описание
+                </th>
+                <th pSortableColumn="status" style="min-width: 10rem">
+                    Статус
+                    <p-sortIcon field="status" />
+                </th>
+                <th style="min-width: 10rem">Действия</th>
+            </tr>
+        </ng-template>
+
+        <ng-template #body let-reception>
+            <tr>
+                <td>{{ reception.name }}</td>
+                <td>{{ reception.date | date: 'dd.MM.yyyy' }}</td>
+                <td>{{ reception.visitor }}</td>
+                <td>
+          <span [pTooltip]="reception.description || ''" tooltipPosition="top">
+            {{ reception.description ? (reception.description.length > 50 ? reception.description.substring(0, 50) + '...' : reception.description) : '-' }}
+          </span>
+                </td>
+                <td>
+                    <p-tag
+                        [value]="getStatusLabel(reception.status)"
+                        [severity]="getStatusSeverity(reception.status)"
+                    />
+                </td>
+                <td>
+                    <div class="flex gap-2">
+                        <p-button
+                            icon="pi pi-pencil"
+                            (onClick)="editReception(reception)"
+                            severity="info"
+                            [text]="true"
+                            [rounded]="true"
+                            pTooltip="Редактировать"
+                        />
+                        <p-button
+                            icon="pi pi-trash"
+                            (onClick)="deleteReception(reception)"
+                            severity="danger"
+                            [text]="true"
+                            [rounded]="true"
+                            pTooltip="Удалить"
+                        />
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template #emptymessage>
+            <tr>
+                <td colspan="7" class="text-center">Нет данных</td>
+            </tr>
+        </ng-template>
+
+        <ng-template #loadingbody>
+            <tr>
+                <td colspan="7" class="text-center">Загрузка...</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<!-- Create/Edit Dialog -->
+<app-dialog
+    [(visible)]="dialogVisible"
+    [header]="selectedReception ? 'Редактировать прием' : 'Новый прием'"
+    [form]="receptionForm"
+    (save)="saveReception()"
+    (cancel)="hideDialog()"
+>
+    <form class="p-4" [formGroup]="receptionForm" (ngSubmit)="saveReception()">
+
+        <app-input-text
+            label="Название"
+            formControlName="name"
+            [submitted]="submitted"
+            errorMessage="Укажите название"
+        />
+
+        <app-date-picker
+            label="Дата"
+            formControlName="date"
+            [submitted]="submitted"
+            errorMessage="Укажите дату"
+        />
+
+        <app-input-text
+            label="Посетитель"
+            formControlName="visitor"
+            [submitted]="submitted"
+            errorMessage="Укажите посетителя"
+        />
+
+        <app-textarea
+            label="Описание"
+            formControlName="description"
+            [submitted]="submitted"
+            [required]="false"
+        />
+
+    </form>
+</app-dialog>
