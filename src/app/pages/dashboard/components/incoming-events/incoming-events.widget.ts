@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, Input, Output, EventEmitter } from '@angular/core';
 import { RippleModule } from 'primeng/ripple';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
@@ -19,6 +19,9 @@ import { FileResponse } from '@/core/interfaces/files';
 export class IncomingEventsWidget implements OnInit {
     private eventService = inject(EventManagementService);
     private router = inject(Router);
+
+    @Input() expanded = false;
+    @Output() expansionChange = new EventEmitter<boolean>();
 
     events: Event[] = [];
     loading = false;
@@ -91,5 +94,9 @@ export class IncomingEventsWidget implements OnInit {
 
     viewEventDetails(eventId: number) {
         this.router.navigate(['/event-management', eventId]);
+    }
+
+    toggleExpansion() {
+        this.expansionChange.emit(!this.expanded);
     }
 }
