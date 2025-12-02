@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ApiService, BASE_URL } from '@/core/services/api.service';
 import { Observable } from 'rxjs';
 import { Reception } from '@/core/interfaces/reception';
+import { HttpParams } from '@angular/common/http';
 
 const RECEPTIONS = '/receptions';
 
@@ -9,8 +10,12 @@ const RECEPTIONS = '/receptions';
     providedIn: 'root'
 })
 export class ReceptionService extends ApiService {
-    getReceptions(): Observable<Reception[]> {
-        return this.http.get<Reception[]>(BASE_URL + RECEPTIONS);
+    getReceptions(status?: string): Observable<Reception[]> {
+        let params = new HttpParams();
+        if (status) {
+            params = params.set('status', status);
+        }
+        return this.http.get<Reception[]>(BASE_URL + RECEPTIONS, { params: params });
     }
 
     getReception(id: number): Observable<Reception> {
