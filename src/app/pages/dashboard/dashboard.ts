@@ -2,14 +2,13 @@ import { Component } from '@angular/core';
 import { StatsWidget } from './components/stats/stats.widget';
 import { IncomingEventsWidget } from './components/incoming-events/incoming-events.widget';
 import { WaterResourcesWidget } from '@/pages/dashboard/components/water-resources/water-resources.widget';
-import { ConstructionsWidget } from '@/pages/dashboard/components/constructions/constructions.widget';
 import { NotificationsWidget } from '@/pages/dashboard/components/notifications/notifications.widget';
 import GesWidget from '@/pages/dashboard/components/ges/ges.widget';
 
 @Component({
     selector: 'app-dashboard',
     standalone: true,
-    imports: [StatsWidget, IncomingEventsWidget, WaterResourcesWidget, ConstructionsWidget, NotificationsWidget, GesWidget],
+    imports: [StatsWidget, IncomingEventsWidget, WaterResourcesWidget, NotificationsWidget, GesWidget],
     template: `
         <div class="grid grid-cols-12 gap-8">
             <app-stats-widget class="contents col-span-12 order-first" />
@@ -26,10 +25,10 @@ import GesWidget from '@/pages/dashboard/components/ges/ges.widget';
                 (expansionChange)="onExpansionChange('water', $event)"
             />
 
-            <app-constructions-widget
-                [class]="getWidgetClass('constructions') + ' h-full'"
-                [expanded]="expandedWidgetId === 'constructions'"
-                (expansionChange)="onExpansionChange('constructions', $event)"
+            <app-incoming-events-widget
+                [class]="getWidgetClass('events') + ' h-full'"
+                [expanded]="expandedWidgetId === 'events'"
+                (expansionChange)="onExpansionChange('events', $event)"
             />
 
             <app-notifications-widget
@@ -37,8 +36,6 @@ import GesWidget from '@/pages/dashboard/components/ges/ges.widget';
                 [expanded]="expandedWidgetId === 'notifications'"
                 (expansionChange)="onExpansionChange('notifications', $event)"
             />
-
-            <app-incoming-events-widget class="col-span-12 order-last" />
         </div>
     `
 })

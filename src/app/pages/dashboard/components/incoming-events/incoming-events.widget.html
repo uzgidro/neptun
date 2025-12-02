@@ -1,8 +1,12 @@
-<div class="col-span-12">
-    <div class="card">
-        <div class="font-semibold text-xl mb-4">Предстоящие мероприятия</div>
-        <p-table [value]="events" sortField="event_date" [sortOrder]="1" styleClass="p-datatable-gridlines"
-                 [loading]="loading">
+<div class="card h-full">
+    <div class="flex items-center justify-between mb-4">
+        <div class="font-semibold text-xl">Предстоящие мероприятия</div>
+        <button pButton type="button" [icon]="expanded ? 'pi pi-window-minimize' : 'pi pi-window-maximize'"
+                class="p-button-text p-button-rounded" (click)="toggleExpansion()"
+                [pTooltip]="expanded ? 'Свернуть' : 'Развернуть'" tooltipPosition="left"></button>
+    </div>
+    <p-table [value]="events" sortField="event_date" [sortOrder]="1" styleClass="p-datatable-gridlines"
+             [loading]="loading">
             <ng-template #header>
                 <tr>
                     <th style="width: 5rem"></th>
@@ -64,7 +68,6 @@
                 </tr>
             </ng-template>
         </p-table>
-    </div>
 </div>
 
 <app-file-viewer [(visible)]="fileViewerVisible" [header]="fileViewerHeader" [files]="selectedFiles" />
