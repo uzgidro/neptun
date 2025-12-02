@@ -12,13 +12,8 @@ import { FormsModule } from '@angular/forms';
 import { AppConfigurator } from '@/layout/component/app.configurator';
 import { ButtonDirective } from 'primeng/button';
 import { TopbarCalendarComponent } from '@/layout/component/topbar/topbar-calendar/topbar-calendar.component';
-
-// Интерфейс для данных контакта
-interface Contact {
-    id?: string;
-    name?: string;
-    phoneNumber?: string;
-}
+import { FastCallService } from '@/core/services/fast-call.service';
+import { FastCall } from '@/core/interfaces/fast-call';
 
 @Component({
     selector: 'app-topbar',
@@ -85,9 +80,9 @@ interface Contact {
                             </ng-template>
                             <ng-template pTemplate="body" let-contact>
                                 <tr>
-                                    <td>{{ contact.name }}</td>
+                                    <td>{{ contact.contact.name }}</td>
                                     <td>
-                                        <a pButton outlined class="p-button-sm" [href]="'tel:' + contact.phoneNumber">
+                                        <a pButton outlined class="p-button-sm" [href]="'tel:' + contact.contact.phone">
                                             <i class="pi pi-phone text-green-500"></i>
                                             <!--                                            <span class="ml-2">Позвонить</span>-->
                                         </a>
@@ -105,22 +100,18 @@ interface Contact {
 })
 export class AppTopbar implements OnInit {
     items!: MenuItem[];
-    contacts: Contact[] = [];
+    contacts: FastCall[] = [];
 
     layoutService = inject(LayoutService);
     messageService = inject(MessageService);
+    private fastCallsService: FastCallService = inject(FastCallService);
 
     ngOnInit() {
-        // Заполняем таблицу демонстрационными данными
-        this.contacts = [
-            { id: '1000', name: 'Хамраев Сухроб Ахмеджанович', phoneNumber: '+998001112233' },
-            { id: '1001', name: 'Пулатова Сурайё Насимовна', phoneNumber: '+998002223344' },
-            { id: '1002', name: 'Олланазаров Бахром Отажанович', phoneNumber: '+998003334455' },
-            { id: '1003', name: 'Ибраимов Эрнес Меркезович', phoneNumber: '+998004445566' },
-            { id: '1004', name: 'Сунатов Иноят Сохибович', phoneNumber: '+998005556677' },
-            { id: '1005', name: 'Атаханов Махаммад Исмаилович', phoneNumber: '+998006667788' },
-            { id: '1006', name: 'Зокиров Авазбек Зокиржон угли', phoneNumber: '+998007778899' }
-        ];
+        this.fastCallsService.getFastCalls().subscribe({
+            next: (data) => {
+                this.contacts = data;
+            }
+        });
     }
 
     toggleDarkMode() {
