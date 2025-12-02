@@ -3,14 +3,15 @@ import { ChartModule } from 'primeng/chart';
 import { TableModule } from 'primeng/table';
 import { DashboardService } from '@/core/services/dashboard.service';
 import { Reservoir } from '@/core/interfaces/reservoir';
-import { DecimalPipe } from '@angular/common';
+import { DecimalPipe, NgClass } from '@angular/common';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
 import { FormsModule } from '@angular/forms';
+import { ButtonDirective, ButtonIcon, ButtonLabel } from 'primeng/button';
 
 @Component({
     standalone: true,
     selector: 'app-water-resources-widget',
-    imports: [ChartModule, TableModule, DecimalPipe, DatePickerComponent, FormsModule],
+    imports: [ChartModule, TableModule, DecimalPipe, DatePickerComponent, FormsModule, ButtonDirective, ButtonIcon, ButtonLabel, NgClass],
     templateUrl: './water-resources.widget.html'
 })
 export class WaterResourcesWidget implements OnInit {

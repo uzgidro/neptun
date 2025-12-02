@@ -1,14 +1,16 @@
 <div class="card mb-8!">
-    <div class="mb-4 flex justify-between">
+    <div class="mb-4 flex justify-between items-start">
         <div class="font-semibold text-xl">Водохранилища</div>
-        <div class="w-44">
+        <div class="flex gap-2 items-baseline">
             <app-date-picker
                 [(ngModel)]="selectedDate"
-                [label]="'Выберите дату'"
                 [showTime]="false"
                 [required]="false"
                 (ngModelChange)="onDateChange($event)">
             </app-date-picker>
+            <button pButton outlined>
+                <i pButtonIcon class="pi pi-fw pi-window-maximize text-sm"></i>
+            </button>
         </div>
     </div>
     <p-table [value]="reservoirs" dataKey="organization_id" [scrollable]="true" scrollHeight="25rem"

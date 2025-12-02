@@ -21,7 +21,7 @@ let nextId = 0
     styleUrl: './date-picker.component.scss'
 })
 export class DatePickerComponent implements ControlValueAccessor {
-    @Input() label: string = 'Дата';
+    @Input() label: string = '';
     @Input() submitted: boolean = false;
     @Input() isEditMode: boolean = false;
     @Input() showTime: boolean = true;
@@ -29,7 +29,6 @@ export class DatePickerComponent implements ControlValueAccessor {
     @Input() errorMessage: string = 'Это поле обязательно';
     @Input() required: boolean = true;
     @Input() disabled: boolean = false;
-
 
     uniqueId: string;
     internalValue: Date | null = null;
