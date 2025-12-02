@@ -26,9 +26,9 @@ export class MenuComponent implements OnInit {
                         label: 'Кадровый персонал (HRM)',
                         role: ['admin', 'rais'],
                         items: [
-                            { label: 'Организации', role: ['rais'], routerLink: ['/organizations'] },
+                            { label: 'Организации', role: ['rais'] },
                             { label: 'Дни рождения', role: ['rais'] },
-                            { label: 'Потеря личного состава', role: ['rais'] },
+                            // { label: 'Потеря личного состава', role: ['rais'] },
                             { label: 'Работники', role: ['admin'], routerLink: ['/employees'] },
                             { label: 'Должности', role: ['admin'], routerLink: ['/positions'] },
                             { label: 'Отделы', role: ['admin'], routerLink: ['/departments'] },
@@ -68,11 +68,11 @@ export class MenuComponent implements OnInit {
                                         queryParams: { type: 'production' },
                                         routerLinkActiveOptions: { queryParams: 'exact' }
                                     },
-                                    {
-                                        label: 'Холостой сброс',
-                                        role: ['rais', 'sc'],
-                                        routerLink: ['/discharge']
-                                    }
+                                    // {
+                                    //     label: 'Холостой сброс',
+                                    //     role: ['rais', 'sc'],
+                                    //     routerLink: ['/discharge']
+                                    // }
                                 ]
                             },
                             {
@@ -109,11 +109,11 @@ export class MenuComponent implements OnInit {
                                     }
                                 ]
                             },
-                            {
-                                label: 'Строительство',
-                                role: ['rais', 'sc'],
-                                routerLink: ['/construction']
-                            },
+                            // {
+                            //     label: 'Строительство',
+                            //     role: ['rais', 'sc'],
+                            //     routerLink: ['/construction']
+                            // },
                             { label: 'Категории', role: ['sc'], routerLink: ['/categories'] },
                             { label: 'Файлы', role: ['sc'], routerLink: ['/files'] }
                         ]
