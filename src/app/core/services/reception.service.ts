@@ -27,7 +27,7 @@ export class ReceptionService extends ApiService {
     }
 
     updateReception(id: number, reception: Partial<Reception>): Observable<Reception> {
-        return this.http.put<Reception>(BASE_URL + RECEPTIONS + '/' + id, reception);
+        return this.http.patch<Reception>(BASE_URL + RECEPTIONS + '/' + id, reception);
     }
 
     deleteReception(id: number): Observable<any> {

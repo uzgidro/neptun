@@ -1,21 +1,23 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { Popover } from 'primeng/popover';
-import { PrimeTemplate } from 'primeng/api';
+import { MessageService, PrimeTemplate } from 'primeng/api';
 import { Dialog } from 'primeng/dialog';
 import { ReceptionService } from '@/core/services/reception.service';
 import { Reception } from '@/core/interfaces/reception';
 import { Tag } from 'primeng/tag';
 import { OverlayBadge } from 'primeng/overlaybadge';
+import { Button } from 'primeng/button';
 
 @Component({
     selector: 'app-inbox',
-    imports: [DatePipe, Popover, PrimeTemplate, Dialog, Tag, OverlayBadge],
+    imports: [DatePipe, Popover, PrimeTemplate, Dialog, Tag, OverlayBadge, Button],
     templateUrl: './inbox-widget.component.html',
     styleUrl: './inbox-widget.component.scss'
 })
 export class InboxWidget implements OnInit {
     receptionService = inject(ReceptionService);
+    messageService = inject(MessageService);
 
     pendingReceptions = signal<Reception[]>([]);
     loading = false;
@@ -81,5 +83,45 @@ export class InboxWidget implements OnInit {
             default:
                 return 'Ожидание';
         }
+    }
+
+    approveReception(reception: Reception): void {
+        this.receptionService.updateReception(reception.id, { status: 'true' }).subscribe({
+            next: () => {
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Прием одобрен'
+                });
+                this.receptionDialogVisible = false;
+                this.loadPendingReceptions();
+            },
+            error: (err) => {
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Ошибка одобрения приема',
+                    detail: err.message
+                });
+            }
+        });
+    }
+
+    rejectReception(reception: Reception): void {
+        this.receptionService.updateReception(reception.id, { status: 'false' }).subscribe({
+            next: () => {
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Прием отклонен'
+                });
+                this.receptionDialogVisible = false;
+                this.loadPendingReceptions();
+            },
+            error: (err) => {
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Ошибка отклонения приема',
+                    detail: err.message
+                });
+            }
+        });
     }
 }
