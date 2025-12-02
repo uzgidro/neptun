@@ -33,6 +33,9 @@
                 <th class="whitespace-nowrap" pSortableColumn="reservoir_metrics.current.volume">Объём, млн. м³
                     <p-sortIcon field="reservoir_metrics.current.volume" />
                 </th>
+                <th class="whitespace-nowrap" pSortableColumn="current_discharge">Холостой сброс, м³/с
+                    <p-sortIcon field="current_discharge" />
+                </th>
             </tr>
         </ng-template>
         <ng-template #body let-reservoir>
@@ -98,6 +101,7 @@
                         )
                     }
                 </td>
+                <td class="whitespace-nowrap">{{ reservoir.current_discharge }}</td>
             </tr>
         </ng-template>
     </p-table>

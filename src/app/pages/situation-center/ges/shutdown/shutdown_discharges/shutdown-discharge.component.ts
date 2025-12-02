@@ -7,7 +7,6 @@ import { DischargeService } from '@/core/services/discharge.service';
 import { IdleDischargeResponse } from '@/core/interfaces/discharge';
 import { Button } from 'primeng/button';
 import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
-import { GroupSelectComponent } from '@/layout/component/dialog/group-select/group-select.component';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
 import { InputNumberdComponent } from '@/layout/component/dialog/input-number/input-number.component';
 import { TextareaComponent } from '@/layout/component/dialog/textarea/textarea.component';
@@ -19,6 +18,7 @@ import { OrganizationService } from '@/core/services/organization.service';
 import { FileUploadComponent } from '@/layout/component/dialog/file-upload/file-upload.component';
 import { FileViewerComponent } from '@/layout/component/dialog/file-viewer/file-viewer.component';
 import { FileListComponent } from '@/layout/component/dialog/file-list/file-list.component';
+import { SelectComponent } from '@/layout/component/dialog/select/select.component';
 
 @Component({
     selector: 'app-shutdown-discharge',
@@ -30,14 +30,14 @@ import { FileListComponent } from '@/layout/component/dialog/file-list/file-list
         DecimalPipe,
         Button,
         DialogComponent,
-        GroupSelectComponent,
         DatePickerComponent,
         InputNumberdComponent,
         TextareaComponent,
         TooltipModule,
         FileUploadComponent,
         FileViewerComponent,
-        FileListComponent
+        FileListComponent,
+        SelectComponent
     ],
     templateUrl: './shutdown-discharge.component.html',
     styleUrl: './shutdown-discharge.component.scss'
@@ -104,7 +104,7 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
 
     private loadOrganizations() {
         this.orgsLoading = true;
-        this.organizationService.getCascades().subscribe({
+        this.organizationService.getOrganizationsFlat().subscribe({
             next: (data) => {
                 this.organizations = data;
             },

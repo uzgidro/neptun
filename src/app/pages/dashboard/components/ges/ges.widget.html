@@ -45,7 +45,7 @@
                     class="text-green-500">{{ cascade.ascue_metrics?.pending_agg_count ?? 0 }}</span>/<span
                     class="text-yellow-500">{{ cascade.ascue_metrics?.repair_agg_count ?? 0 }}</span>
                 </td>
-                <td>{{ cascade.current_discharge ?? 0 }}</td>
+                <td>{{ cascade.current_discharge ?? 0 | number:'1.0-1' }}</td>
             </tr>
         </ng-template>
         <ng-template #expandedrow let-cascade>
@@ -54,24 +54,29 @@
                     <h5 class="pl-10">{{ cascade.name }}</h5>
                 </td>
             </tr>
-            @for (contact of cascade.contacts; track contact.id) {
+            @if (cascade.contacts?.length) {
                 <tr>
-                    <td colspan="7">
-                        <p class="pl-10 font-bold">{{ contact.position?.description ?? '' }}</p>
-                    </td>
+                    @for (contact of cascade.contacts; track contact.id; let i = $index) {
+                        <td [attr.colspan]="cascade.contacts.length === 1 ? 7 : (i === 0 ? 3 : 4)">
+                            <p class="pl-10 font-bold">{{ contact.position?.description }}</p>
+                        </td>
+                    }
                 </tr>
+
                 <tr>
-                    <td colspan="7">
-                        <div class="pl-10">
-                            <p>{{ contact.name }}</p>
-                            @if (contact.phone) {
-                                <a pButton outlined class="p-button-sm mb-4" [href]="'tel:' + contact.phone">
-                                    <i pButtonIcon class="pi pi-phone"></i>
-                                    <span pButtonLabel>Позвонить</span>
-                                </a>
-                            }
-                        </div>
-                    </td>
+                    @for (contact of cascade.contacts; track contact.id; let i = $index) {
+                        <td [attr.colspan]="cascade.contacts.length === 1 ? 7 : (i === 0 ? 3 : 4)">
+                            <div class="pl-10">
+                                <p>{{ contact.name }}</p>
+                                @if (contact.phone) {
+                                    <a pButton outlined class="p-button-sm mb-4" [href]="'tel:' + contact.phone">
+                                        <i pButtonIcon class="pi pi-phone"></i>
+                                        <span pButtonLabel>Позвонить</span>
+                                    </a>
+                                }
+                            </div>
+                        </td>
+                    }
                 </tr>
             }
             <tr>
@@ -112,7 +117,7 @@
                                         class="text-green-500">{{ ges.ascue_metrics?.pending_agg_count ?? 0 }}</span>/<span
                                         class="text-yellow-500">{{ ges.ascue_metrics?.repair_agg_count ?? 0 }}</span>
                                     </td>
-                                    <td>{{ ges.current_discharge ?? 0 }}</td>
+                                    <td>{{ ges.current_discharge ?? 0 | number:'1.0-2' }}</td>
                                 </tr>
                             </ng-template>
                             <ng-template #emptymessage>
