@@ -22,18 +22,25 @@
     </div>
 </div>
 
-<app-dialog header="Дебит за {{dc?.currentDate | date:'dd.MM.yyyy'}}" [(visible)]="showDialog" [width]="'70vw'">
+<app-dialog
+    header="Дебит за {{dc?.currentDate | date:'dd.MM.yyyy'}}"
+    [(visible)]="showDialog"
+    [width]="'70vw'"
+    [showFooter]="false"
+    [showConvertButton]="true"
+    [convertLabel]="convertButtonLabel"
+    (convert)="toggleDialogCurrency()">
     <p-table [value]="dc?.items || []" dataKey="name" rowGroupMode="subheader" groupRowsBy="name">
         <ng-template pTemplate="header">
             <tr>
                 <th style="width: 3rem"></th>
-                <th>Название</th>
-                <th class="text-right">Начало года</th>
-                <th class="text-right">Текущее значение</th>
-                <th class="text-right">Изменение</th>
+                <th style="width: 40%">Название</th>
+                <th class="text-right" style="width: 20%">Начало года</th>
+                <th class="text-right" style="width: 20%">Текущее значение</th>
+                <th class="text-right" style="width: 20%">Изменение</th>
             </tr>
         </ng-template>
-        <ng-template pTemplate="groupheader" let-item let-rowIndex="rowIndex" let-expanded="expanded">
+        <ng-template pTemplate="groupheader" let-item let-expanded="expanded">
             <tr>
                 <td>
                     @if (item.items && item.items.length > 0) {
@@ -43,8 +50,12 @@
                     }
                 </td>
                 <td>{{ item.name }}</td>
-                <td class="text-right">{{ item.debit.yearStartValue | number: '1.0-1' }} млн UZS</td>
-                <td class="text-right font-semibold">{{ item.debit.currentValue | number: '1.0-1' }} млн UZS</td>
+                <td class="text-right">{{ convertValue(item.debit.yearStartValue) | number: '1.0-1' }}
+                    млн {{ dialogShowInUSD ? '$' : 'UZS' }}
+                </td>
+                <td class="text-right font-semibold">{{ convertValue(item.debit.currentValue) | number: '1.0-1' }}
+                    млн {{ dialogShowInUSD ? '$' : 'UZS' }}
+                </td>
                 <td class="text-right">
                     <span [class]="item.debit.diff > 0 ? 'text-green-500' : item.debit.diff < 0 ? 'text-red-500' : ''">
                         {{ item.debit.diff > 0 ? '+' : '' }}{{ item.debit.diff | number: '1.0-0' }}%
@@ -59,22 +70,22 @@
                         <p-table [value]="item.items || []" dataKey="name">
                             <ng-template pTemplate="header">
                                 <tr>
-                                    <th></th>
-                                    <th>Подкатегория</th>
-                                    <th class="text-right">Начало года</th>
-                                    <th class="text-right">Текущее значение</th>
-                                    <th class="text-right">Изменение</th>
+                                    <th style="width: 3rem"></th>
+                                    <th style="width: 40%">Подкатегория</th>
+                                    <th class="text-right" style="width: 20%">Начало года</th>
+                                    <th class="text-right" style="width: 20%">Текущее значение</th>
+                                    <th class="text-right" style="width: 20%">Изменение</th>
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-subItem>
                                 <tr>
                                     <td></td>
                                     <td>{{ subItem.name }}</td>
-                                    <td class="text-right">{{ subItem.debit.yearStartValue | number: '1.0-1' }} млн
-                                        UZS
+                                    <td class="text-right">{{ convertValue(subItem.debit.yearStartValue) | number: '1.0-1' }}
+                                        млн {{ dialogShowInUSD ? '$' : 'UZS' }}
                                     </td>
-                                    <td class="text-right font-semibold">{{ subItem.debit.currentValue | number: '1.0-1' }}
-                                        млн UZS
+                                    <td class="text-right font-semibold">{{ convertValue(subItem.debit.currentValue) | number: '1.0-1' }}
+                                        млн {{ dialogShowInUSD ? '$' : 'UZS' }}
                                     </td>
                                     <td class="text-right">
                                         <span

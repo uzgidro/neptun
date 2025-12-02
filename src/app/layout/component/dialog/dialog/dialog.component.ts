@@ -18,11 +18,15 @@ export class DialogComponent {
     @Input() submitting: boolean = false;
     @Input() saveLabel: string = 'Сохранить';
     @Input() width: string = '30vw';
+    @Input() showFooter: boolean = true;
+    @Input() showConvertButton: boolean = false;
+    @Input() convertLabel: string = 'Конвертировать в USD';
 
     // --- Исходящие ---
     @Output() visibleChange = new EventEmitter<boolean>();
     @Output() save = new EventEmitter<void>();
     @Output() cancel = new EventEmitter<void>();
+    @Output() convert = new EventEmitter<void>();
 
     // Клик по "Сохранить"
     onSaveClick() {
@@ -34,5 +38,10 @@ export class DialogComponent {
         this.visible = false;
         this.visibleChange.emit(false);
         this.cancel.emit();
+    }
+
+    // Клик по "Конвертировать"
+    onConvertClick() {
+        this.convert.emit();
     }
 }

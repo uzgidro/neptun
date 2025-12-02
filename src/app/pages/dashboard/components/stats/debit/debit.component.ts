@@ -20,6 +20,7 @@ export class DebitComponent implements OnInit {
     showInUSD: boolean = false;
     convertedValue: number = 0;
     showDialog: boolean = false;
+    dialogShowInUSD: boolean = false;
     private currency: number = 0;
     private currencyService: CurrencyService = inject(CurrencyService);
 
@@ -51,5 +52,20 @@ export class DebitComponent implements OnInit {
 
     openDialog() {
         this.showDialog = true;
+    }
+
+    toggleDialogCurrency() {
+        this.dialogShowInUSD = !this.dialogShowInUSD;
+    }
+
+    get convertButtonLabel(): string {
+        return this.dialogShowInUSD ? 'Конвертировать в UZS' : 'Конвертировать в USD';
+    }
+
+    convertValue(value: number): number {
+        if (this.dialogShowInUSD && this.currency > 0) {
+            return value / this.currency;
+        }
+        return value;
     }
 }
