@@ -1,0 +1,22 @@
+:host ::ng-deep {
+    .p-datatable {
+        .p-datatable-thead > tr > th {
+            background-color: var(--surface-50);
+            color: var(--text-color);
+            font-weight: 600;
+        }
+
+        .p-datatable-tbody > tr {
+            &:hover {
+                background-color: var(--surface-100);
+            }
+        }
+    }
+
+    .p-dialog {
+        .p-dialog-header {
+            background-color: var(--surface-50);
+            border-bottom: 1px solid var(--surface-200);
+        }
+    }
+}

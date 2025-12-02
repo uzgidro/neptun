@@ -10,13 +10,13 @@ import { CategoriesComponent } from '@/pages/categories/categories.component';
 import { FilesComponent } from '@/pages/files/files.component';
 import { DocumentViewerComponent } from '@/pages/document-viewer/document-viewer.component';
 import { DischargeComponent } from '@/pages/situation-center/ges/discharge/discharge.component';
-import { PlanningComponent } from '@/pages/planning/planning.component';
 import { ShutdownComponent } from '@/pages/situation-center/ges/shutdown/shutdown.component';
 import { PositionComponent } from '@/pages/hrm/position/position.component';
 import { DepartmentComponent } from '@/pages/hrm/department/department.component';
 import { EmployeeComponent } from '@/pages/hrm/employee/employee.component';
 import { EventsComponent } from '@/pages/planning/events/events.component';
 import { ConstructionComponent } from '@/pages/situation-center/construction/construction.component';
+import { ReceptionComponent } from '@/pages/planning/reception/reception.component';
 
 export const appRoutes: Routes = [
     {
@@ -39,10 +39,10 @@ export const appRoutes: Routes = [
             { path: 'employees', component: EmployeeComponent, canActivate: [adminGuard] },
             { path: 'viewer', component: DocumentViewerComponent, canActivate: [raisGuard] },
             { path: 'discharge', component: DischargeComponent, canActivate: [raisGuard] },
-            { path: 'planning', component: PlanningComponent, canActivate: [raisGuard] },
             { path: 'shutdowns', component: ShutdownComponent, canActivate: [raisGuard] },
             { path: 'construction', component: ConstructionComponent, canActivate: [raisGuard] },
             { path: 'planning/events', component: EventsComponent, canActivate: [raisGuard] },
+            { path: 'planning/reception', component: ReceptionComponent, canActivate: [raisGuard] },
             { path: 'shutdowns', component: ShutdownComponent, canActivate: [raisGuard] }
         ]
     },

@@ -1,5 +1,5 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { MenuItem, MessageService } from 'primeng/api';
+import { Component, inject } from '@angular/core';
+import { MessageService } from 'primeng/api';
 import { RouterModule } from '@angular/router';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { StyleClassModule } from 'primeng/styleclass';
@@ -10,15 +10,14 @@ import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { FormsModule } from '@angular/forms';
 import { AppConfigurator } from '@/layout/component/app.configurator';
-import { ButtonDirective } from 'primeng/button';
-import { TopbarCalendarComponent } from '@/layout/component/topbar/topbar-calendar/topbar-calendar.component';
-import { FastCallService } from '@/core/services/fast-call.service';
-import { FastCall } from '@/core/interfaces/fast-call';
+import { TopbarCalendarWidget } from '@/layout/component/topbar/topbar-calendar/topbar-calendar-widget.component';
+import { FastCallWidget } from '@/layout/component/topbar/fast-call/fast-call.widget';
+import { InboxWidget } from '@/layout/component/topbar/inbox/inbox-widget.component';
 
 @Component({
     selector: 'app-topbar',
     standalone: true,
-    imports: [RouterModule, CommonModule, StyleClassModule, ProfileMenu, PopoverModule, TableModule, ToastModule, FormsModule, AppConfigurator, ButtonDirective, TopbarCalendarComponent, NgOptimizedImage],
+    imports: [RouterModule, CommonModule, StyleClassModule, ProfileMenu, PopoverModule, TableModule, ToastModule, FormsModule, AppConfigurator, TopbarCalendarWidget, NgOptimizedImage, FastCallWidget, InboxWidget],
     providers: [MessageService], // Добавляем сервис для уведомлений
     template: ` <div class="layout-topbar">
         <div class="layout-topbar-logo-container">
@@ -56,63 +55,26 @@ import { FastCall } from '@/core/interfaces/fast-call';
                 <i class="pi pi-ellipsis-v"></i>
             </button>
 
+            <!-- Fast calls -->
+            <app-fast-call></app-fast-call>
+
             <div class="layout-topbar-menu hidden lg:block">
                 <div class="layout-topbar-menu-content">
+                    <!--  Calendar  -->
                     <app-topbar-calendar></app-topbar-calendar>
-                    <button type="button" class="layout-topbar-action">
-                        <i class="pi pi-inbox"></i>
-                        <span>Messages</span>
-                    </button>
 
-                    <!-- Обновленная кнопка "Звонок" с Popover -->
-                    <p-toast />
-                    <button type="button" class="layout-topbar-action" (click)="phonePopover.toggle($event)">
-                        <i class="pi pi-phone"></i>
-                        <span>Звонок</span>
-                    </button>
-                    <p-popover #phonePopover [style]="{ width: '450px' }">
-                        <p-table [value]="contacts" dataKey="id" [rows]="5" [paginator]="true">
-                            <ng-template pTemplate="header">
-                                <tr>
-                                    <th>Имя</th>
-                                    <th style="width: 8rem">Действие</th>
-                                </tr>
-                            </ng-template>
-                            <ng-template pTemplate="body" let-contact>
-                                <tr>
-                                    <td>{{ contact.contact.name }}</td>
-                                    <td>
-                                        <a pButton outlined class="p-button-sm" [href]="'tel:' + contact.contact.phone">
-                                            <i class="pi pi-phone text-green-500"></i>
-                                            <!--                                            <span class="ml-2">Позвонить</span>-->
-                                        </a>
-                                    </td>
-                                </tr>
-                            </ng-template>
-                        </p-table>
-                    </p-popover>
+                    <!-- Inbox -->
+                    <app-inbox></app-inbox>
 
+                    <!-- Profile -->
                     <app-profile-menu />
                 </div>
             </div>
         </div>
     </div>`
 })
-export class AppTopbar implements OnInit {
-    items!: MenuItem[];
-    contacts: FastCall[] = [];
-
+export class AppTopbar {
     layoutService = inject(LayoutService);
-    messageService = inject(MessageService);
-    private fastCallsService: FastCallService = inject(FastCallService);
-
-    ngOnInit() {
-        this.fastCallsService.getFastCalls().subscribe({
-            next: (data) => {
-                this.contacts = data;
-            }
-        });
-    }
 
     toggleDarkMode() {
         this.layoutService.layoutConfig.update((state) => ({ ...state, darkTheme: !state.darkTheme }));

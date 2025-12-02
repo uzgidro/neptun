@@ -14,10 +14,10 @@ import { Tooltip } from 'primeng/tooltip';
 @Component({
     selector: 'app-topbar-calendar',
     imports: [DatePicker, DatePipe, Popover, PrimeTemplate, FormsModule, NgClass, Dialog, Tooltip, ButtonDirective, ButtonIcon],
-    templateUrl: './topbar-calendar.component.html',
-    styleUrl: './topbar-calendar.component.scss'
+    templateUrl: './topbar-calendar-widget.component.html',
+    styleUrl: './topbar-calendar-widget.component.scss'
 })
-export class TopbarCalendarComponent implements OnInit {
+export class TopbarCalendarWidget implements OnInit {
     eventManagementService = inject(EventManagementService);
 
     allEvents = signal<Event[]>([]);
