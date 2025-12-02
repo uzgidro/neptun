@@ -7,7 +7,7 @@ export interface ReservoirMetricValues {
 
 export interface ReservoirMetrics {
     current: ReservoirMetricValues;
-    diff: ReservoirMetricValues;
+    diff?: ReservoirMetricValues;
 }
 
 export interface Contact {

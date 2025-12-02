@@ -1,6 +1,20 @@
-<div class="card mb-8!">
-    <div class="font-semibold text-xl mb-4">Водохранилища</div>
-    <p-table [value]="reservoirs" dataKey="organization_id" [scrollable]="true" scrollHeight="25rem"
+<div class="card mb-8! h-full">
+    <div class="mb-4 flex justify-between items-start">
+        <div class="font-semibold text-xl">Водохранилища</div>
+        <div class="flex gap-2 items-baseline">
+            <app-date-picker
+                [(ngModel)]="selectedDate"
+                [showTime]="false"
+                [required]="false"
+                (ngModelChange)="onDateChange($event)">
+            </app-date-picker>
+            <button pButton outlined (click)="expandAll()">
+                <i pButtonIcon class="pi pi-fw text-sm"
+                   [ngClass]="{ 'pi-window-minimize': expanded, 'pi-window-maximize': !expanded }"></i>
+            </button>
+        </div>
+    </div>
+    <p-table [value]="reservoirs" dataKey="organization_id" [scrollable]="true"
              [loading]="loading" class="p-datatable-lg">
         <ng-template #header>
             <tr>
@@ -24,52 +38,65 @@
         <ng-template #body let-reservoir>
             <tr>
                 <td class="whitespace-nowrap">{{ reservoir.organization_name }}</td>
-                <td class="whitespace-nowrap">{{ reservoir.reservoir_metrics.current.income }} (
-                    @if (reservoir.reservoir_metrics.diff.income > 0) {
-                        <span
-                            class="text-lime-500">+{{ reservoir.reservoir_metrics.diff.income | number:'1.2-2' }}</span>
-                    } @else if (reservoir.reservoir_metrics.diff.income < 0) {
-                        <span
-                            class="text-rose-500">{{ reservoir.reservoir_metrics.diff.income | number:'1.2-2' }}</span>
-                    } @else {
-                        {{ reservoir.reservoir_metrics.diff.income | number:'1.2-2' }}
+                <td class="whitespace-nowrap">{{ reservoir.reservoir_metrics.current.income }}
+                    @if (reservoir.reservoir_metrics.diff) {
+                        (
+                        @if (reservoir.reservoir_metrics.diff.income > 0) {
+                            <span
+                                class="text-lime-500">+{{ reservoir.reservoir_metrics.diff.income | number:'1.2-2' }}</span>
+                        } @else if (reservoir.reservoir_metrics.diff.income < 0) {
+                            <span
+                                class="text-rose-500">{{ reservoir.reservoir_metrics.diff.income | number:'1.2-2' }}</span>
+                        } @else {
+                            {{ reservoir.reservoir_metrics.diff.income | number:'1.2-2' }}
+                        }
+                        )
                     }
-                    )
                 </td>
-                <td class="whitespace-nowrap">{{ reservoir.reservoir_metrics.current.release }} (
-                    @if (reservoir.reservoir_metrics.diff.release > 0) {
-                        <span
-                            class="text-lime-500">+{{ reservoir.reservoir_metrics.diff.release | number:'1.2-2' }}</span>
-                    } @else if (reservoir.reservoir_metrics.diff.release < 0) {
-                        <span
-                            class="text-rose-500">{{ reservoir.reservoir_metrics.diff.release | number:'1.2-2' }}</span>
-                    } @else {
-                        {{ reservoir.reservoir_metrics.diff.release | number:'1.2-2' }}
+                <td class="whitespace-nowrap">{{ reservoir.reservoir_metrics.current.release }}
+                    @if (reservoir.reservoir_metrics.diff) {
+                        (
+                        @if (reservoir.reservoir_metrics.diff.release > 0) {
+                            <span
+                                class="text-lime-500">+{{ reservoir.reservoir_metrics.diff.release | number:'1.2-2' }}</span>
+                        } @else if (reservoir.reservoir_metrics.diff.release < 0) {
+                            <span
+                                class="text-rose-500">{{ reservoir.reservoir_metrics.diff.release | number:'1.2-2' }}</span>
+                        } @else {
+                            {{ reservoir.reservoir_metrics.diff.release | number:'1.2-2' }}
+                        }
+                        )
                     }
-                    )
                 </td>
-                <td class="whitespace-nowrap">{{ reservoir.reservoir_metrics.current.level }} (
-                    @if (reservoir.reservoir_metrics.diff.level > 0) {
-                        <span
-                            class="text-lime-500">+{{ reservoir.reservoir_metrics.diff.level | number:'1.2-2' }}</span>
-                    } @else if (reservoir.reservoir_metrics.diff.level < 0) {
-                        <span class="text-rose-500">{{ reservoir.reservoir_metrics.diff.level | number:'1.2-2' }}</span>
-                    } @else {
-                        {{ reservoir.reservoir_metrics.diff.level | number:'1.2-2' }}
+                <td class="whitespace-nowrap">{{ reservoir.reservoir_metrics.current.level }}
+                    @if (reservoir.reservoir_metrics.diff) {
+                        (
+                        @if (reservoir.reservoir_metrics.diff.level > 0) {
+                            <span
+                                class="text-lime-500">+{{ reservoir.reservoir_metrics.diff.level | number:'1.2-2' }}</span>
+                        } @else if (reservoir.reservoir_metrics.diff.level < 0) {
+                            <span
+                                class="text-rose-500">{{ reservoir.reservoir_metrics.diff.level | number:'1.2-2' }}</span>
+                        } @else {
+                            {{ reservoir.reservoir_metrics.diff.level | number:'1.2-2' }}
+                        }
+                        )
                     }
-                    )
                 </td>
-                <td class="whitespace-nowrap">{{ reservoir.reservoir_metrics.current.volume }} (
-                    @if (reservoir.reservoir_metrics.diff.volume > 0) {
-                        <span
-                            class="text-lime-500">+{{ reservoir.reservoir_metrics.diff.volume | number:'1.2-2' }}</span>
-                    } @else if (reservoir.reservoir_metrics.diff.volume < 0) {
-                        <span
-                            class="text-rose-500">{{ reservoir.reservoir_metrics.diff.volume | number:'1.2-2' }}</span>
-                    } @else {
-                        {{ reservoir.reservoir_metrics.diff.volume | number:'1.2-2' }}
+                <td class="whitespace-nowrap">{{ reservoir.reservoir_metrics.current.volume }}
+                    @if (reservoir.reservoir_metrics.diff) {
+                        (
+                        @if (reservoir.reservoir_metrics.diff.volume > 0) {
+                            <span
+                                class="text-lime-500">+{{ reservoir.reservoir_metrics.diff.volume | number:'1.2-2' }}</span>
+                        } @else if (reservoir.reservoir_metrics.diff.volume < 0) {
+                            <span
+                                class="text-rose-500">{{ reservoir.reservoir_metrics.diff.volume | number:'1.2-2' }}</span>
+                        } @else {
+                            {{ reservoir.reservoir_metrics.diff.volume | number:'1.2-2' }}
+                        }
+                        )
                     }
-                    )
                 </td>
             </tr>
         </ng-template>

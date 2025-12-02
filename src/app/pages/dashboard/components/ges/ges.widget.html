@@ -1,4 +1,4 @@
-<div class="card mb-8!">
+<div class="card mb-8! h-full">
     <div class="flex flex-row justify-between items-center mb-6" >
         <span class="font-semibold text-xl">Гидроэлектростанции</span>
         <button pButton outlined (click)="expandAll()">
@@ -7,7 +7,7 @@
             <span pButtonLabel>{{ expanded ? 'Свернуть' : 'Развернуть' }}</span>
         </button>
     </div>
-    <p-table [value]="cascades" dataKey="name" [scrollable]="true" scrollHeight="22rem" [loading]="loading"
+    <p-table [value]="cascades" dataKey="name" [scrollable]="true" scrollHeight="23rem" [loading]="loading"
              [expandedRowKeys]="expandedRows">
         <ng-template #header>
             <tr>

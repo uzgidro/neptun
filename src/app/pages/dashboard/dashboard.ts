@@ -12,36 +12,58 @@ import GesWidget from '@/pages/dashboard/components/ges/ges.widget';
     imports: [StatsWidget, IncomingEventsWidget, WaterResourcesWidget, ConstructionsWidget, NotificationsWidget, GesWidget],
     template: `
         <div class="grid grid-cols-12 gap-8">
-            <app-stats-widget class="contents" />
-            @if (gesExpanded) {
-                <app-ges-widget class="col-span-12" (expansionChange)="onGesExpansionChange($event)" [expanded]="gesExpanded" />
-                <div class="col-span-12 xl:col-span-4">
-                    <app-constructions-widget />
-                </div>
-                <div class="col-span-12 xl:col-span-4">
-                    <app-water-resources-widget />
-                </div>
-                <div class="col-span-12 xl:col-span-4">
-                    <app-notifications-widget />
-                </div>
-            } @else {
-                <div class="col-span-12 xl:col-span-6">
-                    <app-ges-widget (expansionChange)="onGesExpansionChange($event)" />
-                    <app-constructions-widget />
-                </div>
-                <div class="col-span-12 xl:col-span-6">
-                    <app-water-resources-widget />
-                    <app-notifications-widget />
-                </div>
-            }
-            <app-incoming-events-widget class="contents" />
+            <app-stats-widget class="contents col-span-12 order-first" />
+
+            <app-ges-widget
+                [class]="getWidgetClass('ges') + ' h-full'"
+                [expanded]="expandedWidgetId === 'ges'"
+                (expansionChange)="onExpansionChange('ges', $event)"
+            />
+
+            <app-water-resources-widget
+                [class]="getWidgetClass('water') + ' h-full'"
+                [expanded]="expandedWidgetId === 'water'"
+                (expansionChange)="onExpansionChange('water', $event)"
+            />
+
+            <app-constructions-widget
+                [class]="getWidgetClass('constructions') + ' h-full'"
+                [expanded]="expandedWidgetId === 'constructions'"
+                (expansionChange)="onExpansionChange('constructions', $event)"
+            />
+
+            <app-notifications-widget
+                [class]="getWidgetClass('notifications') + ' h-full'"
+                [expanded]="expandedWidgetId === 'notifications'"
+                (expansionChange)="onExpansionChange('notifications', $event)"
+            />
+
+            <app-incoming-events-widget class="col-span-12 order-last" />
         </div>
     `
 })
 export class Dashboard {
-    gesExpanded = false;
+    expandedWidgetId: string | null = null;
 
-    onGesExpansionChange(expanded: boolean) {
-        this.gesExpanded = expanded;
+    onExpansionChange(widgetId: string, expanded: boolean) {
+        this.expandedWidgetId = expanded ? widgetId : null;
+    }
+
+    getWidgetClass(widgetId: string): string {
+        // 1. СЦЕНАРИЙ: Никто не раскрыт - все виджеты в стандартном виде
+        // col-span-6 занимает половину экрана
+        if (!this.expandedWidgetId) {
+            return 'col-span-12 xl:col-span-6';
+        }
+
+        // 2. СЦЕНАРИЙ: Этот виджет - тот самый, который раскрыт
+        if (this.expandedWidgetId === widgetId) {
+            // Он занимает всю ширину и встает первым (order-1)
+            return 'col-span-12 order-1';
+        }
+
+        // 3. СЦЕНАРИЙ: Раскрыт КТО-ТО ДРУГОЙ, а этот виджет должен "потесниться"
+        // Занимает треть экрана (col-span-4) и встает после главного (order-2)
+        return 'col-span-12 xl:col-span-4 order-2';
     }
 }
