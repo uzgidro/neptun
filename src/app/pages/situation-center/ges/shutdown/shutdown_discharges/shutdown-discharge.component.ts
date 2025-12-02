@@ -7,7 +7,6 @@ import { DischargeService } from '@/core/services/discharge.service';
 import { IdleDischargeResponse } from '@/core/interfaces/discharge';
 import { Button } from 'primeng/button';
 import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
-import { GroupSelectComponent } from '@/layout/component/dialog/group-select/group-select.component';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
 import { InputNumberdComponent } from '@/layout/component/dialog/input-number/input-number.component';
 import { TextareaComponent } from '@/layout/component/dialog/textarea/textarea.component';
@@ -31,7 +30,6 @@ import { SelectComponent } from '@/layout/component/dialog/select/select.compone
         DecimalPipe,
         Button,
         DialogComponent,
-        GroupSelectComponent,
         DatePickerComponent,
         InputNumberdComponent,
         TextareaComponent,
