@@ -64,10 +64,10 @@ export class MenuComponent implements OnInit {
                                     {
                                         label: 'Выработка',
                                         role: ['rais', 'sc'],
-                                        routerLink: ['/viewer'],
-                                        queryParams: { type: 'production' },
-                                        routerLinkActiveOptions: { queryParams: 'exact' }
-                                    },
+                                        // routerLink: ['/viewer'],
+                                        // queryParams: { type: 'production' },
+                                        // routerLinkActiveOptions: { queryParams: 'exact' }
+                                    }
                                     // {
                                     //     label: 'Холостой сброс',
                                     //     role: ['rais', 'sc'],
