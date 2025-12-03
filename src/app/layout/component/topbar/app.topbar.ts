@@ -80,17 +80,21 @@ export class AppTopbar {
 
     toggleDarkMode() {
         this.layoutService.layoutConfig.update((state) => {
-            let surfaceName: string
+            let surfaceName: string;
             if (!state.darkTheme) {
-                let surface = this.configurator.surfaces.find(value => {return value.name == 'ocean'});
-                surfaceName = surface?.name ?? 'ocean'
+                let surface = this.configurator.surfaces.find((value) => {
+                    return value.name == 'ocean';
+                });
+                surfaceName = surface?.name ?? 'ocean';
                 updateSurfacePalette(surface?.palette);
             } else {
-                let surface = this.configurator.surfaces.find(value => {return value.name == 'slate'});
-                surfaceName = surface?.name ?? 'ocean'
+                let surface = this.configurator.surfaces.find((value) => {
+                    return value.name == 'slate';
+                });
+                surfaceName = surface?.name ?? 'ocean';
                 updateSurfacePalette(surface?.palette);
             }
-            return ({...state, darkTheme: !state.darkTheme, surface: surfaceName});
+            return { ...state, darkTheme: !state.darkTheme, surface: surfaceName };
         });
     }
 }
