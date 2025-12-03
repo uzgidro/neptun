@@ -151,7 +151,7 @@ export class MenuComponent implements OnInit {
                             // { label: 'Созвоны', role: ['rais'], routerLink: ['/planning'], queryParams: { type: 'call' }, routerLinkActiveOptions: { queryParams: 'exact' } },
                             // { label: 'Переговоры', role: ['rais'], routerLink: ['/planning'], queryParams: { type: 'negotiation' }, routerLinkActiveOptions: { queryParams: 'exact' } },
                             // { label: 'ВКС', role: ['rais'], routerLink: ['/planning'], queryParams: { type: 'vcs' }, routerLinkActiveOptions: { queryParams: 'exact' } },
-                            { label: 'Все события', role: ['rais', 'assistant'], routerLink: ['/planning/events'] },
+                            { label: 'События', role: ['rais', 'assistant'], routerLink: ['/planning/events'] },
                             { label: 'Приемная', role: ['rais', 'assistant'], routerLink: ['/planning/reception'] }
                         ]
                     },
