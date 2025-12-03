@@ -38,7 +38,6 @@ export class CreditWidget implements OnInit {
     ngOnInit() {
         this.currencyService.getCurrency().subscribe({
             next: ({ rate }: { rate: number }) => {
-                console.log(rate);
                 this.currency = rate;
             }
         });
