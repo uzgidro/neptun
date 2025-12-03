@@ -228,13 +228,10 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
         this.form.reset();
 
         let organizationToSet: any = null;
-        if (discharge.organization && this.organizations) {
-            for (const cascade of this.organizations) {
-                const foundOrg = cascade.items?.find((org: any) => org.id === discharge.organization.id);
-                if (foundOrg) {
-                    organizationToSet = foundOrg;
-                    break;
-                }
+        if (discharge.id && this.organizations) {
+            const foundOrg = this.organizations.find((org: any) => org.id === discharge.organization.id);
+            if (foundOrg) {
+                organizationToSet = foundOrg;
             }
         }
 
@@ -273,14 +270,6 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
     showFiles(discharge: IdleDischargeResponse) {
         this.selectedDischargeForFiles = discharge;
         this.showFilesDialog = true;
-    }
-
-    formatFileSize(bytes: number): string {
-        if (!bytes || bytes === 0) return '0 Bytes';
-        const k = 1024;
-        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-        const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
     }
 
     deleteDischarge(discharge: IdleDischargeResponse) {
