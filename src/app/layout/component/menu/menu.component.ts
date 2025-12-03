@@ -164,14 +164,16 @@ export class MenuComponent implements OnInit {
                             { label: 'Письма', role: ['rais'] },
                             { label: 'Инструкции', role: ['rais'] },
                             {
-                                label: 'Постановления',
+                                label: 'Нормативно правовая документация',
                                 role: ['rais'],
                                 items: [
-                                    { label: 'Президент', role: ['rais'] },
-                                    { label: 'Кабинет министров', role: ['rais'] },
-                                    { label: 'Указы', role: ['rais'] },
-                                    { label: 'Приказы', role: ['rais'] },
-                                    { label: 'Совместные соглашения', role: ['rais'] }
+                                    { label: 'Законы Республики Узбекистан', role: ['rais'] },
+                                    { label: 'Постановления Президента Республики Узбекистан', role: ['rais'] },
+                                    { label: 'Указы Президента Республики Узбекистан', role: ['rais'] },
+                                    { label: 'Постановления Кабинета министров', role: ['rais'] },
+                                    { label: 'Приказы министерств и ведомств', role: ['rais'] },
+                                    { label: 'Совместные соглашения(NDA)', role: ['rais'] },
+                                    { label: 'Иные документы', role: ['rais'] }
                                 ]
                             }
                         ]
