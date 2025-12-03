@@ -46,28 +46,37 @@ export class MenuComponent implements OnInit {
                                 items: [
                                     {
                                         label: 'ГЭС',
-                                        role: ['rais', 'sc']
+                                        role: ['rais', 'sc'],
+                                        routerLink: ['/viewer'],
+                                        queryParams: { type: 'production' },
+                                        routerLinkActiveOptions: { queryParams: 'exact' }
                                     },
                                     {
                                         label: 'Малые и микро ГЭС',
-                                        role: ['rais', 'sc']
+                                        role: ['rais', 'sc'],
+                                        routerLink: ['/viewer'],
+                                        queryParams: { type: 'minimicro' },
+                                        routerLinkActiveOptions: { queryParams: 'exact' }
                                     },
                                     {
                                         label: 'Солнце',
-                                        role: ['rais', 'sc']
+                                        role: ['rais', 'sc'],
+                                        routerLink: ['/viewer'],
+                                        queryParams: { type: 'sun' },
+                                        routerLinkActiveOptions: { queryParams: 'exact' }
                                     },
                                     {
                                         label: 'Аварийные отключение',
                                         role: ['rais', 'sc'],
                                         routerLink: ['/shutdowns']
-                                    },
-                                    {
-                                        label: 'Выработка',
-                                        role: ['rais', 'sc']
-                                        // routerLink: ['/viewer'],
-                                        // queryParams: { type: 'production' },
-                                        // routerLinkActiveOptions: { queryParams: 'exact' }
                                     }
+                                    // {
+                                    //     label: 'Выработка',
+                                    //     role: ['rais', 'sc']
+                                    //     // routerLink: ['/viewer'],
+                                    //     // queryParams: { type: 'production' },
+                                    //     // routerLinkActiveOptions: { queryParams: 'exact' }
+                                    // }
                                     // {
                                     //     label: 'Холостой сброс',
                                     //     role: ['rais', 'sc'],
@@ -81,26 +90,29 @@ export class MenuComponent implements OnInit {
                                 items: [
                                     {
                                         label: 'Водохранилища',
-                                        role: ['rais', 'sc']
-                                    },
-                                    {
-                                        label: 'MODSNOW',
-                                        role: ['rais', 'sc']
-                                    },
-                                    {
-                                        label: 'Фильтрация',
-                                        role: ['rais', 'sc']
+                                        role: ['rais', 'sc'],
+                                        routerLink: ['/viewer'],
+                                        queryParams: { type: 'reservoir' },
+                                        routerLinkActiveOptions: { queryParams: 'exact' }
                                     }
+                                    // {
+                                    //     label: 'MODSNOW',
+                                    //     role: ['rais', 'sc']
+                                    // },
+                                    // {
+                                    //     label: 'Фильтрация',
+                                    //     role: ['rais', 'sc']
+                                    // }
                                 ]
                             },
                             {
                                 label: 'Прочая информация',
                                 role: ['rais', 'sc'],
                                 items: [
-                                    {
-                                        label: 'События',
-                                        role: ['rais', 'sc']
-                                    },
+                                    // {
+                                    //     label: 'События',
+                                    //     role: ['rais', 'sc']
+                                    // },
                                     {
                                         label: 'Землетрясение',
                                         role: ['rais', 'sc'],

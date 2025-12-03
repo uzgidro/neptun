@@ -62,9 +62,7 @@ export class DocumentViewerComponent implements OnInit, OnDestroy {
                     const categoryName = categoryMap[tabIndex];
                     const foundFile = files.find((file) => file.category_name.includes(categoryName));
                     this.fileUrl = foundFile ? foundFile.url : '';
-                }
-
-                if (params['type'] === 'production' || params['type'] === 'shutdown') {
+                } else {
                     const foundFile = files.find((file) => file.category_name.includes(params['type']));
                     this.fileUrl = foundFile ? foundFile.url : '';
                 }
