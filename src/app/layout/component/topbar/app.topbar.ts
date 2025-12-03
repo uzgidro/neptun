@@ -13,6 +13,7 @@ import { AppConfigurator } from '@/layout/component/app.configurator';
 import { TopbarCalendarWidget } from '@/layout/component/topbar/topbar-calendar/topbar-calendar-widget.component';
 import { FastCallWidget } from '@/layout/component/topbar/fast-call/fast-call.widget';
 import { InboxWidget } from '@/layout/component/topbar/inbox/inbox-widget.component';
+import { updateSurfacePalette } from '@primeuix/themes';
 
 @Component({
     selector: 'app-topbar',
@@ -75,8 +76,21 @@ import { InboxWidget } from '@/layout/component/topbar/inbox/inbox-widget.compon
 })
 export class AppTopbar {
     layoutService = inject(LayoutService);
+    configurator = new AppConfigurator();
 
     toggleDarkMode() {
-        this.layoutService.layoutConfig.update((state) => ({ ...state, darkTheme: !state.darkTheme }));
+        this.layoutService.layoutConfig.update((state) => {
+            let surfaceName: string
+            if (!state.darkTheme) {
+                let surface = this.configurator.surfaces.find(value => {return value.name == 'ocean'});
+                surfaceName = surface?.name ?? 'ocean'
+                updateSurfacePalette(surface?.palette);
+            } else {
+                let surface = this.configurator.surfaces.find(value => {return value.name == 'slate'});
+                surfaceName = surface?.name ?? 'ocean'
+                updateSurfacePalette(surface?.palette);
+            }
+            return ({...state, darkTheme: !state.darkTheme, surface: surfaceName});
+        });
     }
 }
