@@ -4,8 +4,8 @@ import { Dashboard } from '@/pages/dashboard/dashboard';
 import { Notfound } from '@/pages/notfound/notfound';
 
 import { adminGuard, authGuard, raisGuard, scGuard } from '@/core/guards/auth.guard';
-import { User } from '@/pages/users/user.component';
-import { Role } from '@/pages/roles/roles';
+import { User } from '@/pages/hrm/users/user.component';
+import { Role } from '@/pages/hrm/roles/roles';
 import { CategoriesComponent } from '@/pages/categories/categories.component';
 import { FilesComponent } from '@/pages/files/files.component';
 import { DocumentViewerComponent } from '@/pages/document-viewer/document-viewer.component';

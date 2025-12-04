@@ -145,7 +145,7 @@ export class User implements OnInit, OnDestroy {
         this.submitted = false;
 
         // Convert role_ids to role objects for multiselect
-        const selectedRoles = this.allRoles.filter((role) => user.role_ids?.includes(role.id));
+        const selectedRoles = this.allRoles.filter((role) => user.roles.includes(role.name));
 
         // Parse date if present
         let dobDate = null;
@@ -168,7 +168,6 @@ export class User implements OnInit, OnDestroy {
             position_id: user.contact?.position_id || null
         });
 
-        console.log(this.userForm.value);
 
         this.userForm.get('login')?.enable();
         this.userForm.get('password')?.clearValidators();
@@ -296,7 +295,6 @@ export class User implements OnInit, OnDestroy {
     private loadUsers(): void {
         this.apiService.getUsers().subscribe({
             next: (data) => {
-                console.log(data);
                 this.users = data;
             },
             error: (err) => console.log(err),
