@@ -128,73 +128,122 @@
                 <!-- Contact Information -->
                 <div class="font-semibold text-lg mb-2 mt-4">Контактная информация</div>
 
-                <app-input-text
-                    formControlName="name"
-                    label="ФИО"
-                    [submitted]="submitted"
-                    errorMessage="ФИО обязательно"
-                    [required]="true">
-                </app-input-text>
+                @if (!isEditMode) {
+                    <div class="flex flex-col gap-2">
+                        <label>Режим контакта</label>
+                        <p-selectbutton
+                            [options]="contactModeOptions"
+                            [(ngModel)]="contactMode"
+                            [ngModelOptions]="{standalone: true}"
+                            (onChange)="onContactModeChange()"
+                            optionLabel="label"
+                            optionValue="value">
+                        </p-selectbutton>
+                    </div>
+                }
 
-                <app-input-text
-                    formControlName="email"
-                    label="Email"
-                    type="email"
-                    [submitted]="submitted"
-                    [required]="false">
-                </app-input-text>
+                @if (!isEditMode && contactMode === 'existing') {
+                    <div class="flex flex-col gap-2">
+                        <label for="contact_id">Выберите контакт</label>
+                        <p-select
+                            id="contact_id"
+                            formControlName="contact_id"
+                            [options]="allContacts"
+                            optionLabel="name"
+                            optionValue="id"
+                            placeholder="Выберите существующий контакт"
+                            [filter]="true"
+                            filterBy="name,email,phone"
+                            [appendTo]="'body'">
+                            <ng-template let-contact #item>
+                                <div class="flex flex-col">
+                                    <div class="font-semibold">{{ contact.name }}</div>
+                                    @if (contact.email) {
+                                        <div class="text-sm text-gray-600">{{ contact.email }}</div>
+                                    }
+                                    @if (contact.phone) {
+                                        <div class="text-sm text-gray-600">{{ contact.phone }}</div>
+                                    }
+                                </div>
+                            </ng-template>
+                        </p-select>
+                        @if (submitted && userForm.controls['contact_id'].errors?.['required']) {
+                            <small class="p-error">Выберите контакт.</small>
+                        }
+                    </div>
+                }
 
-                <app-input-text
-                    formControlName="phone"
-                    label="Телефон"
-                    type="tel"
-                    [submitted]="submitted"
-                    [required]="false">
-                </app-input-text>
+                @if (isEditMode || contactMode === 'new') {
+                    <app-input-text
+                        formControlName="name"
+                        label="ФИО"
+                        [submitted]="submitted"
+                        errorMessage="ФИО обязательно"
+                        [required]="contactMode === 'new' && !isEditMode">
+                    </app-input-text>
+                }
 
-                <app-input-text
-                    formControlName="ip_phone"
-                    label="IP телефон"
-                    [submitted]="submitted"
-                    [required]="false">
-                </app-input-text>
+                @if (isEditMode || contactMode === 'new') {
+                    <app-input-text
+                        formControlName="email"
+                        label="Email"
+                        type="email"
+                        [submitted]="submitted"
+                        [required]="false">
+                    </app-input-text>
 
-                <app-date-picker
-                    formControlName="dob"
-                    label="Дата рождения"
-                    [submitted]="submitted">
-                </app-date-picker>
+                    <app-input-text
+                        formControlName="phone"
+                        label="Телефон"
+                        type="tel"
+                        [submitted]="submitted"
+                        [required]="false">
+                    </app-input-text>
 
-                <app-input-text
-                    formControlName="external_organization_name"
-                    label="Внешняя организация"
-                    [submitted]="submitted"
-                    [required]="false">
-                </app-input-text>
+                    <app-input-text
+                        formControlName="ip_phone"
+                        label="IP телефон"
+                        [submitted]="submitted"
+                        [required]="false">
+                    </app-input-text>
 
-                <app-input-number
-                    formControlName="organization_id"
-                    label="ID организации"
-                    [submitted]="submitted"
-                    [required]="false"
-                    [showButtons]="false">
-                </app-input-number>
+                    <app-date-picker
+                        formControlName="dob"
+                        label="Дата рождения"
+                        [submitted]="submitted">
+                    </app-date-picker>
 
-                <app-input-number
-                    formControlName="department_id"
-                    label="ID отдела"
-                    [submitted]="submitted"
-                    [required]="false"
-                    [showButtons]="false">
-                </app-input-number>
+                    <app-input-text
+                        formControlName="external_organization_name"
+                        label="Внешняя организация"
+                        [submitted]="submitted"
+                        [required]="false">
+                    </app-input-text>
 
-                <app-input-number
-                    formControlName="position_id"
-                    label="ID должности"
-                    [submitted]="submitted"
-                    [required]="false"
-                    [showButtons]="false">
-                </app-input-number>
+                    <app-input-number
+                        formControlName="organization_id"
+                        label="ID организации"
+                        [submitted]="submitted"
+                        [required]="false"
+                        [showButtons]="false">
+                    </app-input-number>
+
+                    <app-input-number
+                        formControlName="department_id"
+                        label="ID отдела"
+                        [submitted]="submitted"
+                        [required]="false"
+                        [showButtons]="false">
+                    </app-input-number>
+
+                    <app-input-number
+                        formControlName="position_id"
+                        label="ID должности"
+                        [submitted]="submitted"
+                        [required]="false"
+                        [showButtons]="false">
+                    </app-input-number>
+                }
             </div>
         </form>
         <ng-template pTemplate="footer">

@@ -3,13 +3,15 @@ import { Table, TableModule } from 'primeng/table';
 import { AddUserRequest, EditUserRequest, Users } from '@/core/interfaces/users';
 import { ApiService } from '@/core/services/api.service';
 import { UserService } from '@/core/services/user.service';
+import { ContactService } from '@/core/services/contact.service';
+import { Contact } from '@/core/interfaces/contact';
 import { Button, ButtonDirective, ButtonIcon, ButtonLabel } from 'primeng/button';
 import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
 import { InputText } from 'primeng/inputtext';
 import { Chip } from 'primeng/chip';
 import { Dialog } from 'primeng/dialog';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormsModule } from '@angular/forms';
 import { Roles } from '@/core/interfaces/roles';
 import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
@@ -22,6 +24,8 @@ import {
     DeleteConfirmationComponent
 } from '@/layout/component/dialog/delete-confirmation/delete-confirmation.component';
 import { Tooltip } from 'primeng/tooltip';
+import { SelectButton } from 'primeng/selectbutton';
+import { Select } from 'primeng/select';
 
 @Component({
     selector: 'app-users',
@@ -37,13 +41,16 @@ import { Tooltip } from 'primeng/tooltip';
         Button,
         Dialog,
         ReactiveFormsModule,
+        FormsModule,
         Password,
         MultiSelect,
         InputTextComponent,
         DatePickerComponent,
         InputNumberdComponent,
         DeleteConfirmationComponent,
-        Tooltip
+        Tooltip,
+        SelectButton,
+        Select
     ],
     templateUrl: './user.component.html',
     styleUrl: './user.component.scss'
@@ -51,6 +58,7 @@ import { Tooltip } from 'primeng/tooltip';
 export class User implements OnInit, OnDestroy {
     users: Users[] = [];
     allRoles: Roles[] = [];
+    allContacts: Contact[] = [];
     loading: boolean = true;
     displayDialog: boolean = false;
     displayDeleteDialog: boolean = false;
@@ -58,9 +66,15 @@ export class User implements OnInit, OnDestroy {
     isEditMode: boolean = false;
     selectedUser: Users | null = null;
     userForm: FormGroup;
+    contactModeOptions = [
+        { label: 'Новый контакт', value: 'new' },
+        { label: 'Существующий контакт', value: 'existing' }
+    ];
+    contactMode: 'new' | 'existing' = 'new';
 
     private apiService = inject(ApiService);
     private userService = inject(UserService);
+    private contactService = inject(ContactService);
 
     private fb = inject(FormBuilder);
     private messageService = inject(MessageService);
@@ -71,6 +85,8 @@ export class User implements OnInit, OnDestroy {
             login: ['', Validators.required],
             password: [''],
             roles: [[]],
+            // Contact selection
+            contact_id: [null],
             // NewContactRequest fields
             name: [''],
             email: [''],
@@ -87,6 +103,7 @@ export class User implements OnInit, OnDestroy {
     ngOnInit() {
         this.loadUsers();
         this.apiService.getRoles().subscribe((roles) => (this.allRoles = roles));
+        this.contactService.getContacts().subscribe((contacts) => (this.allContacts = contacts));
     }
 
     onGlobalFilter(table: Table, event: Event) {
@@ -97,13 +114,29 @@ export class User implements OnInit, OnDestroy {
         this.isEditMode = false;
         this.selectedUser = null;
         this.submitted = false;
-        this.userForm.reset({ roles: [] });
+        this.contactMode = 'new';
+        this.userForm.reset({ roles: [], contact_id: null });
         this.userForm.get('login')?.enable();
         this.userForm.get('password')?.setValidators([Validators.required]);
         this.userForm.get('password')?.updateValueAndValidity();
-        this.userForm.get('name')?.setValidators([Validators.required]);
-        this.userForm.get('name')?.updateValueAndValidity();
+        this.updateContactValidators();
         this.displayDialog = true;
+    }
+
+    onContactModeChange(): void {
+        this.updateContactValidators();
+    }
+
+    private updateContactValidators(): void {
+        if (this.contactMode === 'new') {
+            this.userForm.get('name')?.setValidators([Validators.required]);
+            this.userForm.get('contact_id')?.clearValidators();
+        } else {
+            this.userForm.get('name')?.clearValidators();
+            this.userForm.get('contact_id')?.setValidators([Validators.required]);
+        }
+        this.userForm.get('name')?.updateValueAndValidity();
+        this.userForm.get('contact_id')?.updateValueAndValidity();
     }
 
     openEditDialog(user: Users): void {
@@ -170,8 +203,13 @@ export class User implements OnInit, OnDestroy {
         const payload: AddUserRequest = {
             login: formValue.login,
             password: formValue.password,
-            role_ids: formValue.roles.map((role: Roles) => role.id),
-            contact: {
+            role_ids: formValue.roles.map((role: Roles) => role.id)
+        };
+
+        if (this.contactMode === 'existing') {
+            payload.contact_id = formValue.contact_id;
+        } else {
+            payload.contact = {
                 name: formValue.name,
                 email: formValue.email || null,
                 phone: formValue.phone || null,
@@ -181,8 +219,8 @@ export class User implements OnInit, OnDestroy {
                 organization_id: formValue.organization_id || null,
                 department_id: formValue.department_id || null,
                 position_id: formValue.position_id || null
-            }
-        };
+            };
+        }
 
         this.userService
             .createUser(payload)
