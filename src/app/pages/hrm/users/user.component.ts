@@ -212,7 +212,7 @@ export class User implements OnInit, OnDestroy {
         this.selectedUser = null;
     }
 
-    saveUser() {
+    onSubmit() {
         this.submitted = true;
 
         if (this.userForm.invalid) {
@@ -232,7 +232,7 @@ export class User implements OnInit, OnDestroy {
 
         formData.append('login', formValue.login);
         formData.append('password', formValue.password);
-        formData.append('role_ids', JSON.stringify(formValue.roles.map((role: Roles) => role.id)));
+        formData.append('role_ids', formValue.roles.map((role: Roles) => role.id).join(','));
 
         if (this.contactMode === 'existing') {
             formData.append('contact_id', formValue.contact_id.toString());
