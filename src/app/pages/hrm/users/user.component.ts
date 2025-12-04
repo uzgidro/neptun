@@ -1,31 +1,38 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Table, TableModule } from 'primeng/table';
-import { AddUserRequest, EditUserRequest, Users } from '@/core/interfaces/users';
+import { Users } from '@/core/interfaces/users';
 import { ApiService } from '@/core/services/api.service';
 import { UserService } from '@/core/services/user.service';
 import { ContactService } from '@/core/services/contact.service';
+import { OrganizationService } from '@/core/services/organization.service';
+import { DepartmentService } from '@/core/services/department.service';
+import { PositionService } from '@/core/services/position.service';
 import { Contact } from '@/core/interfaces/contact';
+import { Organization } from '@/core/interfaces/organizations';
+import { Department } from '@/core/interfaces/department';
+import { Position } from '@/core/interfaces/position';
 import { Button, ButtonDirective, ButtonIcon, ButtonLabel } from 'primeng/button';
 import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
 import { InputText } from 'primeng/inputtext';
 import { Chip } from 'primeng/chip';
-import { Dialog } from 'primeng/dialog';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Roles } from '@/core/interfaces/roles';
 import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
 import { Password } from 'primeng/password';
 import { MultiSelect } from 'primeng/multiselect';
 import { InputTextComponent } from '@/layout/component/dialog/input-text/input-text.component';
+import { SelectComponent } from '@/layout/component/dialog/select/select.component';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
-import { InputNumberdComponent } from '@/layout/component/dialog/input-number/input-number.component';
 import {
     DeleteConfirmationComponent
 } from '@/layout/component/dialog/delete-confirmation/delete-confirmation.component';
+import { FileUploadComponent } from '@/layout/component/dialog/file-upload/file-upload.component';
 import { Tooltip } from 'primeng/tooltip';
 import { SelectButton } from 'primeng/selectbutton';
 import { Select } from 'primeng/select';
+import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
 
 @Component({
     selector: 'app-users',
@@ -39,18 +46,19 @@ import { Select } from 'primeng/select';
         ButtonIcon,
         Chip,
         Button,
-        Dialog,
         ReactiveFormsModule,
         FormsModule,
         Password,
         MultiSelect,
         InputTextComponent,
+        SelectComponent,
         DatePickerComponent,
-        InputNumberdComponent,
         DeleteConfirmationComponent,
+        FileUploadComponent,
         Tooltip,
         SelectButton,
-        Select
+        Select,
+        DialogComponent
     ],
     templateUrl: './user.component.html',
     styleUrl: './user.component.scss'
@@ -59,6 +67,9 @@ export class User implements OnInit, OnDestroy {
     users: Users[] = [];
     allRoles: Roles[] = [];
     allContacts: Contact[] = [];
+    organizations: Organization[] = [];
+    departments: Department[] = [];
+    positions: Position[] = [];
     loading: boolean = true;
     displayDialog: boolean = false;
     displayDeleteDialog: boolean = false;
@@ -71,10 +82,14 @@ export class User implements OnInit, OnDestroy {
         { label: 'Существующий контакт', value: 'existing' }
     ];
     contactMode: 'new' | 'existing' = 'new';
+    selectedFiles: File[] = [];
 
     private apiService = inject(ApiService);
     private userService = inject(UserService);
     private contactService = inject(ContactService);
+    private organizationService = inject(OrganizationService);
+    private departmentService = inject(DepartmentService);
+    private positionService = inject(PositionService);
 
     private fb = inject(FormBuilder);
     private messageService = inject(MessageService);
@@ -104,6 +119,9 @@ export class User implements OnInit, OnDestroy {
         this.loadUsers();
         this.apiService.getRoles().subscribe((roles) => (this.allRoles = roles));
         this.contactService.getContacts().subscribe((contacts) => (this.allContacts = contacts));
+        this.organizationService.getOrganizationsFlat().subscribe((orgs) => (this.organizations = orgs));
+        this.departmentService.getDepartments().subscribe((depts) => (this.departments = depts));
+        this.positionService.getPositions().subscribe((positions) => (this.positions = positions));
     }
 
     onGlobalFilter(table: Table, event: Event) {
@@ -115,12 +133,21 @@ export class User implements OnInit, OnDestroy {
         this.selectedUser = null;
         this.submitted = false;
         this.contactMode = 'new';
+        this.selectedFiles = [];
         this.userForm.reset({ roles: [], contact_id: null });
         this.userForm.get('login')?.enable();
         this.userForm.get('password')?.setValidators([Validators.required]);
         this.userForm.get('password')?.updateValueAndValidity();
         this.updateContactValidators();
         this.displayDialog = true;
+    }
+
+    onFilesSelected(files: File[]): void {
+        this.selectedFiles = files;
+    }
+
+    onFileRemoved(index: number): void {
+        this.selectedFiles.splice(index, 1);
     }
 
     onContactModeChange(): void {
@@ -147,6 +174,11 @@ export class User implements OnInit, OnDestroy {
         // Convert role_ids to role objects for multiselect
         const selectedRoles = this.allRoles.filter((role) => user.roles.includes(role.name));
 
+        // Find objects for select components
+        const selectedOrg = this.organizations.find((org) => org.id === user.contact?.organization_id);
+        const selectedDept = this.departments.find((dept) => dept.id === user.contact?.department_id);
+        const selectedPos = this.positions.find((pos) => pos.id === user.contact?.position_id);
+
         // Parse date if present
         let dobDate = null;
         if (user.contact?.dob) {
@@ -163,11 +195,10 @@ export class User implements OnInit, OnDestroy {
             ip_phone: user.contact?.ip_phone || '',
             dob: dobDate,
             external_organization_name: user.contact?.external_organization_name || '',
-            organization_id: user.contact?.organization_id || null,
-            department_id: user.contact?.department_id || null,
-            position_id: user.contact?.position_id || null
+            organization_id: selectedOrg || null,
+            department_id: selectedDept || null,
+            position_id: selectedPos || null
         });
-
 
         this.userForm.get('login')?.enable();
         this.userForm.get('password')?.clearValidators();
@@ -199,30 +230,52 @@ export class User implements OnInit, OnDestroy {
 
     private createUser() {
         const formValue = this.userForm.value;
-        const payload: AddUserRequest = {
-            login: formValue.login,
-            password: formValue.password,
-            role_ids: formValue.roles.map((role: Roles) => role.id)
-        };
+        const formData = new FormData();
+
+        formData.append('login', formValue.login);
+        formData.append('password', formValue.password);
+        formData.append('role_ids', JSON.stringify(formValue.roles.map((role: Roles) => role.id)));
 
         if (this.contactMode === 'existing') {
-            payload.contact_id = formValue.contact_id;
+            formData.append('contact_id', formValue.contact_id.toString());
         } else {
-            payload.contact = {
-                name: formValue.name,
-                email: formValue.email || null,
-                phone: formValue.phone || null,
-                ip_phone: formValue.ip_phone || null,
-                dob: formValue.dob ? this.apiService['dateToYMD'](formValue.dob) : null,
-                external_organization_name: formValue.external_organization_name || null,
-                organization_id: formValue.organization_id || null,
-                department_id: formValue.department_id || null,
-                position_id: formValue.position_id || null
-            };
+            // Append contact fields
+            if (formValue.name) {
+                formData.append('contact.name', formValue.name);
+            }
+            if (formValue.email) {
+                formData.append('contact.email', formValue.email);
+            }
+            if (formValue.phone) {
+                formData.append('contact.phone', formValue.phone);
+            }
+            if (formValue.ip_phone) {
+                formData.append('contact.ip_phone', formValue.ip_phone);
+            }
+            if (formValue.dob) {
+                formData.append('contact.dob', this.apiService['dateToYMD'](formValue.dob));
+            }
+            if (formValue.external_organization_name) {
+                formData.append('contact.external_organization_name', formValue.external_organization_name);
+            }
+            if (formValue.organization_id?.id) {
+                formData.append('contact.organization_id', formValue.organization_id.id.toString());
+            }
+            if (formValue.department_id?.id) {
+                formData.append('contact.department_id', formValue.department_id.id.toString());
+            }
+            if (formValue.position_id?.id) {
+                formData.append('contact.position_id', formValue.position_id.id.toString());
+            }
+        }
+
+        // Append icon file if selected
+        if (this.selectedFiles.length > 0) {
+            formData.append('icon', this.selectedFiles[0], this.selectedFiles[0].name);
         }
 
         this.userService
-            .createUser(payload)
+            .createUser(formData)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
@@ -241,18 +294,23 @@ export class User implements OnInit, OnDestroy {
         if (!this.selectedUser) return;
 
         const formValue = this.userForm.getRawValue();
-        const payload: EditUserRequest = {
-            login: formValue.login,
-            role_ids: formValue.roles.map((role: Roles) => role.id)
-        };
+        const formData = new FormData();
+
+        formData.append('login', formValue.login);
+        formData.append('role_ids', JSON.stringify(formValue.roles.map((role: Roles) => role.id)));
 
         // Only include password if it was changed
         if (formValue.password) {
-            payload.password = formValue.password;
+            formData.append('password', formValue.password);
+        }
+
+        // Append icon file if selected
+        if (this.selectedFiles.length > 0) {
+            formData.append('icon', this.selectedFiles[0], this.selectedFiles[0].name);
         }
 
         this.userService
-            .editUser(this.selectedUser.id, payload)
+            .editUser(this.selectedUser.id, formData)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {

@@ -3,7 +3,7 @@ import { MessageService } from 'primeng/api';
 import { RouterModule } from '@angular/router';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { StyleClassModule } from 'primeng/styleclass';
-import { ProfileMenu } from '../app.profilemenu';
+import { ProfileMenu } from './profile/app.profilemenu';
 import { LayoutService } from '../../service/layout.service';
 import { PopoverModule } from 'primeng/popover';
 import { TableModule } from 'primeng/table';

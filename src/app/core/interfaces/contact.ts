@@ -2,12 +2,21 @@ import { Position } from '@/core/interfaces/position';
 import { Department } from '@/core/interfaces/department';
 import { Organization } from '@/core/interfaces/organizations';
 
+export interface ContactIcon {
+    id: number;
+    file_name: string;
+    mime_type: string;
+    size_bytes: number;
+    url: string;
+}
+
 export interface Contact {
     id: number;
     name: string;
     email?: string | null;
     phone?: string | null;
     ip_phone?: string | null;
+    icon?: ContactIcon;
 
     dob?: string | null;
 

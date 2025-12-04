@@ -94,9 +94,8 @@
 </div>
 
 @if (displayDialog) {
-    <p-dialog [header]="isEditMode ? 'Редактировать пользователя' : 'Новый пользователь'" [(visible)]="displayDialog"
-              [breakpoints]="{ '960px': '75vw' }"
-              [style]="{ width: '50vw' }" [modal]="true" (onHide)="closeDialog()">
+    <app-dialog [header]="isEditMode ? 'Редактировать пользователя' : 'Новый пользователь'" [(visible)]="displayDialog"
+    >
         <form [formGroup]="userForm">
             <div class="flex flex-col gap-4 p-fluid">
                 <!-- Account Information -->
@@ -213,44 +212,57 @@
                         [submitted]="submitted">
                     </app-date-picker>
 
+                    <div class="font-semibold text-lg mb-2 mt-4">Место работы</div>
+
+                    <app-select
+                        formControlName="organization_id"
+                        label="Организация"
+                        [items]="organizations"
+                        [submitted]="submitted"
+                        errorMessage="Организация обязательна">
+                    </app-select>
+
+                    <app-select
+                        formControlName="department_id"
+                        label="Отдел"
+                        [items]="departments"
+                        [submitted]="submitted"
+                        errorMessage="Отдел обязателен">
+                    </app-select>
+
+                    <app-select
+                        formControlName="position_id"
+                        label="Должность"
+                        [items]="positions"
+                        [submitted]="submitted"
+                        errorMessage="Должность обязательна">
+                    </app-select>
+
                     <app-input-text
                         formControlName="external_organization_name"
                         label="Внешняя организация"
                         [submitted]="submitted"
                         [required]="false">
                     </app-input-text>
-
-                    <app-input-number
-                        formControlName="organization_id"
-                        label="ID организации"
-                        [submitted]="submitted"
-                        [required]="false"
-                        [showButtons]="false">
-                    </app-input-number>
-
-                    <app-input-number
-                        formControlName="department_id"
-                        label="ID отдела"
-                        [submitted]="submitted"
-                        [required]="false"
-                        [showButtons]="false">
-                    </app-input-number>
-
-                    <app-input-number
-                        formControlName="position_id"
-                        label="ID должности"
-                        [submitted]="submitted"
-                        [required]="false"
-                        [showButtons]="false">
-                    </app-input-number>
                 }
+
+                <app-file-upload
+                    label="Загрузить фото"
+                    [multiple]="false"
+                    [maxFileSize]="10242880"
+                    accept="image/*"
+                    [files]="selectedFiles"
+                    (filesSelected)="onFilesSelected($event)"
+                    (fileRemoved)="onFileRemoved($event)"
+                    [enableClipboard]="false">
+                </app-file-upload>
             </div>
         </form>
         <ng-template pTemplate="footer">
             <p-button label="Отмена" (click)="closeDialog()" styleClass="p-button-text" />
             <p-button [label]="isEditMode ? 'Обновить' : 'Сохранить'" type="submit" (click)="saveUser()" />
         </ng-template>
-    </p-dialog>
+    </app-dialog>
 }
 
 <app-delete-confirmation
