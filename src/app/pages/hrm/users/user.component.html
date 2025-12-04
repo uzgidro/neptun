@@ -244,18 +244,17 @@
                         [submitted]="submitted"
                         [required]="false">
                     </app-input-text>
+                    <app-file-upload
+                        label="Загрузить фото"
+                        [multiple]="false"
+                        [maxFileSize]="10242880"
+                        accept="image/*"
+                        [files]="selectedFiles"
+                        (filesSelected)="onFilesSelected($event)"
+                        (fileRemoved)="onFileRemoved($event)"
+                        [enableClipboard]="false">
+                    </app-file-upload>
                 }
-
-                <app-file-upload
-                    label="Загрузить фото"
-                    [multiple]="false"
-                    [maxFileSize]="10242880"
-                    accept="image/*"
-                    [files]="selectedFiles"
-                    (filesSelected)="onFilesSelected($event)"
-                    (fileRemoved)="onFileRemoved($event)"
-                    [enableClipboard]="false">
-                </app-file-upload>
             </div>
         </form>
         <ng-template pTemplate="footer">

@@ -28,11 +28,13 @@ import { AuthService } from '@/core/services/auth.service';
             </button>
             <a class="layout-topbar-logo" routerLink="/">
                 <img ngSrc="/images/logo-x.png" alt="" width="52" height="22" />
-                <span>Планшет
+                <span class="text-nowrap"
+                    >Планшет
                     @if (authService.hasRole('first deputy')) {
                         <span>Первого заместителя</span>
                     }
-                    Председателя правления</span>
+                    Председателя правления</span
+                >
             </a>
         </div>
 
