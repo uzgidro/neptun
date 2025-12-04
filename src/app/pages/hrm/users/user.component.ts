@@ -25,9 +25,7 @@ import { MultiSelect } from 'primeng/multiselect';
 import { InputTextComponent } from '@/layout/component/dialog/input-text/input-text.component';
 import { SelectComponent } from '@/layout/component/dialog/select/select.component';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
-import {
-    DeleteConfirmationComponent
-} from '@/layout/component/dialog/delete-confirmation/delete-confirmation.component';
+import { DeleteConfirmationComponent } from '@/layout/component/dialog/delete-confirmation/delete-confirmation.component';
 import { FileUploadComponent } from '@/layout/component/dialog/file-upload/file-upload.component';
 import { Tooltip } from 'primeng/tooltip';
 import { SelectButton } from 'primeng/selectbutton';

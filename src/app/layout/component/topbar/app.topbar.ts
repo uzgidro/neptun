@@ -19,7 +19,7 @@ import { updateSurfacePalette } from '@primeuix/themes';
     selector: 'app-topbar',
     standalone: true,
     imports: [RouterModule, CommonModule, StyleClassModule, ProfileMenu, PopoverModule, TableModule, ToastModule, FormsModule, AppConfigurator, TopbarCalendarWidget, NgOptimizedImage, FastCallWidget, InboxWidget],
-    providers: [MessageService], // Добавляем сервис для уведомлений
+    providers: [MessageService],
     template: ` <div class="layout-topbar">
         <div class="layout-topbar-logo-container">
             <button class="layout-menu-button layout-topbar-action" (click)="layoutService.onMenuToggle()">

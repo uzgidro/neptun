@@ -1,3 +1,5 @@
+import { Contact } from '@/core/interfaces/contact';
+
 export interface ReservoirMetricValues {
     income: number;
     release: number;
@@ -8,15 +10,6 @@ export interface ReservoirMetricValues {
 export interface ReservoirMetrics {
     current: ReservoirMetricValues;
     diff?: ReservoirMetricValues;
-}
-
-export interface Contact {
-    id: number;
-    name: string;
-    phone?: string;
-    position?: {
-        description: string;
-    };
 }
 
 export interface Reservoir {
