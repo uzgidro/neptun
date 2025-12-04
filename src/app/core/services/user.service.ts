@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { ApiService, BASE_URL } from '@/core/services/api.service';
-import { AddUserRequest, EditUserRequest } from '@/core/interfaces/users';
 import { Observable } from 'rxjs';
 
 const USERS = '/users'
@@ -9,12 +8,12 @@ const USERS = '/users'
     providedIn: 'root'
 })
 export class UserService extends ApiService {
-    createUser(request: AddUserRequest): Observable<any> {
-        return this.http.post(BASE_URL + USERS, request);
+    createUser(formData: FormData): Observable<any> {
+        return this.http.post(BASE_URL + USERS, formData);
     }
 
-    editUser(id: number, request: EditUserRequest): Observable<any> {
-        return this.http.patch(BASE_URL + USERS + '/' + id, request);
+    editUser(id: number, formData: FormData): Observable<any> {
+        return this.http.patch(BASE_URL + USERS + '/' + id, formData);
     }
 
     deleteUser(id: number): Observable<any> {

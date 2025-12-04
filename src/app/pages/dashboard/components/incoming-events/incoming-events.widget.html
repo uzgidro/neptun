@@ -7,67 +7,67 @@
     </div>
     <p-table [value]="events" sortField="event_date" [sortOrder]="1" styleClass="p-datatable-gridlines"
              [loading]="loading">
-            <ng-template #header>
-                <tr>
-                    <th style="width: 5rem"></th>
-                    <th pSortableColumn="name">Название
-                        <p-sortIcon field="name" />
-                    </th>
-                    <th pSortableColumn="event_type.name">Тип
-                        <p-sortIcon field="event_type.name" />
-                    </th>
-                    <th pSortableColumn="event_date">Дата
-                        <p-sortIcon field="event_date" />
-                    </th>
-                    <th pSortableColumn="location">Место
-                        <p-sortIcon field="location" />
-                    </th>
-                    <th pSortableColumn="responsible_contact">Ответственный
-                        <p-sortIcon field="responsible_contact" />
-                    </th>
-                    <th style="width: 8rem">Файлы</th>
-                </tr>
-            </ng-template>
-            <ng-template #body let-event>
-                <tr>
-                    <td>
-                        <i class="pi text-xl" [ngClass]="getIconClass(event.event_type_id)"></i>
-                    </td>
-                    <td>{{ event.name }}</td>
-                    <td>{{ event.event_type?.name || '-' }}</td>
-                    <td>{{ event.event_date | date: 'dd.MM.yyyy HH:mm' }}</td>
-                    <td>{{ getLocationDisplay(event) }}</td>
-                    <td>
-                        <div class="flex items-center gap-4">
-                            <span>{{ event.responsible_contact?.name || '-' }}</span>
-                            @if (event.responsible_contact?.phone) {
-                                <a pButton outlined [href]="'tel:' + event.responsible_contact.phone"
-                                   class="p-button-sm p-button-icon-only" pTooltip="Позвонить" tooltipPosition="top">
-                                    <i pButtonIcon class="pi pi-phone"></i>
-                                </a>
-                            }
-                        </div>
-                    </td>
-                    <td>
-                        @if (event.files && event.files.length > 0) {
-                            <button pButton type="button" outlined class="p-button-sm"
-                                    (click)="openFileViewer(event)"
-                                    pTooltip="Просмотр файлов" tooltipPosition="top">
-                                <i class="pi pi-paperclip mr-2"></i>
-                                <span>{{ event.files.length }}</span>
-                            </button>
-                        } @else {
-                            <span class="text-color-secondary">-</span>
+        <ng-template #header>
+            <tr>
+                <th style="width: 5rem"></th>
+                <th pSortableColumn="name">Название
+                    <p-sortIcon field="name" />
+                </th>
+                <th pSortableColumn="event_type.name">Тип
+                    <p-sortIcon field="event_type.name" />
+                </th>
+                <th pSortableColumn="event_date">Дата
+                    <p-sortIcon field="event_date" />
+                </th>
+                <th pSortableColumn="location">Место
+                    <p-sortIcon field="location" />
+                </th>
+                <th pSortableColumn="responsible_contact">Ответственный
+                    <p-sortIcon field="responsible_contact" />
+                </th>
+                <th style="width: 8rem">Файлы</th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-event>
+            <tr>
+                <td>
+                    <i class="pi text-xl" [ngClass]="getIconClass(event.event_type_id)"></i>
+                </td>
+                <td>{{ event.name }}</td>
+                <td>{{ event.event_type?.name || '-' }}</td>
+                <td>{{ event.event_date | date: 'dd.MM.yyyy HH:mm' }}</td>
+                <td>{{ getLocationDisplay(event) }}</td>
+                <td>
+                    <div class="flex items-center gap-4">
+                        <span>{{ event.responsible_contact?.name || '-' }}</span>
+                        @if (event.responsible_contact?.phone) {
+                            <a pButton outlined [href]="'tel:' + event.responsible_contact.phone"
+                               class="p-button-sm p-button-icon-only" pTooltip="Позвонить" tooltipPosition="top">
+                                <i pButtonIcon class="pi pi-phone"></i>
+                            </a>
                         }
-                    </td>
-                </tr>
-            </ng-template>
-            <ng-template #emptymessage>
-                <tr>
-                    <td colspan="7" class="text-center">Нет предстоящих мероприятий</td>
-                </tr>
-            </ng-template>
-        </p-table>
+                    </div>
+                </td>
+                <td>
+                    @if (event.files && event.files.length > 0) {
+                        <button pButton type="button" outlined class="p-button-sm"
+                                (click)="openFileViewer(event)"
+                                pTooltip="Просмотр файлов" tooltipPosition="top">
+                            <i class="pi pi-paperclip mr-2"></i>
+                            <span>{{ event.files.length }}</span>
+                        </button>
+                    } @else {
+                        <span class="text-color-secondary">-</span>
+                    }
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template #emptymessage>
+            <tr>
+                <td colspan="7" class="text-center">Нет предстоящих мероприятий</td>
+            </tr>
+        </ng-template>
+    </p-table>
 </div>
 
 <app-file-viewer [(visible)]="fileViewerVisible" [header]="fileViewerHeader" [files]="selectedFiles" />

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ApiService, BASE_URL } from '@/core/services/api.service';
-import { Cascade, IdleDischargeResponse, WaterDischargePayload } from '@/core/interfaces/discharge';
+import { Cascade, IdleDischargeResponse } from '@/core/interfaces/discharge';
 import { Observable } from 'rxjs';
 import { HttpParams } from '@angular/common/http';
 

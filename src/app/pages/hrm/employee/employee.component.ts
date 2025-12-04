@@ -1,6 +1,6 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Table, TableModule } from 'primeng/table';
-import { AddContactRequest, Contact, EditContactRequest } from '@/core/interfaces/contact';
+import { Contact } from '@/core/interfaces/contact';
 import { ContactService } from '@/core/services/contact.service';
 import { OrganizationService } from '@/core/services/organization.service';
 import { DepartmentService } from '@/core/services/department.service';
@@ -19,12 +19,29 @@ import { InputTextComponent } from '@/layout/component/dialog/input-text/input-t
 import { SelectComponent } from '@/layout/component/dialog/select/select.component';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
 import { DeleteConfirmationComponent } from '@/layout/component/dialog/delete-confirmation/delete-confirmation.component';
+import { FileUploadComponent } from '@/layout/component/dialog/file-upload/file-upload.component';
 import { Tooltip } from 'primeng/tooltip';
 import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
 
 @Component({
     selector: 'app-employee',
-    imports: [TableModule, ButtonDirective, IconField, InputIcon, InputText, ButtonLabel, ButtonIcon, ReactiveFormsModule, InputTextComponent, SelectComponent, DatePickerComponent, DeleteConfirmationComponent, Tooltip, DialogComponent],
+    imports: [
+        TableModule,
+        ButtonDirective,
+        IconField,
+        InputIcon,
+        InputText,
+        ButtonLabel,
+        ButtonIcon,
+        ReactiveFormsModule,
+        InputTextComponent,
+        SelectComponent,
+        DatePickerComponent,
+        DeleteConfirmationComponent,
+        FileUploadComponent,
+        Tooltip,
+        DialogComponent
+    ],
     templateUrl: './employee.component.html',
     styleUrl: './employee.component.scss'
 })
@@ -40,6 +57,7 @@ export class EmployeeComponent implements OnInit, OnDestroy {
     isEditMode: boolean = false;
     selectedContact: Contact | null = null;
     contactForm: FormGroup;
+    selectedFiles: File[] = [];
 
     private contactService = inject(ContactService);
     private organizationService = inject(OrganizationService);
@@ -78,8 +96,17 @@ export class EmployeeComponent implements OnInit, OnDestroy {
         this.isEditMode = false;
         this.selectedContact = null;
         this.submitted = false;
+        this.selectedFiles = [];
         this.contactForm.reset();
         this.displayDialog = true;
+    }
+
+    onFilesSelected(files: File[]): void {
+        this.selectedFiles = files;
+    }
+
+    onFileRemoved(index: number): void {
+        this.selectedFiles.splice(index, 1);
     }
 
     openEditDialog(contact: Contact): void {
@@ -136,20 +163,42 @@ export class EmployeeComponent implements OnInit, OnDestroy {
 
     private createContact() {
         const formValue = this.contactForm.value;
-        const payload: AddContactRequest = {
-            name: formValue.name,
-            email: formValue.email || null,
-            phone: formValue.phone || null,
-            ip_phone: formValue.ip_phone || null,
-            dob: formValue.dob ? this.dateToYMD(formValue.dob) : null,
-            external_organization_name: formValue.external_organization_name || null,
-            organization_id: formValue.organization_id?.id || null,
-            department_id: formValue.department_id?.id || null,
-            position_id: formValue.position_id?.id || null
-        };
+        const formData = new FormData();
+
+        formData.append('name', formValue.name);
+
+        if (formValue.email) {
+            formData.append('email', formValue.email);
+        }
+        if (formValue.phone) {
+            formData.append('phone', formValue.phone);
+        }
+        if (formValue.ip_phone) {
+            formData.append('ip_phone', formValue.ip_phone);
+        }
+        if (formValue.dob) {
+            formData.append('dob', this.dateToYMD(formValue.dob));
+        }
+        if (formValue.external_organization_name) {
+            formData.append('external_organization_name', formValue.external_organization_name);
+        }
+        if (formValue.organization_id?.id) {
+            formData.append('organization_id', formValue.organization_id.id.toString());
+        }
+        if (formValue.department_id?.id) {
+            formData.append('department_id', formValue.department_id.id.toString());
+        }
+        if (formValue.position_id?.id) {
+            formData.append('position_id', formValue.position_id.id.toString());
+        }
+
+        // Append icon file if selected
+        if (this.selectedFiles.length > 0) {
+            formData.append('icon', this.selectedFiles[0], this.selectedFiles[0].name);
+        }
 
         this.contactService
-            .createContact(payload)
+            .createContact(formData)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
@@ -168,20 +217,43 @@ export class EmployeeComponent implements OnInit, OnDestroy {
         if (!this.selectedContact) return;
 
         const formValue = this.contactForm.value;
-        const payload: EditContactRequest = {
-            name: formValue.name || null,
-            email: formValue.email || null,
-            phone: formValue.phone || null,
-            ip_phone: formValue.ip_phone || null,
-            dob: formValue.dob ? this.dateToYMD(formValue.dob) : null,
-            external_organization_name: formValue.external_organization_name || null,
-            organization_id: formValue.organization_id?.id || null,
-            department_id: formValue.department_id?.id || null,
-            position_id: formValue.position_id?.id || null
-        };
+        const formData = new FormData();
+
+        if (formValue.name) {
+            formData.append('name', formValue.name);
+        }
+        if (formValue.email) {
+            formData.append('email', formValue.email);
+        }
+        if (formValue.phone) {
+            formData.append('phone', formValue.phone);
+        }
+        if (formValue.ip_phone) {
+            formData.append('ip_phone', formValue.ip_phone);
+        }
+        if (formValue.dob) {
+            formData.append('dob', this.dateToYMD(formValue.dob));
+        }
+        if (formValue.external_organization_name) {
+            formData.append('external_organization_name', formValue.external_organization_name);
+        }
+        if (formValue.organization_id?.id) {
+            formData.append('organization_id', formValue.organization_id.id.toString());
+        }
+        if (formValue.department_id?.id) {
+            formData.append('department_id', formValue.department_id.id.toString());
+        }
+        if (formValue.position_id?.id) {
+            formData.append('position_id', formValue.position_id.id.toString());
+        }
+
+        // Append icon file if selected
+        if (this.selectedFiles.length > 0) {
+            formData.append('icon', this.selectedFiles[0], this.selectedFiles[0].name);
+        }
 
         this.contactService
-            .updateContact(this.selectedContact.id, payload)
+            .updateContact(this.selectedContact.id, formData)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {

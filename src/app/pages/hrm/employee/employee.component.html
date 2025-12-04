@@ -27,6 +27,7 @@
         </ng-template>
         <ng-template #header>
             <tr>
+                <th style="width: 4rem">Фото</th>
                 <th pFrozenColumn style="min-width: 12rem">ФИО</th>
                 <th style="min-width: 12rem">Email</th>
                 <th style="min-width: 10rem">Телефон</th>
@@ -39,6 +40,14 @@
         </ng-template>
         <ng-template #body let-contact>
             <tr>
+                <td>
+                    @if (contact.icon?.url) {
+                        <img [src]="contact.icon.url" [alt]="contact.name"
+                             class="w-10 h-10 rounded-full object-cover" />
+                    } @else {
+                        <i class="pi pi-user text-2xl text-gray-400"></i>
+                    }
+                </td>
                 <td pFrozenColumn>{{ contact.name }}</td>
                 <td>{{ contact.email || '—' }}</td>
                 <td>{{ contact.phone || '—' }}</td>
@@ -68,100 +77,114 @@
         </ng-template>
         <ng-template #emptymessage>
             <tr>
-                <td colspan="8">Ничего не найдено</td>
+                <td colspan="9">Ничего не найдено</td>
             </tr>
         </ng-template>
         <ng-template #loadingbody>
             <tr>
-                <td colspan="8">Идет загрузка. Ожидайте...</td>
+                <td colspan="9">Идет загрузка. Ожидайте...</td>
             </tr>
         </ng-template>
     </p-table>
 </div>
 
 @if (displayDialog) {
-<app-dialog
-    [(visible)]="displayDialog"
-    [header]="isEditMode ? 'Редактировать сотрудника' : 'Новый сотрудник'"
-    [form]="contactForm"
-    [saveLabel]="isEditMode ? 'Обновить' : 'Сохранить'"
-    (save)="onSubmit()"
-    (cancel)="closeDialog()">
-    <form class="p-4" [formGroup]="contactForm" (ngSubmit)="onSubmit()">
-        <div class="font-semibold text-lg mb-2">Основная информация</div>
+    <app-dialog
+        [(visible)]="displayDialog"
+        [header]="isEditMode ? 'Редактировать сотрудника' : 'Новый сотрудник'"
+        [form]="contactForm"
+        [saveLabel]="isEditMode ? 'Обновить' : 'Сохранить'"
+        (save)="onSubmit()"
+        (cancel)="closeDialog()">
+        <form class="p-4" [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+            <div class="font-semibold text-lg mb-2">Основная информация</div>
 
-        <app-input-text
-            formControlName="name"
-            label="ФИО"
-            [submitted]="submitted"
-            errorMessage="ФИО обязательно"
-            [required]="true">
-        </app-input-text>
+            <app-input-text
+                formControlName="name"
+                label="ФИО"
+                [submitted]="submitted"
+                errorMessage="ФИО обязательно"
+                [required]="true">
+            </app-input-text>
 
-        <app-input-text
-            formControlName="email"
-            label="Email"
-            type="email"
-            [submitted]="submitted"
-            [required]="false">
-        </app-input-text>
+            <app-input-text
+                formControlName="email"
+                label="Email"
+                type="email"
+                [submitted]="submitted"
+                [required]="false">
+            </app-input-text>
 
-        <app-input-text
-            formControlName="phone"
-            label="Телефон"
-            type="tel"
-            [submitted]="submitted"
-            [required]="false">
-        </app-input-text>
+            <app-input-text
+                formControlName="phone"
+                label="Телефон"
+                type="tel"
+                [submitted]="submitted"
+                [required]="false">
+            </app-input-text>
 
-        <app-input-text
-            formControlName="ip_phone"
-            label="IP телефон"
-            [submitted]="submitted"
-            [required]="false">
-        </app-input-text>
+            <app-input-text
+                formControlName="ip_phone"
+                label="IP телефон"
+                [submitted]="submitted"
+                [required]="false">
+            </app-input-text>
 
-        <app-date-picker
-            formControlName="dob"
-            label="Дата рождения"
-            [submitted]="submitted"
-            [showTime]="false">
-        </app-date-picker>
+            <app-date-picker
+                formControlName="dob"
+                label="Дата рождения"
+                [submitted]="submitted"
+                [showTime]="false">
+            </app-date-picker>
 
-        <div class="font-semibold text-lg mb-2 mt-4">Место работы</div>
+            <div class="font-semibold text-lg mb-2 mt-4">Место работы</div>
 
-        <app-select
-            formControlName="organization_id"
-            label="Организация"
-            [items]="organizations"
-            [submitted]="submitted"
-            errorMessage="Организация обязательна">
-        </app-select>
+            <app-select
+                formControlName="organization_id"
+                label="Организация"
+                [items]="organizations"
+                [submitted]="submitted"
+                errorMessage="Организация обязательна"
+                [required]="false">
+            </app-select>
 
-        <app-select
-            formControlName="department_id"
-            label="Отдел"
-            [items]="departments"
-            [submitted]="submitted"
-            errorMessage="Отдел обязателен">
-        </app-select>
+            <app-select
+                formControlName="department_id"
+                label="Отдел"
+                [items]="departments"
+                [submitted]="submitted"
+                errorMessage="Отдел обязателен"
+                [required]="false">
+            </app-select>
 
-        <app-select
-            formControlName="position_id"
-            label="Должность"
-            [items]="positions"
-            [submitted]="submitted"
-            errorMessage="Должность обязательна">
-        </app-select>
+            <app-select
+                formControlName="position_id"
+                label="Должность"
+                [items]="positions"
+                [submitted]="submitted"
+                errorMessage="Должность обязательна"
+                [required]="false">
+            </app-select>
 
-        <app-input-text
-            formControlName="external_organization_name"
-            label="Внешняя организация"
-            [submitted]="submitted"
-            [required]="false">
-        </app-input-text>
-    </form>
-</app-dialog>
+            <app-input-text
+                formControlName="external_organization_name"
+                label="Внешняя организация"
+                [submitted]="submitted"
+                [required]="false">
+            </app-input-text>
+
+            <app-file-upload
+                label="Загрузить фото"
+                [multiple]="false"
+                [maxFileSize]="10242880"
+                accept="image/*"
+                [files]="selectedFiles"
+                (filesSelected)="onFilesSelected($event)"
+                (fileRemoved)="onFileRemoved($event)"
+                [enableClipboard]="false">
+            </app-file-upload>
+        </form>
+    </app-dialog>
 }
 
 <app-delete-confirmation
