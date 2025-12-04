@@ -27,7 +27,7 @@ import { updateSurfacePalette } from '@primeuix/themes';
             </button>
             <a class="layout-topbar-logo" routerLink="/">
                 <img ngSrc="/images/logo-x.png" alt="" width="52" height="22" />
-                <span>Планшет председателя</span>
+                <span>Планшет Председателя правления</span>
             </a>
         </div>
 
