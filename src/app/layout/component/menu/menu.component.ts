@@ -145,7 +145,7 @@ export class MenuComponent implements OnInit {
                     },
                     {
                         label: 'Планирование',
-                        role: ['rais'],
+                        role: ['rais', 'assistant'],
                         items: [
                             // { label: 'Встречи', role: ['rais'], routerLink: ['/planning'], queryParams: { type: 'meeting' }, routerLinkActiveOptions: { queryParams: 'exact' } },
                             // { label: 'Созвоны', role: ['rais'], routerLink: ['/planning'], queryParams: { type: 'call' }, routerLinkActiveOptions: { queryParams: 'exact' } },

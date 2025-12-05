@@ -95,8 +95,9 @@
 
 @if (displayDialog) {
     <app-dialog [header]="isEditMode ? 'Редактировать пользователя' : 'Новый пользователь'" [(visible)]="displayDialog"
+                (save)="onSubmit()"
     >
-        <form [formGroup]="userForm">
+        <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
             <div class="flex flex-col gap-4 p-fluid">
                 <!-- Account Information -->
                 <div class="font-semibold text-lg mb-2">Информация об аккаунте</div>
@@ -244,23 +245,22 @@
                         [submitted]="submitted"
                         [required]="false">
                     </app-input-text>
+                    <app-file-upload
+                        label="Загрузить фото"
+                        [multiple]="false"
+                        [maxFileSize]="10242880"
+                        accept="image/*"
+                        [files]="selectedFiles"
+                        (filesSelected)="onFilesSelected($event)"
+                        (fileRemoved)="onFileRemoved($event)"
+                        [enableClipboard]="false">
+                    </app-file-upload>
                 }
-
-                <app-file-upload
-                    label="Загрузить фото"
-                    [multiple]="false"
-                    [maxFileSize]="10242880"
-                    accept="image/*"
-                    [files]="selectedFiles"
-                    (filesSelected)="onFilesSelected($event)"
-                    (fileRemoved)="onFileRemoved($event)"
-                    [enableClipboard]="false">
-                </app-file-upload>
             </div>
         </form>
         <ng-template pTemplate="footer">
             <p-button label="Отмена" (click)="closeDialog()" styleClass="p-button-text" />
-            <p-button [label]="isEditMode ? 'Обновить' : 'Сохранить'" type="submit" (click)="saveUser()" />
+            <p-button [label]="isEditMode ? 'Обновить' : 'Сохранить'" type="submit" (click)="onSubmit()" />
         </ng-template>
     </app-dialog>
 }

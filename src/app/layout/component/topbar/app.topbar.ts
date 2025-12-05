@@ -14,6 +14,7 @@ import { TopbarCalendarWidget } from '@/layout/component/topbar/topbar-calendar/
 import { FastCallWidget } from '@/layout/component/topbar/fast-call/fast-call.widget';
 import { InboxWidget } from '@/layout/component/topbar/inbox/inbox-widget.component';
 import { updateSurfacePalette } from '@primeuix/themes';
+import { AuthService } from '@/core/services/auth.service';
 
 @Component({
     selector: 'app-topbar',
@@ -27,7 +28,13 @@ import { updateSurfacePalette } from '@primeuix/themes';
             </button>
             <a class="layout-topbar-logo" routerLink="/">
                 <img ngSrc="/images/logo-x.png" alt="" width="52" height="22" />
-                <span>Планшет председателя</span>
+                <span class="text-nowrap"
+                    >Планшет
+                    @if (authService.hasRole('first deputy')) {
+                        <span>Первого заместителя</span>
+                    }
+                    Председателя правления</span
+                >
             </a>
         </div>
 
@@ -76,6 +83,7 @@ import { updateSurfacePalette } from '@primeuix/themes';
 })
 export class AppTopbar {
     layoutService = inject(LayoutService);
+    authService: AuthService = inject(AuthService);
     configurator = new AppConfigurator();
 
     toggleDarkMode() {
