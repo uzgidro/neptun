@@ -114,6 +114,11 @@ export class MenuComponent implements OnInit {
                                 role: ['rais', 'sc'],
                                 routerLink: ['/construction']
                             },
+                            {
+                                label: 'Водохранилища',
+                                role: ['rais', 'sc'],
+                                routerLink: ['/reservoir']
+                            },
                             { label: 'Категории', role: ['sc'], routerLink: ['/categories'] },
                             { label: 'Файлы', role: ['sc'], routerLink: ['/files'] }
                         ]

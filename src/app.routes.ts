@@ -17,6 +17,7 @@ import { DepartmentComponent } from '@/pages/hrm/department/department.component
 import { EmployeeComponent } from '@/pages/hrm/employee/employee.component';
 import { EventsComponent } from '@/pages/planning/events/events.component';
 import { ConstructionComponent } from '@/pages/situation-center/construction/construction.component';
+import { ReservoirComponent } from '@/pages/situation-center/reservoir/reservoir.component';
 
 export const appRoutes: Routes = [
     {
@@ -42,8 +43,8 @@ export const appRoutes: Routes = [
             { path: 'planning', component: PlanningComponent, canActivate: [raisGuard] },
             { path: 'shutdowns', component: ShutdownComponent, canActivate: [raisGuard] },
             { path: 'construction', component: ConstructionComponent, canActivate: [raisGuard] },
-            { path: 'planning/events', component: EventsComponent, canActivate: [raisGuard] },
-            { path: 'shutdowns', component: ShutdownComponent, canActivate: [raisGuard] }
+            { path: 'reservoir', component: ReservoirComponent, canActivate: [raisGuard] },
+            { path: 'planning/events', component: EventsComponent, canActivate: [raisGuard] }
         ]
     },
     { path: 'notfound', component: Notfound },
