@@ -25,6 +25,14 @@ export class DocumentViewerComponent implements OnInit, OnDestroy {
     files: LatestFiles[] = [];
 
     fileUrl = '';
+    zoom = 1.0;
+    zoomStep = 0.25;
+    minZoom = 0.5;
+    maxZoom = 3.0;
+
+    // Touch gesture properties
+    private initialPinchDistance = 0;
+    private initialZoom = 1.0;
 
     ngOnInit() {
         const files$ = this.apiService.getLatestFiles().pipe(shareReplay(1));
@@ -71,6 +79,58 @@ export class DocumentViewerComponent implements OnInit, OnDestroy {
 
     onTabChange(index: number | string) {
         this.router.navigate([], { queryParams: { tabIndex: index }, queryParamsHandling: 'merge' });
+    }
+
+    zoomIn() {
+        if (this.zoom < this.maxZoom) {
+            this.zoom += this.zoomStep;
+        }
+    }
+
+    zoomOut() {
+        if (this.zoom > this.minZoom) {
+            this.zoom -= this.zoomStep;
+        }
+    }
+
+    resetZoom() {
+        this.zoom = 1.0;
+    }
+
+    // Touch gesture handlers
+    onTouchStart(event: TouchEvent) {
+        if (event.touches.length === 2) {
+            event.preventDefault();
+            this.initialPinchDistance = this.getPinchDistance(event.touches);
+            this.initialZoom = this.zoom;
+        }
+    }
+
+    onTouchMove(event: TouchEvent) {
+        if (event.touches.length === 2 && this.initialPinchDistance > 0) {
+            event.preventDefault();
+            const currentDistance = this.getPinchDistance(event.touches);
+            const scale = currentDistance / this.initialPinchDistance;
+            let newZoom = this.initialZoom * scale;
+
+            // Clamp zoom to min/max values
+            newZoom = Math.max(this.minZoom, Math.min(this.maxZoom, newZoom));
+            this.zoom = newZoom;
+        }
+    }
+
+    onTouchEnd(event: TouchEvent) {
+        if (event.touches.length < 2) {
+            this.initialPinchDistance = 0;
+        }
+    }
+
+    private getPinchDistance(touches: TouchList): number {
+        const touch1 = touches[0];
+        const touch2 = touches[1];
+        const dx = touch2.clientX - touch1.clientX;
+        const dy = touch2.clientY - touch1.clientY;
+        return Math.sqrt(dx * dx + dy * dy);
     }
 
     ngOnDestroy() {
