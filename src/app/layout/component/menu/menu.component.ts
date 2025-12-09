@@ -91,9 +91,7 @@ export class MenuComponent implements OnInit {
                                     {
                                         label: 'Водохранилища',
                                         role: ['rais', 'sc'],
-                                        routerLink: ['/viewer'],
-                                        queryParams: { type: 'reservoir' },
-                                        routerLinkActiveOptions: { queryParams: 'exact' }
+                                        routerLink: ['/reservoir-summary']
                                     }
                                     // {
                                     //     label: 'MODSNOW',
