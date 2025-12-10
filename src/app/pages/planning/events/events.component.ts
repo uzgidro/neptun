@@ -539,7 +539,7 @@ export class EventsComponent implements OnInit, OnDestroy {
     /**
      * Get severity for status tag
      */
-    getStatusSeverity(statusId: number): string {
+    getStatusSeverity(statusId: number): 'secondary' | 'info' | 'success' | 'warn' | 'danger' | 'contrast' {
         switch (statusId) {
             case 1:
                 return 'secondary'; // Draft
@@ -552,7 +552,7 @@ export class EventsComponent implements OnInit, OnDestroy {
             case 5:
                 return 'danger'; // Cancelled
             case 6:
-                return 'warning'; // Postponed
+                return 'warn'; // Postponed
             default:
                 return 'secondary';
         }

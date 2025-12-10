@@ -147,8 +147,10 @@ export class DocumentViewerComponent implements OnInit, AfterViewInit, OnDestroy
             });
     }
 
-    onTabChange(index: number | string) {
-        this.router.navigate([], { queryParams: { tabIndex: index }, queryParamsHandling: 'merge' });
+    onTabChange(index: number | string | undefined) {
+        if (index !== undefined) {
+            this.router.navigate([], { queryParams: { tabIndex: index }, queryParamsHandling: 'merge' });
+        }
     }
 
     ngOnDestroy() {
