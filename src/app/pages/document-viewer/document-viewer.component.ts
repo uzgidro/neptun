@@ -27,6 +27,10 @@ export class DocumentViewerComponent implements OnInit, AfterViewInit, OnDestroy
     fileUrl = '';
     fileName = '';
 
+    private isViewerInitialized = false;
+    private pendingFileUrl = '';
+    private pendingFileName = '';
+
     ngOnInit() {
         const files$ = this.apiService.getLatestFiles().pipe(shareReplay(1));
         const params$ = this.route.queryParams;
@@ -51,6 +55,7 @@ export class DocumentViewerComponent implements OnInit, AfterViewInit, OnDestroy
                             queryParamsHandling: 'merge',
                             replaceUrl: true
                         });
+                        return; // Skip rendering until query param is set
                     }
 
                     const categoryMap: { [key: number]: string } = {
@@ -71,33 +76,72 @@ export class DocumentViewerComponent implements OnInit, AfterViewInit, OnDestroy
 
     ngAfterViewInit() {
         this.viewSDKService.ready().then(() => {
-            // Initialize Adobe DC View
+            // Initialize Adobe DC View once
             this.viewSDKService.previewFile('adobe-dc-view').then(() => {
-                // Render PDF if file URL is already available
-                if (this.fileUrl) {
-                    this.renderPDF();
+                this.isViewerInitialized = true;
+
+                // Render pending PDF if available
+                if (this.pendingFileUrl) {
+                    this.renderPDF(this.pendingFileUrl, this.pendingFileName);
+                    this.pendingFileUrl = '';
+                    this.pendingFileName = '';
                 }
+            }).catch((error) => {
+                console.error('Error initializing Adobe DC View:', error);
             });
         });
     }
 
     private updateFile(file: LatestFiles | undefined) {
-        this.fileUrl = file ? file.url : '';
-        this.fileName = file ? file.file_name : '';
+        console.log(file);
+        const newFileUrl = file ? file.url : '';
+        const newFileName = file ? file.file_name : '';
 
-        // Render PDF if Adobe DC View is ready
-        if (this.fileUrl && this.viewSDKService.getAdobeDCView()) {
-            this.renderPDF();
+        // Only render if the URL has actually changed
+        if (newFileUrl !== this.fileUrl) {
+            this.fileUrl = newFileUrl;
+            this.fileName = newFileName;
+
+            if (this.isViewerInitialized && this.fileUrl) {
+                // Reinitialize viewer for new PDF to avoid MobX errors
+                this.reinitializeAndRender(this.fileUrl, this.fileName);
+            } else if (this.fileUrl) {
+                // Store for later rendering when viewer is ready
+                this.pendingFileUrl = this.fileUrl;
+                this.pendingFileName = this.fileName;
+            }
         }
     }
 
-    private renderPDF() {
-        if (!this.fileUrl) {
+    private reinitializeAndRender(url: string, fileName: string) {
+        if (!url) {
+            return;
+        }
+
+        // Reinitialize the viewer to avoid MobX state issues
+        this.viewSDKService
+            .reinitializeViewer('adobe-dc-view')
+            .then(() => {
+                return this.viewSDKService.previewFileFromURL(url, fileName);
+            })
+            .then(() => {
+                console.log('PDF rendered successfully:', fileName);
+            })
+            .catch((error) => {
+                console.error('Error rendering PDF:', error);
+            });
+    }
+
+    private renderPDF(url: string, fileName: string) {
+        if (!url) {
             return;
         }
 
         this.viewSDKService
-            .previewFileFromURL(this.fileUrl, this.fileName)
+            .previewFileFromURL(url, fileName)
+            .then(() => {
+                console.log('PDF rendered successfully:', fileName);
+            })
             .catch((error) => {
                 console.error('Error rendering PDF:', error);
             });

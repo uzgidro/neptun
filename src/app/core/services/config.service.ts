@@ -113,4 +113,18 @@ export class ConfigService {
     isFeatureEnabled(feature: keyof AppConfig['features']): boolean {
         return this.config.features[feature] as boolean;
     }
+
+    log(level: 'debug' | 'info' | 'warn' | 'error', message: string, ...args: any[]): void {
+        if (!this.enableConsoleLogging) {
+            return;
+        }
+
+        const levels = ['debug', 'info', 'warn', 'error'];
+        const currentLevelIndex = levels.indexOf(this.loggingLevel);
+        const messageLevelIndex = levels.indexOf(level);
+
+        if (messageLevelIndex >= currentLevelIndex) {
+            console[level](message, ...args);
+        }
+    }
 }

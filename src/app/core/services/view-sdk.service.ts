@@ -8,6 +8,7 @@ export class ViewSDKService {
     private configService = inject(ConfigService);
     private readonly readyPromise: Promise<void>;
     private adobeDCView: AdobeDC.ViewInstance | null = null;
+    private currentDivId = '';
 
     constructor() {
         this.readyPromise = new Promise<void>((resolve) => {
@@ -32,12 +33,36 @@ export class ViewSDKService {
             return Promise.reject('Adobe Client ID not configured');
         }
 
+        // Store the div ID for later cleanup
+        this.currentDivId = divId;
+
         this.adobeDCView = new window.AdobeDC!.View({
             clientId: clientId,
             divId: divId
         });
 
         return Promise.resolve();
+    }
+
+    private clearViewer(): void {
+        if (this.currentDivId) {
+            const container = document.getElementById(this.currentDivId);
+            if (container) {
+                // Clear the container completely
+                container.innerHTML = '';
+            }
+        }
+    }
+
+    reinitializeViewer(divId: string): Promise<void> {
+        // Clear the existing viewer
+        this.clearViewer();
+
+        // Reset the instance
+        this.adobeDCView = null;
+
+        // Reinitialize
+        return this.previewFile(divId);
     }
 
     previewFileFromURL(url: string, fileName: string, viewerConfig: Partial<AdobeDC.ViewerConfig> = {}): Promise<void> {
@@ -67,6 +92,7 @@ export class ViewSDKService {
             }
         };
 
+        this.configService.log('info', 'Rendering PDF:', fileName, url);
         return this.adobeDCView.previewFile(previewConfig, defaultConfig);
     }
 
