@@ -4,8 +4,8 @@ import { AuthService } from '@/core/services/auth.service';
 import { Popover } from 'primeng/popover';
 import { RouterModule } from '@angular/router';
 import { JwtService } from '@/core/services/jwt.service';
-import { ContactService } from '@/core/services/contact.service';
 import { Contact } from '@/core/interfaces/contact';
+import { ContactService } from '@/core/services/contact.service';
 
 @Component({
     selector: 'app-profile-menu',
@@ -34,16 +34,16 @@ import { Contact } from '@/core/interfaces/contact';
                             <div class="text-sm text-gray-600 text-center">{{ contact.email }}</div>
                         }
                     </div>
-                    <hr class="my-4 border-t border-surface" />
-                    <a (click)="logout()" class="cursor-pointer flex items-center gap-2 p-2 rounded-border-sm hover:bg-surface-100 dark:hover:bg-surface-800/70">
-                        <i class="pi pi-sign-out"></i>
-                        <span>Выйти</span>
-                    </a>
                 } @else {
                     <div class="flex items-center justify-center p-4">
                         <i class="pi pi-spin pi-spinner text-2xl"></i>
                     </div>
                 }
+                <hr class="my-4 border-t border-surface" />
+                <a (click)="logout()" class="cursor-pointer flex items-center gap-2 p-2 rounded-border-sm hover:bg-surface-100 dark:hover:bg-surface-800/70">
+                    <i class="pi pi-sign-out"></i>
+                    <span>Выйти</span>
+                </a>
             </div>
         </p-popover>
     `
@@ -56,7 +56,7 @@ export class ProfileMenu implements OnInit {
     contact?: Contact;
 
     ngOnInit(): void {
-        let id = this.jwtService.getDecodedToken().uid;
+        let id = this.jwtService.getDecodedToken().contact_id;
         if (typeof id === 'number') {
             this.contactService.getContact(id).subscribe({
                 next: (data) => {

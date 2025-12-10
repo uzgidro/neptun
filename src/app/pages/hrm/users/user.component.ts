@@ -173,9 +173,9 @@ export class User implements OnInit, OnDestroy {
         const selectedRoles = this.allRoles.filter((role) => user.roles.includes(role.name));
 
         // Find objects for select components
-        const selectedOrg = this.organizations.find((org) => org.id === user.contact?.organization_id);
-        const selectedDept = this.departments.find((dept) => dept.id === user.contact?.department_id);
-        const selectedPos = this.positions.find((pos) => pos.id === user.contact?.position_id);
+        const selectedOrg = this.organizations.find((org) => org.id === user.contact?.organization?.id);
+        const selectedDept = this.departments.find((dept) => dept.id === user.contact?.department?.id);
+        const selectedPos = this.positions.find((pos) => pos.id === user.contact?.position?.id);
 
         // Parse date if present
         let dobDate = null;
