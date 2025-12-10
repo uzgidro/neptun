@@ -10,31 +10,5 @@
         </p-tabs>
     }
 
-    <div class="mt-4">
-        <div class="zoom-controls">
-            <button (click)="zoomOut()" [disabled]="zoom <= minZoom" class="zoom-btn">
-                <i class="pi pi-minus"></i>
-            </button>
-            <span class="zoom-level">{{ (zoom * 100).toFixed(0) }}%</span>
-            <button (click)="zoomIn()" [disabled]="zoom >= maxZoom" class="zoom-btn">
-                <i class="pi pi-plus"></i>
-            </button>
-            <button (click)="resetZoom()" class="zoom-btn">
-                <i class="pi pi-refresh"></i>
-            </button>
-        </div>
-
-        <div class="pdf-container"
-             (touchstart)="onTouchStart($event)"
-             (touchmove)="onTouchMove($event)"
-             (touchend)="onTouchEnd($event)">
-            <pdf-viewer [src]="fileUrl"
-                        [render-text]="true"
-                        [original-size]="false"
-                        [zoom]="zoom"
-                        style="display: block; width: 100%; height: 75vh;">
-            </pdf-viewer>
-        </div>
-    </div>
-
+    <div id="adobe-dc-view" class="h-full flex flex-1"></div>
 </div>

@@ -1,42 +1,34 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, AfterViewInit } from '@angular/core';
 import { Tab, TabList, Tabs } from 'primeng/tabs';
-import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, shareReplay, Subject, takeUntil } from 'rxjs';
 import { ApiService } from '@/core/services/api.service';
+import { ViewSDKService } from '@/core/services/view-sdk.service';
 import { LatestFiles } from '@/core/interfaces/latest-files';
 
 @Component({
     selector: 'app-document-viewer',
     standalone: true,
-    imports: [Tab, TabList, Tabs, PdfViewerModule],
+    imports: [Tab, TabList, Tabs],
     templateUrl: './document-viewer.component.html',
     styleUrl: './document-viewer.component.scss'
 })
-export class DocumentViewerComponent implements OnInit, OnDestroy {
+export class DocumentViewerComponent implements OnInit, AfterViewInit, OnDestroy {
     private route = inject(ActivatedRoute);
     private router = inject(Router);
     private apiService = inject(ApiService);
+    private viewSDKService = inject(ViewSDKService);
     private destroy$ = new Subject<void>();
 
     showTabs = false;
     activeIndex = 0;
 
     files: LatestFiles[] = [];
-
     fileUrl = '';
-    zoom = 1.0;
-    zoomStep = 0.25;
-    minZoom = 0.5;
-    maxZoom = 3.0;
-
-    // Touch gesture properties
-    private initialPinchDistance = 0;
-    private initialZoom = 1.0;
+    fileName = '';
 
     ngOnInit() {
         const files$ = this.apiService.getLatestFiles().pipe(shareReplay(1));
-
         const params$ = this.route.queryParams;
 
         combineLatest([files$, params$])
@@ -69,68 +61,50 @@ export class DocumentViewerComponent implements OnInit, OnDestroy {
                     };
                     const categoryName = categoryMap[tabIndex];
                     const foundFile = files.find((file) => file.category_name.includes(categoryName));
-                    this.fileUrl = foundFile ? foundFile.url : '';
+                    this.updateFile(foundFile);
                 } else {
                     const foundFile = files.find((file) => file.category_name.includes(params['type']));
-                    this.fileUrl = foundFile ? foundFile.url : '';
+                    this.updateFile(foundFile);
                 }
+            });
+    }
+
+    ngAfterViewInit() {
+        this.viewSDKService.ready().then(() => {
+            // Initialize Adobe DC View
+            this.viewSDKService.previewFile('adobe-dc-view').then(() => {
+                // Render PDF if file URL is already available
+                if (this.fileUrl) {
+                    this.renderPDF();
+                }
+            });
+        });
+    }
+
+    private updateFile(file: LatestFiles | undefined) {
+        this.fileUrl = file ? file.url : '';
+        this.fileName = file ? file.file_name : '';
+
+        // Render PDF if Adobe DC View is ready
+        if (this.fileUrl && this.viewSDKService.getAdobeDCView()) {
+            this.renderPDF();
+        }
+    }
+
+    private renderPDF() {
+        if (!this.fileUrl) {
+            return;
+        }
+
+        this.viewSDKService
+            .previewFileFromURL(this.fileUrl, this.fileName)
+            .catch((error) => {
+                console.error('Error rendering PDF:', error);
             });
     }
 
     onTabChange(index: number | string) {
         this.router.navigate([], { queryParams: { tabIndex: index }, queryParamsHandling: 'merge' });
-    }
-
-    zoomIn() {
-        if (this.zoom < this.maxZoom) {
-            this.zoom += this.zoomStep;
-        }
-    }
-
-    zoomOut() {
-        if (this.zoom > this.minZoom) {
-            this.zoom -= this.zoomStep;
-        }
-    }
-
-    resetZoom() {
-        this.zoom = 1.0;
-    }
-
-    // Touch gesture handlers
-    onTouchStart(event: TouchEvent) {
-        if (event.touches.length === 2) {
-            event.preventDefault();
-            this.initialPinchDistance = this.getPinchDistance(event.touches);
-            this.initialZoom = this.zoom;
-        }
-    }
-
-    onTouchMove(event: TouchEvent) {
-        if (event.touches.length === 2 && this.initialPinchDistance > 0) {
-            event.preventDefault();
-            const currentDistance = this.getPinchDistance(event.touches);
-            const scale = currentDistance / this.initialPinchDistance;
-            let newZoom = this.initialZoom * scale;
-
-            // Clamp zoom to min/max values
-            newZoom = Math.max(this.minZoom, Math.min(this.maxZoom, newZoom));
-            this.zoom = newZoom;
-        }
-    }
-
-    onTouchEnd(event: TouchEvent) {
-        if (event.touches.length < 2) {
-            this.initialPinchDistance = 0;
-        }
-    }
-
-    private getPinchDistance(touches: TouchList): number {
-        const touch1 = touches[0];
-        const touch2 = touches[1];
-        const dx = touch2.clientX - touch1.clientX;
-        const dy = touch2.clientY - touch1.clientY;
-        return Math.sqrt(dx * dx + dy * dy);
     }
 
     ngOnDestroy() {
