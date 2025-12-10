@@ -41,7 +41,7 @@ export class ConfigService {
                 enableConsole: true
             },
             adobe: {
-                clientId: 'd9fc1b67087b4146971096230f7cbff5',
+                clientId: 'd9fc1b67087b4146971096230f7cbff123',
                 defaultViewMode: 'FIT_WIDTH'
             }
         };
