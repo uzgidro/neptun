@@ -5,7 +5,9 @@
             "Bash(git checkout:*)",
             "WebFetch(domain:raw.githubusercontent.com)",
             "WebFetch(domain:github.com)",
-            "WebSearch"
+            "WebSearch",
+            "Bash(dos2unix:*)",
+            "Bash(docker-compose build:*)"
         ],
         "deny": [],
         "ask": []

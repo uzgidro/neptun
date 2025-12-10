@@ -47,7 +47,3 @@ docker-compose*.yml
 # CI/CD
 .github
 .gitlab-ci.yml
-
-# Scripts (copied separately)
-inject-config.sh
-docker-entrypoint.sh
