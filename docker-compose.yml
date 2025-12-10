@@ -5,7 +5,7 @@ services:
             dockerfile: Dockerfile
         container_name: neptun-app
         ports:
-            - "80:80"
+            - "4200:80"
         volumes:
             # Mount config directory from host to container
             # Place your config.yaml in ./config/ directory on host
