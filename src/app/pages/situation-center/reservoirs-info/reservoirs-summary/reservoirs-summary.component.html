@@ -61,7 +61,8 @@
                     <td [pEditableColumn]="reservoir.level" pEditableColumnField="current" class="text-nowrap">
                         <p-cellEditor>
                             <ng-template pTemplate="input">
-                                <input pInputText type="number" [(ngModel)]="reservoir.level.current" />
+                                <input pInputText type="number" [(ngModel)]="reservoir.level.current"
+                                       (focus)="onInputFocus($event, reservoir.level, 'current')" />
                             </ng-template>
                             <ng-template pTemplate="output">
                                 {{ reservoir.level.current | number: '1.0-2' }}
@@ -72,7 +73,8 @@
                     <td [pEditableColumn]="reservoir.volume" pEditableColumnField="current" class="text-nowrap">
                         <p-cellEditor>
                             <ng-template pTemplate="input">
-                                <input pInputText type="number" [(ngModel)]="reservoir.volume.current" />
+                                <input pInputText type="number" [(ngModel)]="reservoir.volume.current"
+                                       (focus)="onInputFocus($event, reservoir.volume, 'current')" />
                             </ng-template>
                             <ng-template pTemplate="output">
                                 {{ reservoir.volume.current | number: '1.0-2' }}
@@ -85,7 +87,8 @@
                     <td [pEditableColumn]="reservoir.income" pEditableColumnField="current" class="text-nowrap">
                         <p-cellEditor>
                             <ng-template pTemplate="input">
-                                <input pInputText type="number" [(ngModel)]="reservoir.income.current" />
+                                <input pInputText type="number" [(ngModel)]="reservoir.income.current"
+                                       (focus)="onInputFocus($event, reservoir.income, 'current')" />
                             </ng-template>
                             <ng-template pTemplate="output">
                                 {{ reservoir.income.current | number: '1.0-2' }}
@@ -98,7 +101,8 @@
                     <td [pEditableColumn]="reservoir.release" pEditableColumnField="current" class="text-nowrap">
                         <p-cellEditor>
                             <ng-template pTemplate="input">
-                                <input pInputText type="number" [(ngModel)]="reservoir.release.current" />
+                                <input pInputText type="number" [(ngModel)]="reservoir.release.current"
+                                       (focus)="onInputFocus($event, reservoir.release, 'current')" />
                             </ng-template>
                             <ng-template pTemplate="output">
                                 {{ reservoir.release.current | number: '1.0-2' }}

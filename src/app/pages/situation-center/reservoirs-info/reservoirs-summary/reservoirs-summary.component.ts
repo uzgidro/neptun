@@ -63,22 +63,6 @@ export class ReservoirsSummaryComponent implements OnInit {
         return new Date().getFullYear() - yearsAgo;
     }
 
-    onCellEditComplete(event: any, reservoir: ReservoirSummaryResponse, field: string) {
-        const { data, newValue } = event;
-
-        if (newValue != null && newValue.toString().trim().length > 0) {
-            const numericValue = parseFloat(newValue);
-
-            if (!isNaN(numericValue)) {
-                // Update the nested field (e.g., level.current, volume.current, etc.)
-                const [mainField, subField] = field.split('.');
-                if (subField === 'current') {
-                    (reservoir as any)[mainField][subField] = numericValue;
-                }
-            }
-        }
-    }
-
     hasChanges(): boolean {
         return JSON.stringify(this.data) !== JSON.stringify(this.originalData);
     }
@@ -99,14 +83,15 @@ export class ReservoirsSummaryComponent implements OnInit {
                     level: reservoir.level.current,
                     volume: reservoir.volume.current,
                     release: reservoir.release.current
-                }
+                };
             });
 
         this.reservoirService.upsetReservoirData(dataToSave).subscribe({
             next: () => {
-                this.messageService.add({severity: 'success', summary: 'Данные обновлены'});
-            }, error: (err) => {
-                this.messageService.add({severity: 'warn', summary: 'Произошла ошибка', detail: err});
+                this.messageService.add({ severity: 'success', summary: 'Данные обновлены' });
+            },
+            error: (err) => {
+                this.messageService.add({ severity: 'warn', summary: 'Произошла ошибка', detail: err });
             }
         });
         this.originalData = JSON.parse(JSON.stringify(this.data));
@@ -115,5 +100,19 @@ export class ReservoirsSummaryComponent implements OnInit {
     onReset() {
         // Restore data from the original copy
         this.data = JSON.parse(JSON.stringify(this.originalData));
+    }
+
+    onInputFocus(event: FocusEvent, obj: any, field: string) {
+        // Clear the input if the value is 0
+        if (obj[field] === 0) {
+            obj[field] = null;
+            // Update the input value to empty
+            setTimeout(() => {
+                const input = event.target as HTMLInputElement;
+                if (input) {
+                    input.value = '';
+                }
+            }, 0);
+        }
     }
 }
