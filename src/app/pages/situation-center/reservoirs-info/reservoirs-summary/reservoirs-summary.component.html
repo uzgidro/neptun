@@ -57,7 +57,7 @@
 
             <ng-template pTemplate="body" let-reservoir>
                 <tr>
-                    <td>{{ reservoir.organization_name }}</td>
+                    <td rowspan="2">{{ reservoir.organization_name }}</td>
                     <td>{{ reservoir.level.current | number: '1.0-2' }}</td>
                     <td>{{ reservoir.volume.current | number: '1.0-2' }}</td>
                     <td>{{ reservoir.volume.year_ago !== null ? (reservoir.volume.year_ago | number: '1.0-2') : 'N/A' }}</td>
@@ -70,6 +70,24 @@
                     <td>{{ reservoir.release.two_years_ago !== null ? (reservoir.release.two_years_ago | number: '1.0-2') : 'N/A' }}</td>
                     <td>{{ reservoir.incoming_volume | number: '1.0-2' }}</td>
                     <td>{{ reservoir.incoming_volume_prev_year | number: '1.0-2' }}</td>
+                    <td>N/A</td>
+                    <td>N/A</td>
+                </tr>
+                <tr class="italic">
+                    <td>{{ (reservoir.level.current - reservoir.level.prev) | number: '1.0-2' }}</td>
+                    <td>{{ (reservoir.volume.current - reservoir.volume.prev) | number: '1.0-2' }}</td>
+                    <td>{{ reservoir.volume.year_ago !== null ? ((reservoir.volume.current - reservoir.volume.year_ago) | number: '1.0-2') : 'N/A' }}</td>
+                    <td>{{ reservoir.volume.two_years_ago !== null ? ((reservoir.volume.current - reservoir.volume.two_years_ago) | number: '1.0-2') : 'N/A' }}</td>
+                    <td>{{ (reservoir.income.current - reservoir.income.prev) | number: '1.0-2' }}</td>
+                    <td>{{ reservoir.income.year_ago !== null ? ((reservoir.income.current - reservoir.income.year_ago) | number: '1.0-2') : 'N/A' }}</td>
+                    <td>{{ reservoir.income.two_years_ago !== null ? ((reservoir.income.current - reservoir.income.two_years_ago) | number: '1.0-2') : 'N/A' }}</td>
+                    <td>{{ (reservoir.release.current - reservoir.release.prev) | number: '1.0-2' }}</td>
+                    <td>{{ reservoir.release.year_ago !== null ? ((reservoir.release.current - reservoir.release.year_ago) | number: '1.0-2') : 'N/A' }}</td>
+                    <td>{{ reservoir.release.two_years_ago !== null ? ((reservoir.release.current - reservoir.release.two_years_ago) | number: '1.0-2') : 'N/A' }}</td>
+                    <td>{{ (reservoir.incoming_volume - reservoir.incoming_volume_prev_year) | number: '1.0-2' }}</td>
+                    <td>{{ ((reservoir.incoming_volume / reservoir.incoming_volume_prev_year) * 100) | number: '1.0-0' }}
+                        %
+                    </td>
                     <td>N/A</td>
                     <td>N/A</td>
                 </tr>
