@@ -18,6 +18,9 @@ import { EventsComponent } from '@/pages/planning/events/events.component';
 import { ConstructionComponent } from '@/pages/situation-center/construction/construction.component';
 import { ReceptionComponent } from '@/pages/planning/reception/reception.component';
 import { ReservoirsSummaryComponent } from '@/pages/situation-center/reservoirs-info/reservoirs-summary/reservoirs-summary.component';
+import { InvestmentComponent } from '@/pages/financial-block/investment/investment.component';
+
+
 
 export const appRoutes: Routes = [
     {
@@ -45,7 +48,8 @@ export const appRoutes: Routes = [
             { path: 'planning/events', component: EventsComponent, canActivate: [raisGuard] },
             { path: 'planning/reception', component: ReceptionComponent, canActivate: [raisGuard] },
             { path: 'reservoir-summary', component: ReservoirsSummaryComponent, canActivate: [raisGuard] },
-            { path: 'shutdowns', component: ShutdownComponent, canActivate: [raisGuard] }
+            { path: 'shutdowns', component: ShutdownComponent, canActivate: [raisGuard] },
+            { path: 'investment', component: InvestmentComponent, canActivate: [raisGuard] },
         ]
     },
     { path: 'notfound', component: Notfound },

@@ -1,0 +1,35 @@
+<div class="card">
+    <h3 class="text-center mb-4">Инвестиционные проекты</h3>
+    <p-table [value]="investments" [tableStyle]="{'min-width': '50rem'}">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Название проекта</th>
+                <th>Статус</th>
+                <th>Сумма инвестиций</th>
+                <th>Приоритет</th>
+                <th>Дата</th>
+                <th>Состояние ТЗ</th>
+                <th>Комментарий</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-investment>
+            <tr>
+                <td>{{ investment.col1 }}</td>
+                <td>{{ investment.col2 }}</td>
+                <td>{{ investment.col3 | number }}</td>
+                <td>{{ investment.col4 }}</td>
+                <td>{{ investment.col5 | date: 'dd.MM.yyyy' }}</td>
+                <td class="items-center">
+                    <app-select
+                        [(ngModel)]="investment.status"
+                        [items]="statusOptions"
+                        [filter]="false"
+                        label=""
+                    >
+                    </app-select>
+                </td>
+                <td>{{ investment.col6 }}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>

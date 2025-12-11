@@ -13,11 +13,11 @@
 
             [disabled]="isDisabled || disable"
 
-            [showClear]="true"
-            [filter]="true"
+            [showClear]="showClear"
+            [filter]="filter"
             [appendTo]="'body'"
             [style]="{ width: '100%' }"
-            [required]="true"
+            [required]="required"
 
             [ngClass]="{ 'ng-invalid ng-dirty': submitted && !internalValue }"
         >

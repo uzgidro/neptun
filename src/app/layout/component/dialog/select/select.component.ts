@@ -25,6 +25,9 @@ export class SelectComponent implements ControlValueAccessor {
     @Input() loading: boolean = false;
     @Input() disable: boolean = false;
     @Input() submitted: boolean = false;
+    @Input() filter: boolean = true;
+    @Input() showClear: boolean = true;
+    @Input() required: boolean = true;
     @Input() errorMessage: string = 'Выбор обязателен';
 
     @Input() items: any[] = [];

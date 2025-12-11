@@ -26,9 +26,9 @@ export class MenuComponent implements OnInit {
                         label: 'Кадровый персонал (HRM)',
                         role: ['admin', 'rais'],
                         items: [
-                            { label: 'Организации', role: ['rais'] },
+                            { label: 'Организации', role: ['rais'], routerLink: ['/organizations'] },
                             { label: 'Дни рождения', role: ['rais'] },
-                            // { label: 'Потеря личного состава', role: ['rais'] },
+                            { label: 'Потеря личного состава', role: ['rais'] },
                             { label: 'Работники', role: ['admin'], routerLink: ['/employees'] },
                             { label: 'Должности', role: ['admin'], routerLink: ['/positions'] },
                             { label: 'Отделы', role: ['admin'], routerLink: ['/departments'] },
@@ -46,42 +46,33 @@ export class MenuComponent implements OnInit {
                                 items: [
                                     {
                                         label: 'ГЭС',
+                                        role: ['rais', 'sc']
+                                    },
+                                    {
+                                        label: 'Малые и микро ГЭС',
+                                        role: ['rais', 'sc']
+                                    },
+                                    {
+                                        label: 'Солнце',
+                                        role: ['rais', 'sc']
+                                    },
+                                    {
+                                        label: 'Аварийные отключение',
+                                        role: ['rais', 'sc'],
+                                        routerLink: ['/shutdowns']
+                                    },
+                                    {
+                                        label: 'Выработка',
                                         role: ['rais', 'sc'],
                                         routerLink: ['/viewer'],
                                         queryParams: { type: 'production' },
                                         routerLinkActiveOptions: { queryParams: 'exact' }
                                     },
                                     {
-                                        label: 'Малые и микро ГЭС',
+                                        label: 'Холостой сброс',
                                         role: ['rais', 'sc'],
-                                        routerLink: ['/viewer'],
-                                        queryParams: { type: 'minimicro' },
-                                        routerLinkActiveOptions: { queryParams: 'exact' }
-                                    },
-                                    {
-                                        label: 'Солнце',
-                                        role: ['rais', 'sc'],
-                                        routerLink: ['/viewer'],
-                                        queryParams: { type: 'sun' },
-                                        routerLinkActiveOptions: { queryParams: 'exact' }
-                                    },
-                                    {
-                                        label: 'Аварийные отключение',
-                                        role: ['rais', 'sc'],
-                                        routerLink: ['/shutdowns']
+                                        routerLink: ['/discharge']
                                     }
-                                    // {
-                                    //     label: 'Выработка',
-                                    //     role: ['rais', 'sc']
-                                    //     // routerLink: ['/viewer'],
-                                    //     // queryParams: { type: 'production' },
-                                    //     // routerLinkActiveOptions: { queryParams: 'exact' }
-                                    // }
-                                    // {
-                                    //     label: 'Холостой сброс',
-                                    //     role: ['rais', 'sc'],
-                                    //     routerLink: ['/discharge']
-                                    // }
                                 ]
                             },
                             {
@@ -90,27 +81,26 @@ export class MenuComponent implements OnInit {
                                 items: [
                                     {
                                         label: 'Водохранилища',
-                                        role: ['rais', 'sc'],
-                                        routerLink: ['/reservoir-summary']
+                                        role: ['rais', 'sc']
+                                    },
+                                    {
+                                        label: 'MODSNOW',
+                                        role: ['rais', 'sc']
+                                    },
+                                    {
+                                        label: 'Фильтрация',
+                                        role: ['rais', 'sc']
                                     }
-                                    // {
-                                    //     label: 'MODSNOW',
-                                    //     role: ['rais', 'sc']
-                                    // },
-                                    // {
-                                    //     label: 'Фильтрация',
-                                    //     role: ['rais', 'sc']
-                                    // }
                                 ]
                             },
                             {
                                 label: 'Прочая информация',
                                 role: ['rais', 'sc'],
                                 items: [
-                                    // {
-                                    //     label: 'События',
-                                    //     role: ['rais', 'sc']
-                                    // },
+                                    {
+                                        label: 'События',
+                                        role: ['rais', 'sc']
+                                    },
                                     {
                                         label: 'Землетрясение',
                                         role: ['rais', 'sc'],
@@ -119,11 +109,16 @@ export class MenuComponent implements OnInit {
                                     }
                                 ]
                             },
-                            // {
-                            //     label: 'Строительство',
-                            //     role: ['rais', 'sc'],
-                            //     routerLink: ['/construction']
-                            // },
+                            {
+                                label: 'Строительство',
+                                role: ['rais', 'sc'],
+                                routerLink: ['/construction']
+                            },
+                            {
+                                label: 'Водохранилища',
+                                role: ['rais', 'sc'],
+                                routerLink: ['/reservoir']
+                            },
                             { label: 'Категории', role: ['sc'], routerLink: ['/categories'] },
                             { label: 'Файлы', role: ['sc'], routerLink: ['/files'] }
                         ]
@@ -133,7 +128,7 @@ export class MenuComponent implements OnInit {
                         role: ['rais'],
                         items: [
                             { label: 'Дебит / кредит', role: ['rais'] },
-                            { label: 'Инвестиции', role: ['rais'] },
+                            { label: 'Инвестиции', role: ['rais'], routerLink: ['/investment'] },
                             { label: 'Затраты на ремонт', role: ['rais'] },
                             { label: 'Закупки', role: ['rais'] },
                             { label: 'KPI', role: ['rais'] },
@@ -143,18 +138,17 @@ export class MenuComponent implements OnInit {
                     },
                     {
                         label: 'Планирование',
-                        role: ['rais', 'assistant'],
+                        role: ['rais'],
                         items: [
                             // { label: 'Встречи', role: ['rais'], routerLink: ['/planning'], queryParams: { type: 'meeting' }, routerLinkActiveOptions: { queryParams: 'exact' } },
                             // { label: 'Созвоны', role: ['rais'], routerLink: ['/planning'], queryParams: { type: 'call' }, routerLinkActiveOptions: { queryParams: 'exact' } },
                             // { label: 'Переговоры', role: ['rais'], routerLink: ['/planning'], queryParams: { type: 'negotiation' }, routerLinkActiveOptions: { queryParams: 'exact' } },
                             // { label: 'ВКС', role: ['rais'], routerLink: ['/planning'], queryParams: { type: 'vcs' }, routerLinkActiveOptions: { queryParams: 'exact' } },
-                            { label: 'События', role: ['rais', 'assistant'], routerLink: ['/planning/events'] },
-                            { label: 'Приемная', role: ['rais', 'assistant'], routerLink: ['/planning/reception'] }
+                            { label: 'Все события', role: ['rais', 'assistant'], routerLink: ['/planning/events'] }
                         ]
                     },
                     {
-                        label: 'Канцелярия',
+                        label: 'Почта',
                         role: ['rais'],
                         items: [
                             { label: 'Приказы', role: ['rais'] },
@@ -162,16 +156,14 @@ export class MenuComponent implements OnInit {
                             { label: 'Письма', role: ['rais'] },
                             { label: 'Инструкции', role: ['rais'] },
                             {
-                                label: 'Нормативно правовая документация',
+                                label: 'Постановления',
                                 role: ['rais'],
                                 items: [
-                                    { label: 'Законы Республики Узбекистан', role: ['rais'] },
-                                    { label: 'Постановления Президента Республики Узбекистан', role: ['rais'] },
-                                    { label: 'Указы Президента Республики Узбекистан', role: ['rais'] },
-                                    { label: 'Постановления Кабинета министров', role: ['rais'] },
-                                    { label: 'Приказы министерств и ведомств', role: ['rais'] },
-                                    { label: 'Совместные соглашения(NDA)', role: ['rais'] },
-                                    { label: 'Иные документы', role: ['rais'] }
+                                    { label: 'Президент', role: ['rais'] },
+                                    { label: 'Кабинет министров', role: ['rais'] },
+                                    { label: 'Указы', role: ['rais'] },
+                                    { label: 'Приказы', role: ['rais'] },
+                                    { label: 'Совместные соглашения', role: ['rais'] }
                                 ]
                             }
                         ]
