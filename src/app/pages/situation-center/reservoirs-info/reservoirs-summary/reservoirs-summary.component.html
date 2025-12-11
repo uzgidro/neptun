@@ -17,44 +17,42 @@
         <p-table
             [value]="[data]"
             [scrollable]="true"
+            showGridlines
             scrollHeight="40vh"
             [tableStyle]="{ 'min-width': '1200px' }">
 
             <ng-template pTemplate="header">
                 <tr>
-                    <th>Организация</th>
-                    <th>Приток (текущий)</th>
-                    <th>Приток (предыдущий)</th>
-                    <th>Приток (год назад)</th>
-                    <th>Приток (два года назад)</th>
-                    <th>Объем (текущий)</th>
-                    <th>Объем (предыдущий)</th>
-                    <th>Уровень (текущий)</th>
-                    <th>Уровень (предыдущий)</th>
-                    <th>Сброс (текущий)</th>
-                    <th>Сброс (предыдущий)</th>
-                    <th>Входящий объем</th>
-                    <th>Входящий объем (прошлый год)</th>
+                    <th rowspan="3">Водохранилище</th>
+                    <th>Уровень, м</th>
+                    <th colspan="3">Объем, млн. м³</th>
+                    <th colspan="3">Приток, м³/с</th>
+                    <th colspan="3">Попуск, м³/с</th>
+                    <th colspan="2" rowspan="2">Приток до сегодняшнего дня, млн. м³</th>
+                    <th colspan="2" rowspan="2">MODSNOW, снежный покров %</th>
+                </tr>
+                <tr>
+                    <th rowspan="2" class="text-nowrap">{{ form.get('date')?.value | date: 'dd MMM' : '' : 'ru' }}</th>
+                    <th rowspan="2" class="text-nowrap">{{ form.get('date')?.value | date: 'dd MMM' : '' : 'ru' }}</th>
+                    <th colspan="2">Прошлые года</th>
+                    <th rowspan="2" class="text-nowrap">{{ form.get('date')?.value | date: 'dd MMM' : '' : 'ru' }}</th>
+                    <th colspan="2">Прошлые года</th>
+                    <th rowspan="2" class="text-nowrap">{{ form.get('date')?.value | date: 'dd MMM' : '' : 'ru' }}</th>
+                    <th colspan="2">Прошлые года</th>
+                </tr>
+                <tr>
+                    <th>{{ getPreviousYear(1) }}</th>
+                    <th>{{ getPreviousYear(2) }}</th>
+                    <th>{{ getPreviousYear(1) }}</th>
+                    <th>{{ getPreviousYear(2) }}</th>
+                    <th>{{ getPreviousYear(1) }}</th>
+                    <th>{{ getPreviousYear(2) }}</th>
+                    <th>{{ form.get('date')?.value | date: 'yyyy' }}</th>
+                    <th>{{ getPreviousYear(1) }}</th>
+                    <th>{{ form.get('date')?.value | date: 'yyyy' }}</th>
+                    <th>{{ getPreviousYear(1) }}</th>
                 </tr>
             </ng-template>
-
-            <!--      <ng-template pTemplate="body" let-reservoir>-->
-            <!--        <tr>-->
-            <!--          <td>{{ reservoir.organization_name }}</td>-->
-            <!--          <td>{{ reservoir.income.current }}</td>-->
-            <!--          <td>{{ reservoir.income.prev }}</td>-->
-            <!--          <td>{{ reservoir.income.year_ago ?? 'N/A' }}</td>-->
-            <!--          <td>{{ reservoir.income.two_years_ago ?? 'N/A' }}</td>-->
-            <!--          <td>{{ reservoir.volume.current }}</td>-->
-            <!--          <td>{{ reservoir.volume.prev }}</td>-->
-            <!--          <td>{{ reservoir.level.current }}</td>-->
-            <!--          <td>{{ reservoir.level.prev }}</td>-->
-            <!--          <td>{{ reservoir.release.current }}</td>-->
-            <!--          <td>{{ reservoir.release.prev }}</td>-->
-            <!--          <td>{{ reservoir.incoming_volume }}</td>-->
-            <!--          <td>{{ reservoir.incoming_volume_prev_year }}</td>-->
-            <!--        </tr>-->
-            <!--      </ng-template>-->
         </p-table>
     }
 </div>

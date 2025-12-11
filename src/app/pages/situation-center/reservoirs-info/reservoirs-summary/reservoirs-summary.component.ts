@@ -1,10 +1,13 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { CommonModule, registerLocaleData } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
 import { ReservoirSummaryService } from '@/core/services/reservoir-summary.service';
 import { ReservoirSummaryResponse } from '@/core/interfaces/reservoir-summary';
+import localeRu from '@angular/common/locales/ru';
+
+registerLocaleData(localeRu);
 
 @Component({
     selector: 'app-reservoirs-summary',
@@ -43,5 +46,13 @@ export class ReservoirsSummaryComponent implements OnInit {
                 }
             });
         }
+    }
+
+    getPreviousYear(yearsAgo: number): number {
+        const currentDate = this.form.get('date')?.value;
+        if (currentDate) {
+            return currentDate.getFullYear() - yearsAgo;
+        }
+        return new Date().getFullYear() - yearsAgo;
     }
 }
