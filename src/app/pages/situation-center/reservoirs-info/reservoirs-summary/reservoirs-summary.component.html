@@ -136,9 +136,15 @@
 
         @if (hasChanges()) {
             <div class="flex justify-end gap-2 mt-3">
-                <button pButton type="button" label="Сбросить" icon="pi pi-times" class="p-button-secondary"
-                        (click)="onReset()"></button>
-                <button pButton type="button" label="Применить" icon="pi pi-check" (click)="onAccept()"></button>
+                <button pButton type="button" class="p-button-secondary"
+                        (click)="onReset()">
+                    <span pButtonLabel>Сбросить</span>
+                    <i pButtonIcon class="pi pi-times"></i>
+                </button>
+                <button pButton type="button" (click)="onAccept()">
+                    <span pButtonLabel>Применить</span>
+                    <i pButtonIcon class="pi pi-check"></i>
+                </button>
             </div>
         }
     }
