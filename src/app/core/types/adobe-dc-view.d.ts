@@ -4,6 +4,7 @@ declare namespace AdobeDC {
     interface ViewConfig {
         clientId: string;
         divId: string;
+        locale: string;
     }
 
     interface PreviewFileConfig {
