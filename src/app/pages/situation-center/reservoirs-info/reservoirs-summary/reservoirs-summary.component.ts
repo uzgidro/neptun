@@ -82,11 +82,36 @@ export class ReservoirsSummaryComponent implements OnInit {
     }
 
     onAccept() {
-        console.log('Saving changes:', this.data);
+        // Get the selected date and format it as YYYY-MM-DD
+        const selectedDate = this.form.get('date')?.value;
+        const dateYMD = selectedDate ?
+            `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`
+            : null;
+
+        // Extract only the required fields for saving
+        const dataToSave = this.data.map(reservoir => ({
+            organization_id: reservoir.organization_id,
+            date: dateYMD,
+            level: reservoir.level.current,
+            volume: reservoir.volume.current,
+            income: reservoir.income.current,
+            release: reservoir.release.current
+        }));
+
+        console.log('Saving changes:', dataToSave);
         // TODO: Implement save functionality (e.g., send to backend)
+        // this.reservoirService.updateReservoirSummary(dataToSave).subscribe({
+        //     next: (response) => {
+        //         console.log('Save successful:', response);
+        //         this.originalData = JSON.parse(JSON.stringify(this.data));
+        //     },
+        //     error: (error) => {
+        //         console.error('Error saving:', error);
+        //     }
+        // });
+
         // Update originalData to reflect the new saved state
         this.originalData = JSON.parse(JSON.stringify(this.data));
-        console.log(this.originalData);
     }
 
     onReset() {
