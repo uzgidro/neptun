@@ -2,14 +2,20 @@
     <h3 class="text-center mb-3">Сводка по водохранилищам</h3>
 
     <form [formGroup]="form" class="mb-4">
-        <div class="w-full md:w-1/4">
-            <app-date-picker
-                label="Выберите дату"
-                formControlName="date"
-                [showTime]="false"
-                [submitted]="submitted"
-                errorMessage="Укажите дату">
-            </app-date-picker>
+        <div class="flex justify-between items-end">
+            <div class="w-full md:w-1/4">
+                <app-date-picker
+                    label="Выберите дату"
+                    formControlName="date"
+                    [showTime]="false"
+                    [submitted]="submitted"
+                    errorMessage="Укажите дату">
+                </app-date-picker>
+            </div>
+            <button pButton type="button" class="p-button-outlined" (click)="exportToPDF()">
+                <span pButtonLabel>Экспорт в PDF</span>
+                <i pButtonIcon class="pi pi-file-pdf"></i>
+            </button>
         </div>
     </form>
 
@@ -58,7 +64,7 @@
             <ng-template pTemplate="body" let-reservoir>
                 <tr>
                     <td rowspan="2">{{ reservoir.organization_name }}</td>
-                    <td [pEditableColumn]="reservoir.level" pEditableColumnField="current">
+                    <td [pEditableColumn]="reservoir.level" pEditableColumnField="current" class="text-nowrap">
                         <p-cellEditor>
                             <ng-template pTemplate="input">
                                 <input pInputText type="number" [(ngModel)]="reservoir.level.current" />
@@ -69,7 +75,7 @@
                             </ng-template>
                         </p-cellEditor>
                     </td>
-                    <td [pEditableColumn]="reservoir.volume" pEditableColumnField="current">
+                    <td [pEditableColumn]="reservoir.volume" pEditableColumnField="current" class="text-nowrap">
                         <p-cellEditor>
                             <ng-template pTemplate="input">
                                 <input pInputText type="number" [(ngModel)]="reservoir.volume.current" />
@@ -82,7 +88,7 @@
                     </td>
                     <td>{{ reservoir.volume.year_ago !== null ? (reservoir.volume.year_ago | number: '1.0-2') : 'N/A' }}</td>
                     <td>{{ reservoir.volume.two_years_ago !== null ? (reservoir.volume.two_years_ago | number: '1.0-2') : 'N/A' }}</td>
-                    <td [pEditableColumn]="reservoir.income" pEditableColumnField="current">
+                    <td [pEditableColumn]="reservoir.income" pEditableColumnField="current" class="text-nowrap">
                         <p-cellEditor>
                             <ng-template pTemplate="input">
                                 <input pInputText type="number" [(ngModel)]="reservoir.income.current" />
@@ -95,7 +101,7 @@
                     </td>
                     <td>{{ reservoir.income.year_ago !== null ? (reservoir.income.year_ago | number: '1.0-2') : 'N/A' }}</td>
                     <td>{{ reservoir.income.two_years_ago !== null ? (reservoir.income.two_years_ago | number: '1.0-2') : 'N/A' }}</td>
-                    <td [pEditableColumn]="reservoir.release" pEditableColumnField="current">
+                    <td [pEditableColumn]="reservoir.release" pEditableColumnField="current" class="text-nowrap">
                         <p-cellEditor>
                             <ng-template pTemplate="input">
                                 <input pInputText type="number" [(ngModel)]="reservoir.release.current" />
