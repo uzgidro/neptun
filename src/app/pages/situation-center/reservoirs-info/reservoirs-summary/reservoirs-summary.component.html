@@ -58,58 +58,74 @@
             <ng-template pTemplate="body" let-reservoir>
                 <tr>
                     <td rowspan="2">{{ reservoir.organization_name }}</td>
-                    <td [pEditableColumn]="reservoir.level" pEditableColumnField="current" class="text-nowrap">
-                        <p-cellEditor>
-                            <ng-template pTemplate="input">
-                                <input pInputText type="number" [(ngModel)]="reservoir.level.current"
-                                       (focus)="onInputFocus($event, reservoir.level, 'current')" />
-                            </ng-template>
-                            <ng-template pTemplate="output">
-                                {{ reservoir.level.current | number: '1.0-2' }}
-                                <i class="pi pi-pen-to-square ml-2 text-gray-400 text-xs"></i>
-                            </ng-template>
-                        </p-cellEditor>
-                    </td>
-                    <td [pEditableColumn]="reservoir.volume" pEditableColumnField="current" class="text-nowrap">
-                        <p-cellEditor>
-                            <ng-template pTemplate="input">
-                                <input pInputText type="number" [(ngModel)]="reservoir.volume.current"
-                                       (focus)="onInputFocus($event, reservoir.volume, 'current')" />
-                            </ng-template>
-                            <ng-template pTemplate="output">
-                                {{ reservoir.volume.current | number: '1.0-2' }}
-                                <i class="pi pi-pen-to-square ml-2 text-gray-400 text-xs"></i>
-                            </ng-template>
-                        </p-cellEditor>
-                    </td>
+                    @if (authService.isSc()) {
+                        <td [pEditableColumn]="reservoir.level" pEditableColumnField="current" class="text-nowrap">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="number" [(ngModel)]="reservoir.level.current"
+                                           (focus)="onInputFocus($event, reservoir.level, 'current')" />
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{ reservoir.level.current | number: '1.0-2' }}
+                                    <i class="pi pi-pen-to-square ml-2 text-gray-400 text-xs"></i>
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                    } @else {
+                        <td class="text-nowrap">{{ reservoir.level.current | number: '1.0-2' }}</td>
+                    }
+                    @if (authService.isSc()) {
+                        <td [pEditableColumn]="reservoir.volume" pEditableColumnField="current" class="text-nowrap">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="number" [(ngModel)]="reservoir.volume.current"
+                                           (focus)="onInputFocus($event, reservoir.volume, 'current')" />
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{ reservoir.volume.current | number: '1.0-2' }}
+                                    <i class="pi pi-pen-to-square ml-2 text-gray-400 text-xs"></i>
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                    } @else {
+                        <td class="text-nowrap">{{ reservoir.volume.current | number: '1.0-2' }}</td>
+                    }
                     <td>{{ reservoir.volume.year_ago !== null ? (reservoir.volume.year_ago | number: '1.0-2') : 'N/A' }}</td>
                     <td>{{ reservoir.volume.two_years_ago !== null ? (reservoir.volume.two_years_ago | number: '1.0-2') : 'N/A' }}</td>
-                    <td [pEditableColumn]="reservoir.income" pEditableColumnField="current" class="text-nowrap">
-                        <p-cellEditor>
-                            <ng-template pTemplate="input">
-                                <input pInputText type="number" [(ngModel)]="reservoir.income.current"
-                                       (focus)="onInputFocus($event, reservoir.income, 'current')" />
-                            </ng-template>
-                            <ng-template pTemplate="output">
-                                {{ reservoir.income.current | number: '1.0-2' }}
-                                <i class="pi pi-pen-to-square ml-2 text-gray-400 text-xs"></i>
-                            </ng-template>
-                        </p-cellEditor>
-                    </td>
+                    @if (authService.isSc()) {
+                        <td [pEditableColumn]="reservoir.income" pEditableColumnField="current" class="text-nowrap">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="number" [(ngModel)]="reservoir.income.current"
+                                           (focus)="onInputFocus($event, reservoir.income, 'current')" />
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{ reservoir.income.current | number: '1.0-2' }}
+                                    <i class="pi pi-pen-to-square ml-2 text-gray-400 text-xs"></i>
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                    } @else {
+                        <td class="text-nowrap">{{ reservoir.income.current | number: '1.0-2' }}</td>
+                    }
                     <td>{{ reservoir.income.year_ago !== null ? (reservoir.income.year_ago | number: '1.0-2') : 'N/A' }}</td>
                     <td>{{ reservoir.income.two_years_ago !== null ? (reservoir.income.two_years_ago | number: '1.0-2') : 'N/A' }}</td>
-                    <td [pEditableColumn]="reservoir.release" pEditableColumnField="current" class="text-nowrap">
-                        <p-cellEditor>
-                            <ng-template pTemplate="input">
-                                <input pInputText type="number" [(ngModel)]="reservoir.release.current"
-                                       (focus)="onInputFocus($event, reservoir.release, 'current')" />
-                            </ng-template>
-                            <ng-template pTemplate="output">
-                                {{ reservoir.release.current | number: '1.0-2' }}
-                                <i class="pi pi-pen-to-square ml-2 text-gray-400 text-xs"></i>
-                            </ng-template>
-                        </p-cellEditor>
-                    </td>
+                    @if (authService.isSc()) {
+                        <td [pEditableColumn]="reservoir.release" pEditableColumnField="current" class="text-nowrap">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="number" [(ngModel)]="reservoir.release.current"
+                                           (focus)="onInputFocus($event, reservoir.release, 'current')" />
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{ reservoir.release.current | number: '1.0-2' }}
+                                    <i class="pi pi-pen-to-square ml-2 text-gray-400 text-xs"></i>
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                    } @else {
+                        <td class="text-nowrap">{{ reservoir.release.current | number: '1.0-2' }}</td>
+                    }
                     <td>{{ reservoir.release.year_ago !== null ? (reservoir.release.year_ago | number: '1.0-2') : 'N/A' }}</td>
                     <td>{{ reservoir.release.two_years_ago !== null ? (reservoir.release.two_years_ago | number: '1.0-2') : 'N/A' }}</td>
                     <td>{{ reservoir.incoming_volume | number: '1.0-2' }}</td>
@@ -138,7 +154,7 @@
             </ng-template>
         </p-table>
 
-        @if (hasChanges()) {
+        @if (authService.isSc() && hasChanges()) {
             <div class="flex justify-end gap-2 mt-3">
                 <button pButton type="button" class="p-button-secondary"
                         (click)="onReset()">

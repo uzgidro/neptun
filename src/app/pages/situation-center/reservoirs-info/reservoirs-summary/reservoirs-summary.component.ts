@@ -9,6 +9,7 @@ import { ReservoirSummaryService } from '@/core/services/reservoir-summary.servi
 import { ReservoirSummaryRequest, ReservoirSummaryResponse } from '@/core/interfaces/reservoir-summary';
 import localeRu from '@angular/common/locales/ru';
 import { MessageService } from 'primeng/api';
+import { AuthService } from '@/core/services/auth.service';
 
 registerLocaleData(localeRu);
 
@@ -22,6 +23,7 @@ export class ReservoirsSummaryComponent implements OnInit {
     private fb = inject(FormBuilder);
     private reservoirService = inject(ReservoirSummaryService);
     private messageService = inject(MessageService);
+    authService = inject(AuthService);
 
     form: FormGroup = this.fb.group({
         date: [new Date()]
