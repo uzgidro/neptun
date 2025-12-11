@@ -1,3 +1,41 @@
 ::ng-deep .custom-tablist p-tab:not(:last-child) {
     margin-right: 1rem;
 }
+
+// Remove card scrolling
+:host ::ng-deep .card {
+    overflow: hidden;
+    height: calc(100vh - 200px);
+    display: flex;
+    flex-direction: column;
+}
+
+// Adobe PDF Viewer container - Full Height
+.adobe-pdf-viewer {
+    width: 100%;
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    background-color: var(--surface-50);
+
+    // Full window mode styling
+    ::ng-deep {
+        // Ensure the viewer takes full available space
+        .adobe-dc-view-sdk-container {
+            width: 100% !important;
+            height: 100% !important;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+        // Customize Adobe viewer UI to match app theme
+        .adobe-dc-view-sdk-container iframe {
+            border: none;
+            width: 100% !important;
+            height: 100% !important;
+        }
+    }
+}

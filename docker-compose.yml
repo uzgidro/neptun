@@ -1,0 +1,21 @@
+services:
+    neptun:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: neptun-app
+        ports:
+            - "4200:80"
+        volumes:
+            # Mount config directory from host to container
+            # Place your config.yaml in ./config/ directory on host
+            - ./config:/config:ro
+        restart: unless-stopped
+        environment:
+            - NODE_ENV=production
+        healthcheck:
+            test: [ "CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/" ]
+            interval: 30s
+            timeout: 10s
+            retries: 3
+            start_period: 40s

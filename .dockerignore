@@ -1,0 +1,49 @@
+# Dependencies
+node_modules
+npm-debug.log
+yarn-error.log
+package-lock.json
+
+# Build output
+dist
+tmp
+out-tsc
+
+# IDEs
+.idea
+.vscode
+*.swp
+*.swo
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Testing
+coverage
+.angular/cache
+*.spec.ts
+
+# Config (will be mounted at runtime)
+config
+config.yaml
+
+# Documentation
+*.md
+!README.md
+
+# Misc
+.DS_Store
+Thumbs.db
+*.pdf
+comands
+
+# Docker files (not needed in image)
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# CI/CD
+.github
+.gitlab-ci.yml

@@ -1,20 +1,12 @@
+import { Contact } from '@/core/interfaces/contact';
+
 export interface Users {
     id: number;
     name: string;
     login: string;
     roles: string[];
     role_ids: number[];
-    contact?: {
-        name: string;
-        email?: string | null;
-        phone?: string | null;
-        ip_phone?: string | null;
-        dob?: string | null;
-        external_organization_name?: string | null;
-        organization_id?: number | null;
-        department_id?: number | null;
-        position_id?: number | null;
-    };
+    contact?: Contact;
 }
 
 export interface UserShortInfo {
