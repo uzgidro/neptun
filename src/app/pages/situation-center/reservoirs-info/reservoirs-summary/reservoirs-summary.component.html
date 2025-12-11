@@ -2,20 +2,14 @@
     <h3 class="text-center mb-3">Сводка по водохранилищам</h3>
 
     <form [formGroup]="form" class="mb-4">
-        <div class="flex justify-between items-end">
-            <div class="w-full md:w-1/4">
-                <app-date-picker
-                    label="Выберите дату"
-                    formControlName="date"
-                    [showTime]="false"
-                    [submitted]="submitted"
-                    errorMessage="Укажите дату">
-                </app-date-picker>
-            </div>
-            <button pButton type="button" class="p-button-outlined" (click)="exportToPDF()">
-                <span pButtonLabel>Экспорт в PDF</span>
-                <i pButtonIcon class="pi pi-file-pdf"></i>
-            </button>
+        <div class="w-full md:w-1/4">
+            <app-date-picker
+                label="Выберите дату"
+                formControlName="date"
+                [showTime]="false"
+                [submitted]="submitted"
+                errorMessage="Укажите дату">
+            </app-date-picker>
         </div>
     </form>
 
@@ -120,8 +114,8 @@
                     <td>N/A</td>
                 </tr>
                 <tr class="italic">
-                    <td>{{ (reservoir.level.current - reservoir.level.prev) | number: '1.0-2' }}</td>
-                    <td>{{ (reservoir.volume.current - reservoir.volume.prev) | number: '1.0-2' }}</td>
+                    <td>{{ reservoir.organization_id != null ? ((reservoir.level.current - reservoir.level.prev) | number: '1.0-2') : '' }}</td>
+                    <td>{{ reservoir.organization_id != null ? ((reservoir.volume.current - reservoir.volume.prev) | number: '1.0-2') : '' }}</td>
                     <td>{{ reservoir.volume.year_ago !== null ? ((reservoir.volume.current - reservoir.volume.year_ago) | number: '1.0-2') : 'N/A' }}</td>
                     <td>{{ reservoir.volume.two_years_ago !== null ? ((reservoir.volume.current - reservoir.volume.two_years_ago) | number: '1.0-2') : 'N/A' }}</td>
                     <td>{{ (reservoir.income.current - reservoir.income.prev) | number: '1.0-2' }}</td>
