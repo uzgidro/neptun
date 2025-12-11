@@ -38,7 +38,8 @@ export class ViewSDKService {
 
         this.adobeDCView = new window.AdobeDC!.View({
             clientId: clientId,
-            divId: divId
+            divId: divId,
+            locale: 'ru-RU'
         });
 
         return Promise.resolve();
