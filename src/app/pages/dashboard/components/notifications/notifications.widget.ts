@@ -1,5 +1,5 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
-import { ButtonDirective, ButtonIcon, ButtonModule } from 'primeng/button';
+import { ButtonDirective, ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
 import { DatePipe, NgClass } from '@angular/common';
 import { PastEventsService } from '@/core/services/past-events.service';
@@ -12,7 +12,7 @@ import { FormsModule } from '@angular/forms';
 @Component({
     standalone: true,
     selector: 'app-notifications-widget',
-    imports: [ButtonModule, MenuModule, DatePipe, NgClass, ButtonDirective, ButtonIcon, DialogComponent, DatePickerComponent, FormsModule],
+    imports: [ButtonModule, MenuModule, DatePipe, NgClass, ButtonDirective, DialogComponent, DatePickerComponent, FormsModule],
     templateUrl: './notifications.widget.html'
 })
 export class NotificationsWidget implements OnInit {

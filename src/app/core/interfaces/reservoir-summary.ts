@@ -28,3 +28,12 @@ export interface ReservoirSummaryResponse {
     incoming_volume: number;
     incoming_volume_prev_year: number;
 }
+
+export interface ReservoirSummaryRequest {
+    organization_id: number;
+    date: string;
+    income: number;
+    volume: number;
+    release: number;
+    level: number;
+}
