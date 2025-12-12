@@ -2,14 +2,21 @@
     <h3 class="text-center mb-3">Сводка по водохранилищам</h3>
 
     <form [formGroup]="form" class="mb-4">
-        <div class="w-full md:w-1/4">
-            <app-date-picker
-                label="Выберите дату"
-                formControlName="date"
-                [showTime]="false"
-                [submitted]="submitted"
-                errorMessage="Укажите дату">
-            </app-date-picker>
+        <div class="flex justify-between items-end gap-4">
+            <div class="w-full md:w-1/4">
+                <app-date-picker
+                    label="Выберите дату"
+                    formControlName="date"
+                    [showTime]="false"
+                    [submitted]="submitted"
+                    errorMessage="Укажите дату">
+                </app-date-picker>
+            </div>
+            <button pButton type="button" class="p-button-success" (click)="exportToExcel()"
+                    [disabled]="!data || data.length === 0">
+                <span pButtonLabel>Экспорт в Excel</span>
+                <i pButtonIcon class="pi pi-file-excel"></i>
+            </button>
         </div>
     </form>
 
@@ -58,21 +65,25 @@
             <ng-template pTemplate="body" let-reservoir>
                 <tr>
                     <td rowspan="2">{{ reservoir.organization_name }}</td>
-                    @if (authService.isSc()) {
-                        <td [pEditableColumn]="reservoir.level" pEditableColumnField="current" class="text-nowrap">
-                            <p-cellEditor>
-                                <ng-template pTemplate="input">
-                                    <input pInputText type="number" [(ngModel)]="reservoir.level.current"
-                                           (focus)="onInputFocus($event, reservoir.level, 'current')" />
-                                </ng-template>
-                                <ng-template pTemplate="output">
-                                    {{ reservoir.level.current | number: '1.0-2' }}
-                                    <i class="pi pi-pen-to-square ml-2 text-gray-400 text-xs"></i>
-                                </ng-template>
-                            </p-cellEditor>
-                        </td>
+                    @if (reservoir.organization_id !== null) {
+                        @if (authService.isSc()) {
+                            <td [pEditableColumn]="reservoir.level" pEditableColumnField="current" class="text-nowrap">
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input pInputText type="number" [(ngModel)]="reservoir.level.current"
+                                               (focus)="onInputFocus($event, reservoir.level, 'current')" />
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{ reservoir.level.current | number: '1.0-2' }}
+                                        <i class="pi pi-pen-to-square ml-2 text-gray-400 text-xs"></i>
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                        } @else {
+                            <td class="text-nowrap">{{ reservoir.level.current | number: '1.0-2' }}</td>
+                        }
                     } @else {
-                        <td class="text-nowrap">{{ reservoir.level.current | number: '1.0-2' }}</td>
+                        <td></td>
                     }
                     @if (authService.isSc()) {
                         <td [pEditableColumn]="reservoir.volume" pEditableColumnField="current" class="text-nowrap">
@@ -135,7 +146,7 @@
                 </tr>
                 <tr class="italic">
                     <td>{{ reservoir.organization_id != null ? ((reservoir.level.current - reservoir.level.prev) | number: '1.0-2') : '' }}</td>
-                    <td>{{ reservoir.organization_id != null ? ((reservoir.volume.current - reservoir.volume.prev) | number: '1.0-2') : '' }}</td>
+                    <td>{{ ((reservoir.volume.current - reservoir.volume.prev) | number: '1.0-2') }}</td>
                     <td>{{ reservoir.volume.year_ago !== null ? ((reservoir.volume.current - reservoir.volume.year_ago) | number: '1.0-2') : 'N/A' }}</td>
                     <td>{{ reservoir.volume.two_years_ago !== null ? ((reservoir.volume.current - reservoir.volume.two_years_ago) | number: '1.0-2') : 'N/A' }}</td>
                     <td>{{ (reservoir.income.current - reservoir.income.prev) | number: '1.0-2' }}</td>
