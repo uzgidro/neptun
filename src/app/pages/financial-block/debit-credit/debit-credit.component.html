@@ -1,0 +1,21 @@
+<div class="card">
+    <h3 class="text-center mb-4">Дебит и Кредит</h3>
+    <p-table [value]="transactions" [tableStyle]="{'min-width': '50rem'}">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Дата</th>
+                <th>Описание</th>
+                <th>Дебит</th>
+                <th>Кредит</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-transaction>
+            <tr>
+                <td>{{ transaction.date | date: 'dd.MM.yyyy' }}</td>
+                <td>{{ transaction.description }}</td>
+                <td>{{ transaction.debit | number }}</td>
+                <td>{{ transaction.credit | number }}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>

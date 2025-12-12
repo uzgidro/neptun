@@ -19,7 +19,7 @@ import { ConstructionComponent } from '@/pages/situation-center/construction/con
 import { ReceptionComponent } from '@/pages/planning/reception/reception.component';
 import { ReservoirsSummaryComponent } from '@/pages/situation-center/reservoirs-info/reservoirs-summary/reservoirs-summary.component';
 import { InvestmentComponent } from '@/pages/financial-block/investment/investment.component';
-
+import {DebitCreditComponent} from '@/pages/financial-block/debit-credit/debit-credit.component';
 
 
 export const appRoutes: Routes = [
@@ -50,9 +50,10 @@ export const appRoutes: Routes = [
             { path: 'reservoir-summary', component: ReservoirsSummaryComponent, canActivate: [raisGuard] },
             { path: 'shutdowns', component: ShutdownComponent, canActivate: [raisGuard] },
             { path: 'investment', component: InvestmentComponent, canActivate: [raisGuard] },
+            { path: 'debit-credit', component: DebitCreditComponent, canActivate: [adminGuard] },
         ]
     },
     { path: 'notfound', component: Notfound },
     { path: 'auth', loadChildren: () => import('./app/pages/auth/auth.routes') },
-    { path: '**', redirectTo: '/notfound' }
+    { path: '**', redirectTo: '/notfound' },
 ];
