@@ -140,8 +140,45 @@
                     <td>{{ reservoir.release.two_years_ago !== null ? (reservoir.release.two_years_ago | number: '1.0-2') : 'N/A' }}</td>
                     <td>{{ reservoir.incoming_volume | number: '1.0-2' }}</td>
                     <td>{{ reservoir.incoming_volume_prev_year | number: '1.0-2' }}</td>
-                    <td>{{ reservoir.organization_id !== null ? 'Н/Д' : '' }}</td>
-                    <td>{{ reservoir.organization_id !== null ? 'Н/Д' : '' }}</td>
+                    @if (reservoir.organization_id !== null) {
+                        @if (authService.isSc()) {
+                            <td [pEditableColumn]="reservoir.modsnow" pEditableColumnField="current"
+                                class="text-nowrap">
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input pInputText type="number" [(ngModel)]="reservoir.modsnow.current"
+                                               (focus)="onInputFocus($event, reservoir.modsnow, 'current')" />
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{ reservoir.modsnow.current | number: '1.0-0' }}
+                                        <i class="pi pi-pen-to-square ml-2 text-gray-400 text-xs"></i>
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                        } @else {
+                            <td class="text-nowrap">{{ reservoir.modsnow.current | number: '1.0-0' }}</td>
+                        }
+                        @if (authService.isSc()) {
+                            <td [pEditableColumn]="reservoir.modsnow" pEditableColumnField="year_ago"
+                                class="text-nowrap">
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input pInputText type="number" [(ngModel)]="reservoir.modsnow.year_ago"
+                                               (focus)="onInputFocus($event, reservoir.modsnow, 'year_ago')" />
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{ reservoir.modsnow.year_ago | number: '1.0-0' }}
+                                        <i class="pi pi-pen-to-square ml-2 text-gray-400 text-xs"></i>
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                        } @else {
+                            <td class="text-nowrap">{{ reservoir.modsnow.year_ago | number: '1.0-0' }}</td>
+                        }
+                    } @else {
+                        <td></td>
+                        <td></td>
+                    }
                 </tr>
                 <tr class="italic ">
                     <td class="bg-surface-300 dark:bg-surface-800 text-red-500">{{ reservoir.organization_id != null ? ((reservoir.level.current - reservoir.level.prev) | number: '1.0-2') : '' }}</td>
@@ -171,7 +208,7 @@
                         %
                     </td>
                     <td colspan="2"
-                        class="bg-surface-300 dark:bg-surface-800 text-red-500">{{ reservoir.organization_id !== null ? 'Н/Д' : '' }}
+                        class="bg-surface-300 dark:bg-surface-800 text-red-500">{{ reservoir.organization_id !== null ? (reservoir.modsnow.current - reservoir.modsnow.year_ago | number:'1.0-0') : '' }}
                     </td>
                 </tr>
             </ng-template>
