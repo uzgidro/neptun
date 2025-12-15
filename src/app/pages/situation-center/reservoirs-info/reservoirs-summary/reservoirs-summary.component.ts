@@ -85,7 +85,9 @@ export class ReservoirsSummaryComponent implements OnInit {
                     income: reservoir.income.current,
                     level: reservoir.level.current,
                     volume: reservoir.volume.current,
-                    release: reservoir.release.current
+                    release: reservoir.release.current,
+                    modsnow_current: reservoir.modsnow.current,
+                    modsnow_year_ago: reservoir.modsnow.year_ago
                 };
             });
 
@@ -149,8 +151,8 @@ export class ReservoirsSummaryComponent implements OnInit {
                 reservoir.release.two_years_ago !== null ? this.formatNumber(reservoir.release.two_years_ago) : 'N/A',
                 this.formatNumber(reservoir.incoming_volume),
                 this.formatNumber(reservoir.incoming_volume_prev_year),
-                reservoir.organization_id !== null ? 'Н/Д' : '',
-                reservoir.organization_id !== null ? 'Н/Д' : ''
+                reservoir.organization_id !== null ? this.formatNumber(reservoir.modsnow.current, '1.0-0') : '',
+                reservoir.organization_id !== null ? this.formatNumber(reservoir.modsnow.year_ago, '1.0-0') : ''
             ];
             dataRows.push(mainRow);
 
@@ -169,7 +171,7 @@ export class ReservoirsSummaryComponent implements OnInit {
                 reservoir.release.two_years_ago !== null ? this.formatNumber(reservoir.release.current - reservoir.release.two_years_ago) : 'N/A',
                 this.formatNumber(reservoir.incoming_volume - reservoir.incoming_volume_prev_year),
                 this.formatNumber((reservoir.incoming_volume / reservoir.incoming_volume_prev_year) * 100, '1.0-0') + '%',
-                reservoir.organization_id !== null ? 'Н/Д' : '',
+                reservoir.organization_id !== null ? this.formatNumber(reservoir.modsnow.current - reservoir.modsnow.year_ago, '1.0-0') : '',
                 '' // This cell will be hidden by the colspan merge
             ];
             dataRows.push(diffRow);
