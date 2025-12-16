@@ -1,0 +1,80 @@
+.card {
+    padding: 1.5rem;
+}
+
+/* ИТОГИ */
+.summary {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.summary-item {
+    flex: 1;
+    padding: 1rem;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.summary-item strong {
+    font-size: 18px;
+}
+
+.summary-item.debit {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.summary-item.credit {
+    background: #fdecea;
+    color: #d32f2f;
+}
+
+.summary-item.balance {
+    background: #eef2ff;
+    color: #1e40af;
+}
+
+/* ГРАФИК */
+.chart-wrapper {
+    max-width: 400px;
+    margin: 0 auto 1.5rem auto;
+}
+
+/* ФИЛЬТР */
+.filters {
+    width: 260px;
+    margin-bottom: 1rem;
+}
+
+/* ТАБЛИЦА */
+.operation-tag {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.credit {
+    background-color: #fdecea;
+    color: #d32f2f;
+}
+
+.debit {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+.amount {
+    font-weight: 600;
+}
+
+.credit-amount {
+    color: #d32f2f;
+}
+
+.debit-amount {
+    color: #2e7d32;
+}
