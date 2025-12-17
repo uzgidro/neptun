@@ -69,7 +69,7 @@
                 </tr>
             </ng-template>
 
-            <ng-template pTemplate="body" let-reservoir>
+            <ng-template pTemplate="body" let-reservoir let-index="rowIndex">
                 <tr>
                     <td rowspan="2">{{ reservoir.organization_name }}</td>
                     @if (reservoir.organization_id !== null) {
@@ -148,7 +148,7 @@
                     <td>{{ reservoir.release.two_years_ago !== null ? (reservoir.release.two_years_ago | number: '1.0-2') : 'N/A' }}</td>
                     <td>{{ reservoir.incoming_volume | number: '1.0-2' }}</td>
                     <td>{{ reservoir.incoming_volume_prev_year | number: '1.0-2' }}</td>
-                    @if (reservoir.organization_id !== null) {
+                    @if (reservoir.organization_id !== null && index !== 2) {
                         @if (authService.isSc()) {
                             <td [pEditableColumn]="reservoir.modsnow" pEditableColumnField="current"
                                 class="text-nowrap">
@@ -216,7 +216,7 @@
                         %
                     </td>
                     <td colspan="2"
-                        class="bg-surface-300 dark:bg-surface-800 text-red-500">{{ reservoir.organization_id !== null ? (reservoir.modsnow.current - reservoir.modsnow.year_ago | number:'1.0-0') : '' }}
+                        class="bg-surface-300 dark:bg-surface-800 text-red-500">{{ reservoir.organization_id !== null && index !== 2 ? (reservoir.modsnow.current - reservoir.modsnow.year_ago | number:'1.0-0') : '' }}
                     </td>
                 </tr>
             </ng-template>
