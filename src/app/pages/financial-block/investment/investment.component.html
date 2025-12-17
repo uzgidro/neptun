@@ -1,102 +1,63 @@
-<div class="card">
-    <h3 class="text-center mb-3">Инвестиционные проекты</h3>
+<div class="dashboard">
 
-    <!-- ИТОГИ -->
-    <div class="summary">
-        <div class="summary-item debit">
-            <span>Дебит</span>
-            <strong>+ {{ totalDebit | number }}</strong>
-        </div>
-
-        <div class="summary-item credit">
-            <span>Кредит</span>
-            <strong>- {{ totalCredit | number }}</strong>
-        </div>
-
-        <div class="summary-item balance">
-            <span>Баланс</span>
-            <strong>{{ balance | number }}</strong>
+    <!-- HEADER -->
+    <div class="dashboard-header">
+        <h2>Инвестиционный дашборд</h2>
+        <div class="dashboard-filters">
+            <app-select [(ngModel)]="selectedOperation" [items]="operationOptions" (ngModelChange)="applyFilter()" label="Тип операции"></app-select>
         </div>
     </div>
 
-    <!-- ГРАФИК -->
-    <div class="chart-wrapper">
-        <p-chart type="doughnut" [data]="chartData" [options]="chartOptions"></p-chart>
+    <!-- KPI -->
+    <div class="kpi-row">
+        <div class="kpi-card debit"><span>Дебит</span><strong>+ {{ totalDebit | number }}</strong></div>
+        <div class="kpi-card credit"><span>Кредит</span><strong>- {{ totalCredit | number }}</strong></div>
+        <div class="kpi-card balance"><span>Баланс</span><strong>{{ balance | number }}</strong></div>
+        <div class="kpi-card neutral"><span>Проектов</span><strong>{{ filteredInvestments.length }}</strong></div>
     </div>
 
-    <!-- ФИЛЬТР -->
-    <div class="filters">
-        <app-select
-            [(ngModel)]="selectedOperation"
-            [items]="operationOptions"
-            (ngModelChange)="applyFilter()"
-            label="Тип операции"
-        >
-        </app-select>
+    <!-- CHARTS -->
+    <div class="charts-row">
+        <div class="chart-card">
+            <h4>Распределение</h4>
+            <p-chart type="doughnut" [data]="chartData" [options]="chartOptions"></p-chart>
+        </div>
+        <div class="chart-card">
+            <h4>Динамика по датам</h4>
+            <p-chart type="line" [data]="lineChartData" [options]="lineChartOptions"></p-chart>
+        </div>
     </div>
 
-    <!-- ТАБЛИЦА -->
-    <p-table
-        [value]="filteredInvestments"
-        sortMode="multiple"
-        responsiveLayout="scroll"
-        [tableStyle]="{ 'min-width': '70rem' }"
-    >
-        <ng-template pTemplate="header">
-            <tr>
-                <th pSortableColumn="col1">
-                    Проект <p-sortIcon field="col1"></p-sortIcon>
-                </th>
-                <th>Статус</th>
-                <th>Тип</th>
-                <th pSortableColumn="col3">
-                    Сумма <p-sortIcon field="col3"></p-sortIcon>
-                </th>
-                <th>Приоритет</th>
-                <th pSortableColumn="col5">
-                    Дата <p-sortIcon field="col5"></p-sortIcon>
-                </th>
-                <th>Состояние ТЗ</th>
-                <th>Комментарий</th>
-            </tr>
-        </ng-template>
+    <!-- TABLE -->
+    <div class="table-card">
+        <p-table [value]="filteredInvestments" sortMode="multiple" responsiveLayout="scroll" [tableStyle]="{ 'min-width': '70rem' }">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Проект</th>
+                    <th>Статус</th>
+                    <th>Тип</th>
+                    <th>Сумма</th>
+                    <th>Приоритет</th>
+                    <th>Дата</th>
+                    <th>Состояние ТЗ</th>
+                    <th>Комментарий</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-investment>
+                <tr>
+                    <td>{{ investment.col1 }}</td>
+                    <td>{{ investment.col2 }}</td>
+                    <td><span class="operation-tag" [ngClass]="investment.operationType === 'Кредит' ? 'credit' : 'debit'">{{ investment.operationType }}</span></td>
+                    <td class="amount" [ngClass]="investment.operationType === 'Кредит' ? 'credit-amount' : 'debit-amount'">
+                        {{ investment.operationType === 'Кредит' ? '-' : '+' }} {{ investment.col3 | number }}
+                    </td>
+                    <td>{{ investment.col4 }}</td>
+                    <td>{{ investment.col5 | date: 'dd.MM.yyyy' }}</td>
+                    <td><app-select [(ngModel)]="investment.status" [items]="statusOptions" label=""></app-select></td>
+                    <td>{{ investment.col6 }}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
 
-        <ng-template pTemplate="body" let-investment>
-            <tr>
-                <td>{{ investment.col1 }}</td>
-                <td>{{ investment.col2 }}</td>
-
-                <td>
-                    <span
-                        class="operation-tag"
-                        [ngClass]="investment.operationType === 'Кредит' ? 'credit' : 'debit'"
-                    >
-                        {{ investment.operationType }}
-                    </span>
-                </td>
-
-                <td
-                    class="amount"
-                    [ngClass]="investment.operationType === 'Кредит' ? 'credit-amount' : 'debit-amount'"
-                >
-                    {{ investment.operationType === 'Кредит' ? '-' : '+' }}
-                    {{ investment.col3 | number }}
-                </td>
-
-                <td>{{ investment.col4 }}</td>
-                <td>{{ investment.col5 | date: 'dd.MM.yyyy' }}</td>
-
-                <td>
-                    <app-select
-                        [(ngModel)]="investment.status"
-                        [items]="statusOptions"
-                        label=""
-                    >
-                    </app-select>
-                </td>
-
-                <td>{{ investment.col6 }}</td>
-            </tr>
-        </ng-template>
-    </p-table>
 </div>

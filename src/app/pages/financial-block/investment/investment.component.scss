@@ -1,80 +1,54 @@
-.card {
+.dashboard {
     padding: 1.5rem;
-}
 
-/* ИТОГИ */
-.summary {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-}
+    .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        h2 { margin: 0; }
+    }
 
-.summary-item {
-    flex: 1;
-    padding: 1rem;
-    border-radius: 12px;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
+    .dashboard-filters { width: 260px; }
 
-.summary-item strong {
-    font-size: 18px;
-}
+    .kpi-row {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+    }
 
-.summary-item.debit {
-    background: #e8f5e9;
-    color: #2e7d32;
-}
+    .kpi-card {
+        flex: 1;
+        min-width: 120px;
+        padding: 1rem;
+        border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        strong { font-size: 18px; }
+    }
 
-.summary-item.credit {
-    background: #fdecea;
-    color: #d32f2f;
-}
+    .debit { background: #e8f5e9; color: #2e7d32; }
+    .credit { background: #fdecea; color: #d32f2f; }
+    .balance { background: #eef2ff; color: #1e40af; }
+    .neutral { background: #f5f5f5; color: #333; }
 
-.summary-item.balance {
-    background: #eef2ff;
-    color: #1e40af;
-}
+    .charts-row {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-bottom: 1.5rem;
+    }
 
-/* ГРАФИК */
-.chart-wrapper {
-    max-width: 400px;
-    margin: 0 auto 1.5rem auto;
-}
+    .chart-card { flex: 1; min-width: 300px; }
 
-/* ФИЛЬТР */
-.filters {
-    width: 260px;
-    margin-bottom: 1rem;
-}
+    .table-card { margin-top: 1.5rem; }
 
-/* ТАБЛИЦА */
-.operation-tag {
-    padding: 4px 10px;
-    border-radius: 12px;
-    font-weight: 600;
-    font-size: 13px;
-}
-
-.credit {
-    background-color: #fdecea;
-    color: #d32f2f;
-}
-
-.debit {
-    background-color: #e8f5e9;
-    color: #2e7d32;
-}
-
-.amount {
-    font-weight: 600;
-}
-
-.credit-amount {
-    color: #d32f2f;
-}
-
-.debit-amount {
-    color: #2e7d32;
+    .operation-tag { padding: 4px 10px; border-radius: 12px; font-weight: 600; font-size: 13px; }
+    .credit { background-color: #fdecea; color: #d32f2f; }
+    .debit { background-color: #e8f5e9; color: #2e7d32; }
+    .amount { font-weight: 600; }
+    .credit-amount { color: #d32f2f; }
+    .debit-amount { color: #2e7d32; }
 }
