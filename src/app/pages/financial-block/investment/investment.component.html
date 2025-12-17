@@ -4,16 +4,33 @@
     <div class="dashboard-header">
         <h2>Инвестиционный дашборд</h2>
         <div class="dashboard-filters">
-            <app-select [(ngModel)]="selectedOperation" [items]="operationOptions" (ngModelChange)="applyFilter()" label="Тип операции"></app-select>
+            <app-select
+                [(ngModel)]="selectedOperation"
+                [items]="operationOptions"
+                (ngModelChange)="applyFilter()"
+                label="Тип операции">
+            </app-select>
         </div>
     </div>
 
     <!-- KPI -->
     <div class="kpi-row">
-        <div class="kpi-card debit"><span>Дебит</span><strong>+ {{ totalDebit | number }}</strong></div>
-        <div class="kpi-card credit"><span>Кредит</span><strong>- {{ totalCredit | number }}</strong></div>
-        <div class="kpi-card balance"><span>Баланс</span><strong>{{ balance | number }}</strong></div>
-        <div class="kpi-card neutral"><span>Проектов</span><strong>{{ filteredInvestments.length }}</strong></div>
+        <div class="kpi-card debit">
+            <span>Дебит</span>
+            <strong>+ {{ totalDebit | number }}</strong>
+        </div>
+        <div class="kpi-card credit">
+            <span>Кредит</span>
+            <strong>- {{ totalCredit | number }}</strong>
+        </div>
+        <div class="kpi-card balance">
+            <span>Баланс</span>
+            <strong>{{ balance | number }}</strong>
+        </div>
+        <div class="kpi-card neutral">
+            <span>Проектов</span>
+            <strong>{{ filteredInvestments.length }}</strong>
+        </div>
     </div>
 
     <!-- CHARTS -->
@@ -47,13 +64,19 @@
                 <tr>
                     <td>{{ investment.col1 }}</td>
                     <td>{{ investment.col2 }}</td>
-                    <td><span class="operation-tag" [ngClass]="investment.operationType === 'Кредит' ? 'credit' : 'debit'">{{ investment.operationType }}</span></td>
+                    <td>
+                        <span class="operation-tag" [ngClass]="investment.operationType === 'Кредит' ? 'credit' : 'debit'">
+                            {{ investment.operationType }}
+                        </span>
+                    </td>
                     <td class="amount" [ngClass]="investment.operationType === 'Кредит' ? 'credit-amount' : 'debit-amount'">
                         {{ investment.operationType === 'Кредит' ? '-' : '+' }} {{ investment.col3 | number }}
                     </td>
                     <td>{{ investment.col4 }}</td>
                     <td>{{ investment.col5 | date: 'dd.MM.yyyy' }}</td>
-                    <td><app-select [(ngModel)]="investment.status" [items]="statusOptions" label=""></app-select></td>
+                    <td>
+                        <app-select [(ngModel)]="investment.status" [items]="statusOptions" label=""></app-select>
+                    </td>
                     <td>{{ investment.col6 }}</td>
                 </tr>
             </ng-template>

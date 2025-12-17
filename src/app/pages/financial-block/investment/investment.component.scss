@@ -38,10 +38,25 @@
         display: flex;
         gap: 1rem;
         flex-wrap: wrap;
-        margin-bottom: 1.5rem;
+        margin-bottom: 5rem;
     }
 
-    .chart-card { flex: 1; min-width: 300px; }
+    .chart-card {
+        flex: 1;
+        min-width: 300px;
+        display: flex;
+        flex-direction: column;
+        height: 400px; /* одинаковая высота для всех графиков */
+    }
+
+    .chart-card h4 {
+        margin-bottom: 0.5rem;
+    }
+
+    .chart-card p-chart {
+        flex: 1;   /* график растягивается на всю высоту контейнера */
+        height: 100%;
+    }
 
     .table-card { margin-top: 1.5rem; }
 
