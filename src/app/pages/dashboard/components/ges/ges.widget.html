@@ -71,8 +71,18 @@
                                 @if (contact.phone) {
                                     <a pButton outlined class="p-button-sm mb-4" [href]="'tel:' + contact.phone">
                                         <i pButtonIcon class="pi pi-phone"></i>
-                                        <span pButtonLabel>Позвонить</span>
+                                        <span pButtonLabel></span>
                                     </a>
+                                    <a pButton outlined class="p-button-sm mb-4" [href]="'https://t.me/' + contact.phone">
+                                        <i pButtonIcon class="pi pi-telegram"></i>
+                                        <span pButtonLabel></span>
+                                    </a>
+                                    <a pButton outlined class="p-button-sm mb-4" [href]="'https://wa.me/' + contact.phone">
+                                        <i pButtonIcon class="pi pi-whatsapp"></i>
+                                        <span pButtonLabel></span>
+                                    </a>
+
+
                                 }
                             </div>
                         </td>
