@@ -13,17 +13,22 @@
                 </app-date-picker>
             </div>
             <div class="flex gap-4">
-                <button pButton type="button" [loading]="isExcelLoading" class="p-button-success"
-                        (click)="download('excel')"
-                    [disabled]="!data || data.length === 0">
-                <span pButtonLabel>Экспорт в Excel</span>
-                <i pButtonIcon class="pi pi-file-excel"></i>
-            </button>
-                <button pButton type="button" [loading]="isPdfLoading" class="p-button-danger" (click)="download('pdf')"
-                        [disabled]="!data || data.length === 0">
-                    <span pButtonLabel>Экспорт в PDF</span>
-                    <i pButtonIcon class="pi pi-file-pdf"></i>
-                </button>
+                <p-button
+                    label="Экспорт в Excel"
+                    icon="pi pi-file-excel"
+                    severity="success"
+                    [loading]="isExcelLoading"
+                    [disabled]="!data || data.length === 0"
+                    (onClick)="download('excel')">
+                </p-button>
+                <p-button
+                    label="Экспорт в PDF"
+                    icon="pi pi-file-pdf"
+                    severity="danger"
+                    [loading]="isPdfLoading"
+                    [disabled]="!data || data.length === 0"
+                    (onClick)="download('pdf')">
+                </p-button>
             </div>
         </div>
     </form>
