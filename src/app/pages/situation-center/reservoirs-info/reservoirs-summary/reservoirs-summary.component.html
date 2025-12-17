@@ -2,7 +2,7 @@
     <h3 class="text-center mb-3">Сводка по водохранилищам</h3>
 
     <form [formGroup]="form" class="mb-4">
-        <div class="flex justify-between items-end gap-4">
+        <div class="flex justify-between items-baseline gap-4">
             <div class="w-full md:w-1/4">
                 <app-date-picker
                     label="Выберите дату"
@@ -12,11 +12,19 @@
                     errorMessage="Укажите дату">
                 </app-date-picker>
             </div>
-            <button pButton type="button" class="p-button-success" (click)="exportToExcel()"
+            <div class="flex gap-4">
+                <button pButton type="button" [loading]="isExcelLoading" class="p-button-success"
+                        (click)="download('excel')"
                     [disabled]="!data || data.length === 0">
                 <span pButtonLabel>Экспорт в Excel</span>
                 <i pButtonIcon class="pi pi-file-excel"></i>
             </button>
+                <button pButton type="button" [loading]="isPdfLoading" class="p-button-danger" (click)="download('pdf')"
+                        [disabled]="!data || data.length === 0">
+                    <span pButtonLabel>Экспорт в PDF</span>
+                    <i pButtonIcon class="pi pi-file-pdf"></i>
+                </button>
+            </div>
         </div>
     </form>
 
