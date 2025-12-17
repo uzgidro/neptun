@@ -69,20 +69,18 @@
                             <div class="pl-10">
                                 <p>{{ contact.name }}</p>
                                 @if (contact.phone) {
-                                    <a pButton outlined class="p-button-sm mb-4" [href]="'tel:' + contact.phone">
+                                    <a pButton outlined class=" mb-4 mr-2" [href]="'tel:' + contact.phone">
                                         <i pButtonIcon class="pi pi-phone"></i>
                                         <span pButtonLabel></span>
                                     </a>
-                                    <a pButton outlined class="p-button-sm mb-4" [href]="'https://t.me/' + contact.phone">
+                                    <a pButton outlined class=" mb-4 mr-2" [href]="'https://t.me/' + contact.phone">
                                         <i pButtonIcon class="pi pi-telegram"></i>
                                         <span pButtonLabel></span>
                                     </a>
-                                    <a pButton outlined class="p-button-sm mb-4" [href]="'https://wa.me/' + contact.phone">
-                                        <i pButtonIcon class="pi pi-whatsapp"></i>
+                                    <a pButton outlined class=" mb-4" [href]="'https://wa.me/' + contact.phone">
+                                        <i pButtonIcon class="pi pi-whatsapp" style="color: green"></i>
                                         <span pButtonLabel></span>
                                     </a>
-
-
                                 }
                             </div>
                         </td>
