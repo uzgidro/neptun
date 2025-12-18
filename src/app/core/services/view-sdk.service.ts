@@ -97,6 +97,35 @@ export class ViewSDKService {
         return this.adobeDCView.previewFile(previewConfig, defaultConfig);
     }
 
+    previewFileFromBlob(blob: Blob, fileName: string, viewerConfig: Partial<AdobeDC.ViewerConfig> = {}): Promise<void> {
+        if (!this.adobeDCView) {
+            return Promise.reject('Adobe DC View not initialized. Call previewFile first.');
+        }
+
+        const defaultConfig: AdobeDC.ViewerConfig = {
+            defaultViewMode: this.configService.adobeDefaultViewMode,
+            embedMode: 'FULL_WINDOW',
+            showDownloadPDF: true,
+            showPrintPDF: true,
+            showLeftHandPanel: true,
+            dockPageControls: true,
+            ...viewerConfig
+        };
+
+        const previewConfig: AdobeDC.PreviewFileConfig = {
+            content: {
+                promise: Promise.resolve(blob.arrayBuffer())
+            },
+            metaData: {
+                fileName: fileName || 'document.pdf',
+                id: `${Date.now()}-${fileName}`
+            }
+        };
+
+        this.configService.log('info', 'Rendering PDF from Blob:', fileName);
+        return this.adobeDCView.previewFile(previewConfig, defaultConfig);
+    }
+
     registerEventsHandler(eventHandler: (event: any) => void): void {
         if (!this.adobeDCView) {
             return;
