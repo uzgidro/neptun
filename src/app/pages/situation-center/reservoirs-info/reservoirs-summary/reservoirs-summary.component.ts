@@ -129,6 +129,22 @@ export class ReservoirsSummaryComponent implements OnInit {
         }
     }
 
+    calculateIncome(reservoir: ReservoirSummaryResponse) {
+        // Calculate volume diff (current - previous)
+        const volDiff = reservoir.volume.current - reservoir.volume.prev;
+
+        // Calculate income using the formula: income = (vol_diff / 0.0864) + release
+        reservoir.income.current = volDiff / 0.0864 + reservoir.release.current;
+    }
+
+    onVolumeChange(reservoir: ReservoirSummaryResponse) {
+        this.calculateIncome(reservoir);
+    }
+
+    onReleaseChange(reservoir: ReservoirSummaryResponse) {
+        this.calculateIncome(reservoir);
+    }
+
     download(format: 'excel' | 'pdf') {
         // Устанавливаем статус загрузки
         if (format === 'excel') this.isExcelLoading = true;

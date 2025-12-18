@@ -96,9 +96,7 @@ export class MenuComponent implements OnInit {
                                     {
                                         label: 'Водохранилища PDF',
                                         role: ['rais', 'sc'],
-                                        routerLink: ['/viewer'],
-                                        queryParams: { type: 'reservoir' },
-                                        routerLinkActiveOptions: { queryParams: 'exact' }
+                                        routerLink: ['/reservoir-summary/pdf']
                                     }
                                     // {
                                     //     label: 'MODSNOW',
