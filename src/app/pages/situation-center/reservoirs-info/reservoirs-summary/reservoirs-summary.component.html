@@ -105,12 +105,13 @@
                     @if (index > 6) {
                         <td></td>
                     } @else {
-                        @if (authService.isSc()) {
+                        @if (authService.isSc() && index !== 6) {
                             <td [pEditableColumn]="reservoir.volume" pEditableColumnField="current" class="text-nowrap">
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
                                         <input pInputText type="number" [(ngModel)]="reservoir.volume.current"
-                                               (focus)="onInputFocus($event, reservoir.volume, 'current')" />
+                                               (focus)="onInputFocus($event, reservoir.volume, 'current')"
+                                               (ngModelChange)="onVolumeChange(reservoir)" />
                                     </ng-template>
                                     <ng-template pTemplate="output">
                                         {{ reservoir.volume.current | number: '1.0-2' }}
@@ -129,7 +130,7 @@
                         <td></td>
                         <td></td>
                     }
-                    @if (authService.isSc()) {
+                    @if (authService.isSc() && index > 6) {
                         <td [pEditableColumn]="reservoir.income" pEditableColumnField="current" class="text-nowrap">
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
@@ -152,12 +153,13 @@
                         <td></td>
                         <td></td>
                     }
-                    @if (authService.isSc()) {
+                    @if (authService.isSc() && index !== 6) {
                         <td [pEditableColumn]="reservoir.release" pEditableColumnField="current" class="text-nowrap">
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <input pInputText type="number" [(ngModel)]="reservoir.release.current"
-                                           (focus)="onInputFocus($event, reservoir.release, 'current')" />
+                                           (focus)="onInputFocus($event, reservoir.release, 'current')"
+                                           (ngModelChange)="onReleaseChange(reservoir)" />
                                 </ng-template>
                                 <ng-template pTemplate="output">
                                     {{ reservoir.release.current | number: '1.0-2' }}
