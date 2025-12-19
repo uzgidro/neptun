@@ -64,9 +64,31 @@
         </div>
     </div>
 
-    <!-- ADD BUTTON -->
-    <div class="mb-6">
+    <!-- ADD BUTTON & DATE RANGE -->
+    <div class="action-row mb-6">
         <p-button label="Добавить проект" icon="pi pi-plus" (click)="openNew()" />
+        <div class="date-range-filter">
+            <p-datepicker
+                [(ngModel)]="dateRange"
+                selectionMode="range"
+                [showIcon]="true"
+                [showButtonBar]="true"
+                placeholder="Выберите диапазон дат"
+                dateFormat="dd.mm.yy"
+                (onSelect)="onDateRangeChange()"
+                (onClear)="onDateRangeClear()">
+            </p-datepicker>
+            @if (dateRange && dateRange.length > 0) {
+                <p-button
+                    icon="pi pi-times"
+                    severity="secondary"
+                    [text]="true"
+                    [rounded]="true"
+                    pTooltip="Сбросить диапазон"
+                    (click)="onDateRangeClear()">
+                </p-button>
+            }
+        </div>
     </div>
 
     <!-- TABLE -->

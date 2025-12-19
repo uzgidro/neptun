@@ -15,6 +15,7 @@ import { FileUploadComponent } from '@/layout/component/dialog/file-upload/file-
 import { FileViewerComponent } from '@/layout/component/dialog/file-viewer/file-viewer.component';
 import { FileListComponent } from '@/layout/component/dialog/file-list/file-list.component';
 import { InputTextComponent } from '@/layout/component/dialog/input-text/input-text.component';
+import { DatePicker } from 'primeng/datepicker';
 
 type Status = 'Новый' | 'В разработке' | 'Выполнено';
 type OperationFilter = 'Все' | 'Кредит' | 'Дебит';
@@ -60,7 +61,8 @@ interface InvestmentData {
         FileViewerComponent,
         FileListComponent,
         InputTextComponent,
-        FormsModule
+        FormsModule,
+        DatePicker
     ],
     templateUrl: './investment.component.html',
     styleUrl: './investment.component.scss'
@@ -89,6 +91,9 @@ export class InvestmentComponent implements OnInit {
     showFilesDialog: boolean = false;
     selectedInvestmentForFiles: InvestmentData | null = null;
     existingFilesToKeep: number[] = [];
+
+    // Date range filter
+    dateRange: Date[] | null = null;
 
     private fb: FormBuilder = inject(FormBuilder);
     private messageService: MessageService = inject(MessageService);
@@ -259,10 +264,51 @@ export class InvestmentComponent implements OnInit {
         if (!this.selectedOperation) this.selectedOperation = this.operationOptions[0];
         const filterValue = this.selectedOperation.value;
 
-        this.filteredInvestments = filterValue === 'Все' ? [...this.investments] : this.investments.filter((i) => i.operation_type === filterValue);
+        // Filter by operation type
+        let filtered = filterValue === 'Все' ? [...this.investments] : this.investments.filter((i) => i.operation_type === filterValue);
+
+        // Filter by date range
+        if (this.dateRange && this.dateRange.length === 2 && this.dateRange[0] && this.dateRange[1]) {
+            const startDate = new Date(this.dateRange[0]);
+            startDate.setHours(0, 0, 0, 0);
+            const endDate = new Date(this.dateRange[1]);
+            endDate.setHours(23, 59, 59, 999);
+
+            filtered = filtered.filter((i) => {
+                const itemDate = new Date(i.date);
+                return itemDate >= startDate && itemDate <= endDate;
+            });
+        }
+
+        this.filteredInvestments = filtered;
 
         this.updateChart();
         this.updateLineChart();
+    }
+
+    onDateRangeChange(): void {
+        if (this.dateRange && this.dateRange.length === 2 && this.dateRange[0] && this.dateRange[1]) {
+            this.applyFilter();
+            const startFormatted = this.dateRange[0].toLocaleDateString('ru-RU');
+            const endFormatted = this.dateRange[1].toLocaleDateString('ru-RU');
+            this.messageService.add({
+                severity: 'info',
+                summary: 'Диапазон выбран',
+                detail: `${startFormatted} - ${endFormatted}`,
+                life: 2000
+            });
+        }
+    }
+
+    onDateRangeClear(): void {
+        this.dateRange = null;
+        this.applyFilter();
+        this.messageService.add({
+            severity: 'info',
+            summary: 'Диапазон сброшен',
+            detail: 'Показаны все даты',
+            life: 2000
+        });
     }
 
     updateChart(): void {

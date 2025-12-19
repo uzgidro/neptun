@@ -118,6 +118,26 @@
         }
     }
 
+    .action-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .date-range-filter {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        ::ng-deep {
+            .p-datepicker {
+                width: 280px;
+            }
+        }
+    }
+
     .table-card { margin-top: 1.5rem; }
 
     .operation-tag { padding: 4px 10px; border-radius: 12px; font-weight: 600; font-size: 13px; }
