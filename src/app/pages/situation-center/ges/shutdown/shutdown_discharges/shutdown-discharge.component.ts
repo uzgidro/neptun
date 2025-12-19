@@ -19,6 +19,9 @@ import { FileUploadComponent } from '@/layout/component/dialog/file-upload/file-
 import { FileViewerComponent } from '@/layout/component/dialog/file-viewer/file-viewer.component';
 import { FileListComponent } from '@/layout/component/dialog/file-list/file-list.component';
 import { SelectComponent } from '@/layout/component/dialog/select/select.component';
+import { InputText } from 'primeng/inputtext';
+import { IconField } from 'primeng/iconfield';
+import { InputIcon } from 'primeng/inputicon';
 
 @Component({
     selector: 'app-shutdown-discharge',
@@ -37,7 +40,10 @@ import { SelectComponent } from '@/layout/component/dialog/select/select.compone
         FileUploadComponent,
         FileViewerComponent,
         FileListComponent,
-        SelectComponent
+        SelectComponent,
+        InputText,
+        IconField,
+        InputIcon
     ],
     templateUrl: './shutdown-discharge.component.html',
     styleUrl: './shutdown-discharge.component.scss'
@@ -293,14 +299,14 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
     }
 
     getAverageFlowRate(organizationName: string): number {
-        const orgDischarges = this.discharges.filter(d => d.organization.name === organizationName);
+        const orgDischarges = this.discharges.filter((d) => d.organization.name === organizationName);
         if (orgDischarges.length === 0) return 0;
 
         // Calculate time-weighted average
         let totalWeightedFlow = 0;
         let totalDuration = 0;
 
-        orgDischarges.forEach(discharge => {
+        orgDischarges.forEach((discharge) => {
             if (discharge.started_at && discharge.ended_at) {
                 const startTime = new Date(discharge.started_at).getTime();
                 const endTime = new Date(discharge.ended_at).getTime();
@@ -317,7 +323,7 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
     }
 
     getTotalVolume(organizationName: string): number {
-        const orgDischarges = this.discharges.filter(d => d.organization.name === organizationName);
+        const orgDischarges = this.discharges.filter((d) => d.organization.name === organizationName);
         return orgDischarges.reduce((acc, d) => acc + d.total_volume, 0);
     }
 }
