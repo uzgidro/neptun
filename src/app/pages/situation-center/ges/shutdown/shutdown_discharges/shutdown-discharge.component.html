@@ -8,20 +8,20 @@
     class="mt-6"
     [value]="discharges"
     dataKey="id"
-    stripedRows
     [loading]="loading"
     [scrollable]="true"
-    scrollHeight="60rem"
+    scrollHeight="30rem"
     [tableStyle]="{ 'min-width': '60rem' }"
-    [sortField]="'incident_date'"
-    [sortOrder]="-1"
+    rowGroupMode="subheader"
+    groupRowsBy="organization.name"
+    [sortField]="'organization.name'"
 >
     <ng-template #caption>
         <div class="text-lg font-bold">Холостые водосбросы</div>
     </ng-template>
+
     <ng-template pTemplate="header">
         <tr>
-            <th pSortableColumn="organization.name">Объект</th>
             <th pSortableColumn="started_at">Начало</th>
             <th pSortableColumn="ended_at">Конец</th>
             <th pSortableColumn="flow_rate">Поток, м³/с</th>
@@ -35,9 +35,16 @@
         </tr>
     </ng-template>
 
+    <ng-template pTemplate="groupheader" let-discharge>
+        <tr>
+            <td [attr.colspan]="authService.isSc() ? 8 : 7" class="bg-gray-200 dark:bg-gray-900">
+                <span class="font-bold text-lg">{{ discharge.organization.name }}</span>
+            </td>
+        </tr>
+    </ng-template>
+
     <ng-template pTemplate="body" let-discharge>
         <tr>
-            <td>{{ discharge.organization.name }}</td>
             <td>{{ discharge.started_at | date:'dd.MM.yyyy HH:mm' }}</td>
             <td>{{ discharge.ended_at ? (discharge.ended_at | date:'dd.MM.yyyy HH:mm') : '-' }}</td>
             <td>{{ discharge.flow_rate | number: '1.0-2' }}</td>
@@ -83,7 +90,7 @@
 
     <ng-template pTemplate="emptymessage">
         <tr>
-            <td [attr.colspan]="authService.isSc() ? 9 : 8" class="text-center">
+            <td [attr.colspan]="authService.isSc() ? 8 : 7" class="text-center">
                 Водосбросы за выбранную дату не найдены.
             </td>
         </tr>
