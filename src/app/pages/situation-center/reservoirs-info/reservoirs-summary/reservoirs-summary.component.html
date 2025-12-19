@@ -87,6 +87,7 @@
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
                                             <input pInputText type="number" [(ngModel)]="reservoir.level.current"
+                                                   (ngModelChange)="onLevelChange(reservoir)"
                                                    (focus)="onInputFocus($event, reservoir.level, 'current')" />
                                         </ng-template>
                                         <ng-template pTemplate="output">
@@ -130,7 +131,7 @@
                         <td></td>
                         <td></td>
                     }
-                    @if (authService.isSc() && index > 6) {
+                    @if (authService.isSc()) {
                         <td [pEditableColumn]="reservoir.income" pEditableColumnField="current" class="text-nowrap">
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
