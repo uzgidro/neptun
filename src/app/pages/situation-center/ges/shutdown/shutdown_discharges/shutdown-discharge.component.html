@@ -5,29 +5,81 @@
 }
 
 <p-table
+    #shd
     class="mt-6"
     [value]="discharges"
     dataKey="id"
-    stripedRows
     [loading]="loading"
     [scrollable]="true"
-    scrollHeight="60rem"
+    scrollHeight="30rem"
     [tableStyle]="{ 'min-width': '60rem' }"
-    [sortField]="'incident_date'"
-    [sortOrder]="-1"
+    rowGroupMode="subheader"
+    groupRowsBy="organization.name"
+    [sortField]="'organization.name'"
+    [globalFilterFields]="['organization.name', 'reason', 'created_by.name']"
 >
     <ng-template #caption>
-        <div class="text-lg font-bold">Холостые водосбросы</div>
+        <div class="flex justify-between items-center">
+            <div class="text-lg font-bold">Холостые водосбросы</div>
+            <p-iconfield>
+                <p-inputicon>
+                    <i class="pi pi-search"></i>
+                </p-inputicon>
+                <input
+                    pInputText
+                    type="text"
+                    (input)="shd.filterGlobal($event.target?.value, 'contains')"
+                    placeholder="Поиск..."
+                    class="w-full"
+                />
+            </p-iconfield>
+        </div>
     </ng-template>
+
     <ng-template pTemplate="header">
         <tr>
-            <th pSortableColumn="organization.name">Объект</th>
-            <th pSortableColumn="started_at">Начало</th>
-            <th pSortableColumn="ended_at">Конец</th>
-            <th pSortableColumn="flow_rate">Поток, м³/с</th>
-            <th pSortableColumn="total_volume">Объём, млн. м³</th>
-            <th pSortableColumn="reason">Причина</th>
-            <th pSortableColumn="created_by.name">Создал</th>
+            <th pSortableColumn="started_at" style="min-width: 12rem">
+                <div class="flex items-center gap-2">
+                    Начало
+                    <p-sortIcon field="started_at" />
+                    <p-columnFilter type="date" field="started_at" display="menu" />
+                </div>
+            </th>
+            <th pSortableColumn="ended_at" style="min-width: 12rem">
+                <div class="flex items-center gap-2">
+                    Конец
+                    <p-sortIcon field="ended_at" />
+                    <p-columnFilter type="date" field="ended_at" display="menu" />
+                </div>
+            </th>
+            <th pSortableColumn="flow_rate" style="min-width: 10rem">
+                <div class="flex items-center gap-2">
+                    Поток, м³/с
+                    <p-sortIcon field="flow_rate" />
+                    <p-columnFilter type="numeric" field="flow_rate" display="menu" />
+                </div>
+            </th>
+            <th pSortableColumn="total_volume" style="min-width: 10rem">
+                <div class="flex items-center gap-2">
+                    Объём, млн. м³
+                    <p-sortIcon field="total_volume" />
+                    <p-columnFilter type="numeric" field="total_volume" display="menu" />
+                </div>
+            </th>
+            <th pSortableColumn="reason" style="min-width: 12rem">
+                <div class="flex items-center gap-2">
+                    Причина
+                    <p-sortIcon field="reason" />
+                    <p-columnFilter type="text" field="reason" display="menu" />
+                </div>
+            </th>
+            <th pSortableColumn="created_by.name" style="min-width: 10rem">
+                <div class="flex items-center gap-2">
+                    Создал
+                    <p-sortIcon field="created_by.name" />
+                    <p-columnFilter type="text" field="created_by.name" display="menu" />
+                </div>
+            </th>
             <th style="width: 10%">Файлы</th>
             @if (authService.isSc()) {
                 <th style="width: 10%">Действия</th>
@@ -35,9 +87,26 @@
         </tr>
     </ng-template>
 
+    <ng-template pTemplate="groupheader" let-discharge>
+        <tr>
+            <td class="bg-gray-200 dark:bg-gray-900" colspan="2">
+                <span class="font-bold text-lg">{{ discharge.organization.name }}</span>
+            </td>
+            <td class="bg-gray-200 dark:bg-gray-900 font-semibold">
+                {{ getAverageFlowRate(discharge.organization.name) | number: '1.0-2' }}
+            </td>
+            <td class="bg-gray-200 dark:bg-gray-900 font-semibold">
+                {{ getTotalVolume(discharge.organization.name) | number: '1.2-2' }}
+            </td>
+            <td class="bg-gray-200 dark:bg-gray-900" colspan="3"></td>
+            @if (authService.isSc()) {
+                <td class="bg-gray-200 dark:bg-gray-900"></td>
+            }
+        </tr>
+    </ng-template>
+
     <ng-template pTemplate="body" let-discharge>
         <tr>
-            <td>{{ discharge.organization.name }}</td>
             <td>{{ discharge.started_at | date:'dd.MM.yyyy HH:mm' }}</td>
             <td>{{ discharge.ended_at ? (discharge.ended_at | date:'dd.MM.yyyy HH:mm') : '-' }}</td>
             <td>{{ discharge.flow_rate | number: '1.0-2' }}</td>
@@ -83,7 +152,7 @@
 
     <ng-template pTemplate="emptymessage">
         <tr>
-            <td [attr.colspan]="authService.isSc() ? 9 : 8" class="text-center">
+            <td [attr.colspan]="authService.isSc() ? 8 : 7" class="text-center">
                 Водосбросы за выбранную дату не найдены.
             </td>
         </tr>
