@@ -10,6 +10,15 @@
                 (ngModelChange)="applyFilter()"
                 label="Тип операции">
             </app-select>
+            @if (selectedOperation?.value !== 'Все') {
+                <p-button
+                    label="Сбросить фильтр"
+                    icon="pi pi-filter-slash"
+                    severity="secondary"
+                    [text]="true"
+                    (click)="resetFilter()">
+                </p-button>
+            }
         </div>
     </div>
 
@@ -35,13 +44,23 @@
 
     <!-- CHARTS -->
     <div class="charts-row">
-        <div class="chart-card">
-            <h4>Распределение</h4>
+        <div class="chart-card chart-interactive">
+            <div class="chart-header">
+                <h4>Распределение</h4>
+                <span class="chart-hint" pTooltip="Кликните на сегмент для фильтрации">
+                    <i class="pi pi-info-circle"></i>
+                </span>
+            </div>
             <p-chart type="doughnut" [data]="chartData" [options]="chartOptions"></p-chart>
         </div>
-        <div class="chart-card">
-            <h4>Динамика по датам</h4>
-            <p-chart type="line" [data]="lineChartData" [options]="lineChartOptions"></p-chart>
+        <div class="chart-card chart-interactive">
+            <div class="chart-header">
+                <h4>Динамика по датам</h4>
+                <span class="chart-hint" pTooltip="Кликните на точку для фильтрации">
+                    <i class="pi pi-info-circle"></i>
+                </span>
+            </div>
+            <p-chart type="line" [data]="lineChartData" [options]="lineChartOptions" height="300px"></p-chart>
         </div>
     </div>
 
@@ -104,9 +123,17 @@
                         </span>
                     </td>
                     <td class="amount" [ngClass]="investment.operation_type === 'Кредит' ? 'credit-amount' : 'debit-amount'">
-                        {{ investment.operation_type === 'Кредит' ? '-' : '+' }} {{ investment.amount | number }}
+                        {{ investment.operation_type === 'Кредит' ? '-' : '+' }} {{ investment.amount | number }} UZS
                     </td>
-                    <td>{{ investment.priority }}</td>
+                    <td>
+                        <span class="priority-tag" [ngClass]="{
+                            'priority-high': investment.priority === 'Высокий',
+                            'priority-medium': investment.priority === 'Средний',
+                            'priority-low': investment.priority === 'Низкий'
+                        }">
+                            {{ investment.priority }}
+                        </span>
+                    </td>
                     <td>{{ investment.date | date: 'dd.MM.yyyy' }}</td>
                     <td>
                         @if (investment.files && investment.files.length > 0) {

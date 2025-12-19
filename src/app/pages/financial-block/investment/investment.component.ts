@@ -132,14 +132,127 @@ export class InvestmentComponent implements OnInit {
 
         this.investments = [];
 
-        this.chartOptions = { plugins: { legend: { position: 'bottom' } } };
-        this.lineChartOptions = {
-            responsive: true,
-            plugins: { legend: { position: 'bottom' } },
-            scales: { y: { beginAtZero: true } }
+        this.initChartOptions();
+        this.applyFilter();
+    }
+
+    private initChartOptions(): void {
+        const formatCurrency = (value: number) => {
+            return new Intl.NumberFormat('ru-RU', {
+                style: 'decimal',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(value) + ' UZS';
         };
 
-        this.applyFilter();
+        this.chartOptions = {
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        usePointStyle: true,
+                        padding: 20,
+                        font: { size: 13, weight: '500' }
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    titleFont: { size: 14, weight: 'bold' },
+                    bodyFont: { size: 13 },
+                    padding: 12,
+                    cornerRadius: 8,
+                    displayColors: true,
+                    callbacks: {
+                        label: (context: any) => {
+                            const value = context.raw || 0;
+                            const total = context.dataset.data.reduce((a: number, b: number) => a + b, 0);
+                            const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                            return ` ${context.label}: ${formatCurrency(value)} (${percentage}%)`;
+                        }
+                    }
+                }
+            },
+            animation: {
+                animateScale: true,
+                animateRotate: true,
+                duration: 800,
+                easing: 'easeOutQuart'
+            },
+            cutout: '60%',
+            onClick: (event: any, elements: any[]) => this.onDoughnutClick(event, elements)
+        };
+
+        this.lineChartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+                mode: 'index',
+                intersect: false
+            },
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        usePointStyle: true,
+                        padding: 20,
+                        font: { size: 13, weight: '500' }
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    titleFont: { size: 14, weight: 'bold' },
+                    bodyFont: { size: 13 },
+                    padding: 12,
+                    cornerRadius: 8,
+                    callbacks: {
+                        title: (tooltipItems: any[]) => {
+                            const date = tooltipItems[0]?.label;
+                            if (date) {
+                                return new Date(date).toLocaleDateString('ru-RU', {
+                                    day: 'numeric',
+                                    month: 'long',
+                                    year: 'numeric'
+                                });
+                            }
+                            return date;
+                        },
+                        label: (context: any) => {
+                            const value = context.raw || 0;
+                            return ` ${context.dataset.label}: ${formatCurrency(value)}`;
+                        },
+                        footer: (tooltipItems: any[]) => {
+                            const debit = tooltipItems.find(i => i.dataset.label === 'Дебит')?.raw || 0;
+                            const credit = tooltipItems.find(i => i.dataset.label === 'Кредит')?.raw || 0;
+                            const balance = debit - credit;
+                            return `─────────────\nБаланс: ${formatCurrency(balance)}`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    grid: { display: false },
+                    ticks: {
+                        callback: function(value: any, index: number) {
+                            const label = (this as any).getLabelForValue(value);
+                            return new Date(label).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit' });
+                        }
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    grid: { color: 'rgba(0, 0, 0, 0.05)' },
+                    ticks: {
+                        callback: (value: any) => formatCurrency(value)
+                    }
+                }
+            },
+            animation: {
+                duration: 1000,
+                easing: 'easeOutQuart'
+            },
+            onClick: (event: any, elements: any[]) => this.onLineChartClick(event, elements)
+        };
     }
 
     applyFilter(): void {
@@ -157,12 +270,55 @@ export class InvestmentComponent implements OnInit {
         const creditTotal = this.filteredInvestments.filter((i) => i.operation_type === 'Кредит').reduce((sum, i) => sum + i.amount, 0);
         const filterValue = this.selectedOperation?.value || 'Все';
 
+        const debitColors = {
+            background: ['#43a047', '#66bb6a'],
+            hover: ['#2e7d32', '#43a047'],
+            border: '#ffffff'
+        };
+
+        const creditColors = {
+            background: ['#e53935', '#ef5350'],
+            hover: ['#c62828', '#e53935'],
+            border: '#ffffff'
+        };
+
         if (filterValue === 'Все') {
-            this.chartData = { labels: ['Дебит', 'Кредит'], datasets: [{ data: [debitTotal, creditTotal], backgroundColor: ['#2e7d32', '#d32f2f'] }] };
+            this.chartData = {
+                labels: ['Дебит', 'Кредит'],
+                datasets: [{
+                    data: [debitTotal, creditTotal],
+                    backgroundColor: [debitColors.background[0], creditColors.background[0]],
+                    hoverBackgroundColor: [debitColors.hover[0], creditColors.hover[0]],
+                    borderColor: '#ffffff',
+                    borderWidth: 3,
+                    hoverBorderWidth: 4,
+                    hoverOffset: 8
+                }]
+            };
         } else if (filterValue === 'Дебит') {
-            this.chartData = { labels: ['Дебит'], datasets: [{ data: [debitTotal], backgroundColor: ['#2e7d32'] }] };
+            this.chartData = {
+                labels: ['Дебит'],
+                datasets: [{
+                    data: [debitTotal],
+                    backgroundColor: debitColors.background,
+                    hoverBackgroundColor: debitColors.hover,
+                    borderColor: '#ffffff',
+                    borderWidth: 3,
+                    hoverOffset: 8
+                }]
+            };
         } else {
-            this.chartData = { labels: ['Кредит'], datasets: [{ data: [creditTotal], backgroundColor: ['#d32f2f'] }] };
+            this.chartData = {
+                labels: ['Кредит'],
+                datasets: [{
+                    data: [creditTotal],
+                    backgroundColor: creditColors.background,
+                    hoverBackgroundColor: creditColors.hover,
+                    borderColor: '#ffffff',
+                    borderWidth: 3,
+                    hoverOffset: 8
+                }]
+            };
         }
     }
 
@@ -180,8 +336,40 @@ export class InvestmentComponent implements OnInit {
         this.lineChartData = {
             labels,
             datasets: [
-                { label: 'Дебит', data: labels.map((d) => map.get(d)!.debit), borderColor: '#2e7d32', backgroundColor: 'rgba(46,125,50,0.2)', tension: 0.4 },
-                { label: 'Кредит', data: labels.map((d) => map.get(d)!.credit), borderColor: '#d32f2f', backgroundColor: 'rgba(211,47,47,0.2)', tension: 0.4 }
+                {
+                    label: 'Дебит',
+                    data: labels.map((d) => map.get(d)!.debit),
+                    borderColor: '#43a047',
+                    backgroundColor: 'rgba(67, 160, 71, 0.15)',
+                    fill: true,
+                    tension: 0.4,
+                    borderWidth: 3,
+                    pointRadius: 5,
+                    pointHoverRadius: 8,
+                    pointBackgroundColor: '#43a047',
+                    pointBorderColor: '#ffffff',
+                    pointBorderWidth: 2,
+                    pointHoverBackgroundColor: '#2e7d32',
+                    pointHoverBorderColor: '#ffffff',
+                    pointHoverBorderWidth: 3
+                },
+                {
+                    label: 'Кредит',
+                    data: labels.map((d) => map.get(d)!.credit),
+                    borderColor: '#e53935',
+                    backgroundColor: 'rgba(229, 57, 53, 0.15)',
+                    fill: true,
+                    tension: 0.4,
+                    borderWidth: 3,
+                    pointRadius: 5,
+                    pointHoverRadius: 8,
+                    pointBackgroundColor: '#e53935',
+                    pointBorderColor: '#ffffff',
+                    pointBorderWidth: 2,
+                    pointHoverBackgroundColor: '#c62828',
+                    pointHoverBorderColor: '#ffffff',
+                    pointHoverBorderWidth: 3
+                }
             ]
         };
     }
@@ -327,5 +515,68 @@ export class InvestmentComponent implements OnInit {
     showFiles(investment: InvestmentData) {
         this.selectedInvestmentForFiles = investment;
         this.showFilesDialog = true;
+    }
+
+    // Chart click handlers
+    onDoughnutClick(event: any, elements: any[]): void {
+        if (elements.length > 0) {
+            const index = elements[0].index;
+            const label = this.chartData.labels[index];
+
+            if (label === 'Дебит') {
+                this.selectedOperation = this.operationOptions.find(o => o.value === 'Дебит');
+            } else if (label === 'Кредит') {
+                this.selectedOperation = this.operationOptions.find(o => o.value === 'Кредит');
+            }
+
+            this.applyFilter();
+            this.messageService.add({
+                severity: 'info',
+                summary: 'Фильтр применён',
+                detail: `Показаны операции: ${label}`,
+                life: 2000
+            });
+        }
+    }
+
+    onLineChartClick(event: any, elements: any[]): void {
+        if (elements.length > 0) {
+            const datasetIndex = elements[0].datasetIndex;
+            const dataIndex = elements[0].index;
+            const date = this.lineChartData.labels[dataIndex];
+            const datasetLabel = this.lineChartData.datasets[datasetIndex].label;
+
+            // Filter by operation type
+            if (datasetLabel === 'Дебит') {
+                this.selectedOperation = this.operationOptions.find(o => o.value === 'Дебит');
+            } else if (datasetLabel === 'Кредит') {
+                this.selectedOperation = this.operationOptions.find(o => o.value === 'Кредит');
+            }
+
+            this.applyFilter();
+
+            const formattedDate = new Date(date).toLocaleDateString('ru-RU', {
+                day: 'numeric',
+                month: 'long'
+            });
+
+            this.messageService.add({
+                severity: 'info',
+                summary: 'Фильтр применён',
+                detail: `${datasetLabel} за ${formattedDate}`,
+                life: 2000
+            });
+        }
+    }
+
+    resetFilter(): void {
+        this.selectedOperation = this.operationOptions[0];
+        this.applyFilter();
+        this.messageService.add({
+            severity: 'info',
+            summary: 'Фильтр сброшен',
+            detail: 'Показаны все операции',
+            life: 2000
+        });
     }
 }

@@ -9,7 +9,15 @@
         h2 { margin: 0; }
     }
 
-    .dashboard-filters { width: 260px; }
+    .dashboard-filters {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+
+        app-select {
+            width: 200px;
+        }
+    }
 
     .kpi-row {
         display: flex;
@@ -46,16 +54,68 @@
         min-width: 300px;
         display: flex;
         flex-direction: column;
-        height: 400px; /* одинаковая высота для всех графиков */
+        height: 400px;
+        background: var(--surface-card, #f8f9fa);
+        border-radius: 12px;
+        padding: 1.25rem;
+        transition: transform 0.2s ease;
+
+        &.chart-interactive {
+            cursor: pointer;
+
+            &:hover {
+                transform: translateY(-2px);
+            }
+        }
     }
 
-    .chart-card h4 {
-        margin-bottom: 0.5rem;
+    .chart-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.75rem;
+
+        h4 {
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-color, #1e293b);
+        }
+    }
+
+    .chart-hint {
+        color: #9ca3af;
+        font-size: 0.875rem;
+        cursor: help;
+        transition: color 0.2s ease;
+
+        &:hover {
+            color: #6b7280;
+        }
+
+        i {
+            font-size: 1rem;
+        }
     }
 
     .chart-card p-chart {
-        flex: 1;   /* график растягивается на всю высоту контейнера */
+        flex: 1;
         height: 100%;
+
+        ::ng-deep {
+            .p-chart {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 100%;
+                width: 100%;
+            }
+
+            canvas {
+                max-height: 100%;
+                max-width: 100%;
+            }
+        }
     }
 
     .table-card { margin-top: 1.5rem; }
@@ -66,4 +126,9 @@
     .amount { font-weight: 600; }
     .credit-amount { color: #d32f2f; }
     .debit-amount { color: #2e7d32; }
+
+    .priority-tag { padding: 4px 10px; border-radius: 12px; font-weight: 600; font-size: 13px; }
+    .priority-high { background-color: #fdecea; color: #d32f2f; }
+    .priority-medium { background-color: #fff8e1; color: #f57c00; }
+    .priority-low { background-color: #e8f5e9; color: #2e7d32; }
 }
