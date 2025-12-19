@@ -1,48 +1,97 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ChartModule } from 'primeng/chart';
 import { SelectComponent } from '@/layout/component/dialog/select/select.component';
+import { Button } from 'primeng/button';
+import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
+import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
+import { MessageService, PrimeTemplate } from 'primeng/api';
+import { TextareaComponent } from '@/layout/component/dialog/textarea/textarea.component';
+import { InputNumberdComponent } from '@/layout/component/dialog/input-number/input-number.component';
+import { TooltipModule } from 'primeng/tooltip';
+import { FileUploadComponent } from '@/layout/component/dialog/file-upload/file-upload.component';
+import { FileViewerComponent } from '@/layout/component/dialog/file-viewer/file-viewer.component';
+import { FileListComponent } from '@/layout/component/dialog/file-list/file-list.component';
+import { InputTextComponent } from '@/layout/component/dialog/input-text/input-text.component';
 
 type Status = 'Новый' | 'В разработке' | 'Выполнено';
 type OperationFilter = 'Все' | 'Кредит' | 'Дебит';
+type Priority = 'Высокий' | 'Средний' | 'Низкий';
+
+interface FileData {
+    id: number;
+    file_name: string;
+    size_bytes: number;
+    url: string;
+    file?: File;
+}
 
 interface InvestmentData {
     id: number;
-    col1: string;
-    col2: string;
-    col3: number;
-    col4: string;
-    col5: Date;
-    col6: string;
+    project_name: string;
     status: Status;
-    operationType: 'Кредит' | 'Дебит';
+    operation_type: 'Кредит' | 'Дебит';
+    amount: number;
+    priority: Priority;
+    date: Date;
+    comment: string;
+    files?: FileData[];
 }
 
 @Component({
     selector: 'app-investment',
     standalone: true,
-    imports: [CommonModule, TableModule, FormsModule, ChartModule, SelectComponent],
+    imports: [
+        CommonModule,
+        TableModule,
+        ChartModule,
+        SelectComponent,
+        Button,
+        DatePickerComponent,
+        DialogComponent,
+        PrimeTemplate,
+        ReactiveFormsModule,
+        TextareaComponent,
+        InputNumberdComponent,
+        TooltipModule,
+        FileUploadComponent,
+        FileViewerComponent,
+        FileListComponent,
+        InputTextComponent,
+        FormsModule
+    ],
     templateUrl: './investment.component.html',
     styleUrl: './investment.component.scss'
 })
 export class InvestmentComponent implements OnInit {
     investments: InvestmentData[] = [];
     filteredInvestments: InvestmentData[] = [];
-    selectedOperation:
-        | { name: string; value: string }
-        | { name: string; value: string }
-        | {
-              name: string;
-              value: string;
-          }
-        | undefined;
+    selectedOperation: { name: string; value: string } | undefined;
 
     chartData: any;
     chartOptions: any;
     lineChartData: any;
     lineChartOptions: any;
+
+    // Dialog
+    isFormOpen = false;
+    submitted = false;
+    isLoading = false;
+    isEditMode = false;
+    currentInvestmentId: number | null = null;
+    form!: FormGroup;
+
+    // Files
+    selectedFiles: File[] = [];
+    currentInvestment: InvestmentData | null = null;
+    showFilesDialog: boolean = false;
+    selectedInvestmentForFiles: InvestmentData | null = null;
+    existingFilesToKeep: number[] = [];
+
+    private fb: FormBuilder = inject(FormBuilder);
+    private messageService: MessageService = inject(MessageService);
 
     operationOptions = [
         { name: 'Все', value: 'Все' },
@@ -56,15 +105,32 @@ export class InvestmentComponent implements OnInit {
         { name: 'Выполнено', value: 'Выполнено' }
     ];
 
-    ngOnInit(): void {
-        const savedFilter = localStorage.getItem('investment-operation-filter');
-        this.selectedOperation = this.operationOptions.find((opt) => opt.value === savedFilter) || this.operationOptions[0];
+    priorityOptions = [
+        { name: 'Высокий', value: 'Высокий' },
+        { name: 'Средний', value: 'Средний' },
+        { name: 'Низкий', value: 'Низкий' }
+    ];
 
-        this.investments = [
-            { id: 1, col1: 'Проект А', col2: 'В работе', col3: 150000, col4: 'Высокий', col5: new Date('2024-12-01'), col6: 'Комментарий 1', status: 'В разработке', operationType: 'Дебит' },
-            { id: 2, col1: 'Проект Б', col2: 'Завершен', col3: 75000, col4: 'Средний', col5: new Date('2024-11-15'), col6: 'Комментарий 2', status: 'Выполнено', operationType: 'Кредит' },
-            { id: 3, col1: 'Проект В', col2: 'Планируется', col3: 300000, col4: 'Высокий', col5: new Date('2024-12-05'), col6: 'Комментарий 3', status: 'Новый', operationType: 'Дебит' }
-        ];
+    operationTypeOptions = [
+        { name: 'Дебит', value: 'Дебит' },
+        { name: 'Кредит', value: 'Кредит' }
+    ];
+
+    ngOnInit(): void {
+        this.selectedOperation = this.operationOptions[0];
+
+        // Initialize form
+        this.form = this.fb.group({
+            project_name: this.fb.control<string | null>(null),
+            status: this.fb.control<{ name: string; value: Status } | null>(null),
+            operation_type: this.fb.control<{ name: string; value: 'Дебит' | 'Кредит' } | null>(null),
+            amount: this.fb.control<number | null>(null),
+            priority: this.fb.control<{ name: string; value: Priority } | null>(null),
+            date: this.fb.control<Date | null>(null),
+            comment: this.fb.control<string | null>(null)
+        });
+
+        this.investments = [];
 
         this.chartOptions = { plugins: { legend: { position: 'bottom' } } };
         this.lineChartOptions = {
@@ -79,17 +145,16 @@ export class InvestmentComponent implements OnInit {
     applyFilter(): void {
         if (!this.selectedOperation) this.selectedOperation = this.operationOptions[0];
         const filterValue = this.selectedOperation.value;
-        localStorage.setItem('investment-operation-filter', filterValue);
 
-        this.filteredInvestments = filterValue === 'Все' ? [...this.investments] : this.investments.filter((i) => i.operationType === filterValue);
+        this.filteredInvestments = filterValue === 'Все' ? [...this.investments] : this.investments.filter((i) => i.operation_type === filterValue);
 
         this.updateChart();
         this.updateLineChart();
     }
 
     updateChart(): void {
-        const debitTotal = this.filteredInvestments.filter((i) => i.operationType === 'Дебит').reduce((sum, i) => sum + i.col3, 0);
-        const creditTotal = this.filteredInvestments.filter((i) => i.operationType === 'Кредит').reduce((sum, i) => sum + i.col3, 0);
+        const debitTotal = this.filteredInvestments.filter((i) => i.operation_type === 'Дебит').reduce((sum, i) => sum + i.amount, 0);
+        const creditTotal = this.filteredInvestments.filter((i) => i.operation_type === 'Кредит').reduce((sum, i) => sum + i.amount, 0);
         const filterValue = this.selectedOperation?.value || 'Все';
 
         if (filterValue === 'Все') {
@@ -104,11 +169,11 @@ export class InvestmentComponent implements OnInit {
     updateLineChart(): void {
         const map = new Map<string, { debit: number; credit: number }>();
         this.filteredInvestments.forEach((item) => {
-            const dateKey = item.col5.toISOString().split('T')[0];
+            const dateKey = item.date.toISOString().split('T')[0];
             if (!map.has(dateKey)) map.set(dateKey, { debit: 0, credit: 0 });
             const entry = map.get(dateKey)!;
-            if (item.operationType === 'Дебит') entry.debit += item.col3;
-            else entry.credit += item.col3;
+            if (item.operation_type === 'Дебит') entry.debit += item.amount;
+            else entry.credit += item.amount;
         });
 
         const labels = Array.from(map.keys()).sort();
@@ -122,12 +187,145 @@ export class InvestmentComponent implements OnInit {
     }
 
     get totalDebit(): number {
-        return this.filteredInvestments.filter((i) => i.operationType === 'Дебит').reduce((sum, i) => sum + i.col3, 0);
+        return this.filteredInvestments.filter((i) => i.operation_type === 'Дебит').reduce((sum, i) => sum + i.amount, 0);
     }
+
     get totalCredit(): number {
-        return this.filteredInvestments.filter((i) => i.operationType === 'Кредит').reduce((sum, i) => sum + i.col3, 0);
+        return this.filteredInvestments.filter((i) => i.operation_type === 'Кредит').reduce((sum, i) => sum + i.amount, 0);
     }
+
     get balance(): number {
         return this.totalDebit - this.totalCredit;
+    }
+
+    // Dialog methods
+    openNew() {
+        this.isEditMode = false;
+        this.currentInvestmentId = null;
+        this.currentInvestment = null;
+        this.form.reset();
+        this.selectedFiles = [];
+        this.existingFilesToKeep = [];
+        this.submitted = false;
+        this.isLoading = false;
+        this.isFormOpen = true;
+    }
+
+    editInvestment(investment: InvestmentData) {
+        this.isEditMode = true;
+        this.currentInvestmentId = investment.id;
+        this.currentInvestment = investment;
+        this.submitted = false;
+        this.isLoading = false;
+        this.selectedFiles = [];
+        this.existingFilesToKeep = investment.files?.map((f) => f.id) || [];
+
+        this.form.patchValue({
+            project_name: investment.project_name,
+            status: this.statusOptions.find((s) => s.value === investment.status) || null,
+            operation_type: this.operationTypeOptions.find((o) => o.value === investment.operation_type) || null,
+            amount: investment.amount,
+            priority: this.priorityOptions.find((p) => p.value === investment.priority) || null,
+            date: investment.date,
+            comment: investment.comment
+        });
+
+        this.isFormOpen = true;
+    }
+
+    onSubmit() {
+        this.submitted = true;
+
+        if (this.form.invalid) {
+            return;
+        }
+
+        this.isLoading = true;
+        const rawPayload = this.form.getRawValue();
+
+        const investmentData: InvestmentData = {
+            id: this.isEditMode && this.currentInvestmentId ? this.currentInvestmentId : Date.now(),
+            project_name: rawPayload.project_name || '',
+            status: rawPayload.status?.value || 'Новый',
+            operation_type: rawPayload.operation_type?.value || 'Дебит',
+            amount: rawPayload.amount || 0,
+            priority: rawPayload.priority?.value || 'Средний',
+            date: rawPayload.date || new Date(),
+            comment: rawPayload.comment || '',
+            files: []
+        };
+
+        // Handle files
+        if (this.isEditMode && this.currentInvestment) {
+            // Keep existing files that weren't removed
+            const existingFiles = this.currentInvestment.files?.filter((f) => this.existingFilesToKeep.includes(f.id)) || [];
+            investmentData.files = [...existingFiles];
+        }
+
+        // Add new files
+        const newFiles: FileData[] = this.selectedFiles.map((file, index) => ({
+            id: Date.now() + index,
+            file_name: file.name,
+            size_bytes: file.size,
+            url: URL.createObjectURL(file),
+            file: file
+        }));
+
+        investmentData.files = [...(investmentData.files || []), ...newFiles];
+
+        if (this.isEditMode && this.currentInvestmentId) {
+            const index = this.investments.findIndex((inv) => inv.id === this.currentInvestmentId);
+            if (index !== -1) {
+                this.investments[index] = investmentData;
+            }
+            this.messageService.add({ severity: 'success', summary: 'Проект обновлен' });
+        } else {
+            this.investments.push(investmentData);
+            this.messageService.add({ severity: 'success', summary: 'Проект добавлен' });
+        }
+
+        this.closeDialog();
+    }
+
+    closeDialog() {
+        this.isFormOpen = false;
+        this.submitted = false;
+        this.isLoading = false;
+        this.isEditMode = false;
+        this.currentInvestmentId = null;
+        this.currentInvestment = null;
+        this.selectedFiles = [];
+        this.existingFilesToKeep = [];
+        this.form.reset();
+        this.applyFilter();
+    }
+
+    deleteInvestment(id: number) {
+        if (confirm('Вы уверены, что хотите удалить этот проект?')) {
+            this.investments = this.investments.filter((inv) => inv.id !== id);
+            this.messageService.add({ severity: 'success', summary: 'Проект удален' });
+            this.applyFilter();
+        }
+    }
+
+    // File methods
+    onFileSelect(files: File[]) {
+        this.selectedFiles = files;
+    }
+
+    removeFile(index: number) {
+        this.selectedFiles.splice(index, 1);
+    }
+
+    removeExistingFile(fileId: number) {
+        this.existingFilesToKeep = this.existingFilesToKeep.filter((id) => id !== fileId);
+        if (this.currentInvestment?.files) {
+            this.currentInvestment.files = this.currentInvestment.files.filter((f) => f.id !== fileId);
+        }
+    }
+
+    showFiles(investment: InvestmentData) {
+        this.selectedInvestmentForFiles = investment;
+        this.showFilesDialog = true;
     }
 }

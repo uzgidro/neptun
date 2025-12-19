@@ -45,42 +45,201 @@
         </div>
     </div>
 
+    <!-- ADD BUTTON -->
+    <div class="mb-6">
+        <p-button label="Добавить проект" icon="pi pi-plus" (click)="openNew()" />
+    </div>
+
     <!-- TABLE -->
     <div class="table-card">
-        <p-table [value]="filteredInvestments" sortMode="multiple" responsiveLayout="scroll" [tableStyle]="{ 'min-width': '70rem' }">
+        <p-table
+            [value]="filteredInvestments"
+            dataKey="id"
+            stripedRows
+            [scrollable]="true"
+            scrollHeight="60rem"
+            [tableStyle]="{ 'min-width': '70rem' }"
+            [sortField]="'date'"
+            [sortOrder]="-1">
+
             <ng-template pTemplate="header">
                 <tr>
-                    <th>Проект</th>
-                    <th>Статус</th>
-                    <th>Тип</th>
-                    <th>Сумма</th>
-                    <th>Приоритет</th>
-                    <th>Дата</th>
-                    <th>Состояние ТЗ</th>
+                    <th pSortableColumn="project_name">
+                        Проект
+                        <p-sortIcon field="project_name"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="status">
+                        Статус
+                        <p-sortIcon field="status"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="operation_type">
+                        Тип
+                        <p-sortIcon field="operation_type"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="amount">
+                        Сумма
+                        <p-sortIcon field="amount"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="priority">
+                        Приоритет
+                        <p-sortIcon field="priority"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="date">
+                        Дата
+                        <p-sortIcon field="date"></p-sortIcon>
+                    </th>
+                    <th style="width: 10%">Файлы</th>
                     <th>Комментарий</th>
+                    <th style="width: 10%">Действия</th>
                 </tr>
             </ng-template>
+
             <ng-template pTemplate="body" let-investment>
                 <tr>
-                    <td>{{ investment.col1 }}</td>
-                    <td>{{ investment.col2 }}</td>
+                    <td>{{ investment.project_name }}</td>
+                    <td>{{ investment.status }}</td>
                     <td>
-                        <span class="operation-tag" [ngClass]="investment.operationType === 'Кредит' ? 'credit' : 'debit'">
-                            {{ investment.operationType }}
+                        <span class="operation-tag" [ngClass]="investment.operation_type === 'Кредит' ? 'credit' : 'debit'">
+                            {{ investment.operation_type }}
                         </span>
                     </td>
-                    <td class="amount" [ngClass]="investment.operationType === 'Кредит' ? 'credit-amount' : 'debit-amount'">
-                        {{ investment.operationType === 'Кредит' ? '-' : '+' }} {{ investment.col3 | number }}
+                    <td class="amount" [ngClass]="investment.operation_type === 'Кредит' ? 'credit-amount' : 'debit-amount'">
+                        {{ investment.operation_type === 'Кредит' ? '-' : '+' }} {{ investment.amount | number }}
                     </td>
-                    <td>{{ investment.col4 }}</td>
-                    <td>{{ investment.col5 | date: 'dd.MM.yyyy' }}</td>
+                    <td>{{ investment.priority }}</td>
+                    <td>{{ investment.date | date: 'dd.MM.yyyy' }}</td>
                     <td>
-                        <app-select [(ngModel)]="investment.status" [items]="statusOptions" label=""></app-select>
+                        @if (investment.files && investment.files.length > 0) {
+                            <p-button
+                                [label]="investment.files.length.toString()"
+                                icon="pi pi-paperclip"
+                                severity="secondary"
+                                [text]="true"
+                                (click)="showFiles(investment)"
+                                pTooltip="Просмотр файлов"
+                            />
+                        } @else {
+                            <span class="text-color-secondary">—</span>
+                        }
                     </td>
-                    <td>{{ investment.col6 }}</td>
+                    <td>{{ investment.comment }}</td>
+                    <td>
+                        <p-button
+                            icon="pi pi-pencil"
+                            severity="info"
+                            [text]="true"
+                            [rounded]="true"
+                            (click)="editInvestment(investment)"
+                            pTooltip="Редактировать"
+                        />
+                        <p-button
+                            icon="pi pi-trash"
+                            severity="danger"
+                            [text]="true"
+                            [rounded]="true"
+                            (click)="deleteInvestment(investment.id)"
+                            pTooltip="Удалить"
+                        />
+                    </td>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="9" class="text-center">
+                        Проекты не найдены.
+                    </td>
                 </tr>
             </ng-template>
         </p-table>
     </div>
 
 </div>
+
+<!-- DIALOG FOR ADD/EDIT -->
+<app-dialog
+    [(visible)]="isFormOpen"
+    [header]="isEditMode ? 'Редактировать проект' : 'Новый проект'"
+    [form]="form"
+    [submitting]="isLoading"
+    (save)="onSubmit()"
+    (cancel)="closeDialog()">
+
+    <form class="p-4" [formGroup]="form" (ngSubmit)="onSubmit()">
+
+        <app-input-text
+            label="Название проекта"
+            formControlName="project_name"
+            [submitted]="submitted"
+            [required]="false">
+        </app-input-text>
+
+        <app-select
+            label="Статус"
+            formControlName="status"
+            [items]="statusOptions"
+            [submitted]="submitted"
+            [required]="false">
+        </app-select>
+
+        <app-select
+            label="Тип операции"
+            formControlName="operation_type"
+            [items]="operationTypeOptions"
+            [submitted]="submitted"
+            [required]="false">
+        </app-select>
+
+        <app-input-number
+            label="Сумма"
+            formControlName="amount"
+            [submitted]="submitted"
+            [required]="false">
+        </app-input-number>
+
+        <app-select
+            label="Приоритет"
+            formControlName="priority"
+            [items]="priorityOptions"
+            [submitted]="submitted"
+            [required]="false">
+        </app-select>
+
+        <app-date-picker
+            label="Дата"
+            formControlName="date"
+            [submitted]="submitted"
+            [required]="false">
+        </app-date-picker>
+
+        <app-textarea
+            label="Комментарий"
+            formControlName="comment"
+            [submitted]="submitted"
+            [required]="false">
+        </app-textarea>
+
+        @if (isEditMode && currentInvestment?.files && (currentInvestment?.files?.length ?? 0) > 0) {
+            <app-file-list
+                [files]="currentInvestment?.files || []"
+                (removeFile)="removeExistingFile($event)">
+            </app-file-list>
+        }
+
+        <app-file-upload
+            [label]="isEditMode ? 'Добавить новые файлы' : 'Прикрепить файлы'"
+            [files]="selectedFiles"
+            (filesChange)="onFileSelect($event)"
+            (removeFile)="removeFile($event)">
+        </app-file-upload>
+
+    </form>
+
+</app-dialog>
+
+<!-- FILE VIEWER DIALOG -->
+<app-file-viewer
+    [(visible)]="showFilesDialog"
+    [header]="'Файлы проекта'"
+    [files]="selectedInvestmentForFiles?.files || []">
+</app-file-viewer>
