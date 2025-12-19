@@ -13,6 +13,8 @@ import { AuthService } from '@/core/services/auth.service';
 import { finalize } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
 import { saveAs } from 'file-saver';
+import { LevelVolumeService } from '@/core/services/level-volume.service';
+import { LevelVolume } from '@/core/interfaces/level-volume';
 
 registerLocaleData(localeRu);
 
@@ -23,10 +25,11 @@ registerLocaleData(localeRu);
     styleUrl: './reservoirs-summary.component.scss'
 })
 export class ReservoirsSummaryComponent implements OnInit {
-    private fb = inject(FormBuilder);
-    private reservoirService = inject(ReservoirSummaryService);
-    private messageService = inject(MessageService);
-    authService = inject(AuthService);
+    private fb: FormBuilder = inject(FormBuilder);
+    private reservoirService: ReservoirSummaryService = inject(ReservoirSummaryService);
+    private messageService: MessageService = inject(MessageService);
+    private levelVolumeService: LevelVolumeService = inject(LevelVolumeService);
+    authService: AuthService = inject(AuthService);
 
     form: FormGroup = this.fb.group({
         date: [new Date()]
@@ -59,7 +62,6 @@ export class ReservoirsSummaryComponent implements OnInit {
         if (date) {
             this.reservoirService.getReservoirSummary(date).subscribe({
                 next: (response) => {
-                    console.log(response);
                     this.data = response;
                     // Store a deep copy of the original data
                     this.originalData = JSON.parse(JSON.stringify(response));
@@ -115,6 +117,16 @@ export class ReservoirsSummaryComponent implements OnInit {
         this.data = JSON.parse(JSON.stringify(this.originalData));
     }
 
+    onLevelChange(reservoir: ReservoirSummaryResponse) {
+        if (reservoir.level.current !== null) {
+            this.levelVolumeService.getVolume(reservoir.organization_id!, reservoir.level.current).subscribe({
+                next: (lv: LevelVolume) => {
+                    reservoir.volume.current = lv.volume;
+                }
+            });
+        }
+    }
+
     onInputFocus(event: FocusEvent, obj: any, field: string) {
         // Clear the input if the value is 0
         if (obj[field] === 0) {
@@ -134,7 +146,10 @@ export class ReservoirsSummaryComponent implements OnInit {
         const volDiff = reservoir.volume.current - reservoir.volume.prev;
 
         // Calculate income using the formula: income = (vol_diff / 0.0864) + release
-        reservoir.income.current = volDiff / 0.0864 + reservoir.release.current;
+        const income = volDiff / 0.0864 + reservoir.release.current;
+
+        // Round to 2 decimal places
+        reservoir.income.current = Math.round(income * 100) / 100;
     }
 
     onVolumeChange(reservoir: ReservoirSummaryResponse) {
