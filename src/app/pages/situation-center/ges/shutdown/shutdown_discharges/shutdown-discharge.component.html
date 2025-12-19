@@ -37,9 +37,19 @@
 
     <ng-template pTemplate="groupheader" let-discharge>
         <tr>
-            <td [attr.colspan]="authService.isSc() ? 8 : 7" class="bg-gray-200 dark:bg-gray-900">
+            <td class="bg-gray-200 dark:bg-gray-900" colspan="2">
                 <span class="font-bold text-lg">{{ discharge.organization.name }}</span>
             </td>
+            <td class="bg-gray-200 dark:bg-gray-900 font-semibold">
+                {{ getAverageFlowRate(discharge.organization.name) | number: '1.0-2' }}
+            </td>
+            <td class="bg-gray-200 dark:bg-gray-900 font-semibold">
+                {{ getTotalVolume(discharge.organization.name) | number: '1.2-2' }}
+            </td>
+            <td class="bg-gray-200 dark:bg-gray-900" colspan="3"></td>
+            @if (authService.isSc()) {
+                <td class="bg-gray-200 dark:bg-gray-900"></td>
+            }
         </tr>
     </ng-template>
 
