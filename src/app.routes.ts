@@ -50,7 +50,7 @@ export const appRoutes: Routes = [
             { path: 'reservoir-summary', component: ReservoirsSummaryComponent, canActivate: [raisGuard] },
             { path: 'shutdowns', component: ShutdownComponent, canActivate: [raisGuard] },
             { path: 'investment', component: InvestmentComponent, canActivate: [raisGuard] },
-            { path: 'debit-credit', component: DebitCreditComponent, canActivate: [adminGuard] },
+            { path: 'debit-credit', component: DebitCreditComponent, canActivate: [raisGuard] },
         ]
     },
     { path: 'notfound', component: Notfound },

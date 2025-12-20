@@ -127,7 +127,7 @@ export class MenuComponent implements OnInit {
                         label: 'Финансовый блок',
                         role: ['rais'],
                         items: [
-                            { label: 'Дебит / кредит', role: ['rais'] },
+                            { label: 'Дебит / кредит', role: ['rais'], routerLink: ['/debit-credit'] },
                             { label: 'Инвестиции', role: ['rais'], routerLink: ['/investment'] },
                             { label: 'Затраты на ремонт', role: ['rais'] },
                             { label: 'Закупки', role: ['rais'] },
