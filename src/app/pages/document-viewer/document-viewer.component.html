@@ -1,4 +1,17 @@
 <div class="card">
+    <form [formGroup]="form" class="mb-4">
+        <div class="flex justify-between items-baseline gap-4">
+            <div class="w-full md:w-1/4">
+                <app-date-picker
+                    label="Выберите дату"
+                    formControlName="date"
+                    [showTime]="false"
+                    errorMessage="Укажите дату">
+                </app-date-picker>
+            </div>
+        </div>
+    </form>
+
     @if (showTabs) {
         <p-tabs [(value)]="activeIndex" (valueChange)="onTabChange($event)">
             <p-tablist>
