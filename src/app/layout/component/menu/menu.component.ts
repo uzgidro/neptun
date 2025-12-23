@@ -106,7 +106,7 @@ export class MenuComponent implements OnInit {
                                     {
                                         label: 'Гидротехнические сооружения',
                                         role: ['rais', 'sc'],
-                                        routerLink: ['/reservoir-summary/pdf']
+                                        routerLink: ['/reservoir-device']
                                     }
                                     // {
                                     //     label: 'MODSNOW',
