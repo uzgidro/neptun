@@ -1,10 +1,9 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule, registerLocaleData } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { InputText } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
-import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
 import { ReservoirSummaryService } from '@/core/services/reservoir-summary.service';
 import { ReservoirSummaryRequest, ReservoirSummaryResponse } from '@/core/interfaces/reservoir-summary';
 import localeRu from '@angular/common/locales/ru';
@@ -15,25 +14,23 @@ import { HttpResponse } from '@angular/common/http';
 import { saveAs } from 'file-saver';
 import { LevelVolumeService } from '@/core/services/level-volume.service';
 import { LevelVolume } from '@/core/interfaces/level-volume';
+import { DateWidget } from '@/layout/component/widget/date/date.widget';
 
 registerLocaleData(localeRu);
 
 @Component({
     selector: 'app-reservoirs-summary',
-    imports: [CommonModule, ReactiveFormsModule, FormsModule, TableModule, InputText, ButtonModule, DatePickerComponent],
+    imports: [CommonModule, ReactiveFormsModule, FormsModule, TableModule, InputText, ButtonModule, DateWidget],
     templateUrl: './reservoirs-summary.component.html',
     styleUrl: './reservoirs-summary.component.scss'
 })
 export class ReservoirsSummaryComponent implements OnInit {
-    private fb: FormBuilder = inject(FormBuilder);
     private reservoirService: ReservoirSummaryService = inject(ReservoirSummaryService);
     private messageService: MessageService = inject(MessageService);
     private levelVolumeService: LevelVolumeService = inject(LevelVolumeService);
     authService: AuthService = inject(AuthService);
 
-    form: FormGroup = this.fb.group({
-        date: [new Date()]
-    });
+    selectedDate: Date | null = null;
 
     data: ReservoirSummaryResponse[] = [];
     originalData: ReservoirSummaryResponse[] = [];
@@ -42,20 +39,17 @@ export class ReservoirsSummaryComponent implements OnInit {
     isExcelLoading = false;
     isPdfLoading = false;
 
-    get selectedDate(): Date {
-        return this.form.get('date')?.value;
-    }
-
     get dateYMD(): string {
         return this.selectedDate ? `${this.selectedDate.getFullYear()}-${String(this.selectedDate.getMonth() + 1).padStart(2, '0')}-${String(this.selectedDate.getDate()).padStart(2, '0')}` : '';
     }
 
     ngOnInit() {
-        this.loadData(this.selectedDate);
+        // Data will be loaded via onDateChange when DateWidget initializes
+    }
 
-        this.form.get('date')?.valueChanges.subscribe((date) => {
-            this.loadData(date);
-        });
+    onDateChange(date: Date): void {
+        this.selectedDate = date;
+        this.loadData(date);
     }
 
     private loadData(date: Date) {
@@ -104,6 +98,9 @@ export class ReservoirsSummaryComponent implements OnInit {
         this.reservoirService.upsetReservoirData(dataToSave).subscribe({
             next: () => {
                 this.messageService.add({ severity: 'success', summary: 'Данные обновлены' });
+                if (this.selectedDate) {
+                    this.loadData(this.selectedDate);
+                }
             },
             error: (err) => {
                 this.messageService.add({ severity: 'warn', summary: 'Произошла ошибка', detail: err });
@@ -141,32 +138,13 @@ export class ReservoirsSummaryComponent implements OnInit {
         }
     }
 
-    calculateIncome(reservoir: ReservoirSummaryResponse) {
-        // Calculate volume diff (current - previous)
-        const volDiff = reservoir.volume.current - reservoir.volume.prev;
-
-        // Calculate income using the formula: income = (vol_diff / 0.0864) + release
-        const income = volDiff / 0.0864 + reservoir.release.current;
-
-        // Round to 2 decimal places
-        reservoir.income.current = Math.round(income * 100) / 100;
-    }
-
-    onVolumeChange(reservoir: ReservoirSummaryResponse) {
-        this.calculateIncome(reservoir);
-    }
-
-    onReleaseChange(reservoir: ReservoirSummaryResponse) {
-        this.calculateIncome(reservoir);
-    }
-
     download(format: 'excel' | 'pdf') {
         // Устанавливаем статус загрузки
         if (format === 'excel') this.isExcelLoading = true;
         else this.isPdfLoading = true;
 
         this.reservoirService
-            .downloadSummary(this.selectedDate, format)
+            .downloadSummary(this.selectedDate!, format)
             .pipe(
                 finalize(() => {
                     // Снимаем спиннер в любом случае (успех или ошибка)

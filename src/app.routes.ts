@@ -9,7 +9,6 @@ import { Role } from '@/pages/hrm/roles/roles';
 import { CategoriesComponent } from '@/pages/categories/categories.component';
 import { FilesComponent } from '@/pages/files/files.component';
 import { DocumentViewerComponent } from '@/pages/document-viewer/document-viewer.component';
-import { DischargeComponent } from '@/pages/situation-center/ges/discharge/discharge.component';
 import { ShutdownComponent } from '@/pages/situation-center/ges/shutdown/shutdown.component';
 import { PositionComponent } from '@/pages/hrm/position/position.component';
 import { DepartmentComponent } from '@/pages/hrm/department/department.component';
@@ -19,6 +18,10 @@ import { ConstructionComponent } from '@/pages/situation-center/construction/con
 import { ReceptionComponent } from '@/pages/planning/reception/reception.component';
 import { ReservoirsSummaryComponent } from '@/pages/situation-center/reservoirs-info/reservoirs-summary/reservoirs-summary.component';
 import { ReservoirSummatyPdfComponent } from '@/pages/situation-center/reservoirs-info/reservoir-summaty-pdf/reservoir-summaty-pdf.component';
+import { DischargesComponent } from '@/pages/situation-center/ges/discharges/discharges.component';
+import { VisitsComponent } from '@/pages/situation-center/other/visits/visits.component';
+import { IncidentsComponent } from '@/pages/situation-center/other/incidents/incidents.component';
+import { ReservoirsDeviceComponent } from '@/pages/situation-center/reservoirs-info/reservoirs-device/reservoirs-device.component';
 
 export const appRoutes: Routes = [
     {
@@ -40,14 +43,16 @@ export const appRoutes: Routes = [
             { path: 'departments', component: DepartmentComponent, canActivate: [adminGuard] },
             { path: 'employees', component: EmployeeComponent, canActivate: [adminGuard] },
             { path: 'viewer', component: DocumentViewerComponent, canActivate: [raisGuard] },
-            { path: 'discharge', component: DischargeComponent, canActivate: [raisGuard] },
+            { path: 'discharges', component: DischargesComponent, canActivate: [raisGuard] },
             { path: 'shutdowns', component: ShutdownComponent, canActivate: [raisGuard] },
             { path: 'construction', component: ConstructionComponent, canActivate: [raisGuard] },
             { path: 'planning/events', component: EventsComponent, canActivate: [raisGuard] },
             { path: 'planning/reception', component: ReceptionComponent, canActivate: [raisGuard] },
             { path: 'reservoir-summary', component: ReservoirsSummaryComponent, canActivate: [raisGuard] },
             { path: 'reservoir-summary/pdf', component: ReservoirSummatyPdfComponent, canActivate: [raisGuard] },
-            { path: 'shutdowns', component: ShutdownComponent, canActivate: [raisGuard] }
+            { path: 'visits', component: VisitsComponent, canActivate: [raisGuard] },
+            { path: 'incidents', component: IncidentsComponent, canActivate: [raisGuard] },
+            { path: 'reservoir-device', component: ReservoirsDeviceComponent, canActivate: [raisGuard] }
         ]
     },
     { path: 'notfound', component: Notfound },
