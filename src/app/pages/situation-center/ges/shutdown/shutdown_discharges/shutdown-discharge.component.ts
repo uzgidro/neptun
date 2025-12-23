@@ -299,27 +299,7 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
     }
 
     getAverageFlowRate(organizationName: string): number {
-        const orgDischarges = this.discharges.filter((d) => d.organization.name === organizationName);
-        if (orgDischarges.length === 0) return 0;
-
-        // Calculate time-weighted average
-        let totalWeightedFlow = 0;
-        let totalDuration = 0;
-
-        orgDischarges.forEach((discharge) => {
-            if (discharge.started_at && discharge.ended_at) {
-                const startTime = new Date(discharge.started_at).getTime();
-                const endTime = new Date(discharge.ended_at).getTime();
-                const duration = (endTime - startTime) / (1000 * 60 * 60); // Convert to hours
-
-                if (duration > 0) {
-                    totalWeightedFlow += discharge.flow_rate * duration;
-                    totalDuration += duration;
-                }
-            }
-        });
-
-        return totalDuration > 0 ? totalWeightedFlow / totalDuration : 0;
+        return this.getTotalVolume(organizationName) / 0.0864;
     }
 
     getTotalVolume(organizationName: string): number {
