@@ -69,6 +69,11 @@ export class MenuComponent implements OnInit {
                                         label: 'Аварийные отключение',
                                         role: ['rais', 'sc'],
                                         routerLink: ['/shutdowns']
+                                    },
+                                    {
+                                        label: 'Холостые водосбросы',
+                                        role: ['rais', 'sc'],
+                                        routerLink: ['/discharges']
                                     }
                                     // {
                                     //     label: 'Выработка',
@@ -89,12 +94,17 @@ export class MenuComponent implements OnInit {
                                 role: ['rais', 'sc'],
                                 items: [
                                     {
-                                        label: 'Водохранилища',
+                                        label: 'Сводка',
                                         role: ['rais', 'sc'],
                                         routerLink: ['/reservoir-summary']
                                     },
                                     {
-                                        label: 'Водохранилища PDF',
+                                        label: 'Сводка PDF',
+                                        role: ['rais', 'sc'],
+                                        routerLink: ['/reservoir-summary/pdf']
+                                    },
+                                    {
+                                        label: 'Гидротехнические сооружения',
                                         role: ['rais', 'sc'],
                                         routerLink: ['/reservoir-summary/pdf']
                                     }
@@ -121,6 +131,16 @@ export class MenuComponent implements OnInit {
                                         role: ['rais', 'sc'],
                                         url: 'https://soep.uz/',
                                         target: '_blank'
+                                    },
+                                    {
+                                        label: 'Инциденты',
+                                        role: ['rais', 'sc'],
+                                        routerLink: ['/incidents']
+                                    },
+                                    {
+                                        label: 'Визиты',
+                                        role: ['rais', 'sc'],
+                                        routerLink: ['/visits']
                                     }
                                 ]
                             },
