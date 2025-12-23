@@ -1,37 +1,29 @@
 <div class="card">
     <h3 class="text-center mb-3">Сводка по водохранилищам</h3>
 
-    <form [formGroup]="form" class="mb-4">
-        <div class="flex justify-between items-baseline gap-4">
-            <div class="w-full md:w-1/4">
-                <app-date-picker
-                    label="Выберите дату"
-                    formControlName="date"
-                    [showTime]="false"
-                    [submitted]="submitted"
-                    errorMessage="Укажите дату">
-                </app-date-picker>
-            </div>
-            <div class="flex gap-4">
-                <p-button
-                    label="Экспорт в Excel"
-                    icon="pi pi-file-excel"
-                    severity="success"
-                    [loading]="isExcelLoading"
-                    [disabled]="!data || data.length === 0"
-                    (onClick)="download('excel')">
-                </p-button>
-                <p-button
-                    label="Экспорт в PDF"
-                    icon="pi pi-file-pdf"
-                    severity="danger"
-                    [loading]="isPdfLoading"
-                    [disabled]="!data || data.length === 0"
-                    (onClick)="download('pdf')">
-                </p-button>
-            </div>
+    <div class="flex justify-between items-baseline gap-4">
+        <div class="w-full md:w-1/4">
+            <app-date (dateChange)="onDateChange($event)"></app-date>
         </div>
-    </form>
+        <div class="flex gap-4">
+            <p-button
+                label="Экспорт в Excel"
+                icon="pi pi-file-excel"
+                severity="success"
+                [loading]="isExcelLoading"
+                [disabled]="!data || data.length === 0"
+                (onClick)="download('excel')">
+            </p-button>
+            <p-button
+                label="Экспорт в PDF"
+                icon="pi pi-file-pdf"
+                severity="danger"
+                [loading]="isPdfLoading"
+                [disabled]="!data || data.length === 0"
+                (onClick)="download('pdf')">
+            </p-button>
+        </div>
+    </div>
 
     @if (data) {
         <p-table
@@ -52,12 +44,12 @@
                     <th colspan="2" rowspan="2">MODSNOW, снежный покров %</th>
                 </tr>
                 <tr>
-                    <th rowspan="2" class="text-nowrap">{{ form.get('date')?.value | date: 'dd MMM' : '' : 'ru' }}</th>
-                    <th rowspan="2" class="text-nowrap">{{ form.get('date')?.value | date: 'dd MMM' : '' : 'ru' }}</th>
+                    <th rowspan="2" class="text-nowrap">{{ selectedDate | date: 'dd MMM' : '' : 'ru' }}</th>
+                    <th rowspan="2" class="text-nowrap">{{ selectedDate | date: 'dd MMM' : '' : 'ru' }}</th>
                     <th colspan="2">Прошлые года</th>
-                    <th rowspan="2" class="text-nowrap">{{ form.get('date')?.value | date: 'dd MMM' : '' : 'ru' }}</th>
+                    <th rowspan="2" class="text-nowrap">{{ selectedDate | date: 'dd MMM' : '' : 'ru' }}</th>
                     <th colspan="2">Прошлые года</th>
-                    <th rowspan="2" class="text-nowrap">{{ form.get('date')?.value | date: 'dd MMM' : '' : 'ru' }}</th>
+                    <th rowspan="2" class="text-nowrap">{{ selectedDate | date: 'dd MMM' : '' : 'ru' }}</th>
                     <th colspan="2">Прошлые года</th>
                 </tr>
                 <tr>
@@ -67,9 +59,9 @@
                     <th>{{ getPreviousYear(2) }}</th>
                     <th>{{ getPreviousYear(1) }}</th>
                     <th>{{ getPreviousYear(2) }}</th>
-                    <th>{{ form.get('date')?.value | date: 'yyyy' }}</th>
+                    <th>{{ selectedDate | date: 'yyyy' }}</th>
                     <th>{{ getPreviousYear(1) }}</th>
-                    <th>{{ form.get('date')?.value | date: 'yyyy' }}</th>
+                    <th>{{ selectedDate | date: 'yyyy' }}</th>
                     <th>{{ getPreviousYear(1) }}</th>
                 </tr>
             </ng-template>
@@ -111,8 +103,7 @@
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
                                         <input pInputText type="number" [(ngModel)]="reservoir.volume.current"
-                                               (focus)="onInputFocus($event, reservoir.volume, 'current')"
-                                               (ngModelChange)="onVolumeChange(reservoir)" />
+                                               (focus)="onInputFocus($event, reservoir.volume, 'current')" />
                                     </ng-template>
                                     <ng-template pTemplate="output">
                                         {{ reservoir.volume.current | number: '1.0-2' }}
@@ -159,8 +150,7 @@
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <input pInputText type="number" [(ngModel)]="reservoir.release.current"
-                                           (focus)="onInputFocus($event, reservoir.release, 'current')"
-                                           (ngModelChange)="onReleaseChange(reservoir)" />
+                                           (focus)="onInputFocus($event, reservoir.release, 'current')" />
                                 </ng-template>
                                 <ng-template pTemplate="output">
                                     {{ reservoir.release.current | number: '1.0-1' }}

@@ -2,17 +2,7 @@
     <ng-template #caption >
         <div class="font-semibold text-xl mb-4">Аварийные отключение</div>
     </ng-template>
-    <div class="mb-4">
-        <label for="dateSelector" class="block mb-2">Дата:</label>
-        <p-date-picker
-            inputId="dateSelector"
-            [(ngModel)]="selectedDate"
-            dateFormat="dd.mm.yy"
-            [showIcon]="true"
-            (onSelect)="onDateChange()"
-            placeholder="Выберите дату"
-        ></p-date-picker>
-    </div>
+    <app-date [(date)]="selectedDate"></app-date>
 
     <div class="mb-8">
         <app-incident [date]="selectedDate" (incidentSaved)="onIncidentSaved()"></app-incident>
