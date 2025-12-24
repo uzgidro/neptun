@@ -18,6 +18,7 @@
              [loading]="loading" class="p-datatable-lg">
         <ng-template #header>
             <tr>
+                <th style="width: 3rem">№</th>
                 <th class="whitespace-nowrap" pSortableColumn="organization_name">Название
                     <p-sortIcon field="organization_name" />
                 </th>
@@ -38,8 +39,9 @@
                 </th>
             </tr>
         </ng-template>
-        <ng-template #body let-reservoir>
+        <ng-template #body let-reservoir let-rowIndex="rowIndex">
             <tr>
+                <td class="font-semibold">{{ rowIndex + 1 }}</td>
                 <td class="whitespace-nowrap">{{ reservoir.organization_name }}</td>
                 <td class="whitespace-nowrap">{{ reservoir.reservoir_metrics.current.income }}
                     @if (reservoir.reservoir_metrics.diff) {
