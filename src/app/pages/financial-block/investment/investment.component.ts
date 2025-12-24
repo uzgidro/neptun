@@ -16,6 +16,7 @@ import { FileViewerComponent } from '@/layout/component/dialog/file-viewer/file-
 import { FileListComponent } from '@/layout/component/dialog/file-list/file-list.component';
 import { InputTextComponent } from '@/layout/component/dialog/input-text/input-text.component';
 import { DatePicker } from 'primeng/datepicker';
+import { FinancialDashboardService } from '../dashboard/services/financial-dashboard.service';
 
 type Status = 'Новый' | 'В разработке' | 'Выполнено';
 type OperationFilter = 'Все' | 'Кредит' | 'Дебит';
@@ -97,6 +98,7 @@ export class InvestmentComponent implements OnInit {
 
     private fb: FormBuilder = inject(FormBuilder);
     private messageService: MessageService = inject(MessageService);
+    private dashboardService = inject(FinancialDashboardService);
 
     operationOptions = [
         { name: 'Все', value: 'Все' },
@@ -139,6 +141,20 @@ export class InvestmentComponent implements OnInit {
 
         this.initChartOptions();
         this.applyFilter();
+        this.updateDashboardData();
+    }
+
+    private updateDashboardData(): void {
+        const inProgressCount = this.investments.filter(i => i.status === 'В разработке').length;
+        const completedCount = this.investments.filter(i => i.status === 'Выполнено').length;
+        this.dashboardService.updateInvestment({
+            totalDebit: this.totalDebit,
+            totalCredit: this.totalCredit,
+            balance: this.balance,
+            projectsCount: this.investments.length,
+            inProgressCount,
+            completedCount
+        });
     }
 
     private initChartOptions(): void {
@@ -532,6 +548,7 @@ export class InvestmentComponent implements OnInit {
         this.existingFilesToKeep = [];
         this.form.reset();
         this.applyFilter();
+        this.updateDashboardData();
     }
 
     deleteInvestment(id: number) {
@@ -539,6 +556,7 @@ export class InvestmentComponent implements OnInit {
             this.investments = this.investments.filter((inv) => inv.id !== id);
             this.messageService.add({ severity: 'success', summary: 'Проект удален' });
             this.applyFilter();
+            this.updateDashboardData();
         }
     }
 

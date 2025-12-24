@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
@@ -16,6 +16,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { ChartModule } from 'primeng/chart';
+import { FinancialDashboardService } from '../dashboard/services/financial-dashboard.service';
 
 interface Category {
     label: string;
@@ -107,6 +108,8 @@ export class DebitCreditComponent implements OnInit {
     debitCreditCompareData: any;
     debitCreditCompareOptions: any;
 
+    private dashboardService = inject(FinancialDashboardService);
+
     constructor(
         private confirmationService: ConfirmationService,
         private messageService: MessageService
@@ -116,6 +119,18 @@ export class DebitCreditComponent implements OnInit {
         this.loadTransactions();
         this.applyFilters();
         this.initCharts();
+        this.updateDashboardData();
+    }
+
+    private updateDashboardData(): void {
+        const pendingCount = this.transactions.filter(t => t.status === 'pending').length;
+        this.dashboardService.updateDebitCredit({
+            totalDebit: this.totalDebit,
+            totalCredit: this.totalCredit,
+            balance: this.balance,
+            transactionsCount: this.transactions.length,
+            pendingCount
+        });
     }
 
     loadTransactions() {
@@ -282,6 +297,7 @@ export class DebitCreditComponent implements OnInit {
 
         this.calculateBalances();
         this.applyFilters();
+        this.updateDashboardData();
         this.transactionDialog = false;
     }
 
@@ -296,6 +312,7 @@ export class DebitCreditComponent implements OnInit {
                 this.transactions = this.transactions.filter(t => t.id !== transaction.id);
                 this.calculateBalances();
                 this.applyFilters();
+                this.updateDashboardData();
                 this.messageService.add({
                     severity: 'success',
                     summary: 'Успешно',
@@ -315,6 +332,7 @@ export class DebitCreditComponent implements OnInit {
         this.transactions.push(newTransaction);
         this.calculateBalances();
         this.applyFilters();
+        this.updateDashboardData();
         this.messageService.add({
             severity: 'success',
             summary: 'Успешно',

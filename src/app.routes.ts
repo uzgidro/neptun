@@ -19,7 +19,12 @@ import { ConstructionComponent } from '@/pages/situation-center/construction/con
 import { ReceptionComponent } from '@/pages/planning/reception/reception.component';
 import { ReservoirsSummaryComponent } from '@/pages/situation-center/reservoirs-info/reservoirs-summary/reservoirs-summary.component';
 import { InvestmentComponent } from '@/pages/financial-block/investment/investment.component';
-import {DebitCreditComponent} from '@/pages/financial-block/debit-credit/debit-credit.component';
+import { DebitCreditComponent } from '@/pages/financial-block/debit-credit/debit-credit.component';
+import { RepairCostsComponent } from '@/pages/financial-block/repair-costs/repair-costs.component';
+import { ProcurementComponent } from '@/pages/financial-block/procurement/procurement.component';
+import { KpiComponent } from '@/pages/financial-block/kpi/kpi.component';
+import { SalaryComponent } from '@/pages/financial-block/salary/salary.component';
+import { FinancialDashboardComponent } from '@/pages/financial-block/dashboard/financial-dashboard.component';
 
 
 export const appRoutes: Routes = [
@@ -49,8 +54,13 @@ export const appRoutes: Routes = [
             { path: 'planning/reception', component: ReceptionComponent, canActivate: [raisGuard] },
             { path: 'reservoir-summary', component: ReservoirsSummaryComponent, canActivate: [raisGuard] },
             { path: 'shutdowns', component: ShutdownComponent, canActivate: [raisGuard] },
+            { path: 'financial-dashboard', component: FinancialDashboardComponent, canActivate: [raisGuard] },
             { path: 'investment', component: InvestmentComponent, canActivate: [raisGuard] },
             { path: 'debit-credit', component: DebitCreditComponent, canActivate: [raisGuard] },
+            { path: 'repair-costs', component: RepairCostsComponent, canActivate: [raisGuard] },
+            { path: 'procurement', component: ProcurementComponent, canActivate: [raisGuard] },
+            { path: 'kpi', component: KpiComponent, canActivate: [raisGuard] },
+            { path: 'salary', component: SalaryComponent, canActivate: [raisGuard] },
         ]
     },
     { path: 'notfound', component: Notfound },
