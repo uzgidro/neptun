@@ -17,7 +17,7 @@ import { EventsComponent } from '@/pages/planning/events/events.component';
 import { ConstructionComponent } from '@/pages/situation-center/construction/construction.component';
 import { ReceptionComponent } from '@/pages/planning/reception/reception.component';
 import { ReservoirsSummaryComponent } from '@/pages/situation-center/reservoirs-info/reservoirs-summary/reservoirs-summary.component';
-import { ReservoirSummatyPdfComponent } from '@/pages/situation-center/reservoirs-info/reservoir-summaty-pdf/reservoir-summaty-pdf.component';
+import { ReservoirSummaryPdfComponent } from '@/pages/situation-center/reservoirs-info/reservoir-summaty-pdf/reservoir-summary-pdf.component';
 import { DischargesComponent } from '@/pages/situation-center/ges/discharges/discharges.component';
 import { VisitsComponent } from '@/pages/situation-center/other/visits/visits.component';
 import { IncidentsComponent } from '@/pages/situation-center/other/incidents/incidents.component';
@@ -49,7 +49,7 @@ export const appRoutes: Routes = [
             { path: 'planning/events', component: EventsComponent, canActivate: [raisGuard] },
             { path: 'planning/reception', component: ReceptionComponent, canActivate: [raisGuard] },
             { path: 'reservoir-summary', component: ReservoirsSummaryComponent, canActivate: [raisGuard] },
-            { path: 'reservoir-summary/pdf', component: ReservoirSummatyPdfComponent, canActivate: [raisGuard] },
+            { path: 'reservoir-summary/pdf', component: ReservoirSummaryPdfComponent, canActivate: [raisGuard] },
             { path: 'visits', component: VisitsComponent, canActivate: [raisGuard] },
             { path: 'incidents', component: IncidentsComponent, canActivate: [raisGuard] },
             { path: 'reservoir-device', component: ReservoirsDeviceComponent, canActivate: [raisGuard] }
