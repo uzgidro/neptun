@@ -177,6 +177,68 @@ export class FinancialDashboardService {
         ];
     }
 
+    // Загрузка начальных данных (вызывается при старте)
+    loadInitialData(): void {
+        // Данные Дебит/Кредит (из debit-credit модуля)
+        this.updateDebitCredit({
+            totalDebit: 525000,
+            totalCredit: 532000,
+            balance: -7000,
+            transactionsCount: 8,
+            pendingCount: 2
+        });
+
+        // Данные Инвестиции
+        this.updateInvestment({
+            totalDebit: 0,
+            totalCredit: 0,
+            balance: 0,
+            projectsCount: 0,
+            inProgressCount: 0,
+            completedCount: 0
+        });
+
+        // Данные Ремонт
+        this.updateRepairCosts({
+            totalPlannedCost: 0,
+            totalActualCost: 0,
+            costDifference: 0,
+            repairsCount: 0,
+            inProgressCount: 0,
+            completedCount: 0
+        });
+
+        // Данные Закупки
+        this.updateProcurement({
+            totalAmount: 0,
+            procurementsCount: 0,
+            pendingCount: 0,
+            inProgressCount: 0,
+            deliveredCount: 0,
+            deliveredAmount: 0
+        });
+
+        // Данные KPI
+        this.updateKpi({
+            overallKpi: 0,
+            criticalCount: 0,
+            warningCount: 0,
+            completedCount: 0,
+            totalCount: 0
+        });
+
+        // Данные ЗП
+        this.updateSalary({
+            totalFOT: 0,
+            totalNetPay: 0,
+            averageSalary: 0,
+            totalDeductions: 0,
+            employeesCount: 0,
+            paidCount: 0,
+            pendingAmount: 0
+        });
+    }
+
     // Начальные/пустые данные
     private getInitialData(): FinancialDashboardData {
         return {
