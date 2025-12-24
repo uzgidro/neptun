@@ -133,8 +133,7 @@ export class MenuComponent implements OnInit {
                             { label: 'Затраты на ремонт', role: ['rais'], routerLink: ['/repair-costs'] },
                             { label: 'Закупки', role: ['rais'], routerLink: ['/procurement'] },
                             { label: 'KPI', role: ['rais'], routerLink: ['/kpi'] },
-                            { label: 'Заработная плата', role: ['rais'], routerLink: ['/salary'] },
-                            { label: 'Премирование', role: ['rais'] }
+                            { label: 'Заработная плата', role: ['rais'], routerLink: ['/salary'] }
                         ]
                     },
                     {
