@@ -1,0 +1,476 @@
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+<div class="repair-costs-container">
+    <!-- Summary Cards Row -->
+    <div class="summary-cards-row">
+        <div class="summary-card total-card">
+            <div class="card-content">
+                <div class="card-icon total-icon">
+                    <i class="pi pi-wrench"></i>
+                </div>
+                <div class="card-info">
+                    <span class="card-label">Всего ремонтов</span>
+                    <span class="card-value text-primary">{{ totalRepairsCount }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="summary-card planned-card">
+            <div class="card-content">
+                <div class="card-icon planned-icon">
+                    <i class="pi pi-calendar"></i>
+                </div>
+                <div class="card-info">
+                    <span class="card-label">Плановые затраты</span>
+                    <span class="card-value text-blue-500">{{ formatCurrency(totalPlannedCost) }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="summary-card actual-card">
+            <div class="card-content">
+                <div class="card-icon actual-icon">
+                    <i class="pi pi-check-circle"></i>
+                </div>
+                <div class="card-info">
+                    <span class="card-label">Фактические затраты</span>
+                    <span class="card-value text-green-500">{{ formatCurrency(totalActualCost) }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="summary-card difference-card">
+            <div class="card-content">
+                <div class="card-icon" [ngClass]="costDifference >= 0 ? 'savings-icon' : 'overrun-icon'">
+                    <i class="pi" [ngClass]="costDifference >= 0 ? 'pi-arrow-down' : 'pi-arrow-up'"></i>
+                </div>
+                <div class="card-info">
+                    <span class="card-label">{{ costDifference >= 0 ? 'Экономия' : 'Перерасход' }}</span>
+                    <span class="card-value" [ngClass]="{'text-green-500': costDifference >= 0, 'text-red-500': costDifference < 0}">
+                        {{ formatCurrency(costDifference >= 0 ? costDifference : -costDifference) }}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="charts-section">
+        <!-- Monthly Dynamics Chart -->
+        <div class="chart-card chart-large">
+            <div class="chart-header">
+                <h3>Динамика затрат по месяцам</h3>
+                <span class="chart-icon"><i class="pi pi-chart-bar"></i></span>
+            </div>
+            <div class="chart-body">
+                <p-chart
+                    type="bar"
+                    [data]="monthlyChartData"
+                    [options]="monthlyChartOptions"
+                ></p-chart>
+            </div>
+        </div>
+
+        <!-- Right side charts -->
+        <div class="charts-right">
+            <!-- Planned vs Actual -->
+            <div class="chart-card chart-small">
+                <div class="chart-header">
+                    <h3>План vs Факт</h3>
+                    <span class="chart-icon"><i class="pi pi-chart-pie"></i></span>
+                </div>
+                <div class="chart-body-small">
+                    <p-chart
+                        type="doughnut"
+                        [data]="plannedVsActualData"
+                        [options]="plannedVsActualOptions"
+                    ></p-chart>
+                </div>
+            </div>
+
+            <!-- Expenses by Category -->
+            <div class="chart-card chart-small">
+                <div class="chart-header">
+                    <h3>Затраты по категориям</h3>
+                    <span class="chart-icon"><i class="pi pi-percentage"></i></span>
+                </div>
+                <div class="chart-body-small">
+                    <p-chart
+                        type="pie"
+                        [data]="categoryChartData"
+                        [options]="categoryChartOptions"
+                    ></p-chart>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="toolbar-card">
+        <div class="toolbar-filters">
+            <!-- Search -->
+            <p-inputGroup class="search-input">
+                <p-inputGroupAddon>
+                    <i class="pi pi-search"></i>
+                </p-inputGroupAddon>
+                <input
+                    type="text"
+                    pInputText
+                    [(ngModel)]="searchText"
+                    (ngModelChange)="applyFilters()"
+                    placeholder="Поиск..."
+                />
+            </p-inputGroup>
+
+            <!-- Date Range -->
+            <p-datepicker
+                [(ngModel)]="dateRange"
+                (ngModelChange)="applyFilters()"
+                selectionMode="range"
+                [showIcon]="true"
+                dateFormat="dd.mm.yy"
+                placeholder="Период"
+                class="date-picker"
+            ></p-datepicker>
+
+            <!-- Repair Type Filter -->
+            <p-select
+                [options]="repairTypes"
+                [(ngModel)]="selectedRepairType"
+                (ngModelChange)="applyFilters()"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Тип ремонта"
+                [showClear]="true"
+                class="filter-select"
+            ></p-select>
+
+            <!-- Category Filter -->
+            <p-select
+                [options]="categories"
+                [(ngModel)]="selectedCategory"
+                (ngModelChange)="applyFilters()"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Категория"
+                [showClear]="true"
+                class="filter-select"
+            ></p-select>
+
+            <!-- Status Filter -->
+            <p-select
+                [options]="statuses"
+                [(ngModel)]="selectedStatus"
+                (ngModelChange)="applyFilters()"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Статус"
+                [showClear]="true"
+                class="filter-select"
+            ></p-select>
+
+            <!-- Clear Filters -->
+            <p-button
+                icon="pi pi-filter-slash"
+                severity="secondary"
+                [outlined]="true"
+                (onClick)="clearFilters()"
+                pTooltip="Сбросить фильтры"
+            ></p-button>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="toolbar-actions">
+            <p-button
+                label="Excel"
+                icon="pi pi-file-excel"
+                severity="success"
+                [outlined]="true"
+                (onClick)="exportToExcel()"
+            ></p-button>
+            <p-button
+                label="Добавить"
+                icon="pi pi-plus"
+                (onClick)="openNewRepair()"
+            ></p-button>
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-card">
+        <p-table
+            [value]="filteredRepairs"
+            [tableStyle]="{'min-width': '80rem'}"
+            [paginator]="true"
+            [rows]="10"
+            [rowsPerPageOptions]="[5, 10, 25, 50]"
+            [showCurrentPageReport]="true"
+            currentPageReportTemplate="Показано {first} - {last} из {totalRecords} записей"
+            [sortField]="'date'"
+            [sortOrder]="-1"
+        >
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="date" style="width: 110px">
+                        Дата <p-sortIcon field="date"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="objectName">
+                        Объект <p-sortIcon field="objectName"></p-sortIcon>
+                    </th>
+                    <th style="width: 120px">Тип</th>
+                    <th style="width: 130px">Категория</th>
+                    <th pSortableColumn="plannedCost" style="width: 140px; text-align: right">
+                        План <p-sortIcon field="plannedCost"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="actualCost" style="width: 140px; text-align: right">
+                        Факт <p-sortIcon field="actualCost"></p-sortIcon>
+                    </th>
+                    <th style="width: 120px; text-align: right">Разница</th>
+                    <th pSortableColumn="contractor" style="width: 140px">
+                        Подрядчик <p-sortIcon field="contractor"></p-sortIcon>
+                    </th>
+                    <th style="width: 110px">Статус</th>
+                    <th style="width: 120px; text-align: center">Действия</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-repair>
+                <tr>
+                    <td>{{ repair.date | date: 'dd.MM.yyyy' }}</td>
+                    <td>
+                        <div class="flex flex-column">
+                            <span class="font-semibold">{{ repair.objectName }}</span>
+                            <span class="text-sm text-500" *ngIf="repair.description">{{ repair.description }}</span>
+                        </div>
+                    </td>
+                    <td>
+                        <p-tag
+                            [value]="getRepairTypeLabel(repair.repairType)"
+                            [severity]="getRepairTypeSeverity(repair.repairType)"
+                        ></p-tag>
+                    </td>
+                    <td>
+                        <div class="flex align-items-center gap-2">
+                            <i [class]="getCategoryIcon(repair.category)" class="text-500"></i>
+                            <span>{{ getCategoryLabel(repair.category) }}</span>
+                        </div>
+                    </td>
+                    <td class="text-right">
+                        <span class="text-blue-600 font-semibold">
+                            {{ formatCurrency(repair.plannedCost) }}
+                        </span>
+                    </td>
+                    <td class="text-right">
+                        <span *ngIf="repair.actualCost !== null" class="text-green-600 font-semibold">
+                            {{ formatCurrency(repair.actualCost) }}
+                        </span>
+                        <span *ngIf="repair.actualCost === null" class="text-400">-</span>
+                    </td>
+                    <td class="text-right">
+                        <span *ngIf="getCostVariance(repair) !== null" [ngClass]="getCostVarianceClass(repair)" class="font-semibold">
+                            {{ getCostVariance(repair)! >= 0 ? '+' : '' }}{{ formatCurrency(getCostVariance(repair)!) }}
+                        </span>
+                        <span *ngIf="getCostVariance(repair) === null" class="text-400">-</span>
+                    </td>
+                    <td>{{ repair.contractor }}</td>
+                    <td>
+                        <p-tag
+                            [value]="getStatusLabel(repair.status)"
+                            [severity]="getStatusSeverity(repair.status)"
+                        ></p-tag>
+                    </td>
+                    <td class="text-center">
+                        <div class="flex align-items-center justify-content-center gap-1">
+                            <p-button
+                                icon="pi pi-pencil"
+                                [rounded]="true"
+                                [text]="true"
+                                severity="info"
+                                (onClick)="editRepair(repair)"
+                                pTooltip="Редактировать"
+                            ></p-button>
+                            <p-button
+                                icon="pi pi-trash"
+                                [rounded]="true"
+                                [text]="true"
+                                severity="danger"
+                                (onClick)="deleteRepair(repair)"
+                                pTooltip="Удалить"
+                            ></p-button>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="footer">
+                <tr class="font-bold">
+                    <td colspan="4" class="text-right">ИТОГО:</td>
+                    <td class="text-right text-blue-600">{{ formatCurrency(totalPlannedCost) }}</td>
+                    <td class="text-right text-green-600">{{ formatCurrency(totalActualCost) }}</td>
+                    <td class="text-right" [ngClass]="{'text-green-600': costDifference >= 0, 'text-red-600': costDifference < 0}">
+                        {{ costDifference >= 0 ? '+' : '' }}{{ formatCurrency(costDifference) }}
+                    </td>
+                    <td colspan="3"></td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="10" class="text-center p-4">
+                        <div class="flex flex-column align-items-center gap-2">
+                            <i class="pi pi-inbox text-4xl text-500"></i>
+                            <span class="text-500">Записи не найдены</span>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+
+<!-- Repair Dialog -->
+<p-dialog
+    [(visible)]="repairDialog"
+    [header]="isEditMode ? 'Редактирование записи' : 'Новая запись о ремонте'"
+    [modal]="true"
+    [style]="{ width: '600px', maxWidth: '95vw' }"
+    [closable]="true"
+    [draggable]="false"
+    styleClass="repair-dialog"
+>
+    <div class="dialog-form">
+        <!-- Date -->
+        <div class="form-field">
+            <label for="date">Дата <span class="required">*</span></label>
+            <p-datepicker
+                id="date"
+                [(ngModel)]="currentRepair.date"
+                [showIcon]="true"
+                dateFormat="dd.mm.yy"
+                appendTo="body"
+            ></p-datepicker>
+        </div>
+
+        <!-- Object Name -->
+        <div class="form-field">
+            <label for="objectName">Объект/Оборудование <span class="required">*</span></label>
+            <input
+                id="objectName"
+                type="text"
+                pInputText
+                [(ngModel)]="currentRepair.objectName"
+                placeholder="Введите название объекта"
+            />
+        </div>
+
+        <!-- Repair Type & Category Row -->
+        <div class="form-row">
+            <div class="form-field">
+                <label for="repairType">Тип ремонта</label>
+                <p-select
+                    id="repairType"
+                    [options]="repairTypes"
+                    [(ngModel)]="currentRepair.repairType"
+                    optionLabel="label"
+                    optionValue="value"
+                    appendTo="body"
+                ></p-select>
+            </div>
+            <div class="form-field">
+                <label for="category">Категория</label>
+                <p-select
+                    id="category"
+                    [options]="categories"
+                    [(ngModel)]="currentRepair.category"
+                    optionLabel="label"
+                    optionValue="value"
+                    appendTo="body"
+                ></p-select>
+            </div>
+        </div>
+
+        <!-- Contractor -->
+        <div class="form-field">
+            <label for="contractor">Подрядчик/Исполнитель <span class="required">*</span></label>
+            <input
+                id="contractor"
+                type="text"
+                pInputText
+                [(ngModel)]="currentRepair.contractor"
+                placeholder="Введите название подрядчика"
+            />
+        </div>
+
+        <!-- Planned / Actual Cost Row -->
+        <div class="form-row">
+            <div class="form-field">
+                <label for="plannedCost" class="label-planned">
+                    <i class="pi pi-calendar"></i> Плановая стоимость <span class="required">*</span>
+                </label>
+                <p-inputNumber
+                    id="plannedCost"
+                    [(ngModel)]="currentRepair.plannedCost"
+                    mode="decimal"
+                    [minFractionDigits]="0"
+                    [maxFractionDigits]="0"
+                    suffix=" UZS"
+                    placeholder="0 UZS"
+                ></p-inputNumber>
+            </div>
+            <div class="form-field">
+                <label for="actualCost" class="label-actual">
+                    <i class="pi pi-check-circle"></i> Фактическая стоимость
+                </label>
+                <p-inputNumber
+                    id="actualCost"
+                    [(ngModel)]="currentRepair.actualCost"
+                    mode="decimal"
+                    [minFractionDigits]="0"
+                    [maxFractionDigits]="0"
+                    suffix=" UZS"
+                    placeholder="0 UZS"
+                ></p-inputNumber>
+            </div>
+        </div>
+
+        <!-- Status -->
+        <div class="form-field">
+            <label for="status">Статус</label>
+            <p-select
+                id="status"
+                [options]="statuses"
+                [(ngModel)]="currentRepair.status"
+                optionLabel="label"
+                optionValue="value"
+                appendTo="body"
+            ></p-select>
+        </div>
+
+        <!-- Description -->
+        <div class="form-field">
+            <label for="description">Описание работ</label>
+            <textarea
+                id="description"
+                pInputTextarea
+                [(ngModel)]="currentRepair.description"
+                rows="3"
+                placeholder="Опишите выполняемые работы"
+            ></textarea>
+        </div>
+    </div>
+
+    <ng-template pTemplate="footer">
+        <div class="dialog-footer">
+            <p-button
+                label="Отмена"
+                severity="secondary"
+                [outlined]="true"
+                icon="pi pi-times"
+                (onClick)="repairDialog = false"
+            ></p-button>
+            <p-button
+                [label]="isEditMode ? 'Сохранить' : 'Добавить'"
+                [icon]="isEditMode ? 'pi pi-save' : 'pi pi-plus'"
+                (onClick)="saveRepair()"
+            ></p-button>
+        </div>
+    </ng-template>
+</p-dialog>
