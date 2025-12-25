@@ -1,0 +1,175 @@
+<div class="card">
+    <div class="font-semibold text-xl mb-4">Организации</div>
+    <p-table
+        #dt
+        [value]="organizations"
+        dataKey="id"
+        [rows]="10"
+        [loading]="loading"
+        [rowHover]="true"
+        [showGridlines]="true"
+        [paginator]="true"
+        [expandedRowKeys]="expandedRows"
+        [globalFilterFields]="['name', 'parent_organization']"
+    >
+        <ng-template #caption>
+            <div class="flex justify-between items-center flex-column sm:flex-row gap-2">
+                <div class="flex gap-2">
+                    <button pButton (click)="expandAll()" class="p-button-outlined">
+                        <i class="pi {{ isExpanded ? 'pi-minus' : 'pi-plus' }}" pButtonIcon></i>
+                        <span pButtonLabel>{{ isExpanded ? 'Свернуть все' : 'Развернуть все' }}</span>
+                    </button>
+                    <p-iconfield>
+                        <p-inputicon>
+                            <i class="pi pi-search"></i>
+                        </p-inputicon>
+                        <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Поиск" />
+                    </p-iconfield>
+                </div>
+                <button pButton (click)="openDialog()">
+                    <i class="pi pi-plus" pButtonIcon></i>
+                    <span pButtonLabel>Новая организация</span>
+                </button>
+            </div>
+        </ng-template>
+        <ng-template #header>
+            <tr>
+                <th style="width: 4rem"></th>
+                <th style="min-width: 15rem">Название</th>
+                <th style="min-width: 12rem">Родительская организация</th>
+                <th style="width: 10rem">Действия</th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-organization let-expanded="expanded">
+            <tr>
+                <td>
+                    @if (organization.items?.length) {
+                        <button
+                            type="button"
+                            pButton
+                            pRipple
+                            [pRowToggler]="organization"
+                            class="p-button-text p-button-rounded p-button-plain"
+                            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
+                        </button>
+                    }
+                </td>
+                <td>
+                    <span class="font-semibold">{{ organization.name }}</span>
+                </td>
+                <td>
+                    {{ organization.parent_organization || '—' }}
+                </td>
+                <td>
+                    <div class="flex justify-center gap-2">
+                        <button pButton
+                                icon="pi pi-pencil"
+                                (click)="openEditDialog(organization)"
+                                class="p-button-rounded p-button-text p-button-warning"
+                                pTooltip="Редактировать"
+                                tooltipPosition="top">
+                        </button>
+                        <button pButton
+                                icon="pi pi-trash"
+                                (click)="openDeleteDialog(organization)"
+                                class="p-button-rounded p-button-text p-button-danger"
+                                pTooltip="Удалить"
+                                tooltipPosition="top">
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template #expandedrow let-organization>
+            <tr>
+                <td colspan="4">
+                    <div class="p-4">
+                        @if (organization.items?.length) {
+                            <p-table [value]="organization.items" dataKey="id">
+                                <ng-template #header>
+                                    <tr>
+                                        <th style="min-width: 15rem">Название</th>
+                                        <th style="min-width: 12rem">Родительская организация</th>
+                                        <th style="width: 10rem">Действия</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template #body let-child>
+                                    <tr>
+                                        <td>{{ child.name }}</td>
+                                        <td>{{ child.parent_organization || organization.name }}</td>
+                                        <td>
+                                            <div class="flex justify-center gap-2">
+                                                <button pButton
+                                                        icon="pi pi-pencil"
+                                                        (click)="openEditDialog(child)"
+                                                        class="p-button-rounded p-button-text p-button-warning"
+                                                        pTooltip="Редактировать"
+                                                        tooltipPosition="top">
+                                                </button>
+                                                <button pButton
+                                                        icon="pi pi-trash"
+                                                        (click)="openDeleteDialog(child)"
+                                                        class="p-button-rounded p-button-text p-button-danger"
+                                                        pTooltip="Удалить"
+                                                        tooltipPosition="top">
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                                <ng-template #emptymessage>
+                                    <tr>
+                                        <td colspan="3">Нет дочерних организаций</td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        }
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template #emptymessage>
+            <tr>
+                <td colspan="4">Ничего не найдено</td>
+            </tr>
+        </ng-template>
+        <ng-template #loadingbody>
+            <tr>
+                <td colspan="4">Идет загрузка. Ожидайте...</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<app-dialog
+    [(visible)]="displayDialog"
+    [header]="isEditMode ? 'Редактировать организацию' : 'Новая организация'"
+    [form]="organizationForm"
+    [saveLabel]="isEditMode ? 'Обновить' : 'Сохранить'"
+    (save)="onSubmit()"
+    (cancel)="closeDialog()">
+    <form class="p-4" [formGroup]="organizationForm" (ngSubmit)="onSubmit()">
+        <app-input-text
+            formControlName="name"
+            label="Название"
+            [submitted]="submitted"
+            errorMessage="Название обязательно"
+            [required]="true">
+        </app-input-text>
+
+        <app-select
+            formControlName="parent_organization_id"
+            label="Родительская организация"
+            [items]="getAvailableParentOrganizations()"
+            [submitted]="submitted"
+            [required]="false"
+            [showClear]="true">
+        </app-select>
+    </form>
+</app-dialog>
+
+<app-delete-confirmation
+    [(visible)]="displayDeleteDialog"
+    [message]="'Вы уверены, что хотите удалить организацию ' + (selectedOrganization?.name || '') + '?'"
+    (onConfirm)="confirmDelete()">
+</app-delete-confirmation>

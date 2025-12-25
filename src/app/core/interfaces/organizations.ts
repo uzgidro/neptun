@@ -12,3 +12,8 @@ export interface Organization {
     contacts: Contact[];
     ascue_metrics?: AscueMetricsDto;
 }
+
+export interface OrganizationPayload {
+    name: string;
+    parent_organization_id?: number | null;
+}

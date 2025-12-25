@@ -14,6 +14,7 @@ import { ShutdownComponent } from '@/pages/situation-center/ges/shutdown/shutdow
 import { PositionComponent } from '@/pages/hrm/position/position.component';
 import { DepartmentComponent } from '@/pages/hrm/department/department.component';
 import { EmployeeComponent } from '@/pages/hrm/employee/employee.component';
+import { OrganizationComponent } from '@/pages/hrm/organization/organization.component';
 import { EventsComponent } from '@/pages/planning/events/events.component';
 import { ConstructionComponent } from '@/pages/situation-center/construction/construction.component';
 import { ReceptionComponent } from '@/pages/planning/reception/reception.component';
@@ -46,6 +47,7 @@ export const appRoutes: Routes = [
             { path: 'positions', component: PositionComponent, canActivate: [adminGuard] },
             { path: 'departments', component: DepartmentComponent, canActivate: [adminGuard] },
             { path: 'employees', component: EmployeeComponent, canActivate: [adminGuard] },
+            { path: 'organizations', component: OrganizationComponent, canActivate: [raisGuard] },
             { path: 'viewer', component: DocumentViewerComponent, canActivate: [raisGuard] },
             { path: 'discharge', component: DischargeComponent, canActivate: [raisGuard] },
             { path: 'shutdowns', component: ShutdownComponent, canActivate: [raisGuard] },
