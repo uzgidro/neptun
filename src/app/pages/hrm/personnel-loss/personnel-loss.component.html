@@ -1,0 +1,316 @@
+<!-- Статистика -->
+@if (stats) {
+    <div class="grid mb-4">
+        <div class="col-12 md:col-6 lg:col-3">
+            <div class="card mb-0">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <span class="text-color-secondary font-medium">Всего потерь</span>
+                        <div class="text-3xl font-bold mt-2">{{ stats.total }}</div>
+                    </div>
+                    <div class="w-12 h-12 border-round bg-blue-100 flex items-center justify-center">
+                        <i class="pi pi-users text-blue-500 text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 md:col-6 lg:col-3">
+            <div class="card mb-0">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <span class="text-color-secondary font-medium">За этот год</span>
+                        <div class="text-3xl font-bold mt-2">{{ stats.thisYear }}</div>
+                    </div>
+                    <div class="w-12 h-12 border-round bg-orange-100 flex items-center justify-center">
+                        <i class="pi pi-calendar text-orange-500 text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 md:col-6 lg:col-3">
+            <div class="card mb-0">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <span class="text-color-secondary font-medium">Увольнения</span>
+                        <div class="text-3xl font-bold mt-2">{{ stats.dismissals }}</div>
+                    </div>
+                    <div class="w-12 h-12 border-round bg-yellow-100 flex items-center justify-center">
+                        <i class="pi pi-sign-out text-yellow-500 text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 md:col-6 lg:col-3">
+            <div class="card mb-0">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <span class="text-color-secondary font-medium">Смерти</span>
+                        <div class="text-3xl font-bold mt-2">{{ stats.deaths }}</div>
+                    </div>
+                    <div class="w-12 h-12 border-round bg-red-100 flex items-center justify-center">
+                        <i class="pi pi-heart text-red-500 text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- График -->
+    <div class="card mb-4">
+        <div class="font-semibold text-xl mb-4">Динамика за год</div>
+        <div style="height: 200px;">
+            <p-chart type="line" [data]="chartData" [options]="chartOptions" height="200"></p-chart>
+        </div>
+    </div>
+}
+
+<!-- Мемориал -->
+@if (deceased.length > 0) {
+    <div class="card mb-4 memorial-section">
+        <div class="flex items-center gap-2 mb-4">
+            <i class="pi pi-heart text-red-500 text-xl"></i>
+            <span class="font-semibold text-xl">Вечная память</span>
+        </div>
+        <div class="grid">
+            @for (person of deceased; track person.id) {
+                <div class="col-12 md:col-6 lg:col-4">
+                    <div class="memorial-card surface-card border-round p-4 border-left-3 border-red-500">
+                        <div class="flex items-start gap-4">
+                            <div class="avatar-memorial border-circle flex items-center justify-center bg-red-100">
+                                <span class="text-xl font-bold text-red-500">{{ getAvatarLabel(person.name) }}</span>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="m-0 mb-1 font-semibold">{{ person.name }}</h4>
+                                <p class="text-color-secondary m-0 mb-2 text-sm">{{ person.position?.name || '—' }}</p>
+                                <p class="text-color-secondary m-0 text-sm">
+                                    <i class="pi pi-calendar mr-1"></i>{{ formatDate(person.lossDate) }}
+                                </p>
+                                @if (person.achievements) {
+                                    <p class="m-0 mt-2 text-sm font-italic">{{ person.achievements }}</p>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+<!-- Таблица -->
+<div class="card">
+    <div class="font-semibold text-xl mb-4">Учёт потерь личного состава</div>
+
+    <p-table
+        #dt
+        [value]="filteredLosses"
+        dataKey="id"
+        [rows]="10"
+        [loading]="loading"
+        [rowHover]="true"
+        [showGridlines]="true"
+        [paginator]="true"
+        [globalFilterFields]="['name', 'position.name', 'department.name', 'organization.name', 'reason']"
+    >
+        <ng-template #caption>
+            <div class="flex flex-column md:flex-row justify-between items-start md:items-center gap-3">
+                <div class="flex flex-wrap gap-2">
+                    <p-iconfield>
+                        <p-inputicon><i class="pi pi-search"></i></p-inputicon>
+                        <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Поиск" />
+                    </p-iconfield>
+
+                    <p-select
+                        [(ngModel)]="selectedType"
+                        [options]="lossTypes"
+                        optionLabel="label"
+                        optionValue="value"
+                        placeholder="Тип"
+                        (onChange)="applyFilters()"
+                        [style]="{ minWidth: '150px' }">
+                    </p-select>
+
+                    <p-select
+                        [(ngModel)]="selectedYear"
+                        [options]="years"
+                        optionLabel="label"
+                        optionValue="value"
+                        placeholder="Год"
+                        (onChange)="applyFilters()"
+                        [style]="{ minWidth: '120px' }">
+                    </p-select>
+                </div>
+
+                <button pButton (click)="openDialog()">
+                    <i class="pi pi-plus" pButtonIcon></i>
+                    <span pButtonLabel>Добавить запись</span>
+                </button>
+            </div>
+        </ng-template>
+
+        <ng-template #header>
+            <tr>
+                <th style="width: 4rem"></th>
+                <th pSortableColumn="name" style="min-width: 12rem">ФИО</th>
+                <th style="min-width: 10rem">Должность</th>
+                <th style="min-width: 10rem">Организация</th>
+                <th pSortableColumn="lossType" style="min-width: 8rem">Тип</th>
+                <th pSortableColumn="lossDate" style="min-width: 8rem">Дата</th>
+                <th style="min-width: 6rem">Стаж</th>
+                <th style="min-width: 12rem">Причина</th>
+                <th style="width: 8rem">Действия</th>
+            </tr>
+        </ng-template>
+
+        <ng-template #body let-loss>
+            <tr [class.memorial-row]="loss.lossType === 'death'">
+                <td>
+                    <p-avatar
+                        [label]="getAvatarLabel(loss.name)"
+                        shape="circle"
+                        [style]="{ 'background-color': loss.lossType === 'death' ? 'var(--red-100)' : 'var(--primary-100)', color: loss.lossType === 'death' ? 'var(--red-500)' : 'var(--primary-500)' }">
+                    </p-avatar>
+                </td>
+                <td>
+                    <span class="font-semibold">{{ loss.name }}</span>
+                </td>
+                <td>{{ loss.position?.name || '—' }}</td>
+                <td>{{ loss.organization?.name || '—' }}</td>
+                <td>
+                    <p-tag
+                        [value]="getLossTypeLabel(loss.lossType)"
+                        [severity]="getLossTypeSeverity(loss.lossType)"
+                        [icon]="getLossTypeIcon(loss.lossType)">
+                    </p-tag>
+                </td>
+                <td>{{ formatDate(loss.lossDate) }}</td>
+                <td>{{ getYearsLabel(loss.yearsOfService) }}</td>
+                <td>
+                    <span class="text-sm" [pTooltip]="loss.reason || ''" tooltipPosition="top">
+                        {{ loss.reason ? (loss.reason.length > 30 ? loss.reason.substring(0, 30) + '...' : loss.reason) : '—' }}
+                    </span>
+                </td>
+                <td>
+                    <div class="flex justify-center gap-2">
+                        <button pButton
+                                icon="pi pi-pencil"
+                                (click)="openEditDialog(loss)"
+                                class="p-button-rounded p-button-text p-button-warning"
+                                pTooltip="Редактировать"
+                                tooltipPosition="top">
+                        </button>
+                        <button pButton
+                                icon="pi pi-trash"
+                                (click)="openDeleteDialog(loss)"
+                                class="p-button-rounded p-button-text p-button-danger"
+                                pTooltip="Удалить"
+                                tooltipPosition="top">
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template #emptymessage>
+            <tr>
+                <td colspan="9" class="text-center py-4">
+                    <i class="pi pi-inbox text-4xl text-color-secondary mb-2"></i>
+                    <p class="m-0 text-color-secondary">Нет записей</p>
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template #loadingbody>
+            <tr>
+                <td colspan="9" class="text-center py-4">
+                    <p-progressSpinner strokeWidth="4" [style]="{ width: '40px', height: '40px' }"></p-progressSpinner>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<!-- Диалог создания/редактирования -->
+<app-dialog
+    [(visible)]="displayDialog"
+    [header]="isEditMode ? 'Редактировать запись' : 'Новая запись'"
+    [form]="lossForm"
+    [saveLabel]="isEditMode ? 'Обновить' : 'Сохранить'"
+    width="40vw"
+    (save)="onSubmit()"
+    (cancel)="closeDialog()">
+    <form class="p-4" [formGroup]="lossForm" (ngSubmit)="onSubmit()">
+        <app-input-text
+            formControlName="name"
+            label="ФИО"
+            [submitted]="submitted"
+            errorMessage="ФИО обязательно"
+            [required]="true">
+        </app-input-text>
+
+        <app-select
+            formControlName="lossType"
+            label="Тип потери"
+            [items]="lossTypeOptions"
+            [submitted]="submitted"
+            errorMessage="Тип обязателен"
+            [required]="true">
+        </app-select>
+
+        <app-date-picker
+            formControlName="lossDate"
+            label="Дата события"
+            [submitted]="submitted"
+            [showTime]="false"
+            errorMessage="Дата обязательна"
+            [required]="true">
+        </app-date-picker>
+
+        <app-date-picker
+            formControlName="hireDate"
+            label="Дата приёма на работу"
+            [submitted]="submitted"
+            [showTime]="false"
+            [required]="false">
+        </app-date-picker>
+
+        <app-select
+            formControlName="organization_id"
+            label="Организация"
+            [items]="organizations"
+            [submitted]="submitted"
+            [required]="false">
+        </app-select>
+
+        <app-textarea
+            formControlName="reason"
+            label="Причина"
+            [submitted]="submitted"
+            [required]="false"
+            [rows]="2">
+        </app-textarea>
+
+        <app-textarea
+            formControlName="achievements"
+            label="Достижения / Заслуги"
+            [submitted]="submitted"
+            [required]="false"
+            [rows]="2">
+        </app-textarea>
+
+        <app-textarea
+            formControlName="notes"
+            label="Примечания"
+            [submitted]="submitted"
+            [required]="false"
+            [rows]="2">
+        </app-textarea>
+    </form>
+</app-dialog>
+
+<!-- Диалог удаления -->
+<app-delete-confirmation
+    [(visible)]="displayDeleteDialog"
+    [message]="'Вы уверены, что хотите удалить запись о ' + (selectedLoss?.name || '') + '?'"
+    (onConfirm)="confirmDelete()">
+</app-delete-confirmation>

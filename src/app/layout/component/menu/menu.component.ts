@@ -28,7 +28,7 @@ export class MenuComponent implements OnInit {
                         items: [
                             { label: 'Организации', role: ['rais'], routerLink: ['/organizations'] },
                             { label: 'Дни рождения', role: ['rais'], routerLink: ['/birthdays'] },
-                            { label: 'Потеря личного состава', role: ['rais'] },
+                            { label: 'Потеря личного состава', role: ['rais'], routerLink: ['/personnel-loss'] },
                             { label: 'Работники', role: ['admin'], routerLink: ['/employees'] },
                             { label: 'Должности', role: ['admin'], routerLink: ['/positions'] },
                             { label: 'Отделы', role: ['admin'], routerLink: ['/departments'] },
