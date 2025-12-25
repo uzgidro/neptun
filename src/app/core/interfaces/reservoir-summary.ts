@@ -3,6 +3,7 @@ export interface ValueResponse {
     prev: number;
     year_ago: number;
     two_years_ago: number;
+    is_edited?: boolean;
 }
 
 export interface ReservoirSummaryResponse {

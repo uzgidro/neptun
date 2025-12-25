@@ -75,7 +75,8 @@
                         @if (reservoir.organization_id !== null) {
                             @if (authService.isSc()) {
                                 <td [pEditableColumn]="reservoir.level" pEditableColumnField="current"
-                                    class="text-nowrap">
+                                    class="text-nowrap"
+                                    [ngClass]="{'bg-yellow-100 dark:bg-yellow-900': reservoir.level.is_edited}">
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
                                             <input pInputText type="number" [(ngModel)]="reservoir.level.current"
@@ -99,11 +100,13 @@
                         <td></td>
                     } @else {
                         @if (authService.isSc() && index !== 6) {
-                            <td [pEditableColumn]="reservoir.volume" pEditableColumnField="current" class="text-nowrap">
+                            <td [pEditableColumn]="reservoir.volume" pEditableColumnField="current" class="text-nowrap"
+                                [ngClass]="{'bg-yellow-100 dark:bg-yellow-900': reservoir.volume.is_edited}">
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
                                         <input pInputText type="number" [(ngModel)]="reservoir.volume.current"
-                                               (focus)="onInputFocus($event, reservoir.volume, 'current')" />
+                                               (focus)="onInputFocus($event, reservoir.volume, 'current')"
+                                               (ngModelChange)="onVolumeChange(reservoir)" />
                                     </ng-template>
                                     <ng-template pTemplate="output">
                                         {{ reservoir.volume.current | number: '1.0-2' }}
@@ -123,11 +126,13 @@
                         <td></td>
                     }
                     @if (authService.isSc()) {
-                        <td [pEditableColumn]="reservoir.income" pEditableColumnField="current" class="text-nowrap">
+                        <td [pEditableColumn]="reservoir.income" pEditableColumnField="current" class="text-nowrap"
+                            [ngClass]="{'bg-yellow-100 dark:bg-yellow-900': reservoir.income.is_edited}">
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <input pInputText type="number" [(ngModel)]="reservoir.income.current"
-                                           (focus)="onInputFocus($event, reservoir.income, 'current')" />
+                                           (focus)="onInputFocus($event, reservoir.income, 'current')"
+                                           (ngModelChange)="onIncomeChange(reservoir)" />
                                 </ng-template>
                                 <ng-template pTemplate="output">
                                     {{ reservoir.income.current | number: '1.0-1' }}
@@ -146,11 +151,13 @@
                         <td></td>
                     }
                     @if (authService.isSc() && index !== 6) {
-                        <td [pEditableColumn]="reservoir.release" pEditableColumnField="current" class="text-nowrap">
+                        <td [pEditableColumn]="reservoir.release" pEditableColumnField="current" class="text-nowrap"
+                            [ngClass]="{'bg-yellow-100 dark:bg-yellow-900': reservoir.release.is_edited}">
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <input pInputText type="number" [(ngModel)]="reservoir.release.current"
-                                           (focus)="onInputFocus($event, reservoir.release, 'current')" />
+                                           (focus)="onInputFocus($event, reservoir.release, 'current')"
+                                           (ngModelChange)="onReleaseChange(reservoir)" />
                                 </ng-template>
                                 <ng-template pTemplate="output">
                                     {{ reservoir.release.current | number: '1.0-1' }}
@@ -178,11 +185,13 @@
                     @if (reservoir.organization_id !== null && index !== 2) {
                         @if (authService.isSc()) {
                             <td [pEditableColumn]="reservoir.modsnow" pEditableColumnField="current"
-                                class="text-nowrap">
+                                class="text-nowrap"
+                                [ngClass]="{'bg-yellow-100 dark:bg-yellow-900': reservoir.modsnow.is_edited}">
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
                                         <input pInputText type="number" [(ngModel)]="reservoir.modsnow.current"
-                                               (focus)="onInputFocus($event, reservoir.modsnow, 'current')" />
+                                               (focus)="onInputFocus($event, reservoir.modsnow, 'current')"
+                                               (ngModelChange)="onModsnowCurrentChange(reservoir)" />
                                     </ng-template>
                                     <ng-template pTemplate="output">
                                         {{ reservoir.modsnow.current | number: '1.0-1' }}
@@ -195,11 +204,13 @@
                         }
                         @if (authService.isSc()) {
                             <td [pEditableColumn]="reservoir.modsnow" pEditableColumnField="year_ago"
-                                class="text-nowrap">
+                                class="text-nowrap"
+                                [ngClass]="{'bg-yellow-100 dark:bg-yellow-900': reservoir.modsnow.is_edited}">
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
                                         <input pInputText type="number" [(ngModel)]="reservoir.modsnow.year_ago"
-                                               (focus)="onInputFocus($event, reservoir.modsnow, 'year_ago')" />
+                                               (focus)="onInputFocus($event, reservoir.modsnow, 'year_ago')"
+                                               (ngModelChange)="onModsnowYearAgoChange(reservoir)" />
                                     </ng-template>
                                     <ng-template pTemplate="output">
                                         {{ reservoir.modsnow.year_ago | number: '1.0-1' }}
