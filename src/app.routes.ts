@@ -15,6 +15,7 @@ import { PositionComponent } from '@/pages/hrm/position/position.component';
 import { DepartmentComponent } from '@/pages/hrm/department/department.component';
 import { EmployeeComponent } from '@/pages/hrm/employee/employee.component';
 import { OrganizationComponent } from '@/pages/hrm/organization/organization.component';
+import { BirthdaysComponent } from '@/pages/hrm/birthdays/birthdays.component';
 import { EventsComponent } from '@/pages/planning/events/events.component';
 import { ConstructionComponent } from '@/pages/situation-center/construction/construction.component';
 import { ReceptionComponent } from '@/pages/planning/reception/reception.component';
@@ -48,6 +49,7 @@ export const appRoutes: Routes = [
             { path: 'departments', component: DepartmentComponent, canActivate: [adminGuard] },
             { path: 'employees', component: EmployeeComponent, canActivate: [adminGuard] },
             { path: 'organizations', component: OrganizationComponent, canActivate: [raisGuard] },
+            { path: 'birthdays', component: BirthdaysComponent, canActivate: [raisGuard] },
             { path: 'viewer', component: DocumentViewerComponent, canActivate: [raisGuard] },
             { path: 'discharge', component: DischargeComponent, canActivate: [raisGuard] },
             { path: 'shutdowns', component: ShutdownComponent, canActivate: [raisGuard] },
