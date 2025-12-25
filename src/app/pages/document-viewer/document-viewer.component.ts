@@ -2,30 +2,25 @@ import { AfterViewInit, Component, inject, OnDestroy, OnInit } from '@angular/co
 import { Tab, TabList, Tabs } from 'primeng/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { FileService } from '@/core/services/file.service';
 import { FileResponse } from '@/core/interfaces/files';
 import { ViewSDKService } from '@/core/services/view-sdk.service';
-import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
+import { DateWidget } from '@/layout/component/widget/date/date.widget';
 
 @Component({
     selector: 'app-document-viewer',
     standalone: true,
-    imports: [Tab, TabList, Tabs, ReactiveFormsModule, DatePickerComponent],
+    imports: [Tab, TabList, Tabs, ReactiveFormsModule, DateWidget],
     templateUrl: './document-viewer.component.html',
     styleUrl: './document-viewer.component.scss'
 })
 export class DocumentViewerComponent implements OnInit, AfterViewInit, OnDestroy {
     private route = inject(ActivatedRoute);
     private router = inject(Router);
-    private fb = inject(FormBuilder);
     private fileService = inject(FileService);
     private viewSDKService = inject(ViewSDKService);
     private destroy$ = new Subject<void>();
-
-    form: FormGroup = this.fb.group({
-        date: [new Date()]
-    });
 
     showTabs = false;
     activeIndex = 0;
@@ -37,10 +32,6 @@ export class DocumentViewerComponent implements OnInit, AfterViewInit, OnDestroy
     private isViewerInitialized = false;
     private pendingFileUrl = '';
     private pendingFileName = '';
-
-    get selectedDate(): Date {
-        return this.form.get('date')?.value;
-    }
 
     ngOnInit() {
         const params$ = this.route.queryParams;
@@ -76,51 +67,20 @@ export class DocumentViewerComponent implements OnInit, AfterViewInit, OnDestroy
             } else {
                 this.currentCategory = params['type'];
             }
-
-            // Get date from query params or use today
-            let dateToSet = new Date();
-            if (params['date']) {
-                const parsedDate = new Date(params['date']);
-                if (!isNaN(parsedDate.getTime())) {
-                    dateToSet = parsedDate;
-                }
-            }
-
-            // Set date in form without emitting to avoid triggering loadFile twice
-            this.form.patchValue({ date: dateToSet }, { emitEvent: false });
-
-            // Load file for the current category and date
-            this.loadFile();
         });
-
-        // Subscribe to date changes to update query params
-        this.form
-            .get('date')
-            ?.valueChanges.pipe(takeUntil(this.destroy$))
-            .subscribe((date: Date) => {
-                if (date) {
-                    // Format date as YYYY-MM-DD
-                    const year = date.getFullYear();
-                    const month = String(date.getMonth() + 1).padStart(2, '0');
-                    const day = String(date.getDate()).padStart(2, '0');
-                    const dateStr = `${year}-${month}-${day}`;
-
-                    // Update query params with new date
-                    this.router.navigate([], {
-                        queryParams: { date: dateStr },
-                        queryParamsHandling: 'merge'
-                    });
-                }
-            });
     }
 
-    private loadFile() {
-        if (!this.currentCategory || !this.selectedDate) {
+    onDateChange(date: Date): void {
+        this.loadFile(date);
+    }
+
+    private loadFile(date: Date): void {
+        if (!this.currentCategory) {
             return;
         }
 
         this.fileService
-            .getFileByCategory(this.currentCategory, this.selectedDate)
+            .getFileByCategory(this.currentCategory, date)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (file) => {

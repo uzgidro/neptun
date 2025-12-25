@@ -115,13 +115,35 @@ export class ReservoirsSummaryComponent implements OnInit {
     }
 
     onLevelChange(reservoir: ReservoirSummaryResponse) {
+        reservoir.level.is_edited = true;
         if (reservoir.level.current !== null) {
             this.levelVolumeService.getVolume(reservoir.organization_id!, reservoir.level.current).subscribe({
                 next: (lv: LevelVolume) => {
                     reservoir.volume.current = lv.volume;
+                    reservoir.volume.is_edited = true;
                 }
             });
         }
+    }
+
+    onVolumeChange(reservoir: ReservoirSummaryResponse) {
+        reservoir.volume.is_edited = true;
+    }
+
+    onReleaseChange(reservoir: ReservoirSummaryResponse) {
+        reservoir.release.is_edited = true;
+    }
+
+    onIncomeChange(reservoir: ReservoirSummaryResponse) {
+        reservoir.income.is_edited = true;
+    }
+
+    onModsnowCurrentChange(reservoir: ReservoirSummaryResponse) {
+        reservoir.modsnow.is_edited = true;
+    }
+
+    onModsnowYearAgoChange(reservoir: ReservoirSummaryResponse) {
+        reservoir.modsnow.is_edited = true;
     }
 
     onInputFocus(event: FocusEvent, obj: any, field: string) {
