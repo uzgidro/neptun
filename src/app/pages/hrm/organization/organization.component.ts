@@ -50,6 +50,7 @@ export class OrganizationComponent implements OnInit, OnDestroy {
 
     isExpanded: boolean = false;
     expandedRows: { [key: string]: boolean } = {};
+    childExpandedRows: { [key: string]: boolean } = {};
 
     private organizationService = inject(OrganizationService);
     private fb = inject(FormBuilder);

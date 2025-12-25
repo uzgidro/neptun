@@ -43,7 +43,7 @@
         <ng-template #body let-organization let-expanded="expanded">
             <tr>
                 <td>
-                    @if (organization.items?.length) {
+                    @if (organization.items?.length || organization.contacts?.length) {
                         <button
                             type="button"
                             pButton
@@ -81,20 +81,60 @@
             </tr>
         </ng-template>
         <ng-template #expandedrow let-organization>
+            @if (organization.contacts?.length) {
+                <tr style="background-color: rgba(0, 0, 0, 0.03);">
+                    <td colspan="4" style="border-left: 3px solid #cbd5e1;">
+                        <div class="flex gap-8 p-3">
+                            @for (contact of organization.contacts; track contact.id) {
+                                <div class="py-2">
+                                    <p class="font-bold mb-1">{{ contact.position?.description }}</p>
+                                    <p class="mb-2">{{ contact.name }}</p>
+                                    @if (contact.phone) {
+                                        <div class="flex gap-2">
+                                            <a pButton outlined class="p-button-sm" [href]="'tel:' + contact.phone">
+                                                <i pButtonIcon class="pi pi-phone"></i>
+                                            </a>
+                                            <a pButton outlined class="p-button-sm" [href]="'https://t.me/' + contact.phone">
+                                                <i pButtonIcon class="pi pi-telegram"></i>
+                                            </a>
+                                            <a pButton outlined class="p-button-sm" [href]="'https://wa.me/' + contact.phone">
+                                                <i pButtonIcon class="pi pi-whatsapp" style="color: green"></i>
+                                            </a>
+                                        </div>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    </td>
+                </tr>
+            }
             <tr>
                 <td colspan="4">
                     <div class="p-4">
                         @if (organization.items?.length) {
-                            <p-table [value]="organization.items" dataKey="id">
+                            <p-table [value]="organization.items" dataKey="id" [expandedRowKeys]="childExpandedRows">
                                 <ng-template #header>
                                     <tr>
+                                        <th style="width: 4rem"></th>
                                         <th style="min-width: 15rem">Название</th>
                                         <th style="min-width: 12rem">Родительская организация</th>
                                         <th style="width: 10rem">Действия</th>
                                     </tr>
                                 </ng-template>
-                                <ng-template #body let-child>
+                                <ng-template #body let-child let-expanded="expanded">
                                     <tr>
+                                        <td>
+                                            @if (child.contacts?.length) {
+                                                <button
+                                                    type="button"
+                                                    pButton
+                                                    pRipple
+                                                    [pRowToggler]="child"
+                                                    class="p-button-text p-button-rounded p-button-plain"
+                                                    [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
+                                                </button>
+                                            }
+                                        </td>
                                         <td>{{ child.name }}</td>
                                         <td>{{ child.parent_organization || organization.name }}</td>
                                         <td>
@@ -117,9 +157,38 @@
                                         </td>
                                     </tr>
                                 </ng-template>
+                                <ng-template #expandedrow let-child>
+                                    @if (child.contacts?.length) {
+                                        <tr style="background-color: rgba(0, 0, 0, 0.03);">
+                                            <td colspan="4" style="border-left: 3px solid #cbd5e1;">
+                                                <div class="flex gap-8 p-3">
+                                                    @for (contact of child.contacts; track contact.id) {
+                                                        <div class="py-2">
+                                                            <p class="font-bold mb-1">{{ contact.position?.description }}</p>
+                                                            <p class="mb-2">{{ contact.name }}</p>
+                                                            @if (contact.phone) {
+                                                                <div class="flex gap-2">
+                                                                    <a pButton outlined class="p-button-sm" [href]="'tel:' + contact.phone">
+                                                                        <i pButtonIcon class="pi pi-phone"></i>
+                                                                    </a>
+                                                                    <a pButton outlined class="p-button-sm" [href]="'https://t.me/' + contact.phone">
+                                                                        <i pButtonIcon class="pi pi-telegram"></i>
+                                                                    </a>
+                                                                    <a pButton outlined class="p-button-sm" [href]="'https://wa.me/' + contact.phone">
+                                                                        <i pButtonIcon class="pi pi-whatsapp" style="color: green"></i>
+                                                                    </a>
+                                                                </div>
+                                                            }
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </ng-template>
                                 <ng-template #emptymessage>
                                     <tr>
-                                        <td colspan="3">Нет дочерних организаций</td>
+                                        <td colspan="4">Нет дочерних организаций</td>
                                     </tr>
                                 </ng-template>
                             </p-table>
