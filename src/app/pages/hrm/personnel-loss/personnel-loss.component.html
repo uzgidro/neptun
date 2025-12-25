@@ -1,65 +1,69 @@
-<!-- Статистика -->
+<!-- Статистика - горизонтальная линия -->
 @if (stats) {
-    <div class="grid mb-4">
-        <div class="col-12 md:col-6 lg:col-3">
-            <div class="card mb-0">
-                <div class="flex justify-between items-center">
-                    <div>
-                        <span class="text-color-secondary font-medium">Всего потерь</span>
-                        <div class="text-3xl font-bold mt-2">{{ stats.total }}</div>
-                    </div>
-                    <div class="w-12 h-12 border-round bg-blue-100 flex items-center justify-center">
-                        <i class="pi pi-users text-blue-500 text-2xl"></i>
-                    </div>
+    <div class="flex gap-4 mb-4 items-stretch">
+        <div class="card mb-0 flex-1 h-full">
+            <div class="flex justify-between items-center mb-2">
+                <span class="text-muted-color font-medium">Всего потерь</span>
+                <div class="flex items-center justify-center bg-blue-100 dark:bg-blue-400/10 rounded-border"
+                     style="width: 2.5rem; height: 2.5rem">
+                    <i class="pi pi-users text-blue-500 text-xl!"></i>
                 </div>
             </div>
-        </div>
-        <div class="col-12 md:col-6 lg:col-3">
-            <div class="card mb-0">
-                <div class="flex justify-between items-center">
-                    <div>
-                        <span class="text-color-secondary font-medium">За этот год</span>
-                        <div class="text-3xl font-bold mt-2">{{ stats.thisYear }}</div>
-                    </div>
-                    <div class="w-12 h-12 border-round bg-orange-100 flex items-center justify-center">
-                        <i class="pi pi-calendar text-orange-500 text-2xl"></i>
-                    </div>
-                </div>
+            <div class="text-surface-900 dark:text-surface-0 font-medium text-xl mb-1">
+                {{ stats.total }} человек
+            </div>
+            <div class="flex gap-1.5">
+                <span class="text-primary font-medium">{{ stats.thisYear }}</span>
+                <span class="text-muted-color">за этот год</span>
             </div>
         </div>
-        <div class="col-12 md:col-6 lg:col-3">
-            <div class="card mb-0">
-                <div class="flex justify-between items-center">
-                    <div>
-                        <span class="text-color-secondary font-medium">Увольнения</span>
-                        <div class="text-3xl font-bold mt-2">{{ stats.dismissals }}</div>
-                    </div>
-                    <div class="w-12 h-12 border-round bg-yellow-100 flex items-center justify-center">
-                        <i class="pi pi-sign-out text-yellow-500 text-2xl"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-12 md:col-6 lg:col-3">
-            <div class="card mb-0">
-                <div class="flex justify-between items-center">
-                    <div>
-                        <span class="text-color-secondary font-medium">Смерти</span>
-                        <div class="text-3xl font-bold mt-2">{{ stats.deaths }}</div>
-                    </div>
-                    <div class="w-12 h-12 border-round bg-red-100 flex items-center justify-center">
-                        <i class="pi pi-heart text-red-500 text-2xl"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <!-- График -->
-    <div class="card mb-4">
-        <div class="font-semibold text-xl mb-4">Динамика за год</div>
-        <div style="height: 200px;">
-            <p-chart type="line" [data]="chartData" [options]="chartOptions" height="200"></p-chart>
+        <div class="card mb-0 flex-1 h-full">
+            <div class="flex justify-between items-center mb-2">
+                <span class="text-muted-color font-medium">За этот год</span>
+                <div class="flex items-center justify-center bg-orange-100 dark:bg-orange-400/10 rounded-border"
+                     style="width: 2.5rem; height: 2.5rem">
+                    <i class="pi pi-calendar text-orange-500 text-xl!"></i>
+                </div>
+            </div>
+            <div class="text-surface-900 dark:text-surface-0 font-medium text-xl mb-1">
+                {{ stats.thisYear }} человек
+            </div>
+            <div class="flex gap-1.5">
+                <span class="text-muted-color">текущий год</span>
+            </div>
+        </div>
+
+        <div class="card mb-0 flex-1 h-full">
+            <div class="flex justify-between items-center mb-2">
+                <span class="text-muted-color font-medium">Увольнения</span>
+                <div class="flex items-center justify-center bg-yellow-100 dark:bg-yellow-400/10 rounded-border"
+                     style="width: 2.5rem; height: 2.5rem">
+                    <i class="pi pi-sign-out text-yellow-500 text-xl!"></i>
+                </div>
+            </div>
+            <div class="text-surface-900 dark:text-surface-0 font-medium text-xl mb-1">
+                {{ stats.dismissals }} человек
+            </div>
+            <div class="flex gap-1.5">
+                <span class="text-muted-color">всего уволено</span>
+            </div>
+        </div>
+
+        <div class="card mb-0 flex-1 h-full">
+            <div class="flex justify-between items-center mb-2">
+                <span class="text-muted-color font-medium">Смерти</span>
+                <div class="flex items-center justify-center bg-red-100 dark:bg-red-400/10 rounded-border"
+                     style="width: 2.5rem; height: 2.5rem">
+                    <i class="pi pi-heart text-red-500 text-xl!"></i>
+                </div>
+            </div>
+            <div class="text-surface-900 dark:text-surface-0 font-medium text-xl mb-1">
+                {{ stats.deaths }} человек
+            </div>
+            <div class="flex gap-1.5">
+                <span class="text-muted-color">вечная память</span>
+            </div>
         </div>
     </div>
 }

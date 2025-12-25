@@ -84,11 +84,11 @@ export class PersonnelLossComponent implements OnInit, OnDestroy {
     ];
 
     lossTypeOptions = [
-        { label: 'Увольнение', value: 'dismissal' },
-        { label: 'Смерть', value: 'death' },
-        { label: 'Пенсия', value: 'retirement' },
-        { label: 'Перевод', value: 'transfer' },
-        { label: 'Другое', value: 'other' }
+        { name: 'Увольнение', value: 'dismissal' },
+        { name: 'Смерть', value: 'death' },
+        { name: 'Пенсия', value: 'retirement' },
+        { name: 'Перевод', value: 'transfer' },
+        { name: 'Другое', value: 'other' }
     ];
 
     years: { label: string; value: number | null }[] = [];
