@@ -31,6 +31,8 @@ import { FinancialDashboardComponent } from '@/pages/financial-block/dashboard/f
 import { OrdersComponent } from '@/pages/mail/orders/orders.component';
 import { ReportsComponent } from '@/pages/mail/reports/reports.component';
 import { LettersComponent } from '@/pages/mail/letters/letters.component';
+import { InstructionsComponent } from '@/pages/mail/instructions/instructions.component';
+import { ResolutionsComponent } from '@/pages/mail/resolutions/resolutions.component';
 
 
 export const appRoutes: Routes = [
@@ -73,6 +75,8 @@ export const appRoutes: Routes = [
             { path: 'mail/orders', component: OrdersComponent, canActivate: [raisGuard] },
             { path: 'mail/reports', component: ReportsComponent, canActivate: [raisGuard] },
             { path: 'mail/letters', component: LettersComponent, canActivate: [raisGuard] },
+            { path: 'mail/instructions', component: InstructionsComponent, canActivate: [raisGuard] },
+            { path: 'mail/resolutions', component: ResolutionsComponent, canActivate: [raisGuard] },
         ]
     },
     { path: 'notfound', component: Notfound },

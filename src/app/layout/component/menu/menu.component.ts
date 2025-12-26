@@ -154,16 +154,16 @@ export class MenuComponent implements OnInit {
                             { label: 'Приказы', role: ['rais'], routerLink: ['/mail/orders'] },
                             { label: 'Рапорты', role: ['rais'], routerLink: ['/mail/reports'] },
                             { label: 'Письма', role: ['rais'], routerLink: ['/mail/letters'] },
-                            { label: 'Инструкции', role: ['rais'] },
+                            { label: 'Инструкции', role: ['rais'], routerLink: ['/mail/instructions'] },
                             {
                                 label: 'Постановления',
                                 role: ['rais'],
                                 items: [
-                                    { label: 'Президент', role: ['rais'] },
-                                    { label: 'Кабинет министров', role: ['rais'] },
-                                    { label: 'Указы', role: ['rais'] },
-                                    { label: 'Приказы', role: ['rais'] },
-                                    { label: 'Совместные соглашения', role: ['rais'] }
+                                    { label: 'Президент', role: ['rais'], routerLink: ['/mail/resolutions'], queryParams: { type: 'president' } },
+                                    { label: 'Кабинет министров', role: ['rais'], routerLink: ['/mail/resolutions'], queryParams: { type: 'cabinet' } },
+                                    { label: 'Указы', role: ['rais'], routerLink: ['/mail/resolutions'], queryParams: { type: 'decree' } },
+                                    { label: 'Приказы', role: ['rais'], routerLink: ['/mail/resolutions'], queryParams: { type: 'order' } },
+                                    { label: 'Совместные соглашения', role: ['rais'], routerLink: ['/mail/resolutions'], queryParams: { type: 'agreement' } }
                                 ]
                             }
                         ]
