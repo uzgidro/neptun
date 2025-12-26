@@ -176,8 +176,45 @@
                         <td></td>
                     }
                     @if (index <= 6) {
-                        <td>{{ reservoir.incoming_volume | number: '1.0-2' }}</td>
-                        <td>{{ reservoir.incoming_volume_prev_year | number: '1.0-2' }}</td>
+                        @if (authService.isSc()) {
+                            <td [pEditableColumn]="reservoir" pEditableColumnField="incoming_volume" class="text-nowrap"
+                                [ngClass]="{'bg-blue-100 dark:bg-blue-900': reservoir.incoming_volume_is_calculated}">
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input pInputText type="number" [(ngModel)]="reservoir.incoming_volume"
+                                               (focus)="onInputFocus($event, reservoir, 'incoming_volume')"
+                                               (ngModelChange)="onIncomingVolumeChange(reservoir)" />
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{ reservoir.incoming_volume | number: '1.0-2' }}
+                                        <i class="pi pi-pen-to-square ml-2 text-gray-400 text-xs"></i>
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td [pEditableColumn]="reservoir" pEditableColumnField="incoming_volume_prev_year"
+                                class="text-nowrap"
+                                [ngClass]="{'bg-blue-100 dark:bg-blue-900': reservoir.incoming_volume_prev_year_is_calculated}">
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input pInputText type="number"
+                                               [(ngModel)]="reservoir.incoming_volume_prev_year"
+                                               (focus)="onInputFocus($event, reservoir, 'incoming_volume_prev_year')"
+                                               (ngModelChange)="onIncomingVolumePrevYearChange(reservoir)" />
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{ reservoir.incoming_volume_prev_year | number: '1.0-2' }}
+                                        <i class="pi pi-pen-to-square ml-2 text-gray-400 text-xs"></i>
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                        } @else {
+                            <td class="text-nowrap"
+                                [ngClass]="{'bg-blue-100 dark:bg-blue-900': reservoir.incoming_volume_is_calculated}">{{ reservoir.incoming_volume | number: '1.0-2' }}
+                            </td>
+                            <td class="text-nowrap"
+                                [ngClass]="{'bg-blue-100 dark:bg-blue-900': reservoir.incoming_volume_prev_year_is_calculated}">{{ reservoir.incoming_volume_prev_year | number: '1.0-2' }}
+                            </td>
+                        }
                     } @else {
                         <td></td>
                         <td></td>
