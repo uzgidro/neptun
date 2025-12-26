@@ -153,7 +153,7 @@ export class MenuComponent implements OnInit {
                         items: [
                             { label: 'Приказы', role: ['rais'], routerLink: ['/mail/orders'] },
                             { label: 'Рапорты', role: ['rais'], routerLink: ['/mail/reports'] },
-                            { label: 'Письма', role: ['rais'] },
+                            { label: 'Письма', role: ['rais'], routerLink: ['/mail/letters'] },
                             { label: 'Инструкции', role: ['rais'] },
                             {
                                 label: 'Постановления',

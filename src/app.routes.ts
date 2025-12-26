@@ -30,6 +30,7 @@ import { SalaryComponent } from '@/pages/financial-block/salary/salary.component
 import { FinancialDashboardComponent } from '@/pages/financial-block/dashboard/financial-dashboard.component';
 import { OrdersComponent } from '@/pages/mail/orders/orders.component';
 import { ReportsComponent } from '@/pages/mail/reports/reports.component';
+import { LettersComponent } from '@/pages/mail/letters/letters.component';
 
 
 export const appRoutes: Routes = [
@@ -71,6 +72,7 @@ export const appRoutes: Routes = [
             { path: 'salary', component: SalaryComponent, canActivate: [raisGuard] },
             { path: 'mail/orders', component: OrdersComponent, canActivate: [raisGuard] },
             { path: 'mail/reports', component: ReportsComponent, canActivate: [raisGuard] },
+            { path: 'mail/letters', component: LettersComponent, canActivate: [raisGuard] },
         ]
     },
     { path: 'notfound', component: Notfound },
