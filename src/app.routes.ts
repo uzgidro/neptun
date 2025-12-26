@@ -28,6 +28,8 @@ import { ProcurementComponent } from '@/pages/financial-block/procurement/procur
 import { KpiComponent } from '@/pages/financial-block/kpi/kpi.component';
 import { SalaryComponent } from '@/pages/financial-block/salary/salary.component';
 import { FinancialDashboardComponent } from '@/pages/financial-block/dashboard/financial-dashboard.component';
+import { OrdersComponent } from '@/pages/mail/orders/orders.component';
+import { ReportsComponent } from '@/pages/mail/reports/reports.component';
 
 
 export const appRoutes: Routes = [
@@ -67,6 +69,8 @@ export const appRoutes: Routes = [
             { path: 'procurement', component: ProcurementComponent, canActivate: [raisGuard] },
             { path: 'kpi', component: KpiComponent, canActivate: [raisGuard] },
             { path: 'salary', component: SalaryComponent, canActivate: [raisGuard] },
+            { path: 'mail/orders', component: OrdersComponent, canActivate: [raisGuard] },
+            { path: 'mail/reports', component: ReportsComponent, canActivate: [raisGuard] },
         ]
     },
     { path: 'notfound', component: Notfound },

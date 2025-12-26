@@ -1,0 +1,221 @@
+<div class="card">
+    <div class="font-semibold text-xl mb-4">Рапорты</div>
+
+    <p-table
+        #dt
+        [value]="filteredReports"
+        dataKey="id"
+        [rows]="10"
+        [loading]="loading"
+        [rowHover]="true"
+        [showGridlines]="true"
+        [paginator]="true"
+        [globalFilterFields]="['number', 'from', 'to', 'subject', 'content', 'resolution']"
+    >
+        <ng-template #caption>
+            <div class="flex flex-column md:flex-row justify-between items-start md:items-center gap-3">
+                <div class="flex flex-wrap gap-2">
+                    <p-iconfield>
+                        <p-inputicon><i class="pi pi-search"></i></p-inputicon>
+                        <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Поиск" />
+                    </p-iconfield>
+
+                    <p-select
+                        [(ngModel)]="selectedStatus"
+                        [options]="statusOptions"
+                        optionLabel="name"
+                        optionValue="value"
+                        placeholder="Статус"
+                        (onChange)="applyFilters()"
+                        [style]="{ minWidth: '180px' }">
+                    </p-select>
+                </div>
+
+                <button pButton (click)="openDialog()">
+                    <i class="pi pi-plus" pButtonIcon></i>
+                    <span pButtonLabel>Новый рапорт</span>
+                </button>
+            </div>
+        </ng-template>
+
+        <ng-template #header>
+            <tr>
+                <th pSortableColumn="number" style="min-width: 7rem">
+                    Номер
+                    <p-sortIcon field="number" />
+                </th>
+                <th pSortableColumn="date" style="min-width: 7rem">
+                    Дата
+                    <p-sortIcon field="date" />
+                </th>
+                <th style="min-width: 10rem">От кого</th>
+                <th style="min-width: 10rem">Кому</th>
+                <th pSortableColumn="subject" style="min-width: 12rem">
+                    Тема
+                    <p-sortIcon field="subject" />
+                </th>
+                <th pSortableColumn="status" style="min-width: 10rem">
+                    Статус
+                    <p-sortIcon field="status" />
+                </th>
+                <th style="min-width: 12rem">Резолюция</th>
+                <th style="width: 8rem">Действия</th>
+            </tr>
+        </ng-template>
+
+        <ng-template #body let-report>
+            <tr>
+                <td>
+                    <span class="font-semibold">{{ report.number }}</span>
+                </td>
+                <td>{{ formatDate(report.date) }}</td>
+                <td>{{ report.from }}</td>
+                <td>{{ report.to }}</td>
+                <td>
+                    <span [pTooltip]="report.content || ''" tooltipPosition="top">
+                        {{ report.subject }}
+                    </span>
+                </td>
+                <td>
+                    <p-tag
+                        [value]="getStatusLabel(report.status)"
+                        [severity]="getStatusSeverity(report.status)">
+                    </p-tag>
+                </td>
+                <td>
+                    <span class="text-sm" [pTooltip]="report.resolution || ''" tooltipPosition="top">
+                        {{ report.resolution ? (report.resolution.length > 30 ? report.resolution.substring(0, 30) + '...' : report.resolution) : '—' }}
+                    </span>
+                </td>
+                <td>
+                    <div class="flex justify-center gap-2">
+                        <button pButton
+                                icon="pi pi-pencil"
+                                (click)="openEditDialog(report)"
+                                class="p-button-rounded p-button-text p-button-warning"
+                                pTooltip="Редактировать"
+                                tooltipPosition="top">
+                        </button>
+                        <button pButton
+                                icon="pi pi-trash"
+                                (click)="openDeleteDialog(report)"
+                                class="p-button-rounded p-button-text p-button-danger"
+                                pTooltip="Удалить"
+                                tooltipPosition="top">
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template #emptymessage>
+            <tr>
+                <td colspan="8" class="text-center py-4">
+                    <i class="pi pi-inbox text-4xl text-color-secondary mb-2"></i>
+                    <p class="m-0 text-color-secondary">Нет рапортов</p>
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template #loadingbody>
+            <tr>
+                <td colspan="8" class="text-center py-4">
+                    Загрузка...
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<app-dialog
+    [(visible)]="displayDialog"
+    [header]="isEditMode ? 'Редактировать рапорт' : 'Новый рапорт'"
+    [form]="reportForm"
+    [saveLabel]="isEditMode ? 'Обновить' : 'Сохранить'"
+    width="45vw"
+    (save)="onSubmit()"
+    (cancel)="closeDialog()">
+    <form class="p-4" [formGroup]="reportForm" (ngSubmit)="onSubmit()">
+        <div class="grid">
+            <div class="col-6">
+                <app-input-text
+                    formControlName="number"
+                    label="Номер рапорта"
+                    [submitted]="submitted"
+                    errorMessage="Номер обязателен"
+                    [required]="true">
+                </app-input-text>
+            </div>
+            <div class="col-6">
+                <app-date-picker
+                    formControlName="date"
+                    label="Дата"
+                    [submitted]="submitted"
+                    [showTime]="false"
+                    errorMessage="Дата обязательна"
+                    [required]="true">
+                </app-date-picker>
+            </div>
+        </div>
+
+        <div class="grid">
+            <div class="col-6">
+                <app-input-text
+                    formControlName="from"
+                    label="От кого"
+                    [submitted]="submitted"
+                    errorMessage="Поле обязательно"
+                    [required]="true">
+                </app-input-text>
+            </div>
+            <div class="col-6">
+                <app-input-text
+                    formControlName="to"
+                    label="Кому"
+                    [submitted]="submitted"
+                    errorMessage="Поле обязательно"
+                    [required]="true">
+                </app-input-text>
+            </div>
+        </div>
+
+        <app-input-text
+            formControlName="subject"
+            label="Тема"
+            [submitted]="submitted"
+            errorMessage="Тема обязательна"
+            [required]="true">
+        </app-input-text>
+
+        <app-textarea
+            formControlName="content"
+            label="Содержание"
+            [submitted]="submitted"
+            [required]="false"
+            [rows]="3">
+        </app-textarea>
+
+        <app-select
+            formControlName="status"
+            label="Статус"
+            [items]="statusFormOptions"
+            [submitted]="submitted"
+            errorMessage="Статус обязателен"
+            [required]="true">
+        </app-select>
+
+        <app-textarea
+            formControlName="resolution"
+            label="Резолюция"
+            [submitted]="submitted"
+            [required]="false"
+            [rows]="2">
+        </app-textarea>
+    </form>
+</app-dialog>
+
+<app-delete-confirmation
+    [(visible)]="displayDeleteDialog"
+    [message]="'Вы уверены, что хотите удалить рапорт ' + (selectedReport?.number || '') + '?'"
+    (onConfirm)="confirmDelete()">
+</app-delete-confirmation>
