@@ -176,7 +176,7 @@
                         <td></td>
                     }
                     @if (index <= 6) {
-                        @if (authService.isSc()) {
+                        @if (authService.isSc() && index !== 6) {
                             <td [pEditableColumn]="reservoir" pEditableColumnField="incoming_volume" class="text-nowrap"
                                 [ngClass]="{'bg-blue-100 dark:bg-blue-900': reservoir.incoming_volume_is_calculated}">
                                 <p-cellEditor>
@@ -208,11 +208,9 @@
                                 </p-cellEditor>
                             </td>
                         } @else {
-                            <td class="text-nowrap"
-                                [ngClass]="{'bg-blue-100 dark:bg-blue-900': reservoir.incoming_volume_is_calculated}">{{ reservoir.incoming_volume | number: '1.0-2' }}
+                            <td class="text-nowrap">{{ reservoir.incoming_volume | number: '1.0-2' }}
                             </td>
-                            <td class="text-nowrap"
-                                [ngClass]="{'bg-blue-100 dark:bg-blue-900': reservoir.incoming_volume_prev_year_is_calculated}">{{ reservoir.incoming_volume_prev_year | number: '1.0-2' }}
+                            <td class="text-nowrap">{{ reservoir.incoming_volume_prev_year | number: '1.0-2' }}
                             </td>
                         }
                     } @else {
