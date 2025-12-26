@@ -1,16 +1,16 @@
 <div class="card">
-    <div class="font-semibold text-xl mb-4">Рапорты</div>
+    <div class="font-semibold text-xl mb-4">Звонки</div>
 
     <p-table
         #dt
-        [value]="filteredReports"
+        [value]="filteredCalls"
         dataKey="id"
         [rows]="10"
         [loading]="loading"
         [rowHover]="true"
         [showGridlines]="true"
         [paginator]="true"
-        [globalFilterFields]="['number', 'from', 'to', 'subject', 'content', 'resolution']"
+        [globalFilterFields]="['callerName', 'callerPhone', 'receiverName', 'receiverPhone', 'notes']"
     >
         <ng-template #caption>
             <div class="flex flex-column md:flex-row justify-between items-start md:items-center gap-3">
@@ -21,84 +21,105 @@
                     </p-iconfield>
 
                     <p-select
+                        [(ngModel)]="selectedType"
+                        [options]="typeOptions"
+                        optionLabel="name"
+                        optionValue="value"
+                        placeholder="Тип"
+                        (onChange)="applyFilters()"
+                        [style]="{ minWidth: '150px' }">
+                    </p-select>
+
+                    <p-select
                         [(ngModel)]="selectedStatus"
                         [options]="statusOptions"
                         optionLabel="name"
                         optionValue="value"
                         placeholder="Статус"
                         (onChange)="applyFilters()"
-                        [style]="{ minWidth: '180px' }">
+                        [style]="{ minWidth: '150px' }">
                     </p-select>
                 </div>
 
                 <button pButton (click)="openDialog()">
                     <i class="pi pi-plus" pButtonIcon></i>
-                    <span pButtonLabel>Новый рапорт</span>
+                    <span pButtonLabel>Новый звонок</span>
                 </button>
             </div>
         </ng-template>
 
         <ng-template #header>
             <tr>
-                <th pSortableColumn="number" style="min-width: 7rem">
-                    Номер
-                    <p-sortIcon field="number" />
-                </th>
                 <th pSortableColumn="date" style="min-width: 7rem">
                     Дата
                     <p-sortIcon field="date" />
                 </th>
-                <th style="min-width: 10rem">От кого</th>
-                <th style="min-width: 10rem">Кому</th>
-                <th pSortableColumn="subject" style="min-width: 12rem">
-                    Тема
-                    <p-sortIcon field="subject" />
+                <th pSortableColumn="time" style="min-width: 5rem">
+                    Время
+                    <p-sortIcon field="time" />
                 </th>
-                <th pSortableColumn="status" style="min-width: 10rem">
+                <th pSortableColumn="type" style="min-width: 9rem">
+                    Тип
+                    <p-sortIcon field="type" />
+                </th>
+                <th style="min-width: 12rem">Кто звонил</th>
+                <th style="min-width: 10rem">Телефон</th>
+                <th style="min-width: 10rem">Кому</th>
+                <th pSortableColumn="duration" style="min-width: 7rem">
+                    Длительность
+                    <p-sortIcon field="duration" />
+                </th>
+                <th pSortableColumn="status" style="min-width: 8rem">
                     Статус
                     <p-sortIcon field="status" />
                 </th>
-                <th style="min-width: 12rem">Резолюция</th>
                 <th style="width: 8rem">Действия</th>
             </tr>
         </ng-template>
 
-        <ng-template #body let-report>
-            <tr>
+        <ng-template #body let-call>
+            <tr [class.opacity-60]="call.type === 'missed'">
+                <td>{{ formatDate(call.date) }}</td>
                 <td>
-                    <span class="font-semibold">{{ report.number }}</span>
-                </td>
-                <td>{{ formatDate(report.date) }}</td>
-                <td>{{ report.from }}</td>
-                <td>{{ report.to }}</td>
-                <td>
-                    <span [pTooltip]="report.content || ''" tooltipPosition="top">
-                        {{ report.subject }}
-                    </span>
+                    <span class="font-semibold">{{ call.time }}</span>
                 </td>
                 <td>
                     <p-tag
-                        [value]="getStatusLabel(report.status)"
-                        [severity]="getStatusSeverity(report.status)">
+                        [value]="getTypeLabel(call.type)"
+                        [severity]="getTypeSeverity(call.type)"
+                        [icon]="getTypeIcon(call.type)">
                     </p-tag>
                 </td>
                 <td>
-                    <span class="text-sm" [pTooltip]="report.resolution || ''" tooltipPosition="top">
-                        {{ report.resolution ? (report.resolution.length > 30 ? report.resolution.substring(0, 30) + '...' : report.resolution) : '—' }}
+                    <span [pTooltip]="call.notes || ''" tooltipPosition="top">
+                        {{ call.callerName }}
                     </span>
+                </td>
+                <td>
+                    <a [href]="'tel:' + call.callerPhone" class="text-primary no-underline">
+                        {{ call.callerPhone }}
+                    </a>
+                </td>
+                <td>{{ call.receiverName || '—' }}</td>
+                <td>{{ formatDuration(call.duration) }}</td>
+                <td>
+                    <p-tag
+                        [value]="getStatusLabel(call.status)"
+                        [severity]="getStatusSeverity(call.status)">
+                    </p-tag>
                 </td>
                 <td>
                     <div class="flex justify-center gap-2">
                         <button pButton
                                 icon="pi pi-pencil"
-                                (click)="openEditDialog(report)"
+                                (click)="openEditDialog(call)"
                                 class="p-button-rounded p-button-text p-button-warning"
                                 pTooltip="Редактировать"
                                 tooltipPosition="top">
                         </button>
                         <button pButton
                                 icon="pi pi-trash"
-                                (click)="openDeleteDialog(report)"
+                                (click)="openDeleteDialog(call)"
                                 class="p-button-rounded p-button-text p-button-danger"
                                 pTooltip="Удалить"
                                 tooltipPosition="top">
@@ -110,16 +131,16 @@
 
         <ng-template #emptymessage>
             <tr>
-                <td colspan="8" class="text-center py-4">
-                    <i class="pi pi-inbox text-4xl text-color-secondary mb-2"></i>
-                    <p class="m-0 text-color-secondary">Нет рапортов</p>
+                <td colspan="9" class="text-center py-4">
+                    <i class="pi pi-phone text-4xl text-color-secondary mb-2"></i>
+                    <p class="m-0 text-color-secondary">Нет звонков</p>
                 </td>
             </tr>
         </ng-template>
 
         <ng-template #loadingbody>
             <tr>
-                <td colspan="8" class="text-center py-4">
+                <td colspan="9" class="text-center py-4">
                     Загрузка...
                 </td>
             </tr>
@@ -129,21 +150,13 @@
 
 <app-dialog
     [(visible)]="displayDialog"
-    [header]="isEditMode ? 'Редактировать рапорт' : 'Новый рапорт'"
-    [form]="reportForm"
+    [header]="isEditMode ? 'Редактировать звонок' : 'Новый звонок'"
+    [form]="callForm"
     [saveLabel]="isEditMode ? 'Обновить' : 'Сохранить'"
     width="45vw"
     (save)="onSubmit()"
     (cancel)="closeDialog()">
-    <form class="p-4" [formGroup]="reportForm" (ngSubmit)="onSubmit()">
-        <app-input-text
-            formControlName="number"
-            label="Номер рапорта"
-            [submitted]="submitted"
-            errorMessage="Номер обязателен"
-            [required]="true">
-        </app-input-text>
-
+    <form class="p-4" [formGroup]="callForm" (ngSubmit)="onSubmit()">
         <app-date-picker
             formControlName="date"
             label="Дата"
@@ -154,36 +167,58 @@
         </app-date-picker>
 
         <app-input-text
-            formControlName="from"
-            label="От кого"
+            formControlName="time"
+            label="Время (ЧЧ:ММ)"
+            [submitted]="submitted"
+            errorMessage="Время обязательно"
+            [required]="true">
+        </app-input-text>
+
+        <app-select
+            formControlName="type"
+            label="Тип звонка"
+            [items]="typeFormOptions"
+            [submitted]="submitted"
+            errorMessage="Тип обязателен"
+            [required]="true">
+        </app-select>
+
+        <app-input-text
+            formControlName="callerName"
+            label="Кто звонил"
             [submitted]="submitted"
             errorMessage="Поле обязательно"
             [required]="true">
         </app-input-text>
 
         <app-input-text
-            formControlName="to"
-            label="Кому"
+            formControlName="callerPhone"
+            label="Телефон звонившего"
             [submitted]="submitted"
-            errorMessage="Поле обязательно"
+            errorMessage="Телефон обязателен"
             [required]="true">
         </app-input-text>
 
         <app-input-text
-            formControlName="subject"
-            label="Тема"
+            formControlName="receiverName"
+            label="Кому звонили"
             [submitted]="submitted"
-            errorMessage="Тема обязательна"
-            [required]="true">
+            [required]="false">
         </app-input-text>
 
-        <app-textarea
-            formControlName="content"
-            label="Содержание"
+        <app-input-text
+            formControlName="receiverPhone"
+            label="Телефон получателя"
             [submitted]="submitted"
-            [required]="false"
-            [rows]="3">
-        </app-textarea>
+            [required]="false">
+        </app-input-text>
+
+        <app-input-text
+            formControlName="duration"
+            label="Длительность (секунды)"
+            [submitted]="submitted"
+            [required]="false">
+        </app-input-text>
 
         <app-select
             formControlName="status"
@@ -195,8 +230,8 @@
         </app-select>
 
         <app-textarea
-            formControlName="resolution"
-            label="Резолюция"
+            formControlName="notes"
+            label="Заметки"
             [submitted]="submitted"
             [required]="false"
             [rows]="2">
@@ -206,6 +241,6 @@
 
 <app-delete-confirmation
     [(visible)]="displayDeleteDialog"
-    [message]="'Вы уверены, что хотите удалить рапорт ' + (selectedReport?.number || '') + '?'"
+    [message]="'Вы уверены, что хотите удалить этот звонок?'"
     (onConfirm)="confirmDelete()">
 </app-delete-confirmation>

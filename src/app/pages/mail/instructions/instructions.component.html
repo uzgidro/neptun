@@ -148,27 +148,22 @@
     (save)="onSubmit()"
     (cancel)="closeDialog()">
     <form class="p-4" [formGroup]="instructionForm" (ngSubmit)="onSubmit()">
-        <div class="grid">
-            <div class="col-6">
-                <app-input-text
-                    formControlName="number"
-                    label="Номер инструкции"
-                    [submitted]="submitted"
-                    errorMessage="Номер обязателен"
-                    [required]="true">
-                </app-input-text>
-            </div>
-            <div class="col-6">
-                <app-date-picker
-                    formControlName="date"
-                    label="Дата утверждения"
-                    [submitted]="submitted"
-                    [showTime]="false"
-                    errorMessage="Дата обязательна"
-                    [required]="true">
-                </app-date-picker>
-            </div>
-        </div>
+        <app-input-text
+            formControlName="number"
+            label="Номер инструкции"
+            [submitted]="submitted"
+            errorMessage="Номер обязателен"
+            [required]="true">
+        </app-input-text>
+
+        <app-date-picker
+            formControlName="date"
+            label="Дата утверждения"
+            [submitted]="submitted"
+            [showTime]="false"
+            errorMessage="Дата обязательна"
+            [required]="true">
+        </app-date-picker>
 
         <app-input-text
             formControlName="title"
@@ -186,28 +181,23 @@
             [rows]="3">
         </app-textarea>
 
-        <div class="grid">
-            <div class="col-6">
-                <app-select
-                    formControlName="category"
-                    label="Категория"
-                    [items]="categoryFormOptions"
-                    [submitted]="submitted"
-                    errorMessage="Категория обязательна"
-                    [required]="true">
-                </app-select>
-            </div>
-            <div class="col-6">
-                <app-select
-                    formControlName="status"
-                    label="Статус"
-                    [items]="statusFormOptions"
-                    [submitted]="submitted"
-                    errorMessage="Статус обязателен"
-                    [required]="true">
-                </app-select>
-            </div>
-        </div>
+        <app-select
+            formControlName="category"
+            label="Категория"
+            [items]="categoryFormOptions"
+            [submitted]="submitted"
+            errorMessage="Категория обязательна"
+            [required]="true">
+        </app-select>
+
+        <app-select
+            formControlName="status"
+            label="Статус"
+            [items]="statusFormOptions"
+            [submitted]="submitted"
+            errorMessage="Статус обязателен"
+            [required]="true">
+        </app-select>
 
         <app-input-text
             formControlName="approvedBy"

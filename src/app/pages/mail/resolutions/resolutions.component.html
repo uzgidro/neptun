@@ -133,27 +133,22 @@
     (save)="onSubmit()"
     (cancel)="closeDialog()">
     <form class="p-4" [formGroup]="resolutionForm" (ngSubmit)="onSubmit()">
-        <div class="grid">
-            <div class="col-6">
-                <app-input-text
-                    formControlName="number"
-                    label="Номер"
-                    [submitted]="submitted"
-                    errorMessage="Номер обязателен"
-                    [required]="true">
-                </app-input-text>
-            </div>
-            <div class="col-6">
-                <app-date-picker
-                    formControlName="date"
-                    label="Дата"
-                    [submitted]="submitted"
-                    [showTime]="false"
-                    errorMessage="Дата обязательна"
-                    [required]="true">
-                </app-date-picker>
-            </div>
-        </div>
+        <app-input-text
+            formControlName="number"
+            label="Номер"
+            [submitted]="submitted"
+            errorMessage="Номер обязателен"
+            [required]="true">
+        </app-input-text>
+
+        <app-date-picker
+            formControlName="date"
+            label="Дата"
+            [submitted]="submitted"
+            [showTime]="false"
+            errorMessage="Дата обязательна"
+            [required]="true">
+        </app-date-picker>
 
         <app-input-text
             formControlName="title"
@@ -171,47 +166,37 @@
             [rows]="3">
         </app-textarea>
 
-        <div class="grid">
-            <div class="col-6">
-                <app-select
-                    formControlName="status"
-                    label="Статус"
-                    [items]="statusFormOptions"
-                    [submitted]="submitted"
-                    errorMessage="Статус обязателен"
-                    [required]="true">
-                </app-select>
-            </div>
-            <div class="col-6">
-                <app-input-text
-                    formControlName="issuedBy"
-                    label="Кем издано"
-                    [submitted]="submitted"
-                    [required]="false">
-                </app-input-text>
-            </div>
-        </div>
+        <app-select
+            formControlName="status"
+            label="Статус"
+            [items]="statusFormOptions"
+            [submitted]="submitted"
+            errorMessage="Статус обязателен"
+            [required]="true">
+        </app-select>
 
-        <div class="grid">
-            <div class="col-6">
-                <app-date-picker
-                    formControlName="effectiveDate"
-                    label="Дата вступления в силу"
-                    [submitted]="submitted"
-                    [showTime]="false"
-                    [required]="false">
-                </app-date-picker>
-            </div>
-            <div class="col-6">
-                <app-date-picker
-                    formControlName="expirationDate"
-                    label="Дата истечения"
-                    [submitted]="submitted"
-                    [showTime]="false"
-                    [required]="false">
-                </app-date-picker>
-            </div>
-        </div>
+        <app-input-text
+            formControlName="issuedBy"
+            label="Кем издано"
+            [submitted]="submitted"
+            [required]="false">
+        </app-input-text>
+
+        <app-date-picker
+            formControlName="effectiveDate"
+            label="Дата вступления в силу"
+            [submitted]="submitted"
+            [showTime]="false"
+            [required]="false">
+        </app-date-picker>
+
+        <app-date-picker
+            formControlName="expirationDate"
+            label="Дата истечения"
+            [submitted]="submitted"
+            [showTime]="false"
+            [required]="false">
+        </app-date-picker>
     </form>
 </app-dialog>
 

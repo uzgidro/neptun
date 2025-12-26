@@ -33,6 +33,7 @@ import { ReportsComponent } from '@/pages/mail/reports/reports.component';
 import { LettersComponent } from '@/pages/mail/letters/letters.component';
 import { InstructionsComponent } from '@/pages/mail/instructions/instructions.component';
 import { ResolutionsComponent } from '@/pages/mail/resolutions/resolutions.component';
+import { CallsComponent } from '@/pages/calls/calls.component';
 
 
 export const appRoutes: Routes = [
@@ -77,6 +78,7 @@ export const appRoutes: Routes = [
             { path: 'mail/letters', component: LettersComponent, canActivate: [raisGuard] },
             { path: 'mail/instructions', component: InstructionsComponent, canActivate: [raisGuard] },
             { path: 'mail/resolutions', component: ResolutionsComponent, canActivate: [raisGuard] },
+            { path: 'calls', component: CallsComponent, canActivate: [raisGuard] },
         ]
     },
     { path: 'notfound', component: Notfound },

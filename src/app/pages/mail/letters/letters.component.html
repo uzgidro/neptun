@@ -159,27 +159,22 @@
     (save)="onSubmit()"
     (cancel)="closeDialog()">
     <form class="p-4" [formGroup]="letterForm" (ngSubmit)="onSubmit()">
-        <div class="grid">
-            <div class="col-6">
-                <app-input-text
-                    formControlName="number"
-                    label="Номер письма"
-                    [submitted]="submitted"
-                    errorMessage="Номер обязателен"
-                    [required]="true">
-                </app-input-text>
-            </div>
-            <div class="col-6">
-                <app-date-picker
-                    formControlName="date"
-                    label="Дата"
-                    [submitted]="submitted"
-                    [showTime]="false"
-                    errorMessage="Дата обязательна"
-                    [required]="true">
-                </app-date-picker>
-            </div>
-        </div>
+        <app-input-text
+            formControlName="number"
+            label="Номер письма"
+            [submitted]="submitted"
+            errorMessage="Номер обязателен"
+            [required]="true">
+        </app-input-text>
+
+        <app-date-picker
+            formControlName="date"
+            label="Дата"
+            [submitted]="submitted"
+            [showTime]="false"
+            errorMessage="Дата обязательна"
+            [required]="true">
+        </app-date-picker>
 
         <app-select
             formControlName="type"
@@ -190,26 +185,21 @@
             [required]="true">
         </app-select>
 
-        <div class="grid">
-            <div class="col-6">
-                <app-input-text
-                    formControlName="from"
-                    label="От кого"
-                    [submitted]="submitted"
-                    errorMessage="Поле обязательно"
-                    [required]="true">
-                </app-input-text>
-            </div>
-            <div class="col-6">
-                <app-input-text
-                    formControlName="to"
-                    label="Кому"
-                    [submitted]="submitted"
-                    errorMessage="Поле обязательно"
-                    [required]="true">
-                </app-input-text>
-            </div>
-        </div>
+        <app-input-text
+            formControlName="from"
+            label="От кого"
+            [submitted]="submitted"
+            errorMessage="Поле обязательно"
+            [required]="true">
+        </app-input-text>
+
+        <app-input-text
+            formControlName="to"
+            label="Кому"
+            [submitted]="submitted"
+            errorMessage="Поле обязательно"
+            [required]="true">
+        </app-input-text>
 
         <app-input-text
             formControlName="subject"
