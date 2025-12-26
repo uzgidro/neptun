@@ -91,7 +91,9 @@ export class ReservoirsSummaryComponent implements OnInit {
                     volume: reservoir.volume.current,
                     release: reservoir.release.current,
                     modsnow_current: reservoir.modsnow.current,
-                    modsnow_year_ago: reservoir.modsnow.year_ago
+                    modsnow_year_ago: reservoir.modsnow.year_ago,
+                    total_income_volume: reservoir.incoming_volume,
+                    total_income_volume_prev_year: reservoir.incoming_volume_prev_year
                 };
             });
 
@@ -144,6 +146,14 @@ export class ReservoirsSummaryComponent implements OnInit {
 
     onModsnowYearAgoChange(reservoir: ReservoirSummaryResponse) {
         reservoir.modsnow.is_edited = true;
+    }
+
+    onIncomingVolumeChange(reservoir: ReservoirSummaryResponse) {
+        reservoir.incoming_volume_is_calculated = false;
+    }
+
+    onIncomingVolumePrevYearChange(reservoir: ReservoirSummaryResponse) {
+        reservoir.incoming_volume_prev_year_is_calculated = false;
     }
 
     onInputFocus(event: FocusEvent, obj: any, field: string) {
