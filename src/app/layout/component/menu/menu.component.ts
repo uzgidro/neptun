@@ -166,11 +166,11 @@ export class MenuComponent implements OnInit {
                                 role: ['rais'],
                                 items: [
                                     { label: 'Законы Республики Узбекистан', role: ['rais'] },
-                                    { label: 'Постановления Президента Республики Узбекистан', role: ['rais'], routerLink: ['/mail/resolutions'], queryParams: { type: 'president' } },
-                                    { label: 'Указы Президента Республики Узбекистан', role: ['rais'], routerLink: ['/mail/resolutions'], queryParams: { type: 'decree' } },
-                                    { label: 'Постановления Кабинета министров', role: ['rais'], routerLink: ['/mail/resolutions'], queryParams: { type: 'cabinet' } },
-                                    { label: 'Приказы министерств и ведомств', role: ['rais'], routerLink: ['/mail/resolutions'], queryParams: { type: 'order' } },
-                                    { label: 'Совместные соглашения(NDA)', role: ['rais'], routerLink: ['/mail/resolutions'], queryParams: { type: 'agreement' } },
+                                    { label: 'Постановления Президента Республики Узбекистан', role: ['rais'], routerLink: ['/mail/resolutions'], queryParams: { type: 'president' }, routerLinkActiveOptions: { queryParams: 'exact' } },
+                                    { label: 'Указы Президента Республики Узбекистан', role: ['rais'], routerLink: ['/mail/resolutions'], queryParams: { type: 'decree' }, routerLinkActiveOptions: { queryParams: 'exact' } },
+                                    { label: 'Постановления Кабинета министров', role: ['rais'], routerLink: ['/mail/resolutions'], queryParams: { type: 'cabinet' }, routerLinkActiveOptions: { queryParams: 'exact' } },
+                                    { label: 'Приказы министерств и ведомств', role: ['rais'], routerLink: ['/mail/resolutions'], queryParams: { type: 'order' }, routerLinkActiveOptions: { queryParams: 'exact' } },
+                                    { label: 'Совместные соглашения(NDA)', role: ['rais'], routerLink: ['/mail/resolutions'], queryParams: { type: 'agreement' }, routerLinkActiveOptions: { queryParams: 'exact' } },
                                     { label: 'Иные документы', role: ['rais'] }
                                 ]
                             }
