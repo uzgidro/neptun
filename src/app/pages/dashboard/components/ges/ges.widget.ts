@@ -33,7 +33,10 @@ class GesWidget implements OnInit {
         this.loading = true;
         this.dashboardService.getOrganizationsCascades().subscribe({
             next: (res) => {
-                this.cascades = res;
+                this.cascades = res.map(cascade => ({
+                    ...cascade,
+                    contacts: this.sortContacts(cascade.contacts)
+                }));
             },
             error: (err) => {
                 console.log(err);
@@ -41,6 +44,18 @@ class GesWidget implements OnInit {
             complete: () => {
                 this.loading = false;
             }
+        });
+    }
+
+    private sortContacts(contacts: any[]): any[] {
+        if (!contacts) return [];
+        return [...contacts].sort((a, b) => {
+            const posA = a.position?.description?.toLowerCase() || '';
+            const posB = b.position?.description?.toLowerCase() || '';
+            // Директор должен быть первым
+            if (posA.includes('директор')) return -1;
+            if (posB.includes('директор')) return 1;
+            return 0;
         });
     }
 

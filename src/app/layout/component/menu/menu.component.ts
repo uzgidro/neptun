@@ -26,7 +26,7 @@ export class MenuComponent implements OnInit {
                         label: 'Кадровый персонал (HRM)',
                         role: ['admin', 'rais'],
                         items: [
-                            { label: 'Организации', role: ['rais'] },
+                            { label: 'Организации', role: ['rais'], routerLink: ['/organizations'] },
                             { label: 'Дни рождения', role: ['rais'] },
                             // { label: 'Потеря личного состава', role: ['rais'] },
                             { label: 'Работники', role: ['admin'], routerLink: ['/employees'] },
@@ -75,18 +75,6 @@ export class MenuComponent implements OnInit {
                                         role: ['rais', 'sc'],
                                         routerLink: ['/discharges']
                                     }
-                                    // {
-                                    //     label: 'Выработка',
-                                    //     role: ['rais', 'sc']
-                                    //     // routerLink: ['/viewer'],
-                                    //     // queryParams: { type: 'production' },
-                                    //     // routerLinkActiveOptions: { queryParams: 'exact' }
-                                    // }
-                                    // {
-                                    //     label: 'Холостой сброс',
-                                    //     role: ['rais', 'sc'],
-                                    //     routerLink: ['/discharge']
-                                    // }
                                 ]
                             },
                             {
@@ -108,14 +96,6 @@ export class MenuComponent implements OnInit {
                                         role: ['rais', 'sc'],
                                         routerLink: ['/reservoir-device']
                                     }
-                                    // {
-                                    //     label: 'MODSNOW',
-                                    //     role: ['rais', 'sc']
-                                    // },
-                                    // {
-                                    //     label: 'Фильтрация',
-                                    //     role: ['rais', 'sc']
-                                    // }
                                 ]
                             },
                             {
@@ -157,13 +137,13 @@ export class MenuComponent implements OnInit {
                         label: 'Финансовый блок',
                         role: ['rais'],
                         items: [
-                            { label: 'Дебит / кредит', role: ['rais'] },
-                            { label: 'Инвестиции', role: ['rais'] },
-                            { label: 'Затраты на ремонт', role: ['rais'] },
-                            { label: 'Закупки', role: ['rais'] },
-                            { label: 'KPI', role: ['rais'] },
-                            { label: 'Заработная плата', role: ['rais'] },
-                            { label: 'Премирование', role: ['rais'] }
+                            { label: 'Общий дашборд', role: ['rais'], routerLink: ['/financial-dashboard'] },
+                            { label: 'Дебит / кредит', role: ['rais'], routerLink: ['/debit-credit'] },
+                            { label: 'Инвестиции', role: ['rais'], routerLink: ['/investment'] },
+                            { label: 'Затраты на ремонт', role: ['rais'], routerLink: ['/repair-costs'] },
+                            { label: 'Закупки', role: ['rais'], routerLink: ['/procurement'] },
+                            { label: 'KPI', role: ['rais'], routerLink: ['/kpi'] },
+                            { label: 'Заработная плата', role: ['rais'], routerLink: ['/salary'] }
                         ]
                     },
                     {

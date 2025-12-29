@@ -1,0 +1,149 @@
+<div class="financial-dashboard">
+    <!-- Заголовок -->
+    <div class="dashboard-header">
+        <div class="header-content">
+            <h1>Финансовый дашборд</h1>
+            <p class="subtitle">Сводка по всем модулям финансового блока</p>
+        </div>
+        <div class="last-updated" *ngIf="dashboardData?.lastUpdated">
+            <i class="pi pi-clock"></i>
+            <span>Обновлено: {{ dashboardData!.lastUpdated | date:'dd.MM.yyyy HH:mm' }}</span>
+        </div>
+    </div>
+
+    <!-- Главные показатели -->
+    <div class="summary-cards">
+        <div class="summary-card income">
+            <div class="card-icon">
+                <i class="pi pi-arrow-down"></i>
+            </div>
+            <div class="card-content">
+                <span class="label">Общие доходы</span>
+                <span class="value">{{ formatCurrency(totalIncome) }}</span>
+            </div>
+        </div>
+
+        <div class="summary-card expenses">
+            <div class="card-icon">
+                <i class="pi pi-arrow-up"></i>
+            </div>
+            <div class="card-content">
+                <span class="label">Общие расходы</span>
+                <span class="value">{{ formatCurrency(totalExpenses) }}</span>
+            </div>
+        </div>
+
+        <div class="summary-card balance" [ngClass]="getBalanceClass()">
+            <div class="card-icon">
+                <i class="pi pi-wallet"></i>
+            </div>
+            <div class="card-content">
+                <span class="label">Чистый баланс</span>
+                <span class="value">{{ formatCurrency(netBalance) }}</span>
+            </div>
+        </div>
+
+        <div class="summary-card kpi">
+            <div class="card-icon">
+                <i class="pi pi-chart-bar"></i>
+            </div>
+            <div class="card-content">
+                <span class="label">Общий KPI</span>
+                <div class="kpi-progress">
+                    <p-progressBar
+                        [value]="getKpiProgress()"
+                        [showValue]="true"
+                        [style]="{ height: '24px' }"
+                        [color]="getKpiColor()">
+                    </p-progressBar>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Графики -->
+    <div class="charts-section">
+        <div class="chart-card">
+            <h3>Доходы vs Расходы</h3>
+            <div class="chart-container">
+                <p-chart
+                    type="doughnut"
+                    [data]="overviewChartData"
+                    [options]="overviewChartOptions"
+                    [style]="{ width: '100%', height: '280px' }">
+                </p-chart>
+            </div>
+        </div>
+
+        <div class="chart-card">
+            <h3>Структура расходов</h3>
+            <div class="chart-container">
+                <p-chart
+                    type="pie"
+                    [data]="expensesChartData"
+                    [options]="expensesChartOptions"
+                    [style]="{ width: '100%', height: '280px' }">
+                </p-chart>
+            </div>
+        </div>
+
+        <div class="chart-card wide">
+            <h3>Денежный поток по месяцам</h3>
+            <div class="chart-container">
+                <p-chart
+                    type="bar"
+                    [data]="cashFlowChartData"
+                    [options]="cashFlowChartOptions"
+                    [style]="{ width: '100%', height: '280px' }">
+                </p-chart>
+            </div>
+        </div>
+    </div>
+
+    <!-- Карточки модулей -->
+    <div class="modules-section">
+        <h2>Модули финансового блока</h2>
+        <p class="section-subtitle">Нажмите на карточку для перехода к детальному просмотру</p>
+
+        <div class="modules-grid">
+            <div
+                *ngFor="let card of moduleCards"
+                class="module-card"
+                [style.--card-color]="card.color"
+                (click)="navigateToModule(card.route)"
+                pTooltip="Перейти к модулю"
+                tooltipPosition="top">
+
+                <div class="card-header">
+                    <div class="icon-wrapper" [style.background]="card.color">
+                        <i [class]="card.icon"></i>
+                    </div>
+                    <h4>{{ card.title }}</h4>
+                    <i class="pi pi-arrow-right navigate-icon"></i>
+                </div>
+
+                <p-divider></p-divider>
+
+                <div class="metrics-list">
+                    <div *ngFor="let metric of card.metrics" class="metric-item">
+                        <span class="metric-label">{{ metric.label }}</span>
+                        <p-tag
+                            [value]="formatMetricValue(metric)"
+                            [severity]="getMetricSeverity(metric.color)">
+                        </p-tag>
+                    </div>
+                </div>
+
+                <div class="card-footer">
+                    <p-button
+                        label="Подробнее"
+                        icon="pi pi-external-link"
+                        [text]="true"
+                        size="small"
+                        (click)="navigateToModule(card.route); $event.stopPropagation()">
+                    </p-button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

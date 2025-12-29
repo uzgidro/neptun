@@ -1,0 +1,433 @@
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+<div class="debit-credit-container">
+    <!-- Summary Cards Row -->
+    <div class="summary-cards-row">
+        <div class="summary-card debit-card">
+            <div class="card-content">
+                <div class="card-icon debit-icon">
+                    <i class="pi pi-arrow-down-left"></i>
+                </div>
+                <div class="card-info">
+                    <span class="card-label">Общий дебит</span>
+                    <span class="card-value text-green-500">{{ formatCurrency(totalDebit) }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="summary-card credit-card">
+            <div class="card-content">
+                <div class="card-icon credit-icon">
+                    <i class="pi pi-arrow-up-right"></i>
+                </div>
+                <div class="card-info">
+                    <span class="card-label">Общий кредит</span>
+                    <span class="card-value text-red-500">{{ formatCurrency(totalCredit) }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="summary-card balance-card">
+            <div class="card-content">
+                <div class="card-icon" [ngClass]="balance >= 0 ? 'balance-positive' : 'balance-negative'">
+                    <i class="pi" [ngClass]="balance >= 0 ? 'pi-wallet' : 'pi-exclamation-triangle'"></i>
+                </div>
+                <div class="card-info">
+                    <span class="card-label">Сальдо</span>
+                    <span class="card-value" [ngClass]="{'text-green-500': balance >= 0, 'text-red-500': balance < 0}">
+                        {{ formatCurrency(balance) }}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="charts-section">
+        <!-- Monthly Dynamics Chart -->
+        <div class="chart-card chart-large">
+            <div class="chart-header">
+                <h3>Динамика по месяцам</h3>
+                <span class="chart-icon"><i class="pi pi-chart-bar"></i></span>
+            </div>
+            <div class="chart-body">
+                <p-chart
+                    type="bar"
+                    [data]="monthlyChartData"
+                    [options]="monthlyChartOptions"
+                ></p-chart>
+            </div>
+        </div>
+
+        <!-- Right side charts -->
+        <div class="charts-right">
+            <!-- Debit vs Credit -->
+            <div class="chart-card chart-small">
+                <div class="chart-header">
+                    <h3>Дебит vs Кредит</h3>
+                    <span class="chart-icon"><i class="pi pi-chart-pie"></i></span>
+                </div>
+                <div class="chart-body-small">
+                    <p-chart
+                        type="doughnut"
+                        [data]="debitCreditCompareData"
+                        [options]="debitCreditCompareOptions"
+                    ></p-chart>
+                </div>
+            </div>
+
+            <!-- Expenses by Category -->
+            <div class="chart-card chart-small">
+                <div class="chart-header">
+                    <h3>Расходы по категориям</h3>
+                    <span class="chart-icon"><i class="pi pi-percentage"></i></span>
+                </div>
+                <div class="chart-body-small">
+                    <p-chart
+                        type="pie"
+                        [data]="categoryChartData"
+                        [options]="categoryChartOptions"
+                    ></p-chart>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="toolbar-card">
+        <div class="toolbar-filters">
+            <!-- Search -->
+            <p-inputGroup class="search-input">
+                <p-inputGroupAddon>
+                    <i class="pi pi-search"></i>
+                </p-inputGroupAddon>
+                <input
+                    type="text"
+                    pInputText
+                    [(ngModel)]="searchText"
+                    (ngModelChange)="applyFilters()"
+                    placeholder="Поиск..."
+                />
+            </p-inputGroup>
+
+            <!-- Date Range -->
+            <p-datepicker
+                [(ngModel)]="dateRange"
+                (ngModelChange)="applyFilters()"
+                selectionMode="range"
+                [showIcon]="true"
+                dateFormat="dd.mm.yy"
+                placeholder="Период"
+                class="date-picker"
+            ></p-datepicker>
+
+            <!-- Category Filter -->
+            <p-select
+                [options]="categories"
+                [(ngModel)]="selectedCategory"
+                (ngModelChange)="applyFilters()"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Категория"
+                [showClear]="true"
+                class="filter-select"
+            ></p-select>
+
+            <!-- Status Filter -->
+            <p-select
+                [options]="statuses"
+                [(ngModel)]="selectedStatus"
+                (ngModelChange)="applyFilters()"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Статус"
+                [showClear]="true"
+                class="filter-select"
+            ></p-select>
+
+            <!-- Transaction Type Filter -->
+            <p-select
+                [options]="transactionTypes"
+                [(ngModel)]="transactionTypeFilter"
+                (ngModelChange)="applyFilters()"
+                optionLabel="label"
+                optionValue="value"
+                class="filter-select"
+            ></p-select>
+
+            <!-- Clear Filters -->
+            <p-button
+                icon="pi pi-filter-slash"
+                severity="secondary"
+                [outlined]="true"
+                (onClick)="clearFilters()"
+                pTooltip="Сбросить фильтры"
+            ></p-button>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="toolbar-actions">
+            <p-button
+                label="Excel"
+                icon="pi pi-file-excel"
+                severity="success"
+                [outlined]="true"
+                (onClick)="exportToExcel()"
+            ></p-button>
+            <p-button
+                label="Добавить"
+                icon="pi pi-plus"
+                (onClick)="openNewTransaction()"
+            ></p-button>
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-card">
+        <p-table
+            [value]="filteredTransactions"
+            [tableStyle]="{'min-width': '70rem'}"
+            [paginator]="true"
+            [rows]="10"
+            [rowsPerPageOptions]="[5, 10, 25, 50]"
+            [showCurrentPageReport]="true"
+            currentPageReportTemplate="Показано {first} - {last} из {totalRecords} записей"
+            [sortField]="'date'"
+            [sortOrder]="-1"
+        >
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="date" style="width: 120px">
+                        Дата <p-sortIcon field="date"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="description">
+                        Описание <p-sortIcon field="description"></p-sortIcon>
+                    </th>
+                    <th style="width: 140px">Категория</th>
+                    <th pSortableColumn="counterparty" style="width: 160px">
+                        Контрагент <p-sortIcon field="counterparty"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="debit" style="width: 130px; text-align: right">
+                        Дебит <p-sortIcon field="debit"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="credit" style="width: 130px; text-align: right">
+                        Кредит <p-sortIcon field="credit"></p-sortIcon>
+                    </th>
+                    <th style="width: 130px; text-align: right">Баланс</th>
+                    <th style="width: 110px">Статус</th>
+                    <th style="width: 130px; text-align: center">Действия</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-transaction>
+                <tr>
+                    <td>{{ transaction.date | date: 'dd.MM.yyyy' }}</td>
+                    <td>{{ transaction.description }}</td>
+                    <td>
+                        <div class="flex align-items-center gap-2">
+                            <i [class]="getCategoryIcon(transaction.category)" class="text-500"></i>
+                            <span>{{ getCategoryLabel(transaction.category) }}</span>
+                        </div>
+                    </td>
+                    <td>{{ transaction.counterparty }}</td>
+                    <td class="text-right">
+                        <span *ngIf="transaction.debit" class="text-green-600 font-semibold">
+                            +{{ formatCurrency(transaction.debit) }}
+                        </span>
+                        <span *ngIf="!transaction.debit" class="text-400">-</span>
+                    </td>
+                    <td class="text-right">
+                        <span *ngIf="transaction.credit" class="text-red-600 font-semibold">
+                            -{{ formatCurrency(transaction.credit) }}
+                        </span>
+                        <span *ngIf="!transaction.credit" class="text-400">-</span>
+                    </td>
+                    <td class="text-right">
+                        <span [ngClass]="{'text-green-600': transaction.balance >= 0, 'text-red-600': transaction.balance < 0}">
+                            {{ formatCurrency(transaction.balance) }}
+                        </span>
+                    </td>
+                    <td>
+                        <p-tag
+                            [value]="getStatusLabel(transaction.status)"
+                            [severity]="getStatusSeverity(transaction.status)"
+                        ></p-tag>
+                    </td>
+                    <td class="text-center">
+                        <div class="flex align-items-center justify-content-center gap-1">
+                            <p-button
+                                icon="pi pi-pencil"
+                                [rounded]="true"
+                                [text]="true"
+                                severity="info"
+                                (onClick)="editTransaction(transaction)"
+                                pTooltip="Редактировать"
+                            ></p-button>
+                            <p-button
+                                icon="pi pi-copy"
+                                [rounded]="true"
+                                [text]="true"
+                                severity="secondary"
+                                (onClick)="duplicateTransaction(transaction)"
+                                pTooltip="Дублировать"
+                            ></p-button>
+                            <p-button
+                                icon="pi pi-trash"
+                                [rounded]="true"
+                                [text]="true"
+                                severity="danger"
+                                (onClick)="deleteTransaction(transaction)"
+                                pTooltip="Удалить"
+                            ></p-button>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="footer">
+                <tr class="font-bold">
+                    <td colspan="4" class="text-right">ИТОГО:</td>
+                    <td class="text-right text-green-600">+{{ formatCurrency(totalDebit) }}</td>
+                    <td class="text-right text-red-600">-{{ formatCurrency(totalCredit) }}</td>
+                    <td class="text-right" [ngClass]="{'text-green-600': balance >= 0, 'text-red-600': balance < 0}">
+                        {{ formatCurrency(balance) }}
+                    </td>
+                    <td colspan="2"></td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="9" class="text-center p-4">
+                        <div class="flex flex-column align-items-center gap-2">
+                            <i class="pi pi-inbox text-4xl text-500"></i>
+                            <span class="text-500">Транзакции не найдены</span>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+
+<!-- Transaction Dialog -->
+<p-dialog
+    [(visible)]="transactionDialog"
+    [header]="isEditMode ? 'Редактирование транзакции' : 'Новая транзакция'"
+    [modal]="true"
+    [style]="{ width: '520px', maxWidth: '95vw' }"
+    [closable]="true"
+    [draggable]="false"
+    styleClass="transaction-dialog"
+>
+    <div class="dialog-form">
+        <!-- Date -->
+        <div class="form-field">
+            <label for="date">Дата <span class="required">*</span></label>
+            <p-datepicker
+                id="date"
+                [(ngModel)]="currentTransaction.date"
+                [showIcon]="true"
+                dateFormat="dd.mm.yy"
+                appendTo="body"
+            ></p-datepicker>
+        </div>
+
+        <!-- Description -->
+        <div class="form-field">
+            <label for="description">Описание <span class="required">*</span></label>
+            <input
+                id="description"
+                type="text"
+                pInputText
+                [(ngModel)]="currentTransaction.description"
+                placeholder="Введите описание операции"
+            />
+        </div>
+
+        <!-- Counterparty -->
+        <div class="form-field">
+            <label for="counterparty">Контрагент <span class="required">*</span></label>
+            <input
+                id="counterparty"
+                type="text"
+                pInputText
+                [(ngModel)]="currentTransaction.counterparty"
+                placeholder="Введите название контрагента"
+            />
+        </div>
+
+        <!-- Category -->
+        <div class="form-field">
+            <label for="category">Категория</label>
+            <p-select
+                id="category"
+                [options]="categories"
+                [(ngModel)]="currentTransaction.category"
+                optionLabel="label"
+                optionValue="value"
+                appendTo="body"
+            ></p-select>
+        </div>
+
+        <!-- Debit / Credit Row -->
+        <div class="form-row">
+            <div class="form-field">
+                <label for="debit" class="label-debit">
+                    <i class="pi pi-arrow-down-left"></i> Дебит (приход)
+                </label>
+                <p-inputNumber
+                    id="debit"
+                    [(ngModel)]="currentTransaction.debit"
+                    mode="decimal"
+                    [minFractionDigits]="0"
+                    [maxFractionDigits]="2"
+                    suffix=" UZS"
+                    placeholder="0 UZS"
+                ></p-inputNumber>
+            </div>
+            <div class="form-field">
+                <label for="credit" class="label-credit">
+                    <i class="pi pi-arrow-up-right"></i> Кредит (расход)
+                </label>
+                <p-inputNumber
+                    id="credit"
+                    [(ngModel)]="currentTransaction.credit"
+                    mode="decimal"
+                    [minFractionDigits]="0"
+                    [maxFractionDigits]="2"
+                    suffix=" UZS"
+                    placeholder="0 UZS"
+                ></p-inputNumber>
+            </div>
+        </div>
+
+        <!-- Status -->
+        <div class="form-field">
+            <label for="status">Статус</label>
+            <p-select
+                id="status"
+                [options]="statuses"
+                [(ngModel)]="currentTransaction.status"
+                optionLabel="label"
+                optionValue="value"
+                appendTo="body"
+            ></p-select>
+        </div>
+    </div>
+
+    <ng-template pTemplate="footer">
+        <div class="dialog-footer">
+            <p-button
+                label="Отмена"
+                severity="secondary"
+                [outlined]="true"
+                icon="pi pi-times"
+                (onClick)="transactionDialog = false"
+            ></p-button>
+            <p-button
+                [label]="isEditMode ? 'Сохранить' : 'Добавить'"
+                [icon]="isEditMode ? 'pi pi-save' : 'pi pi-plus'"
+                (onClick)="saveTransaction()"
+            ></p-button>
+        </div>
+    </ng-template>
+</p-dialog>

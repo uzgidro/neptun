@@ -2,22 +2,39 @@
     <i class="pi pi-phone"></i>
     <span>Звонок</span>
 </button>
-<p-popover #phonePopover [style]="{ width: '450px' }">
+<p-popover #phonePopover [style]="{ width: '500px' }">
     <p-table [value]="contacts" dataKey="id" [rows]="5" [paginator]="true">
         <ng-template pTemplate="header">
             <tr>
                 <th>Имя</th>
-                <th style="width: 8rem">Действие</th>
+                <th style="width: 10rem">Действие</th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-contact>
             <tr>
-                <td>{{ contact.contact.name }}</td>
                 <td>
-                    <a pButton outlined class="p-button-sm" [href]="'tel:' + contact.contact.phone">
-                        <i class="pi pi-phone text-green-500"></i>
-                        <!--                                            <span class="ml-2">Позвонить</span>-->
-                    </a>
+                    <div class="flex items-center gap-3">
+                        <p-avatar
+                            [image]="contact.contact.icon?.url"
+                            [label]="!contact.contact.icon?.url ? contact.contact.name?.charAt(0) : undefined"
+                            shape="circle"
+                            size="normal"
+                        />
+                        <span>{{ contact.contact.name }}</span>
+                    </div>
+                </td>
+                <td>
+                    <div class="flex gap-1">
+                        <a pButton outlined class="p-button-sm" [href]="'tel:' + contact.contact.phone">
+                            <i class="pi pi-phone text-green-500"></i>
+                        </a>
+                        <a pButton outlined class="p-button-sm" [href]="'https://t.me/' + contact.contact.phone" target="_blank">
+                            <i class="pi pi-telegram text-blue-500"></i>
+                        </a>
+                        <a pButton outlined class="p-button-sm" [href]="'https://wa.me/' + contact.contact.phone" target="_blank">
+                            <i class="pi pi-whatsapp text-green-600"></i>
+                        </a>
+                    </div>
                 </td>
             </tr>
         </ng-template>

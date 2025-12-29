@@ -1,0 +1,651 @@
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+<div class="salary-container">
+    <!-- Summary Cards Row -->
+    <div class="summary-cards-row">
+        <div class="summary-card fot-card">
+            <div class="card-content">
+                <div class="card-icon fot-icon">
+                    <i class="pi pi-wallet"></i>
+                </div>
+                <div class="card-info">
+                    <span class="card-label">Общий ФОТ</span>
+                    <span class="card-value text-primary">{{ formatCurrency(totalFOT) }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="summary-card netpay-card">
+            <div class="card-content">
+                <div class="card-icon netpay-icon">
+                    <i class="pi pi-money-bill"></i>
+                </div>
+                <div class="card-info">
+                    <span class="card-label">К выплате</span>
+                    <span class="card-value text-green-500">{{ formatCurrency(totalNetPay) }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="summary-card avg-card">
+            <div class="card-content">
+                <div class="card-icon avg-icon">
+                    <i class="pi pi-chart-line"></i>
+                </div>
+                <div class="card-info">
+                    <span class="card-label">Средняя ЗП</span>
+                    <span class="card-value text-blue-500">{{ formatCurrency(averageSalary) }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="summary-card employees-card">
+            <div class="card-content">
+                <div class="card-icon employees-icon">
+                    <i class="pi pi-users"></i>
+                </div>
+                <div class="card-info">
+                    <span class="card-label">Сотрудников</span>
+                    <span class="card-value text-cyan-500">{{ employeesCount }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="summary-card pending-card">
+            <div class="card-content">
+                <div class="card-icon pending-icon">
+                    <i class="pi pi-clock"></i>
+                </div>
+                <div class="card-info">
+                    <span class="card-label">Ожидает выплаты</span>
+                    <span class="card-value text-orange-500">{{ formatCurrency(pendingAmount) }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="charts-section">
+        <!-- Monthly Dynamics Chart -->
+        <div class="chart-card chart-large">
+            <div class="chart-header">
+                <h3>ФОТ по месяцам ({{ selectedYear }})</h3>
+                <span class="chart-icon"><i class="pi pi-chart-bar"></i></span>
+            </div>
+            <div class="chart-body">
+                <p-chart
+                    type="bar"
+                    [data]="monthlyChartData"
+                    [options]="monthlyChartOptions"
+                ></p-chart>
+            </div>
+        </div>
+
+        <!-- Right side charts -->
+        <div class="charts-right">
+            <!-- Department Chart -->
+            <div class="chart-card chart-small">
+                <div class="chart-header">
+                    <h3>По отделам</h3>
+                    <span class="chart-icon"><i class="pi pi-chart-pie"></i></span>
+                </div>
+                <div class="chart-body-small">
+                    <p-chart
+                        type="pie"
+                        [data]="departmentChartData"
+                        [options]="departmentChartOptions"
+                    ></p-chart>
+                </div>
+            </div>
+
+            <!-- Structure Chart -->
+            <div class="chart-card chart-small">
+                <div class="chart-header">
+                    <h3>Структура выплат</h3>
+                    <span class="chart-icon"><i class="pi pi-percentage"></i></span>
+                </div>
+                <div class="chart-body-small">
+                    <p-chart
+                        type="doughnut"
+                        [data]="structureChartData"
+                        [options]="structureChartOptions"
+                    ></p-chart>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="toolbar-card">
+        <div class="toolbar-filters">
+            <!-- Search -->
+            <p-inputGroup class="search-input">
+                <p-inputGroupAddon>
+                    <i class="pi pi-search"></i>
+                </p-inputGroupAddon>
+                <input
+                    type="text"
+                    pInputText
+                    [(ngModel)]="searchText"
+                    (ngModelChange)="applyFilters()"
+                    placeholder="Поиск..."
+                />
+            </p-inputGroup>
+
+            <!-- Month Filter -->
+            <p-select
+                [options]="months"
+                [(ngModel)]="selectedMonth"
+                (ngModelChange)="applyFilters()"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Месяц"
+                [showClear]="true"
+                class="filter-select"
+            ></p-select>
+
+            <!-- Year Filter -->
+            <p-select
+                [options]="years"
+                [(ngModel)]="selectedYear"
+                (ngModelChange)="applyFilters()"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Год"
+                class="filter-select-sm"
+            ></p-select>
+
+            <!-- Department Filter -->
+            <p-select
+                [options]="departments"
+                [(ngModel)]="selectedDepartment"
+                (ngModelChange)="applyFilters()"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Отдел"
+                [showClear]="true"
+                class="filter-select"
+            ></p-select>
+
+            <!-- Status Filter -->
+            <p-select
+                [options]="statuses"
+                [(ngModel)]="selectedStatus"
+                (ngModelChange)="applyFilters()"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Статус"
+                [showClear]="true"
+                class="filter-select-sm"
+            ></p-select>
+
+            <!-- Clear Filters -->
+            <p-button
+                icon="pi pi-filter-slash"
+                severity="secondary"
+                [outlined]="true"
+                (onClick)="clearFilters()"
+                pTooltip="Сбросить фильтры"
+            ></p-button>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="toolbar-actions">
+            <p-button
+                label="Excel"
+                icon="pi pi-file-excel"
+                severity="success"
+                [outlined]="true"
+                (onClick)="exportToExcel()"
+            ></p-button>
+            <p-button
+                label="Добавить"
+                icon="pi pi-plus"
+                (onClick)="openNewSalary()"
+            ></p-button>
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-card">
+        <p-table
+            [value]="filteredSalaries"
+            [tableStyle]="{'min-width': '90rem'}"
+            [paginator]="true"
+            [rows]="10"
+            [rowsPerPageOptions]="[5, 10, 25, 50]"
+            [showCurrentPageReport]="true"
+            currentPageReportTemplate="Показано {first} - {last} из {totalRecords} записей"
+            [sortField]="'fullName'"
+            [sortOrder]="1"
+        >
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="employeeId" style="width: 100px">
+                        Таб.№ <p-sortIcon field="employeeId"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="fullName" style="min-width: 200px">
+                        Сотрудник <p-sortIcon field="fullName"></p-sortIcon>
+                    </th>
+                    <th style="width: 140px">Отдел</th>
+                    <th pSortableColumn="baseSalary" style="width: 120px; text-align: right">
+                        Оклад <p-sortIcon field="baseSalary"></p-sortIcon>
+                    </th>
+                    <th style="width: 110px; text-align: right">Надбавки</th>
+                    <th style="width: 100px; text-align: right">Премия</th>
+                    <th style="width: 80px; text-align: center">Дни</th>
+                    <th pSortableColumn="totalAccrued" style="width: 130px; text-align: right">
+                        Начислено <p-sortIcon field="totalAccrued"></p-sortIcon>
+                    </th>
+                    <th style="width: 110px; text-align: right">Удержано</th>
+                    <th pSortableColumn="netPay" style="width: 130px; text-align: right">
+                        К выплате <p-sortIcon field="netPay"></p-sortIcon>
+                    </th>
+                    <th style="width: 110px">Статус</th>
+                    <th style="width: 100px; text-align: center">Действия</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-salary>
+                <tr>
+                    <td>
+                        <span class="text-primary font-semibold">{{ salary.employeeId }}</span>
+                    </td>
+                    <td>
+                        <div class="flex flex-column">
+                            <span class="font-semibold">{{ salary.fullName }}</span>
+                            <span class="text-sm text-500">{{ getPositionLabel(salary.position) }}</span>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="text-sm">{{ getDepartmentLabel(salary.department) }}</span>
+                    </td>
+                    <td class="text-right">
+                        <span class="font-semibold">{{ formatCurrency(salary.baseSalary) }}</span>
+                    </td>
+                    <td class="text-right">
+                        <span class="text-cyan-600">
+                            {{ formatCurrency(salary.seniorityBonus + salary.qualificationBonus + salary.hazardBonus + salary.otherBonuses) }}
+                        </span>
+                    </td>
+                    <td class="text-right">
+                        <span class="text-orange-500">{{ formatCurrency(salary.premium) }}</span>
+                    </td>
+                    <td class="text-center">
+                        <span [ngClass]="{'text-red-500': salary.workedDays < salary.totalDays}">
+                            {{ salary.workedDays }}/{{ salary.totalDays }}
+                        </span>
+                    </td>
+                    <td class="text-right">
+                        <span class="text-blue-600 font-semibold">{{ formatCurrency(salary.totalAccrued) }}</span>
+                    </td>
+                    <td class="text-right">
+                        <span class="text-red-500">-{{ formatCurrency(salary.totalDeductions) }}</span>
+                    </td>
+                    <td class="text-right">
+                        <span class="text-green-600 font-bold">{{ formatCurrency(salary.netPay) }}</span>
+                    </td>
+                    <td>
+                        <p-tag
+                            [value]="getStatusLabel(salary.status)"
+                            [severity]="getStatusSeverity(salary.status)"
+                        ></p-tag>
+                    </td>
+                    <td class="text-center">
+                        <div class="flex align-items-center justify-content-center gap-1">
+                            <p-button
+                                *ngIf="salary.status !== 'paid'"
+                                icon="pi pi-check"
+                                [rounded]="true"
+                                [text]="true"
+                                severity="success"
+                                (onClick)="markAsPaid(salary)"
+                                pTooltip="Отметить как выплачено"
+                            ></p-button>
+                            <p-button
+                                icon="pi pi-pencil"
+                                [rounded]="true"
+                                [text]="true"
+                                severity="info"
+                                (onClick)="editSalary(salary)"
+                                pTooltip="Редактировать"
+                            ></p-button>
+                            <p-button
+                                icon="pi pi-trash"
+                                [rounded]="true"
+                                [text]="true"
+                                severity="danger"
+                                (onClick)="deleteSalary(salary)"
+                                pTooltip="Удалить"
+                            ></p-button>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="footer">
+                <tr class="font-bold">
+                    <td colspan="7" class="text-right">ИТОГО:</td>
+                    <td class="text-right text-blue-600">{{ formatCurrency(totalFOT) }}</td>
+                    <td class="text-right text-red-500">-{{ formatCurrency(totalDeductions) }}</td>
+                    <td class="text-right text-green-600">{{ formatCurrency(totalNetPay) }}</td>
+                    <td colspan="2"></td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="12" class="text-center p-4">
+                        <div class="flex flex-column align-items-center gap-2">
+                            <i class="pi pi-inbox text-4xl text-500"></i>
+                            <span class="text-500">Записи не найдены</span>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+
+<!-- Salary Dialog -->
+<p-dialog
+    [(visible)]="salaryDialog"
+    [header]="isEditMode ? 'Редактирование записи' : 'Новая запись о зарплате'"
+    [modal]="true"
+    [style]="{ width: '750px', maxWidth: '95vw' }"
+    [closable]="true"
+    [draggable]="false"
+    styleClass="salary-dialog"
+>
+    <div class="dialog-form">
+        <!-- Employee Info Section -->
+        <div class="form-section">
+            <h4><i class="pi pi-user"></i> Данные сотрудника</h4>
+            <div class="form-row">
+                <div class="form-field">
+                    <label for="employeeId">Табельный номер <span class="required">*</span></label>
+                    <input
+                        id="employeeId"
+                        type="text"
+                        pInputText
+                        [(ngModel)]="currentSalary.employeeId"
+                        placeholder="EMP001"
+                    />
+                </div>
+                <div class="form-field field-large">
+                    <label for="fullName">ФИО <span class="required">*</span></label>
+                    <input
+                        id="fullName"
+                        type="text"
+                        pInputText
+                        [(ngModel)]="currentSalary.fullName"
+                        placeholder="Иванов Иван Иванович"
+                    />
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-field">
+                    <label for="department">Отдел</label>
+                    <p-select
+                        id="department"
+                        [options]="departments"
+                        [(ngModel)]="currentSalary.department"
+                        optionLabel="label"
+                        optionValue="value"
+                        appendTo="body"
+                    ></p-select>
+                </div>
+                <div class="form-field">
+                    <label for="position">Должность</label>
+                    <p-select
+                        id="position"
+                        [options]="positions"
+                        [(ngModel)]="currentSalary.position"
+                        optionLabel="label"
+                        optionValue="value"
+                        appendTo="body"
+                    ></p-select>
+                </div>
+            </div>
+        </div>
+
+        <p-divider></p-divider>
+
+        <!-- Period Section -->
+        <div class="form-section">
+            <h4><i class="pi pi-calendar"></i> Период</h4>
+            <div class="form-row-3">
+                <div class="form-field">
+                    <label for="periodMonth">Месяц</label>
+                    <p-select
+                        id="periodMonth"
+                        [options]="months"
+                        [(ngModel)]="currentSalary.periodMonth"
+                        optionLabel="label"
+                        optionValue="value"
+                        appendTo="body"
+                    ></p-select>
+                </div>
+                <div class="form-field">
+                    <label for="periodYear">Год</label>
+                    <p-select
+                        id="periodYear"
+                        [options]="years"
+                        [(ngModel)]="currentSalary.periodYear"
+                        optionLabel="label"
+                        optionValue="value"
+                        appendTo="body"
+                    ></p-select>
+                </div>
+                <div class="form-field">
+                    <label for="workedDays">Отработано дней</label>
+                    <div class="flex gap-2 align-items-center">
+                        <p-inputNumber
+                            id="workedDays"
+                            [(ngModel)]="currentSalary.workedDays"
+                            [min]="0"
+                            [max]="31"
+                            (ngModelChange)="calculateSalary()"
+                        ></p-inputNumber>
+                        <span class="text-500">из</span>
+                        <p-inputNumber
+                            [(ngModel)]="currentSalary.totalDays"
+                            [min]="1"
+                            [max]="31"
+                            (ngModelChange)="calculateSalary()"
+                            [style]="{ width: '80px' }"
+                        ></p-inputNumber>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <p-divider></p-divider>
+
+        <!-- Accruals Section -->
+        <div class="form-section">
+            <h4><i class="pi pi-plus-circle"></i> Начисления</h4>
+            <div class="form-row">
+                <div class="form-field">
+                    <label for="baseSalary" class="label-primary">Базовый оклад <span class="required">*</span></label>
+                    <p-inputNumber
+                        id="baseSalary"
+                        [(ngModel)]="currentSalary.baseSalary"
+                        mode="decimal"
+                        [minFractionDigits]="0"
+                        [maxFractionDigits]="0"
+                        suffix=" UZS"
+                        (ngModelChange)="calculateSalary()"
+                    ></p-inputNumber>
+                </div>
+                <div class="form-field">
+                    <label for="premium" class="label-warning">Премия</label>
+                    <p-inputNumber
+                        id="premium"
+                        [(ngModel)]="currentSalary.premium"
+                        mode="decimal"
+                        [minFractionDigits]="0"
+                        [maxFractionDigits]="0"
+                        suffix=" UZS"
+                        (ngModelChange)="calculateSalary()"
+                    ></p-inputNumber>
+                </div>
+            </div>
+            <div class="form-row-4">
+                <div class="form-field">
+                    <label for="seniorityBonus">За стаж</label>
+                    <p-inputNumber
+                        id="seniorityBonus"
+                        [(ngModel)]="currentSalary.seniorityBonus"
+                        mode="decimal"
+                        [minFractionDigits]="0"
+                        [maxFractionDigits]="0"
+                        suffix=" UZS"
+                        (ngModelChange)="calculateSalary()"
+                    ></p-inputNumber>
+                </div>
+                <div class="form-field">
+                    <label for="qualificationBonus">За квалификацию</label>
+                    <p-inputNumber
+                        id="qualificationBonus"
+                        [(ngModel)]="currentSalary.qualificationBonus"
+                        mode="decimal"
+                        [minFractionDigits]="0"
+                        [maxFractionDigits]="0"
+                        suffix=" UZS"
+                        (ngModelChange)="calculateSalary()"
+                    ></p-inputNumber>
+                </div>
+                <div class="form-field">
+                    <label for="hazardBonus">За вредность</label>
+                    <p-inputNumber
+                        id="hazardBonus"
+                        [(ngModel)]="currentSalary.hazardBonus"
+                        mode="decimal"
+                        [minFractionDigits]="0"
+                        [maxFractionDigits]="0"
+                        suffix=" UZS"
+                        (ngModelChange)="calculateSalary()"
+                    ></p-inputNumber>
+                </div>
+                <div class="form-field">
+                    <label for="otherBonuses">Прочие</label>
+                    <p-inputNumber
+                        id="otherBonuses"
+                        [(ngModel)]="currentSalary.otherBonuses"
+                        mode="decimal"
+                        [minFractionDigits]="0"
+                        [maxFractionDigits]="0"
+                        suffix=" UZS"
+                        (ngModelChange)="calculateSalary()"
+                    ></p-inputNumber>
+                </div>
+            </div>
+        </div>
+
+        <p-divider></p-divider>
+
+        <!-- Deductions Section -->
+        <div class="form-section">
+            <h4><i class="pi pi-minus-circle"></i> Удержания</h4>
+            <div class="form-row-3">
+                <div class="form-field">
+                    <label for="incomeTax" class="label-danger">НДФЛ (12%)</label>
+                    <p-inputNumber
+                        id="incomeTax"
+                        [(ngModel)]="currentSalary.incomeTax"
+                        mode="decimal"
+                        [minFractionDigits]="0"
+                        [maxFractionDigits]="0"
+                        suffix=" UZS"
+                        [disabled]="true"
+                    ></p-inputNumber>
+                </div>
+                <div class="form-field">
+                    <label for="pensionFund" class="label-warning">Пенсионный (4%)</label>
+                    <p-inputNumber
+                        id="pensionFund"
+                        [(ngModel)]="currentSalary.pensionFund"
+                        mode="decimal"
+                        [minFractionDigits]="0"
+                        [maxFractionDigits]="0"
+                        suffix=" UZS"
+                        [disabled]="true"
+                    ></p-inputNumber>
+                </div>
+                <div class="form-field">
+                    <label for="otherDeductions">Прочие удержания</label>
+                    <p-inputNumber
+                        id="otherDeductions"
+                        [(ngModel)]="currentSalary.otherDeductions"
+                        mode="decimal"
+                        [minFractionDigits]="0"
+                        [maxFractionDigits]="0"
+                        suffix=" UZS"
+                        (ngModelChange)="calculateSalary()"
+                    ></p-inputNumber>
+                </div>
+            </div>
+        </div>
+
+        <p-divider></p-divider>
+
+        <!-- Totals Section -->
+        <div class="form-section totals-section">
+            <div class="totals-row">
+                <div class="total-item">
+                    <span class="total-label">Начислено:</span>
+                    <span class="total-value text-blue-600">{{ formatCurrency(currentSalary.totalAccrued) }}</span>
+                </div>
+                <div class="total-item">
+                    <span class="total-label">Удержано:</span>
+                    <span class="total-value text-red-500">-{{ formatCurrency(currentSalary.totalDeductions) }}</span>
+                </div>
+                <div class="total-item total-netpay">
+                    <span class="total-label">К выплате:</span>
+                    <span class="total-value text-green-600">{{ formatCurrency(currentSalary.netPay) }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status & Notes -->
+        <div class="form-row">
+            <div class="form-field">
+                <label for="status">Статус</label>
+                <p-select
+                    id="status"
+                    [options]="statuses"
+                    [(ngModel)]="currentSalary.status"
+                    optionLabel="label"
+                    optionValue="value"
+                    appendTo="body"
+                ></p-select>
+            </div>
+            <div class="form-field">
+                <label for="notes">Примечания</label>
+                <input
+                    id="notes"
+                    type="text"
+                    pInputText
+                    [(ngModel)]="currentSalary.notes"
+                    placeholder="Дополнительная информация"
+                />
+            </div>
+        </div>
+    </div>
+
+    <ng-template pTemplate="footer">
+        <div class="dialog-footer">
+            <p-button
+                label="Отмена"
+                severity="secondary"
+                [outlined]="true"
+                icon="pi pi-times"
+                (onClick)="salaryDialog = false"
+            ></p-button>
+            <p-button
+                [label]="isEditMode ? 'Сохранить' : 'Добавить'"
+                [icon]="isEditMode ? 'pi pi-save' : 'pi pi-plus'"
+                (onClick)="saveSalary()"
+            ></p-button>
+        </div>
+    </ng-template>
+</p-dialog>

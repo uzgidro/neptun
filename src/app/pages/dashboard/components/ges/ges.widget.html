@@ -7,11 +7,11 @@
             <span pButtonLabel>{{ expanded ? 'Свернуть' : 'Развернуть' }}</span>
         </button>-->
     </div>
-    <p-table [value]="cascades" dataKey="name" [scrollable]="true" scrollHeight="23rem" [loading]="loading"
+    <p-table [value]="cascades" dataKey="name" [loading]="loading"
              [expandedRowKeys]="expandedRows">
         <ng-template #header>
             <tr>
-                <th style="width: 5rem"></th>
+                <th style="width: 3rem">№</th>
                 <th style="width: 2rem"></th>
                 <th class="whitespace-nowrap" pSortableColumn="name">Название
                     <p-sortIcon field="name" />
@@ -27,12 +27,9 @@
                 </th>
             </tr>
         </ng-template>
-        <ng-template #body let-cascade let-expanded="expanded">
+        <ng-template #body let-cascade let-expanded="expanded" let-rowIndex="rowIndex">
             <tr [pRowToggler]="cascade" class="cursor-pointer">
-                <td>
-                    <p-button type="button" pRipple [text]="true" [rounded]="true"
-                              [plain]="true" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" />
-                </td>
+                <td class="font-semibold">{{ rowIndex + 1 }}</td>
                 <td>
                     <span class="inline-block w-2 h-2 rounded-full"
                           [ngClass]="cascade.ascue_metrics ? 'bg-green-500' : 'bg-red-500'"></span>
@@ -49,39 +46,37 @@
             </tr>
         </ng-template>
         <ng-template #expandedrow let-cascade>
-            <tr>
-                <td colspan="7">
-                    <h5 class="pl-10">{{ cascade.name }}</h5>
-                </td>
-            </tr>
             @if (cascade.contacts?.length) {
-                <tr>
-                    @for (contact of cascade.contacts; track contact.id; let i = $index) {
-                        <td [attr.colspan]="cascade.contacts.length === 1 ? 7 : (i === 0 ? 3 : 4)">
-                            <p class="pl-10 font-bold">{{ contact.position?.description }}</p>
-                        </td>
-                    }
-                </tr>
-
-                <tr>
-                    @for (contact of cascade.contacts; track contact.id; let i = $index) {
-                        <td [attr.colspan]="cascade.contacts.length === 1 ? 7 : (i === 0 ? 3 : 4)">
-                            <div class="pl-10">
-                                <p>{{ contact.name }}</p>
-                                @if (contact.phone) {
-                                    <a pButton outlined class="p-button-sm mb-4" [href]="'tel:' + contact.phone">
-                                        <i pButtonIcon class="pi pi-phone"></i>
-                                        <span pButtonLabel>Позвонить</span>
-                                    </a>
-                                }
-                            </div>
-                        </td>
-                    }
+                <tr style="background-color: rgba(0, 0, 0, 0.03);">
+                    <td colspan="2"></td>
+                    <td [attr.colspan]="5" style="border-left: 3px solid #cbd5e1;">
+                        <div class="flex gap-8">
+                            @for (contact of cascade.contacts; track contact.id) {
+                                <div class="py-2">
+                                    <p class="font-bold mb-1">{{ contact.position?.description }}</p>
+                                    <p class="mb-2">{{ contact.name }}</p>
+                                    @if (contact.phone) {
+                                        <div class="flex gap-2">
+                                            <a pButton outlined class="p-button-sm" [href]="'tel:' + contact.phone">
+                                                <i pButtonIcon class="pi pi-phone"></i>
+                                            </a>
+                                            <a pButton outlined class="p-button-sm" [href]="'https://t.me/' + contact.phone">
+                                                <i pButtonIcon class="pi pi-telegram"></i>
+                                            </a>
+                                            <a pButton outlined class="p-button-sm" [href]="'https://wa.me/' + contact.phone">
+                                                <i pButtonIcon class="pi pi-whatsapp" style="color: green"></i>
+                                            </a>
+                                        </div>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    </td>
                 </tr>
             }
-            <tr>
-                <td colspan="7">
-                    <div class="pl-10">
+            <tr style="background-color: rgba(0, 0, 0, 0.03);">
+                <td colspan="2"></td>
+                <td colspan="5" style="border-left: 3px solid #cbd5e1;">
                         <p-table [value]="cascade.items" dataKey="name" styleClass="p-datatable-sm">
                             <ng-template #header>
                                 <tr>
@@ -126,7 +121,6 @@
                                 </tr>
                             </ng-template>
                         </p-table>
-                    </div>
                 </td>
             </tr>
         </ng-template>
