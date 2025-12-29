@@ -1,19 +1,28 @@
 <div class="card">
-    <h3 class="text-center mb-4">Сводная таблица по водохранилищам</h3>
+    <h3 class="text-center mb-3">Сводка по водохранилищам</h3>
 
-    <div class="flex justify-between items-center mb-4">
-        <form [formGroup]="form">
-            <div class="flex items-center gap-2">
-                <app-date-picker
-                    label="Выберите дату"
-                    formControlName="date"
-                    [showTime]="false"
-                    [submitted]="submitted"
-                    errorMessage="Укажите дату">
-                </app-date-picker>
-            </div>
-        </form>
-        <p-button label="Экспорт в Excel" icon="pi pi-file-excel" styleClass="p-button-success" (click)="exportExcel()"></p-button>
+    <div class="flex justify-between items-baseline gap-4">
+        <div class="w-full md:w-1/4">
+            <app-date (dateChange)="onDateChange($event)"></app-date>
+        </div>
+        <div class="flex gap-4">
+            <p-button
+                label="Экспорт в Excel"
+                icon="pi pi-file-excel"
+                severity="success"
+                [loading]="isExcelLoading"
+                [disabled]="!data || data.length === 0"
+                (onClick)="download('excel')">
+            </p-button>
+            <p-button
+                label="Экспорт в PDF"
+                icon="pi pi-file-pdf"
+                severity="danger"
+                [loading]="isPdfLoading"
+                [disabled]="!data || data.length === 0"
+                (onClick)="download('pdf')">
+            </p-button>
+        </div>
     </div>
 
     @if (data) {
@@ -21,7 +30,6 @@
             [value]="data"
             [scrollable]="true"
             showGridlines
-            stripedRows
             scrollHeight="60vh"
             [tableStyle]="{ 'min-width': '1200px' }">
 
@@ -36,12 +44,12 @@
                     <th colspan="2" rowspan="2">MODSNOW, снежный покров %</th>
                 </tr>
                 <tr>
-                    <th rowspan="2" class="text-nowrap">{{ form.get('date')?.value | date: 'dd MMM' : '' : 'ru' }}</th>
-                    <th rowspan="2" class="text-nowrap">{{ form.get('date')?.value | date: 'dd MMM' : '' : 'ru' }}</th>
+                    <th rowspan="2" class="text-nowrap">{{ selectedDate | date: 'dd MMM' : '' : 'ru' }}</th>
+                    <th rowspan="2" class="text-nowrap">{{ selectedDate | date: 'dd MMM' : '' : 'ru' }}</th>
                     <th colspan="2">Прошлые года</th>
-                    <th rowspan="2" class="text-nowrap">{{ form.get('date')?.value | date: 'dd MMM' : '' : 'ru' }}</th>
+                    <th rowspan="2" class="text-nowrap">{{ selectedDate | date: 'dd MMM' : '' : 'ru' }}</th>
                     <th colspan="2">Прошлые года</th>
-                    <th rowspan="2" class="text-nowrap">{{ form.get('date')?.value | date: 'dd MMM' : '' : 'ru' }}</th>
+                    <th rowspan="2" class="text-nowrap">{{ selectedDate | date: 'dd MMM' : '' : 'ru' }}</th>
                     <th colspan="2">Прошлые года</th>
                 </tr>
                 <tr>
@@ -51,108 +59,266 @@
                     <th>{{ getPreviousYear(2) }}</th>
                     <th>{{ getPreviousYear(1) }}</th>
                     <th>{{ getPreviousYear(2) }}</th>
-                    <th>{{ form.get('date')?.value | date: 'yyyy' }}</th>
+                    <th>{{ selectedDate | date: 'yyyy' }}</th>
                     <th>{{ getPreviousYear(1) }}</th>
-                    <th>{{ form.get('date')?.value | date: 'yyyy' }}</th>
+                    <th>{{ selectedDate | date: 'yyyy' }}</th>
                     <th>{{ getPreviousYear(1) }}</th>
                 </tr>
             </ng-template>
 
-            <ng-template pTemplate="body" let-reservoir>
+            <ng-template pTemplate="body" let-reservoir let-index="rowIndex">
                 <tr>
                     <td rowspan="2">{{ reservoir.organization_name }}</td>
-                    @if (authService.isSc()) {
-                        <td [pEditableColumn]="reservoir.level" pEditableColumnField="current" class="text-nowrap">
-                            <p-cellEditor>
-                                <ng-template pTemplate="input">
-                                    <input pInputText type="number" [(ngModel)]="reservoir.level.current"
-                                           (focus)="onInputFocus($event, reservoir.level, 'current')" />
-                                </ng-template>
-                                <ng-template pTemplate="output">
-                                    {{ reservoir.level.current | number: '1.0-2' }}
-                                    <i class="pi pi-pen-to-square ml-2 text-gray-400 text-xs"></i>
-                                </ng-template>
-                            </p-cellEditor>
-                        </td>
+                    @if (index === 8) {
+                        <td></td>
                     } @else {
-                        <td class="text-nowrap">{{ reservoir.level.current | number: '1.0-2' }}</td>
+                        @if (reservoir.organization_id !== null) {
+                            @if (authService.isSc()) {
+                                <td [pEditableColumn]="reservoir.level" pEditableColumnField="current"
+                                    class="text-nowrap"
+                                    [ngClass]="{'bg-yellow-100 dark:bg-yellow-900': reservoir.level.is_edited}">
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="number" [(ngModel)]="reservoir.level.current"
+                                                   (ngModelChange)="onLevelChange(reservoir)"
+                                                   (focus)="onInputFocus($event, reservoir.level, 'current')" />
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{ reservoir.level.current | number: '1.0-2' }}
+                                            <i class="pi pi-pen-to-square ml-2 text-gray-400 text-xs"></i>
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                            } @else {
+                                <td class="text-nowrap">{{ reservoir.level.current | number: '1.0-2' }}</td>
+                            }
+                        } @else {
+                            <td></td>
+                        }
+                    }
+                    @if (index > 6) {
+                        <td></td>
+                    } @else {
+                        @if (authService.isSc() && index !== 6) {
+                            <td [pEditableColumn]="reservoir.volume" pEditableColumnField="current" class="text-nowrap"
+                                [ngClass]="{'bg-yellow-100 dark:bg-yellow-900': reservoir.volume.is_edited}">
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input pInputText type="number" [(ngModel)]="reservoir.volume.current"
+                                               (focus)="onInputFocus($event, reservoir.volume, 'current')"
+                                               (ngModelChange)="onVolumeChange(reservoir)" />
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{ reservoir.volume.current | number: '1.0-2' }}
+                                        <i class="pi pi-pen-to-square ml-2 text-gray-400 text-xs"></i>
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                        } @else {
+                            <td class="text-nowrap">{{ reservoir.volume.current | number: '1.0-2' }}</td>
+                        }
+                    }
+                    @if (index <= 6) {
+                        <td>{{ reservoir.volume.year_ago !== null ? (reservoir.volume.year_ago | number: '1.0-2') : 'N/A' }}</td>
+                        <td>{{ reservoir.volume.two_years_ago !== null ? (reservoir.volume.two_years_ago | number: '1.0-2') : 'N/A' }}</td>
+                    } @else {
+                        <td></td>
+                        <td></td>
                     }
                     @if (authService.isSc()) {
-                        <td [pEditableColumn]="reservoir.volume" pEditableColumnField="current" class="text-nowrap">
-                            <p-cellEditor>
-                                <ng-template pTemplate="input">
-                                    <input pInputText type="number" [(ngModel)]="reservoir.volume.current"
-                                           (focus)="onInputFocus($event, reservoir.volume, 'current')" />
-                                </ng-template>
-                                <ng-template pTemplate="output">
-                                    {{ reservoir.volume.current | number: '1.0-2' }}
-                                    <i class="pi pi-pen-to-square ml-2 text-gray-400 text-xs"></i>
-                                </ng-template>
-                            </p-cellEditor>
-                        </td>
-                    } @else {
-                        <td class="text-nowrap">{{ reservoir.volume.current | number: '1.0-2' }}</td>
-                    }
-                    <td>{{ reservoir.volume.year_ago !== null ? (reservoir.volume.year_ago | number: '1.0-2') : 'N/A' }}</td>
-                    <td>{{ reservoir.volume.two_years_ago !== null ? (reservoir.volume.two_years_ago | number: '1.0-2') : 'N/A' }}</td>
-                    @if (authService.isSc()) {
-                        <td [pEditableColumn]="reservoir.income" pEditableColumnField="current" class="text-nowrap">
+                        <td [pEditableColumn]="reservoir.income" pEditableColumnField="current" class="text-nowrap"
+                            [ngClass]="{'bg-yellow-100 dark:bg-yellow-900': reservoir.income.is_edited}">
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <input pInputText type="number" [(ngModel)]="reservoir.income.current"
-                                           (focus)="onInputFocus($event, reservoir.income, 'current')" />
+                                           (focus)="onInputFocus($event, reservoir.income, 'current')"
+                                           (ngModelChange)="onIncomeChange(reservoir)" />
                                 </ng-template>
                                 <ng-template pTemplate="output">
-                                    {{ reservoir.income.current | number: '1.0-2' }}
+                                    {{ reservoir.income.current | number: '1.0-1' }}
                                     <i class="pi pi-pen-to-square ml-2 text-gray-400 text-xs"></i>
                                 </ng-template>
                             </p-cellEditor>
                         </td>
                     } @else {
-                        <td class="text-nowrap">{{ reservoir.income.current | number: '1.0-2' }}</td>
+                        <td class="text-nowrap">{{ reservoir.income.current | number: '1.0-1' }}</td>
                     }
-                    <td>{{ reservoir.income.year_ago !== null ? (reservoir.income.year_ago | number: '1.0-2') : 'N/A' }}</td>
-                    <td>{{ reservoir.income.two_years_ago !== null ? (reservoir.income.two_years_ago | number: '1.0-2') : 'N/A' }}</td>
-                    @if (authService.isSc()) {
-                        <td [pEditableColumn]="reservoir.release" pEditableColumnField="current" class="text-nowrap">
+                    @if (index <= 6) {
+                        <td>{{ reservoir.income.year_ago !== null ? (reservoir.income.year_ago | number: '1.0-1') : 'N/A' }}</td>
+                        <td>{{ reservoir.income.two_years_ago !== null ? (reservoir.income.two_years_ago | number: '1.0-1') : 'N/A' }}</td>
+                    } @else {
+                        <td></td>
+                        <td></td>
+                    }
+                    @if (authService.isSc() && index !== 6) {
+                        <td [pEditableColumn]="reservoir.release" pEditableColumnField="current" class="text-nowrap"
+                            [ngClass]="{'bg-yellow-100 dark:bg-yellow-900': reservoir.release.is_edited}">
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <input pInputText type="number" [(ngModel)]="reservoir.release.current"
-                                           (focus)="onInputFocus($event, reservoir.release, 'current')" />
+                                           (focus)="onInputFocus($event, reservoir.release, 'current')"
+                                           (ngModelChange)="onReleaseChange(reservoir)" />
                                 </ng-template>
                                 <ng-template pTemplate="output">
-                                    {{ reservoir.release.current | number: '1.0-2' }}
+                                    {{ reservoir.release.current | number: '1.0-1' }}
                                     <i class="pi pi-pen-to-square ml-2 text-gray-400 text-xs"></i>
                                 </ng-template>
                             </p-cellEditor>
                         </td>
                     } @else {
-                        <td class="text-nowrap">{{ reservoir.release.current | number: '1.0-2' }}</td>
+                        <td class="text-nowrap">{{ reservoir.release.current | number: '1.0-1' }}</td>
                     }
-                    <td>{{ reservoir.release.year_ago !== null ? (reservoir.release.year_ago | number: '1.0-2') : 'N/A' }}</td>
-                    <td>{{ reservoir.release.two_years_ago !== null ? (reservoir.release.two_years_ago | number: '1.0-2') : 'N/A' }}</td>
-                    <td>{{ reservoir.incoming_volume | number: '1.0-2' }}</td>
-                    <td>{{ reservoir.incoming_volume_prev_year | number: '1.0-2' }}</td>
-                    <td>N/A</td>
-                    <td>N/A</td>
+                    @if (index <= 6) {
+                        <td>{{ reservoir.release.year_ago !== null ? (reservoir.release.year_ago | number: '1.0-1') : 'N/A' }}</td>
+                        <td>{{ reservoir.release.two_years_ago !== null ? (reservoir.release.two_years_ago | number: '1.0-1') : 'N/A' }}</td>
+                    } @else {
+                        <td></td>
+                        <td></td>
+                    }
+                    @if (index <= 6) {
+                        @if (authService.isSc() && index !== 6) {
+                            <td [pEditableColumn]="reservoir" pEditableColumnField="incoming_volume" class="text-nowrap"
+                                [ngClass]="{'bg-blue-100 dark:bg-blue-900': reservoir.incoming_volume_is_calculated}">
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input pInputText type="number" [(ngModel)]="reservoir.incoming_volume"
+                                               (focus)="onInputFocus($event, reservoir, 'incoming_volume')"
+                                               (ngModelChange)="onIncomingVolumeChange(reservoir)" />
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{ reservoir.incoming_volume | number: '1.0-2' }}
+                                        <i class="pi pi-pen-to-square ml-2 text-gray-400 text-xs"></i>
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td [pEditableColumn]="reservoir" pEditableColumnField="incoming_volume_prev_year"
+                                class="text-nowrap"
+                                [ngClass]="{'bg-blue-100 dark:bg-blue-900': reservoir.incoming_volume_prev_year_is_calculated}">
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input pInputText type="number"
+                                               [(ngModel)]="reservoir.incoming_volume_prev_year"
+                                               (focus)="onInputFocus($event, reservoir, 'incoming_volume_prev_year')"
+                                               (ngModelChange)="onIncomingVolumePrevYearChange(reservoir)" />
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{ reservoir.incoming_volume_prev_year | number: '1.0-2' }}
+                                        <i class="pi pi-pen-to-square ml-2 text-gray-400 text-xs"></i>
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                        } @else {
+                            <td class="text-nowrap">{{ reservoir.incoming_volume | number: '1.0-2' }}
+                            </td>
+                            <td class="text-nowrap">{{ reservoir.incoming_volume_prev_year | number: '1.0-2' }}
+                            </td>
+                        }
+                    } @else {
+                        <td></td>
+                        <td></td>
+                    }
+                    @if (reservoir.organization_id !== null && index !== 2) {
+                        @if (authService.isSc()) {
+                            <td [pEditableColumn]="reservoir.modsnow" pEditableColumnField="current"
+                                class="text-nowrap"
+                                [ngClass]="{'bg-yellow-100 dark:bg-yellow-900': reservoir.modsnow.is_edited}">
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input pInputText type="number" [(ngModel)]="reservoir.modsnow.current"
+                                               (focus)="onInputFocus($event, reservoir.modsnow, 'current')"
+                                               (ngModelChange)="onModsnowCurrentChange(reservoir)" />
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{ reservoir.modsnow.current | number: '1.0-1' }}
+                                        <i class="pi pi-pen-to-square ml-2 text-gray-400 text-xs"></i>
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                        } @else {
+                            <td class="text-nowrap">{{ reservoir.modsnow.current | number: '1.0-1' }}</td>
+                        }
+                        @if (authService.isSc()) {
+                            <td [pEditableColumn]="reservoir.modsnow" pEditableColumnField="year_ago"
+                                class="text-nowrap"
+                                [ngClass]="{'bg-yellow-100 dark:bg-yellow-900': reservoir.modsnow.is_edited}">
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input pInputText type="number" [(ngModel)]="reservoir.modsnow.year_ago"
+                                               (focus)="onInputFocus($event, reservoir.modsnow, 'year_ago')"
+                                               (ngModelChange)="onModsnowYearAgoChange(reservoir)" />
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{ reservoir.modsnow.year_ago | number: '1.0-1' }}
+                                        <i class="pi pi-pen-to-square ml-2 text-gray-400 text-xs"></i>
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                        } @else {
+                            <td class="text-nowrap">{{ reservoir.modsnow.year_ago | number: '1.0-1' }}</td>
+                        }
+                    } @else {
+                        <td></td>
+                        <td></td>
+                    }
                 </tr>
-                <tr class="italic">
-                    <td>{{ reservoir.organization_id != null ? ((reservoir.level.current - reservoir.level.prev) | number: '1.0-2') : '' }}</td>
-                    <td>{{ reservoir.organization_id != null ? ((reservoir.volume.current - reservoir.volume.prev) | number: '1.0-2') : '' }}</td>
-                    <td>{{ reservoir.volume.year_ago !== null ? ((reservoir.volume.current - reservoir.volume.year_ago) | number: '1.0-2') : 'N/A' }}</td>
-                    <td>{{ reservoir.volume.two_years_ago !== null ? ((reservoir.volume.current - reservoir.volume.two_years_ago) | number: '1.0-2') : 'N/A' }}</td>
-                    <td>{{ (reservoir.income.current - reservoir.income.prev) | number: '1.0-2' }}</td>
-                    <td>{{ reservoir.income.year_ago !== null ? ((reservoir.income.current - reservoir.income.year_ago) | number: '1.0-2') : 'N/A' }}</td>
-                    <td>{{ reservoir.income.two_years_ago !== null ? ((reservoir.income.current - reservoir.income.two_years_ago) | number: '1.0-2') : 'N/A' }}</td>
-                    <td>{{ (reservoir.release.current - reservoir.release.prev) | number: '1.0-2' }}</td>
-                    <td>{{ reservoir.release.year_ago !== null ? ((reservoir.release.current - reservoir.release.year_ago) | number: '1.0-2') : 'N/A' }}</td>
-                    <td>{{ reservoir.release.two_years_ago !== null ? ((reservoir.release.current - reservoir.release.two_years_ago) | number: '1.0-2') : 'N/A' }}</td>
-                    <td>{{ (reservoir.incoming_volume - reservoir.incoming_volume_prev_year) | number: '1.0-2' }}</td>
-                    <td>{{ ((reservoir.incoming_volume / reservoir.incoming_volume_prev_year) * 100) | number: '1.0-0' }}
-                        %
+                <tr class="italic ">
+                    @if (index === 8) {
+                        <td class="bg-surface-300 dark:bg-surface-800"></td>
+                    } @else {
+                        <td class="bg-surface-300 dark:bg-surface-800 text-red-500">{{ reservoir.organization_id != null ? ((reservoir.level.current - reservoir.level.prev) | number: '1.0-2') : '' }}</td>
+                    }
+                    @if (index > 6) {
+                        <td class="bg-surface-300 dark:bg-surface-800"></td>
+                    } @else {
+                        <td class="bg-surface-300 dark:bg-surface-800 text-red-500">{{ ((reservoir.volume.current - reservoir.volume.prev) | number: '1.0-2') }}</td>
+                    }
+                    @if (index <= 6) {
+                        <td class="bg-surface-300 dark:bg-surface-800"
+                            [ngClass]="{'text-red-500': reservoir.organization_id === null}">{{ reservoir.volume.year_ago !== null ? ((reservoir.volume.current - reservoir.volume.year_ago) | number: '1.0-1') : 'N/A' }}
+                        </td>
+                        <td class="bg-surface-300 dark:bg-surface-800"
+                            [ngClass]="{'text-red-500': reservoir.organization_id === null}">{{ reservoir.volume.two_years_ago !== null ? ((reservoir.volume.current - reservoir.volume.two_years_ago) | number: '1.0-1') : 'N/A' }}
+                        </td>
+                    } @else {
+                        <td class="bg-surface-300 dark:bg-surface-800"></td>
+                        <td class="bg-surface-300 dark:bg-surface-800"></td>
+                    }
+                    <td class="bg-surface-300 dark:bg-surface-800 text-red-500">{{ (reservoir.income.current - reservoir.income.prev) | number: '1.0-2' }}</td>
+                    @if (index <= 6) {
+                        <td class="bg-surface-300 dark:bg-surface-800"
+                            [ngClass]="{'text-red-500': reservoir.organization_id === null}">{{ reservoir.income.year_ago !== null ? ((reservoir.income.current - reservoir.income.year_ago) | number: '1.0-1') : 'N/A' }}
+                        </td>
+                        <td class="bg-surface-300 dark:bg-surface-800"
+                            [ngClass]="{'text-red-500': reservoir.organization_id === null}">{{ reservoir.income.two_years_ago !== null ? ((reservoir.income.current - reservoir.income.two_years_ago) | number: '1.0-1') : 'N/A' }}
+                        </td>
+                    } @else {
+                        <td class="bg-surface-300 dark:bg-surface-800"></td>
+                        <td class="bg-surface-300 dark:bg-surface-800"></td>
+                    }
+                    <td class="bg-surface-300 dark:bg-surface-800 text-red-500">{{ (reservoir.release.current - reservoir.release.prev) | number: '1.0-1' }}</td>
+                    @if (index <= 6) {
+                        <td class="bg-surface-300 dark:bg-surface-800"
+                            [ngClass]="{'text-red-500': reservoir.organization_id === null}">{{ reservoir.release.year_ago !== null ? ((reservoir.release.current - reservoir.release.year_ago) | number: '1.0-1') : 'N/A' }}
+                        </td>
+                        <td class="bg-surface-300 dark:bg-surface-800"
+                            [ngClass]="{'text-red-500': reservoir.organization_id === null}">{{ reservoir.release.two_years_ago !== null ? ((reservoir.release.current - reservoir.release.two_years_ago) | number: '1.0-1') : 'N/A' }}
+                        </td>
+                    } @else {
+                        <td class="bg-surface-300 dark:bg-surface-800"></td>
+                        <td class="bg-surface-300 dark:bg-surface-800"></td>
+                    }
+                    @if (index <= 6) {
+                        <td class="bg-surface-300 dark:bg-surface-800 text-red-500">{{ (reservoir.incoming_volume - reservoir.incoming_volume_prev_year) | number: '1.0-2' }}</td>
+                        <td class="bg-surface-300 dark:bg-surface-800 text-red-500">{{ ((reservoir.incoming_volume / reservoir.incoming_volume_prev_year) * 100) | number: '1.0-0' }}
+                            %
+                        </td>
+                    } @else {
+                        <td class="bg-surface-300 dark:bg-surface-800"></td>
+                        <td class="bg-surface-300 dark:bg-surface-800"></td>
+                    }
+                    <td colspan="2"
+                        class="bg-surface-300 dark:bg-surface-800 text-red-500">{{ reservoir.organization_id !== null && index !== 2 ? (reservoir.modsnow.current - reservoir.modsnow.year_ago | number:'1.0-1') : '' }}
                     </td>
-                    <td>N/A</td>
-                    <td>N/A</td>
                 </tr>
             </ng-template>
         </p-table>
