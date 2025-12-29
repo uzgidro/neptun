@@ -1,0 +1,188 @@
+<div class="card">
+    <div class="font-semibold text-xl mb-4">Приказы</div>
+
+    <p-table
+        #dt
+        [value]="filteredOrders"
+        dataKey="id"
+        [rows]="10"
+        [loading]="loading"
+        [rowHover]="true"
+        [showGridlines]="true"
+        [paginator]="true"
+        [globalFilterFields]="['number', 'title', 'description', 'signedBy']"
+    >
+        <ng-template #caption>
+            <div class="flex flex-column md:flex-row justify-between items-start md:items-center gap-3">
+                <div class="flex flex-wrap gap-2">
+                    <p-iconfield>
+                        <p-inputicon><i class="pi pi-search"></i></p-inputicon>
+                        <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Поиск" />
+                    </p-iconfield>
+
+                    <p-select
+                        [(ngModel)]="selectedStatus"
+                        [options]="statusOptions"
+                        optionLabel="name"
+                        optionValue="value"
+                        placeholder="Статус"
+                        (onChange)="applyFilters()"
+                        [style]="{ minWidth: '180px' }">
+                    </p-select>
+                </div>
+
+                <button pButton (click)="openDialog()">
+                    <i class="pi pi-plus" pButtonIcon></i>
+                    <span pButtonLabel>Новый приказ</span>
+                </button>
+            </div>
+        </ng-template>
+
+        <ng-template #header>
+            <tr>
+                <th pSortableColumn="number" style="min-width: 8rem">
+                    Номер
+                    <p-sortIcon field="number" />
+                </th>
+                <th pSortableColumn="date" style="min-width: 8rem">
+                    Дата
+                    <p-sortIcon field="date" />
+                </th>
+                <th pSortableColumn="title" style="min-width: 15rem">
+                    Название
+                    <p-sortIcon field="title" />
+                </th>
+                <th style="min-width: 12rem">Описание</th>
+                <th pSortableColumn="status" style="min-width: 10rem">
+                    Статус
+                    <p-sortIcon field="status" />
+                </th>
+                <th style="min-width: 10rem">Подписал</th>
+                <th style="width: 8rem">Действия</th>
+            </tr>
+        </ng-template>
+
+        <ng-template #body let-order>
+            <tr>
+                <td>
+                    <span class="font-semibold">{{ order.number }}</span>
+                </td>
+                <td>{{ formatDate(order.date) }}</td>
+                <td>{{ order.title }}</td>
+                <td>
+                    <span class="text-sm" [pTooltip]="order.description || ''" tooltipPosition="top">
+                        {{ order.description ? (order.description.length > 40 ? order.description.substring(0, 40) + '...' : order.description) : '—' }}
+                    </span>
+                </td>
+                <td>
+                    <p-tag
+                        [value]="getStatusLabel(order.status)"
+                        [severity]="getStatusSeverity(order.status)">
+                    </p-tag>
+                </td>
+                <td>{{ order.signedBy || '—' }}</td>
+                <td>
+                    <div class="flex justify-center gap-2">
+                        <button pButton
+                                icon="pi pi-pencil"
+                                (click)="openEditDialog(order)"
+                                class="p-button-rounded p-button-text p-button-warning"
+                                pTooltip="Редактировать"
+                                tooltipPosition="top">
+                        </button>
+                        <button pButton
+                                icon="pi pi-trash"
+                                (click)="openDeleteDialog(order)"
+                                class="p-button-rounded p-button-text p-button-danger"
+                                pTooltip="Удалить"
+                                tooltipPosition="top">
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template #emptymessage>
+            <tr>
+                <td colspan="7" class="text-center py-4">
+                    <i class="pi pi-inbox text-4xl text-color-secondary mb-2"></i>
+                    <p class="m-0 text-color-secondary">Нет приказов</p>
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template #loadingbody>
+            <tr>
+                <td colspan="7" class="text-center py-4">
+                    Загрузка...
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<app-dialog
+    [(visible)]="displayDialog"
+    [header]="isEditMode ? 'Редактировать приказ' : 'Новый приказ'"
+    [form]="orderForm"
+    [saveLabel]="isEditMode ? 'Обновить' : 'Сохранить'"
+    width="40vw"
+    (save)="onSubmit()"
+    (cancel)="closeDialog()">
+    <form class="p-4" [formGroup]="orderForm" (ngSubmit)="onSubmit()">
+        <app-input-text
+            formControlName="number"
+            label="Номер приказа"
+            [submitted]="submitted"
+            errorMessage="Номер обязателен"
+            [required]="true">
+        </app-input-text>
+
+        <app-date-picker
+            formControlName="date"
+            label="Дата приказа"
+            [submitted]="submitted"
+            [showTime]="false"
+            errorMessage="Дата обязательна"
+            [required]="true">
+        </app-date-picker>
+
+        <app-input-text
+            formControlName="title"
+            label="Название"
+            [submitted]="submitted"
+            errorMessage="Название обязательно"
+            [required]="true">
+        </app-input-text>
+
+        <app-textarea
+            formControlName="description"
+            label="Описание"
+            [submitted]="submitted"
+            [required]="false"
+            [rows]="3">
+        </app-textarea>
+
+        <app-select
+            formControlName="status"
+            label="Статус"
+            [items]="statusFormOptions"
+            [submitted]="submitted"
+            errorMessage="Статус обязателен"
+            [required]="true">
+        </app-select>
+
+        <app-input-text
+            formControlName="signedBy"
+            label="Кто подписал"
+            [submitted]="submitted"
+            [required]="false">
+        </app-input-text>
+    </form>
+</app-dialog>
+
+<app-delete-confirmation
+    [(visible)]="displayDeleteDialog"
+    [message]="'Вы уверены, что хотите удалить приказ ' + (selectedOrder?.number || '') + '?'"
+    (onConfirm)="confirmDelete()">
+</app-delete-confirmation>

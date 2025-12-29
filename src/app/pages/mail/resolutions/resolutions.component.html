@@ -1,0 +1,207 @@
+<div class="card">
+    <div class="font-semibold text-xl mb-4">{{ pageTitle }}</div>
+
+    <p-table
+        #dt
+        [value]="filteredResolutions"
+        dataKey="id"
+        [rows]="10"
+        [loading]="loading"
+        [rowHover]="true"
+        [showGridlines]="true"
+        [paginator]="true"
+        [globalFilterFields]="['number', 'title', 'description', 'issuedBy']"
+    >
+        <ng-template #caption>
+            <div class="flex flex-column md:flex-row justify-between items-start md:items-center gap-3">
+                <div class="flex flex-wrap gap-2">
+                    <p-iconfield>
+                        <p-inputicon><i class="pi pi-search"></i></p-inputicon>
+                        <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Поиск" />
+                    </p-iconfield>
+
+                    <p-select
+                        [(ngModel)]="selectedStatus"
+                        [options]="statusOptions"
+                        optionLabel="name"
+                        optionValue="value"
+                        placeholder="Статус"
+                        (onChange)="applyFilters()"
+                        [style]="{ minWidth: '160px' }">
+                    </p-select>
+                </div>
+
+                <button pButton (click)="openDialog()">
+                    <i class="pi pi-plus" pButtonIcon></i>
+                    <span pButtonLabel>Новое постановление</span>
+                </button>
+            </div>
+        </ng-template>
+
+        <ng-template #header>
+            <tr>
+                <th pSortableColumn="number" style="min-width: 8rem">
+                    Номер
+                    <p-sortIcon field="number" />
+                </th>
+                <th pSortableColumn="date" style="min-width: 7rem">
+                    Дата
+                    <p-sortIcon field="date" />
+                </th>
+                <th pSortableColumn="title" style="min-width: 15rem">
+                    Название
+                    <p-sortIcon field="title" />
+                </th>
+                <th pSortableColumn="status" style="min-width: 10rem">
+                    Статус
+                    <p-sortIcon field="status" />
+                </th>
+                <th style="min-width: 10rem">Кем издано</th>
+                <th pSortableColumn="effectiveDate" style="min-width: 8rem">
+                    Вступает в силу
+                    <p-sortIcon field="effectiveDate" />
+                </th>
+                <th style="width: 8rem">Действия</th>
+            </tr>
+        </ng-template>
+
+        <ng-template #body let-resolution>
+            <tr [class.opacity-60]="resolution.status === 'cancelled' || resolution.status === 'expired'">
+                <td>
+                    <span class="font-semibold">{{ resolution.number }}</span>
+                </td>
+                <td>{{ formatDate(resolution.date) }}</td>
+                <td>
+                    <span [pTooltip]="resolution.description || ''" tooltipPosition="top">
+                        {{ resolution.title }}
+                    </span>
+                </td>
+                <td>
+                    <p-tag
+                        [value]="getStatusLabel(resolution.status)"
+                        [severity]="getStatusSeverity(resolution.status)">
+                    </p-tag>
+                </td>
+                <td>{{ resolution.issuedBy || '—' }}</td>
+                <td>{{ formatDate(resolution.effectiveDate) }}</td>
+                <td>
+                    <div class="flex justify-center gap-2">
+                        <button pButton
+                                icon="pi pi-pencil"
+                                (click)="openEditDialog(resolution)"
+                                class="p-button-rounded p-button-text p-button-warning"
+                                pTooltip="Редактировать"
+                                tooltipPosition="top">
+                        </button>
+                        <button pButton
+                                icon="pi pi-trash"
+                                (click)="openDeleteDialog(resolution)"
+                                class="p-button-rounded p-button-text p-button-danger"
+                                pTooltip="Удалить"
+                                tooltipPosition="top">
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template #emptymessage>
+            <tr>
+                <td colspan="7" class="text-center py-4">
+                    <i class="pi pi-inbox text-4xl text-color-secondary mb-2"></i>
+                    <p class="m-0 text-color-secondary">Нет постановлений</p>
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template #loadingbody>
+            <tr>
+                <td colspan="7" class="text-center py-4">
+                    Загрузка...
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<app-dialog
+    [(visible)]="displayDialog"
+    [header]="isEditMode ? 'Редактировать постановление' : 'Новое постановление'"
+    [form]="resolutionForm"
+    [saveLabel]="isEditMode ? 'Обновить' : 'Сохранить'"
+    width="50vw"
+    (save)="onSubmit()"
+    (cancel)="closeDialog()">
+    <form class="p-4" [formGroup]="resolutionForm" (ngSubmit)="onSubmit()">
+        <app-input-text
+            formControlName="number"
+            label="Номер"
+            [submitted]="submitted"
+            errorMessage="Номер обязателен"
+            [required]="true">
+        </app-input-text>
+
+        <app-date-picker
+            formControlName="date"
+            label="Дата"
+            [submitted]="submitted"
+            [showTime]="false"
+            errorMessage="Дата обязательна"
+            [required]="true">
+        </app-date-picker>
+
+        <app-input-text
+            formControlName="title"
+            label="Название"
+            [submitted]="submitted"
+            errorMessage="Название обязательно"
+            [required]="true">
+        </app-input-text>
+
+        <app-textarea
+            formControlName="description"
+            label="Описание"
+            [submitted]="submitted"
+            [required]="false"
+            [rows]="3">
+        </app-textarea>
+
+        <app-select
+            formControlName="status"
+            label="Статус"
+            [items]="statusFormOptions"
+            [submitted]="submitted"
+            errorMessage="Статус обязателен"
+            [required]="true">
+        </app-select>
+
+        <app-input-text
+            formControlName="issuedBy"
+            label="Кем издано"
+            [submitted]="submitted"
+            [required]="false">
+        </app-input-text>
+
+        <app-date-picker
+            formControlName="effectiveDate"
+            label="Дата вступления в силу"
+            [submitted]="submitted"
+            [showTime]="false"
+            [required]="false">
+        </app-date-picker>
+
+        <app-date-picker
+            formControlName="expirationDate"
+            label="Дата истечения"
+            [submitted]="submitted"
+            [showTime]="false"
+            [required]="false">
+        </app-date-picker>
+    </form>
+</app-dialog>
+
+<app-delete-confirmation
+    [(visible)]="displayDeleteDialog"
+    [message]="'Вы уверены, что хотите удалить постановление ' + (selectedResolution?.number || '') + '?'"
+    (onConfirm)="confirmDelete()">
+</app-delete-confirmation>

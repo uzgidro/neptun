@@ -1,0 +1,246 @@
+<div class="card">
+    <div class="font-semibold text-xl mb-4">Звонки</div>
+
+    <p-table
+        #dt
+        [value]="filteredCalls"
+        dataKey="id"
+        [rows]="10"
+        [loading]="loading"
+        [rowHover]="true"
+        [showGridlines]="true"
+        [paginator]="true"
+        [globalFilterFields]="['callerName', 'callerPhone', 'receiverName', 'receiverPhone', 'notes']"
+    >
+        <ng-template #caption>
+            <div class="flex flex-column md:flex-row justify-between items-start md:items-center gap-3">
+                <div class="flex flex-wrap gap-2">
+                    <p-iconfield>
+                        <p-inputicon><i class="pi pi-search"></i></p-inputicon>
+                        <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Поиск" />
+                    </p-iconfield>
+
+                    <p-select
+                        [(ngModel)]="selectedType"
+                        [options]="typeOptions"
+                        optionLabel="name"
+                        optionValue="value"
+                        placeholder="Тип"
+                        (onChange)="applyFilters()"
+                        [style]="{ minWidth: '150px' }">
+                    </p-select>
+
+                    <p-select
+                        [(ngModel)]="selectedStatus"
+                        [options]="statusOptions"
+                        optionLabel="name"
+                        optionValue="value"
+                        placeholder="Статус"
+                        (onChange)="applyFilters()"
+                        [style]="{ minWidth: '150px' }">
+                    </p-select>
+                </div>
+
+                <button pButton (click)="openDialog()">
+                    <i class="pi pi-plus" pButtonIcon></i>
+                    <span pButtonLabel>Новый звонок</span>
+                </button>
+            </div>
+        </ng-template>
+
+        <ng-template #header>
+            <tr>
+                <th pSortableColumn="date" style="min-width: 7rem">
+                    Дата
+                    <p-sortIcon field="date" />
+                </th>
+                <th pSortableColumn="time" style="min-width: 5rem">
+                    Время
+                    <p-sortIcon field="time" />
+                </th>
+                <th pSortableColumn="type" style="min-width: 9rem">
+                    Тип
+                    <p-sortIcon field="type" />
+                </th>
+                <th style="min-width: 12rem">Кто звонил</th>
+                <th style="min-width: 10rem">Телефон</th>
+                <th style="min-width: 10rem">Кому</th>
+                <th pSortableColumn="duration" style="min-width: 7rem">
+                    Длительность
+                    <p-sortIcon field="duration" />
+                </th>
+                <th pSortableColumn="status" style="min-width: 8rem">
+                    Статус
+                    <p-sortIcon field="status" />
+                </th>
+                <th style="width: 8rem">Действия</th>
+            </tr>
+        </ng-template>
+
+        <ng-template #body let-call>
+            <tr [class.opacity-60]="call.type === 'missed'">
+                <td>{{ formatDate(call.date) }}</td>
+                <td>
+                    <span class="font-semibold">{{ call.time }}</span>
+                </td>
+                <td>
+                    <p-tag
+                        [value]="getTypeLabel(call.type)"
+                        [severity]="getTypeSeverity(call.type)"
+                        [icon]="getTypeIcon(call.type)">
+                    </p-tag>
+                </td>
+                <td>
+                    <span [pTooltip]="call.notes || ''" tooltipPosition="top">
+                        {{ call.callerName }}
+                    </span>
+                </td>
+                <td>
+                    <a [href]="'tel:' + call.callerPhone" class="text-primary no-underline">
+                        {{ call.callerPhone }}
+                    </a>
+                </td>
+                <td>{{ call.receiverName || '—' }}</td>
+                <td>{{ formatDuration(call.duration) }}</td>
+                <td>
+                    <p-tag
+                        [value]="getStatusLabel(call.status)"
+                        [severity]="getStatusSeverity(call.status)">
+                    </p-tag>
+                </td>
+                <td>
+                    <div class="flex justify-center gap-2">
+                        <button pButton
+                                icon="pi pi-pencil"
+                                (click)="openEditDialog(call)"
+                                class="p-button-rounded p-button-text p-button-warning"
+                                pTooltip="Редактировать"
+                                tooltipPosition="top">
+                        </button>
+                        <button pButton
+                                icon="pi pi-trash"
+                                (click)="openDeleteDialog(call)"
+                                class="p-button-rounded p-button-text p-button-danger"
+                                pTooltip="Удалить"
+                                tooltipPosition="top">
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template #emptymessage>
+            <tr>
+                <td colspan="9" class="text-center py-4">
+                    <i class="pi pi-phone text-4xl text-color-secondary mb-2"></i>
+                    <p class="m-0 text-color-secondary">Нет звонков</p>
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template #loadingbody>
+            <tr>
+                <td colspan="9" class="text-center py-4">
+                    Загрузка...
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<app-dialog
+    [(visible)]="displayDialog"
+    [header]="isEditMode ? 'Редактировать звонок' : 'Новый звонок'"
+    [form]="callForm"
+    [saveLabel]="isEditMode ? 'Обновить' : 'Сохранить'"
+    width="45vw"
+    (save)="onSubmit()"
+    (cancel)="closeDialog()">
+    <form class="p-4" [formGroup]="callForm" (ngSubmit)="onSubmit()">
+        <app-date-picker
+            formControlName="date"
+            label="Дата"
+            [submitted]="submitted"
+            [showTime]="false"
+            errorMessage="Дата обязательна"
+            [required]="true">
+        </app-date-picker>
+
+        <app-input-text
+            formControlName="time"
+            label="Время (ЧЧ:ММ)"
+            [submitted]="submitted"
+            errorMessage="Время обязательно"
+            [required]="true">
+        </app-input-text>
+
+        <app-select
+            formControlName="type"
+            label="Тип звонка"
+            [items]="typeFormOptions"
+            [submitted]="submitted"
+            errorMessage="Тип обязателен"
+            [required]="true">
+        </app-select>
+
+        <app-input-text
+            formControlName="callerName"
+            label="Кто звонил"
+            [submitted]="submitted"
+            errorMessage="Поле обязательно"
+            [required]="true">
+        </app-input-text>
+
+        <app-input-text
+            formControlName="callerPhone"
+            label="Телефон звонившего"
+            [submitted]="submitted"
+            errorMessage="Телефон обязателен"
+            [required]="true">
+        </app-input-text>
+
+        <app-input-text
+            formControlName="receiverName"
+            label="Кому звонили"
+            [submitted]="submitted"
+            [required]="false">
+        </app-input-text>
+
+        <app-input-text
+            formControlName="receiverPhone"
+            label="Телефон получателя"
+            [submitted]="submitted"
+            [required]="false">
+        </app-input-text>
+
+        <app-input-text
+            formControlName="duration"
+            label="Длительность (секунды)"
+            [submitted]="submitted"
+            [required]="false">
+        </app-input-text>
+
+        <app-select
+            formControlName="status"
+            label="Статус"
+            [items]="statusFormOptions"
+            [submitted]="submitted"
+            errorMessage="Статус обязателен"
+            [required]="true">
+        </app-select>
+
+        <app-textarea
+            formControlName="notes"
+            label="Заметки"
+            [submitted]="submitted"
+            [required]="false"
+            [rows]="2">
+        </app-textarea>
+    </form>
+</app-dialog>
+
+<app-delete-confirmation
+    [(visible)]="displayDeleteDialog"
+    [message]="'Вы уверены, что хотите удалить этот звонок?'"
+    (onConfirm)="confirmDelete()">
+</app-delete-confirmation>

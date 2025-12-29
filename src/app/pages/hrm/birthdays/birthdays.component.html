@@ -1,0 +1,132 @@
+<div class="card">
+    <!-- Заголовок и фильтры -->
+    <div class="flex flex-column md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+        <div>
+            <h2 class="text-2xl font-bold m-0">Дни рождения сотрудников</h2>
+            <p class="text-color-secondary mt-1 mb-0">Всего: {{ filteredContacts.length }} сотрудников</p>
+        </div>
+
+        <div class="flex flex-column sm:flex-row gap-3">
+            <p-select
+                [(ngModel)]="selectedPeriod"
+                [options]="periods"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Период"
+                (onChange)="onPeriodChange()"
+                [style]="{ minWidth: '150px' }">
+            </p-select>
+
+            <p-select
+                [(ngModel)]="selectedMonth"
+                [options]="months"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Месяц рождения"
+                (onChange)="onMonthChange()"
+                [style]="{ minWidth: '180px' }">
+            </p-select>
+        </div>
+    </div>
+
+    <!-- Загрузка -->
+    @if (loading) {
+        <div class="flex justify-center items-center py-8">
+            <p-progressSpinner strokeWidth="4" [style]="{ width: '50px', height: '50px' }"></p-progressSpinner>
+        </div>
+    }
+
+    <!-- Карточки сотрудников -->
+    @if (!loading && filteredContacts.length > 0) {
+        <div class="grid">
+            @for (contact of filteredContacts; track contact.id) {
+                <div class="col-12 sm:col-6 lg:col-4 xl:col-3">
+                    <div class="birthday-card surface-card border-round-xl shadow-2 overflow-hidden"
+                         [class.birthday-today]="contact.daysUntilBirthday === 0">
+
+                        <!-- Верхняя часть с фото -->
+                        <div class="card-header text-center p-4"
+                             [class.bg-red-500]="contact.daysUntilBirthday === 0"
+                             [class.bg-primary]="contact.daysUntilBirthday > 0">
+                            @if (contact.icon && contact.icon.url) {
+                                <img [src]="contact.icon!.url!"
+                                     [alt]="contact.name"
+                                     class="avatar-img border-circle border-4 border-white shadow-4">
+                            } @else {
+                                <div class="avatar-placeholder border-circle border-4 border-white shadow-4 flex items-center justify-center mx-auto">
+                                    <span class="text-3xl font-bold text-white">{{ getAvatarLabel(contact.name) }}</span>
+                                </div>
+                            }
+                        </div>
+
+                        <!-- Информация -->
+                        <div class="p-4">
+                            <h3 class="text-lg font-semibold m-0 mb-2 text-center">{{ contact.name }}</h3>
+
+                            <div class="flex justify-center mb-3">
+                                <p-tag [value]="getDaysLabel(contact.daysUntilBirthday)"
+                                       [severity]="getTagSeverity(contact.daysUntilBirthday)"
+                                       [rounded]="true">
+                                </p-tag>
+                            </div>
+
+                            <div class="info-list">
+                                <div class="info-item flex items-center gap-2 mb-2">
+                                    <i class="pi pi-gift text-color-secondary"></i>
+                                    <span class="font-medium">{{ formatBirthDate(contact.dob) }}</span>
+                                    <span class="text-color-secondary">({{ getAgeLabel(contact.age) }})</span>
+                                </div>
+
+                                @if (contact.position?.name) {
+                                    <div class="info-item flex items-center gap-2 mb-2">
+                                        <i class="pi pi-briefcase text-color-secondary"></i>
+                                        <span>{{ contact.position?.name }}</span>
+                                    </div>
+                                }
+
+                                @if (contact.department?.name) {
+                                    <div class="info-item flex items-center gap-2 mb-2">
+                                        <i class="pi pi-sitemap text-color-secondary"></i>
+                                        <span>{{ contact.department?.name }}</span>
+                                    </div>
+                                }
+
+                                @if (contact.organization?.name) {
+                                    <div class="info-item flex items-center gap-2 mb-2">
+                                        <i class="pi pi-building text-color-secondary"></i>
+                                        <span class="text-sm">{{ contact.organization?.name }}</span>
+                                    </div>
+                                }
+
+                                @if (contact.phone) {
+                                    <div class="info-item flex items-center gap-2">
+                                        <i class="pi pi-phone text-color-secondary"></i>
+                                        <a [href]="'tel:' + contact.phone" class="text-primary no-underline">
+                                            {{ contact.phone }}
+                                        </a>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+                        <!-- Праздничная лента для сегодняшних именинников -->
+                        @if (contact.daysUntilBirthday === 0) {
+                            <div class="celebration-ribbon">
+                                <i class="pi pi-star-fill"></i>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+    <!-- Пустое состояние -->
+    @if (!loading && filteredContacts.length === 0) {
+        <div class="flex flex-column items-center justify-center py-8 text-color-secondary">
+            <i class="pi pi-calendar-times text-6xl mb-4"></i>
+            <h3 class="text-xl m-0 mb-2">Нет сотрудников</h3>
+            <p class="m-0">По выбранным фильтрам не найдено сотрудников с днями рождения</p>
+        </div>
+    }
+</div>

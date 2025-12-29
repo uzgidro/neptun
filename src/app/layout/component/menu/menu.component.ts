@@ -27,8 +27,8 @@ export class MenuComponent implements OnInit {
                         role: ['admin', 'rais'],
                         items: [
                             { label: 'Организации', role: ['rais'], routerLink: ['/organizations'] },
-                            { label: 'Дни рождения', role: ['rais'] },
-                            // { label: 'Потеря личного состава', role: ['rais'] },
+                            { label: 'Дни рождения', role: ['rais'], routerLink: ['/birthdays'] },
+                            { label: 'Потеря личного состава', role: ['rais'], routerLink: ['/personnel-loss'] },
                             { label: 'Работники', role: ['admin'], routerLink: ['/employees'] },
                             { label: 'Должности', role: ['admin'], routerLink: ['/positions'] },
                             { label: 'Отделы', role: ['admin'], routerLink: ['/departments'] },
@@ -124,11 +124,6 @@ export class MenuComponent implements OnInit {
                                     }
                                 ]
                             },
-                            // {
-                            //     label: 'Строительство',
-                            //     role: ['rais', 'sc'],
-                            //     routerLink: ['/construction']
-                            // },
                             { label: 'Категории', role: ['sc'], routerLink: ['/categories'] },
                             { label: 'Файлы', role: ['sc'], routerLink: ['/files'] }
                         ]
@@ -162,26 +157,26 @@ export class MenuComponent implements OnInit {
                         label: 'Канцелярия',
                         role: ['rais'],
                         items: [
-                            { label: 'Приказы', role: ['rais'] },
-                            { label: 'Рапорты', role: ['rais'] },
-                            { label: 'Письма', role: ['rais'] },
-                            { label: 'Инструкции', role: ['rais'] },
+                            { label: 'Приказы', role: ['rais'], routerLink: ['/mail/orders'] },
+                            { label: 'Рапорты', role: ['rais'], routerLink: ['/mail/reports'] },
+                            { label: 'Письма', role: ['rais'], routerLink: ['/mail/letters'] },
+                            { label: 'Инструкции', role: ['rais'], routerLink: ['/mail/instructions'] },
                             {
                                 label: 'Нормативно правовая документация',
                                 role: ['rais'],
                                 items: [
                                     { label: 'Законы Республики Узбекистан', role: ['rais'] },
-                                    { label: 'Постановления Президента Республики Узбекистан', role: ['rais'] },
-                                    { label: 'Указы Президента Республики Узбекистан', role: ['rais'] },
-                                    { label: 'Постановления Кабинета министров', role: ['rais'] },
-                                    { label: 'Приказы министерств и ведомств', role: ['rais'] },
-                                    { label: 'Совместные соглашения(NDA)', role: ['rais'] },
+                                    { label: 'Постановления Президента Республики Узбекистан', role: ['rais'], routerLink: ['/mail/resolutions'], queryParams: { type: 'president' }, routerLinkActiveOptions: { queryParams: 'exact' } },
+                                    { label: 'Указы Президента Республики Узбекистан', role: ['rais'], routerLink: ['/mail/resolutions'], queryParams: { type: 'decree' }, routerLinkActiveOptions: { queryParams: 'exact' } },
+                                    { label: 'Постановления Кабинета министров', role: ['rais'], routerLink: ['/mail/resolutions'], queryParams: { type: 'cabinet' }, routerLinkActiveOptions: { queryParams: 'exact' } },
+                                    { label: 'Приказы министерств и ведомств', role: ['rais'], routerLink: ['/mail/resolutions'], queryParams: { type: 'order' }, routerLinkActiveOptions: { queryParams: 'exact' } },
+                                    { label: 'Совместные соглашения(NDA)', role: ['rais'], routerLink: ['/mail/resolutions'], queryParams: { type: 'agreement' }, routerLinkActiveOptions: { queryParams: 'exact' } },
                                     { label: 'Иные документы', role: ['rais'] }
                                 ]
                             }
                         ]
                     },
-                    { label: 'Звонки', role: ['rais'] },
+                    { label: 'Звонки', role: ['rais'], routerLink: ['/calls'] },
                     { label: 'СМИ', role: ['rais'] }
                 ]
             }

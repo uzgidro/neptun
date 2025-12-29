@@ -13,6 +13,9 @@ import { ShutdownComponent } from '@/pages/situation-center/ges/shutdown/shutdow
 import { PositionComponent } from '@/pages/hrm/position/position.component';
 import { DepartmentComponent } from '@/pages/hrm/department/department.component';
 import { EmployeeComponent } from '@/pages/hrm/employee/employee.component';
+import { OrganizationComponent } from '@/pages/hrm/organization/organization.component';
+import { BirthdaysComponent } from '@/pages/hrm/birthdays/birthdays.component';
+import { PersonnelLossComponent } from '@/pages/hrm/personnel-loss/personnel-loss.component';
 import { EventsComponent } from '@/pages/planning/events/events.component';
 import { ConstructionComponent } from '@/pages/situation-center/construction/construction.component';
 import { ReceptionComponent } from '@/pages/planning/reception/reception.component';
@@ -29,6 +32,12 @@ import { ProcurementComponent } from '@/pages/financial-block/procurement/procur
 import { KpiComponent } from '@/pages/financial-block/kpi/kpi.component';
 import { SalaryComponent } from '@/pages/financial-block/salary/salary.component';
 import { FinancialDashboardComponent } from '@/pages/financial-block/dashboard/financial-dashboard.component';
+import { OrdersComponent } from '@/pages/mail/orders/orders.component';
+import { ReportsComponent } from '@/pages/mail/reports/reports.component';
+import { LettersComponent } from '@/pages/mail/letters/letters.component';
+import { InstructionsComponent } from '@/pages/mail/instructions/instructions.component';
+import { ResolutionsComponent } from '@/pages/mail/resolutions/resolutions.component';
+import { CallsComponent } from '@/pages/calls/calls.component';
 
 
 export const appRoutes: Routes = [
@@ -50,6 +59,9 @@ export const appRoutes: Routes = [
             { path: 'positions', component: PositionComponent, canActivate: [adminGuard] },
             { path: 'departments', component: DepartmentComponent, canActivate: [adminGuard] },
             { path: 'employees', component: EmployeeComponent, canActivate: [adminGuard] },
+            { path: 'organizations', component: OrganizationComponent, canActivate: [raisGuard] },
+            { path: 'birthdays', component: BirthdaysComponent, canActivate: [raisGuard] },
+            { path: 'personnel-loss', component: PersonnelLossComponent, canActivate: [raisGuard] },
             { path: 'viewer', component: DocumentViewerComponent, canActivate: [raisGuard] },
             { path: 'discharges', component: DischargesComponent, canActivate: [raisGuard] },
             { path: 'shutdowns', component: ShutdownComponent, canActivate: [raisGuard] },
@@ -68,7 +80,13 @@ export const appRoutes: Routes = [
             { path: 'reservoir-summary/pdf', component: ReservoirSummaryPdfComponent, canActivate: [raisGuard] },
             { path: 'visits', component: VisitsComponent, canActivate: [raisGuard] },
             { path: 'incidents', component: IncidentsComponent, canActivate: [raisGuard] },
-            { path: 'reservoir-device', component: ReservoirsDeviceComponent, canActivate: [raisGuard] }
+            { path: 'reservoir-device', component: ReservoirsDeviceComponent, canActivate: [raisGuard] },
+            { path: 'mail/orders', component: OrdersComponent, canActivate: [raisGuard] },
+            { path: 'mail/reports', component: ReportsComponent, canActivate: [raisGuard] },
+            { path: 'mail/letters', component: LettersComponent, canActivate: [raisGuard] },
+            { path: 'mail/instructions', component: InstructionsComponent, canActivate: [raisGuard] },
+            { path: 'mail/resolutions', component: ResolutionsComponent, canActivate: [raisGuard] },
+            { path: 'calls', component: CallsComponent, canActivate: [raisGuard] },
         ]
     },
     { path: 'notfound', component: Notfound },
