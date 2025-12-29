@@ -16,26 +16,10 @@ import { FileListComponent } from '@/layout/component/dialog/file-list/file-list
 import { InputTextComponent } from '@/layout/component/dialog/input-text/input-text.component';
 import { DatePicker } from 'primeng/datepicker';
 import { FinancialDashboardService } from '../dashboard/services/financial-dashboard.service';
-
-type Status = 'Активная фаза' | 'В разработке';
-
-interface FileData {
-    id: number;
-    file_name: string;
-    size_bytes: number;
-    url: string;
-    file?: File;
-}
-
-interface InvestmentData {
-    id: number;
-    project_name: string;
-    status: Status;
-    amount: number;
-    date: Date;
-    comment: string;
-    files?: FileData[];
-}
+import { InvestmentService } from '@/core/services/investment.service';
+import { InvestmentDto, InvestmentStatus, INVESTMENT_STATUS_LABELS } from '@/core/interfaces/investment';
+import { FileResponse } from '@/core/interfaces/files';
+import { ApiService } from '@/core/services/api.service';
 
 @Component({
     selector: 'app-investment',
@@ -63,8 +47,8 @@ interface InvestmentData {
     styleUrl: './investment.component.scss'
 })
 export class InvestmentComponent implements OnInit {
-    investments: InvestmentData[] = [];
-    filteredInvestments: InvestmentData[] = [];
+    investments: InvestmentDto[] = [];
+    filteredInvestments: InvestmentDto[] = [];
 
     // Dialog
     isFormOpen = false;
@@ -76,9 +60,9 @@ export class InvestmentComponent implements OnInit {
 
     // Files
     selectedFiles: File[] = [];
-    currentInvestment: InvestmentData | null = null;
+    currentInvestment: InvestmentDto | null = null;
     showFilesDialog: boolean = false;
-    selectedInvestmentForFiles: InvestmentData | null = null;
+    selectedInvestmentForFiles: InvestmentDto | null = null;
     existingFilesToKeep: number[] = [];
 
     // Date range filter
@@ -87,24 +71,48 @@ export class InvestmentComponent implements OnInit {
     private fb: FormBuilder = inject(FormBuilder);
     private messageService: MessageService = inject(MessageService);
     private dashboardService = inject(FinancialDashboardService);
+    private investmentService = inject(InvestmentService);
+    private apiService = inject(ApiService);
 
-    statusOptions = [
-        { name: 'Активная фаза', value: 'Активная фаза' },
-        { name: 'В разработке', value: 'В разработке' }
+    statusOptions: { name: string; value: InvestmentStatus }[] = [
+        { name: 'Запланировано', value: 'Planned' },
+        { name: 'В процессе', value: 'In Progress' },
+        { name: 'Завершено', value: 'Completed' },
+        { name: 'Отменено', value: 'Cancelled' }
     ];
 
     ngOnInit(): void {
         this.form = this.fb.group({
             project_name: this.fb.control<string | null>(null),
-            status: this.fb.control<{ name: string; value: Status } | null>(null),
+            status: this.fb.control<{ name: string; value: InvestmentStatus } | null>(null),
             amount: this.fb.control<number | null>(null),
             date: this.fb.control<Date | null>(null),
             comment: this.fb.control<string | null>(null)
         });
 
-        this.investments = [];
-        this.applyFilter();
-        this.updateDashboardData();
+        this.loadInvestments();
+    }
+
+    private loadInvestments(): void {
+        this.isLoading = true;
+        this.investmentService.getInvestments().subscribe({
+            next: (data) => {
+                this.investments = data;
+                this.applyFilter();
+            },
+            error: (err) => {
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Ошибка загрузки',
+                    detail: 'Не удалось загрузить инвестиционные проекты'
+                });
+                console.error(err);
+            },
+            complete: () => {
+                this.isLoading = false;
+                this.updateDashboardData();
+            }
+        });
     }
 
     private updateDashboardData(): void {
@@ -161,11 +169,19 @@ export class InvestmentComponent implements OnInit {
     }
 
     get activePhaseCount(): number {
-        return this.filteredInvestments.filter(i => i.status === 'Активная фаза').length;
+        return this.filteredInvestments.filter(i => i.status === 'In Progress').length;
     }
 
     get inDevelopmentCount(): number {
-        return this.filteredInvestments.filter(i => i.status === 'В разработке').length;
+        return this.filteredInvestments.filter(i => i.status === 'Planned').length;
+    }
+
+    get completedCount(): number {
+        return this.filteredInvestments.filter(i => i.status === 'Completed').length;
+    }
+
+    get cancelledCount(): number {
+        return this.filteredInvestments.filter(i => i.status === 'Cancelled').length;
     }
 
     get totalAmount(): number {
@@ -185,7 +201,7 @@ export class InvestmentComponent implements OnInit {
         this.isFormOpen = true;
     }
 
-    editInvestment(investment: InvestmentData) {
+    editInvestment(investment: InvestmentDto) {
         this.isEditMode = true;
         this.currentInvestmentId = investment.id;
         this.currentInvestment = investment;
@@ -194,9 +210,12 @@ export class InvestmentComponent implements OnInit {
         this.selectedFiles = [];
         this.existingFilesToKeep = investment.files?.map((f) => f.id) || [];
 
+        // Find the status option that matches the backend value
+        const statusOption = this.statusOptions.find(opt => opt.value === investment.status);
+
         this.form.patchValue({
             project_name: investment.project_name,
-            status: this.statusOptions.find((s) => s.value === investment.status) || null,
+            status: statusOption || null,
             amount: investment.amount,
             date: investment.date,
             comment: investment.comment
@@ -207,53 +226,79 @@ export class InvestmentComponent implements OnInit {
 
     onSubmit() {
         this.submitted = true;
-
-        if (this.form.invalid) {
-            return;
-        }
+        if (this.form.invalid) return;
 
         this.isLoading = true;
         const rawPayload = this.form.getRawValue();
 
-        const investmentData: InvestmentData = {
-            id: this.isEditMode && this.currentInvestmentId ? this.currentInvestmentId : Date.now(),
-            project_name: rawPayload.project_name || '',
-            status: rawPayload.status?.value || 'Активная фаза',
-            amount: rawPayload.amount || 0,
-            date: rawPayload.date || new Date(),
-            comment: rawPayload.comment || '',
-            files: []
-        };
+        // Build FormData
+        const formData = new FormData();
+        formData.append('project_name', rawPayload.project_name || '');
+        formData.append('status', rawPayload.status?.value || 'Planned');
+        formData.append('amount', (rawPayload.amount || 0).toString());
 
-        // Handle files
-        if (this.isEditMode && this.currentInvestment) {
-            const existingFiles = this.currentInvestment.files?.filter((f) => this.existingFilesToKeep.includes(f.id)) || [];
-            investmentData.files = [...existingFiles];
+        // Format date using ApiService
+        if (rawPayload.date) {
+            formData.append('date', this.apiService['dateToYMD'](rawPayload.date));
+        }
+
+        if (rawPayload.comment) {
+            formData.append('comment', rawPayload.comment);
         }
 
         // Add new files
-        const newFiles: FileData[] = this.selectedFiles.map((file, index) => ({
-            id: Date.now() + index,
-            file_name: file.name,
-            size_bytes: file.size,
-            url: URL.createObjectURL(file),
-            file: file
-        }));
+        this.selectedFiles.forEach((file) => {
+            formData.append('files', file, file.name);
+        });
 
-        investmentData.files = [...(investmentData.files || []), ...newFiles];
-
-        if (this.isEditMode && this.currentInvestmentId) {
-            const index = this.investments.findIndex((inv) => inv.id === this.currentInvestmentId);
-            if (index !== -1) {
-                this.investments[index] = investmentData;
-            }
-            this.messageService.add({ severity: 'success', summary: 'Проект обновлен' });
-        } else {
-            this.investments.push(investmentData);
-            this.messageService.add({ severity: 'success', summary: 'Проект добавлен' });
+        // In edit mode, specify which files to keep
+        if (this.isEditMode && this.existingFilesToKeep.length > 0) {
+            formData.append('file_ids', this.existingFilesToKeep.join(','));
         }
 
-        this.closeDialog();
+        if (this.isEditMode && this.currentInvestmentId) {
+            this.investmentService.updateInvestment(this.currentInvestmentId, formData).subscribe({
+                next: () => {
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Проект обновлен'
+                    });
+                    this.closeDialog();
+                },
+                error: (err) => {
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'Ошибка обновления',
+                        detail: err.message || 'Не удалось обновить проект'
+                    });
+                    this.isLoading = false;
+                },
+                complete: () => {
+                    this.isLoading = false;
+                }
+            });
+        } else {
+            this.investmentService.createInvestment(formData).subscribe({
+                next: () => {
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Проект добавлен'
+                    });
+                    this.closeDialog();
+                },
+                error: (err) => {
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'Ошибка создания',
+                        detail: err.message || 'Не удалось создать проект'
+                    });
+                    this.isLoading = false;
+                },
+                complete: () => {
+                    this.isLoading = false;
+                }
+            });
+        }
     }
 
     closeDialog() {
@@ -266,16 +311,30 @@ export class InvestmentComponent implements OnInit {
         this.selectedFiles = [];
         this.existingFilesToKeep = [];
         this.form.reset();
-        this.applyFilter();
-        this.updateDashboardData();
+
+        // Reload data from API
+        this.loadInvestments();
     }
 
     deleteInvestment(id: number) {
         if (confirm('Вы уверены, что хотите удалить этот проект?')) {
-            this.investments = this.investments.filter((inv) => inv.id !== id);
-            this.messageService.add({ severity: 'success', summary: 'Проект удален' });
-            this.applyFilter();
-            this.updateDashboardData();
+            this.investmentService.deleteInvestment(id).subscribe({
+                next: () => {
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Проект удален'
+                    });
+                    this.loadInvestments();
+                },
+                error: (err) => {
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'Ошибка удаления',
+                        detail: err.message || 'Не удалось удалить проект'
+                    });
+                    console.error(err);
+                }
+            });
         }
     }
 
@@ -291,12 +350,19 @@ export class InvestmentComponent implements OnInit {
     removeExistingFile(fileId: number) {
         this.existingFilesToKeep = this.existingFilesToKeep.filter((id) => id !== fileId);
         if (this.currentInvestment?.files) {
-            this.currentInvestment.files = this.currentInvestment.files.filter((f) => f.id !== fileId);
+            this.currentInvestment = {
+                ...this.currentInvestment,
+                files: this.currentInvestment.files.filter((f) => f.id !== fileId)
+            };
         }
     }
 
-    showFiles(investment: InvestmentData) {
+    showFiles(investment: InvestmentDto) {
         this.selectedInvestmentForFiles = investment;
         this.showFilesDialog = true;
+    }
+
+    getStatusLabel(status: InvestmentStatus): string {
+        return INVESTMENT_STATUS_LABELS[status];
     }
 }
