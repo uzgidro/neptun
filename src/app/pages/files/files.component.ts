@@ -13,10 +13,11 @@ import { finalize, forkJoin, Subject, takeUntil } from 'rxjs';
 import { FileUpload } from 'primeng/fileupload';
 import { LatestFiles } from '@/core/interfaces/latest-files';
 import { Categories } from '@/core/interfaces/categories';
+import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
 
 @Component({
     selector: 'app-files',
-    imports: [Button, ButtonDirective, ButtonIcon, ButtonLabel, Dialog, FormsModule, IconField, InputIcon, InputText, ReactiveFormsModule, Select, TableModule, FileUpload],
+    imports: [Button, ButtonDirective, ButtonIcon, ButtonLabel, Dialog, FormsModule, IconField, InputIcon, InputText, ReactiveFormsModule, Select, TableModule, FileUpload, DatePickerComponent],
     templateUrl: './files.component.html',
     styleUrl: './files.component.scss'
 })
@@ -34,7 +35,8 @@ export class FilesComponent implements OnInit, OnDestroy {
 
     constructor() {
         this.uploadForm = this.fb.group({
-            category_id: [null, Validators.required]
+            category_id: [null, Validators.required],
+            date: [new Date(), Validators.required]
         });
     }
 
@@ -63,9 +65,15 @@ export class FilesComponent implements OnInit, OnDestroy {
             return;
         }
 
-        const { category_id } = this.uploadForm.value;
+        const { category_id, date } = this.uploadForm.value;
 
-        const uploadObservables = event.files.map((file) => this.apiService.uploadFile(file, category_id.id));
+        // Format date as YYYY-MM-DD
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const dateStr = `${year}-${month}-${day}`;
+
+        const uploadObservables = event.files.map((file) => this.apiService.uploadFile(file, category_id.id, dateStr));
 
         forkJoin(uploadObservables)
             .pipe(

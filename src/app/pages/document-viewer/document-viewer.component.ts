@@ -1,75 +1,93 @@
-import { Component, inject, OnDestroy, OnInit, AfterViewInit } from '@angular/core';
+import { AfterViewInit, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Tab, TabList, Tabs } from 'primeng/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { combineLatest, shareReplay, Subject, takeUntil } from 'rxjs';
-import { ApiService } from '@/core/services/api.service';
+import { Subject, takeUntil } from 'rxjs';
+import { ReactiveFormsModule } from '@angular/forms';
+import { FileService } from '@/core/services/file.service';
+import { FileResponse } from '@/core/interfaces/files';
 import { ViewSDKService } from '@/core/services/view-sdk.service';
-import { LatestFiles } from '@/core/interfaces/latest-files';
+import { DateWidget } from '@/layout/component/widget/date/date.widget';
 
 @Component({
     selector: 'app-document-viewer',
     standalone: true,
-    imports: [Tab, TabList, Tabs],
+    imports: [Tab, TabList, Tabs, ReactiveFormsModule, DateWidget],
     templateUrl: './document-viewer.component.html',
     styleUrl: './document-viewer.component.scss'
 })
 export class DocumentViewerComponent implements OnInit, AfterViewInit, OnDestroy {
     private route = inject(ActivatedRoute);
     private router = inject(Router);
-    private apiService = inject(ApiService);
+    private fileService = inject(FileService);
     private viewSDKService = inject(ViewSDKService);
     private destroy$ = new Subject<void>();
 
     showTabs = false;
     activeIndex = 0;
 
-    files: LatestFiles[] = [];
     fileUrl = '';
     fileName = '';
+    currentCategory = '';
 
     private isViewerInitialized = false;
     private pendingFileUrl = '';
     private pendingFileName = '';
 
     ngOnInit() {
-        const files$ = this.apiService.getLatestFiles().pipe(shareReplay(1));
         const params$ = this.route.queryParams;
 
-        combineLatest([files$, params$])
-            .pipe(takeUntil(this.destroy$))
-            .subscribe(([files, params]) => {
-                this.files = files;
-                const isConstruction = params['type'] === 'constructions';
-                this.showTabs = isConstruction;
+        // Subscribe to query params changes
+        params$.pipe(takeUntil(this.destroy$)).subscribe((params) => {
+            const isConstruction = params['type'] === 'constructions';
+            this.showTabs = isConstruction;
 
-                if (isConstruction) {
-                    let tabIndex = 0;
-                    if (params['tabIndex']) {
-                        tabIndex = parseInt(params['tabIndex'], 10);
-                        if (!isNaN(tabIndex) && tabIndex >= 0 && tabIndex < files.length) {
-                            this.activeIndex = tabIndex;
-                        }
-                    } else {
-                        this.router.navigate([], {
-                            queryParams: { tabIndex: 0 },
-                            queryParamsHandling: 'merge',
-                            replaceUrl: true
-                        });
-                        return; // Skip rendering until query param is set
+            if (isConstruction) {
+                let tabIndex = 0;
+                if (params['tabIndex']) {
+                    tabIndex = parseInt(params['tabIndex'], 10);
+                    if (!isNaN(tabIndex) && tabIndex >= 0 && tabIndex < 4) {
+                        this.activeIndex = tabIndex;
                     }
-
-                    const categoryMap: { [key: number]: string } = {
-                        0: 'norin',
-                        1: 'chotqol',
-                        2: 'ufk',
-                        3: 'oqsuv'
-                    };
-                    const categoryName = categoryMap[tabIndex];
-                    const foundFile = files.find((file) => file.category_name.includes(categoryName));
-                    this.updateFile(foundFile);
                 } else {
-                    const foundFile = files.find((file) => file.category_name.includes(params['type']));
-                    this.updateFile(foundFile);
+                    this.router.navigate([], {
+                        queryParams: { tabIndex: 0 },
+                        queryParamsHandling: 'merge',
+                        replaceUrl: true
+                    });
+                    return; // Skip rendering until query param is set
+                }
+
+                const categoryMap: { [key: number]: string } = {
+                    0: 'norin',
+                    1: 'chotqol',
+                    2: 'ufk',
+                    3: 'oqsuv'
+                };
+                this.currentCategory = categoryMap[tabIndex];
+            } else {
+                this.currentCategory = params['type'];
+            }
+        });
+    }
+
+    onDateChange(date: Date): void {
+        this.loadFile(date);
+    }
+
+    private loadFile(date: Date): void {
+        if (!this.currentCategory) {
+            return;
+        }
+
+        this.fileService
+            .getFileByCategory(this.currentCategory, date)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: (file) => {
+                    this.updateFile(file);
+                },
+                error: (error) => {
+                    console.error('Error loading file:', error);
                 }
             });
     }
@@ -77,25 +95,27 @@ export class DocumentViewerComponent implements OnInit, AfterViewInit, OnDestroy
     ngAfterViewInit() {
         this.viewSDKService.ready().then(() => {
             // Initialize Adobe DC View once
-            this.viewSDKService.previewFile('adobe-dc-view').then(() => {
-                this.isViewerInitialized = true;
+            this.viewSDKService
+                .previewFile('adobe-dc-view')
+                .then(() => {
+                    this.isViewerInitialized = true;
 
-                // Render pending PDF if available
-                if (this.pendingFileUrl) {
-                    this.renderPDF(this.pendingFileUrl, this.pendingFileName);
-                    this.pendingFileUrl = '';
-                    this.pendingFileName = '';
-                }
-            }).catch((error) => {
-                console.error('Error initializing Adobe DC View:', error);
-            });
+                    // Render pending PDF if available
+                    if (this.pendingFileUrl) {
+                        this.renderPDF(this.pendingFileUrl, this.pendingFileName);
+                        this.pendingFileUrl = '';
+                        this.pendingFileName = '';
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error initializing Adobe DC View:', error);
+                });
         });
     }
 
-    private updateFile(file: LatestFiles | undefined) {
-        console.log(file);
-        const newFileUrl = file ? file.url : '';
-        const newFileName = file ? file.file_name : '';
+    private updateFile(file: FileResponse) {
+        const newFileUrl = file.url;
+        const newFileName = file.file_name;
 
         // Only render if the URL has actually changed
         if (newFileUrl !== this.fileUrl) {

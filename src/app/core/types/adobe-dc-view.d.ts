@@ -9,10 +9,11 @@ declare namespace AdobeDC {
 
     interface PreviewFileConfig {
         content: {
-            location: {
+            location?: {
                 url: string;
                 headers?: { key: string; value: string }[];
             };
+            promise?: Promise<ArrayBuffer>;
         };
         metaData: {
             fileName: string;

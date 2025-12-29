@@ -1,0 +1,7 @@
+<div class="card">
+    <app-date (dateChange)="onDateChange($event)"></app-date>
+
+    <div class="mb-8">
+        <app-shutdown-discharge [date]="selectedDate"></app-shutdown-discharge>
+    </div>
+</div>

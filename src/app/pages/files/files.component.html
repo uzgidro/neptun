@@ -89,6 +89,15 @@
                       placeholder="Выберите категорию" [appendTo]="'body'"></p-select>
         </div>
 
+        <div class="flex flex-col gap-2 p-fluid">
+            <app-date-picker
+                label="Выберите дату"
+                formControlName="date"
+                [showTime]="false"
+                errorMessage="Укажите дату">
+            </app-date-picker>
+        </div>
+
         <p-fileupload #uploader name="files[]" [multiple]="true" accept=".pdf" mode="advanced" [customUpload]="true" (uploadHandler)="handleFileUpload($event, uploader)"
                       chooseLabel="Выберите файлы" uploadLabel="Загрузить" cancelLabel="Отмена">
             <ng-template pTemplate="empty">

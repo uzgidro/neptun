@@ -1,4 +1,6 @@
 <div class="card">
+    <app-date (dateChange)="onDateChange($event)"></app-date>
+
     @if (showTabs) {
         <p-tabs [(value)]="activeIndex" (valueChange)="onTabChange($event)">
             <p-tablist>

@@ -1,3 +1,27 @@
+.table-section {
+    background: var(--surface-card);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    border-left: 4px solid;
+}
+
+.ges-section {
+    border-left-color: #3b82f6;
+    background: linear-gradient(to right, rgba(59, 130, 246, 0.12), var(--surface-card) 30%);
+}
+
+.micro-section {
+    border-left-color: #22c55e;
+    background: linear-gradient(to right, rgba(34, 197, 94, 0.12), var(--surface-card) 30%);
+}
+
+.mini-section {
+    border-left-color: #a855f7;
+    background: linear-gradient(to right, rgba(168, 85, 247, 0.12), var(--surface-card) 30%);
+}
+
 .existing-files {
     display: flex;
     flex-direction: column;

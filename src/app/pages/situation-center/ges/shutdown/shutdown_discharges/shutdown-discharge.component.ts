@@ -19,6 +19,9 @@ import { FileUploadComponent } from '@/layout/component/dialog/file-upload/file-
 import { FileViewerComponent } from '@/layout/component/dialog/file-viewer/file-viewer.component';
 import { FileListComponent } from '@/layout/component/dialog/file-list/file-list.component';
 import { SelectComponent } from '@/layout/component/dialog/select/select.component';
+import { InputText } from 'primeng/inputtext';
+import { IconField } from 'primeng/iconfield';
+import { InputIcon } from 'primeng/inputicon';
 
 @Component({
     selector: 'app-shutdown-discharge',
@@ -37,7 +40,10 @@ import { SelectComponent } from '@/layout/component/dialog/select/select.compone
         FileUploadComponent,
         FileViewerComponent,
         FileListComponent,
-        SelectComponent
+        SelectComponent,
+        InputText,
+        IconField,
+        InputIcon
     ],
     templateUrl: './shutdown-discharge.component.html',
     styleUrl: './shutdown-discharge.component.scss'
@@ -290,5 +296,14 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
         if (changes['date'] && !changes['date'].firstChange) {
             this.loadDischarges();
         }
+    }
+
+    getAverageFlowRate(organizationName: string): number {
+        return this.getTotalVolume(organizationName) / 0.0864;
+    }
+
+    getTotalVolume(organizationName: string): number {
+        const orgDischarges = this.discharges.filter((d) => d.organization.name === organizationName);
+        return orgDischarges.reduce((acc, d) => acc + d.total_volume, 0);
     }
 }

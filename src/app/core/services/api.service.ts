@@ -72,10 +72,11 @@ export class ApiService {
         return this.http.post(BASE_URL + FILES + CATEGORIES, category);
     }
 
-    uploadFile(file: File, categoryId: number): Observable<any> {
+    uploadFile(file: File, categoryId: number, date: string): Observable<any> {
         const formData = new FormData();
         formData.append('file', file, file.name);
         formData.append('category_id', categoryId.toString());
+        formData.append('date', date);
 
         return this.http.post(BASE_URL + UPLOAD + FILES, formData);
     }

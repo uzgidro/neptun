@@ -295,7 +295,7 @@ export class User implements OnInit, OnDestroy {
         const formData = new FormData();
 
         formData.append('login', formValue.login);
-        formData.append('role_ids', JSON.stringify(formValue.roles.map((role: Roles) => role.id)));
+        formData.append('role_ids', formValue.roles.map((role: Roles) => role.id).join(','));
 
         // Only include password if it was changed
         if (formValue.password) {
