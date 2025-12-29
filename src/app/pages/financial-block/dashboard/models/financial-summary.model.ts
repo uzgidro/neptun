@@ -13,8 +13,6 @@ export interface InvestmentSummary {
     totalCredit: number;
     balance: number;
     projectsCount: number;
-    inProgressCount: number;
-    completedCount: number;
 }
 
 export interface RepairCostsSummary {

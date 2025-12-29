@@ -3,64 +3,25 @@
     <!-- HEADER -->
     <div class="dashboard-header">
         <h2>Инвестиционный дашборд</h2>
-        <div class="dashboard-filters">
-            <app-select
-                [(ngModel)]="selectedOperation"
-                [items]="operationOptions"
-                (ngModelChange)="applyFilter()"
-                label="Тип операции">
-            </app-select>
-            @if (selectedOperation?.value !== 'Все') {
-                <p-button
-                    label="Сбросить фильтр"
-                    icon="pi pi-filter-slash"
-                    severity="secondary"
-                    [text]="true"
-                    (click)="resetFilter()">
-                </p-button>
-            }
-        </div>
     </div>
 
     <!-- KPI -->
     <div class="kpi-row">
-        <div class="kpi-card debit">
-            <span>Дебит</span>
-            <strong>+ {{ totalDebit | number }}</strong>
-        </div>
-        <div class="kpi-card credit">
-            <span>Кредит</span>
-            <strong>- {{ totalCredit | number }}</strong>
-        </div>
-        <div class="kpi-card balance">
-            <span>Баланс</span>
-            <strong>{{ balance | number }}</strong>
-        </div>
         <div class="kpi-card neutral">
-            <span>Проектов</span>
+            <span>Всего проектов</span>
             <strong>{{ filteredInvestments.length }}</strong>
         </div>
-    </div>
-
-    <!-- CHARTS -->
-    <div class="charts-row">
-        <div class="chart-card chart-interactive">
-            <div class="chart-header">
-                <h4>Распределение</h4>
-                <span class="chart-hint" pTooltip="Кликните на сегмент для фильтрации">
-                    <i class="pi pi-info-circle"></i>
-                </span>
-            </div>
-            <p-chart type="doughnut" [data]="chartData" [options]="chartOptions"></p-chart>
+        <div class="kpi-card debit">
+            <span>Активная фаза</span>
+            <strong>{{ activePhaseCount }}</strong>
         </div>
-        <div class="chart-card chart-interactive">
-            <div class="chart-header">
-                <h4>Динамика по датам</h4>
-                <span class="chart-hint" pTooltip="Кликните на точку для фильтрации">
-                    <i class="pi pi-info-circle"></i>
-                </span>
-            </div>
-            <p-chart type="line" [data]="lineChartData" [options]="lineChartOptions" height="300px"></p-chart>
+        <div class="kpi-card credit">
+            <span>В разработке</span>
+            <strong>{{ inDevelopmentCount }}</strong>
+        </div>
+        <div class="kpi-card balance">
+            <span>Общая стоимость</span>
+            <strong>{{ totalAmount | number }} UZS</strong>
         </div>
     </div>
 
@@ -113,17 +74,9 @@
                         Статус
                         <p-sortIcon field="status"></p-sortIcon>
                     </th>
-                    <th pSortableColumn="operation_type">
-                        Тип
-                        <p-sortIcon field="operation_type"></p-sortIcon>
-                    </th>
                     <th pSortableColumn="amount">
-                        Сумма
+                        Стоимость
                         <p-sortIcon field="amount"></p-sortIcon>
-                    </th>
-                    <th pSortableColumn="priority">
-                        Приоритет
-                        <p-sortIcon field="priority"></p-sortIcon>
                     </th>
                     <th pSortableColumn="date">
                         Дата
@@ -139,23 +92,7 @@
                 <tr>
                     <td>{{ investment.project_name }}</td>
                     <td>{{ investment.status }}</td>
-                    <td>
-                        <span class="operation-tag" [ngClass]="investment.operation_type === 'Кредит' ? 'credit' : 'debit'">
-                            {{ investment.operation_type }}
-                        </span>
-                    </td>
-                    <td class="amount" [ngClass]="investment.operation_type === 'Кредит' ? 'credit-amount' : 'debit-amount'">
-                        {{ investment.operation_type === 'Кредит' ? '-' : '+' }} {{ investment.amount | number }} UZS
-                    </td>
-                    <td>
-                        <span class="priority-tag" [ngClass]="{
-                            'priority-high': investment.priority === 'Высокий',
-                            'priority-medium': investment.priority === 'Средний',
-                            'priority-low': investment.priority === 'Низкий'
-                        }">
-                            {{ investment.priority }}
-                        </span>
-                    </td>
+                    <td>{{ investment.amount | number }} UZS</td>
                     <td>{{ investment.date | date: 'dd.MM.yyyy' }}</td>
                     <td>
                         @if (investment.files && investment.files.length > 0) {
@@ -195,7 +132,7 @@
 
             <ng-template pTemplate="emptymessage">
                 <tr>
-                    <td colspan="9" class="text-center">
+                    <td colspan="7" class="text-center">
                         Проекты не найдены.
                     </td>
                 </tr>
@@ -231,28 +168,12 @@
             [required]="false">
         </app-select>
 
-        <app-select
-            label="Тип операции"
-            formControlName="operation_type"
-            [items]="operationTypeOptions"
-            [submitted]="submitted"
-            [required]="false">
-        </app-select>
-
         <app-input-number
-            label="Сумма"
+            label="Стоимость"
             formControlName="amount"
             [submitted]="submitted"
             [required]="false">
         </app-input-number>
-
-        <app-select
-            label="Приоритет"
-            formControlName="priority"
-            [items]="priorityOptions"
-            [submitted]="submitted"
-            [required]="false">
-        </app-select>
 
         <app-date-picker
             label="Дата"

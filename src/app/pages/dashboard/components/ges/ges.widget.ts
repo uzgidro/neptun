@@ -13,7 +13,7 @@ interface expandedRows {
 
 @Component({
     selector: 'app-ges-widget',
-    imports: [ButtonDirective, Ripple, TableModule, Button, FormsModule, ButtonIcon, NgClass, ButtonLabel, DecimalPipe],
+    imports: [ButtonDirective, TableModule, FormsModule, ButtonIcon, NgClass, DecimalPipe],
     templateUrl: './ges.widget.html',
     styleUrl: './ges.widget.scss'
 })

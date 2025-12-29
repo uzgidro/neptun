@@ -193,9 +193,7 @@ export class FinancialDashboardService {
             totalDebit: 0,
             totalCredit: 0,
             balance: 0,
-            projectsCount: 0,
-            inProgressCount: 0,
-            completedCount: 0
+            projectsCount: 0
         });
 
         // Данные Ремонт
@@ -257,7 +255,7 @@ export class FinancialDashboardService {
     }
 
     private getEmptyInvestment(): InvestmentSummary {
-        return { totalDebit: 0, totalCredit: 0, balance: 0, projectsCount: 0, inProgressCount: 0, completedCount: 0 };
+        return { totalDebit: 0, totalCredit: 0, balance: 0, projectsCount: 0 };
     }
 
     private getEmptyRepairCosts(): RepairCostsSummary {

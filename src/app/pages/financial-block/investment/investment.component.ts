@@ -2,7 +2,6 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ChartModule } from 'primeng/chart';
 import { SelectComponent } from '@/layout/component/dialog/select/select.component';
 import { Button } from 'primeng/button';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
@@ -18,9 +17,7 @@ import { InputTextComponent } from '@/layout/component/dialog/input-text/input-t
 import { DatePicker } from 'primeng/datepicker';
 import { FinancialDashboardService } from '../dashboard/services/financial-dashboard.service';
 
-type Status = 'Новый' | 'В разработке' | 'Выполнено';
-type OperationFilter = 'Все' | 'Кредит' | 'Дебит';
-type Priority = 'Высокий' | 'Средний' | 'Низкий';
+type Status = 'Активная фаза' | 'В разработке';
 
 interface FileData {
     id: number;
@@ -34,9 +31,7 @@ interface InvestmentData {
     id: number;
     project_name: string;
     status: Status;
-    operation_type: 'Кредит' | 'Дебит';
     amount: number;
-    priority: Priority;
     date: Date;
     comment: string;
     files?: FileData[];
@@ -48,7 +43,6 @@ interface InvestmentData {
     imports: [
         CommonModule,
         TableModule,
-        ChartModule,
         SelectComponent,
         Button,
         DatePickerComponent,
@@ -71,12 +65,6 @@ interface InvestmentData {
 export class InvestmentComponent implements OnInit {
     investments: InvestmentData[] = [];
     filteredInvestments: InvestmentData[] = [];
-    selectedOperation: { name: string; value: string } | undefined;
-
-    chartData: any;
-    chartOptions: any;
-    lineChartData: any;
-    lineChartOptions: any;
 
     // Dialog
     isFormOpen = false;
@@ -100,188 +88,36 @@ export class InvestmentComponent implements OnInit {
     private messageService: MessageService = inject(MessageService);
     private dashboardService = inject(FinancialDashboardService);
 
-    operationOptions = [
-        { name: 'Все', value: 'Все' },
-        { name: 'Кредит', value: 'Кредит' },
-        { name: 'Дебит', value: 'Дебит' }
-    ];
-
     statusOptions = [
-        { name: 'Новый', value: 'Новый' },
-        { name: 'В разработке', value: 'В разработке' },
-        { name: 'Выполнено', value: 'Выполнено' }
-    ];
-
-    priorityOptions = [
-        { name: 'Высокий', value: 'Высокий' },
-        { name: 'Средний', value: 'Средний' },
-        { name: 'Низкий', value: 'Низкий' }
-    ];
-
-    operationTypeOptions = [
-        { name: 'Дебит', value: 'Дебит' },
-        { name: 'Кредит', value: 'Кредит' }
+        { name: 'Активная фаза', value: 'Активная фаза' },
+        { name: 'В разработке', value: 'В разработке' }
     ];
 
     ngOnInit(): void {
-        this.selectedOperation = this.operationOptions[0];
-
-        // Initialize form
         this.form = this.fb.group({
             project_name: this.fb.control<string | null>(null),
             status: this.fb.control<{ name: string; value: Status } | null>(null),
-            operation_type: this.fb.control<{ name: string; value: 'Дебит' | 'Кредит' } | null>(null),
             amount: this.fb.control<number | null>(null),
-            priority: this.fb.control<{ name: string; value: Priority } | null>(null),
             date: this.fb.control<Date | null>(null),
             comment: this.fb.control<string | null>(null)
         });
 
         this.investments = [];
-
-        this.initChartOptions();
         this.applyFilter();
         this.updateDashboardData();
     }
 
     private updateDashboardData(): void {
-        const inProgressCount = this.investments.filter(i => i.status === 'В разработке').length;
-        const completedCount = this.investments.filter(i => i.status === 'Выполнено').length;
         this.dashboardService.updateInvestment({
-            totalDebit: this.totalDebit,
-            totalCredit: this.totalCredit,
-            balance: this.balance,
-            projectsCount: this.investments.length,
-            inProgressCount,
-            completedCount
+            totalDebit: 0,
+            totalCredit: 0,
+            balance: 0,
+            projectsCount: this.investments.length
         });
     }
 
-    private initChartOptions(): void {
-        const formatCurrency = (value: number) => {
-            return new Intl.NumberFormat('ru-RU', {
-                style: 'decimal',
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 0
-            }).format(value) + ' UZS';
-        };
-
-        this.chartOptions = {
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                    labels: {
-                        usePointStyle: true,
-                        padding: 20,
-                        font: { size: 13, weight: '500' }
-                    }
-                },
-                tooltip: {
-                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                    titleFont: { size: 14, weight: 'bold' },
-                    bodyFont: { size: 13 },
-                    padding: 12,
-                    cornerRadius: 8,
-                    displayColors: true,
-                    callbacks: {
-                        label: (context: any) => {
-                            const value = context.raw || 0;
-                            const total = context.dataset.data.reduce((a: number, b: number) => a + b, 0);
-                            const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
-                            return ` ${context.label}: ${formatCurrency(value)} (${percentage}%)`;
-                        }
-                    }
-                }
-            },
-            animation: {
-                animateScale: true,
-                animateRotate: true,
-                duration: 800,
-                easing: 'easeOutQuart'
-            },
-            cutout: '60%',
-            onClick: (event: any, elements: any[]) => this.onDoughnutClick(event, elements)
-        };
-
-        this.lineChartOptions = {
-            responsive: true,
-            maintainAspectRatio: false,
-            interaction: {
-                mode: 'index',
-                intersect: false
-            },
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                    labels: {
-                        usePointStyle: true,
-                        padding: 20,
-                        font: { size: 13, weight: '500' }
-                    }
-                },
-                tooltip: {
-                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                    titleFont: { size: 14, weight: 'bold' },
-                    bodyFont: { size: 13 },
-                    padding: 12,
-                    cornerRadius: 8,
-                    callbacks: {
-                        title: (tooltipItems: any[]) => {
-                            const date = tooltipItems[0]?.label;
-                            if (date) {
-                                return new Date(date).toLocaleDateString('ru-RU', {
-                                    day: 'numeric',
-                                    month: 'long',
-                                    year: 'numeric'
-                                });
-                            }
-                            return date;
-                        },
-                        label: (context: any) => {
-                            const value = context.raw || 0;
-                            return ` ${context.dataset.label}: ${formatCurrency(value)}`;
-                        },
-                        footer: (tooltipItems: any[]) => {
-                            const debit = tooltipItems.find(i => i.dataset.label === 'Дебит')?.raw || 0;
-                            const credit = tooltipItems.find(i => i.dataset.label === 'Кредит')?.raw || 0;
-                            const balance = debit - credit;
-                            return `─────────────\nБаланс: ${formatCurrency(balance)}`;
-                        }
-                    }
-                }
-            },
-            scales: {
-                x: {
-                    grid: { display: false },
-                    ticks: {
-                        callback: function(value: any, index: number) {
-                            const label = (this as any).getLabelForValue(value);
-                            return new Date(label).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit' });
-                        }
-                    }
-                },
-                y: {
-                    beginAtZero: true,
-                    grid: { color: 'rgba(0, 0, 0, 0.05)' },
-                    ticks: {
-                        callback: (value: any) => formatCurrency(value)
-                    }
-                }
-            },
-            animation: {
-                duration: 1000,
-                easing: 'easeOutQuart'
-            },
-            onClick: (event: any, elements: any[]) => this.onLineChartClick(event, elements)
-        };
-    }
-
     applyFilter(): void {
-        if (!this.selectedOperation) this.selectedOperation = this.operationOptions[0];
-        const filterValue = this.selectedOperation.value;
-
-        // Filter by operation type
-        let filtered = filterValue === 'Все' ? [...this.investments] : this.investments.filter((i) => i.operation_type === filterValue);
+        let filtered = [...this.investments];
 
         // Filter by date range
         if (this.dateRange && this.dateRange.length === 2 && this.dateRange[0] && this.dateRange[1]) {
@@ -297,9 +133,6 @@ export class InvestmentComponent implements OnInit {
         }
 
         this.filteredInvestments = filtered;
-
-        this.updateChart();
-        this.updateLineChart();
     }
 
     onDateRangeChange(): void {
@@ -327,125 +160,16 @@ export class InvestmentComponent implements OnInit {
         });
     }
 
-    updateChart(): void {
-        const debitTotal = this.filteredInvestments.filter((i) => i.operation_type === 'Дебит').reduce((sum, i) => sum + i.amount, 0);
-        const creditTotal = this.filteredInvestments.filter((i) => i.operation_type === 'Кредит').reduce((sum, i) => sum + i.amount, 0);
-        const filterValue = this.selectedOperation?.value || 'Все';
-
-        const debitColors = {
-            background: ['#43a047', '#66bb6a'],
-            hover: ['#2e7d32', '#43a047'],
-            border: '#ffffff'
-        };
-
-        const creditColors = {
-            background: ['#e53935', '#ef5350'],
-            hover: ['#c62828', '#e53935'],
-            border: '#ffffff'
-        };
-
-        if (filterValue === 'Все') {
-            this.chartData = {
-                labels: ['Дебит', 'Кредит'],
-                datasets: [{
-                    data: [debitTotal, creditTotal],
-                    backgroundColor: [debitColors.background[0], creditColors.background[0]],
-                    hoverBackgroundColor: [debitColors.hover[0], creditColors.hover[0]],
-                    borderColor: '#ffffff',
-                    borderWidth: 3,
-                    hoverBorderWidth: 4,
-                    hoverOffset: 8
-                }]
-            };
-        } else if (filterValue === 'Дебит') {
-            this.chartData = {
-                labels: ['Дебит'],
-                datasets: [{
-                    data: [debitTotal],
-                    backgroundColor: debitColors.background,
-                    hoverBackgroundColor: debitColors.hover,
-                    borderColor: '#ffffff',
-                    borderWidth: 3,
-                    hoverOffset: 8
-                }]
-            };
-        } else {
-            this.chartData = {
-                labels: ['Кредит'],
-                datasets: [{
-                    data: [creditTotal],
-                    backgroundColor: creditColors.background,
-                    hoverBackgroundColor: creditColors.hover,
-                    borderColor: '#ffffff',
-                    borderWidth: 3,
-                    hoverOffset: 8
-                }]
-            };
-        }
+    get activePhaseCount(): number {
+        return this.filteredInvestments.filter(i => i.status === 'Активная фаза').length;
     }
 
-    updateLineChart(): void {
-        const map = new Map<string, { debit: number; credit: number }>();
-        this.filteredInvestments.forEach((item) => {
-            const dateKey = item.date.toISOString().split('T')[0];
-            if (!map.has(dateKey)) map.set(dateKey, { debit: 0, credit: 0 });
-            const entry = map.get(dateKey)!;
-            if (item.operation_type === 'Дебит') entry.debit += item.amount;
-            else entry.credit += item.amount;
-        });
-
-        const labels = Array.from(map.keys()).sort();
-        this.lineChartData = {
-            labels,
-            datasets: [
-                {
-                    label: 'Дебит',
-                    data: labels.map((d) => map.get(d)!.debit),
-                    borderColor: '#43a047',
-                    backgroundColor: 'rgba(67, 160, 71, 0.15)',
-                    fill: true,
-                    tension: 0.4,
-                    borderWidth: 3,
-                    pointRadius: 5,
-                    pointHoverRadius: 8,
-                    pointBackgroundColor: '#43a047',
-                    pointBorderColor: '#ffffff',
-                    pointBorderWidth: 2,
-                    pointHoverBackgroundColor: '#2e7d32',
-                    pointHoverBorderColor: '#ffffff',
-                    pointHoverBorderWidth: 3
-                },
-                {
-                    label: 'Кредит',
-                    data: labels.map((d) => map.get(d)!.credit),
-                    borderColor: '#e53935',
-                    backgroundColor: 'rgba(229, 57, 53, 0.15)',
-                    fill: true,
-                    tension: 0.4,
-                    borderWidth: 3,
-                    pointRadius: 5,
-                    pointHoverRadius: 8,
-                    pointBackgroundColor: '#e53935',
-                    pointBorderColor: '#ffffff',
-                    pointBorderWidth: 2,
-                    pointHoverBackgroundColor: '#c62828',
-                    pointHoverBorderColor: '#ffffff',
-                    pointHoverBorderWidth: 3
-                }
-            ]
-        };
+    get inDevelopmentCount(): number {
+        return this.filteredInvestments.filter(i => i.status === 'В разработке').length;
     }
 
-    get totalDebit(): number {
-        return this.filteredInvestments.filter((i) => i.operation_type === 'Дебит').reduce((sum, i) => sum + i.amount, 0);
-    }
-
-    get totalCredit(): number {
-        return this.filteredInvestments.filter((i) => i.operation_type === 'Кредит').reduce((sum, i) => sum + i.amount, 0);
-    }
-
-    get balance(): number {
-        return this.totalDebit - this.totalCredit;
+    get totalAmount(): number {
+        return this.filteredInvestments.reduce((sum, i) => sum + i.amount, 0);
     }
 
     // Dialog methods
@@ -473,9 +197,7 @@ export class InvestmentComponent implements OnInit {
         this.form.patchValue({
             project_name: investment.project_name,
             status: this.statusOptions.find((s) => s.value === investment.status) || null,
-            operation_type: this.operationTypeOptions.find((o) => o.value === investment.operation_type) || null,
             amount: investment.amount,
-            priority: this.priorityOptions.find((p) => p.value === investment.priority) || null,
             date: investment.date,
             comment: investment.comment
         });
@@ -496,10 +218,8 @@ export class InvestmentComponent implements OnInit {
         const investmentData: InvestmentData = {
             id: this.isEditMode && this.currentInvestmentId ? this.currentInvestmentId : Date.now(),
             project_name: rawPayload.project_name || '',
-            status: rawPayload.status?.value || 'Новый',
-            operation_type: rawPayload.operation_type?.value || 'Дебит',
+            status: rawPayload.status?.value || 'Активная фаза',
             amount: rawPayload.amount || 0,
-            priority: rawPayload.priority?.value || 'Средний',
             date: rawPayload.date || new Date(),
             comment: rawPayload.comment || '',
             files: []
@@ -507,7 +227,6 @@ export class InvestmentComponent implements OnInit {
 
         // Handle files
         if (this.isEditMode && this.currentInvestment) {
-            // Keep existing files that weren't removed
             const existingFiles = this.currentInvestment.files?.filter((f) => this.existingFilesToKeep.includes(f.id)) || [];
             investmentData.files = [...existingFiles];
         }
@@ -579,68 +298,5 @@ export class InvestmentComponent implements OnInit {
     showFiles(investment: InvestmentData) {
         this.selectedInvestmentForFiles = investment;
         this.showFilesDialog = true;
-    }
-
-    // Chart click handlers
-    onDoughnutClick(event: any, elements: any[]): void {
-        if (elements.length > 0) {
-            const index = elements[0].index;
-            const label = this.chartData.labels[index];
-
-            if (label === 'Дебит') {
-                this.selectedOperation = this.operationOptions.find(o => o.value === 'Дебит');
-            } else if (label === 'Кредит') {
-                this.selectedOperation = this.operationOptions.find(o => o.value === 'Кредит');
-            }
-
-            this.applyFilter();
-            this.messageService.add({
-                severity: 'info',
-                summary: 'Фильтр применён',
-                detail: `Показаны операции: ${label}`,
-                life: 2000
-            });
-        }
-    }
-
-    onLineChartClick(event: any, elements: any[]): void {
-        if (elements.length > 0) {
-            const datasetIndex = elements[0].datasetIndex;
-            const dataIndex = elements[0].index;
-            const date = this.lineChartData.labels[dataIndex];
-            const datasetLabel = this.lineChartData.datasets[datasetIndex].label;
-
-            // Filter by operation type
-            if (datasetLabel === 'Дебит') {
-                this.selectedOperation = this.operationOptions.find(o => o.value === 'Дебит');
-            } else if (datasetLabel === 'Кредит') {
-                this.selectedOperation = this.operationOptions.find(o => o.value === 'Кредит');
-            }
-
-            this.applyFilter();
-
-            const formattedDate = new Date(date).toLocaleDateString('ru-RU', {
-                day: 'numeric',
-                month: 'long'
-            });
-
-            this.messageService.add({
-                severity: 'info',
-                summary: 'Фильтр применён',
-                detail: `${datasetLabel} за ${formattedDate}`,
-                life: 2000
-            });
-        }
-    }
-
-    resetFilter(): void {
-        this.selectedOperation = this.operationOptions[0];
-        this.applyFilter();
-        this.messageService.add({
-            severity: 'info',
-            summary: 'Фильтр сброшен',
-            detail: 'Показаны все операции',
-            life: 2000
-        });
     }
 }
