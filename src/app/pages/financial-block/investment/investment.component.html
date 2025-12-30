@@ -12,11 +12,11 @@
             <strong>{{ filteredInvestments.length }}</strong>
         </div>
         <div class="kpi-card debit">
-            <span>Активная фаза</span>
+            <span>В процессе</span>
             <strong>{{ activePhaseCount }}</strong>
         </div>
         <div class="kpi-card credit">
-            <span>В разработке</span>
+            <span>Запланировано</span>
             <strong>{{ inDevelopmentCount }}</strong>
         </div>
         <div class="kpi-card balance">
@@ -28,28 +28,28 @@
     <!-- ADD BUTTON & DATE RANGE -->
     <div class="action-row mb-6">
         <p-button label="Добавить проект" icon="pi pi-plus" (click)="openNew()" />
-        <div class="date-range-filter">
-            <p-datepicker
-                [(ngModel)]="dateRange"
-                selectionMode="range"
-                [showIcon]="true"
-                [showButtonBar]="true"
-                placeholder="Выберите диапазон дат"
-                dateFormat="dd.mm.yy"
-                (onSelect)="onDateRangeChange()"
-                (onClear)="onDateRangeClear()">
-            </p-datepicker>
-            @if (dateRange && dateRange.length > 0) {
-                <p-button
-                    icon="pi pi-times"
-                    severity="secondary"
-                    [text]="true"
-                    [rounded]="true"
-                    pTooltip="Сбросить диапазон"
-                    (click)="onDateRangeClear()">
-                </p-button>
-            }
-        </div>
+        <!--        <div class="date-range-filter">-->
+        <!--            <p-datepicker-->
+        <!--                [(ngModel)]="dateRange"-->
+        <!--                selectionMode="range"-->
+        <!--                [showIcon]="true"-->
+        <!--                [showButtonBar]="true"-->
+        <!--                placeholder="Выберите диапазон дат"-->
+        <!--                dateFormat="dd.mm.yy"-->
+        <!--                (onSelect)="onDateRangeChange()"-->
+        <!--                (onClear)="onDateRangeClear()">-->
+        <!--            </p-datepicker>-->
+        <!--            @if (dateRange && dateRange.length > 0) {-->
+        <!--                <p-button-->
+        <!--                    icon="pi pi-times"-->
+        <!--                    severity="secondary"-->
+        <!--                    [text]="true"-->
+        <!--                    [rounded]="true"-->
+        <!--                    pTooltip="Сбросить диапазон"-->
+        <!--                    (click)="onDateRangeClear()">-->
+        <!--                </p-button>-->
+        <!--            }-->
+        <!--        </div>-->
     </div>
 
     <!-- TABLE -->
@@ -66,9 +66,9 @@
 
             <ng-template pTemplate="header">
                 <tr>
-                    <th pSortableColumn="project_name">
+                    <th pSortableColumn="name">
                         Проект
-                        <p-sortIcon field="project_name"></p-sortIcon>
+                        <p-sortIcon field="name"></p-sortIcon>
                     </th>
                     <th pSortableColumn="status">
                         Статус
@@ -78,10 +78,6 @@
                         Стоимость
                         <p-sortIcon field="amount"></p-sortIcon>
                     </th>
-                    <th pSortableColumn="date">
-                        Дата
-                        <p-sortIcon field="date"></p-sortIcon>
-                    </th>
                     <th style="width: 10%">Файлы</th>
                     <th>Комментарий</th>
                     <th style="width: 10%">Действия</th>
@@ -90,10 +86,9 @@
 
             <ng-template pTemplate="body" let-investment>
                 <tr>
-                    <td>{{ investment.project_name }}</td>
-                    <td>{{ investment.status }}</td>
-                    <td>{{ investment.amount | number }} UZS</td>
-                    <td>{{ investment.date | date: 'dd.MM.yyyy' }}</td>
+                    <td>{{ investment.name }}</td>
+                    <td>{{ investment.status.name }}</td>
+                    <td>{{ investment.cost | number }} UZS</td>
                     <td>
                         @if (investment.files && investment.files.length > 0) {
                             <p-button
@@ -108,7 +103,7 @@
                             <span class="text-color-secondary">—</span>
                         }
                     </td>
-                    <td>{{ investment.comment }}</td>
+                    <td>{{ investment.comments }}</td>
                     <td>
                         <p-button
                             icon="pi pi-pencil"
@@ -174,13 +169,6 @@
             [submitted]="submitted"
             [required]="false">
         </app-input-number>
-
-        <app-date-picker
-            label="Дата"
-            formControlName="date"
-            [submitted]="submitted"
-            [required]="false">
-        </app-date-picker>
 
         <app-textarea
             label="Комментарий"
