@@ -1,28 +1,17 @@
 import { Injectable } from '@angular/core';
 import { ApiService, BASE_URL } from '@/core/services/api.service';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { InvestmentDto, InvestmentResponse } from '@/core/interfaces/investment';
+import { InvestmentDto, InvestmentResponse, InvestmentStatus } from '@/core/interfaces/investment';
 
 const INVESTMENTS = '/investments';
+const STATUSES = '/statuses';
 
 @Injectable({
     providedIn: 'root'
 })
 export class InvestmentService extends ApiService {
     getInvestments(): Observable<InvestmentDto[]> {
-        return this.http.get<InvestmentResponse[]>(BASE_URL + INVESTMENTS).pipe(
-            map((responseArray) => {
-                if (!responseArray) {
-                    return [];
-                }
-
-                return responseArray.map((raw) => ({
-                    ...raw,
-                    date: new Date(raw.date)
-                }));
-            })
-        );
+        return this.http.get<InvestmentResponse[]>(BASE_URL + INVESTMENTS);
     }
 
     createInvestment(formData: FormData): Observable<any> {
@@ -35,5 +24,9 @@ export class InvestmentService extends ApiService {
 
     deleteInvestment(id: number): Observable<any> {
         return this.http.delete(`${BASE_URL}${INVESTMENTS}/${id}`);
+    }
+
+    getStatuses(): Observable<InvestmentStatus[]> {
+        return this.http.get<InvestmentStatus[]>(BASE_URL + INVESTMENTS + STATUSES);
     }
 }

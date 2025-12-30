@@ -130,11 +130,11 @@ export class MenuComponent implements OnInit {
                     },
                     {
                         label: 'Финансовый блок',
-                        role: ['rais'],
+                        role: ['rais', 'investment'],
                         items: [
                             { label: 'Общий дашборд', role: ['rais'], routerLink: ['/financial-dashboard'] },
                             { label: 'Дебит / кредит', role: ['rais'], routerLink: ['/debit-credit'] },
-                            { label: 'Инвестиции', role: ['rais'], routerLink: ['/investment'] },
+                            { label: 'Инвестиции', role: ['rais', 'investment'], routerLink: ['/investment'] },
                             { label: 'Затраты на ремонт', role: ['rais'], routerLink: ['/repair-costs'] },
                             { label: 'Закупки', role: ['rais'], routerLink: ['/procurement'] },
                             { label: 'KPI', role: ['rais'], routerLink: ['/kpi'] },

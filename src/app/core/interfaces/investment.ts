@@ -2,37 +2,24 @@ import { FileResponse } from '@/core/interfaces/files';
 
 export interface InvestmentResponse {
     id: number;
-    project_name: string;
+    name: string;
     status: InvestmentStatus;
-    amount: number;
-    date: string;
-    comment: string;
+    cost: number;
+    comments: string;
     files?: FileResponse[];
 }
 
 export interface InvestmentDto {
     id: number;
-    project_name: string;
+    name: string;
     status: InvestmentStatus;
-    amount: number;
-    date: Date;
-    comment: string;
+    cost: number;
+    comments: string;
     files?: FileResponse[];
 }
 
-export interface InvestmentPayload {
-    project_name: string;
-    status: InvestmentStatus;
-    amount: number;
-    date: string;
-    comment?: string;
+export interface InvestmentStatus {
+    id: number;
+    name: string;
+    description: string;
 }
-
-export type InvestmentStatus = 'Planned' | 'In Progress' | 'Completed' | 'Cancelled';
-
-export const INVESTMENT_STATUS_LABELS: Record<InvestmentStatus, string> = {
-    Planned: 'Запланировано',
-    'In Progress': 'В процессе',
-    Completed: 'Завершено',
-    Cancelled: 'Отменено'
-};
