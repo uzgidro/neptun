@@ -177,7 +177,7 @@ export class MenuComponent implements OnInit {
                         ]
                     },
                     { label: 'Звонки', role: ['rais'], routerLink: ['/calls'] },
-                    { label: 'СМИ', role: ['rais'] }
+                    { label: 'Пресс-служба', role: ['rais'], routerLink: ['/media/news'] }
                 ]
             }
         ];

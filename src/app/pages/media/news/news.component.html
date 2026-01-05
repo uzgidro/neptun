@@ -1,0 +1,337 @@
+<div class="card">
+    <!-- Заголовок с информацией о канале -->
+    <div class="flex justify-between items-center mb-4">
+        <div>
+            <div class="font-semibold text-xl flex items-center gap-2">
+                <i class="pi pi-telegram text-blue-500"></i>
+                {{ newsData?.channel_title || 'Новости Telegram' }}
+            </div>
+            @if (newsData) {
+                <div class="text-sm text-color-secondary mt-1">
+                    ID канала: {{ newsData.channel_id }}
+                </div>
+            }
+        </div>
+        <p-tag [value]="filteredMessages.length + ' сообщений'" severity="info"></p-tag>
+    </div>
+
+    <!-- Фильтры -->
+    <div class="flex flex-column md:flex-row justify-between items-start md:items-center gap-3 mb-4">
+        <div class="flex flex-wrap gap-2 items-center">
+            <p-iconfield>
+                <p-inputicon><i class="pi pi-search"></i></p-inputicon>
+                <input pInputText type="text" (input)="onSearchInput($event)" placeholder="Поиск по тексту" />
+            </p-iconfield>
+
+            <div style="width: 180px;">
+                <app-date-picker
+                    [(ngModel)]="dateFrom"
+                    (ngModelChange)="onDateFilterChange()"
+                    label="Дата от"
+                    [required]="false"
+                    [submitted]="false"
+                    [showTime]="false">
+                </app-date-picker>
+            </div>
+
+            <div style="width: 180px;">
+                <app-date-picker
+                    [(ngModel)]="dateTo"
+                    (ngModelChange)="onDateFilterChange()"
+                    label="Дата до"
+                    [required]="false"
+                    [submitted]="false"
+                    [showTime]="false">
+                </app-date-picker>
+            </div>
+
+            @if (dateFrom || dateTo) {
+                <button pButton
+                        (click)="clearDateFilter()"
+                        class="p-button-text p-button-sm"
+                        pTooltip="Очистить фильтр по дате">
+                    <i pButtonIcon class="pi pi-times"></i>
+                </button>
+            }
+        </div>
+    </div>
+
+    <!-- Состояние загрузки -->
+    @if (loading) {
+        <div class="flex justify-center items-center py-8">
+            <i class="pi pi-spin pi-spinner text-4xl text-primary"></i>
+        </div>
+    }
+
+    <!-- Пустое состояние -->
+    @if (!loading && filteredMessages.length === 0) {
+        <div class="flex flex-column items-center justify-center py-8">
+            <i class="pi pi-inbox text-6xl text-gray-400 mb-3"></i>
+            <p class="text-color-secondary mt-2">Сообщения не найдены. Попробуйте изменить фильтры.</p>
+        </div>
+    }
+
+    <!-- Сетка карточек сообщений -->
+    @if (!loading && filteredMessages.length > 0) {
+        <div class="news-grid">
+            @for (message of paginatedMessages; track message.id) {
+                <div class="news-card-wrapper">
+                    <div class="news-card"
+                         (click)="openDetailDialog(message)"
+                         (mouseenter)="onCardHover($event, true)"
+                         (mouseleave)="onCardHover($event, false)">
+
+                        <!-- Медиа превью -->
+                        <div class="news-card-image">
+                            <!-- Фото -->
+                            @if (isPhoto(message)) {
+                                <img [ngSrc]="getMediaThumbnail(message)"
+                                     [alt]="'Message ' + message.id"
+                                     class="media-content" fill>
+                            }
+
+                            <!-- Видео -->
+                            @if (isVideo(message)) {
+                                <div class="video-container">
+                                    <video [src]="getMediaUrl(message)"
+                                           muted
+                                           loop
+                                           playsinline
+                                           preload="metadata"
+                                           class="media-content">
+                                    </video>
+                                    <div class="video-overlay">
+                                        <i class="pi pi-play-circle"></i>
+                                    </div>
+                                </div>
+                            }
+
+                            <!-- Плейсхолдер (если нет медиа) -->
+                            @if (!hasMedia(message)) {
+                                <div class="news-card-placeholder">
+                                    <i class="pi pi-comment"></i>
+                                </div>
+                            }
+
+                            <!-- Бейдж Telegram -->
+                            <div class="telegram-badge">
+                                <i class="pi pi-telegram"></i>
+                            </div>
+
+                            <!-- Индикаторы -->
+                            <div class="news-card-stats">
+                                <div class="stat-item" pTooltip="Просмотры">
+                                    <i class="pi pi-eye"></i>
+                                    <span>{{ formatViews(message.views) }}</span>
+                                </div>
+                                @if (message.forwards > 0) {
+                                    <div class="stat-item" pTooltip="Пересылки">
+                                        <i class="pi pi-share-alt"></i>
+                                        <span>{{ message.forwards }}</span>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+                        <!-- Контент -->
+                        <div class="news-card-content">
+                            <p class="news-card-text">{{ truncateText(message.text, 120) }}</p>
+
+                            <div class="news-card-footer">
+                                <div class="news-card-date">
+                                    <i class="pi pi-calendar"></i>
+                                    {{ formatDate(message.date) }}
+                                </div>
+                                <div class="news-card-id">
+                                    <span class="text-xs text-color-secondary">#{{ message.id }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+    <!-- Пагинация -->
+    @if (filteredMessages.length > rows) {
+        <p-paginator
+            [first]="first"
+            [rows]="rows"
+            [totalRecords]="filteredMessages.length"
+            [rowsPerPageOptions]="[10, 20, 50, 100]"
+            (onPageChange)="onPageChange($event)"
+            [showCurrentPageReport]="true"
+            currentPageReportTemplate="Показано {first}-{last} из {totalRecords}">
+        </p-paginator>
+    }
+</div>
+
+<!-- Диалог детального просмотра -->
+<p-dialog
+    [(visible)]="displayDetailDialog"
+    [header]="'Сообщение #' + (selectedMessage?.id || '')"
+    [modal]="true"
+    [dismissableMask]="true"
+    [draggable]="false"
+    [resizable]="false"
+    [style]="{ width: '70vw', maxWidth: '900px' }"
+    [breakpoints]="{ '960px': '90vw' }"
+    styleClass="news-detail-dialog">
+
+    @if (selectedMessage) {
+        <!-- Шапка со статистикой -->
+        <div class="flex flex-wrap justify-between items-center mb-4 gap-3">
+            <div class="flex gap-3">
+                <div class="stat-badge">
+                    <i class="pi pi-eye text-blue-500"></i>
+                    <div>
+                        <div class="text-xs text-color-secondary">Просмотры</div>
+                        <div class="font-semibold">{{ selectedMessage.views.toLocaleString('ru-RU') }}</div>
+                    </div>
+                </div>
+                @if (selectedMessage.forwards > 0) {
+                    <div class="stat-badge">
+                        <i class="pi pi-share-alt text-green-500"></i>
+                        <div>
+                            <div class="text-xs text-color-secondary">Пересылки</div>
+                            <div class="font-semibold">{{ selectedMessage.forwards }}</div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <p-tag
+                [value]="'#' + selectedMessage.id"
+                severity="info"
+                [style]="{ fontSize: '0.875rem' }">
+            </p-tag>
+        </div>
+
+        <!-- Медиа -->
+        @if (hasMedia(selectedMessage)) {
+            <div class="mb-4">
+                <!-- Фото -->
+                @if (isPhoto(selectedMessage)) {
+                    <div class="text-center">
+                        <p-image
+                            [src]="getMediaUrl(selectedMessage)"
+                            [alt]="'Message ' + selectedMessage.id"
+                            [preview]="true"
+                            class="detail-image">
+                            <ng-template #image>
+                                <img [ngSrc]="getMediaUrl(selectedMessage)"
+                                     [alt]="'Message ' + selectedMessage.id"
+                                     class="w-full border-round"
+                                     style="max-height: 500px; object-fit: contain;" fill>
+                            </ng-template>
+                        </p-image>
+                    </div>
+                }
+
+                <!-- Видео -->
+                @if (isVideo(selectedMessage)) {
+                    <div>
+                        <video [src]="getMediaUrl(selectedMessage)"
+                               controls
+                               class="w-full border-round"
+                               style="max-height: 500px;">
+                            Ваш браузер не поддерживает видео.
+                        </video>
+                        @if (selectedMessage.media?.duration) {
+                            <div class="text-xs text-color-secondary mt-2">
+                                <i class="pi pi-clock"></i>
+                                Длительность: {{ selectedMessage!.media!.duration }} сек
+                            </div>
+                        }
+                    </div>
+                }
+
+                <!-- Информация о файле -->
+                @if (selectedMessage.media) {
+                    <div class="mt-3 p-3 surface-100 border-round">
+                        <div class="grid gap-2 text-sm">
+                            @if (selectedMessage.media.file_name) {
+                                <div class="col-12 md:col-6">
+                                    <span class="text-color-secondary">Имя файла:</span>
+                                    <span class="ml-2 font-medium">{{ selectedMessage.media.file_name }}</span>
+                                </div>
+                            }
+                            @if (selectedMessage.media.file_size) {
+                                <div class="col-12 md:col-6">
+                                    <span class="text-color-secondary">Размер:</span>
+                                    <span
+                                        class="ml-2 font-medium">{{ (selectedMessage.media.file_size / 1024 / 1024).toFixed(2) }}
+                                        MB</span>
+                                </div>
+                            }
+                            @if (selectedMessage.media.width && selectedMessage.media.height) {
+                                <div class="col-12 md:col-6">
+                                    <span class="text-color-secondary">Разрешение:</span>
+                                    <span class="ml-2 font-medium">{{ selectedMessage.media.width }}
+                                        × {{ selectedMessage.media.height }}</span>
+                                </div>
+                            }
+                            @if (selectedMessage.media.mime_type) {
+                                <div class="col-12 md:col-6">
+                                    <span class="text-color-secondary">Тип:</span>
+                                    <span class="ml-2 font-medium">{{ selectedMessage.media.mime_type }}</span>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+
+        <!-- Placeholder если нет медиа -->
+        @if (!hasMedia(selectedMessage)) {
+            <div class="w-full h-48 bg-gray-100 flex items-center justify-center border-round mb-4">
+                <i class="pi pi-comment text-6xl text-gray-400"></i>
+            </div>
+        }
+
+        <p-divider></p-divider>
+
+        <!-- Текст сообщения -->
+        <div class="news-content text-lg leading-relaxed mb-4"
+             style="white-space: pre-wrap;">{{ selectedMessage.text }}
+        </div>
+
+        <p-divider></p-divider>
+
+        <!-- Метаинформация -->
+        <div class="flex flex-wrap gap-4 text-sm text-color-secondary">
+            <div class="flex items-center gap-2">
+                <i class="pi pi-calendar"></i>
+                <span>Опубликовано: {{ formatDateTime(selectedMessage.date) }}</span>
+            </div>
+            @if (selectedMessage.edit_date) {
+                <div class="flex items-center gap-2">
+                    <i class="pi pi-pencil"></i>
+                    <span>Изменено: {{ formatDateTime(selectedMessage.edit_date) }}</span>
+                </div>
+            }
+            @if (selectedMessage.author) {
+                <div class="flex items-center gap-2">
+                    <i class="pi pi-user"></i>
+                    <span>Автор: {{ selectedMessage.author }}</span>
+                </div>
+            }
+            @if (selectedMessage.reply_to_message_id) {
+                <div class="flex items-center gap-2">
+                    <i class="pi pi-reply"></i>
+                    <span>Ответ на: #{{ selectedMessage.reply_to_message_id }}</span>
+                </div>
+            }
+        </div>
+    }
+
+    <ng-template pTemplate="footer">
+        <button pButton
+                class="p-button-secondary"
+                (click)="closeDetailDialog()">
+            <span pButtonLabel>Закрыть</span>
+            <i pButtonIcon class="pi pi-times"></i>
+        </button>
+    </ng-template>
+</p-dialog>
