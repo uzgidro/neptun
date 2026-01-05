@@ -1,331 +1,176 @@
 <div class="card">
-    <!-- Заголовок и кнопка синхронизации -->
+    <!-- Заголовок с информацией о канале -->
     <div class="flex justify-between items-center mb-4">
-        <div class="font-semibold text-xl">Новости Пресс-службы</div>
-        <button pButton (click)="syncFromTelegram()" [disabled]="syncing" class="p-button-outlined">
-            <i class="pi pi-sync" [class.pi-spin]="syncing" pButtonIcon></i>
-            <span pButtonLabel>{{ syncing ? 'Синхронизация...' : 'Синхронизировать с Telegram' }}</span>
-        </button>
+        <div>
+            <div class="font-semibold text-xl flex items-center gap-2">
+                <i class="pi pi-telegram text-blue-500"></i>
+                {{ newsData?.channel_title || 'Новости Telegram' }}
+            </div>
+            @if (newsData) {
+                <div class="text-sm text-color-secondary mt-1">
+                    ID канала: {{ newsData.channel_id }}
+                </div>
+            }
+        </div>
+        <p-tag [value]="filteredMessages.length + ' сообщений'" severity="info"></p-tag>
     </div>
 
-    <!-- Фильтры и кнопка добавления -->
+    <!-- Фильтры -->
     <div class="flex flex-column md:flex-row justify-between items-start md:items-center gap-3 mb-4">
-        <div class="flex flex-wrap gap-2">
+        <div class="flex flex-wrap gap-2 items-center">
             <p-iconfield>
                 <p-inputicon><i class="pi pi-search"></i></p-inputicon>
-                <input pInputText type="text" (input)="onSearchInput($event)" placeholder="Поиск" />
+                <input pInputText type="text" (input)="onSearchInput($event)" placeholder="Поиск по тексту" />
             </p-iconfield>
 
-            <p-select
-                [(ngModel)]="selectedCategory"
-                [options]="categoryOptions"
-                optionLabel="name"
-                optionValue="value"
-                placeholder="Категория"
-                (onChange)="applyFilters()"
-                [style]="{ minWidth: '150px' }">
-            </p-select>
+            <div style="width: 180px;">
+                <app-date-picker
+                    [(ngModel)]="dateFrom"
+                    (ngModelChange)="onDateFilterChange()"
+                    label="Дата от"
+                    [required]="false"
+                    [submitted]="false"
+                    [showTime]="false">
+                </app-date-picker>
+            </div>
 
-            <p-select
-                [(ngModel)]="selectedStatus"
-                [options]="statusOptions"
-                optionLabel="name"
-                optionValue="value"
-                placeholder="Статус"
-                (onChange)="applyFilters()"
-                [style]="{ minWidth: '150px' }">
-            </p-select>
+            <div style="width: 180px;">
+                <app-date-picker
+                    [(ngModel)]="dateTo"
+                    (ngModelChange)="onDateFilterChange()"
+                    label="Дата до"
+                    [required]="false"
+                    [submitted]="false"
+                    [showTime]="false">
+                </app-date-picker>
+            </div>
 
-            <p-select
-                [(ngModel)]="selectedSort"
-                [options]="sortOptions"
-                optionLabel="name"
-                optionValue="value"
-                placeholder="Сортировка"
-                (onChange)="applyFilters()"
-                [style]="{ minWidth: '180px' }">
-            </p-select>
+            @if (dateFrom || dateTo) {
+                <button pButton
+                        (click)="clearDateFilter()"
+                        class="p-button-text p-button-sm"
+                        pTooltip="Очистить фильтр по дате">
+                    <i pButtonIcon class="pi pi-times"></i>
+                </button>
+            }
         </div>
-
-        <button pButton (click)="openDialog()">
-            <i class="pi pi-plus" pButtonIcon></i>
-            <span pButtonLabel>Новая новость</span>
-        </button>
     </div>
 
     <!-- Состояние загрузки -->
-    <div *ngIf="loading" class="flex justify-center items-center py-8">
-        <i class="pi pi-spin pi-spinner text-4xl text-primary"></i>
-    </div>
+    @if (loading) {
+        <div class="flex justify-center items-center py-8">
+            <i class="pi pi-spin pi-spinner text-4xl text-primary"></i>
+        </div>
+    }
 
     <!-- Пустое состояние -->
-    <div *ngIf="!loading && filteredNews.length === 0" class="flex flex-column items-center justify-center py-8">
-        <p class="text-color-secondary mt-2">Добавьте первую новость или измените фильтры</p>
-    </div>
-
-    <!-- Сетка карточек -->
-    <div *ngIf="!loading && filteredNews.length > 0" class="news-grid">
-        <div *ngFor="let item of paginatedNews" class="news-card-wrapper">
-            <div class="news-card"
-                 (click)="openDetailDialog(item)"
-                 (mouseenter)="onCardHover($event, true)"
-                 (mouseleave)="onCardHover($event, false)">
-                <!-- Медиа превью -->
-                <div class="news-card-image">
-                    <!-- Изображение -->
-                    <img *ngIf="getFirstImageUrl(item)"
-                         [src]="getFirstImageUrl(item)"
-                         [alt]="item.title">
-                    <!-- Видео (если нет изображения) -->
-                    <video *ngIf="!getFirstImageUrl(item) && getFirstVideoUrl(item)"
-                           [src]="getFirstVideoUrl(item)"
-                           muted
-                           loop
-                           playsinline
-                           preload="metadata"
-                           class="news-card-video"
-                           (loadeddata)="onVideoLoaded($event)"
-                           (error)="onVideoError($event, item)">
-                    </video>
-                    <!-- Плейсхолдер для видео пока загружается -->
-                    <div *ngIf="!getFirstImageUrl(item) && getFirstVideoUrl(item)" class="news-card-video-overlay">
-                        <i class="pi pi-play-circle"></i>
-                    </div>
-                    <!-- Плейсхолдер (если нет медиа) -->
-                    <div *ngIf="!getFirstImageUrl(item) && !getFirstVideoUrl(item)" class="news-card-placeholder">
-                        <i class="pi pi-image"></i>
-                    </div>
-
-                    <!-- Бейджи -->
-                    <div class="news-card-badges">
-                        <span *ngIf="item.category" class="badge-category"
-                              [style.background-color]="getCategoryColor(item.category.type)">
-                            <i [class]="getCategoryIcon(item.category.type)"></i>
-                            {{ getCategoryLabel(item.category.type) }}
-                        </span>
-                        <span class="badge-status" [attr.data-status]="item.status">
-                            {{ getStatusLabel(item.status) }}
-                        </span>
-                    </div>
-
-                    <!-- Индикаторы медиа -->
-                    <div class="news-card-media-indicators">
-                        <div *ngIf="hasMediaType(item, 'video')" class="news-card-video-badge">
-                            <i class="pi pi-play"></i>
-                        </div>
-                        <div *ngIf="item.media && item.media.length > 1" class="news-card-media-count">
-                            <i class="pi pi-images"></i> {{ item.media.length }}
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Контент -->
-                <div class="news-card-content">
-                    <h3 class="news-card-title">{{ item.title }}</h3>
-                    <p class="news-card-text">{{ truncateText(item.content, 120) }}</p>
-
-                    <div class="news-card-footer">
-                        <div class="news-card-date">
-                            <i class="pi pi-calendar"></i>
-                            {{ formatDate(item.publishedAt) }}
-                        </div>
-                        <div class="news-card-actions" (click)="$event.stopPropagation()">
-                            <button pButton
-                                    icon="pi pi-pencil"
-                                    (click)="openEditDialog(item)"
-                                    class="p-button-rounded p-button-text p-button-warning"
-                                    pTooltip="Редактировать">
-                            </button>
-                            <button pButton
-                                    icon="pi pi-trash"
-                                    (click)="openDeleteDialog(item)"
-                                    class="p-button-rounded p-button-text p-button-danger"
-                                    pTooltip="Удалить">
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    @if (!loading && filteredMessages.length === 0) {
+        <div class="flex flex-column items-center justify-center py-8">
+            <i class="pi pi-inbox text-6xl text-gray-400 mb-3"></i>
+            <p class="text-color-secondary mt-2">Сообщения не найдены. Попробуйте изменить фильтры.</p>
         </div>
-    </div>
+    }
+
+    <!-- Сетка карточек сообщений -->
+    @if (!loading && filteredMessages.length > 0) {
+        <div class="news-grid">
+            @for (message of paginatedMessages; track message.id) {
+                <div class="news-card-wrapper">
+                    <div class="news-card"
+                         (click)="openDetailDialog(message)"
+                         (mouseenter)="onCardHover($event, true)"
+                         (mouseleave)="onCardHover($event, false)">
+
+                        <!-- Медиа превью -->
+                        <div class="news-card-image">
+                            <!-- Фото -->
+                            @if (isPhoto(message)) {
+                                <img [ngSrc]="getMediaThumbnail(message)"
+                                     [alt]="'Message ' + message.id"
+                                     class="media-content" fill>
+                            }
+
+                            <!-- Видео -->
+                            @if (isVideo(message)) {
+                                <div class="video-container">
+                                    <video [src]="getMediaUrl(message)"
+                                           muted
+                                           loop
+                                           playsinline
+                                           preload="metadata"
+                                           class="media-content">
+                                    </video>
+                                    <div class="video-overlay">
+                                        <i class="pi pi-play-circle"></i>
+                                    </div>
+                                </div>
+                            }
+
+                            <!-- Плейсхолдер (если нет медиа) -->
+                            @if (!hasMedia(message)) {
+                                <div class="news-card-placeholder">
+                                    <i class="pi pi-comment"></i>
+                                </div>
+                            }
+
+                            <!-- Бейдж Telegram -->
+                            <div class="telegram-badge">
+                                <i class="pi pi-telegram"></i>
+                            </div>
+
+                            <!-- Индикаторы -->
+                            <div class="news-card-stats">
+                                <div class="stat-item" pTooltip="Просмотры">
+                                    <i class="pi pi-eye"></i>
+                                    <span>{{ formatViews(message.views) }}</span>
+                                </div>
+                                @if (message.forwards > 0) {
+                                    <div class="stat-item" pTooltip="Пересылки">
+                                        <i class="pi pi-share-alt"></i>
+                                        <span>{{ message.forwards }}</span>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+                        <!-- Контент -->
+                        <div class="news-card-content">
+                            <p class="news-card-text">{{ truncateText(message.text, 120) }}</p>
+
+                            <div class="news-card-footer">
+                                <div class="news-card-date">
+                                    <i class="pi pi-calendar"></i>
+                                    {{ formatDate(message.date) }}
+                                </div>
+                                <div class="news-card-id">
+                                    <span class="text-xs text-color-secondary">#{{ message.id }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
 
     <!-- Пагинация -->
-    <p-paginator
-        *ngIf="filteredNews.length > rows"
-        [first]="first"
-        [rows]="rows"
-        [totalRecords]="filteredNews.length"
-        [rowsPerPageOptions]="[10, 20, 50]"
-        (onPageChange)="onPageChange($event)"
-        [showCurrentPageReport]="true"
-        currentPageReportTemplate="Показано {first}-{last} из {totalRecords}">
-    </p-paginator>
+    @if (filteredMessages.length > rows) {
+        <p-paginator
+            [first]="first"
+            [rows]="rows"
+            [totalRecords]="filteredMessages.length"
+            [rowsPerPageOptions]="[10, 20, 50, 100]"
+            (onPageChange)="onPageChange($event)"
+            [showCurrentPageReport]="true"
+            currentPageReportTemplate="Показано {first}-{last} из {totalRecords}">
+        </p-paginator>
+    }
 </div>
-
-<!-- Диалог создания/редактирования -->
-<app-dialog
-    [(visible)]="displayDialog"
-    [header]="isEditMode ? 'Редактировать новость' : 'Новая новость'"
-    [form]="newsForm"
-    [saveLabel]="isEditMode ? 'Обновить' : 'Сохранить'"
-    width="80vw"
-    (save)="onSubmit()"
-    (cancel)="closeDialog()">
-    <div class="flex gap-4 p-4">
-        <!-- Форма слева -->
-        <div class="flex-1">
-            <form [formGroup]="newsForm" (ngSubmit)="onSubmit()">
-                <app-input-text
-                    formControlName="title"
-                    label="Заголовок"
-                    [submitted]="submitted"
-                    errorMessage="Заголовок обязателен"
-                    [required]="true">
-                </app-input-text>
-
-                <app-textarea
-                    formControlName="content"
-                    label="Содержание"
-                    [submitted]="submitted"
-                    errorMessage="Содержание обязательно"
-                    [required]="true"
-                    [rows]="5">
-                </app-textarea>
-
-                <app-select
-                    formControlName="category"
-                    label="Категория"
-                    [items]="categoryFormOptions"
-                    [submitted]="submitted"
-                    errorMessage="Категория обязательна"
-                    [required]="true">
-                </app-select>
-
-                <app-select
-                    formControlName="source"
-                    label="Источник"
-                    [items]="sourceFormOptions"
-                    [submitted]="submitted"
-                    errorMessage="Источник обязателен"
-                    [required]="true">
-                </app-select>
-
-                <app-input-text
-                    formControlName="sourceUrl"
-                    label="Ссылка на оригинал"
-                    [submitted]="submitted"
-                    [required]="false">
-                </app-input-text>
-
-                <app-select
-                    formControlName="status"
-                    label="Статус"
-                    [items]="statusFormOptions"
-                    [submitted]="submitted"
-                    errorMessage="Статус обязателен"
-                    [required]="true">
-                </app-select>
-
-                <app-date-picker
-                    formControlName="publishedAt"
-                    label="Дата публикации"
-                    [submitted]="submitted"
-                    [showTime]="true"
-                    [required]="false">
-                </app-date-picker>
-
-                <!-- Существующие медиа при редактировании -->
-                <div *ngIf="isEditMode && selectedNews?.media?.length" class="field mb-4">
-                    <label class="block font-medium mb-2">Существующие медиа</label>
-                    <div class="flex flex-wrap gap-2">
-                        <div *ngFor="let media of selectedNews!.media"
-                             class="existing-media-item"
-                             [class.removed]="mediaToRemove.has(media.id)">
-                            <div class="media-preview">
-                                <img *ngIf="media.type === 'image'" [src]="media.url" [alt]="media.fileName">
-                                <i *ngIf="media.type === 'video'" class="pi pi-video text-2xl"></i>
-                                <i *ngIf="media.type === 'document'" class="pi pi-file text-2xl"></i>
-                            </div>
-                            <span class="media-name">{{ media.fileName || 'Файл' }}</span>
-                            <button pButton
-                                    type="button"
-                                    [icon]="mediaToRemove.has(media.id) ? 'pi pi-replay' : 'pi pi-times'"
-                                    [class]="mediaToRemove.has(media.id) ? 'p-button-rounded p-button-success p-button-text p-button-sm' : 'p-button-rounded p-button-danger p-button-text p-button-sm'"
-                                    (click)="toggleMediaRemoval(media.id)"
-                                    [pTooltip]="mediaToRemove.has(media.id) ? 'Восстановить' : 'Удалить'">
-                            </button>
-                        </div>
-                    </div>
-                    <small *ngIf="mediaToRemove.size > 0" class="text-orange-500">
-                        Отмечено к удалению: {{ mediaToRemove.size }}
-                    </small>
-                </div>
-
-                <app-file-upload
-                    [label]="isEditMode ? 'Добавить новые медиа' : 'Медиа файлы'"
-                    [files]="mediaFiles"
-                    [multiple]="true"
-                    accept="image/*,video/*,.pdf,.doc,.docx"
-                    (filesChange)="onFilesChange($event)"
-                    (removeFile)="onRemoveFile($event)">
-                </app-file-upload>
-            </form>
-        </div>
-
-        <!-- Предпросмотр справа -->
-        <div class="w-80 flex-shrink-0">
-            <div class="text-lg font-semibold mb-3">Предпросмотр</div>
-            <div class="news-card surface-card border-round shadow-2 overflow-hidden">
-                <!-- Изображение -->
-                <div class="news-card-image relative">
-                    <img *ngIf="previewMediaUrl"
-                         [src]="previewMediaUrl"
-                         alt="Preview"
-                         class="w-full h-40 object-cover">
-                    <div *ngIf="!previewMediaUrl"
-                         class="w-full h-40 bg-gray-100 flex items-center justify-center">
-                        <i class="pi pi-image text-4xl text-gray-400"></i>
-                    </div>
-
-                    <!-- Категория -->
-                    <div class="absolute top-2 left-2">
-                        <p-tag *ngIf="previewCategory"
-                            [value]="previewCategory.name"
-                            [icon]="previewCategory.icon"
-                            [style]="{ backgroundColor: previewCategory.color, color: 'white' }">
-                        </p-tag>
-                    </div>
-                </div>
-
-                <div class="p-3">
-                    <!-- Заголовок -->
-                    <h3 class="text-base font-semibold m-0 mb-2 line-clamp-2">{{ previewTitle }}</h3>
-
-                    <!-- Контент -->
-                    <p class="text-color-secondary text-sm m-0 mb-3 line-clamp-3">
-                        {{ previewContent }}
-                    </p>
-
-                    <!-- Дата -->
-                    <div class="flex items-center gap-2 text-xs text-color-secondary">
-                        <i class="pi pi-calendar"></i>
-                        {{ previewPublishedAt }}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</app-dialog>
-
-<app-delete-confirmation
-    [(visible)]="displayDeleteDialog"
-    [message]="'Вы уверены, что хотите удалить новость: ' + (selectedNews?.title || '') + '?'"
-    (onConfirm)="confirmDelete()"></app-delete-confirmation>
 
 <!-- Диалог детального просмотра -->
 <p-dialog
     [(visible)]="displayDetailDialog"
-    [header]="selectedNews?.title || 'Новость'"
+    [header]="'Сообщение #' + (selectedMessage?.id || '')"
     [modal]="true"
     [dismissableMask]="true"
     [draggable]="false"
@@ -334,130 +179,159 @@
     [breakpoints]="{ '960px': '90vw' }"
     styleClass="news-detail-dialog">
 
-    <ng-container *ngIf="selectedNews">
-        <!-- Шапка с категорией и статусом -->
-        <div class="flex justify-between items-center mb-4">
-            <p-tag *ngIf="selectedNews.category"
-                [value]="getCategoryLabel(selectedNews.category.type)"
-                [icon]="getCategoryIcon(selectedNews.category.type)"
-                [style]="{ backgroundColor: getCategoryColor(selectedNews.category.type), color: 'white' }">
-            </p-tag>
-            <p-tag
-                [value]="getStatusLabel(selectedNews.status)"
-                [severity]="getStatusSeverity(selectedNews.status)">
-            </p-tag>
-        </div>
-
-        <!-- Галерея медиа -->
-        <div *ngIf="selectedNews.media && selectedNews.media.length > 0" class="mb-4">
-            <!-- Если одно изображение -->
-            <div *ngIf="selectedNews.media.length === 1 && selectedNews.media[0].type === 'image'" class="text-center">
-                <p-image
-                    [src]="selectedNews.media[0].url"
-                    [alt]="selectedNews.title"
-                    [preview]="true"
-                    class="detail-image">
-                    <ng-template #image>
-                        <img [src]="selectedNews.media[0].url"
-                             [alt]="selectedNews.title"
-                             class="w-full border-round"
-                             style="max-height: 400px; object-fit: cover;">
-                    </ng-template>
-                </p-image>
-            </div>
-
-            <!-- Если несколько изображений - галерея -->
-            <p-galleria *ngIf="getImages(selectedNews).length > 1"
-                [value]="getImages(selectedNews)"
-                [numVisible]="5"
-                [circular]="true"
-                [showItemNavigators]="true"
-                [showThumbnails]="true"
-                [responsiveOptions]="galleriaResponsiveOptions"
-                [containerStyle]="{ 'max-width': '100%' }">
-                <ng-template #item let-item>
-                    <img [src]="item.url" [alt]="item.fileName" class="w-full border-round" style="max-height: 400px; object-fit: contain;">
-                </ng-template>
-                <ng-template #thumbnail let-item>
-                    <img [src]="item.url" [alt]="item.fileName" style="width: 80px; height: 60px; object-fit: cover;" class="border-round">
-                </ng-template>
-            </p-galleria>
-
-            <!-- Видео -->
-            <div *ngFor="let media of getVideos(selectedNews)" class="mb-3">
-                <video [src]="media.url" controls class="w-full border-round" style="max-height: 400px;">
-                    Ваш браузер не поддерживает видео.
-                </video>
-            </div>
-
-            <!-- Документы -->
-            <div *ngIf="getDocuments(selectedNews).length > 0" class="mt-3">
-                <div class="text-sm font-semibold mb-2">Прикреплённые документы:</div>
-                <div class="flex flex-wrap gap-2">
-                    <a *ngFor="let doc of getDocuments(selectedNews)"
-                       [href]="doc.url"
-                       target="_blank"
-                       class="flex items-center gap-2 px-3 py-2 surface-100 border-round text-color no-underline hover:surface-200">
-                        <i class="pi pi-file-pdf text-red-500" *ngIf="doc.fileName?.endsWith('.pdf')"></i>
-                        <i class="pi pi-file-word text-blue-500" *ngIf="doc.fileName?.endsWith('.doc') || doc.fileName?.endsWith('.docx')"></i>
-                        <i class="pi pi-file" *ngIf="!doc.fileName?.endsWith('.pdf') && !doc.fileName?.endsWith('.doc') && !doc.fileName?.endsWith('.docx')"></i>
-                        <span class="text-sm">{{ doc.fileName || 'Документ' }}</span>
-                        <i class="pi pi-download text-sm"></i>
-                    </a>
+    @if (selectedMessage) {
+        <!-- Шапка со статистикой -->
+        <div class="flex flex-wrap justify-between items-center mb-4 gap-3">
+            <div class="flex gap-3">
+                <div class="stat-badge">
+                    <i class="pi pi-eye text-blue-500"></i>
+                    <div>
+                        <div class="text-xs text-color-secondary">Просмотры</div>
+                        <div class="font-semibold">{{ selectedMessage.views.toLocaleString('ru-RU') }}</div>
+                    </div>
                 </div>
+                @if (selectedMessage.forwards > 0) {
+                    <div class="stat-badge">
+                        <i class="pi pi-share-alt text-green-500"></i>
+                        <div>
+                            <div class="text-xs text-color-secondary">Пересылки</div>
+                            <div class="font-semibold">{{ selectedMessage.forwards }}</div>
+                        </div>
+                    </div>
+                }
             </div>
+            <p-tag
+                [value]="'#' + selectedMessage.id"
+                severity="info"
+                [style]="{ fontSize: '0.875rem' }">
+            </p-tag>
         </div>
+
+        <!-- Медиа -->
+        @if (hasMedia(selectedMessage)) {
+            <div class="mb-4">
+                <!-- Фото -->
+                @if (isPhoto(selectedMessage)) {
+                    <div class="text-center">
+                        <p-image
+                            [src]="getMediaUrl(selectedMessage)"
+                            [alt]="'Message ' + selectedMessage.id"
+                            [preview]="true"
+                            class="detail-image">
+                            <ng-template #image>
+                                <img [ngSrc]="getMediaUrl(selectedMessage)"
+                                     [alt]="'Message ' + selectedMessage.id"
+                                     class="w-full border-round"
+                                     style="max-height: 500px; object-fit: contain;" fill>
+                            </ng-template>
+                        </p-image>
+                    </div>
+                }
+
+                <!-- Видео -->
+                @if (isVideo(selectedMessage)) {
+                    <div>
+                        <video [src]="getMediaUrl(selectedMessage)"
+                               controls
+                               class="w-full border-round"
+                               style="max-height: 500px;">
+                            Ваш браузер не поддерживает видео.
+                        </video>
+                        @if (selectedMessage.media?.duration) {
+                            <div class="text-xs text-color-secondary mt-2">
+                                <i class="pi pi-clock"></i>
+                                Длительность: {{ selectedMessage!.media!.duration }} сек
+                            </div>
+                        }
+                    </div>
+                }
+
+                <!-- Информация о файле -->
+                @if (selectedMessage.media) {
+                    <div class="mt-3 p-3 surface-100 border-round">
+                        <div class="grid gap-2 text-sm">
+                            @if (selectedMessage.media.file_name) {
+                                <div class="col-12 md:col-6">
+                                    <span class="text-color-secondary">Имя файла:</span>
+                                    <span class="ml-2 font-medium">{{ selectedMessage.media.file_name }}</span>
+                                </div>
+                            }
+                            @if (selectedMessage.media.file_size) {
+                                <div class="col-12 md:col-6">
+                                    <span class="text-color-secondary">Размер:</span>
+                                    <span
+                                        class="ml-2 font-medium">{{ (selectedMessage.media.file_size / 1024 / 1024).toFixed(2) }}
+                                        MB</span>
+                                </div>
+                            }
+                            @if (selectedMessage.media.width && selectedMessage.media.height) {
+                                <div class="col-12 md:col-6">
+                                    <span class="text-color-secondary">Разрешение:</span>
+                                    <span class="ml-2 font-medium">{{ selectedMessage.media.width }}
+                                        × {{ selectedMessage.media.height }}</span>
+                                </div>
+                            }
+                            @if (selectedMessage.media.mime_type) {
+                                <div class="col-12 md:col-6">
+                                    <span class="text-color-secondary">Тип:</span>
+                                    <span class="ml-2 font-medium">{{ selectedMessage.media.mime_type }}</span>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        }
 
         <!-- Placeholder если нет медиа -->
-        <div *ngIf="!selectedNews.media || selectedNews.media.length === 0"
-             class="w-full h-48 bg-gray-100 flex items-center justify-center border-round mb-4">
-            <i class="pi pi-image text-6xl text-gray-400"></i>
-        </div>
+        @if (!hasMedia(selectedMessage)) {
+            <div class="w-full h-48 bg-gray-100 flex items-center justify-center border-round mb-4">
+                <i class="pi pi-comment text-6xl text-gray-400"></i>
+            </div>
+        }
 
         <p-divider></p-divider>
 
-        <!-- Содержание новости -->
-        <div class="news-content text-lg leading-relaxed mb-4" style="white-space: pre-wrap;">{{ selectedNews.content }}</div>
+        <!-- Текст сообщения -->
+        <div class="news-content text-lg leading-relaxed mb-4"
+             style="white-space: pre-wrap;">{{ selectedMessage.text }}
+        </div>
 
         <p-divider></p-divider>
 
         <!-- Метаинформация -->
         <div class="flex flex-wrap gap-4 text-sm text-color-secondary">
             <div class="flex items-center gap-2">
-                <i class="pi pi-link"></i>
-                <span>Источник: {{ getSourceLabel(selectedNews.source) }}</span>
-                <a *ngIf="selectedNews.sourceUrl"
-                   [href]="selectedNews.sourceUrl"
-                   target="_blank"
-                   class="text-primary ml-1">
-                    <i class="pi pi-external-link"></i>
-                </a>
-            </div>
-            <div class="flex items-center gap-2">
                 <i class="pi pi-calendar"></i>
-                <span>Опубликовано: {{ formatDateTime(selectedNews.publishedAt) }}</span>
+                <span>Опубликовано: {{ formatDateTime(selectedMessage.date) }}</span>
             </div>
-            <div class="flex items-center gap-2">
-                <i class="pi pi-clock"></i>
-                <span>Создано: {{ formatDateTime(selectedNews.createdAt) }}</span>
-            </div>
+            @if (selectedMessage.edit_date) {
+                <div class="flex items-center gap-2">
+                    <i class="pi pi-pencil"></i>
+                    <span>Изменено: {{ formatDateTime(selectedMessage.edit_date) }}</span>
+                </div>
+            }
+            @if (selectedMessage.author) {
+                <div class="flex items-center gap-2">
+                    <i class="pi pi-user"></i>
+                    <span>Автор: {{ selectedMessage.author }}</span>
+                </div>
+            }
+            @if (selectedMessage.reply_to_message_id) {
+                <div class="flex items-center gap-2">
+                    <i class="pi pi-reply"></i>
+                    <span>Ответ на: #{{ selectedMessage.reply_to_message_id }}</span>
+                </div>
+            }
         </div>
-    </ng-container>
+    }
 
     <ng-template pTemplate="footer">
-        <div class="flex justify-between w-full">
-            <button pButton
-                    label="Редактировать"
-                    icon="pi pi-pencil"
-                    class="p-button-warning"
-                    (click)="closeDetailDialog(); openEditDialog(selectedNews!)">
-            </button>
-            <button pButton
-                    label="Закрыть"
-                    icon="pi pi-times"
-                    class="p-button-secondary"
-                    (click)="closeDetailDialog()">
-            </button>
-        </div>
+        <button pButton
+                class="p-button-secondary"
+                (click)="closeDetailDialog()">
+            <span pButtonLabel>Закрыть</span>
+            <i pButtonIcon class="pi pi-times"></i>
+        </button>
     </ng-template>
 </p-dialog>
