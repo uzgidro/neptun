@@ -34,6 +34,12 @@
                                     <i class="pi pi-user text-xs mr-1"></i>
                                     {{ reception.visitor }}
                                 </div>
+                                @if (reception.together) {
+                                    <div class="text-sm text-surface-500 mb-2">
+                                        <i class="pi pi-users text-xs mr-1"></i>
+                                        {{ reception.together }}
+                                    </div>
+                                }
                                 <div class="flex items-center gap-2 text-xs text-surface-500">
                                     <i class="pi pi-calendar"></i>
                                     <span>{{ reception.date | date: 'dd.MM.yyyy' }}</span>
@@ -41,8 +47,8 @@
                             </div>
                             <div class="flex-shrink-0">
                                 <p-tag
-                                    [value]="getStatusLabel(reception.status)"
-                                    [severity]="getStatusSeverity(reception.status)"
+                                    [value]="getStatusLabel(reception)"
+                                    [severity]="getStatusSeverity(reception)"
                                     [rounded]="true"
                                 />
                             </div>
@@ -94,8 +100,8 @@
                 <div>
                     <div class="font-semibold text-surface-500 mb-1">Статус</div>
                     <p-tag
-                        [value]="getStatusLabel(selectedReceptionDetails.status)"
-                        [severity]="getStatusSeverity(selectedReceptionDetails.status)"
+                        [value]="getStatusLabel(selectedReceptionDetails)"
+                        [severity]="getStatusSeverity(selectedReceptionDetails)"
                     />
                 </div>
             </div>
@@ -108,11 +114,30 @@
                 </div>
             </div>
 
+            @if (selectedReceptionDetails.together) {
+                <div>
+                    <div class="font-semibold text-surface-500 mb-1">Совместно</div>
+                    <div class="flex items-center gap-2">
+                        <i class="pi pi-users text-surface-500"></i>
+                        <span>{{ selectedReceptionDetails.together }}</span>
+                    </div>
+                </div>
+            }
+
             @if (selectedReceptionDetails.description) {
                 <div>
                     <div class="font-semibold text-surface-500 mb-1">Описание</div>
                     <div class="whitespace-pre-wrap p-3 bg-surface-50 dark:bg-surface-800 rounded-border">
                         {{ selectedReceptionDetails.description }}
+                    </div>
+                </div>
+            }
+
+            @if (selectedReceptionDetails.status_change_reason) {
+                <div>
+                    <div class="font-semibold text-surface-500 mb-1">Комментарий</div>
+                    <div class="whitespace-pre-wrap p-3 bg-surface-50 dark:bg-surface-800 rounded-border">
+                        {{ selectedReceptionDetails.status_change_reason }}
                     </div>
                 </div>
             }
@@ -190,6 +215,11 @@
                     <div class="text-sm text-surface-500">
                         Посетитель: {{ selectedReceptionForReject.visitor }}
                     </div>
+                    @if (selectedReceptionForReject.together) {
+                        <div class="text-sm text-surface-500">
+                            Совместно: {{ selectedReceptionForReject.together }}
+                        </div>
+                    }
                     <div class="text-sm text-surface-500">
                         Дата: {{ selectedReceptionForReject.date | date: 'dd.MM.yyyy HH:mm' }}
                     </div>
@@ -242,6 +272,11 @@
                     <div class="text-sm text-surface-500">
                         Посетитель: {{ selectedReceptionForReschedule.visitor }}
                     </div>
+                    @if (selectedReceptionForReschedule.together) {
+                        <div class="text-sm text-surface-500">
+                            Совместно: {{ selectedReceptionForReschedule.together }}
+                        </div>
+                    }
                     <div class="text-sm text-surface-500">
                         Текущая дата: {{ selectedReceptionForReschedule.date | date: 'dd.MM.yyyy HH:mm' }}
                     </div>

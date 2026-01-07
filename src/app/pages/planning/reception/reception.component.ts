@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Table, TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -50,8 +50,27 @@ export class ReceptionComponent implements OnInit {
             date: [null, Validators.required],
             visitor: ['', Validators.required],
             description: [''],
-            status: ['default']
+            status: ['default'],
+            togetherFields: this.fb.array([this.createTogetherField()])
         });
+    }
+
+    createTogetherField(): FormControl {
+        return new FormControl('');
+    }
+
+    get togetherFields(): FormArray {
+        return this.receptionForm.get('togetherFields') as FormArray;
+    }
+
+    addTogetherField(): void {
+        this.togetherFields.push(this.createTogetherField());
+    }
+
+    removeTogetherField(index: number): void {
+        if (this.togetherFields.length > 1) {
+            this.togetherFields.removeAt(index);
+        }
     }
 
     loadReceptions(): void {
@@ -81,12 +100,28 @@ export class ReceptionComponent implements OnInit {
         this.selectedReception = null;
         this.submitted = false;
         this.receptionForm.reset({ status: 'default' });
+        this.togetherFields.clear();
+        this.togetherFields.push(this.createTogetherField());
         this.dialogVisible.set(true);
     }
 
     editReception(reception: Reception): void {
         this.selectedReception = reception;
         this.submitted = false;
+
+        // Clear existing together fields
+        this.togetherFields.clear();
+
+        // Parse together field if it exists
+        if (reception.together) {
+            const togetherArray = reception.together.split(',').map(item => item.trim());
+            togetherArray.forEach(item => {
+                this.togetherFields.push(new FormControl(item));
+            });
+        } else {
+            this.togetherFields.push(this.createTogetherField());
+        }
+
         this.receptionForm.patchValue({
             name: reception.name,
             date: reception.date,
@@ -170,6 +205,12 @@ export class ReceptionComponent implements OnInit {
 
         const formValue = this.receptionForm.value;
 
+        // Process togetherFields: collect values, replace commas with dots, join with commas
+        const togetherString = formValue.togetherFields
+            .filter((field: string) => field && field.trim())
+            .map((field: string) => field.replace(/,/g, '.'))
+            .join(', ');
+
         if (this.selectedReception) {
             // Edit mode - prepare editRequest structure
             const editRequest: any = {};
@@ -188,6 +229,9 @@ export class ReceptionComponent implements OnInit {
             }
             if (formValue.status !== this.selectedReception.status) {
                 editRequest.status = formValue.status;
+            }
+            if (togetherString !== this.selectedReception.together) {
+                editRequest.together = togetherString || undefined;
             }
 
             this.receptionService.updateReception(this.selectedReception.id, editRequest).subscribe({
@@ -215,7 +259,8 @@ export class ReceptionComponent implements OnInit {
                 name: formValue.name,
                 date: formValue.date,
                 visitor: formValue.visitor,
-                description: formValue.description || undefined
+                description: formValue.description || undefined,
+                together: togetherString || undefined
             };
 
             this.receptionService.createReception(addRequest).subscribe({
@@ -244,6 +289,8 @@ export class ReceptionComponent implements OnInit {
         this.dialogVisible.set(false);
         this.submitted = false;
         this.receptionForm.reset({ status: 'default' });
+        this.togetherFields.clear();
+        this.togetherFields.push(this.createTogetherField());
         this.selectedReception = null;
     }
 
@@ -275,8 +322,11 @@ export class ReceptionComponent implements OnInit {
         return this.authService.isSc();
     }
 
-    getStatusSeverity(status: string): 'success' | 'danger' | 'secondary' {
-        switch (status) {
+    getStatusSeverity(reception: Reception): 'success' | 'danger' | 'secondary' | 'warn' {
+        if (reception.status === 'true' && reception.status_change_reason) {
+            return 'warn';
+        }
+        switch (reception.status) {
             case 'true':
                 return 'success';
             case 'false':
@@ -286,8 +336,11 @@ export class ReceptionComponent implements OnInit {
         }
     }
 
-    getStatusLabel(status: string): string {
-        switch (status) {
+    getStatusLabel(reception: Reception): string {
+        if (reception.status === 'true' && reception.status_change_reason) {
+            return 'Перенесено';
+        }
+        switch (reception.status) {
             case 'true':
                 return 'Одобрено';
             case 'false':

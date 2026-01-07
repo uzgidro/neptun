@@ -6,6 +6,7 @@ export interface Reception {
     date: string | Date;
     description?: string;
     visitor: string;
+    together?: string;
     status: 'default' | 'true' | 'false';
     status_change_reason?: string;
     informed?: boolean;

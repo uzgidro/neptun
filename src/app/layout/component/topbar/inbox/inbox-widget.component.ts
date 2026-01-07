@@ -104,8 +104,11 @@ export class InboxWidget implements OnInit {
         });
     }
 
-    getStatusSeverity(status: string): 'success' | 'danger' | 'secondary' {
-        switch (status) {
+    getStatusSeverity(reception: Reception): 'success' | 'danger' | 'secondary' | 'warn' {
+        if (reception.status === 'true' && reception.status_change_reason) {
+            return 'warn';
+        }
+        switch (reception.status) {
             case 'true':
                 return 'success';
             case 'false':
@@ -115,8 +118,11 @@ export class InboxWidget implements OnInit {
         }
     }
 
-    getStatusLabel(status: string): string {
-        switch (status) {
+    getStatusLabel(reception: Reception): string {
+        if (reception.status === 'true' && reception.status_change_reason) {
+            return 'Перенесено';
+        }
+        switch (reception.status) {
             case 'true':
                 return 'Одобрено';
             case 'false':
