@@ -196,8 +196,13 @@
 
         .layout-topbar-action-emergency {
             font-size: 0.75rem;
-            padding: 0 0.5rem;
+            padding: 0 1rem;
             height: 2rem;
+            border-radius: 9999px; /* Ensure pill shape on mobile */
+
+            i {
+                font-size: 0.9rem;
+            }
         }
 
         .layout-topbar-menu {
@@ -214,9 +219,12 @@
             top: 4rem;
             min-width: 15rem;
             border: 1px solid var(--surface-border);
+            z-index: 999; /* Ensure menu is above other elements */
 
             .layout-topbar-menu-content {
                 gap: 0.5rem;
+                flex-direction: column; /* Stack items vertically */
+                align-items: stretch; /* Stretch items to full width */
             }
 
             .layout-topbar-action {
@@ -225,7 +233,11 @@
                 height: auto;
                 justify-content: flex-start;
                 border-radius: var(--content-border-radius);
-                padding: 0.5rem 1rem;
+                padding: 0.75rem 1rem;
+
+                &:hover {
+                    background-color: var(--surface-hover);
+                }
 
                 i {
                     font-size: 1rem;
@@ -233,14 +245,19 @@
                 }
 
                 span {
-                    font-weight: medium;
-                    display: block;
+                    display: block; /* Show text labels in mobile menu */
                 }
             }
         }
+    }
+}
 
-        .layout-topbar-menu-content {
-            flex-direction: column;
+@media (max-width: 576px) {
+    .layout-topbar {
+        .layout-topbar-logo {
+            span {
+                display: none; /* Hide logo text on very small screens */
+            }
         }
     }
 }
