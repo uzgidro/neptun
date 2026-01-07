@@ -26,9 +26,10 @@
                     <i class="pi pi-search"></i>
                 </p-inputicon>
                 <input
+                    #searchInput
                     pInputText
                     type="text"
-                    (input)="shd.filterGlobal($event.target?.value, 'contains')"
+                    (input)="shd.filterGlobal(searchInput.value, 'contains')"
                     placeholder="Поиск..."
                     class="w-full"
                 />
