@@ -12,6 +12,7 @@ import { MessageService } from 'primeng/api';
 
 import { Reception } from '@/core/interfaces/reception';
 import { ReceptionService } from '@/core/services/reception.service';
+import { AuthService } from '@/core/services/auth.service';
 import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
 import { InputTextComponent } from '@/layout/component/dialog/input-text/input-text.component';
 import { TextareaComponent } from '@/layout/component/dialog/textarea/textarea.component';
@@ -28,6 +29,7 @@ export class ReceptionComponent implements OnInit {
     private receptionService = inject(ReceptionService);
     private messageService = inject(MessageService);
     private fb = inject(FormBuilder);
+    private authService = inject(AuthService);
 
     receptions = signal<Reception[]>([]);
     loading = signal<boolean>(false);
@@ -243,6 +245,34 @@ export class ReceptionComponent implements OnInit {
         this.submitted = false;
         this.receptionForm.reset({ status: 'default' });
         this.selectedReception = null;
+    }
+
+    informReception(reception: Reception): void {
+        this.receptionService.updateReception(reception.id, { informed: true }).subscribe({
+            next: () => {
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Успешно',
+                    detail: 'Прием отмечен как проинформированный'
+                });
+                this.loadReceptions();
+            },
+            error: (err) => {
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Ошибка',
+                    detail: err.message
+                });
+            }
+        });
+    }
+
+    canApproveReject(): boolean {
+        return this.authService.hasRole(['rais', 'assistant']);
+    }
+
+    canInform(): boolean {
+        return this.authService.isSc();
     }
 
     getStatusSeverity(status: string): 'success' | 'danger' | 'secondary' {
