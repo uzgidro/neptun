@@ -122,7 +122,7 @@ export class FinancialDashboardService {
             {
                 title: 'Инвестиции',
                 icon: 'pi pi-chart-line',
-                route: '/investment',
+                route: '/invest-perspective-projects',
                 color: '#10B981',
                 metrics: [
                     { label: 'Дебит', value: inv.totalDebit, format: 'currency', color: 'success' },

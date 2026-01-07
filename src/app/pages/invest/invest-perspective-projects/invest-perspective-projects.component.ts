@@ -13,12 +13,12 @@ import { FileUploadComponent } from '@/layout/component/dialog/file-upload/file-
 import { FileViewerComponent } from '@/layout/component/dialog/file-viewer/file-viewer.component';
 import { FileListComponent } from '@/layout/component/dialog/file-list/file-list.component';
 import { InputTextComponent } from '@/layout/component/dialog/input-text/input-text.component';
-import { FinancialDashboardService } from '../dashboard/services/financial-dashboard.service';
+import { FinancialDashboardService } from '../../financial-block/dashboard/services/financial-dashboard.service';
 import { InvestmentService } from '@/core/services/investment.service';
 import { InvestmentDto, InvestmentStatus } from '@/core/interfaces/investment';
 
 @Component({
-    selector: 'app-investment',
+    selector: 'app-invest-perspective-projects',
     standalone: true,
     imports: [
         CommonModule,
@@ -37,12 +37,20 @@ import { InvestmentDto, InvestmentStatus } from '@/core/interfaces/investment';
         InputTextComponent,
         FormsModule
     ],
-    templateUrl: './investment.component.html',
-    styleUrl: './investment.component.scss'
+    templateUrl: './invest-perspective-projects.component.html',
+    styleUrl: './invest-perspective-projects.component.scss'
 })
-export class InvestmentComponent implements OnInit {
+export class InvestPerspectiveProjectsComponent implements OnInit {
     investments: InvestmentDto[] = [];
     filteredInvestments: InvestmentDto[] = [];
+
+    // Project stages
+    projectStages = [
+        { key: 'Terms of reference', label: 'ТЗ' },
+        { key: 'Feasibility study', label: 'ТЭО' },
+        { key: 'Expertise', label: 'Экспертиза' },
+        { key: 'Statement', label: 'Утверждение' }
+    ];
 
     // Dialog
     isFormOpen = false;
@@ -144,20 +152,8 @@ export class InvestmentComponent implements OnInit {
         this.filteredInvestments = filtered;
     }
 
-    get activePhaseCount(): number {
-        return this.filteredInvestments.filter((i) => i.status.name === 'In Progress').length;
-    }
-
-    get inDevelopmentCount(): number {
-        return this.filteredInvestments.filter((i) => i.status.name === 'Planned').length;
-    }
-
-    get completedCount(): number {
-        return this.filteredInvestments.filter((i) => i.status.name === 'Completed').length;
-    }
-
-    get cancelledCount(): number {
-        return this.filteredInvestments.filter((i) => i.status.name === 'Cancelled').length;
+    getStageCount(stageKey: string): number {
+        return this.filteredInvestments.filter((i) => i.status.description === stageKey).length;
     }
 
     get totalAmount(): number {
@@ -332,5 +328,21 @@ export class InvestmentComponent implements OnInit {
     showFiles(investment: InvestmentDto) {
         this.selectedInvestmentForFiles = investment;
         this.showFilesDialog = true;
+    }
+
+    // Stage helpers
+    isStageActive(statusDescription: string, stageKey: string): boolean {
+        return statusDescription === stageKey;
+    }
+
+    isStageCompleted(statusDescription: string, stageKey: string): boolean {
+        const currentIndex = this.projectStages.findIndex((s) => s.key === statusDescription);
+        const stageIndex = this.projectStages.findIndex((s) => s.key === stageKey);
+        return currentIndex > stageIndex;
+    }
+
+    getStageLabel(statusDescription: string): string {
+        const stage = this.projectStages.find((s) => s.key === statusDescription);
+        return stage ? stage.label : statusDescription;
     }
 }
