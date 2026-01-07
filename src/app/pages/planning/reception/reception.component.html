@@ -59,12 +59,15 @@
                     Статус
                     <p-sortIcon field="status" />
                 </th>
+                <th pSortableColumn="status_change_reason" style="min-width: 15rem">
+                    Комментарий
+                </th>
                 <th style="min-width: 10rem">Действия</th>
             </tr>
         </ng-template>
 
         <ng-template #body let-reception>
-            <tr>
+            <tr (click)="viewReception(reception)" style="cursor: pointer;">
                 <td>{{ reception.name }}</td>
                 <td>{{ reception.date | date: 'dd.MM.yyyy' }}</td>
                 <td>{{ reception.visitor }}</td>
@@ -75,30 +78,49 @@
                 </td>
                 <td>
                     <p-tag
-                        [value]="getStatusLabel(reception.status)"
-                        [severity]="getStatusSeverity(reception.status)"
+                        [value]="getStatusLabel(reception)"
+                        [severity]="getStatusSeverity(reception)"
                     />
                 </td>
                 <td>
+          <span [pTooltip]="reception.status_change_reason || ''" tooltipPosition="top">
+            {{ reception.status_change_reason ? (reception.status_change_reason.length > 50 ? reception.status_change_reason.substring(0, 50) + '...' : reception.status_change_reason) : '-' }}
+          </span>
+                </td>
+                <td (click)="$event.stopPropagation()">
                     <div class="flex gap-2">
-                        <p-button
-                            icon="pi pi-check"
-                            (onClick)="approveReception(reception)"
-                            severity="success"
-                            [text]="true"
-                            [rounded]="true"
-                            pTooltip="Одобрить"
-                            [disabled]="reception.status === 'true'"
-                        />
-                        <p-button
-                            icon="pi pi-times"
-                            (onClick)="rejectReception(reception)"
-                            severity="danger"
-                            [text]="true"
-                            [rounded]="true"
-                            pTooltip="Отклонить"
-                            [disabled]="reception.status === 'false'"
-                        />
+                        @if (canApproveReject()) {
+                            <p-button
+                                icon="pi pi-check"
+                                (onClick)="approveReception(reception)"
+                                severity="success"
+                                [text]="true"
+                                [rounded]="true"
+                                pTooltip="Одобрить"
+                                [disabled]="reception.status === 'true'"
+                            />
+                        }
+                        @if (canApproveReject()) {
+                            <p-button
+                                icon="pi pi-times"
+                                (onClick)="rejectReception(reception)"
+                                severity="danger"
+                                [text]="true"
+                                [rounded]="true"
+                                pTooltip="Отклонить"
+                                [disabled]="reception.status === 'false'"
+                            />
+                        }
+                        @if (canInform(reception)) {
+                            <p-button
+                                icon="pi pi-info-circle"
+                                (onClick)="informReception(reception)"
+                                severity="info"
+                                [text]="true"
+                                [rounded]="true"
+                                pTooltip="Проинформировал"
+                            />
+                        }
                         <p-button
                             icon="pi pi-pencil"
                             (onClick)="editReception(reception)"
@@ -122,13 +144,13 @@
 
         <ng-template #emptymessage>
             <tr>
-                <td colspan="7" class="text-center">Нет данных</td>
+                <td colspan="8" class="text-center">Нет данных</td>
             </tr>
         </ng-template>
 
         <ng-template #loadingbody>
             <tr>
-                <td colspan="7" class="text-center">Загрузка...</td>
+                <td colspan="8" class="text-center">Загрузка...</td>
             </tr>
         </ng-template>
     </p-table>
@@ -165,6 +187,39 @@
             errorMessage="Укажите посетителя"
         />
 
+        <div class="field">
+            <label class="block mb-2">Совместно</label>
+            <div formArrayName="togetherFields">
+                @for (_ of togetherFields.controls; track i; let i = $index) {
+                    <div class="flex gap-2 mb-2">
+                        <input
+                            type="text"
+                            pInputText
+                            [formControlName]="i"
+                            placeholder="ФИО"
+                            class="flex-1"
+                        />
+                        @if (togetherFields.length > 1) {
+                            <p-button
+                                icon="pi pi-trash"
+                                (onClick)="removeTogetherField(i)"
+                                severity="danger"
+                                [outlined]="true"
+                            />
+                        }
+                    </div>
+                }
+            </div>
+            <p-button
+                label="Добавить"
+                icon="pi pi-plus"
+                (onClick)="addTogetherField()"
+                severity="secondary"
+                [outlined]="true"
+                class="mt-2"
+            />
+        </div>
+
         <app-textarea
             label="Описание"
             formControlName="description"
@@ -174,3 +229,127 @@
 
     </form>
 </app-dialog>
+
+<!-- View Dialog -->
+<p-dialog
+    [(visible)]="viewDialogVisible"
+    header="Информация о приеме"
+    [modal]="true"
+    [style]="{ width: '600px' }"
+    [breakpoints]="{ '960px': '75vw', '640px': '90vw' }"
+>
+    @if (selectedReceptionForView) {
+        <div class="flex flex-col gap-4">
+            <div>
+                <div class="font-semibold text-surface-500 mb-1">Название</div>
+                <div class="text-lg">{{ selectedReceptionForView.name }}</div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <div class="font-semibold text-surface-500 mb-1">Дата</div>
+                    <div class="flex items-center gap-2">
+                        <i class="pi pi-calendar text-surface-500"></i>
+                        <span>{{ selectedReceptionForView.date | date: 'dd.MM.yyyy' }}</span>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="font-semibold text-surface-500 mb-1">Статус</div>
+                    <p-tag
+                        [value]="getStatusLabel(selectedReceptionForView)"
+                        [severity]="getStatusSeverity(selectedReceptionForView)"
+                    />
+                </div>
+            </div>
+
+            <div>
+                <div class="font-semibold text-surface-500 mb-1">Посетитель</div>
+                <div class="flex items-center gap-2">
+                    <i class="pi pi-user text-surface-500"></i>
+                    <span>{{ selectedReceptionForView.visitor }}</span>
+                </div>
+            </div>
+
+            @if (selectedReceptionForView.together) {
+                <div>
+                    <div class="font-semibold text-surface-500 mb-1">Совместно</div>
+                    <div class="flex items-center gap-2">
+                        <i class="pi pi-users text-surface-500"></i>
+                        <span>{{ selectedReceptionForView.together }}</span>
+                    </div>
+                </div>
+            }
+
+            @if (selectedReceptionForView.description) {
+                <div>
+                    <div class="font-semibold text-surface-500 mb-1">Описание</div>
+                    <div class="whitespace-pre-wrap p-3 bg-surface-50 dark:bg-surface-800 rounded-border">
+                        {{ selectedReceptionForView.description }}
+                    </div>
+                </div>
+            }
+
+            @if (selectedReceptionForView.status_change_reason) {
+                <div>
+                    <div class="font-semibold text-surface-500 mb-1">Комментарий</div>
+                    <div class="whitespace-pre-wrap p-3 bg-surface-50 dark:bg-surface-800 rounded-border">
+                        {{ selectedReceptionForView.status_change_reason }}
+                    </div>
+                </div>
+            }
+
+            @if (selectedReceptionForView.informed) {
+                <div>
+                    <div class="font-semibold text-surface-500 mb-1">Проинформирован</div>
+                    <div class="flex items-center gap-2">
+                        <i class="pi pi-check-circle text-green-500"></i>
+                        <span>Да</span>
+                        @if (selectedReceptionForView.informed_by) {
+                            <span class="text-surface-500 text-sm">
+                                ({{ selectedReceptionForView.informed_by.name }})
+                            </span>
+                        }
+                    </div>
+                </div>
+            }
+
+            <div class="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                    <div class="font-semibold text-surface-500 mb-1">Создано</div>
+                    <div class="text-surface-600">
+                        {{ selectedReceptionForView.created_at | date: 'dd.MM.yyyy HH:mm' }}
+                    </div>
+                    @if (selectedReceptionForView.created_by) {
+                        <div class="text-surface-500 text-xs mt-1">
+                            {{ selectedReceptionForView.created_by.name }}
+                        </div>
+                    }
+                </div>
+
+                @if (selectedReceptionForView.updated_at) {
+                    <div>
+                        <div class="font-semibold text-surface-500 mb-1">Обновлено</div>
+                        <div class="text-surface-600">
+                            {{ selectedReceptionForView.updated_at | date: 'dd.MM.yyyy HH:mm' }}
+                        </div>
+                        @if (selectedReceptionForView.updated_by) {
+                            <div class="text-surface-500 text-xs mt-1">
+                                {{ selectedReceptionForView.updated_by.name }}
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    }
+
+    <ng-template pTemplate="footer">
+        <p-button
+            label="Закрыть"
+            icon="pi pi-times"
+            severity="secondary"
+            (onClick)="closeViewDialog()"
+        />
+    </ng-template>
+</p-dialog>
