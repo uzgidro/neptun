@@ -1,7 +1,15 @@
 <div class="card">
-    <div class="mb-2">
-        <h2 class="text-2xl font-semibold mb-2">Активные инвестиционные проекты</h2>
-        <p class="text-surface-500">Список активных проектов в сфере энергетики</p>
+    <div class="mb-4 flex justify-between items-start">
+        <div>
+            <h2 class="text-2xl font-semibold mb-2">Активные инвестиционные проекты</h2>
+            <p class="text-surface-500">Список активных проектов в сфере энергетики</p>
+        </div>
+        <button
+            pButton
+            label="Добавить проект"
+            icon="pi pi-plus"
+            (click)="openAddDialog()">
+        </button>
     </div>
 
     @if (loading) {
@@ -93,6 +101,7 @@
                                     Статус
                                     <p-sortIcon field="status_text"></p-sortIcon>
                                 </th>
+                                <th style="width: 10rem">Действия</th>
                             </tr>
                         </ng-template>
 
@@ -139,12 +148,34 @@
                                         <span class="text-surface-400">—</span>
                                     }
                                 </td>
+                                <td>
+                                    <div class="flex gap-2">
+                                        <button
+                                            pButton
+                                            icon="pi pi-pencil"
+                                            severity="secondary"
+                                            [outlined]="true"
+                                            size="small"
+                                            (click)="openEditDialog(project)"
+                                            pTooltip="Редактировать">
+                                        </button>
+                                        <button
+                                            pButton
+                                            icon="pi pi-trash"
+                                            severity="danger"
+                                            [outlined]="true"
+                                            size="small"
+                                            (click)="confirmDelete(project)"
+                                            pTooltip="Удалить">
+                                        </button>
+                                    </div>
+                                </td>
                             </tr>
                         </ng-template>
 
                         <ng-template pTemplate="emptymessage">
                             <tr>
-                                <td colspan="7" class="text-center py-8">
+                                <td colspan="8" class="text-center py-8">
                                     <div class="text-surface-500">
                                         <i class="pi pi-inbox text-4xl mb-3 block"></i>
                                         <div>Проекты не найдены</div>
@@ -229,6 +260,7 @@
                                         Статус
                                         <p-sortIcon field="status_text"></p-sortIcon>
                                     </th>
+                                    <th style="width: 10rem">Действия</th>
                                 </tr>
                             </ng-template>
 
@@ -288,12 +320,34 @@
                                             <span class="text-surface-400">—</span>
                                         }
                                     </td>
+                                    <td>
+                                        <div class="flex gap-2">
+                                            <button
+                                                pButton
+                                                icon="pi pi-pencil"
+                                                severity="secondary"
+                                                [outlined]="true"
+                                                size="small"
+                                                (click)="openEditDialog(project)"
+                                                pTooltip="Редактировать">
+                                            </button>
+                                            <button
+                                                pButton
+                                                icon="pi pi-trash"
+                                                severity="danger"
+                                                [outlined]="true"
+                                                size="small"
+                                                (click)="confirmDelete(project)"
+                                                pTooltip="Удалить">
+                                            </button>
+                                        </div>
+                                    </td>
                                 </tr>
                             </ng-template>
 
                             <ng-template pTemplate="emptymessage">
                                 <tr>
-                                    <td colspan="8" class="text-center py-8">
+                                    <td colspan="7" class="text-center py-8">
                                         <div class="text-surface-500">
                                             <i class="pi pi-inbox text-4xl mb-3 block"></i>
                                             <div>Проекты не найдены</div>
@@ -308,3 +362,10 @@
         </p-tabs>
     }
 </div>
+
+<!-- Диалог добавления/редактирования проекта -->
+<app-invest-project-dialog
+    [(display)]="showProjectDialog"
+    [projectToEdit]="projectToEdit"
+    (save)="loadProjects()">
+</app-invest-project-dialog>

@@ -11,6 +11,7 @@ import { InputText } from 'primeng/inputtext';
 import { ButtonDirective } from 'primeng/button';
 import { Tooltip } from 'primeng/tooltip';
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from 'primeng/tabs';
+import { InvestProjectDialogComponent } from './invest-project-dialog/invest-project-dialog.component';
 
 @Component({
     selector: 'app-invest-active-projects',
@@ -28,7 +29,8 @@ import { Tabs, TabList, Tab, TabPanels, TabPanel } from 'primeng/tabs';
         TabList,
         Tab,
         TabPanels,
-        TabPanel
+        TabPanel,
+        InvestProjectDialogComponent
     ],
     templateUrl: './invest-active-projects.component.html',
     styleUrl: './invest-active-projects.component.scss'
@@ -39,6 +41,10 @@ export class InvestActiveProjectsComponent implements OnInit {
     categories: string[] = [];
     loading = false;
     searchValue: string = '';
+
+    // Диалоги
+    showProjectDialog = false;
+    projectToEdit: InvestActiveProject | null = null;
 
     private projectService = inject(InvestActiveProjectService);
     private messageService = inject(MessageService);
@@ -85,5 +91,41 @@ export class InvestActiveProjectsComponent implements OnInit {
 
     getProjectsForCategory(category: string): InvestActiveProject[] {
         return this.projectsByCategory[category] || [];
+    }
+
+    openAddDialog(): void {
+        this.projectToEdit = null;
+        this.showProjectDialog = true;
+    }
+
+    openEditDialog(project: InvestActiveProject): void {
+        this.projectToEdit = project;
+        this.showProjectDialog = true;
+    }
+
+    confirmDelete(project: InvestActiveProject): void {
+        if (confirm('Вы уверены, что хотите удалить этот проект?')) {
+            this.deleteProject(project.id);
+        }
+    }
+
+    deleteProject(id: number): void {
+        this.projectService.delete(id).subscribe({
+            next: () => {
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Успешно',
+                    detail: 'Проект успешно удален'
+                });
+                this.loadProjects();
+            },
+            error: (err) => {
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Ошибка удаления',
+                    detail: err.error?.message || 'Не удалось удалить проект'
+                });
+            }
+        });
     }
 }
