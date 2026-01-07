@@ -39,6 +39,12 @@ import { AuthService } from '@/core/services/auth.service';
         </div>
 
         <div class="layout-topbar-actions">
+            <!-- Emergency SOS Button -->
+            <a href="tel:112" class="layout-topbar-action-emergency">
+                <i class="pi pi-phone"></i>
+                <span class="emergency-text">SOS</span>
+            </a>
+
             <div class="layout-config-menu">
                 <button type="button" class="layout-topbar-action" (click)="toggleDarkMode()">
                     <i [ngClass]="{ 'pi ': true, 'pi-moon': layoutService.isDarkTheme(), 'pi-sun': !layoutService.isDarkTheme() }"></i>
