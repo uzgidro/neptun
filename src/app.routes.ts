@@ -39,6 +39,7 @@ import { InstructionsComponent } from '@/pages/mail/instructions/instructions.co
 import { ResolutionsComponent } from '@/pages/mail/resolutions/resolutions.component';
 import { CallsComponent } from '@/pages/calls/calls.component';
 import { NewsComponent } from '@/pages/media/news/news.component';
+import { InvestActiveProjectsComponent } from '@/pages/invest/invest-active-projects/invest-active-projects.component';
 
 
 export const appRoutes: Routes = [
@@ -72,7 +73,8 @@ export const appRoutes: Routes = [
             { path: 'reservoir-summary', component: ReservoirsSummaryComponent, canActivate: [raisGuard] },
             { path: 'shutdowns', component: ShutdownComponent, canActivate: [raisGuard] },
             { path: 'financial-dashboard', component: FinancialDashboardComponent, canActivate: [raisGuard] },
-            { path: 'invest', component: InvestPerspectiveProjectsComponent, canActivate: [raisGuard] },
+            { path: 'invest-perspective', component: InvestPerspectiveProjectsComponent, canActivate: [raisGuard] },
+            { path: 'invest-active', component: InvestActiveProjectsComponent, canActivate: [raisGuard] },
             { path: 'debit-credit', component: DebitCreditComponent, canActivate: [raisGuard] },
             { path: 'repair-costs', component: RepairCostsComponent, canActivate: [raisGuard] },
             { path: 'procurement', component: ProcurementComponent, canActivate: [raisGuard] },
