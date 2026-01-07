@@ -8,30 +8,16 @@ import { FormsModule } from '@angular/forms';
 import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
 import { InputText } from 'primeng/inputtext';
-import { ButtonDirective } from 'primeng/button';
+import { ButtonDirective, ButtonIcon, ButtonLabel } from 'primeng/button';
 import { Tooltip } from 'primeng/tooltip';
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from 'primeng/tabs';
 import { InvestProjectDialogComponent } from './invest-project-dialog/invest-project-dialog.component';
+import { AuthService } from '@/core/services/auth.service';
 
 @Component({
     selector: 'app-invest-active-projects',
     standalone: true,
-    imports: [
-        CommonModule,
-        TableModule,
-        FormsModule,
-        IconField,
-        InputIcon,
-        InputText,
-        ButtonDirective,
-        Tooltip,
-        Tabs,
-        TabList,
-        Tab,
-        TabPanels,
-        TabPanel,
-        InvestProjectDialogComponent
-    ],
+    imports: [CommonModule, TableModule, FormsModule, IconField, InputIcon, InputText, ButtonDirective, Tooltip, Tabs, TabList, Tab, TabPanels, TabPanel, InvestProjectDialogComponent, ButtonLabel, ButtonIcon],
     templateUrl: './invest-active-projects.component.html',
     styleUrl: './invest-active-projects.component.scss'
 })
@@ -48,6 +34,11 @@ export class InvestActiveProjectsComponent implements OnInit {
 
     private projectService = inject(InvestActiveProjectService);
     private messageService = inject(MessageService);
+    private authService = inject(AuthService);
+
+    get canEdit(): boolean {
+        return this.authService.hasRole('investment');
+    }
 
     ngOnInit(): void {
         this.loadProjects();

@@ -4,12 +4,14 @@
             <h2 class="text-2xl font-semibold mb-2">Активные инвестиционные проекты</h2>
             <p class="text-surface-500">Список активных проектов в сфере энергетики</p>
         </div>
-        <button
-            pButton
-            label="Добавить проект"
-            icon="pi pi-plus"
-            (click)="openAddDialog()">
-        </button>
+        @if (canEdit) {
+            <button
+                pButton
+                (click)="openAddDialog()">
+                <span pButtonLabel>Добавить проект</span>
+                <i pButtonIcon class="pi pi-plus"></i>
+            </button>
+        }
     </div>
 
     @if (loading) {
@@ -41,7 +43,7 @@
                         [scrollable]="true"
                         scrollHeight="600px"
                         [tableStyle]="{ 'min-width': '100rem' }"
-                        styleClass="p-datatable-gridlines">
+                        class="p-datatable-gridlines">
 
                         <ng-template pTemplate="caption">
                             <div class="flex justify-end items-center">
@@ -62,11 +64,12 @@
                                         type="button"
                                         class="ml-2"
                                         pButton
-                                        icon="pi pi-times"
                                         severity="secondary"
                                         [outlined]="true"
                                         (click)="clear(dtAll)"
-                                        pTooltip="Очистить"></button>
+                                        pTooltip="Очистить">
+                                        <i pButtonIcon class="pi pi-times"></i>
+                                    </button>
                                 }
                             </div>
                         </ng-template>
@@ -101,7 +104,9 @@
                                     Статус
                                     <p-sortIcon field="status_text"></p-sortIcon>
                                 </th>
-                                <th style="width: 10rem">Действия</th>
+                                @if (canEdit) {
+                                    <th style="width: 10rem">Действия</th>
+                                }
                             </tr>
                         </ng-template>
 
@@ -148,34 +153,36 @@
                                         <span class="text-surface-400">—</span>
                                     }
                                 </td>
-                                <td>
-                                    <div class="flex gap-2">
-                                        <button
-                                            pButton
-                                            icon="pi pi-pencil"
-                                            severity="secondary"
-                                            [outlined]="true"
-                                            size="small"
-                                            (click)="openEditDialog(project)"
-                                            pTooltip="Редактировать">
-                                        </button>
-                                        <button
-                                            pButton
-                                            icon="pi pi-trash"
-                                            severity="danger"
-                                            [outlined]="true"
-                                            size="small"
-                                            (click)="confirmDelete(project)"
-                                            pTooltip="Удалить">
-                                        </button>
-                                    </div>
-                                </td>
+                                @if (canEdit) {
+                                    <td>
+                                        <div class="flex gap-2">
+                                            <button
+                                                pButton
+                                                severity="secondary"
+                                                [outlined]="true"
+                                                size="small"
+                                                (click)="openEditDialog(project)"
+                                                pTooltip="Редактировать">
+                                                <i pButtonIcon class="pi pi-pencil"></i>
+                                            </button>
+                                            <button
+                                                pButton
+                                                severity="danger"
+                                                [outlined]="true"
+                                                size="small"
+                                                (click)="confirmDelete(project)"
+                                                pTooltip="Удалить">
+                                                <i pButtonIcon class="pi pi-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                }
                             </tr>
                         </ng-template>
 
                         <ng-template pTemplate="emptymessage">
                             <tr>
-                                <td colspan="8" class="text-center py-8">
+                                <td [attr.colspan]="canEdit ? 8 : 7" class="text-center py-8">
                                     <div class="text-surface-500">
                                         <i class="pi pi-inbox text-4xl mb-3 block"></i>
                                         <div>Проекты не найдены</div>
@@ -196,7 +203,7 @@
                             [scrollable]="true"
                             scrollHeight="600px"
                             [tableStyle]="{ 'min-width': '100rem' }"
-                            styleClass="p-datatable-gridlines">
+                            class="p-datatable-gridlines">
 
                             <ng-template pTemplate="caption">
                                 <div class="flex justify-end items-center">
@@ -217,11 +224,12 @@
                                             type="button"
                                             class="ml-2"
                                             pButton
-                                            icon="pi pi-times"
                                             severity="secondary"
                                             [outlined]="true"
                                             (click)="clear(dt)"
-                                            pTooltip="Очистить"></button>
+                                            pTooltip="Очистить">
+                                            <i pButtonIcon class="pi pi-times"></i>
+                                        </button>
                                     }
                                 </div>
                             </ng-template>
@@ -236,14 +244,6 @@
                                         Название проекта
                                         <p-sortIcon field="project_name"></p-sortIcon>
                                     </th>
-<!--                                    <th style="min-width: 15rem" pSortableColumn="foreign_partner">-->
-<!--                                        Иностранный партнер-->
-<!--                                        <p-sortIcon field="foreign_partner"></p-sortIcon>-->
-<!--                                    </th>-->
-<!--                                    <th style="min-width: 12rem" pSortableColumn="implementation_period">-->
-<!--                                        Период реализации-->
-<!--                                        <p-sortIcon field="implementation_period"></p-sortIcon>-->
-<!--                                    </th>-->
                                     <th style="min-width: 10rem" pSortableColumn="capacity_mw">
                                         Мощность (МВт)
                                         <p-sortIcon field="capacity_mw"></p-sortIcon>
@@ -260,7 +260,9 @@
                                         Статус
                                         <p-sortIcon field="status_text"></p-sortIcon>
                                     </th>
-                                    <th style="width: 10rem">Действия</th>
+                                    @if (canEdit) {
+                                        <th style="width: 10rem">Действия</th>
+                                    }
                                 </tr>
                             </ng-template>
 
@@ -278,20 +280,6 @@
                                             <span>{{ project.implementation_period }}</span>
                                         </div>
                                     </td>
-<!--                                    <td>-->
-<!--                                        @if (project.foreign_partner) {-->
-<!--                                            {{ project.foreign_partner }}-->
-<!--                                        } @else {-->
-<!--                                            <span class="text-surface-400">—</span>-->
-<!--                                        }-->
-<!--                                    </td>-->
-<!--                                    <td>-->
-<!--                                        @if (project.implementation_period) {-->
-<!--                                            {{ project.implementation_period }}-->
-<!--                                        } @else {-->
-<!--                                            <span class="text-surface-400">—</span>-->
-<!--                                        }-->
-<!--                                    </td>-->
                                     <td class="text-right">
                                         @if (project.capacity_mw !== null && project.capacity_mw !== undefined) {
                                             {{ project.capacity_mw | number: '1.2-2' }}
@@ -308,7 +296,8 @@
                                     </td>
                                     <td class="text-right">
                                         @if (project.cost_mln_usd !== null && project.cost_mln_usd !== undefined) {
-                                            <span class="font-semibold">{{ project.cost_mln_usd | number: '1.2-2' }}</span>
+                                            <span
+                                                class="font-semibold">{{ project.cost_mln_usd | number: '1.2-2' }}</span>
                                         } @else {
                                             <span class="text-surface-400">—</span>
                                         }
@@ -320,34 +309,36 @@
                                             <span class="text-surface-400">—</span>
                                         }
                                     </td>
-                                    <td>
-                                        <div class="flex gap-2">
-                                            <button
-                                                pButton
-                                                icon="pi pi-pencil"
-                                                severity="secondary"
-                                                [outlined]="true"
-                                                size="small"
-                                                (click)="openEditDialog(project)"
-                                                pTooltip="Редактировать">
-                                            </button>
-                                            <button
-                                                pButton
-                                                icon="pi pi-trash"
-                                                severity="danger"
-                                                [outlined]="true"
-                                                size="small"
-                                                (click)="confirmDelete(project)"
-                                                pTooltip="Удалить">
-                                            </button>
-                                        </div>
-                                    </td>
+                                    @if (canEdit) {
+                                        <td>
+                                            <div class="flex gap-2">
+                                                <button
+                                                    pButton
+                                                    severity="secondary"
+                                                    [outlined]="true"
+                                                    size="small"
+                                                    (click)="openEditDialog(project)"
+                                                    pTooltip="Редактировать">
+                                                    <i pButtonIcon class="pi pi-pencil"></i>
+                                                </button>
+                                                <button
+                                                    pButton
+                                                    severity="danger"
+                                                    [outlined]="true"
+                                                    size="small"
+                                                    (click)="confirmDelete(project)"
+                                                    pTooltip="Удалить">
+                                                    <i pButtonIcon class="pi pi-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    }
                                 </tr>
                             </ng-template>
 
                             <ng-template pTemplate="emptymessage">
                                 <tr>
-                                    <td colspan="7" class="text-center py-8">
+                                    <td [attr.colspan]="canEdit ? 7 : 6" class="text-center py-8">
                                         <div class="text-surface-500">
                                             <i class="pi pi-inbox text-4xl mb-3 block"></i>
                                             <div>Проекты не найдены</div>
