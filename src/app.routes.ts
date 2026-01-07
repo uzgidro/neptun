@@ -25,7 +25,7 @@ import { DischargesComponent } from '@/pages/situation-center/ges/discharges/dis
 import { VisitsComponent } from '@/pages/situation-center/other/visits/visits.component';
 import { IncidentsComponent } from '@/pages/situation-center/other/incidents/incidents.component';
 import { ReservoirsDeviceComponent } from '@/pages/situation-center/reservoirs-info/reservoirs-device/reservoirs-device.component';
-import { InvestmentComponent } from '@/pages/financial-block/investment/investment.component';
+import { InvestPerspectiveProjectsComponent } from '@/pages/invest/invest-perspective-projects/invest-perspective-projects.component';
 import { DebitCreditComponent } from '@/pages/financial-block/debit-credit/debit-credit.component';
 import { RepairCostsComponent } from '@/pages/financial-block/repair-costs/repair-costs.component';
 import { ProcurementComponent } from '@/pages/financial-block/procurement/procurement.component';
@@ -72,7 +72,7 @@ export const appRoutes: Routes = [
             { path: 'reservoir-summary', component: ReservoirsSummaryComponent, canActivate: [raisGuard] },
             { path: 'shutdowns', component: ShutdownComponent, canActivate: [raisGuard] },
             { path: 'financial-dashboard', component: FinancialDashboardComponent, canActivate: [raisGuard] },
-            { path: 'invest', component: InvestmentComponent, canActivate: [raisGuard] },
+            { path: 'invest', component: InvestPerspectiveProjectsComponent, canActivate: [raisGuard] },
             { path: 'debit-credit', component: DebitCreditComponent, canActivate: [raisGuard] },
             { path: 'repair-costs', component: RepairCostsComponent, canActivate: [raisGuard] },
             { path: 'procurement', component: ProcurementComponent, canActivate: [raisGuard] },
