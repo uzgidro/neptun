@@ -59,7 +59,7 @@ export class MenuComponent implements OnInit {
                                         routerLinkActiveOptions: { queryParams: 'exact' }
                                     },
                                     {
-                                        label: 'Солнце',
+                                        label: 'Солнечные станции',
                                         role: ['rais', 'sc'],
                                         routerLink: ['/viewer'],
                                         queryParams: { type: 'sun' },
@@ -157,7 +157,7 @@ export class MenuComponent implements OnInit {
                             // { label: 'Переговоры', role: ['rais'], routerLink: ['/planning'], queryParams: { type: 'negotiation' }, routerLinkActiveOptions: { queryParams: 'exact' } },
                             // { label: 'ВКС', role: ['rais'], routerLink: ['/planning'], queryParams: { type: 'vcs' }, routerLinkActiveOptions: { queryParams: 'exact' } },
                             { label: 'События', role: ['rais', 'assistant'], routerLink: ['/planning/events'] },
-                            { label: 'Приемная', role: ['rais', 'assistant', 'sc'], routerLink: ['/planning/reception'] }
+                            { label: 'Приемная Председателя Правления', role: ['rais', 'assistant', 'sc'], routerLink: ['/planning/reception'] }
                         ]
                     },
                     {

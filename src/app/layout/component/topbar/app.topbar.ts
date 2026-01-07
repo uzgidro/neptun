@@ -28,7 +28,7 @@ import { AuthService } from '@/core/services/auth.service';
             </button>
             <a class="layout-topbar-logo" routerLink="/">
                 <img ngSrc="/images/logo-x.png" alt="" width="52" height="22" />
-                <span class="text-nowrap"
+                <span class="text-nowrap hidden lg:inline"
                     >Планшет
                     @if (authService.hasRole('first deputy')) {
                         <span>Первого заместителя</span>
@@ -39,6 +39,12 @@ import { AuthService } from '@/core/services/auth.service';
         </div>
 
         <div class="layout-topbar-actions">
+            <!-- Emergency SOS Button -->
+            <a href="tel:112" class="layout-topbar-action-emergency">
+                <i class="pi pi-phone"></i>
+                <span class="emergency-text">SOS</span>
+            </a>
+
             <div class="layout-config-menu">
                 <button type="button" class="layout-topbar-action" (click)="toggleDarkMode()">
                     <i [ngClass]="{ 'pi ': true, 'pi-moon': layoutService.isDarkTheme(), 'pi-sun': !layoutService.isDarkTheme() }"></i>
@@ -63,11 +69,11 @@ import { AuthService } from '@/core/services/auth.service';
                 <i class="pi pi-ellipsis-v"></i>
             </button>
 
-            <!-- Fast calls -->
-            <app-fast-call></app-fast-call>
-
             <div class="layout-topbar-menu hidden lg:block">
                 <div class="layout-topbar-menu-content">
+                    <!-- Fast calls -->
+                    <app-fast-call></app-fast-call>
+
                     <!--  Calendar  -->
                     <app-topbar-calendar></app-topbar-calendar>
 
