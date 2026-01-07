@@ -1,1 +1,310 @@
-<p>invest-active-projects works!</p>
+<div class="card">
+    <div class="mb-2">
+        <h2 class="text-2xl font-semibold mb-2">Активные инвестиционные проекты</h2>
+        <p class="text-surface-500">Список активных проектов в сфере энергетики</p>
+    </div>
+
+    @if (loading) {
+        <div class="flex items-center justify-center py-8">
+            <i class="pi pi-spin pi-spinner text-4xl text-surface-400"></i>
+            <span class="ml-3 text-lg">Загрузка данных...</span>
+        </div>
+    } @else if (categories.length === 0) {
+        <div class="text-center py-8 text-surface-500">
+            <i class="pi pi-inbox text-4xl mb-3 block"></i>
+            <div>Проекты не найдены</div>
+        </div>
+    } @else {
+        <p-tabs [value]="0">
+            <p-tablist>
+                <p-tab [value]="0">Все ({{ projects.length }})</p-tab>
+                @for (category of categories; track category; let idx = $index) {
+                    <p-tab [value]="idx + 1">{{ category }} ({{ getProjectsForCategory(category).length }})</p-tab>
+                }
+            </p-tablist>
+
+            <p-tabpanels>
+                <p-tabpanel [value]="0">
+                    <p-table
+                        #dtAll
+                        [value]="projects"
+                        [globalFilterFields]="['category', 'project_name', 'foreign_partner', 'implementation_period', 'status_text']"
+                        dataKey="id"
+                        [scrollable]="true"
+                        scrollHeight="600px"
+                        [tableStyle]="{ 'min-width': '100rem' }"
+                        styleClass="p-datatable-gridlines">
+
+                        <ng-template pTemplate="caption">
+                            <div class="flex justify-end items-center">
+                                <p-iconfield iconPosition="left">
+                                    <p-inputicon>
+                                        <i class="pi pi-search"></i>
+                                    </p-inputicon>
+                                    <input
+                                        pInputText
+                                        type="text"
+                                        [(ngModel)]="searchValue"
+                                        (input)="dtAll.filterGlobal($any($event.target).value, 'contains')"
+                                        placeholder="Поиск..."
+                                        class="w-full" />
+                                </p-iconfield>
+                                @if (searchValue) {
+                                    <button
+                                        type="button"
+                                        class="ml-2"
+                                        pButton
+                                        icon="pi pi-times"
+                                        severity="secondary"
+                                        [outlined]="true"
+                                        (click)="clear(dtAll)"
+                                        pTooltip="Очистить"></button>
+                                }
+                            </div>
+                        </ng-template>
+
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th style="width: 5rem" pSortableColumn="id">
+                                    ID
+                                    <p-sortIcon field="id"></p-sortIcon>
+                                </th>
+                                <th style="min-width: 12rem" pSortableColumn="category">
+                                    Категория
+                                    <p-sortIcon field="category"></p-sortIcon>
+                                </th>
+                                <th style="min-width: 20rem" pSortableColumn="project_name">
+                                    Название проекта
+                                    <p-sortIcon field="project_name"></p-sortIcon>
+                                </th>
+                                <th style="min-width: 10rem" pSortableColumn="capacity_mw">
+                                    Мощность (МВт)
+                                    <p-sortIcon field="capacity_mw"></p-sortIcon>
+                                </th>
+                                <th style="min-width: 12rem" pSortableColumn="production_mln_kwh">
+                                    Производство (млн. кВт⋅ч)
+                                    <p-sortIcon field="production_mln_kwh"></p-sortIcon>
+                                </th>
+                                <th style="min-width: 12rem" pSortableColumn="cost_mln_usd">
+                                    Стоимость (млн. USD)
+                                    <p-sortIcon field="cost_mln_usd"></p-sortIcon>
+                                </th>
+                                <th style="min-width: 15rem" pSortableColumn="status_text">
+                                    Статус
+                                    <p-sortIcon field="status_text"></p-sortIcon>
+                                </th>
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="body" let-project>
+                            <tr>
+                                <td>{{ project.id }}</td>
+                                <td>{{ project.category }}</td>
+                                <td>
+                                    <div class="font-semibold mb-4">{{ project.project_name }}</div>
+                                    <div class="mb-4">
+                                        <span class="font-semibold">Иностранный партнер:</span>
+                                        <span>{{ project.foreign_partner }}</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-semibold">Срок исполнения:</span>
+                                        <span>{{ project.implementation_period }}</span>
+                                    </div>
+                                </td>
+                                <td class="text-right">
+                                    @if (project.capacity_mw !== null && project.capacity_mw !== undefined) {
+                                        {{ project.capacity_mw | number: '1.2-2' }}
+                                    } @else {
+                                        <span class="text-surface-400">—</span>
+                                    }
+                                </td>
+                                <td class="text-right">
+                                    @if (project.production_mln_kwh !== null && project.production_mln_kwh !== undefined) {
+                                        {{ project.production_mln_kwh | number: '1.2-2' }}
+                                    } @else {
+                                        <span class="text-surface-400">—</span>
+                                    }
+                                </td>
+                                <td class="text-right">
+                                    @if (project.cost_mln_usd !== null && project.cost_mln_usd !== undefined) {
+                                        <span class="font-semibold">{{ project.cost_mln_usd | number: '1.2-2' }}</span>
+                                    } @else {
+                                        <span class="text-surface-400">—</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (project.status_text) {
+                                        <span class="whitespace-pre-line">{{ project.status_text }}</span>
+                                    } @else {
+                                        <span class="text-surface-400">—</span>
+                                    }
+                                </td>
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td colspan="7" class="text-center py-8">
+                                    <div class="text-surface-500">
+                                        <i class="pi pi-inbox text-4xl mb-3 block"></i>
+                                        <div>Проекты не найдены</div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </p-tabpanel>
+
+                @for (category of categories; track category; let idx = $index) {
+                    <p-tabpanel [value]="idx + 1">
+                        <p-table
+                            #dt
+                            [value]="getProjectsForCategory(category)"
+                            [globalFilterFields]="['project_name', 'foreign_partner', 'implementation_period', 'status_text']"
+                            dataKey="id"
+                            [scrollable]="true"
+                            scrollHeight="600px"
+                            [tableStyle]="{ 'min-width': '100rem' }"
+                            styleClass="p-datatable-gridlines">
+
+                            <ng-template pTemplate="caption">
+                                <div class="flex justify-end items-center">
+                                    <p-iconfield iconPosition="left">
+                                        <p-inputicon>
+                                            <i class="pi pi-search"></i>
+                                        </p-inputicon>
+                                        <input
+                                            pInputText
+                                            type="text"
+                                            [(ngModel)]="searchValue"
+                                            (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                                            placeholder="Поиск..."
+                                            class="w-full" />
+                                    </p-iconfield>
+                                    @if (searchValue) {
+                                        <button
+                                            type="button"
+                                            class="ml-2"
+                                            pButton
+                                            icon="pi pi-times"
+                                            severity="secondary"
+                                            [outlined]="true"
+                                            (click)="clear(dt)"
+                                            pTooltip="Очистить"></button>
+                                    }
+                                </div>
+                            </ng-template>
+
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th style="width: 5rem" pSortableColumn="id">
+                                        ID
+                                        <p-sortIcon field="id"></p-sortIcon>
+                                    </th>
+                                    <th style="min-width: 20rem" pSortableColumn="project_name">
+                                        Название проекта
+                                        <p-sortIcon field="project_name"></p-sortIcon>
+                                    </th>
+<!--                                    <th style="min-width: 15rem" pSortableColumn="foreign_partner">-->
+<!--                                        Иностранный партнер-->
+<!--                                        <p-sortIcon field="foreign_partner"></p-sortIcon>-->
+<!--                                    </th>-->
+<!--                                    <th style="min-width: 12rem" pSortableColumn="implementation_period">-->
+<!--                                        Период реализации-->
+<!--                                        <p-sortIcon field="implementation_period"></p-sortIcon>-->
+<!--                                    </th>-->
+                                    <th style="min-width: 10rem" pSortableColumn="capacity_mw">
+                                        Мощность (МВт)
+                                        <p-sortIcon field="capacity_mw"></p-sortIcon>
+                                    </th>
+                                    <th style="min-width: 12rem" pSortableColumn="production_mln_kwh">
+                                        Производство (млн. кВт⋅ч)
+                                        <p-sortIcon field="production_mln_kwh"></p-sortIcon>
+                                    </th>
+                                    <th style="min-width: 12rem" pSortableColumn="cost_mln_usd">
+                                        Стоимость (млн. USD)
+                                        <p-sortIcon field="cost_mln_usd"></p-sortIcon>
+                                    </th>
+                                    <th style="min-width: 15rem" pSortableColumn="status_text">
+                                        Статус
+                                        <p-sortIcon field="status_text"></p-sortIcon>
+                                    </th>
+                                </tr>
+                            </ng-template>
+
+                            <ng-template pTemplate="body" let-project>
+                                <tr>
+                                    <td>{{ project.id }}</td>
+                                    <td>
+                                        <div class="font-semibold mb-4">{{ project.project_name }}</div>
+                                        <div class="mb-4">
+                                            <span class="font-semibold">Иностранный партнер:</span>
+                                            <span>{{ project.foreign_partner }}</span>
+                                        </div>
+                                        <div>
+                                            <span class="font-semibold">Срок исполнения:</span>
+                                            <span>{{ project.implementation_period }}</span>
+                                        </div>
+                                    </td>
+<!--                                    <td>-->
+<!--                                        @if (project.foreign_partner) {-->
+<!--                                            {{ project.foreign_partner }}-->
+<!--                                        } @else {-->
+<!--                                            <span class="text-surface-400">—</span>-->
+<!--                                        }-->
+<!--                                    </td>-->
+<!--                                    <td>-->
+<!--                                        @if (project.implementation_period) {-->
+<!--                                            {{ project.implementation_period }}-->
+<!--                                        } @else {-->
+<!--                                            <span class="text-surface-400">—</span>-->
+<!--                                        }-->
+<!--                                    </td>-->
+                                    <td class="text-right">
+                                        @if (project.capacity_mw !== null && project.capacity_mw !== undefined) {
+                                            {{ project.capacity_mw | number: '1.2-2' }}
+                                        } @else {
+                                            <span class="text-surface-400">—</span>
+                                        }
+                                    </td>
+                                    <td class="text-right">
+                                        @if (project.production_mln_kwh !== null && project.production_mln_kwh !== undefined) {
+                                            {{ project.production_mln_kwh | number: '1.2-2' }}
+                                        } @else {
+                                            <span class="text-surface-400">—</span>
+                                        }
+                                    </td>
+                                    <td class="text-right">
+                                        @if (project.cost_mln_usd !== null && project.cost_mln_usd !== undefined) {
+                                            <span class="font-semibold">{{ project.cost_mln_usd | number: '1.2-2' }}</span>
+                                        } @else {
+                                            <span class="text-surface-400">—</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (project.status_text) {
+                                            <span class="whitespace-pre-line">{{ project.status_text }}</span>
+                                        } @else {
+                                            <span class="text-surface-400">—</span>
+                                        }
+                                    </td>
+                                </tr>
+                            </ng-template>
+
+                            <ng-template pTemplate="emptymessage">
+                                <tr>
+                                    <td colspan="8" class="text-center py-8">
+                                        <div class="text-surface-500">
+                                            <i class="pi pi-inbox text-4xl mb-3 block"></i>
+                                            <div>Проекты не найдены</div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </p-tabpanel>
+                }
+            </p-tabpanels>
+        </p-tabs>
+    }
+</div>
