@@ -5,6 +5,7 @@ export interface Reception {
     description?: string;
     visitor: string;
     status: 'default' | 'true' | 'false';
+    status_change_reason?: string;
     created_at: string | Date;
     updated_at?: string | Date;
     created_by_id: number;

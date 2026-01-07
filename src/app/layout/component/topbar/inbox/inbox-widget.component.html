@@ -9,7 +9,7 @@
     <span>Приемная</span>
 </button>
 
-<p-popover #inboxPopover [style]="{ width: '400px', maxHeight: '500px' }">
+<p-popover #inboxPopover (onShow)="onPopoverShow()" [style]="{ width: '400px', maxHeight: '500px' }">
     <ng-template pTemplate="content">
         <div class="p-4 border-b border-surface">
             <div class="font-semibold text-lg">Ожидающие приемы</div>
@@ -162,7 +162,126 @@
                     severity="danger"
                     (onClick)="rejectReception(selectedReceptionDetails)"
                 />
+                <p-button
+                    label="Перенести"
+                    icon="pi pi-calendar"
+                    severity="secondary"
+                    [outlined]="true"
+                    (onClick)="openRescheduleDialog(selectedReceptionDetails)"
+                />
             </div>
         }
+    </ng-template>
+</p-dialog>
+
+<!-- Reject Dialog -->
+<p-dialog
+    [(visible)]="rejectDialogVisible"
+    header="Отклонить прием"
+    [modal]="true"
+    [style]="{ width: '500px' }"
+    [breakpoints]="{ '960px': '75vw', '640px': '90vw' }"
+>
+    <form [formGroup]="rejectForm" (ngSubmit)="saveRejection()">
+        <div class="flex flex-col gap-4">
+            @if (selectedReceptionForReject) {
+                <div class="p-3 bg-surface-50 dark:bg-surface-800 rounded-border">
+                    <div class="font-semibold mb-1">{{ selectedReceptionForReject.name }}</div>
+                    <div class="text-sm text-surface-500">
+                        Посетитель: {{ selectedReceptionForReject.visitor }}
+                    </div>
+                    <div class="text-sm text-surface-500">
+                        Дата: {{ selectedReceptionForReject.date | date: 'dd.MM.yyyy HH:mm' }}
+                    </div>
+                </div>
+            }
+
+            <app-textarea
+                label="Причина отклонения"
+                formControlName="reason"
+                [submitted]="submittedReject"
+                [required]="true"
+                errorMessage="Укажите причину отклонения"
+            />
+        </div>
+    </form>
+
+    <ng-template #footer>
+        <div class="flex gap-2">
+            <p-button
+                label="Отмена"
+                icon="pi pi-times"
+                severity="secondary"
+                [outlined]="true"
+                (onClick)="closeRejectDialog()"
+            />
+            <p-button
+                label="Отклонить"
+                icon="pi pi-check"
+                severity="danger"
+                (onClick)="saveRejection()"
+            />
+        </div>
+    </ng-template>
+</p-dialog>
+
+<!-- Reschedule Dialog -->
+<p-dialog
+    [(visible)]="rescheduleDialogVisible"
+    header="Перенести прием"
+    [modal]="true"
+    [style]="{ width: '500px' }"
+    [breakpoints]="{ '960px': '75vw', '640px': '90vw' }"
+>
+    <form [formGroup]="rescheduleForm" (ngSubmit)="saveReschedule()">
+        <div class="flex flex-col gap-4">
+            @if (selectedReceptionForReschedule) {
+                <div class="p-3 bg-surface-50 dark:bg-surface-800 rounded-border">
+                    <div class="font-semibold mb-1">Текущий прием:</div>
+                    <div class="text-sm">{{ selectedReceptionForReschedule.name }}</div>
+                    <div class="text-sm text-surface-500">
+                        Посетитель: {{ selectedReceptionForReschedule.visitor }}
+                    </div>
+                    <div class="text-sm text-surface-500">
+                        Текущая дата: {{ selectedReceptionForReschedule.date | date: 'dd.MM.yyyy HH:mm' }}
+                    </div>
+                </div>
+            }
+
+            <app-date-picker
+                label="Новая дата и время"
+                formControlName="date"
+                [submitted]="submittedReschedule"
+                [showTime]="true"
+                [required]="true"
+                errorMessage="Укажите новую дату и время"
+            />
+
+            <app-textarea
+                label="Причина переноса"
+                formControlName="reason"
+                [submitted]="submittedReschedule"
+                [required]="true"
+                errorMessage="Укажите причину переноса"
+            />
+        </div>
+    </form>
+
+    <ng-template #footer>
+        <div class="flex gap-2">
+            <p-button
+                label="Отмена"
+                icon="pi pi-times"
+                severity="secondary"
+                [outlined]="true"
+                (onClick)="closeRescheduleDialog()"
+            />
+            <p-button
+                label="Сохранить"
+                icon="pi pi-check"
+                severity="primary"
+                (onClick)="saveReschedule()"
+            />
+        </div>
     </ng-template>
 </p-dialog>
