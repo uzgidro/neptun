@@ -8,7 +8,8 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
-import { MessageService } from 'primeng/api';
+import { DialogModule } from 'primeng/dialog';
+import { MessageService, PrimeTemplate } from 'primeng/api';
 
 import { Reception } from '@/core/interfaces/reception';
 import { ReceptionService } from '@/core/services/reception.service';
@@ -21,7 +22,7 @@ import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-
 @Component({
     selector: 'app-reception',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, TableModule, ButtonModule, InputTextModule, IconFieldModule, InputIconModule, TagModule, TooltipModule, DialogComponent, InputTextComponent, TextareaComponent, DatePickerComponent],
+    imports: [CommonModule, ReactiveFormsModule, TableModule, ButtonModule, InputTextModule, IconFieldModule, InputIconModule, TagModule, TooltipModule, DialogModule, PrimeTemplate, DialogComponent, InputTextComponent, TextareaComponent, DatePickerComponent],
     templateUrl: './reception.component.html',
     styleUrl: './reception.component.scss'
 })
@@ -38,6 +39,10 @@ export class ReceptionComponent implements OnInit {
     selectedReception: Reception | null = null;
     receptionForm!: FormGroup;
     submitted = false;
+
+    // View dialog
+    viewDialogVisible = false;
+    selectedReceptionForView: Reception | null = null;
 
     ngOnInit(): void {
         this.initForm();
@@ -318,8 +323,18 @@ export class ReceptionComponent implements OnInit {
         return this.authService.hasRole(['rais', 'assistant']);
     }
 
-    canInform(): boolean {
-        return this.authService.isSc();
+    canInform(reception: Reception): boolean {
+        return this.authService.isSc() && !reception.informed;
+    }
+
+    viewReception(reception: Reception): void {
+        this.selectedReceptionForView = reception;
+        this.viewDialogVisible = true;
+    }
+
+    closeViewDialog(): void {
+        this.viewDialogVisible = false;
+        this.selectedReceptionForView = null;
     }
 
     getStatusSeverity(reception: Reception): 'success' | 'danger' | 'secondary' | 'warn' {
