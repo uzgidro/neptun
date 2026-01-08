@@ -6,11 +6,26 @@
             <i class="pi pi-bolt text-purple-500 text-xl!"></i>
         </div>
     </div>
-    <div class="text-surface-900 dark:text-surface-0 font-medium text-xl mb-1">
-        10,761 млн КВт/ч
-    </div>
-    <div class="flex gap-1.5">
-        <span class="text-primary font-medium">+0,338</span>
-        <span class="text-muted-color">за сутки</span>
-    </div>
+    @if (isLoading) {
+        <div class="animate-pulse">
+            <div class="h-8 bg-gray-200 rounded mb-2 w-3/4"></div>
+            <div class="h-5 bg-gray-200 rounded w-1/2"></div>
+        </div>
+    } @else if (data) {
+        <div class="text-surface-900 dark:text-surface-0 font-medium text-xl mb-1">
+            {{ data.value | number: '1.0-3' }} млн КВт/ч
+        </div>
+        <div class="flex gap-1.5">
+            <span class="font-medium" [ngClass]="{
+                'text-green-500': data.change_direction === 'up',
+                'text-red-500': data.change_direction === 'down',
+                'text-muted-color': data.change_direction === 'neutral'
+            }">
+                {{ data.change_direction === 'up' ? '+' : (data.change_direction === 'down' ? '-' : '') }}{{ data.change_percent | number: '1.0-2' }}%
+            </span>
+            <span class="text-muted-color">за сутки</span>
+        </div>
+    } @else {
+        <div class="text-muted-color text-sm">Нет данных</div>
+    }
 </div>
