@@ -180,6 +180,20 @@ export class ReservoirsSummaryComponent implements OnInit {
         reservoir.incoming_volume_prev_year_is_calculated = false;
     }
 
+    getIncomingVolumeTooltip(reservoir: ReservoirSummaryResponse): string {
+        if (reservoir.incoming_volume_base_date || reservoir.incoming_volume_base_value != null) {
+            return `Базовая дата: ${reservoir.incoming_volume_base_date || '-'}\nБазовое значение: ${reservoir.incoming_volume_base_value != null ? reservoir.incoming_volume_base_value : '-'}`;
+        }
+        return '';
+    }
+
+    getIncomingVolumePrevYearTooltip(reservoir: ReservoirSummaryResponse): string {
+        if (reservoir.incoming_volume_prev_year_base_date || reservoir.incoming_volume_prev_year_base_value != null) {
+            return `Базовая дата: ${reservoir.incoming_volume_prev_year_base_date || '-'}\nБазовое значение: ${reservoir.incoming_volume_prev_year_base_value != null ? reservoir.incoming_volume_prev_year_base_value : '-'}`;
+        }
+        return '';
+    }
+
     onInputFocus(event: FocusEvent, obj: any, field: string) {
         // Clear the input if the value is 0
         if (obj[field] === 0) {

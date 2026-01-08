@@ -178,7 +178,8 @@
                     @if (index <= 6) {
                         @if (authService.isSc() && index !== 6) {
                             <td [pEditableColumn]="reservoir" pEditableColumnField="incoming_volume" class="text-nowrap"
-                                [ngClass]="{'bg-blue-100 dark:bg-blue-900': reservoir.incoming_volume_is_calculated, 'bg-green-100 dark:bg-green-900': reservoir.incoming_volume_is_reset}">
+                                [ngClass]="{'bg-blue-100 dark:bg-blue-900': reservoir.incoming_volume_is_calculated, 'bg-green-100 dark:bg-green-900': reservoir.incoming_volume_is_reset}"
+                                [pTooltip]="getIncomingVolumeTooltip(reservoir)" tooltipPosition="top">
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
                                         <div class="flex gap-1 items-center">
@@ -197,7 +198,8 @@
                             </td>
                             <td [pEditableColumn]="reservoir" pEditableColumnField="incoming_volume_prev_year"
                                 class="text-nowrap"
-                                [ngClass]="{'bg-blue-100 dark:bg-blue-900': reservoir.incoming_volume_prev_year_is_calculated, 'bg-green-100 dark:bg-green-900': reservoir.incoming_volume_prev_year_is_reset}">
+                                [ngClass]="{'bg-blue-100 dark:bg-blue-900': reservoir.incoming_volume_prev_year_is_calculated, 'bg-green-100 dark:bg-green-900': reservoir.incoming_volume_prev_year_is_reset}"
+                                [pTooltip]="getIncomingVolumePrevYearTooltip(reservoir)" tooltipPosition="top">
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
                                         <div class="flex gap-1 items-center">

@@ -20,6 +20,10 @@ export interface ReservoirSummaryResponse {
     incoming_volume_prev_year_is_calculated: boolean;
     incoming_volume_is_reset?: boolean;
     incoming_volume_prev_year_is_reset?: boolean;
+    incoming_volume_base_date?: string;
+    incoming_volume_base_value?: number;
+    incoming_volume_prev_year_base_date?: string;
+    incoming_volume_prev_year_base_value?: number;
 }
 
 export interface ReservoirSummaryRequest {
