@@ -14,10 +14,12 @@ export interface ReservoirSummaryResponse {
     level: ValueResponse;
     release: ValueResponse;
     modsnow: ValueResponse;
-    incoming_volume: number;
-    incoming_volume_prev_year: number;
+    incoming_volume: number | null;
+    incoming_volume_prev_year: number | null;
     incoming_volume_is_calculated: boolean;
     incoming_volume_prev_year_is_calculated: boolean;
+    incoming_volume_is_reset?: boolean;
+    incoming_volume_prev_year_is_reset?: boolean;
 }
 
 export interface ReservoirSummaryRequest {
@@ -29,6 +31,6 @@ export interface ReservoirSummaryRequest {
     level: number;
     modsnow_current: number;
     modsnow_year_ago: number;
-    total_income_volume: number;
-    total_income_volume_prev_year: number;
+    total_income_volume?: number | null;
+    total_income_volume_prev_year?: number | null;
 }

@@ -15,12 +15,13 @@ import { saveAs } from 'file-saver';
 import { LevelVolumeService } from '@/core/services/level-volume.service';
 import { LevelVolume } from '@/core/interfaces/level-volume';
 import { DateWidget } from '@/layout/component/widget/date/date.widget';
+import { TooltipModule } from 'primeng/tooltip';
 
 registerLocaleData(localeRu);
 
 @Component({
     selector: 'app-reservoirs-summary',
-    imports: [CommonModule, ReactiveFormsModule, FormsModule, TableModule, InputText, ButtonModule, DateWidget],
+    imports: [CommonModule, ReactiveFormsModule, FormsModule, TableModule, InputText, ButtonModule, DateWidget, TooltipModule],
     templateUrl: './reservoirs-summary.component.html',
     styleUrl: './reservoirs-summary.component.scss'
 })
@@ -83,7 +84,8 @@ export class ReservoirsSummaryComponent implements OnInit {
         const dataToSave: ReservoirSummaryRequest[] = this.data
             .filter((value) => value.organization_id !== null)
             .map((reservoir) => {
-                return {
+                const original = this.originalData.find(o => o.organization_id === reservoir.organization_id);
+                const request: ReservoirSummaryRequest = {
                     organization_id: reservoir.organization_id!,
                     date: this.dateYMD,
                     income: reservoir.income.current,
@@ -91,10 +93,18 @@ export class ReservoirsSummaryComponent implements OnInit {
                     volume: reservoir.volume.current,
                     release: reservoir.release.current,
                     modsnow_current: reservoir.modsnow.current,
-                    modsnow_year_ago: reservoir.modsnow.year_ago,
-                    total_income_volume: reservoir.incoming_volume,
-                    total_income_volume_prev_year: reservoir.incoming_volume_prev_year
+                    modsnow_year_ago: reservoir.modsnow.year_ago
                 };
+
+                if (original && original.incoming_volume !== reservoir.incoming_volume) {
+                    request.total_income_volume = reservoir.incoming_volume;
+                }
+
+                if (original && original.incoming_volume_prev_year !== reservoir.incoming_volume_prev_year) {
+                    request.total_income_volume_prev_year = reservoir.incoming_volume_prev_year;
+                }
+
+                return request;
             });
 
         this.reservoirService.upsetReservoirData(dataToSave).subscribe({
@@ -150,9 +160,23 @@ export class ReservoirsSummaryComponent implements OnInit {
 
     onIncomingVolumeChange(reservoir: ReservoirSummaryResponse) {
         reservoir.incoming_volume_is_calculated = false;
+        reservoir.incoming_volume_is_reset = false;
     }
 
     onIncomingVolumePrevYearChange(reservoir: ReservoirSummaryResponse) {
+        reservoir.incoming_volume_prev_year_is_calculated = false;
+        reservoir.incoming_volume_prev_year_is_reset = false;
+    }
+
+    onResetIncomingVolume(reservoir: ReservoirSummaryResponse) {
+        reservoir.incoming_volume = null;
+        reservoir.incoming_volume_is_reset = true;
+        reservoir.incoming_volume_is_calculated = false;
+    }
+
+    onResetIncomingVolumePrevYear(reservoir: ReservoirSummaryResponse) {
+        reservoir.incoming_volume_prev_year = null;
+        reservoir.incoming_volume_prev_year_is_reset = true;
         reservoir.incoming_volume_prev_year_is_calculated = false;
     }
 
