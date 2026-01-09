@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ApiService, BASE_URL } from '@/core/services/api.service';
-import { Observable } from 'rxjs';
+import { Observable, of, tap } from 'rxjs';
 import { InvestmentDto, InvestmentResponse, InvestmentStatus, InvestmentType } from '@/core/interfaces/investment';
 
 const INVESTMENTS = '/investments';
@@ -11,6 +11,8 @@ const TYPES = '/types';
     providedIn: 'root'
 })
 export class InvestmentService extends ApiService {
+    private statusesCache = new Map<number | string, InvestmentStatus[]>();
+
     getInvestments(typeId?: number): Observable<InvestmentDto[]> {
         let params: any = {};
         if (typeId) {
@@ -31,11 +33,34 @@ export class InvestmentService extends ApiService {
         return this.http.delete(`${BASE_URL}${INVESTMENTS}/${id}`);
     }
 
-    getStatuses(): Observable<InvestmentStatus[]> {
-        return this.http.get<InvestmentStatus[]>(BASE_URL + INVESTMENTS + STATUSES);
+    getStatuses(typeId?: number): Observable<InvestmentStatus[]> {
+        const cacheKey = typeId ? typeId : 'all';
+        if (this.statusesCache.has(cacheKey)) {
+            return of(this.statusesCache.get(cacheKey)!);
+        }
+
+        let params: any = {};
+        if (typeId) {
+            params.type_id = typeId;
+        }
+
+        return this.http.get<InvestmentStatus[]>(BASE_URL + INVESTMENTS + STATUSES, { params }).pipe(
+            tap((statuses) => {
+                this.statusesCache.set(cacheKey, statuses);
+            })
+        );
     }
 
+    private typesCache: InvestmentType[] | null = null;
+
     getTypes(): Observable<InvestmentType[]> {
-        return this.http.get<InvestmentType[]>(BASE_URL + INVESTMENTS + TYPES);
+        if (this.typesCache) {
+            return of(this.typesCache);
+        }
+        return this.http.get<InvestmentType[]>(BASE_URL + INVESTMENTS + TYPES).pipe(
+            tap((types) => {
+                this.typesCache = types;
+            })
+        );
     }
 }

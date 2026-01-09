@@ -79,6 +79,7 @@ export class InvestPerspectiveProjectsComponent implements OnInit {
 
     statusOptions: InvestmentStatus[] = [];
     typeId: number | undefined;
+    pageTitle: string = 'Инвестиционный дашборд';
 
     ngOnInit(): void {
         this.form = this.fb.group({
@@ -89,16 +90,28 @@ export class InvestPerspectiveProjectsComponent implements OnInit {
             comment: this.fb.control<string | null>(null)
         });
 
-        this.loadStatuses();
         this.route.queryParams.subscribe((params) => {
             const typeId = params['type_id'];
             this.typeId = typeId ? Number(typeId) : undefined;
+            this.updateTitle();
+            this.loadStatuses();
             this.loadInvestments();
         });
     }
 
+    private updateTitle(): void {
+        if (!this.typeId) {
+            this.pageTitle = 'Инвестиционный дашборд';
+            return;
+        }
+        this.investmentService.getTypes().subscribe((types) => {
+            const type = types.find((t) => t.id === this.typeId);
+            this.pageTitle = type ? type.name : 'Инвестиционный дашборд';
+        });
+    }
+
     private loadStatuses(): void {
-        this.investmentService.getStatuses().subscribe({
+        this.investmentService.getStatuses(this.typeId).subscribe({
             next: (statuses) => {
                 this.statusOptions = statuses;
             },
@@ -117,7 +130,6 @@ export class InvestPerspectiveProjectsComponent implements OnInit {
         this.isLoading = true;
         this.investmentService.getInvestments(this.typeId).subscribe({
             next: (data) => {
-                console.log(data);
                 this.investments = data;
                 this.applyFilter();
             },
