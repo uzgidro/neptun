@@ -233,6 +233,10 @@ export class InvestPerspectiveProjectsComponent implements OnInit {
         }
         formData.append('cost', (rawPayload.amount || 0).toString());
 
+        if (this.typeId) {
+            formData.append('type_id', this.typeId.toString());
+        }
+
         if (rawPayload.comment) {
             formData.append('comments', rawPayload.comment);
         }
