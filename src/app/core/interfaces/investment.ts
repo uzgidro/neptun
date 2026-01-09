@@ -24,7 +24,7 @@ export interface InvestmentStatus {
     id: number;
     name: string;
     description: string;
-    display_order: number
+    display_order: number;
 }
 
 export interface InvestmentType {

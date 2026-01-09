@@ -173,7 +173,7 @@ export class InvestPerspectiveProjectsComponent implements OnInit {
         if (!this.statusOptions || this.statusOptions.length === 0) {
             return 0;
         }
-        
+
         const orders = this.statusOptions.map((s) => s.display_order);
         const min = Math.min(...orders);
         const max = Math.max(...orders);

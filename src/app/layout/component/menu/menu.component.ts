@@ -133,9 +133,7 @@ export class MenuComponent implements OnInit {
                     {
                         label: 'Инвестиционный блок',
                         role: ['rais', 'investment'],
-                        items: [
-                            {label: "Проекты в активной фазе", role: ['rais', 'investment'], routerLink: ['/invest-active']}
-                        ]
+                        items: [{ label: 'Проекты в активной фазе', role: ['rais', 'investment'], routerLink: ['/invest-active'] }]
                     },
                     {
                         label: 'Финансовый блок',
