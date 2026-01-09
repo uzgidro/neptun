@@ -23,3 +23,9 @@ export interface InvestmentStatus {
     name: string;
     description: string;
 }
+
+export interface InvestmentType {
+    id: number;
+    name: string;
+    description: string;
+}
