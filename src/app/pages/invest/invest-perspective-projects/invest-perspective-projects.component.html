@@ -100,25 +100,13 @@
                 <tr>
                     <td>{{ investment.name }}</td>
                     <td>
-                        <div class="project-stage-wrapper">
-                            <div class="project-stages">
-                                @for (stage of projectStages; track $index) {
-                                    <div class="stage-item"
-                                         [class.active]="isStageActive(investment.status.description, stage.key)"
-                                         [class.completed]="isStageCompleted(investment.status.description, stage.key)">
-                                        <div class="stage-circle">
-                                            @if (isStageCompleted(investment.status.description, stage.key)) {
-                                                <i class="pi pi-check"></i>
-                                            }
-                                        </div>
-                                        @if ($index < projectStages.length - 1) {
-                                            <div class="stage-line"
-                                                 [class.completed]="isStageCompleted(investment.status.description, stage.key)"></div>
-                                        }
-                                    </div>
-                                }
-                            </div>
-                            <div class="stage-label">{{ getStageLabel(investment.status.description) }}</div>
+                        <div class="flex flex-col gap-2">
+                            <p-progressBar 
+                                [value]="getProjectProgress(investment.status)" 
+                                [showValue]="false" 
+                                [style]="{ height: '10px' }"
+                            ></p-progressBar>
+                            <span class="text-sm font-medium">{{ investment.status.name }}</span>
                         </div>
                     </td>
                     <td>{{ investment.cost | number }} UZS</td>
