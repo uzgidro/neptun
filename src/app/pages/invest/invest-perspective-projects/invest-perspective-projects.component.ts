@@ -16,6 +16,8 @@ import { InputTextComponent } from '@/layout/component/dialog/input-text/input-t
 import { FinancialDashboardService } from '../../financial-block/dashboard/services/financial-dashboard.service';
 import { InvestmentService } from '@/core/services/investment.service';
 import { InvestmentDto, InvestmentStatus } from '@/core/interfaces/investment';
+import { ActivatedRoute } from '@angular/router';
+import { ProgressBarModule } from 'primeng/progressbar';
 
 @Component({
     selector: 'app-invest-perspective-projects',
@@ -35,7 +37,8 @@ import { InvestmentDto, InvestmentStatus } from '@/core/interfaces/investment';
         FileViewerComponent,
         FileListComponent,
         InputTextComponent,
-        FormsModule
+        FormsModule,
+        ProgressBarModule
     ],
     templateUrl: './invest-perspective-projects.component.html',
     styleUrl: './invest-perspective-projects.component.scss'
@@ -43,14 +46,6 @@ import { InvestmentDto, InvestmentStatus } from '@/core/interfaces/investment';
 export class InvestPerspectiveProjectsComponent implements OnInit {
     investments: InvestmentDto[] = [];
     filteredInvestments: InvestmentDto[] = [];
-
-    // Project stages
-    projectStages = [
-        { key: 'Terms of reference', label: 'ТЗ' },
-        { key: 'Feasibility study', label: 'ТЭО' },
-        { key: 'Expertise', label: 'Экспертиза' },
-        { key: 'Statement', label: 'Утверждение' }
-    ];
 
     // Dialog
     isFormOpen = false;
@@ -74,8 +69,11 @@ export class InvestPerspectiveProjectsComponent implements OnInit {
     private messageService: MessageService = inject(MessageService);
     private dashboardService = inject(FinancialDashboardService);
     private investmentService = inject(InvestmentService);
+    private route = inject(ActivatedRoute);
 
     statusOptions: InvestmentStatus[] = [];
+    typeId: number | undefined;
+    pageTitle: string = 'Инвестиционный дашборд';
 
     ngOnInit(): void {
         this.form = this.fb.group({
@@ -86,12 +84,28 @@ export class InvestPerspectiveProjectsComponent implements OnInit {
             comment: this.fb.control<string | null>(null)
         });
 
-        this.loadStatuses();
-        this.loadInvestments();
+        this.route.queryParams.subscribe((params) => {
+            const typeId = params['type_id'];
+            this.typeId = typeId ? Number(typeId) : undefined;
+            this.updateTitle();
+            this.loadStatuses();
+            this.loadInvestments();
+        });
+    }
+
+    private updateTitle(): void {
+        if (!this.typeId) {
+            this.pageTitle = 'Инвестиционный дашборд';
+            return;
+        }
+        this.investmentService.getTypes().subscribe((types) => {
+            const type = types.find((t) => t.id === this.typeId);
+            this.pageTitle = type ? type.name : 'Инвестиционный дашборд';
+        });
     }
 
     private loadStatuses(): void {
-        this.investmentService.getStatuses().subscribe({
+        this.investmentService.getStatuses(this.typeId).subscribe({
             next: (statuses) => {
                 this.statusOptions = statuses;
             },
@@ -108,9 +122,8 @@ export class InvestPerspectiveProjectsComponent implements OnInit {
 
     private loadInvestments(): void {
         this.isLoading = true;
-        this.investmentService.getInvestments().subscribe({
+        this.investmentService.getInvestments(this.typeId).subscribe({
             next: (data) => {
-                console.log(data);
                 this.investments = data;
                 this.applyFilter();
             },
@@ -152,12 +165,22 @@ export class InvestPerspectiveProjectsComponent implements OnInit {
         this.filteredInvestments = filtered;
     }
 
-    getStageCount(stageKey: string): number {
-        return this.filteredInvestments.filter((i) => i.status.description === stageKey).length;
-    }
-
     get totalAmount(): number {
         return this.filteredInvestments.reduce((sum, i) => sum + i.cost, 0);
+    }
+
+    getProjectProgress(status: InvestmentStatus): number {
+        if (!this.statusOptions || this.statusOptions.length === 0) {
+            return 0;
+        }
+
+        const orders = this.statusOptions.map((s) => s.display_order);
+        const min = Math.min(...orders);
+        const max = Math.max(...orders);
+
+        if (max === min) return 100;
+
+        return Math.round(((status.display_order - min) / (max - min)) * 100);
     }
 
     // Dialog methods
@@ -209,6 +232,10 @@ export class InvestPerspectiveProjectsComponent implements OnInit {
             formData.append('status_id', rawPayload.status.id.toString());
         }
         formData.append('cost', (rawPayload.amount || 0).toString());
+
+        if (this.typeId) {
+            formData.append('type_id', this.typeId.toString());
+        }
 
         if (rawPayload.comment) {
             formData.append('comments', rawPayload.comment);
@@ -328,21 +355,5 @@ export class InvestPerspectiveProjectsComponent implements OnInit {
     showFiles(investment: InvestmentDto) {
         this.selectedInvestmentForFiles = investment;
         this.showFilesDialog = true;
-    }
-
-    // Stage helpers
-    isStageActive(statusDescription: string, stageKey: string): boolean {
-        return statusDescription === stageKey;
-    }
-
-    isStageCompleted(statusDescription: string, stageKey: string): boolean {
-        const currentIndex = this.projectStages.findIndex((s) => s.key === statusDescription);
-        const stageIndex = this.projectStages.findIndex((s) => s.key === stageKey);
-        return currentIndex > stageIndex;
-    }
-
-    getStageLabel(statusDescription: string): string {
-        const stage = this.projectStages.find((s) => s.key === statusDescription);
-        return stage ? stage.label : statusDescription;
     }
 }
