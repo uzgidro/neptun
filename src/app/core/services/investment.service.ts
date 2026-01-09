@@ -11,8 +11,12 @@ const TYPES = '/types';
     providedIn: 'root'
 })
 export class InvestmentService extends ApiService {
-    getInvestments(): Observable<InvestmentDto[]> {
-        return this.http.get<InvestmentResponse[]>(BASE_URL + INVESTMENTS);
+    getInvestments(typeId?: number): Observable<InvestmentDto[]> {
+        let params: any = {};
+        if (typeId) {
+            params.type_id = typeId;
+        }
+        return this.http.get<InvestmentResponse[]>(BASE_URL + INVESTMENTS, { params });
     }
 
     createInvestment(formData: FormData): Observable<any> {

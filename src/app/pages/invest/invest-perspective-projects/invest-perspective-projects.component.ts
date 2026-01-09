@@ -16,6 +16,7 @@ import { InputTextComponent } from '@/layout/component/dialog/input-text/input-t
 import { FinancialDashboardService } from '../../financial-block/dashboard/services/financial-dashboard.service';
 import { InvestmentService } from '@/core/services/investment.service';
 import { InvestmentDto, InvestmentStatus } from '@/core/interfaces/investment';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-invest-perspective-projects',
@@ -74,8 +75,10 @@ export class InvestPerspectiveProjectsComponent implements OnInit {
     private messageService: MessageService = inject(MessageService);
     private dashboardService = inject(FinancialDashboardService);
     private investmentService = inject(InvestmentService);
+    private route = inject(ActivatedRoute);
 
     statusOptions: InvestmentStatus[] = [];
+    typeId: number | undefined;
 
     ngOnInit(): void {
         this.form = this.fb.group({
@@ -87,7 +90,11 @@ export class InvestPerspectiveProjectsComponent implements OnInit {
         });
 
         this.loadStatuses();
-        this.loadInvestments();
+        this.route.queryParams.subscribe((params) => {
+            const typeId = params['type_id'];
+            this.typeId = typeId ? Number(typeId) : undefined;
+            this.loadInvestments();
+        });
     }
 
     private loadStatuses(): void {
@@ -108,7 +115,7 @@ export class InvestPerspectiveProjectsComponent implements OnInit {
 
     private loadInvestments(): void {
         this.isLoading = true;
-        this.investmentService.getInvestments().subscribe({
+        this.investmentService.getInvestments(this.typeId).subscribe({
             next: (data) => {
                 console.log(data);
                 this.investments = data;
