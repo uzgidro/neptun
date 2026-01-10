@@ -1,10 +1,9 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MenuitemComponent } from '../menuitem/menuitem.component';
 import { WeatherWidget } from '@/pages/dashboard/components/weather/weather.widget';
 import { MenuItems } from '@/core/interfaces/menuitems';
-import { InvestmentService } from '@/core/services/investment.service';
 
 @Component({
     selector: 'app-menu',
@@ -14,7 +13,6 @@ import { InvestmentService } from '@/core/services/investment.service';
 })
 export class MenuComponent implements OnInit {
     model: MenuItems[] = [];
-    private investmentService = inject(InvestmentService);
 
     ngOnInit() {
         this.model = [
@@ -133,7 +131,18 @@ export class MenuComponent implements OnInit {
                     {
                         label: 'Инвестиционный блок',
                         role: ['rais', 'investment'],
-                        items: [{ label: 'Проекты в активной фазе', role: ['rais', 'investment'], routerLink: ['/invest-active'] }]
+                        items: [
+                            { label: 'Проекты в активной фазе', role: ['rais', 'investment'], routerLink: ['/invest-active'] },
+                            {
+                                label: 'Перспективные проекты',
+                                role: ['rais', 'investment'],
+                                items: [
+                                    { label: 'За счет собственных средств', role: ['rais', 'investment'], routerLink: ['/invest-perspective'], queryParams: { type_id: 1 }, routerLinkActiveOptions: { queryParams: 'exact' } },
+                                    { label: 'За счет частных инвестиций (ГЧП)', role: ['rais', 'investment'], routerLink: ['/invest-perspective'], queryParams: { type_id: 2 }, routerLinkActiveOptions: { queryParams: 'exact' } },
+                                    { label: 'За счет кредитов под государственной гарантией', role: ['rais', 'investment'], routerLink: ['/invest-perspective'], queryParams: { type_id: 3 }, routerLinkActiveOptions: { queryParams: 'exact' } }
+                                ]
+                            }
+                        ]
                     },
                     {
                         label: 'Финансовый блок',
@@ -188,18 +197,18 @@ export class MenuComponent implements OnInit {
             }
         ];
 
-        this.investmentService.getTypes().subscribe((types) => {
-            const investBlock = this.model[0].items?.find((item) => item.label === 'Инвестиционный блок');
-            if (investBlock && investBlock.items) {
-                const dynamicItems = types.map((t) => ({
-                    label: t.name,
-                    role: ['rais', 'investment'],
-                    routerLink: ['/invest-perspective'],
-                    queryParams: { type_id: t.id },
-                    routerLinkActiveOptions: { queryParams: 'exact' }
-                }));
-                investBlock.items = [...investBlock.items, ...dynamicItems];
-            }
-        });
+        // this.investmentService.getTypes().subscribe((types) => {
+        //     const investBlock = this.model[0].items?.find((item) => item.label === 'Инвестиционный блок');
+        //     if (investBlock && investBlock.items) {
+        //         const dynamicItems = types.map((t) => ({
+        //             label: t.name,
+        //             role: ['rais', 'investment'],
+        //             routerLink: ['/invest-perspective'],
+        //             queryParams: { type_id: t.id },
+        //             routerLinkActiveOptions: { queryParams: 'exact' }
+        //         }));
+        //         investBlock.items = [...investBlock.items, ...dynamicItems];
+        //     }
+        // });
     }
 }
