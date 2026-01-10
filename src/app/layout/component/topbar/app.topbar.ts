@@ -28,13 +28,23 @@ import { AuthService } from '@/core/services/auth.service';
             </button>
             <a class="layout-topbar-logo" routerLink="/">
                 <img ngSrc="/images/logo-x.png" alt="" width="52" height="22" />
-                <span class="text-nowrap hidden lg:inline"
-                    >Планшет
-                    @if (authService.hasRole('first deputy')) {
-                        <span>Первого заместителя</span>
+                <span class="text-nowrap">
+                    @if (authService.hasRole('admin')) {
+                        Планшет администратора
+                    } @else if (authService.hasRole('first deputy')) {
+                        Планшет Первого заместителя Председателя правления
+                    } @else if (authService.hasRole('rais')) {
+                        Планшет Председателя правления
+                    } @else if (authService.hasRole('assistant')) {
+                        Планшет помощника
+                    } @else if (authService.hasRole('investment')) {
+                        Планшет начальника инвестиций
+                    } @else if (authService.hasRole('sc')) {
+                        Планшет дежурного
+                    } @else {
+                        Планшет
                     }
-                    Председателя правления</span
-                >
+                </span>
             </a>
         </div>
 
