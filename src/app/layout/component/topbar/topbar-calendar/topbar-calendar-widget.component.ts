@@ -12,6 +12,8 @@ import { ButtonDirective, ButtonIcon } from 'primeng/button';
 import { Tooltip } from 'primeng/tooltip';
 import { CalendarEventsService } from '@/core/services/calendar-events.service';
 import { CalendarResponse, DayCounts } from '@/core/interfaces/calendar-events';
+import { PastEventsService } from '@/core/services/past-events.service';
+import { PastEvent as PastEvent } from '@/core/interfaces/past-events';
 
 @Component({
     selector: 'app-topbar-calendar',
@@ -22,6 +24,7 @@ import { CalendarResponse, DayCounts } from '@/core/interfaces/calendar-events';
 export class TopbarCalendarWidget implements OnInit {
     eventManagementService = inject(EventManagementService);
     calendarEventsService = inject(CalendarEventsService);
+    pastEventsService = inject(PastEventsService);
 
     allEvents = signal<Event[]>([]);
     selectedDate: Date = new Date();
@@ -33,6 +36,12 @@ export class TopbarCalendarWidget implements OnInit {
     eventDialogHeader = '';
     selectedEventDetails: Event | null = null;
     loadingEventDetails = false;
+
+    // Модальное окно для статистики
+    statisticsDialogVisible = false;
+    statisticsDialogHeader = '';
+    statisticsPastEvents = signal<PastEvent[]>([]);
+    loadingStatistics = false;
 
     // Кэш для данных календаря по месяцам (ключ: "year-month")
     private calendarCache = new Map<string, CalendarResponse>();
@@ -212,11 +221,43 @@ export class TopbarCalendarWidget implements OnInit {
         this.selectedDayCounts.set(dayCounts || null);
     }
 
-    onStatisticClick(type: string, count: number) {
+    onStatisticClick(type: 'incidents' | 'shutdowns' | 'discharges' | 'visits', count: number) {
         if (count === 0) return;
 
-        console.log(`Clicked on ${type}: ${count} items for date ${this.selectedDate.toLocaleDateString()}`);
-        // Здесь можно добавить логику для отображения деталей
-        // Например, открыть диалог с подробностями или отфильтровать данные
+        // Мапим тип для API
+        const typeMap = {
+            incidents: 'incident',
+            shutdowns: 'shutdown',
+            discharges: 'discharge',
+            visits: 'visit'
+        };
+
+        const apiType = typeMap[type] as 'incident' | 'shutdown' | 'discharge' | 'visit';
+
+        // Мапим тип для заголовка
+        const headerMap = {
+            incidents: 'Инциденты',
+            shutdowns: 'Аварийные отключения',
+            discharges: 'Холостые водосбросы',
+            visits: 'Визиты'
+        };
+
+        this.statisticsDialogHeader = `${headerMap[type]} - ${this.selectedDate.toLocaleDateString('ru-RU')}`;
+        this.statisticsDialogVisible = true;
+        this.loadingStatistics = true;
+
+        this.pastEventsService.getPastEventsByType(this.selectedDate, apiType).subscribe({
+            next: (response) => {
+                // Извлекаем массив events из ответа, создаем копию и реверсируем
+                const eventsArray = response?.events ? [...response.events].reverse() : [];
+                this.statisticsPastEvents.set(eventsArray);
+                this.loadingStatistics = false;
+            },
+            error: (err) => {
+                console.error('Failed to load statistics:', err);
+                this.loadingStatistics = false;
+                this.statisticsDialogVisible = false;
+            }
+        });
     }
 }
