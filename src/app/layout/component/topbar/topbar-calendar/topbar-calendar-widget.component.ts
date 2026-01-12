@@ -10,6 +10,10 @@ import { isSameDay, parseISO } from 'date-fns';
 import { Dialog } from 'primeng/dialog';
 import { ButtonDirective, ButtonIcon } from 'primeng/button';
 import { Tooltip } from 'primeng/tooltip';
+import { CalendarEventsService } from '@/core/services/calendar-events.service';
+import { CalendarResponse, DayCounts } from '@/core/interfaces/calendar-events';
+import { PastEventsService } from '@/core/services/past-events.service';
+import { PastEvent as PastEvent } from '@/core/interfaces/past-events';
 
 @Component({
     selector: 'app-topbar-calendar',
@@ -19,10 +23,13 @@ import { Tooltip } from 'primeng/tooltip';
 })
 export class TopbarCalendarWidget implements OnInit {
     eventManagementService = inject(EventManagementService);
+    calendarEventsService = inject(CalendarEventsService);
+    pastEventsService = inject(PastEventsService);
 
     allEvents = signal<Event[]>([]);
     selectedDate: Date = new Date();
     selectedDayEvents = signal<Event[]>([]);
+    selectedDayCounts = signal<DayCounts | null>(null);
     loading = false;
 
     eventDialogVisible = false;
@@ -30,8 +37,18 @@ export class TopbarCalendarWidget implements OnInit {
     selectedEventDetails: Event | null = null;
     loadingEventDetails = false;
 
+    // Модальное окно для статистики
+    statisticsDialogVisible = false;
+    statisticsDialogHeader = '';
+    statisticsPastEvents = signal<PastEvent[]>([]);
+    loadingStatistics = false;
+
+    // Кэш для данных календаря по месяцам (ключ: "year-month")
+    private calendarCache = new Map<string, CalendarResponse>();
+
     ngOnInit() {
         this.loadEvents();
+        this.loadCalendarData(this.selectedDate.getFullYear(), this.selectedDate.getMonth() + 1);
     }
 
     loadEvents() {
@@ -52,6 +69,21 @@ export class TopbarCalendarWidget implements OnInit {
     onDateSelect(date: Date) {
         this.selectedDate = date;
         this.selectedDayEvents.set(this.getEventsForDate(date));
+        this.updateSelectedDayCounts(date);
+
+        // Загружаем данные для нового месяца, если их нет в кэше
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1;
+        const cacheKey = `${year}-${month}`;
+        if (!this.calendarCache.has(cacheKey)) {
+            this.loadCalendarData(year, month);
+        }
+    }
+
+    onMonthChange(event: { month?: number; year?: number }) {
+        if (event.month && event.year) {
+            this.loadCalendarData(event.year, event.month + 1);
+        }
     }
 
     hasEvents(day: number, month: number, year: number): boolean {
@@ -149,5 +181,83 @@ export class TopbarCalendarWidget implements OnInit {
         }
 
         return 'pi pi-file text-gray-400';
+    }
+
+    loadCalendarData(year: number, month: number) {
+        const cacheKey = `${year}-${month}`;
+
+        if (this.calendarCache.has(cacheKey)) {
+            this.updateSelectedDayCounts(this.selectedDate);
+            return;
+        }
+
+        this.calendarEventsService.getCalendarEvents(year, month).subscribe({
+            next: (response) => {
+                this.calendarCache.set(cacheKey, response);
+                this.updateSelectedDayCounts(this.selectedDate);
+            },
+            error: (err) => {
+                console.error('Failed to load calendar data:', err);
+            }
+        });
+    }
+
+    updateSelectedDayCounts(date: Date) {
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1;
+        const cacheKey = `${year}-${month}`;
+
+        const calendarData = this.calendarCache.get(cacheKey);
+        if (!calendarData) {
+            this.selectedDayCounts.set(null);
+            return;
+        }
+
+        // Форматируем дату в формат "YYYY-MM-DD"
+        const dateString = `${year}-${month.toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+
+        // Находим данные для выбранного дня
+        const dayCounts = calendarData.days.find((day) => day.date === dateString);
+        this.selectedDayCounts.set(dayCounts || null);
+    }
+
+    onStatisticClick(type: 'incidents' | 'shutdowns' | 'discharges' | 'visits', count: number) {
+        if (count === 0) return;
+
+        // Мапим тип для API
+        const typeMap = {
+            incidents: 'incident',
+            shutdowns: 'shutdown',
+            discharges: 'discharge',
+            visits: 'visit'
+        };
+
+        const apiType = typeMap[type] as 'incident' | 'shutdown' | 'discharge' | 'visit';
+
+        // Мапим тип для заголовка
+        const headerMap = {
+            incidents: 'Инциденты',
+            shutdowns: 'Аварийные отключения',
+            discharges: 'Холостые водосбросы',
+            visits: 'Визиты'
+        };
+
+        this.statisticsDialogHeader = `${headerMap[type]} - ${this.selectedDate.toLocaleDateString('ru-RU')}`;
+        this.statisticsDialogVisible = true;
+        this.loadingStatistics = true;
+
+        this.pastEventsService.getPastEventsByType(this.selectedDate, apiType).subscribe({
+            next: (response) => {
+                // Извлекаем массив events из ответа, создаем копию и реверсируем
+                const eventsArray = response?.events ? [...response.events].reverse() : [];
+                this.statisticsPastEvents.set(eventsArray);
+                this.loadingStatistics = false;
+            },
+            error: (err) => {
+                console.error('Failed to load statistics:', err);
+                this.loadingStatistics = false;
+                this.statisticsDialogVisible = false;
+            }
+        });
     }
 }
