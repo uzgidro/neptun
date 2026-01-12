@@ -1,31 +1,31 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LanguageService, Language } from '@/core/services/language.service';
-import { MenuModule } from 'primeng/menu';
-import { ButtonModule } from 'primeng/button';
-import { MenuItem } from 'primeng/api';
+import { TooltipModule } from 'primeng/tooltip';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-language-switcher',
     standalone: true,
-    imports: [CommonModule, MenuModule, ButtonModule, TranslateModule],
+    imports: [CommonModule, TooltipModule, TranslateModule],
     template: `
         <button
             type="button"
             class="layout-topbar-action"
-            (click)="menu.toggle($event)"
+            (click)="switchToNextLanguage()"
+            [pTooltip]="getTooltipText()"
+            tooltipPosition="bottom"
             [attr.aria-label]="'LANGUAGE.SELECT' | translate"
         >
             <i class="pi pi-globe"></i>
             <span class="ml-1 text-sm font-medium">{{ getLanguageLabel() }}</span>
         </button>
-        <p-menu #menu [model]="menuItems" [popup]="true" appendTo="body" />
     `
 })
 export class LanguageSwitcherComponent {
     private languageService = inject(LanguageService);
     private translateService = inject(TranslateService);
+    private languageOrder = ['ru', 'uz-latn', 'uz-cyrl'];
 
     get currentLanguage(): Language {
         return this.languageService.getCurrentLanguage();
@@ -39,12 +39,9 @@ export class LanguageSwitcherComponent {
         return code.toUpperCase();
     }
 
-    get menuItems(): MenuItem[] {
-        return this.languageService.getLanguages().map(lang => ({
-            label: this.translateService.instant(this.getLangKey(lang.code)),
-            icon: lang.code === this.currentLanguage.code ? 'pi pi-check' : '',
-            command: () => this.selectLanguage(lang.code)
-        }));
+    getTooltipText(): string {
+        const nextLang = this.getNextLanguageCode();
+        return this.translateService.instant(this.getLangKey(nextLang));
     }
 
     private getLangKey(code: string): string {
@@ -54,7 +51,14 @@ export class LanguageSwitcherComponent {
         return 'LANGUAGE.RU';
     }
 
-    selectLanguage(langCode: string): void {
-        this.languageService.setLanguage(langCode);
+    private getNextLanguageCode(): string {
+        const currentIndex = this.languageOrder.indexOf(this.currentLanguage.code);
+        const nextIndex = (currentIndex + 1) % this.languageOrder.length;
+        return this.languageOrder[nextIndex];
+    }
+
+    switchToNextLanguage(): void {
+        const nextLangCode = this.getNextLanguageCode();
+        this.languageService.setLanguage(nextLangCode);
     }
 }

@@ -1,14 +1,14 @@
 <div class="card">
     <div class="mb-4 flex justify-between items-start">
         <div>
-            <h2 class="text-2xl font-semibold mb-2">Активные инвестиционные проекты</h2>
-            <p class="text-surface-500">Список активных проектов в сфере энергетики</p>
+            <h2 class="text-2xl font-semibold mb-2">{{ 'INVEST.ACTIVE_PROJECTS.TITLE' | translate }}</h2>
+            <p class="text-surface-500">{{ 'INVEST.ACTIVE_PROJECTS.SUBTITLE' | translate }}</p>
         </div>
         @if (canEdit) {
             <button
                 pButton
                 (click)="openAddDialog()">
-                <span pButtonLabel>Добавить проект</span>
+                <span pButtonLabel>{{ 'INVEST.ACTIVE_PROJECTS.ADD_PROJECT' | translate }}</span>
                 <i pButtonIcon class="pi pi-plus"></i>
             </button>
         }
@@ -17,17 +17,17 @@
     @if (loading) {
         <div class="flex items-center justify-center py-8">
             <i class="pi pi-spin pi-spinner text-4xl text-surface-400"></i>
-            <span class="ml-3 text-lg">Загрузка данных...</span>
+            <span class="ml-3 text-lg">{{ 'INVEST.ACTIVE_PROJECTS.LOADING' | translate }}</span>
         </div>
     } @else if (categories.length === 0) {
         <div class="text-center py-8 text-surface-500">
             <i class="pi pi-inbox text-4xl mb-3 block"></i>
-            <div>Проекты не найдены</div>
+            <div>{{ 'INVEST.ACTIVE_PROJECTS.NOT_FOUND' | translate }}</div>
         </div>
     } @else {
         <p-tabs [value]="0">
             <p-tablist>
-                <p-tab [value]="0">Все ({{ projects.length }})</p-tab>
+                <p-tab [value]="0">{{ 'INVEST.ACTIVE_PROJECTS.ALL' | translate }} ({{ projects.length }})</p-tab>
                 @for (category of categories; track category; let idx = $index) {
                     <p-tab [value]="idx + 1">{{ category }} ({{ getProjectsForCategory(category).length }})</p-tab>
                 }
@@ -56,7 +56,7 @@
                                         type="text"
                                         [(ngModel)]="searchValue"
                                         (input)="dtAll.filterGlobal($any($event.target).value, 'contains')"
-                                        placeholder="Поиск..."
+                                        [placeholder]="'INVEST.ACTIVE_PROJECTS.SEARCH' | translate"
                                         class="w-full" />
                                 </p-iconfield>
                                 @if (searchValue) {
@@ -67,7 +67,7 @@
                                         severity="secondary"
                                         [outlined]="true"
                                         (click)="clear(dtAll)"
-                                        pTooltip="Очистить">
+                                        [pTooltip]="'INVEST.ACTIVE_PROJECTS.CLEAR' | translate">
                                         <i pButtonIcon class="pi pi-times"></i>
                                     </button>
                                 }
@@ -81,31 +81,31 @@
                                     <p-sortIcon field="id"></p-sortIcon>
                                 </th>
                                 <th style="min-width: 12rem" pSortableColumn="category">
-                                    Категория
+                                    {{ 'INVEST.ACTIVE_PROJECTS.CATEGORY' | translate }}
                                     <p-sortIcon field="category"></p-sortIcon>
                                 </th>
                                 <th style="min-width: 20rem" pSortableColumn="project_name">
-                                    Название проекта
+                                    {{ 'INVEST.ACTIVE_PROJECTS.PROJECT_NAME' | translate }}
                                     <p-sortIcon field="project_name"></p-sortIcon>
                                 </th>
                                 <th style="min-width: 10rem" pSortableColumn="capacity_mw">
-                                    Мощность (МВт)
+                                    {{ 'INVEST.ACTIVE_PROJECTS.CAPACITY_MW' | translate }}
                                     <p-sortIcon field="capacity_mw"></p-sortIcon>
                                 </th>
                                 <th style="min-width: 12rem" pSortableColumn="production_mln_kwh">
-                                    Производство (млн. кВт⋅ч)
+                                    {{ 'INVEST.ACTIVE_PROJECTS.PRODUCTION_MLN_KWH' | translate }}
                                     <p-sortIcon field="production_mln_kwh"></p-sortIcon>
                                 </th>
                                 <th style="min-width: 12rem" pSortableColumn="cost_mln_usd">
-                                    Стоимость (млн. USD)
+                                    {{ 'INVEST.ACTIVE_PROJECTS.COST_MLN_USD' | translate }}
                                     <p-sortIcon field="cost_mln_usd"></p-sortIcon>
                                 </th>
                                 <th style="min-width: 15rem" pSortableColumn="status_text">
-                                    Статус
+                                    {{ 'INVEST.ACTIVE_PROJECTS.STATUS' | translate }}
                                     <p-sortIcon field="status_text"></p-sortIcon>
                                 </th>
                                 @if (canEdit) {
-                                    <th style="width: 10rem">Действия</th>
+                                    <th style="width: 10rem">{{ 'INVEST.ACTIVE_PROJECTS.ACTIONS' | translate }}</th>
                                 }
                             </tr>
                         </ng-template>
@@ -117,11 +117,11 @@
                                 <td>
                                     <div class="font-semibold mb-4">{{ project.project_name }}</div>
                                     <div class="mb-4">
-                                        <span class="font-semibold">Иностранный партнер:</span>
+                                        <span class="font-semibold">{{ 'INVEST.ACTIVE_PROJECTS.FOREIGN_PARTNER' | translate }}:</span>
                                         <span>{{ project.foreign_partner }}</span>
                                     </div>
                                     <div>
-                                        <span class="font-semibold">Срок исполнения:</span>
+                                        <span class="font-semibold">{{ 'INVEST.ACTIVE_PROJECTS.IMPLEMENTATION_PERIOD' | translate }}:</span>
                                         <span>{{ project.implementation_period }}</span>
                                     </div>
                                 </td>
@@ -162,7 +162,7 @@
                                                 [outlined]="true"
                                                 size="small"
                                                 (click)="openEditDialog(project)"
-                                                pTooltip="Редактировать">
+                                                [pTooltip]="'INVEST.ACTIVE_PROJECTS.EDIT' | translate">
                                                 <i pButtonIcon class="pi pi-pencil"></i>
                                             </button>
                                             <button
@@ -171,7 +171,7 @@
                                                 [outlined]="true"
                                                 size="small"
                                                 (click)="confirmDelete(project)"
-                                                pTooltip="Удалить">
+                                                [pTooltip]="'INVEST.ACTIVE_PROJECTS.DELETE' | translate">
                                                 <i pButtonIcon class="pi pi-trash"></i>
                                             </button>
                                         </div>
@@ -185,7 +185,7 @@
                                 <td [attr.colspan]="canEdit ? 8 : 7" class="text-center py-8">
                                     <div class="text-surface-500">
                                         <i class="pi pi-inbox text-4xl mb-3 block"></i>
-                                        <div>Проекты не найдены</div>
+                                        <div>{{ 'INVEST.ACTIVE_PROJECTS.NOT_FOUND' | translate }}</div>
                                     </div>
                                 </td>
                             </tr>
@@ -216,7 +216,7 @@
                                             type="text"
                                             [(ngModel)]="searchValue"
                                             (input)="dt.filterGlobal($any($event.target).value, 'contains')"
-                                            placeholder="Поиск..."
+                                            [placeholder]="'INVEST.ACTIVE_PROJECTS.SEARCH' | translate"
                                             class="w-full" />
                                     </p-iconfield>
                                     @if (searchValue) {
@@ -227,7 +227,7 @@
                                             severity="secondary"
                                             [outlined]="true"
                                             (click)="clear(dt)"
-                                            pTooltip="Очистить">
+                                            [pTooltip]="'INVEST.ACTIVE_PROJECTS.CLEAR' | translate">
                                             <i pButtonIcon class="pi pi-times"></i>
                                         </button>
                                     }
@@ -241,27 +241,27 @@
                                         <p-sortIcon field="id"></p-sortIcon>
                                     </th>
                                     <th style="min-width: 20rem" pSortableColumn="project_name">
-                                        Название проекта
+                                        {{ 'INVEST.ACTIVE_PROJECTS.PROJECT_NAME' | translate }}
                                         <p-sortIcon field="project_name"></p-sortIcon>
                                     </th>
                                     <th style="min-width: 10rem" pSortableColumn="capacity_mw">
-                                        Мощность (МВт)
+                                        {{ 'INVEST.ACTIVE_PROJECTS.CAPACITY_MW' | translate }}
                                         <p-sortIcon field="capacity_mw"></p-sortIcon>
                                     </th>
                                     <th style="min-width: 12rem" pSortableColumn="production_mln_kwh">
-                                        Производство (млн. кВт⋅ч)
+                                        {{ 'INVEST.ACTIVE_PROJECTS.PRODUCTION_MLN_KWH' | translate }}
                                         <p-sortIcon field="production_mln_kwh"></p-sortIcon>
                                     </th>
                                     <th style="min-width: 12rem" pSortableColumn="cost_mln_usd">
-                                        Стоимость (млн. USD)
+                                        {{ 'INVEST.ACTIVE_PROJECTS.COST_MLN_USD' | translate }}
                                         <p-sortIcon field="cost_mln_usd"></p-sortIcon>
                                     </th>
                                     <th style="min-width: 15rem" pSortableColumn="status_text">
-                                        Статус
+                                        {{ 'INVEST.ACTIVE_PROJECTS.STATUS' | translate }}
                                         <p-sortIcon field="status_text"></p-sortIcon>
                                     </th>
                                     @if (canEdit) {
-                                        <th style="width: 10rem">Действия</th>
+                                        <th style="width: 10rem">{{ 'INVEST.ACTIVE_PROJECTS.ACTIONS' | translate }}</th>
                                     }
                                 </tr>
                             </ng-template>
@@ -272,11 +272,11 @@
                                     <td>
                                         <div class="font-semibold mb-4">{{ project.project_name }}</div>
                                         <div class="mb-4">
-                                            <span class="font-semibold">Иностранный партнер:</span>
+                                            <span class="font-semibold">{{ 'INVEST.ACTIVE_PROJECTS.FOREIGN_PARTNER' | translate }}:</span>
                                             <span>{{ project.foreign_partner }}</span>
                                         </div>
                                         <div>
-                                            <span class="font-semibold">Срок исполнения:</span>
+                                            <span class="font-semibold">{{ 'INVEST.ACTIVE_PROJECTS.IMPLEMENTATION_PERIOD' | translate }}:</span>
                                             <span>{{ project.implementation_period }}</span>
                                         </div>
                                     </td>
@@ -318,7 +318,7 @@
                                                     [outlined]="true"
                                                     size="small"
                                                     (click)="openEditDialog(project)"
-                                                    pTooltip="Редактировать">
+                                                    [pTooltip]="'INVEST.ACTIVE_PROJECTS.EDIT' | translate">
                                                     <i pButtonIcon class="pi pi-pencil"></i>
                                                 </button>
                                                 <button
@@ -327,7 +327,7 @@
                                                     [outlined]="true"
                                                     size="small"
                                                     (click)="confirmDelete(project)"
-                                                    pTooltip="Удалить">
+                                                    [pTooltip]="'INVEST.ACTIVE_PROJECTS.DELETE' | translate">
                                                     <i pButtonIcon class="pi pi-trash"></i>
                                                 </button>
                                             </div>
@@ -341,7 +341,7 @@
                                     <td [attr.colspan]="canEdit ? 7 : 6" class="text-center py-8">
                                         <div class="text-surface-500">
                                             <i class="pi pi-inbox text-4xl mb-3 block"></i>
-                                            <div>Проекты не найдены</div>
+                                            <div>{{ 'INVEST.ACTIVE_PROJECTS.NOT_FOUND' | translate }}</div>
                                         </div>
                                     </td>
                                 </tr>

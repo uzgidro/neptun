@@ -125,7 +125,26 @@
     "DECREES": "Farmonlar",
     "AGREEMENTS": "Birgalikdagi kelishuvlar",
     "CALLS": "Qo'ng'iroqlar",
-    "PRESS_SERVICE": "Matbuot xizmati"
+    "PRESS_SERVICE": "Matbuot xizmati",
+    "INVESTMENT_BLOCK": "Investitsiya bloki",
+    "ACTIVE_PHASE_PROJECTS": "Faol bosqichdagi loyihalar",
+    "PERSPECTIVE_PROJECTS": "Istiqbolli loyihalar",
+    "OWN_FUNDS": "O'z mablag'lari hisobidan",
+    "PRIVATE_INVESTMENTS": "Xususiy investitsiyalar hisobidan (DXS)",
+    "STATE_GUARANTEE_CREDITS": "Davlat kafolati ostidagi kreditlar hisobidan",
+    "CHANCELLERY": "Kantselyariya",
+    "CHANCELLERY_ORDERS": "Buyruqlar",
+    "CHANCELLERY_REPORTS": "Hisobotlar",
+    "CHANCELLERY_LETTERS": "Xatlar",
+    "CHANCELLERY_INSTRUCTIONS": "Ko'rsatmalar",
+    "REGULATORY_DOCS": "Normativ-huquqiy hujjatlar",
+    "LAWS_RUZ": "O'zbekiston Respublikasi qonunlari",
+    "PRESIDENT_RESOLUTIONS": "O'zbekiston Respublikasi Prezidentining qarorlari",
+    "PRESIDENT_DECREES": "O'zbekiston Respublikasi Prezidentining farmonlari",
+    "CABINET_RESOLUTIONS": "Vazirlar Mahkamasining qarorlari",
+    "MINISTRY_ORDERS": "Vazirlik va idoralarning buyruqlari",
+    "JOINT_AGREEMENTS": "Qo'shma kelishuvlar (NDA)",
+    "OTHER_DOCS": "Boshqa hujjatlar"
   },
   "DASHBOARD": {
     "EVENTS": "Voqealar",
@@ -162,7 +181,7 @@
     "SELECT": "Tilni tanlang",
     "RU": "Ruscha",
     "UZ_LATN": "O'zbekcha (Lotin)",
-    "UZ_CYRL": "Ўзбекча (Кирилл)"
+    "UZ_CYRL": "O'zbekcha (Kirill)"
   },
   "HRM": {
     "ORGANIZATIONS": {
@@ -1157,6 +1176,124 @@
       "NO_ANSWER": "Javob yo'q",
       "BUSY": "Band",
       "CANCELLED": "Bekor qilingan"
+    }
+  },
+  "INVEST": {
+    "ACTIVE_PROJECTS": {
+      "TITLE": "Faol investitsiya loyihalari",
+      "SUBTITLE": "Energetika sohasidagi faol loyihalar ro'yxati",
+      "ADD_PROJECT": "Loyiha qo'shish",
+      "LOADING": "Ma'lumotlar yuklanmoqda...",
+      "NOT_FOUND": "Loyihalar topilmadi",
+      "ALL": "Hammasi",
+      "SEARCH": "Qidirish...",
+      "CLEAR": "Tozalash",
+      "CATEGORY": "Kategoriya",
+      "PROJECT_NAME": "Loyiha nomi",
+      "CAPACITY_MW": "Quvvat (MVt)",
+      "PRODUCTION_MLN_KWH": "Ishlab chiqarish (mln. kVt*s)",
+      "COST_MLN_USD": "Narxi (mln. USD)",
+      "STATUS": "Holat",
+      "ACTIONS": "Amallar",
+      "FOREIGN_PARTNER": "Xorijiy hamkor",
+      "IMPLEMENTATION_PERIOD": "Bajarish muddati",
+      "EDIT": "Tahrirlash",
+      "DELETE": "O'chirish"
+    },
+    "PROJECT_DIALOG": {
+      "EDIT_TITLE": "Loyihani tahrirlash",
+      "ADD_TITLE": "Loyiha qo'shish",
+      "CATEGORY": "Kategoriya",
+      "CATEGORY_REQUIRED": "Kategoriya majburiy",
+      "PROJECT_NAME": "Loyiha nomi",
+      "PROJECT_NAME_REQUIRED": "Loyiha nomi majburiy",
+      "FOREIGN_PARTNER": "Xorijiy hamkor",
+      "IMPLEMENTATION_PERIOD": "Bajarish muddati",
+      "CAPACITY_MW": "Quvvat (MVt)",
+      "PRODUCTION_MLN_KWH": "Ishlab chiqarish (mln. kVt*s)",
+      "COST_MLN_USD": "Narxi (mln. USD)",
+      "STATUS": "Holat",
+      "VALUE_POSITIVE": "Qiymat musbat bo'lishi kerak",
+      "CANCEL": "Bekor qilish",
+      "SAVE": "Saqlash",
+      "ADD": "Qo'shish"
+    }
+  },
+  "NEWS": {
+    "TITLE": "Matbuot xizmati yangiliklari",
+    "NEW": "Qo'shish",
+    "NEW_NEWS": "Yangi yangilik",
+    "EDIT_NEWS": "Yangilikni tahrirlash",
+    "NEWS_ITEM": "Yangilik",
+    "SEARCH": "Qidirish...",
+    "CATEGORY": "Kategoriya",
+    "STATUS_LABEL": "Holat",
+    "SORT_LABEL": "Saralash",
+    "EDIT": "Tahrirlash",
+    "DELETE": "O'chirish",
+    "NO_DATA": "Yangiliklar yo'q",
+    "PAGE_REPORT": "{first} - {last} ko'rsatilmoqda, jami {totalRecords} ta",
+    "SYNC_TELEGRAM": "Telegram bilan sinxronlashtirish",
+    "SYNCING": "Sinxronlashtirish...",
+    "SYNC": "Sinxronlashtirish",
+    "SYNC_ERROR": "Telegram bilan sinxronlashtirishda xatolik",
+    "ALL_CATEGORIES": "Barcha kategoriyalar",
+    "ALL_STATUSES": "Barcha holatlar",
+    "SUCCESS": "Muvaffaqiyat",
+    "ERROR": "Xato",
+    "CREATED": "Yangilik yaratildi",
+    "UPDATED": "Yangilik yangilandi",
+    "DELETED": "Yangilik o'chirildi",
+    "CREATE_ERROR": "Yangilikni yaratib bo'lmadi",
+    "UPDATE_ERROR": "Yangilikni yangilab bo'lmadi",
+    "DELETE_ERROR": "Yangilikni o'chirib bo'lmadi",
+    "DELETE_CONFIRM": "Haqiqatan ham yangilikni o'chirmoqchimisiz",
+    "PREVIEW": "Oldindan ko'rish",
+    "PREVIEW_TITLE": "Yangilik sarlavhasi",
+    "PREVIEW_CONTENT": "Yangilik matni shu yerda ko'rsatiladi...",
+    "EXISTING_MEDIA": "Mavjud media",
+    "FILE": "Fayl",
+    "RESTORE": "Qayta tiklash",
+    "MARKED_FOR_DELETION": "O'chirishga belgilangan",
+    "ADD_NEW_MEDIA": "Yangi media qo'shish",
+    "MEDIA_FILES": "Media fayllar",
+    "VIDEO_NOT_SUPPORTED": "Brauzeringiz videoni qo'llab-quvvatlamaydi",
+    "ATTACHED_DOCUMENTS": "Biriktirilgan hujjatlar",
+    "DOCUMENT": "Hujjat",
+    "STATUS": {
+      "DRAFT": "Qoralama",
+      "PUBLISHED": "Nashr qilingan",
+      "ARCHIVED": "Arxivlangan"
+    },
+    "SOURCE": {
+      "MANUAL": "Qo'lda",
+      "TELEGRAM": "Telegram",
+      "INSTAGRAM": "Instagram"
+    },
+    "SORT": {
+      "DATE_DESC": "Avval yangilari",
+      "DATE_ASC": "Avval eskilari",
+      "TITLE_ASC": "Nomi bo'yicha (A-Z)",
+      "TITLE_DESC": "Nomi bo'yicha (Z-A)"
+    },
+    "FORM": {
+      "TITLE": "Sarlavha",
+      "TITLE_REQUIRED": "Sarlavha majburiy",
+      "CONTENT": "Mazmun",
+      "CONTENT_REQUIRED": "Mazmun majburiy",
+      "CATEGORY": "Kategoriya",
+      "CATEGORY_REQUIRED": "Kategoriya majburiy",
+      "SOURCE": "Manba",
+      "SOURCE_REQUIRED": "Manba majburiy",
+      "SOURCE_URL": "Asl manzil",
+      "STATUS": "Holat",
+      "STATUS_REQUIRED": "Holat majburiy",
+      "PUBLISHED_AT": "Nashr sanasi"
+    },
+    "META": {
+      "SOURCE": "Manba",
+      "PUBLISHED": "Nashr qilingan",
+      "CREATED": "Yaratilgan"
     }
   }
 }

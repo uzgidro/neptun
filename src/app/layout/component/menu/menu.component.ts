@@ -138,17 +138,17 @@ export class MenuComponent implements OnInit {
                         ]
                     },
                     {
-                        label: 'Инвестиционный блок',
+                        label: this.t('MENU.INVESTMENT_BLOCK'),
                         role: ['rais', 'investment'],
                         items: [
-                            { label: 'Проекты в активной фазе', role: ['rais', 'investment'], routerLink: ['/invest-active'] },
+                            { label: this.t('MENU.ACTIVE_PHASE_PROJECTS'), role: ['rais', 'investment'], routerLink: ['/invest-active'] },
                             {
-                                label: 'Перспективные проекты',
+                                label: this.t('MENU.PERSPECTIVE_PROJECTS'),
                                 role: ['rais', 'investment'],
                                 items: [
-                                    { label: 'За счет собственных средств', role: ['rais', 'investment'], routerLink: ['/invest-perspective'], queryParams: { type_id: 1 }, routerLinkActiveOptions: { queryParams: 'exact' } },
-                                    { label: 'За счет частных инвестиций (ГЧП)', role: ['rais', 'investment'], routerLink: ['/invest-perspective'], queryParams: { type_id: 2 }, routerLinkActiveOptions: { queryParams: 'exact' } },
-                                    { label: 'За счет кредитов под государственной гарантией', role: ['rais', 'investment'], routerLink: ['/invest-perspective'], queryParams: { type_id: 3 }, routerLinkActiveOptions: { queryParams: 'exact' } }
+                                    { label: this.t('MENU.OWN_FUNDS'), role: ['rais', 'investment'], routerLink: ['/invest-perspective'], queryParams: { type_id: 1 }, routerLinkActiveOptions: { queryParams: 'exact' } },
+                                    { label: this.t('MENU.PRIVATE_INVESTMENTS'), role: ['rais', 'investment'], routerLink: ['/invest-perspective'], queryParams: { type_id: 2 }, routerLinkActiveOptions: { queryParams: 'exact' } },
+                                    { label: this.t('MENU.STATE_GUARANTEE_CREDITS'), role: ['rais', 'investment'], routerLink: ['/invest-perspective'], queryParams: { type_id: 3 }, routerLinkActiveOptions: { queryParams: 'exact' } }
                                 ]
                             }
                         ]
@@ -178,24 +178,24 @@ export class MenuComponent implements OnInit {
                         ]
                     },
                     {
-                        label: 'Канцелярия',
+                        label: this.t('MENU.CHANCELLERY'),
                         role: ['rais'],
                         items: [
-                            { label: 'Приказы', role: ['rais'], routerLink: ['/mail/orders'] },
-                            { label: 'Рапорты', role: ['rais'], routerLink: ['/mail/reports'] },
-                            { label: 'Письма', role: ['rais'], routerLink: ['/mail/letters'] },
-                            { label: 'Инструкции', role: ['rais'], routerLink: ['/mail/instructions'] },
+                            { label: this.t('MENU.CHANCELLERY_ORDERS'), role: ['rais'], routerLink: ['/mail/orders'] },
+                            { label: this.t('MENU.CHANCELLERY_REPORTS'), role: ['rais'], routerLink: ['/mail/reports'] },
+                            { label: this.t('MENU.CHANCELLERY_LETTERS'), role: ['rais'], routerLink: ['/mail/letters'] },
+                            { label: this.t('MENU.CHANCELLERY_INSTRUCTIONS'), role: ['rais'], routerLink: ['/mail/instructions'] },
                             {
-                                label: 'Нормативно правовая документация',
+                                label: this.t('MENU.REGULATORY_DOCS'),
                                 role: ['rais'],
                                 items: [
-                                    { label: 'Законы Республики Узбекистан', role: ['rais'] },
-                                    { label: 'Постановления Президента Республики Узбекистан', role: ['rais'], routerLink: ['/mail/resolutions'], queryParams: { type: 'president' }, routerLinkActiveOptions: { queryParams: 'exact' } },
-                                    { label: 'Указы Президента Республики Узбекистан', role: ['rais'], routerLink: ['/mail/resolutions'], queryParams: { type: 'decree' }, routerLinkActiveOptions: { queryParams: 'exact' } },
-                                    { label: 'Постановления Кабинета министров', role: ['rais'], routerLink: ['/mail/resolutions'], queryParams: { type: 'cabinet' }, routerLinkActiveOptions: { queryParams: 'exact' } },
-                                    { label: 'Приказы министерств и ведомств', role: ['rais'], routerLink: ['/mail/resolutions'], queryParams: { type: 'order' }, routerLinkActiveOptions: { queryParams: 'exact' } },
-                                    { label: 'Совместные соглашения(NDA)', role: ['rais'], routerLink: ['/mail/resolutions'], queryParams: { type: 'agreement' }, routerLinkActiveOptions: { queryParams: 'exact' } },
-                                    { label: 'Иные документы', role: ['rais'] }
+                                    { label: this.t('MENU.LAWS_RUZ'), role: ['rais'] },
+                                    { label: this.t('MENU.PRESIDENT_RESOLUTIONS'), role: ['rais'], routerLink: ['/mail/resolutions'], queryParams: { type: 'president' }, routerLinkActiveOptions: { queryParams: 'exact' } },
+                                    { label: this.t('MENU.PRESIDENT_DECREES'), role: ['rais'], routerLink: ['/mail/resolutions'], queryParams: { type: 'decree' }, routerLinkActiveOptions: { queryParams: 'exact' } },
+                                    { label: this.t('MENU.CABINET_RESOLUTIONS'), role: ['rais'], routerLink: ['/mail/resolutions'], queryParams: { type: 'cabinet' }, routerLinkActiveOptions: { queryParams: 'exact' } },
+                                    { label: this.t('MENU.MINISTRY_ORDERS'), role: ['rais'], routerLink: ['/mail/resolutions'], queryParams: { type: 'order' }, routerLinkActiveOptions: { queryParams: 'exact' } },
+                                    { label: this.t('MENU.JOINT_AGREEMENTS'), role: ['rais'], routerLink: ['/mail/resolutions'], queryParams: { type: 'agreement' }, routerLinkActiveOptions: { queryParams: 'exact' } },
+                                    { label: this.t('MENU.OTHER_DOCS'), role: ['rais'] }
                                 ]
                             }
                         ]

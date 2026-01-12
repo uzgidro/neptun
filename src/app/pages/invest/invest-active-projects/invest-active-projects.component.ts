@@ -13,11 +13,12 @@ import { Tooltip } from 'primeng/tooltip';
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from 'primeng/tabs';
 import { InvestProjectDialogComponent } from './invest-project-dialog/invest-project-dialog.component';
 import { AuthService } from '@/core/services/auth.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-invest-active-projects',
     standalone: true,
-    imports: [CommonModule, TableModule, FormsModule, IconField, InputIcon, InputText, ButtonDirective, Tooltip, Tabs, TabList, Tab, TabPanels, TabPanel, InvestProjectDialogComponent, ButtonLabel, ButtonIcon],
+    imports: [CommonModule, TableModule, FormsModule, IconField, InputIcon, InputText, ButtonDirective, Tooltip, Tabs, TabList, Tab, TabPanels, TabPanel, InvestProjectDialogComponent, ButtonLabel, ButtonIcon, TranslateModule],
     templateUrl: './invest-active-projects.component.html',
     styleUrl: './invest-active-projects.component.scss'
 })
@@ -35,6 +36,7 @@ export class InvestActiveProjectsComponent implements OnInit {
     private projectService = inject(InvestActiveProjectService);
     private messageService = inject(MessageService);
     private authService = inject(AuthService);
+    private translateService = inject(TranslateService);
 
     get canEdit(): boolean {
         return this.authService.hasRole('investment');
