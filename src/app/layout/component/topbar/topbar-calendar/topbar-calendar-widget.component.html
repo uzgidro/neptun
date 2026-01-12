@@ -6,8 +6,20 @@
     <ng-template pTemplate="content">
         <p-date-picker [(ngModel)]="selectedDate" (onSelect)="onDateSelect($event)" (onMonthChange)="onMonthChange($event)" [inline]="true" fluid>
             <ng-template pTemplate="date" let-date>
+                @let hasEvent = hasEvents(date.day, date.month, date.year);
+                @let hasReception = hasReceptions(date.day, date.month, date.year);
                 <span
-                    [ngClass]="{ 'bg-primary text-primary-contrast rounded-full !w-8 !h-8 flex items-center justify-center': hasEvents(date.day, date.month, date.year) }">{{ date.day }}</span>
+                    [ngClass]="{
+                        'bg-primary text-primary-contrast': hasEvent && !hasReception,
+                        'bg-green-500 text-white': !hasEvent && hasReception,
+                        'bg-gradient-to-br from-primary to-green-500 text-white': hasEvent && hasReception
+                    }"
+                    [class.rounded-full]="hasEvent || hasReception"
+                    [class.!w-8]="hasEvent || hasReception"
+                    [class.!h-8]="hasEvent || hasReception"
+                    [class.flex]="hasEvent || hasReception"
+                    [class.items-center]="hasEvent || hasReception"
+                    [class.justify-center]="hasEvent || hasReception">{{ date.day }}</span>
             </ng-template>
         </p-date-picker>
         <div class="p-4 border-t border-surface">
@@ -21,7 +33,7 @@
             } @else if (selectedDayEvents().length > 0) {
                 @for (event of selectedDayEvents(); track event.id) {
                     <div (click)="openEventDetails(event.id); calendarPopover.toggle($event)"
-                         class="mb-2 flex items-center justify-between gap-2">
+                         class="mb-2 flex items-center justify-between gap-2 cursor-pointer hover:bg-primary-50 dark:hover:bg-primary-950 p-2 rounded-border transition-colors">
                         <div class="flex-1 min-w-0">
                             <div class="font-medium text-ellipsis overflow-hidden whitespace-nowrap">
                                 {{ event.name }} ({{ event.event_date | date: 'HH:mm' }})
@@ -33,15 +45,45 @@
                         <button pButton
                                 type="button"
                                 class="p-button-text p-button-rounded p-button-sm"
-                                (click)="openEventDetails(event.id)"
+                                (click)="openEventDetails(event.id); $event.stopPropagation()"
                                 pTooltip="Подробнее"
                                 tooltipPosition="left">
                             <i class="pi pi-info-circle" pButtonIcon></i>
                         </button>
                     </div>
                 }
-            } @else {
+            } @else if (selectedDayReceptions().length === 0) {
                 <div>Нет событий</div>
+            }
+
+            @if (selectedDayReceptions().length > 0) {
+                @if (selectedDayEvents().length > 0) {
+                    <div class="my-3 border-t border-surface"></div>
+                }
+                <div class="font-semibold mb-2 text-green-600 dark:text-green-400">
+                    Приемы:
+                </div>
+                @for (reception of selectedDayReceptions(); track reception.id) {
+                    <div (click)="openReceptionDetails(reception.id); calendarPopover.toggle($event)"
+                         class="mb-2 flex items-center justify-between gap-2 cursor-pointer hover:bg-green-50 dark:hover:bg-green-950 p-2 rounded-border transition-colors">
+                        <div class="flex-1 min-w-0">
+                            <div class="font-medium text-ellipsis overflow-hidden whitespace-nowrap">
+                                {{ reception.name }} ({{ reception.date | date: 'HH:mm' }})
+                            </div>
+                            <div class="text-xs text-surface-500">
+                                Посетитель: {{ reception.visitor }}
+                            </div>
+                        </div>
+                        <button pButton
+                                type="button"
+                                class="p-button-text p-button-rounded p-button-sm"
+                                (click)="openReceptionDetails(reception.id); $event.stopPropagation()"
+                                pTooltip="Подробнее"
+                                tooltipPosition="left">
+                            <i class="pi pi-info-circle" pButtonIcon></i>
+                        </button>
+                    </div>
+                }
             }
 
             @if (selectedDayCounts()) {
@@ -271,6 +313,124 @@
     } @else {
         <div class="text-center p-8 text-surface-500">
             Нет данных для отображения
+        </div>
+    }
+</p-dialog>
+
+<p-dialog [(visible)]="receptionDialogVisible" [header]="receptionDialogHeader" [modal]="true"
+          [dismissableMask]="true" [style]="{ width: '600px' }" [breakpoints]="{ '960px': '75vw', '640px': '90vw' }">
+    @if (loadingReceptionDetails) {
+        <div class="flex items-center justify-center p-8">
+            <i class="pi pi-spin pi-spinner text-4xl"></i>
+        </div>
+    } @else if (selectedReceptionDetails) {
+        <div class="flex flex-col gap-4">
+            <div>
+                <div class="font-semibold text-surface-500 mb-1">Название</div>
+                <div>{{ selectedReceptionDetails.name }}</div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <div class="font-semibold text-surface-500 mb-1">Дата и время</div>
+                    <div>{{ selectedReceptionDetails.date | date: 'dd.MM.yyyy HH:mm' }}</div>
+                </div>
+
+                <div>
+                    <div class="font-semibold text-surface-500 mb-1">Статус</div>
+                    <div>
+                        @switch (selectedReceptionDetails.status) {
+                            @case ('true') {
+                                <span class="px-2 py-1 text-xs font-medium rounded bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300">
+                                    Состоялся
+                                </span>
+                            }
+                            @case ('false') {
+                                <span class="px-2 py-1 text-xs font-medium rounded bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300">
+                                    Не состоялся
+                                </span>
+                            }
+                            @case ('default') {
+                                <span class="px-2 py-1 text-xs font-medium rounded bg-gray-100 text-gray-700 dark:bg-gray-900 dark:text-gray-300">
+                                    Запланирован
+                                </span>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div class="font-semibold text-surface-500 mb-1">Посетитель</div>
+                <div>{{ selectedReceptionDetails.visitor }}</div>
+            </div>
+
+            @if (selectedReceptionDetails.together) {
+                <div>
+                    <div class="font-semibold text-surface-500 mb-1">Сопровождающие</div>
+                    <div>{{ selectedReceptionDetails.together }}</div>
+                </div>
+            }
+
+            @if (selectedReceptionDetails.description) {
+                <div>
+                    <div class="font-semibold text-surface-500 mb-1">Описание</div>
+                    <div class="whitespace-pre-wrap">{{ selectedReceptionDetails.description }}</div>
+                </div>
+            }
+
+            @if (selectedReceptionDetails.status_change_reason) {
+                <div>
+                    <div class="font-semibold text-surface-500 mb-1">Причина изменения статуса</div>
+                    <div class="whitespace-pre-wrap">{{ selectedReceptionDetails.status_change_reason }}</div>
+                </div>
+            }
+
+            <div class="grid grid-cols-2 gap-4">
+                @if (selectedReceptionDetails.informed !== undefined) {
+                    <div>
+                        <div class="font-semibold text-surface-500 mb-1">Информирование</div>
+                        <div>
+                            @if (selectedReceptionDetails.informed) {
+                                <span class="text-green-600 dark:text-green-400">
+                                    <i class="pi pi-check-circle mr-1"></i>Проинформирован
+                                </span>
+                            } @else {
+                                <span class="text-red-600 dark:text-red-400">
+                                    <i class="pi pi-times-circle mr-1"></i>Не проинформирован
+                                </span>
+                            }
+                        </div>
+                    </div>
+                }
+
+                @if (selectedReceptionDetails.informed_by) {
+                    <div>
+                        <div class="font-semibold text-surface-500 mb-1">Проинформировал</div>
+                        <div>{{ selectedReceptionDetails.informed_by.name }}</div>
+                    </div>
+                }
+            </div>
+
+            <div class="pt-3 border-t border-surface">
+                <div class="grid grid-cols-2 gap-4 text-sm text-surface-500">
+                    @if (selectedReceptionDetails.created_by) {
+                        <div>
+                            <div class="font-semibold mb-1">Создал</div>
+                            <div>{{ selectedReceptionDetails.created_by.name }}</div>
+                            <div class="text-xs">{{ selectedReceptionDetails.created_at | date: 'dd.MM.yyyy HH:mm' }}</div>
+                        </div>
+                    }
+
+                    @if (selectedReceptionDetails.updated_by) {
+                        <div>
+                            <div class="font-semibold mb-1">Обновил</div>
+                            <div>{{ selectedReceptionDetails.updated_by.name }}</div>
+                            <div class="text-xs">{{ selectedReceptionDetails.updated_at | date: 'dd.MM.yyyy HH:mm' }}</div>
+                        </div>
+                    }
+                </div>
+            </div>
         </div>
     }
 </p-dialog>
