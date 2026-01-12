@@ -14,6 +14,8 @@ import { CalendarEventsService } from '@/core/services/calendar-events.service';
 import { CalendarResponse, DayCounts } from '@/core/interfaces/calendar-events';
 import { PastEventsService } from '@/core/services/past-events.service';
 import { PastEvent as PastEvent } from '@/core/interfaces/past-events';
+import { ReceptionService } from '@/core/services/reception.service';
+import { Reception } from '@/core/interfaces/reception';
 
 @Component({
     selector: 'app-topbar-calendar',
@@ -25,10 +27,13 @@ export class TopbarCalendarWidget implements OnInit {
     eventManagementService = inject(EventManagementService);
     calendarEventsService = inject(CalendarEventsService);
     pastEventsService = inject(PastEventsService);
+    receptionService = inject(ReceptionService);
 
     allEvents = signal<Event[]>([]);
+    allReceptions = signal<Reception[]>([]);
     selectedDate: Date = new Date();
     selectedDayEvents = signal<Event[]>([]);
+    selectedDayReceptions = signal<Reception[]>([]);
     selectedDayCounts = signal<DayCounts | null>(null);
     loading = false;
 
@@ -36,6 +41,12 @@ export class TopbarCalendarWidget implements OnInit {
     eventDialogHeader = '';
     selectedEventDetails: Event | null = null;
     loadingEventDetails = false;
+
+    // Модальное окно для Reception
+    receptionDialogVisible = false;
+    receptionDialogHeader = '';
+    selectedReceptionDetails: Reception | null = null;
+    loadingReceptionDetails = false;
 
     // Модальное окно для статистики
     statisticsDialogVisible = false;
@@ -48,6 +59,7 @@ export class TopbarCalendarWidget implements OnInit {
 
     ngOnInit() {
         this.loadEvents();
+        this.loadReceptions();
         this.loadCalendarData(this.selectedDate.getFullYear(), this.selectedDate.getMonth() + 1);
     }
 
@@ -66,9 +78,22 @@ export class TopbarCalendarWidget implements OnInit {
         });
     }
 
+    loadReceptions() {
+        this.receptionService.getReceptions().subscribe({
+            next: (receptions) => {
+                this.allReceptions.set(receptions);
+                this.onDateSelect(this.selectedDate);
+            },
+            error: (err) => {
+                console.error('Failed to load receptions:', err);
+            }
+        });
+    }
+
     onDateSelect(date: Date) {
         this.selectedDate = date;
         this.selectedDayEvents.set(this.getEventsForDate(date));
+        this.selectedDayReceptions.set(this.getReceptionsForDate(date));
         this.updateSelectedDayCounts(date);
 
         // Загружаем данные для нового месяца, если их нет в кэше
@@ -91,10 +116,31 @@ export class TopbarCalendarWidget implements OnInit {
         return this.allEvents().some((event) => isSameDay(parseISO(event.event_date), date));
     }
 
+    hasReceptions(day: number, month: number, year: number): boolean {
+        const date = new Date(year, month, day);
+        return this.allReceptions().some((reception) => {
+            const receptionDate = typeof reception.date === 'string' ? parseISO(reception.date) : reception.date;
+            return isSameDay(receptionDate, date);
+        });
+    }
+
     private getEventsForDate(date: Date): Event[] {
         return this.allEvents()
             .filter((event) => isSameDay(parseISO(event.event_date), date))
             .sort((a, b) => parseISO(a.event_date).getTime() - parseISO(b.event_date).getTime());
+    }
+
+    private getReceptionsForDate(date: Date): Reception[] {
+        return this.allReceptions()
+            .filter((reception) => {
+                const receptionDate = typeof reception.date === 'string' ? parseISO(reception.date) : reception.date;
+                return isSameDay(receptionDate, date);
+            })
+            .sort((a, b) => {
+                const dateA = typeof a.date === 'string' ? parseISO(a.date) : a.date;
+                const dateB = typeof b.date === 'string' ? parseISO(b.date) : b.date;
+                return dateA.getTime() - dateB.getTime();
+            });
     }
 
     openEventDetails(eventId: number) {
@@ -111,6 +157,24 @@ export class TopbarCalendarWidget implements OnInit {
                 console.error('Failed to load event details:', err);
                 this.loadingEventDetails = false;
                 this.eventDialogVisible = false;
+            }
+        });
+    }
+
+    openReceptionDetails(receptionId: number) {
+        this.loadingReceptionDetails = true;
+        this.receptionDialogVisible = true;
+        this.receptionDialogHeader = 'Информация о приеме';
+
+        this.receptionService.getReception(receptionId).subscribe({
+            next: (reception) => {
+                this.selectedReceptionDetails = reception;
+                this.loadingReceptionDetails = false;
+            },
+            error: (err) => {
+                console.error('Failed to load reception details:', err);
+                this.loadingReceptionDetails = false;
+                this.receptionDialogVisible = false;
             }
         });
     }
