@@ -18,6 +18,7 @@ import { InvestmentService } from '@/core/services/investment.service';
 import { InvestmentDto, InvestmentStatus } from '@/core/interfaces/investment';
 import { ActivatedRoute } from '@angular/router';
 import { ProgressBarModule } from 'primeng/progressbar';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-invest-perspective-projects',
@@ -38,7 +39,8 @@ import { ProgressBarModule } from 'primeng/progressbar';
         FileListComponent,
         InputTextComponent,
         FormsModule,
-        ProgressBarModule
+        ProgressBarModule,
+        TranslatePipe
     ],
     templateUrl: './invest-perspective-projects.component.html',
     styleUrl: './invest-perspective-projects.component.scss'

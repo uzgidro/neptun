@@ -1,7 +1,6 @@
-import { Component, inject, OnInit, OnDestroy, signal } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { Table, TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
@@ -10,10 +9,9 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
-import { MessageService } from 'primeng/api';
+import { MessageService, PrimeTemplate } from 'primeng/api';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { DialogModule } from 'primeng/dialog';
-import { MessageService, PrimeTemplate } from 'primeng/api';
 
 import { Reception } from '@/core/interfaces/reception';
 import { ReceptionService } from '@/core/services/reception.service';
@@ -26,7 +24,24 @@ import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-
 @Component({
     selector: 'app-reception',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, TableModule, ButtonModule, InputTextModule, IconFieldModule, InputIconModule, TagModule, TranslateModule, TooltipModule, DialogModule, PrimeTemplate, DialogComponent, InputTextComponent, TextareaComponent, DatePickerComponent],
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        TableModule,
+        ButtonModule,
+        InputTextModule,
+        IconFieldModule,
+        InputIconModule,
+        TagModule,
+        TranslateModule,
+        TooltipModule,
+        DialogModule,
+        PrimeTemplate,
+        DialogComponent,
+        InputTextComponent,
+        TextareaComponent,
+        DatePickerComponent
+    ],
     templateUrl: './reception.component.html',
     styleUrl: './reception.component.scss'
 })
@@ -86,21 +101,24 @@ export class ReceptionComponent implements OnInit, OnDestroy {
 
     loadReceptions(): void {
         this.loading.set(true);
-        this.receptionService.getReceptions().pipe(takeUntil(this.destroy$)).subscribe({
-            next: (data) => {
-                this.receptions.set(data);
-                this.loading.set(false);
-            },
-            error: (error) => {
-                console.error('Error loading receptions:', error);
-                this.messageService.add({
-                    severity: 'error',
-                    summary: this.translate.instant('PLANNING.COMMON.ERROR'),
-                    detail: this.translate.instant('PLANNING.RECEPTION.LOAD_ERROR')
-                });
-                this.loading.set(false);
-            }
-        });
+        this.receptionService
+            .getReceptions()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: (data) => {
+                    this.receptions.set(data);
+                    this.loading.set(false);
+                },
+                error: (error) => {
+                    console.error('Error loading receptions:', error);
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: this.translate.instant('PLANNING.COMMON.ERROR'),
+                        detail: this.translate.instant('PLANNING.RECEPTION.LOAD_ERROR')
+                    });
+                    this.loading.set(false);
+                }
+            });
     }
 
     onGlobalFilter(table: Table, event: Event): void {
@@ -125,8 +143,8 @@ export class ReceptionComponent implements OnInit, OnDestroy {
 
         // Parse together field if it exists
         if (reception.together) {
-            const togetherArray = reception.together.split(',').map(item => item.trim());
-            togetherArray.forEach(item => {
+            const togetherArray = reception.together.split(',').map((item) => item.trim());
+            togetherArray.forEach((item) => {
                 this.togetherFields.push(new FormControl(item));
             });
         } else {
@@ -145,61 +163,70 @@ export class ReceptionComponent implements OnInit, OnDestroy {
 
     deleteReception(reception: Reception): void {
         if (confirm(this.translate.instant('PLANNING.RECEPTION.DELETE_CONFIRM'))) {
-            this.receptionService.deleteReception(reception.id).pipe(takeUntil(this.destroy$)).subscribe({
+            this.receptionService
+                .deleteReception(reception.id)
+                .pipe(takeUntil(this.destroy$))
+                .subscribe({
+                    next: () => {
+                        this.messageService.add({
+                            severity: 'success',
+                            summary: this.translate.instant('PLANNING.RECEPTION.DELETED')
+                        });
+                        this.loadReceptions();
+                    },
+                    error: (err) => {
+                        this.messageService.add({
+                            severity: 'error',
+                            summary: this.translate.instant('PLANNING.RECEPTION.DELETE_ERROR'),
+                            detail: err.message
+                        });
+                    }
+                });
+        }
+    }
+
+    approveReception(reception: Reception): void {
+        this.receptionService
+            .updateReception(reception.id, { status: 'true' })
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
                 next: () => {
                     this.messageService.add({
                         severity: 'success',
-                        summary: this.translate.instant('PLANNING.RECEPTION.DELETED')
+                        summary: this.translate.instant('PLANNING.RECEPTION.APPROVED_SUCCESS')
                     });
                     this.loadReceptions();
                 },
                 error: (err) => {
                     this.messageService.add({
                         severity: 'error',
-                        summary: this.translate.instant('PLANNING.RECEPTION.DELETE_ERROR'),
+                        summary: this.translate.instant('PLANNING.RECEPTION.APPROVE_ERROR'),
                         detail: err.message
                     });
                 }
             });
-        }
-    }
-
-    approveReception(reception: Reception): void {
-        this.receptionService.updateReception(reception.id, { status: 'true' }).pipe(takeUntil(this.destroy$)).subscribe({
-            next: () => {
-                this.messageService.add({
-                    severity: 'success',
-                    summary: this.translate.instant('PLANNING.RECEPTION.APPROVED_SUCCESS')
-                });
-                this.loadReceptions();
-            },
-            error: (err) => {
-                this.messageService.add({
-                    severity: 'error',
-                    summary: this.translate.instant('PLANNING.RECEPTION.APPROVE_ERROR'),
-                    detail: err.message
-                });
-            }
-        });
     }
 
     rejectReception(reception: Reception): void {
-        this.receptionService.updateReception(reception.id, { status: 'false' }).pipe(takeUntil(this.destroy$)).subscribe({
-            next: () => {
-                this.messageService.add({
-                    severity: 'success',
-                    summary: this.translate.instant('PLANNING.RECEPTION.REJECTED_SUCCESS')
-                });
-                this.loadReceptions();
-            },
-            error: (err) => {
-                this.messageService.add({
-                    severity: 'error',
-                    summary: this.translate.instant('PLANNING.RECEPTION.REJECT_ERROR'),
-                    detail: err.message
-                });
-            }
-        });
+        this.receptionService
+            .updateReception(reception.id, { status: 'false' })
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: () => {
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: this.translate.instant('PLANNING.RECEPTION.REJECTED_SUCCESS')
+                    });
+                    this.loadReceptions();
+                },
+                error: (err) => {
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: this.translate.instant('PLANNING.RECEPTION.REJECT_ERROR'),
+                        detail: err.message
+                    });
+                }
+            });
     }
 
     saveReception(): void {
@@ -245,25 +272,28 @@ export class ReceptionComponent implements OnInit, OnDestroy {
                 editRequest.together = togetherString || undefined;
             }
 
-            this.receptionService.updateReception(this.selectedReception.id, editRequest).pipe(takeUntil(this.destroy$)).subscribe({
-                next: () => {
-                    this.messageService.add({
-                        severity: 'success',
-                        summary: this.translate.instant('PLANNING.COMMON.SUCCESS'),
-                        detail: this.translate.instant('PLANNING.RECEPTION.UPDATED')
-                    });
-                    this.loadReceptions();
-                    this.hideDialog();
-                },
-                error: (error) => {
-                    console.error('Error updating reception:', error);
-                    this.messageService.add({
-                        severity: 'error',
-                        summary: this.translate.instant('PLANNING.COMMON.ERROR'),
-                        detail: this.translate.instant('PLANNING.RECEPTION.UPDATE_ERROR')
-                    });
-                }
-            });
+            this.receptionService
+                .updateReception(this.selectedReception.id, editRequest)
+                .pipe(takeUntil(this.destroy$))
+                .subscribe({
+                    next: () => {
+                        this.messageService.add({
+                            severity: 'success',
+                            summary: this.translate.instant('PLANNING.COMMON.SUCCESS'),
+                            detail: this.translate.instant('PLANNING.RECEPTION.UPDATED')
+                        });
+                        this.loadReceptions();
+                        this.hideDialog();
+                    },
+                    error: (error) => {
+                        console.error('Error updating reception:', error);
+                        this.messageService.add({
+                            severity: 'error',
+                            summary: this.translate.instant('PLANNING.COMMON.ERROR'),
+                            detail: this.translate.instant('PLANNING.RECEPTION.UPDATE_ERROR')
+                        });
+                    }
+                });
         } else {
             // Prepare addRequest structure
             const addRequest = {
@@ -274,25 +304,28 @@ export class ReceptionComponent implements OnInit, OnDestroy {
                 together: togetherString || undefined
             };
 
-            this.receptionService.createReception(addRequest).pipe(takeUntil(this.destroy$)).subscribe({
-                next: () => {
-                    this.messageService.add({
-                        severity: 'success',
-                        summary: this.translate.instant('PLANNING.COMMON.SUCCESS'),
-                        detail: this.translate.instant('PLANNING.RECEPTION.CREATED')
-                    });
-                    this.loadReceptions();
-                    this.hideDialog();
-                },
-                error: (error) => {
-                    console.error('Error creating reception:', error);
-                    this.messageService.add({
-                        severity: 'error',
-                        summary: this.translate.instant('PLANNING.COMMON.ERROR'),
-                        detail: this.translate.instant('PLANNING.RECEPTION.CREATE_ERROR')
-                    });
-                }
-            });
+            this.receptionService
+                .createReception(addRequest)
+                .pipe(takeUntil(this.destroy$))
+                .subscribe({
+                    next: () => {
+                        this.messageService.add({
+                            severity: 'success',
+                            summary: this.translate.instant('PLANNING.COMMON.SUCCESS'),
+                            detail: this.translate.instant('PLANNING.RECEPTION.CREATED')
+                        });
+                        this.loadReceptions();
+                        this.hideDialog();
+                    },
+                    error: (error) => {
+                        console.error('Error creating reception:', error);
+                        this.messageService.add({
+                            severity: 'error',
+                            summary: this.translate.instant('PLANNING.COMMON.ERROR'),
+                            detail: this.translate.instant('PLANNING.RECEPTION.CREATE_ERROR')
+                        });
+                    }
+                });
         }
     }
 

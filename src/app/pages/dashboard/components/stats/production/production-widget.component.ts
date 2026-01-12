@@ -2,13 +2,11 @@ import { Component, inject, OnInit } from '@angular/core';
 import { DashboardService } from '@/core/services/dashboard.service';
 import { DashboardResponse } from '@/core/interfaces/ges-production';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslatePipe } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-production',
-    imports: [CommonModule],
-    imports: [TranslateModule],
+    imports: [CommonModule, TranslatePipe, TranslateModule],
     templateUrl: './production-widget.component.html',
     styleUrl: './production-widget.component.scss'
 })
