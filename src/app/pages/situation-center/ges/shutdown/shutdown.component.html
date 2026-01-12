@@ -5,35 +5,9 @@
     <div class="flex justify-end mb-6">
         <div class="flex items-center gap-2">
             <label for="dateSelector" class="font-medium">{{ 'SITUATION_CENTER.COMMON.DATE' | translate }}:</label>
-            <p-date-picker
-                inputId="dateSelector"
-                [(ngModel)]="selectedDate"
-                dateFormat="dd.mm.yy"
-                [showIcon]="true"
-                (onSelect)="onDateChange()"
-                [placeholder]="'SITUATION_CENTER.COMMON.SELECT_DATE' | translate"
-            ></p-date-picker>
+            <app-date [(date)]="selectedDate"></app-date>
         </div>
     </div>
 
-    <div class="mb-8">
-        <app-incident [date]="selectedDate" (incidentSaved)="onIncidentSaved()"></app-incident>
-    </div>
-
-    <div class="mb-8">
-        <app-ges-shutdown [date]="selectedDate" (shutdownSaved)="onShutdownSaved()"></app-ges-shutdown>
-    </div>
-
-    <div class="mb-8">
-        <app-reservoir-device></app-reservoir-device>
-    </div>
-
-    <div class="mb-8">
-        <app-shutdown-discharge [date]="selectedDate"></app-shutdown-discharge>
-    </div>
-
-    <div class="mb-8">
-        <app-visit [date]="selectedDate"></app-visit>
-    </div>
-
+    <app-ges-shutdown [date]="selectedDate" (shutdownSaved)="onShutdownSaved()"></app-ges-shutdown>
 </div>

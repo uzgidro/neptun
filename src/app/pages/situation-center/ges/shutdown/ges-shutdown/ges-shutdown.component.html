@@ -4,6 +4,7 @@
     </div>
 }
 
+<div class="table-section ges-section">
 <p-table
     [value]="shutdowns.ges"
     dataKey="id"
@@ -133,10 +134,9 @@
     </ng-template>
 
 </p-table>
+</div>
 
-<div class="my-8"></div>
-<hr>
-
+<div class="table-section micro-section">
 <p-table
     [value]="shutdowns.micro"
     dataKey="id"
@@ -266,10 +266,9 @@
     </ng-template>
 
 </p-table>
+</div>
 
-<div class="my-8"></div>
-<hr>
-
+<div class="table-section mini-section">
 <p-table
     [value]="shutdowns.mini"
     dataKey="id"
@@ -399,6 +398,7 @@
     </ng-template>
 
 </p-table>
+</div>
 
 <app-dialog
     [(visible)]="isFormOpen"

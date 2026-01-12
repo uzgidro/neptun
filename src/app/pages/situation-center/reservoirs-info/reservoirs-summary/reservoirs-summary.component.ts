@@ -1,53 +1,62 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule, registerLocaleData } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { InputText } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
-import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
 import { ReservoirSummaryService } from '@/core/services/reservoir-summary.service';
 import { ReservoirSummaryRequest, ReservoirSummaryResponse } from '@/core/interfaces/reservoir-summary';
 import localeRu from '@angular/common/locales/ru';
 import { MessageService } from 'primeng/api';
 import { AuthService } from '@/core/services/auth.service';
-import { ExportService } from '@/core/services/export.service';
+import { finalize } from 'rxjs';
+import { HttpResponse } from '@angular/common/http';
+import { saveAs } from 'file-saver';
+import { LevelVolumeService } from '@/core/services/level-volume.service';
+import { LevelVolume } from '@/core/interfaces/level-volume';
+import { DateWidget } from '@/layout/component/widget/date/date.widget';
+import { TooltipModule } from 'primeng/tooltip';
 
 registerLocaleData(localeRu);
 
 @Component({
     selector: 'app-reservoirs-summary',
-    imports: [CommonModule, ReactiveFormsModule, TableModule, DatePickerComponent, ButtonModule, FormsModule, InputText],
+    imports: [CommonModule, ReactiveFormsModule, FormsModule, TableModule, InputText, ButtonModule, DateWidget, TooltipModule],
     templateUrl: './reservoirs-summary.component.html',
     styleUrl: './reservoirs-summary.component.scss'
 })
 export class ReservoirsSummaryComponent implements OnInit {
-    private fb = inject(FormBuilder);
-    private reservoirService = inject(ReservoirSummaryService);
-    private exportService = inject(ExportService);
-    private messageService = inject(MessageService);
-    authService = inject(AuthService);
+    private reservoirService: ReservoirSummaryService = inject(ReservoirSummaryService);
+    private messageService: MessageService = inject(MessageService);
+    private levelVolumeService: LevelVolumeService = inject(LevelVolumeService);
+    authService: AuthService = inject(AuthService);
 
-    form: FormGroup = this.fb.group({
-        date: [new Date()]
-    });
+    selectedDate: Date | null = null;
 
     data: ReservoirSummaryResponse[] = [];
     originalData: ReservoirSummaryResponse[] = [];
     submitted: boolean = false;
 
-    ngOnInit() {
-        this.loadData(this.form.get('date')?.value);
+    isExcelLoading = false;
+    isPdfLoading = false;
 
-        this.form.get('date')?.valueChanges.subscribe((date) => {
-            this.loadData(date);
-        });
+    get dateYMD(): string {
+        return this.selectedDate ? `${this.selectedDate.getFullYear()}-${String(this.selectedDate.getMonth() + 1).padStart(2, '0')}-${String(this.selectedDate.getDate()).padStart(2, '0')}` : '';
+    }
+
+    ngOnInit() {
+        // Data will be loaded via onDateChange when DateWidget initializes
+    }
+
+    onDateChange(date: Date): void {
+        this.selectedDate = date;
+        this.loadData(date);
     }
 
     private loadData(date: Date) {
         if (date) {
             this.reservoirService.getReservoirSummary(date).subscribe({
                 next: (response) => {
-                    console.log(response);
                     this.data = response;
                     // Store a deep copy of the original data
                     this.originalData = JSON.parse(JSON.stringify(response));
@@ -60,9 +69,8 @@ export class ReservoirsSummaryComponent implements OnInit {
     }
 
     getPreviousYear(yearsAgo: number): number {
-        const currentDate = this.form.get('date')?.value;
-        if (currentDate) {
-            return currentDate.getFullYear() - yearsAgo;
+        if (this.selectedDate) {
+            return this.selectedDate.getFullYear() - yearsAgo;
         }
         return new Date().getFullYear() - yearsAgo;
     }
@@ -72,27 +80,39 @@ export class ReservoirsSummaryComponent implements OnInit {
     }
 
     onAccept() {
-        // Get the selected date and format it as YYYY-MM-DD
-        const selectedDate = this.form.get('date')?.value;
-        const dateYMD = selectedDate ? `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}` : '';
-
         // Extract only the required fields for saving
         const dataToSave: ReservoirSummaryRequest[] = this.data
             .filter((value) => value.organization_id !== null)
             .map((reservoir) => {
-                return {
+                const original = this.originalData.find(o => o.organization_id === reservoir.organization_id);
+                const request: ReservoirSummaryRequest = {
                     organization_id: reservoir.organization_id!,
-                    date: dateYMD,
+                    date: this.dateYMD,
                     income: reservoir.income.current,
                     level: reservoir.level.current,
                     volume: reservoir.volume.current,
-                    release: reservoir.release.current
+                    release: reservoir.release.current,
+                    modsnow_current: reservoir.modsnow.current,
+                    modsnow_year_ago: reservoir.modsnow.year_ago
                 };
+
+                if (original && original.incoming_volume !== reservoir.incoming_volume) {
+                    request.total_income_volume = reservoir.incoming_volume;
+                }
+
+                if (original && original.incoming_volume_prev_year !== reservoir.incoming_volume_prev_year) {
+                    request.total_income_volume_prev_year = reservoir.incoming_volume_prev_year;
+                }
+
+                return request;
             });
 
         this.reservoirService.upsetReservoirData(dataToSave).subscribe({
             next: () => {
                 this.messageService.add({ severity: 'success', summary: 'Данные обновлены' });
+                if (this.selectedDate) {
+                    this.loadData(this.selectedDate);
+                }
             },
             error: (err) => {
                 this.messageService.add({ severity: 'warn', summary: 'Произошла ошибка', detail: err });
@@ -104,6 +124,74 @@ export class ReservoirsSummaryComponent implements OnInit {
     onReset() {
         // Restore data from the original copy
         this.data = JSON.parse(JSON.stringify(this.originalData));
+    }
+
+    onLevelChange(reservoir: ReservoirSummaryResponse) {
+        reservoir.level.is_edited = true;
+        if (reservoir.level.current !== null) {
+            this.levelVolumeService.getVolume(reservoir.organization_id!, reservoir.level.current).subscribe({
+                next: (lv: LevelVolume) => {
+                    reservoir.volume.current = lv.volume;
+                    reservoir.volume.is_edited = true;
+                }
+            });
+        }
+    }
+
+    onVolumeChange(reservoir: ReservoirSummaryResponse) {
+        reservoir.volume.is_edited = true;
+    }
+
+    onReleaseChange(reservoir: ReservoirSummaryResponse) {
+        reservoir.release.is_edited = true;
+    }
+
+    onIncomeChange(reservoir: ReservoirSummaryResponse) {
+        reservoir.income.is_edited = true;
+    }
+
+    onModsnowCurrentChange(reservoir: ReservoirSummaryResponse) {
+        reservoir.modsnow.is_edited = true;
+    }
+
+    onModsnowYearAgoChange(reservoir: ReservoirSummaryResponse) {
+        reservoir.modsnow.is_edited = true;
+    }
+
+    onIncomingVolumeChange(reservoir: ReservoirSummaryResponse) {
+        reservoir.incoming_volume_is_calculated = false;
+        reservoir.incoming_volume_is_reset = false;
+    }
+
+    onIncomingVolumePrevYearChange(reservoir: ReservoirSummaryResponse) {
+        reservoir.incoming_volume_prev_year_is_calculated = false;
+        reservoir.incoming_volume_prev_year_is_reset = false;
+    }
+
+    onResetIncomingVolume(reservoir: ReservoirSummaryResponse) {
+        reservoir.incoming_volume = null;
+        reservoir.incoming_volume_is_reset = true;
+        reservoir.incoming_volume_is_calculated = false;
+    }
+
+    onResetIncomingVolumePrevYear(reservoir: ReservoirSummaryResponse) {
+        reservoir.incoming_volume_prev_year = null;
+        reservoir.incoming_volume_prev_year_is_reset = true;
+        reservoir.incoming_volume_prev_year_is_calculated = false;
+    }
+
+    getIncomingVolumeTooltip(reservoir: ReservoirSummaryResponse): string {
+        if (reservoir.incoming_volume_base_date || reservoir.incoming_volume_base_value != null) {
+            return `Базовая дата: ${reservoir.incoming_volume_base_date || '-'}\nБазовое значение: ${reservoir.incoming_volume_base_value != null ? reservoir.incoming_volume_base_value : '-'}`;
+        }
+        return '';
+    }
+
+    getIncomingVolumePrevYearTooltip(reservoir: ReservoirSummaryResponse): string {
+        if (reservoir.incoming_volume_prev_year_base_date || reservoir.incoming_volume_prev_year_base_value != null) {
+            return `Базовая дата: ${reservoir.incoming_volume_prev_year_base_date || '-'}\nБазовое значение: ${reservoir.incoming_volume_prev_year_base_value != null ? reservoir.incoming_volume_prev_year_base_value : '-'}`;
+        }
+        return '';
     }
 
     onInputFocus(event: FocusEvent, obj: any, field: string) {
@@ -120,22 +208,34 @@ export class ReservoirsSummaryComponent implements OnInit {
         }
     }
 
-    exportExcel() {
-        const dataToExport = this.data.map((item) => ({
-            'Водохранилище': item.reservoir_name,
-            'Объем на сегодня': item.volume_today,
-            'Объем на вчера': item.volume_yesterday,
-            'Разница объемов': item.volume_difference,
-            [`Объем на ${this.getPreviousYear(1)} год`]: item.volume_1_year_ago,
-            [`Объем на ${this.getPreviousYear(2)} год`]: item.volume_2_years_ago,
-            'Уровень на сегодня': item.level_today,
-            'Уровень на вчера': item.level_yesterday,
-            'Разница уровней': item.level_difference,
-            [`Уровень на ${this.getPreviousYear(1)} год`]: item.level_1_year_ago,
-            [`Уровень на ${this.getPreviousYear(2)} год`]: item.level_2_years_ago,
-            'Приток': item.inflow,
-            'Сброс': item.outflow
-        }));
-        this.exportService.exportToExcel(dataToExport, 'Сводка по водохранилищам');
+    download(format: 'excel' | 'pdf') {
+        // Устанавливаем статус загрузки
+        if (format === 'excel') this.isExcelLoading = true;
+        else this.isPdfLoading = true;
+
+        this.reservoirService
+            .downloadSummary(this.selectedDate!, format)
+            .pipe(
+                finalize(() => {
+                    // Снимаем спиннер в любом случае (успех или ошибка)
+                    this.isExcelLoading = false;
+                    this.isPdfLoading = false;
+                })
+            )
+            .subscribe({
+                next: (response: HttpResponse<Blob>) => {
+                    // 1. Пытаемся достать имя файла из заголовка Content-Disposition
+                    const extension = format === 'excel' ? 'xlsx' : 'pdf';
+                    const filename = `СВОД_${this.dateYMD}.${extension}`;
+
+                    // 2. Сохраняем файл с помощью file-saver
+                    // response.body! - это сам Blob (файл)
+                    saveAs(response.body!, filename);
+                },
+                error: (err: any) => {
+                    console.error('Ошибка при скачивании:', err);
+                    alert('Не удалось скачать файл. Проверьте консоль.');
+                }
+            });
     }
 }
