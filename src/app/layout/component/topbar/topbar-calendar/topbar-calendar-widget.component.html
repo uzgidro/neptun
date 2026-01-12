@@ -4,7 +4,7 @@
 </button>
 <p-popover #calendarPopover [style]="{ width: '350px' }">
     <ng-template pTemplate="content">
-        <p-date-picker [(ngModel)]="selectedDate" (onSelect)="onDateSelect($event)" [inline]="true" fluid>
+        <p-date-picker [(ngModel)]="selectedDate" (onSelect)="onDateSelect($event)" (onMonthChange)="onMonthChange($event)" [inline]="true" fluid>
             <ng-template pTemplate="date" let-date>
                 <span
                     [ngClass]="{ 'bg-primary text-primary-contrast rounded-full !w-8 !h-8 flex items-center justify-center': hasEvents(date.day, date.month, date.year) }">{{ date.day }}</span>
@@ -42,6 +42,41 @@
                 }
             } @else {
                 <div>Нет событий</div>
+            }
+
+            @if (selectedDayCounts()) {
+                <div class="mt-3 pt-3 border-t border-surface">
+                    <div class="flex flex-col gap-1 text-sm">
+                        <div
+                            (click)="onStatisticClick('incidents', selectedDayCounts()!.incidents)"
+                            class="flex justify-between p-2 rounded-border transition-colors"
+                            [ngClass]="selectedDayCounts()!.incidents > 0 ? 'cursor-pointer hover:bg-surface-100 dark:hover:bg-surface-800' : 'opacity-60'">
+                            <span>Инциденты:</span>
+                            <span class="font-medium">{{ selectedDayCounts()!.incidents }}</span>
+                        </div>
+                        <div
+                            (click)="onStatisticClick('shutdowns', selectedDayCounts()!.shutdowns)"
+                            class="flex justify-between p-2 rounded-border transition-colors"
+                            [ngClass]="selectedDayCounts()!.shutdowns > 0 ? 'cursor-pointer hover:bg-surface-100 dark:hover:bg-surface-800' : 'opacity-60'">
+                            <span>Аварийные отключения:</span>
+                            <span class="font-medium">{{ selectedDayCounts()!.shutdowns }}</span>
+                        </div>
+                        <div
+                            (click)="onStatisticClick('discharges', selectedDayCounts()!.discharges)"
+                            class="flex justify-between p-2 rounded-border transition-colors"
+                            [ngClass]="selectedDayCounts()!.discharges > 0 ? 'cursor-pointer hover:bg-surface-100 dark:hover:bg-surface-800' : 'opacity-60'">
+                            <span>Холостые водосбросы:</span>
+                            <span class="font-medium">{{ selectedDayCounts()!.discharges }}</span>
+                        </div>
+                        <div
+                            (click)="onStatisticClick('visits', selectedDayCounts()!.visits)"
+                            class="flex justify-between p-2 rounded-border transition-colors"
+                            [ngClass]="selectedDayCounts()!.visits > 0 ? 'cursor-pointer hover:bg-surface-100 dark:hover:bg-surface-800' : 'opacity-60'">
+                            <span>Визиты:</span>
+                            <span class="font-medium">{{ selectedDayCounts()!.visits }}</span>
+                        </div>
+                    </div>
+                </div>
             }
         </div>
     </ng-template>

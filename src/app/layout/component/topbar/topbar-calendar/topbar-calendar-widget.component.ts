@@ -10,6 +10,8 @@ import { isSameDay, parseISO } from 'date-fns';
 import { Dialog } from 'primeng/dialog';
 import { ButtonDirective, ButtonIcon } from 'primeng/button';
 import { Tooltip } from 'primeng/tooltip';
+import { CalendarEventsService } from '@/core/services/calendar-events.service';
+import { CalendarResponse, DayCounts } from '@/core/interfaces/calendar-events';
 
 @Component({
     selector: 'app-topbar-calendar',
@@ -19,10 +21,12 @@ import { Tooltip } from 'primeng/tooltip';
 })
 export class TopbarCalendarWidget implements OnInit {
     eventManagementService = inject(EventManagementService);
+    calendarEventsService = inject(CalendarEventsService);
 
     allEvents = signal<Event[]>([]);
     selectedDate: Date = new Date();
     selectedDayEvents = signal<Event[]>([]);
+    selectedDayCounts = signal<DayCounts | null>(null);
     loading = false;
 
     eventDialogVisible = false;
@@ -30,8 +34,12 @@ export class TopbarCalendarWidget implements OnInit {
     selectedEventDetails: Event | null = null;
     loadingEventDetails = false;
 
+    // Кэш для данных календаря по месяцам (ключ: "year-month")
+    private calendarCache = new Map<string, CalendarResponse>();
+
     ngOnInit() {
         this.loadEvents();
+        this.loadCalendarData(this.selectedDate.getFullYear(), this.selectedDate.getMonth() + 1);
     }
 
     loadEvents() {
@@ -52,6 +60,21 @@ export class TopbarCalendarWidget implements OnInit {
     onDateSelect(date: Date) {
         this.selectedDate = date;
         this.selectedDayEvents.set(this.getEventsForDate(date));
+        this.updateSelectedDayCounts(date);
+
+        // Загружаем данные для нового месяца, если их нет в кэше
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1;
+        const cacheKey = `${year}-${month}`;
+        if (!this.calendarCache.has(cacheKey)) {
+            this.loadCalendarData(year, month);
+        }
+    }
+
+    onMonthChange(event: { month?: number; year?: number }) {
+        if (event.month && event.year) {
+            this.loadCalendarData(event.year, event.month + 1);
+        }
     }
 
     hasEvents(day: number, month: number, year: number): boolean {
@@ -149,5 +172,51 @@ export class TopbarCalendarWidget implements OnInit {
         }
 
         return 'pi pi-file text-gray-400';
+    }
+
+    loadCalendarData(year: number, month: number) {
+        const cacheKey = `${year}-${month}`;
+
+        if (this.calendarCache.has(cacheKey)) {
+            this.updateSelectedDayCounts(this.selectedDate);
+            return;
+        }
+
+        this.calendarEventsService.getCalendarEvents(year, month).subscribe({
+            next: (response) => {
+                this.calendarCache.set(cacheKey, response);
+                this.updateSelectedDayCounts(this.selectedDate);
+            },
+            error: (err) => {
+                console.error('Failed to load calendar data:', err);
+            }
+        });
+    }
+
+    updateSelectedDayCounts(date: Date) {
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1;
+        const cacheKey = `${year}-${month}`;
+
+        const calendarData = this.calendarCache.get(cacheKey);
+        if (!calendarData) {
+            this.selectedDayCounts.set(null);
+            return;
+        }
+
+        // Форматируем дату в формат "YYYY-MM-DD"
+        const dateString = `${year}-${month.toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+
+        // Находим данные для выбранного дня
+        const dayCounts = calendarData.days.find((day) => day.date === dateString);
+        this.selectedDayCounts.set(dayCounts || null);
+    }
+
+    onStatisticClick(type: string, count: number) {
+        if (count === 0) return;
+
+        console.log(`Clicked on ${type}: ${count} items for date ${this.selectedDate.toLocaleDateString()}`);
+        // Здесь можно добавить логику для отображения деталей
+        // Например, открыть диалог с подробностями или отфильтровать данные
     }
 }
