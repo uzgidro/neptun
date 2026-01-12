@@ -1,7 +1,7 @@
 <div class="card">
-    <app-date (dateChange)="onDateChange($event)"></app-date>
-
-    <div class="mb-8">
-        <app-shutdown-discharge [date]="selectedDate"></app-shutdown-discharge>
+    <div class="flex justify-center mb-4">
+        <h2 class="text-2xl font-bold m-0">{{ 'SITUATION_CENTER.DISCHARGE.TITLE' | translate }}</h2>
     </div>
+
+    <app-shutdown-discharge [date]="selectedDate" (dateChange)="onDateChange($event)"></app-shutdown-discharge>
 </div>

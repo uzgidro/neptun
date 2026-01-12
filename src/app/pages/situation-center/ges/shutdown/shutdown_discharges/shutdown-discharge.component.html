@@ -19,8 +19,7 @@
     [globalFilterFields]="['organization.name', 'reason', 'created_by.name']"
 >
     <ng-template #caption>
-        <div class="flex justify-between items-center">
-            <div class="text-lg font-bold">{{ 'SITUATION_CENTER.DISCHARGE.TITLE' | translate }}</div>
+        <div class="flex justify-end items-center gap-3">
             <p-iconfield>
                 <p-inputicon>
                     <i class="pi pi-search"></i>
@@ -30,10 +29,11 @@
                     pInputText
                     type="text"
                     (input)="shd.filterGlobal(searchInput.value, 'contains')"
-                    placeholder="Поиск..."
+                    [placeholder]="'COMMON.SEARCH' | translate"
                     class="w-full"
                 />
             </p-iconfield>
+            <app-date [date]="selectedDate" [syncQueryParams]="false" (dateChange)="onDateChanged($event)"></app-date>
         </div>
     </ng-template>
 

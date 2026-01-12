@@ -3,10 +3,7 @@
         <h2 class="text-2xl font-bold m-0">{{ 'SITUATION_CENTER.SHUTDOWN.TITLE' | translate }}</h2>
     </div>
     <div class="flex justify-end mb-6">
-        <div class="flex items-center gap-2">
-            <label for="dateSelector" class="font-medium">{{ 'SITUATION_CENTER.COMMON.DATE' | translate }}:</label>
-            <app-date [(date)]="selectedDate"></app-date>
-        </div>
+        <app-date [(date)]="selectedDate"></app-date>
     </div>
 
     <app-ges-shutdown [date]="selectedDate" (shutdownSaved)="onShutdownSaved()"></app-ges-shutdown>
