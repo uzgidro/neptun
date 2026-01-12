@@ -10,7 +10,7 @@ import { TextareaComponent } from '@/layout/component/dialog/textarea/textarea.c
 import { Organization } from '@/core/interfaces/organizations';
 import { GesShutdownService } from '@/core/services/ges-shutdown.service';
 import { InputNumberdComponent } from '@/layout/component/dialog/input-number/input-number.component';
-import { GesShutdownDto, GesShutdownPayload, ShutdownDto } from '@/core/interfaces/ges-shutdown';
+import { GesShutdownDto, ShutdownDto } from '@/core/interfaces/ges-shutdown';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { AuthService } from '@/core/services/auth.service';
 import { TooltipModule } from 'primeng/tooltip';
@@ -18,6 +18,7 @@ import { OrganizationService } from '@/core/services/organization.service';
 import { FileUploadComponent } from '@/layout/component/dialog/file-upload/file-upload.component';
 import { FileViewerComponent } from '@/layout/component/dialog/file-viewer/file-viewer.component';
 import { FileListComponent } from '@/layout/component/dialog/file-list/file-list.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-ges-shutdown',
@@ -36,7 +37,8 @@ import { FileListComponent } from '@/layout/component/dialog/file-list/file-list
         DecimalPipe,
         FileUploadComponent,
         FileViewerComponent,
-        FileListComponent
+        FileListComponent,
+        TranslateModule
     ],
     templateUrl: './ges-shutdown.component.html',
     styleUrl: './ges-shutdown.component.scss'
@@ -260,14 +262,6 @@ export class GesShutdownComponent implements OnInit, OnChanges {
     showFiles(shutdown: ShutdownDto) {
         this.selectedShutdownForFiles = shutdown;
         this.showFilesDialog = true;
-    }
-
-    formatFileSize(bytes: number): string {
-        if (!bytes || bytes === 0) return '0 Bytes';
-        const k = 1024;
-        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-        const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
     }
 
     deleteShutdown(id: number) {

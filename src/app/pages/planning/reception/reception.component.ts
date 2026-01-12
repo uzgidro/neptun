@@ -1,6 +1,7 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Subject, takeUntil } from 'rxjs';
 import { Table, TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -9,6 +10,7 @@ import { InputIconModule } from 'primeng/inputicon';
 import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
 import { MessageService } from 'primeng/api';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { Reception } from '@/core/interfaces/reception';
 import { ReceptionService } from '@/core/services/reception.service';
@@ -20,14 +22,16 @@ import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-
 @Component({
     selector: 'app-reception',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, TableModule, ButtonModule, InputTextModule, IconFieldModule, InputIconModule, TagModule, TooltipModule, DialogComponent, InputTextComponent, TextareaComponent, DatePickerComponent],
+    imports: [CommonModule, ReactiveFormsModule, TableModule, ButtonModule, InputTextModule, IconFieldModule, InputIconModule, TagModule, TooltipModule, DialogComponent, InputTextComponent, TextareaComponent, DatePickerComponent, TranslateModule],
     templateUrl: './reception.component.html',
     styleUrl: './reception.component.scss'
 })
-export class ReceptionComponent implements OnInit {
+export class ReceptionComponent implements OnInit, OnDestroy {
     private receptionService = inject(ReceptionService);
     private messageService = inject(MessageService);
     private fb = inject(FormBuilder);
+    private translate = inject(TranslateService);
+    private destroy$ = new Subject<void>();
 
     receptions = signal<Reception[]>([]);
     loading = signal<boolean>(false);
@@ -54,7 +58,7 @@ export class ReceptionComponent implements OnInit {
 
     loadReceptions(): void {
         this.loading.set(true);
-        this.receptionService.getReceptions().subscribe({
+        this.receptionService.getReceptions().pipe(takeUntil(this.destroy$)).subscribe({
             next: (data) => {
                 this.receptions.set(data);
                 this.loading.set(false);
@@ -63,8 +67,8 @@ export class ReceptionComponent implements OnInit {
                 console.error('Error loading receptions:', error);
                 this.messageService.add({
                     severity: 'error',
-                    summary: 'Ошибка',
-                    detail: 'Не удалось загрузить приемы'
+                    summary: this.translate.instant('PLANNING.COMMON.ERROR'),
+                    detail: this.translate.instant('PLANNING.RECEPTION.LOAD_ERROR')
                 });
                 this.loading.set(false);
             }
@@ -96,19 +100,19 @@ export class ReceptionComponent implements OnInit {
     }
 
     deleteReception(reception: Reception): void {
-        if (confirm('Вы уверены, что хотите удалить этот прием?')) {
-            this.receptionService.deleteReception(reception.id).subscribe({
+        if (confirm(this.translate.instant('PLANNING.RECEPTION.DELETE_CONFIRM'))) {
+            this.receptionService.deleteReception(reception.id).pipe(takeUntil(this.destroy$)).subscribe({
                 next: () => {
                     this.messageService.add({
                         severity: 'success',
-                        summary: 'Прием удален'
+                        summary: this.translate.instant('PLANNING.RECEPTION.DELETED')
                     });
                     this.loadReceptions();
                 },
                 error: (err) => {
                     this.messageService.add({
                         severity: 'error',
-                        summary: 'Ошибка удаления приема',
+                        summary: this.translate.instant('PLANNING.RECEPTION.DELETE_ERROR'),
                         detail: err.message
                     });
                 }
@@ -117,18 +121,18 @@ export class ReceptionComponent implements OnInit {
     }
 
     approveReception(reception: Reception): void {
-        this.receptionService.updateReception(reception.id, { status: 'true' }).subscribe({
+        this.receptionService.updateReception(reception.id, { status: 'true' }).pipe(takeUntil(this.destroy$)).subscribe({
             next: () => {
                 this.messageService.add({
                     severity: 'success',
-                    summary: 'Прием одобрен'
+                    summary: this.translate.instant('PLANNING.RECEPTION.APPROVED_SUCCESS')
                 });
                 this.loadReceptions();
             },
             error: (err) => {
                 this.messageService.add({
                     severity: 'error',
-                    summary: 'Ошибка одобрения приема',
+                    summary: this.translate.instant('PLANNING.RECEPTION.APPROVE_ERROR'),
                     detail: err.message
                 });
             }
@@ -136,18 +140,18 @@ export class ReceptionComponent implements OnInit {
     }
 
     rejectReception(reception: Reception): void {
-        this.receptionService.updateReception(reception.id, { status: 'false' }).subscribe({
+        this.receptionService.updateReception(reception.id, { status: 'false' }).pipe(takeUntil(this.destroy$)).subscribe({
             next: () => {
                 this.messageService.add({
                     severity: 'success',
-                    summary: 'Прием отклонен'
+                    summary: this.translate.instant('PLANNING.RECEPTION.REJECTED_SUCCESS')
                 });
                 this.loadReceptions();
             },
             error: (err) => {
                 this.messageService.add({
                     severity: 'error',
-                    summary: 'Ошибка отклонения приема',
+                    summary: this.translate.instant('PLANNING.RECEPTION.REJECT_ERROR'),
                     detail: err.message
                 });
             }
@@ -160,8 +164,8 @@ export class ReceptionComponent implements OnInit {
         if (this.receptionForm.invalid) {
             this.messageService.add({
                 severity: 'warn',
-                summary: 'Предупреждение',
-                detail: 'Заполните все обязательные поля'
+                summary: this.translate.instant('PLANNING.COMMON.WARNING'),
+                detail: this.translate.instant('PLANNING.COMMON.FILL_REQUIRED_FIELDS')
             });
             return;
         }
@@ -188,12 +192,12 @@ export class ReceptionComponent implements OnInit {
                 editRequest.status = formValue.status;
             }
 
-            this.receptionService.updateReception(this.selectedReception.id, editRequest).subscribe({
+            this.receptionService.updateReception(this.selectedReception.id, editRequest).pipe(takeUntil(this.destroy$)).subscribe({
                 next: () => {
                     this.messageService.add({
                         severity: 'success',
-                        summary: 'Успешно',
-                        detail: 'Прием обновлен'
+                        summary: this.translate.instant('PLANNING.COMMON.SUCCESS'),
+                        detail: this.translate.instant('PLANNING.RECEPTION.UPDATED')
                     });
                     this.loadReceptions();
                     this.hideDialog();
@@ -202,8 +206,8 @@ export class ReceptionComponent implements OnInit {
                     console.error('Error updating reception:', error);
                     this.messageService.add({
                         severity: 'error',
-                        summary: 'Ошибка',
-                        detail: 'Не удалось обновить прием'
+                        summary: this.translate.instant('PLANNING.COMMON.ERROR'),
+                        detail: this.translate.instant('PLANNING.RECEPTION.UPDATE_ERROR')
                     });
                 }
             });
@@ -216,12 +220,12 @@ export class ReceptionComponent implements OnInit {
                 description: formValue.description || undefined
             };
 
-            this.receptionService.createReception(addRequest).subscribe({
+            this.receptionService.createReception(addRequest).pipe(takeUntil(this.destroy$)).subscribe({
                 next: () => {
                     this.messageService.add({
                         severity: 'success',
-                        summary: 'Успешно',
-                        detail: 'Прием создан'
+                        summary: this.translate.instant('PLANNING.COMMON.SUCCESS'),
+                        detail: this.translate.instant('PLANNING.RECEPTION.CREATED')
                     });
                     this.loadReceptions();
                     this.hideDialog();
@@ -230,8 +234,8 @@ export class ReceptionComponent implements OnInit {
                     console.error('Error creating reception:', error);
                     this.messageService.add({
                         severity: 'error',
-                        summary: 'Ошибка',
-                        detail: 'Не удалось создать прием'
+                        summary: this.translate.instant('PLANNING.COMMON.ERROR'),
+                        detail: this.translate.instant('PLANNING.RECEPTION.CREATE_ERROR')
                     });
                 }
             });
@@ -259,11 +263,16 @@ export class ReceptionComponent implements OnInit {
     getStatusLabel(status: string): string {
         switch (status) {
             case 'true':
-                return 'Одобрено';
+                return this.translate.instant('PLANNING.RECEPTION.STATUS.APPROVED');
             case 'false':
-                return 'Отклонено';
+                return this.translate.instant('PLANNING.RECEPTION.STATUS.REJECTED');
             default:
-                return 'Ожидание';
+                return this.translate.instant('PLANNING.RECEPTION.STATUS.PENDING');
         }
+    }
+
+    ngOnDestroy(): void {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

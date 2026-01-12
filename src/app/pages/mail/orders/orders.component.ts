@@ -19,6 +19,7 @@ import { SelectComponent } from '@/layout/component/dialog/select/select.compone
 import { TextareaComponent } from '@/layout/component/dialog/textarea/textarea.component';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
 import { DeleteConfirmationComponent } from '@/layout/component/dialog/delete-confirmation/delete-confirmation.component';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-orders',
@@ -42,7 +43,8 @@ import { DeleteConfirmationComponent } from '@/layout/component/dialog/delete-co
         SelectComponent,
         TextareaComponent,
         DatePickerComponent,
-        DeleteConfirmationComponent
+        DeleteConfirmationComponent,
+        TranslateModule
     ],
     templateUrl: './orders.component.html',
     styleUrl: './orders.component.scss'
@@ -61,25 +63,31 @@ export class OrdersComponent implements OnInit, OnDestroy {
 
     selectedStatus: OrderStatus | null = null;
 
-    statusOptions = [
-        { name: 'Все статусы', value: null },
-        { name: 'Черновик', value: 'draft' },
-        { name: 'На согласовании', value: 'pending' },
-        { name: 'Подписан', value: 'signed' },
-        { name: 'Отменён', value: 'cancelled' }
-    ];
-
-    statusFormOptions = [
-        { name: 'Черновик', value: 'draft' },
-        { name: 'На согласовании', value: 'pending' },
-        { name: 'Подписан', value: 'signed' },
-        { name: 'Отменён', value: 'cancelled' }
-    ];
+    statusOptions: { name: string; value: string | null }[] = [];
+    statusFormOptions: { name: string; value: string }[] = [];
 
     private orderService = inject(OrderService);
     private messageService = inject(MessageService);
     private fb = inject(FormBuilder);
+    private translate = inject(TranslateService);
     private destroy$ = new Subject<void>();
+
+    private initOptions(): void {
+        this.statusOptions = [
+            { name: this.translate.instant('MAIL.COMMON.ALL_STATUSES'), value: null },
+            { name: this.translate.instant('MAIL.ORDERS.STATUS.DRAFT'), value: 'draft' },
+            { name: this.translate.instant('MAIL.ORDERS.STATUS.PENDING'), value: 'pending' },
+            { name: this.translate.instant('MAIL.ORDERS.STATUS.SIGNED'), value: 'signed' },
+            { name: this.translate.instant('MAIL.ORDERS.STATUS.CANCELLED'), value: 'cancelled' }
+        ];
+
+        this.statusFormOptions = [
+            { name: this.translate.instant('MAIL.ORDERS.STATUS.DRAFT'), value: 'draft' },
+            { name: this.translate.instant('MAIL.ORDERS.STATUS.PENDING'), value: 'pending' },
+            { name: this.translate.instant('MAIL.ORDERS.STATUS.SIGNED'), value: 'signed' },
+            { name: this.translate.instant('MAIL.ORDERS.STATUS.CANCELLED'), value: 'cancelled' }
+        ];
+    }
 
     constructor() {
         this.orderForm = this.fb.group({
@@ -93,7 +101,12 @@ export class OrdersComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.initOptions();
         this.loadOrders();
+
+        this.translate.onLangChange.pipe(takeUntil(this.destroy$)).subscribe(() => {
+            this.initOptions();
+        });
     }
 
     private loadOrders() {
@@ -182,12 +195,20 @@ export class OrdersComponent implements OnInit, OnDestroy {
                 .pipe(takeUntil(this.destroy$))
                 .subscribe({
                     next: () => {
-                        this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Приказ обновлён' });
+                        this.messageService.add({
+                            severity: 'success',
+                            summary: this.translate.instant('MAIL.COMMON.SUCCESS'),
+                            detail: this.translate.instant('MAIL.ORDERS.UPDATED')
+                        });
                         this.loadOrders();
                         this.closeDialog();
                     },
                     error: () => {
-                        this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось обновить приказ' });
+                        this.messageService.add({
+                            severity: 'error',
+                            summary: this.translate.instant('MAIL.COMMON.ERROR'),
+                            detail: this.translate.instant('MAIL.ORDERS.UPDATE_ERROR')
+                        });
                     }
                 });
         } else {
@@ -196,12 +217,20 @@ export class OrdersComponent implements OnInit, OnDestroy {
                 .pipe(takeUntil(this.destroy$))
                 .subscribe({
                     next: () => {
-                        this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Приказ создан' });
+                        this.messageService.add({
+                            severity: 'success',
+                            summary: this.translate.instant('MAIL.COMMON.SUCCESS'),
+                            detail: this.translate.instant('MAIL.ORDERS.CREATED')
+                        });
                         this.loadOrders();
                         this.closeDialog();
                     },
                     error: () => {
-                        this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось создать приказ' });
+                        this.messageService.add({
+                            severity: 'error',
+                            summary: this.translate.instant('MAIL.COMMON.ERROR'),
+                            detail: this.translate.instant('MAIL.ORDERS.CREATE_ERROR')
+                        });
                     }
                 });
         }
@@ -212,6 +241,11 @@ export class OrdersComponent implements OnInit, OnDestroy {
         this.displayDeleteDialog = true;
     }
 
+    get deleteConfirmMessage(): string {
+        return this.translate.instant('MAIL.COMMON.DELETE_CONFIRM') + ' ' +
+               (this.selectedOrder?.number || '') + '?';
+    }
+
     confirmDelete() {
         if (!this.selectedOrder) return;
 
@@ -220,13 +254,21 @@ export class OrdersComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
-                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Приказ удалён' });
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: this.translate.instant('MAIL.COMMON.SUCCESS'),
+                        detail: this.translate.instant('MAIL.ORDERS.DELETED')
+                    });
                     this.loadOrders();
                     this.displayDeleteDialog = false;
                     this.selectedOrder = null;
                 },
                 error: () => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось удалить приказ' });
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: this.translate.instant('MAIL.COMMON.ERROR'),
+                        detail: this.translate.instant('MAIL.ORDERS.DELETE_ERROR')
+                    });
                 }
             });
     }

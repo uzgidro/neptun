@@ -19,6 +19,7 @@ import { SelectComponent } from '@/layout/component/dialog/select/select.compone
 import { TextareaComponent } from '@/layout/component/dialog/textarea/textarea.component';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
 import { DeleteConfirmationComponent } from '@/layout/component/dialog/delete-confirmation/delete-confirmation.component';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-reports',
@@ -42,7 +43,8 @@ import { DeleteConfirmationComponent } from '@/layout/component/dialog/delete-co
         SelectComponent,
         TextareaComponent,
         DatePickerComponent,
-        DeleteConfirmationComponent
+        DeleteConfirmationComponent,
+        TranslateModule
     ],
     templateUrl: './reports.component.html',
     styleUrl: './reports.component.scss'
@@ -61,23 +63,29 @@ export class ReportsComponent implements OnInit, OnDestroy {
 
     selectedStatus: ReportStatus | null = null;
 
-    statusOptions = [
-        { name: 'Все статусы', value: null },
-        { name: 'На рассмотрении', value: 'pending' },
-        { name: 'Одобрен', value: 'approved' },
-        { name: 'Отклонён', value: 'rejected' }
-    ];
-
-    statusFormOptions = [
-        { name: 'На рассмотрении', value: 'pending' },
-        { name: 'Одобрен', value: 'approved' },
-        { name: 'Отклонён', value: 'rejected' }
-    ];
+    statusOptions: { name: string; value: string | null }[] = [];
+    statusFormOptions: { name: string; value: string }[] = [];
 
     private reportService = inject(ReportService);
     private messageService = inject(MessageService);
     private fb = inject(FormBuilder);
+    private translate = inject(TranslateService);
     private destroy$ = new Subject<void>();
+
+    private initOptions(): void {
+        this.statusOptions = [
+            { name: this.translate.instant('MAIL.COMMON.ALL_STATUSES'), value: null },
+            { name: this.translate.instant('MAIL.REPORTS.STATUS.PENDING'), value: 'pending' },
+            { name: this.translate.instant('MAIL.REPORTS.STATUS.APPROVED'), value: 'approved' },
+            { name: this.translate.instant('MAIL.REPORTS.STATUS.REJECTED'), value: 'rejected' }
+        ];
+
+        this.statusFormOptions = [
+            { name: this.translate.instant('MAIL.REPORTS.STATUS.PENDING'), value: 'pending' },
+            { name: this.translate.instant('MAIL.REPORTS.STATUS.APPROVED'), value: 'approved' },
+            { name: this.translate.instant('MAIL.REPORTS.STATUS.REJECTED'), value: 'rejected' }
+        ];
+    }
 
     constructor() {
         this.reportForm = this.fb.group({
@@ -93,7 +101,12 @@ export class ReportsComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.initOptions();
         this.loadReports();
+
+        this.translate.onLangChange.pipe(takeUntil(this.destroy$)).subscribe(() => {
+            this.initOptions();
+        });
     }
 
     private loadReports() {
@@ -186,12 +199,20 @@ export class ReportsComponent implements OnInit, OnDestroy {
                 .pipe(takeUntil(this.destroy$))
                 .subscribe({
                     next: () => {
-                        this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Рапорт обновлён' });
+                        this.messageService.add({
+                            severity: 'success',
+                            summary: this.translate.instant('MAIL.COMMON.SUCCESS'),
+                            detail: this.translate.instant('MAIL.REPORTS.UPDATED')
+                        });
                         this.loadReports();
                         this.closeDialog();
                     },
                     error: () => {
-                        this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось обновить рапорт' });
+                        this.messageService.add({
+                            severity: 'error',
+                            summary: this.translate.instant('MAIL.COMMON.ERROR'),
+                            detail: this.translate.instant('MAIL.REPORTS.UPDATE_ERROR')
+                        });
                     }
                 });
         } else {
@@ -200,12 +221,20 @@ export class ReportsComponent implements OnInit, OnDestroy {
                 .pipe(takeUntil(this.destroy$))
                 .subscribe({
                     next: () => {
-                        this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Рапорт создан' });
+                        this.messageService.add({
+                            severity: 'success',
+                            summary: this.translate.instant('MAIL.COMMON.SUCCESS'),
+                            detail: this.translate.instant('MAIL.REPORTS.CREATED')
+                        });
                         this.loadReports();
                         this.closeDialog();
                     },
                     error: () => {
-                        this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось создать рапорт' });
+                        this.messageService.add({
+                            severity: 'error',
+                            summary: this.translate.instant('MAIL.COMMON.ERROR'),
+                            detail: this.translate.instant('MAIL.REPORTS.CREATE_ERROR')
+                        });
                     }
                 });
         }
@@ -216,6 +245,11 @@ export class ReportsComponent implements OnInit, OnDestroy {
         this.displayDeleteDialog = true;
     }
 
+    get deleteConfirmMessage(): string {
+        return this.translate.instant('MAIL.COMMON.DELETE_CONFIRM') + ' ' +
+               (this.selectedReport?.number || '') + '?';
+    }
+
     confirmDelete() {
         if (!this.selectedReport) return;
 
@@ -224,13 +258,21 @@ export class ReportsComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
-                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Рапорт удалён' });
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: this.translate.instant('MAIL.COMMON.SUCCESS'),
+                        detail: this.translate.instant('MAIL.REPORTS.DELETED')
+                    });
                     this.loadReports();
                     this.displayDeleteDialog = false;
                     this.selectedReport = null;
                 },
                 error: () => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось удалить рапорт' });
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: this.translate.instant('MAIL.COMMON.ERROR'),
+                        detail: this.translate.instant('MAIL.REPORTS.DELETE_ERROR')
+                    });
                 }
             });
     }

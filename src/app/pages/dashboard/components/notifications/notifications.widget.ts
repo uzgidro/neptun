@@ -8,11 +8,12 @@ import { FileResponse } from '@/core/interfaces/files';
 import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
 import { FormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
     standalone: true,
     selector: 'app-notifications-widget',
-    imports: [ButtonModule, MenuModule, DatePipe, NgClass, ButtonDirective, DialogComponent, DatePickerComponent, FormsModule],
+    imports: [ButtonModule, MenuModule, DatePipe, NgClass, ButtonDirective, DialogComponent, DatePickerComponent, FormsModule, TranslateModule],
     templateUrl: './notifications.widget.html'
 })
 export class NotificationsWidget implements OnInit {

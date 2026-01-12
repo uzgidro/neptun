@@ -1,17 +1,19 @@
 <div class="card">
-    <ng-template #caption >
-        <div class="font-semibold text-xl mb-4">Аварийные отключение</div>
-    </ng-template>
-    <div class="mb-4">
-        <label for="dateSelector" class="block mb-2">Дата:</label>
-        <p-date-picker
-            inputId="dateSelector"
-            [(ngModel)]="selectedDate"
-            dateFormat="dd.mm.yy"
-            [showIcon]="true"
-            (onSelect)="onDateChange()"
-            placeholder="Выберите дату"
-        ></p-date-picker>
+    <div class="flex justify-center mb-4">
+        <h2 class="text-2xl font-bold m-0">{{ 'SITUATION_CENTER.SHUTDOWN.TITLE' | translate }}</h2>
+    </div>
+    <div class="flex justify-end mb-6">
+        <div class="flex items-center gap-2">
+            <label for="dateSelector" class="font-medium">{{ 'SITUATION_CENTER.COMMON.DATE' | translate }}:</label>
+            <p-date-picker
+                inputId="dateSelector"
+                [(ngModel)]="selectedDate"
+                dateFormat="dd.mm.yy"
+                [showIcon]="true"
+                (onSelect)="onDateChange()"
+                [placeholder]="'SITUATION_CENTER.COMMON.SELECT_DATE' | translate"
+            ></p-date-picker>
+        </div>
     </div>
 
     <div class="mb-8">

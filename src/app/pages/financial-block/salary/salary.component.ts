@@ -19,6 +19,7 @@ import { ChartModule } from 'primeng/chart';
 import { TextareaModule } from 'primeng/textarea';
 import { DividerModule } from 'primeng/divider';
 import { FinancialDashboardService } from '../dashboard/services/financial-dashboard.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 interface SalaryRecord {
     id: number;
@@ -70,7 +71,8 @@ interface SalaryRecord {
         InputGroupAddonModule,
         ChartModule,
         TextareaModule,
-        DividerModule
+        DividerModule,
+        TranslateModule
     ],
     providers: [ConfirmationService, MessageService],
     templateUrl: './salary.component.html',
@@ -92,55 +94,16 @@ export class SalaryComponent implements OnInit {
     selectedMonth: number | null = null;
     selectedYear: number | null = null;
 
-    // Dropdown options
-    departments = [
-        { label: 'Производственный отдел', value: 'production' },
-        { label: 'Технический отдел', value: 'technical' },
-        { label: 'Финансовый отдел', value: 'finance' },
-        { label: 'IT отдел', value: 'it' },
-        { label: 'Отдел кадров', value: 'hr' },
-        { label: 'Административный отдел', value: 'admin' },
-        { label: 'Служба безопасности', value: 'security' }
-    ];
-
-    statuses = [
-        { label: 'Начислено', value: 'calculated' },
-        { label: 'Выплачено', value: 'paid' },
-        { label: 'Задержка', value: 'delayed' }
-    ];
-
-    months = [
-        { label: 'Январь', value: 1 },
-        { label: 'Февраль', value: 2 },
-        { label: 'Март', value: 3 },
-        { label: 'Апрель', value: 4 },
-        { label: 'Май', value: 5 },
-        { label: 'Июнь', value: 6 },
-        { label: 'Июль', value: 7 },
-        { label: 'Август', value: 8 },
-        { label: 'Сентябрь', value: 9 },
-        { label: 'Октябрь', value: 10 },
-        { label: 'Ноябрь', value: 11 },
-        { label: 'Декабрь', value: 12 }
-    ];
+    // Dropdown options - initialized in initTranslations()
+    departments: { label: string; value: string }[] = [];
+    statuses: { label: string; value: string }[] = [];
+    months: { label: string; value: number }[] = [];
+    positions: { label: string; value: string }[] = [];
 
     years = [
         { label: '2024', value: 2024 },
         { label: '2023', value: 2023 },
         { label: '2022', value: 2022 }
-    ];
-
-    positions = [
-        { label: 'Директор', value: 'director' },
-        { label: 'Главный инженер', value: 'chief_engineer' },
-        { label: 'Начальник отдела', value: 'head_of_department' },
-        { label: 'Ведущий специалист', value: 'lead_specialist' },
-        { label: 'Специалист', value: 'specialist' },
-        { label: 'Инженер', value: 'engineer' },
-        { label: 'Техник', value: 'technician' },
-        { label: 'Оператор', value: 'operator' },
-        { label: 'Бухгалтер', value: 'accountant' },
-        { label: 'Программист', value: 'programmer' }
     ];
 
     // Charts
@@ -154,6 +117,7 @@ export class SalaryComponent implements OnInit {
     deductionsChartOptions: any;
 
     private dashboardService = inject(FinancialDashboardService);
+    private translate = inject(TranslateService);
 
     constructor(
         private confirmationService: ConfirmationService,
@@ -161,12 +125,66 @@ export class SalaryComponent implements OnInit {
     ) {}
 
     ngOnInit() {
+        this.initTranslations();
         this.loadSalaries();
         this.selectedMonth = new Date().getMonth() + 1;
         this.selectedYear = new Date().getFullYear();
         this.applyFilters();
         this.initCharts();
         this.updateDashboardData();
+
+        this.translate.onLangChange.subscribe(() => {
+            this.initTranslations();
+            this.updateCharts();
+        });
+    }
+
+    private initTranslations(): void {
+        const t = this.translate;
+
+        this.departments = [
+            { label: t.instant('FINANCIAL_BLOCK.SALARY.DEPT_PRODUCTION'), value: 'production' },
+            { label: t.instant('FINANCIAL_BLOCK.SALARY.DEPT_TECHNICAL'), value: 'technical' },
+            { label: t.instant('FINANCIAL_BLOCK.SALARY.DEPT_FINANCE'), value: 'finance' },
+            { label: t.instant('FINANCIAL_BLOCK.SALARY.DEPT_IT'), value: 'it' },
+            { label: t.instant('FINANCIAL_BLOCK.SALARY.DEPT_HR'), value: 'hr' },
+            { label: t.instant('FINANCIAL_BLOCK.SALARY.DEPT_ADMIN'), value: 'admin' },
+            { label: t.instant('FINANCIAL_BLOCK.SALARY.DEPT_SECURITY'), value: 'security' }
+        ];
+
+        this.statuses = [
+            { label: t.instant('FINANCIAL_BLOCK.SALARY.STATUS_CALCULATED'), value: 'calculated' },
+            { label: t.instant('FINANCIAL_BLOCK.SALARY.STATUS_PAID'), value: 'paid' },
+            { label: t.instant('FINANCIAL_BLOCK.SALARY.STATUS_DELAYED'), value: 'delayed' }
+        ];
+
+        this.months = [
+            { label: t.instant('COMMON.MONTHS_FULL.JAN'), value: 1 },
+            { label: t.instant('COMMON.MONTHS_FULL.FEB'), value: 2 },
+            { label: t.instant('COMMON.MONTHS_FULL.MAR'), value: 3 },
+            { label: t.instant('COMMON.MONTHS_FULL.APR'), value: 4 },
+            { label: t.instant('COMMON.MONTHS_FULL.MAY'), value: 5 },
+            { label: t.instant('COMMON.MONTHS_FULL.JUN'), value: 6 },
+            { label: t.instant('COMMON.MONTHS_FULL.JUL'), value: 7 },
+            { label: t.instant('COMMON.MONTHS_FULL.AUG'), value: 8 },
+            { label: t.instant('COMMON.MONTHS_FULL.SEP'), value: 9 },
+            { label: t.instant('COMMON.MONTHS_FULL.OCT'), value: 10 },
+            { label: t.instant('COMMON.MONTHS_FULL.NOV'), value: 11 },
+            { label: t.instant('COMMON.MONTHS_FULL.DEC'), value: 12 }
+        ];
+
+        this.positions = [
+            { label: t.instant('FINANCIAL_BLOCK.SALARY.POSITION_DIRECTOR'), value: 'director' },
+            { label: t.instant('FINANCIAL_BLOCK.SALARY.POSITION_CHIEF_ENGINEER'), value: 'chief_engineer' },
+            { label: t.instant('FINANCIAL_BLOCK.SALARY.POSITION_HEAD_OF_DEPARTMENT'), value: 'head_of_department' },
+            { label: t.instant('FINANCIAL_BLOCK.SALARY.POSITION_LEAD_SPECIALIST'), value: 'lead_specialist' },
+            { label: t.instant('FINANCIAL_BLOCK.SALARY.POSITION_SPECIALIST'), value: 'specialist' },
+            { label: t.instant('FINANCIAL_BLOCK.SALARY.POSITION_ENGINEER'), value: 'engineer' },
+            { label: t.instant('FINANCIAL_BLOCK.SALARY.POSITION_TECHNICIAN'), value: 'technician' },
+            { label: t.instant('FINANCIAL_BLOCK.SALARY.POSITION_OPERATOR'), value: 'operator' },
+            { label: t.instant('FINANCIAL_BLOCK.SALARY.POSITION_ACCOUNTANT'), value: 'accountant' },
+            { label: t.instant('FINANCIAL_BLOCK.SALARY.POSITION_PROGRAMMER'), value: 'programmer' }
+        ];
     }
 
     private updateDashboardData(): void {
@@ -361,8 +379,8 @@ export class SalaryComponent implements OnInit {
         if (!this.currentSalary.fullName || !this.currentSalary.employeeId) {
             this.messageService.add({
                 severity: 'warn',
-                summary: 'Внимание',
-                detail: 'Заполните данные сотрудника'
+                summary: this.translate.instant('COMMON.WARNING'),
+                detail: this.translate.instant('FINANCIAL_BLOCK.SALARY.FILL_EMPLOYEE_DATA')
             });
             return;
         }
@@ -370,8 +388,8 @@ export class SalaryComponent implements OnInit {
         if (this.currentSalary.baseSalary <= 0) {
             this.messageService.add({
                 severity: 'warn',
-                summary: 'Внимание',
-                detail: 'Укажите базовый оклад'
+                summary: this.translate.instant('COMMON.WARNING'),
+                detail: this.translate.instant('FINANCIAL_BLOCK.SALARY.SPECIFY_BASE_SALARY')
             });
             return;
         }
@@ -386,16 +404,16 @@ export class SalaryComponent implements OnInit {
             }
             this.messageService.add({
                 severity: 'success',
-                summary: 'Успешно',
-                detail: 'Запись обновлена'
+                summary: this.translate.instant('COMMON.SUCCESS'),
+                detail: this.translate.instant('FINANCIAL_BLOCK.SALARY.SALARY_UPDATED')
             });
         } else {
             this.currentSalary.id = Math.max(...this.salaries.map(s => s.id), 0) + 1;
             this.salaries.push({ ...this.currentSalary });
             this.messageService.add({
                 severity: 'success',
-                summary: 'Успешно',
-                detail: 'Запись добавлена'
+                summary: this.translate.instant('COMMON.SUCCESS'),
+                detail: this.translate.instant('FINANCIAL_BLOCK.SALARY.SALARY_ADDED')
             });
         }
 
@@ -406,19 +424,19 @@ export class SalaryComponent implements OnInit {
 
     deleteSalary(salary: SalaryRecord) {
         this.confirmationService.confirm({
-            message: `Вы уверены, что хотите удалить запись для "${salary.fullName}"?`,
-            header: 'Подтверждение удаления',
+            message: `${this.translate.instant('FINANCIAL_BLOCK.SALARY.DELETE_CONFIRM')} "${salary.fullName}"?`,
+            header: this.translate.instant('COMMON.CONFIRM_DELETE'),
             icon: 'pi pi-exclamation-triangle',
-            acceptLabel: 'Да',
-            rejectLabel: 'Нет',
+            acceptLabel: this.translate.instant('COMMON.YES'),
+            rejectLabel: this.translate.instant('COMMON.NO'),
             accept: () => {
                 this.salaries = this.salaries.filter(s => s.id !== salary.id);
                 this.applyFilters();
                 this.updateDashboardData();
                 this.messageService.add({
                     severity: 'success',
-                    summary: 'Успешно',
-                    detail: 'Запись удалена'
+                    summary: this.translate.instant('COMMON.SUCCESS'),
+                    detail: this.translate.instant('FINANCIAL_BLOCK.SALARY.SALARY_DELETED')
                 });
             }
         });
@@ -431,8 +449,8 @@ export class SalaryComponent implements OnInit {
         this.updateDashboardData();
         this.messageService.add({
             severity: 'success',
-            summary: 'Успешно',
-            detail: `Зарплата для ${salary.fullName} отмечена как выплаченная`
+            summary: this.translate.instant('COMMON.SUCCESS'),
+            detail: this.translate.instant('FINANCIAL_BLOCK.SALARY.SALARY_PAID')
         });
     }
 
@@ -472,44 +490,47 @@ export class SalaryComponent implements OnInit {
 
     // Export to Excel
     exportToExcel() {
+        const t = this.translate;
+        const cols = 'FINANCIAL_BLOCK.SALARY.EXPORT_COLUMNS';
+
         const data = this.filteredSalaries.map(s => ({
-            'Таб. номер': s.employeeId,
-            'ФИО': s.fullName,
-            'Отдел': this.getDepartmentLabel(s.department),
-            'Должность': this.getPositionLabel(s.position),
-            'Период': `${this.getMonthLabel(s.periodMonth)} ${s.periodYear}`,
-            'Оклад': s.baseSalary,
-            'Надбавки': s.seniorityBonus + s.qualificationBonus + s.hazardBonus + s.otherBonuses,
-            'Премия': s.premium,
-            'Отработано дней': s.workedDays,
-            'Начислено': s.totalAccrued,
-            'Удержано': s.totalDeductions,
-            'К выплате': s.netPay,
-            'Статус': this.getStatusLabel(s.status)
+            [t.instant(`${cols}.EMPLOYEE_ID`)]: s.employeeId,
+            [t.instant(`${cols}.FULL_NAME`)]: s.fullName,
+            [t.instant(`${cols}.DEPARTMENT`)]: this.getDepartmentLabel(s.department),
+            [t.instant(`${cols}.POSITION`)]: this.getPositionLabel(s.position),
+            [t.instant(`${cols}.PERIOD`)]: `${this.getMonthLabel(s.periodMonth)} ${s.periodYear}`,
+            [t.instant(`${cols}.BASE_SALARY`)]: s.baseSalary,
+            [t.instant(`${cols}.ALLOWANCES`)]: s.seniorityBonus + s.qualificationBonus + s.hazardBonus + s.otherBonuses,
+            [t.instant(`${cols}.PREMIUM`)]: s.premium,
+            [t.instant(`${cols}.WORKED_DAYS`)]: s.workedDays,
+            [t.instant(`${cols}.ACCRUED`)]: s.totalAccrued,
+            [t.instant(`${cols}.DEDUCTIONS`)]: s.totalDeductions,
+            [t.instant(`${cols}.NET_PAY`)]: s.netPay,
+            [t.instant(`${cols}.STATUS`)]: this.getStatusLabel(s.status)
         }));
 
         // Add totals row
         data.push({
-            'Таб. номер': '',
-            'ФИО': 'ИТОГО',
-            'Отдел': '',
-            'Должность': '',
-            'Период': '',
-            'Оклад': '' as any,
-            'Надбавки': '' as any,
-            'Премия': '' as any,
-            'Отработано дней': '' as any,
-            'Начислено': this.totalFOT,
-            'Удержано': this.filteredSalaries.reduce((sum, s) => sum + s.totalDeductions, 0),
-            'К выплате': this.totalNetPay,
-            'Статус': ''
+            [t.instant(`${cols}.EMPLOYEE_ID`)]: '',
+            [t.instant(`${cols}.FULL_NAME`)]: t.instant(`${cols}.TOTAL_ROW`),
+            [t.instant(`${cols}.DEPARTMENT`)]: '',
+            [t.instant(`${cols}.POSITION`)]: '',
+            [t.instant(`${cols}.PERIOD`)]: '',
+            [t.instant(`${cols}.BASE_SALARY`)]: '' as any,
+            [t.instant(`${cols}.ALLOWANCES`)]: '' as any,
+            [t.instant(`${cols}.PREMIUM`)]: '' as any,
+            [t.instant(`${cols}.WORKED_DAYS`)]: '' as any,
+            [t.instant(`${cols}.ACCRUED`)]: this.totalFOT,
+            [t.instant(`${cols}.DEDUCTIONS`)]: this.filteredSalaries.reduce((sum, s) => sum + s.totalDeductions, 0),
+            [t.instant(`${cols}.NET_PAY`)]: this.totalNetPay,
+            [t.instant(`${cols}.STATUS`)]: ''
         });
 
         // Convert to CSV
         const headers = Object.keys(data[0]);
         const csvContent = [
             headers.join(';'),
-            ...data.map(row => headers.map(h => row[h as keyof typeof row]).join(';'))
+            ...data.map(row => headers.map(h => (row as any)[h]).join(';'))
         ].join('\n');
 
         // Add BOM for Excel to recognize UTF-8
@@ -528,8 +549,8 @@ export class SalaryComponent implements OnInit {
 
         this.messageService.add({
             severity: 'success',
-            summary: 'Экспорт',
-            detail: 'Файл успешно экспортирован'
+            summary: t.instant('COMMON.EXPORT'),
+            detail: t.instant('COMMON.EXPORT_SUCCESS')
         });
     }
 
@@ -678,15 +699,28 @@ export class SalaryComponent implements OnInit {
                 monthlyData[s.periodMonth].paid += s.netPay;
             });
 
-        const labels = this.months.map(m => m.label.substring(0, 3));
+        const shortMonths = [
+            this.translate.instant('COMMON.MONTHS.JAN'),
+            this.translate.instant('COMMON.MONTHS.FEB'),
+            this.translate.instant('COMMON.MONTHS.MAR'),
+            this.translate.instant('COMMON.MONTHS.APR'),
+            this.translate.instant('COMMON.MONTHS.MAY'),
+            this.translate.instant('COMMON.MONTHS.JUN'),
+            this.translate.instant('COMMON.MONTHS.JUL'),
+            this.translate.instant('COMMON.MONTHS.AUG'),
+            this.translate.instant('COMMON.MONTHS.SEP'),
+            this.translate.instant('COMMON.MONTHS.OCT'),
+            this.translate.instant('COMMON.MONTHS.NOV'),
+            this.translate.instant('COMMON.MONTHS.DEC')
+        ];
         const accruedData = this.months.map(m => monthlyData[m.value]?.accrued || 0);
         const paidData = this.months.map(m => monthlyData[m.value]?.paid || 0);
 
         this.monthlyChartData = {
-            labels: labels,
+            labels: shortMonths,
             datasets: [
                 {
-                    label: 'Начислено',
+                    label: this.translate.instant('FINANCIAL_BLOCK.SALARY.CHART_ACCRUED'),
                     data: accruedData,
                     backgroundColor: 'rgba(59, 130, 246, 0.7)',
                     borderColor: '#3B82F6',
@@ -694,7 +728,7 @@ export class SalaryComponent implements OnInit {
                     borderRadius: 4
                 },
                 {
-                    label: 'К выплате',
+                    label: this.translate.instant('FINANCIAL_BLOCK.SALARY.CHART_NET_PAY'),
                     data: paidData,
                     backgroundColor: 'rgba(34, 197, 94, 0.7)',
                     borderColor: '#22C55E',
@@ -742,7 +776,11 @@ export class SalaryComponent implements OnInit {
         });
 
         this.structureChartData = {
-            labels: ['Оклад', 'Надбавки', 'Премии'],
+            labels: [
+                this.translate.instant('FINANCIAL_BLOCK.SALARY.CHART_SALARY'),
+                this.translate.instant('FINANCIAL_BLOCK.SALARY.CHART_ALLOWANCES'),
+                this.translate.instant('FINANCIAL_BLOCK.SALARY.CHART_PREMIUMS')
+            ],
             datasets: [{
                 data: [totalBase, totalBonuses, totalPremiums],
                 backgroundColor: ['#3B82F6', '#22C55E', '#F59E0B'],
@@ -764,7 +802,11 @@ export class SalaryComponent implements OnInit {
         });
 
         this.deductionsChartData = {
-            labels: ['НДФЛ (12%)', 'Пенсионный фонд (4%)', 'Прочие удержания'],
+            labels: [
+                this.translate.instant('FINANCIAL_BLOCK.SALARY.CHART_INCOME_TAX'),
+                this.translate.instant('FINANCIAL_BLOCK.SALARY.CHART_PENSION_FUND'),
+                this.translate.instant('FINANCIAL_BLOCK.SALARY.CHART_OTHER_DEDUCTIONS')
+            ],
             datasets: [{
                 data: [totalIncomeTax, totalPensionFund, totalOtherDeductions],
                 backgroundColor: ['#EF4444', '#F59E0B', '#6B7280'],

@@ -11,10 +11,11 @@ import { ReservoirDeviceComponent } from '@/pages/situation-center/ges/shutdown/
 import { VisitComponent } from '@/pages/situation-center/ges/shutdown/visit/visit.component';
 import { OrganizationService } from '@/core/services/organization.service';
 import { TimeService } from '@/core/services/time.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-shutdown',
-    imports: [TableModule, ReactiveFormsModule, FormsModule, IncidentComponent, GesShutdownComponent, ShutdownDischargeComponent, DatePicker, ReservoirDeviceComponent, VisitComponent],
+    imports: [TableModule, ReactiveFormsModule, FormsModule, IncidentComponent, GesShutdownComponent, ShutdownDischargeComponent, DatePicker, ReservoirDeviceComponent, VisitComponent, TranslateModule],
     templateUrl: './shutdown.component.html',
     styleUrl: './shutdown.component.scss'
 })

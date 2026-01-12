@@ -9,19 +9,19 @@
     scrollHeight="60rem"
 >
     <ng-template #caption>
-        <div class="text-lg font-bold">Гидротехнические сооружения и устройства водохранилищ</div>
+        <div class="text-lg font-bold">{{ 'SITUATION_CENTER.RESERVOIR_DEVICE.TITLE' | translate }}</div>
     </ng-template>
     <ng-template pTemplate="header">
         <tr>
-            <th>Водохранилище</th>
-            <th>Всего</th>
-            <th>Активно</th>
-            <th>Автоматизировано</th>
-            <th>Установлено</th>
-            <th>Рабочие</th>
-            <th>Неисправные</th>
-            <th>Мезон 1</th>
-            <th>Мезон 2</th>
+            <th>{{ 'SITUATION_CENTER.RESERVOIR_DEVICE.RESERVOIR' | translate }}</th>
+            <th>{{ 'SITUATION_CENTER.RESERVOIR_DEVICE.TOTAL' | translate }}</th>
+            <th>{{ 'SITUATION_CENTER.RESERVOIR_DEVICE.ACTIVE' | translate }}</th>
+            <th>{{ 'SITUATION_CENTER.RESERVOIR_DEVICE.AUTOMATED' | translate }}</th>
+            <th>{{ 'SITUATION_CENTER.RESERVOIR_DEVICE.INSTALLED' | translate }}</th>
+            <th>{{ 'SITUATION_CENTER.RESERVOIR_DEVICE.OPERATIONAL' | translate }}</th>
+            <th>{{ 'SITUATION_CENTER.RESERVOIR_DEVICE.FAULTY' | translate }}</th>
+            <th>{{ 'SITUATION_CENTER.RESERVOIR_DEVICE.CRITERION_1' | translate }}</th>
+            <th>{{ 'SITUATION_CENTER.RESERVOIR_DEVICE.CRITERION_2' | translate }}</th>
         </tr>
     </ng-template>
 
@@ -169,7 +169,7 @@
     <ng-template pTemplate="emptymessage">
         <tr>
             <td colspan="10" class="text-center">
-                Данные не найдены
+                {{ 'SITUATION_CENTER.RESERVOIR_DEVICE.NO_DATA' | translate }}
             </td>
         </tr>
     </ng-template>
@@ -178,14 +178,14 @@
 @if (authService.isSc() && hasChanges) {
     <div class="flex gap-3 mt-6 justify-end">
         <p-button
-            label="Сбросить"
+            [label]="'SITUATION_CENTER.COMMON.RESET' | translate"
             icon="pi pi-times"
             severity="secondary"
             (click)="resetChanges()"
             [disabled]="saving"
         />
         <p-button
-            label="Сохранить"
+            [label]="'SITUATION_CENTER.COMMON.SAVE' | translate"
             icon="pi pi-check"
             (click)="saveChanges()"
             [loading]="saving"

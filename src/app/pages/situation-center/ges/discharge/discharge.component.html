@@ -1,16 +1,20 @@
 <div class="card">
-    <div class="font-semibold text-xl mb-4">Холостой водосброс</div>
-    <div class="mb-4">
-        <label for="dateSelector" class="block mb-2">Дата:</label>
-        <p-date-picker
-            inputId="dateSelector"
-            [(ngModel)]="selectedDate"
-            [maxDate]="maxDate"
-            dateFormat="dd.mm.yy"
-            [showIcon]="true"
-            (onSelect)="onDateChange()"
-            placeholder="Выберите дату"
-        ></p-date-picker>
+    <div class="flex justify-center mb-4">
+        <h2 class="text-2xl font-bold m-0">{{ 'SITUATION_CENTER.DISCHARGE.TITLE' | translate }}</h2>
+    </div>
+    <div class="flex justify-end mb-6">
+        <div class="flex items-center gap-2">
+            <label for="dateSelector" class="font-medium">{{ 'SITUATION_CENTER.COMMON.DATE' | translate }}:</label>
+            <p-date-picker
+                inputId="dateSelector"
+                [(ngModel)]="selectedDate"
+                [maxDate]="maxDate"
+                dateFormat="dd.mm.yy"
+                [showIcon]="true"
+                (onSelect)="onDateChange()"
+                [placeholder]="'SITUATION_CENTER.COMMON.SELECT_DATE' | translate"
+            ></p-date-picker>
+        </div>
     </div>
     <p-table
         [value]="dischargeByCascades"
@@ -23,19 +27,17 @@
         [tableStyle]="{ 'min-width': '60rem' }"
     >
         <ng-template pTemplate="caption">
-            <div class="flex justify-between items-center">
-                <div class="flex gap-2">
-                    <button pButton (click)="expandAll()">
-                        <i pButtonIcon class="pi pi-fw"
-                           [ngClass]="{ 'pi-minus': isExpanded, 'pi-plus': !isExpanded }"></i>
-                        <span pButtonLabel>{{ isExpanded ? 'Свернуть' : 'Развернуть' }}</span>
-                    </button>
-                    <button pButton (click)="exportExcel()" icon="pi pi-file-excel" label="Экспорт в Excel"></button>
-                </div>
+            <div class="flex justify-end items-center gap-2">
+                <button pButton (click)="expandAll()">
+                    <i pButtonIcon class="pi pi-fw"
+                       [ngClass]="{ 'pi-minus': isExpanded, 'pi-plus': !isExpanded }"></i>
+                    <span pButtonLabel>{{ isExpanded ? ('SITUATION_CENTER.COMMON.COLLAPSE' | translate) : ('SITUATION_CENTER.COMMON.EXPAND' | translate) }}</span>
+                </button>
+                <button pButton (click)="exportExcel()" icon="pi pi-file-excel" [label]="'SITUATION_CENTER.COMMON.EXPORT_EXCEL' | translate"></button>
                 @if (authService.isSc()) {
                     <button pButton (click)="openDialog()">
                         <i pButtonIcon class="pi pi-plus"></i>
-                        <span pButtonLabel>Добавить</span>
+                        <span pButtonLabel>{{ 'SITUATION_CENTER.COMMON.ADD' | translate }}</span>
                     </button>
                 }
             </div>
@@ -44,10 +46,10 @@
         <ng-template pTemplate="header">
             <tr>
                 <th style="width: 3rem"></th>
-                <th pSortableColumn="name">Название Каскада
+                <th pSortableColumn="name">{{ 'SITUATION_CENTER.DISCHARGE.CASCADE_NAME' | translate }}
                     <p-sortIcon field="name" />
                 </th>
-                <th pSortableColumn="total_volume">Общий объём по Каскаду
+                <th pSortableColumn="total_volume">{{ 'SITUATION_CENTER.DISCHARGE.TOTAL_CASCADE_VOLUME' | translate }}
                     <p-sortIcon field="total_volume" />
                 </th>
             </tr>
@@ -74,10 +76,10 @@
                             <ng-template #header>
                                 <tr>
                                     <th style="width: 3rem"></th>
-                                    <th pSortableColumn="name">Название ГЭС
+                                    <th pSortableColumn="name">{{ 'SITUATION_CENTER.DISCHARGE.GES_NAME' | translate }}
                                         <p-sortIcon field="name" />
                                     </th>
-                                    <th pSortableColumn="total_volume">Объём ГЭС
+                                    <th pSortableColumn="total_volume">{{ 'SITUATION_CENTER.DISCHARGE.GES_VOLUME' | translate }}
                                         <p-sortIcon field="total_volume" />
                                     </th>
                                 </tr>
@@ -102,15 +104,15 @@
                                             <p-table [value]="hpp.discharges" dataKey="id" class="p-datatable-sm">
                                                 <ng-template #header>
                                                     <tr>
-                                                        <th pSortableColumn="started_at">Начало</th>
-                                                        <th pSortableColumn="ended_at">Конец</th>
-                                                        <th pSortableColumn="flow_rate">Поток, м³/с</th>
-                                                        <th pSortableColumn="total_volume">Объём, млн. м³</th>
-                                                        <th pSortableColumn="reason">Причина</th>
+                                                        <th pSortableColumn="started_at">{{ 'SITUATION_CENTER.COMMON.START' | translate }}</th>
+                                                        <th pSortableColumn="ended_at">{{ 'SITUATION_CENTER.COMMON.END' | translate }}</th>
+                                                        <th pSortableColumn="flow_rate">{{ 'SITUATION_CENTER.DISCHARGE.FLOW_RATE' | translate }}</th>
+                                                        <th pSortableColumn="total_volume">{{ 'SITUATION_CENTER.DISCHARGE.VOLUME' | translate }}</th>
+                                                        <th pSortableColumn="reason">{{ 'SITUATION_CENTER.COMMON.REASON' | translate }}</th>
                                                         @if (authService.isSc()) {
-                                                            <th pSortableColumn="created_by.name">Создал</th>
-                                                            <th>Подтвердил</th>
-                                                            <th>Действия</th>
+                                                            <th pSortableColumn="created_by.name">{{ 'SITUATION_CENTER.COMMON.CREATED_BY' | translate }}</th>
+                                                            <th>{{ 'SITUATION_CENTER.DISCHARGE.CONFIRMED_BY' | translate }}</th>
+                                                            <th>{{ 'SITUATION_CENTER.COMMON.ACTIONS' | translate }}</th>
                                                         }
                                                     </tr>
                                                 </ng-template>
@@ -126,42 +128,42 @@
                                                             <td>
                                                                 @if (discharge.approved === true) {
                                                                     <i class="pi pi-check-circle text-green-500"
-                                                                       pTooltip="Подтверждено"></i>
+                                                                       [pTooltip]="'SITUATION_CENTER.COMMON.APPROVED' | translate"></i>
                                                                     <span
                                                                         class="ml-1">{{ discharge.updated_by?.name || '' }}</span>
                                                                 } @else if (discharge.approved === false) {
                                                                     <i class="pi pi-times-circle text-red-500"
-                                                                       pTooltip="Отклонено"></i>
+                                                                       [pTooltip]="'SITUATION_CENTER.COMMON.REJECTED' | translate"></i>
                                                                     <span
                                                                         class="ml-1">{{ discharge.updated_by?.name || '' }}</span>
                                                                 } @else {
                                                                     <i class="pi pi-question-circle text-gray-500"
-                                                                       pTooltip="Ожидает"></i>
+                                                                       [pTooltip]="'SITUATION_CENTER.COMMON.PENDING' | translate"></i>
                                                                 }
                                                             </td>
                                                             <td>
                                                                 <a href="tel:YOUR_NUMBER_HERE">
                                                                     <button pButton
                                                                             class="p-button-text p-button-info"
-                                                                            pTooltip="Позвонить">
+                                                                            [pTooltip]="'SITUATION_CENTER.COMMON.CALL' | translate">
                                                                         <i pButtonIcon class="pi pi-phone"></i>
                                                                     </button>
                                                                 </a>
                                                                 <button pButton
                                                                         class="p-button-text p-button-success"
-                                                                        pTooltip="Подтвердить"
+                                                                        [pTooltip]="'SITUATION_CENTER.COMMON.APPROVE' | translate"
                                                                         (click)="openApprove(discharge.id)">
                                                                     <i pButtonIcon class="pi pi-check"></i>
                                                                 </button>
                                                                 <button pButton
                                                                         class="p-button-text p-button-warning"
-                                                                        pTooltip="Изменить"
+                                                                        [pTooltip]="'SITUATION_CENTER.COMMON.EDIT' | translate"
                                                                         (click)="edit(discharge)">
                                                                     <i pButtonIcon class="pi pi-pencil"></i>
                                                                 </button>
                                                                 <button pButton
                                                                         class="p-button-text p-button-danger"
-                                                                        pTooltip="Удалить"
+                                                                        [pTooltip]="'SITUATION_CENTER.COMMON.DELETE' | translate"
                                                                         (click)="openDelete(discharge.id)">
                                                                     <i pButtonIcon class="pi pi-trash"></i>
                                                                 </button>
@@ -171,9 +173,7 @@
                                                 </ng-template>
                                                 <ng-template #empty>
                                                     <tr>
-                                                        <td [attr.colspan]="authService.isSc() ? 8 : 5">Сбросов не
-                                                            найдено.
-                                                        </td>
+                                                        <td [attr.colspan]="authService.isSc() ? 8 : 5">{{ 'SITUATION_CENTER.DISCHARGE.NO_DISCHARGES' | translate }}</td>
                                                     </tr>
                                                 </ng-template>
                                             </p-table>
@@ -183,7 +183,7 @@
                             </ng-template>
                             <ng-template #empty>
                                 <tr>
-                                    <td colspan="3">ГЭС не найдены.</td>
+                                    <td colspan="3">{{ 'SITUATION_CENTER.DISCHARGE.NO_GES' | translate }}</td>
                                 </tr>
                             </ng-template>
                         </p-table>
@@ -193,7 +193,7 @@
         </ng-template>
         <ng-template #empty>
             <tr>
-                <td colspan="3" class="text-center">Данные не найдены.</td>
+                <td colspan="3" class="text-center">{{ 'SITUATION_CENTER.COMMON.DATA_NOT_FOUND' | translate }}</td>
             </tr>
         </ng-template>
 
@@ -203,7 +203,7 @@
 <app-delete-confirmation
     [(visible)]="showDeleteDialog"
     (onConfirm)="doDelete()"
-    [message]="'Вы точно хотите удалить этот сброс?'"
+    [message]="'SITUATION_CENTER.DISCHARGE.DELETE_CONFIRM' | translate"
 />
 
 <app-approve-confirmation

@@ -12,6 +12,7 @@ import { Subscription } from 'rxjs';
 
 import { FinancialDashboardService } from './services/financial-dashboard.service';
 import { FinancialDashboardData, ModuleCard, MetricItem } from './models/financial-summary.model';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-financial-dashboard',
@@ -24,7 +25,8 @@ import { FinancialDashboardData, ModuleCard, MetricItem } from './models/financi
         TagModule,
         TooltipModule,
         DividerModule,
-        ProgressBarModule
+        ProgressBarModule,
+        TranslateModule
     ],
     templateUrl: './financial-dashboard.component.html',
     styleUrl: './financial-dashboard.component.scss'

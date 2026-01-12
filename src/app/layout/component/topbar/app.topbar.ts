@@ -13,13 +13,14 @@ import { AppConfigurator } from '@/layout/component/app.configurator';
 import { TopbarCalendarWidget } from '@/layout/component/topbar/topbar-calendar/topbar-calendar-widget.component';
 import { FastCallWidget } from '@/layout/component/topbar/fast-call/fast-call.widget';
 import { InboxWidget } from '@/layout/component/topbar/inbox/inbox-widget.component';
+import { LanguageSwitcherComponent } from '@/layout/component/topbar/language-switcher/language-switcher.component';
 import { updateSurfacePalette } from '@primeuix/themes';
 import { AuthService } from '@/core/services/auth.service';
 
 @Component({
     selector: 'app-topbar',
     standalone: true,
-    imports: [RouterModule, CommonModule, StyleClassModule, ProfileMenu, PopoverModule, TableModule, ToastModule, FormsModule, AppConfigurator, TopbarCalendarWidget, NgOptimizedImage, FastCallWidget, InboxWidget],
+    imports: [RouterModule, CommonModule, StyleClassModule, ProfileMenu, PopoverModule, TableModule, ToastModule, FormsModule, AppConfigurator, TopbarCalendarWidget, NgOptimizedImage, FastCallWidget, InboxWidget, LanguageSwitcherComponent],
     providers: [MessageService],
     template: ` <div class="layout-topbar">
         <div class="layout-topbar-logo-container">
@@ -40,6 +41,7 @@ import { AuthService } from '@/core/services/auth.service';
 
         <div class="layout-topbar-actions">
             <div class="layout-config-menu">
+                <app-language-switcher></app-language-switcher>
                 <button type="button" class="layout-topbar-action" (click)="toggleDarkMode()">
                     <i [ngClass]="{ 'pi ': true, 'pi-moon': layoutService.isDarkTheme(), 'pi-sun': !layoutService.isDarkTheme() }"></i>
                 </button>

@@ -19,6 +19,7 @@ import { FileUploadComponent } from '@/layout/component/dialog/file-upload/file-
 import { FileViewerComponent } from '@/layout/component/dialog/file-viewer/file-viewer.component';
 import { FileListComponent } from '@/layout/component/dialog/file-list/file-list.component';
 import { SelectComponent } from '@/layout/component/dialog/select/select.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-shutdown-discharge',
@@ -37,7 +38,8 @@ import { SelectComponent } from '@/layout/component/dialog/select/select.compone
         FileUploadComponent,
         FileViewerComponent,
         FileListComponent,
-        SelectComponent
+        SelectComponent,
+        TranslateModule
     ],
     templateUrl: './shutdown-discharge.component.html',
     styleUrl: './shutdown-discharge.component.scss'

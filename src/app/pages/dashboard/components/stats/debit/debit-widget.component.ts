@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { ButtonDirective } from 'primeng/button';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { DCInfo } from '@/core/interfaces/debit-credit';
@@ -9,10 +9,11 @@ import { Ripple } from 'primeng/ripple';
 import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
 import { FinancialDashboardService } from '@/pages/financial-block/dashboard/services/financial-dashboard.service';
 import { Subscription } from 'rxjs';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-debit',
-    imports: [ButtonDirective, DecimalPipe, DialogModule, TableModule, Ripple, DatePipe, DialogComponent],
+    imports: [ButtonDirective, DecimalPipe, DialogModule, TableModule, Ripple, DatePipe, DialogComponent, TranslateModule],
     templateUrl: './debit-widget.component.html',
     styleUrl: './debit-widget.component.scss'
 })

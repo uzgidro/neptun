@@ -5,32 +5,30 @@
             <div class="w-full bg-surface-0 dark:bg-surface-900 py-20 px-8 sm:px-20" style="border-radius: 53px">
                 <div class="text-center mb-8">
                     <img ngSrc="/images/logo-x.png" alt="" height="86" width="200" class="mx-auto my-4">
-                    <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">Планшет Председателя
-                        Правления
-                    </div>
-                    <span class="text-muted-color font-medium">АО "Узбекгидроэнерго"</span>
+                    <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">{{ 'AUTH.TITLE' | translate }}</div>
+                    <span class="text-muted-color font-medium">{{ 'AUTH.COMPANY' | translate }}</span>
                 </div>
                 @if (errorMessage) {
                 <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 text-center" role="alert">
-                    {{ errorMessage }}
+                    {{ errorMessage | translate }}
                 </div>
                 }
 
                 <form (ngSubmit)="signIn()">
-                    <label for="email1" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Логин</label>
-                    <input pInputText id="email1" type="text" placeholder="Логин" class="w-full md:w-120 mb-8" [(ngModel)]="username" name="username" />
+                    <label for="email1" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">{{ 'AUTH.USERNAME' | translate }}</label>
+                    <input pInputText id="email1" type="text" [placeholder]="'AUTH.USERNAME' | translate" class="w-full md:w-120 mb-8" [(ngModel)]="username" name="username" />
 
-                    <label for="password1" class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">Пароль</label>
-                    <p-password id="password1" [(ngModel)]="password" name="password" placeholder="Пароль" [toggleMask]="true" class="mb-4" [fluid]="true" [feedback]="false"></p-password>
+                    <label for="password1" class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">{{ 'AUTH.PASSWORD' | translate }}</label>
+                    <p-password id="password1" [(ngModel)]="password" name="password" [placeholder]="'AUTH.PASSWORD' | translate" [toggleMask]="true" class="mb-4" [fluid]="true" [feedback]="false"></p-password>
 
                     <div class="flex items-center justify-between mt-2 mb-8 gap-8">
                         <div class="flex items-center">
                             <p-checkbox [(ngModel)]="checked" name="rememberme" id="rememberme1" binary class="mr-2"></p-checkbox>
-                            <label for="rememberme1">Запомнить меня</label>
+                            <label for="rememberme1">{{ 'AUTH.REMEMBER_ME' | translate }}</label>
                         </div>
-                        <span class="font-medium no-underline ml-2 text-right cursor-pointer text-primary">Забыли пароль</span>
+                        <span class="font-medium no-underline ml-2 text-right cursor-pointer text-primary">{{ 'AUTH.FORGOT_PASSWORD' | translate }}</span>
                     </div>
-                    <p-button label="Войти" styleClass="w-full" type="submit" [loading]="loading"></p-button>
+                    <p-button [label]="'AUTH.LOGIN' | translate" styleClass="w-full" type="submit" [loading]="loading"></p-button>
                 </form>
             </div>
         </div>

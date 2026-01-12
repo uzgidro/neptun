@@ -10,7 +10,7 @@
                     <i class="pi pi-arrow-down-left"></i>
                 </div>
                 <div class="card-info">
-                    <span class="card-label">Общий дебит</span>
+                    <span class="card-label">{{ 'FINANCIAL_BLOCK.DEBIT_CREDIT.TOTAL_DEBIT' | translate }}</span>
                     <span class="card-value text-green-500">{{ formatCurrency(totalDebit) }}</span>
                 </div>
             </div>
@@ -22,7 +22,7 @@
                     <i class="pi pi-arrow-up-right"></i>
                 </div>
                 <div class="card-info">
-                    <span class="card-label">Общий кредит</span>
+                    <span class="card-label">{{ 'FINANCIAL_BLOCK.DEBIT_CREDIT.TOTAL_CREDIT' | translate }}</span>
                     <span class="card-value text-red-500">{{ formatCurrency(totalCredit) }}</span>
                 </div>
             </div>
@@ -34,7 +34,7 @@
                     <i class="pi" [ngClass]="balance >= 0 ? 'pi-wallet' : 'pi-exclamation-triangle'"></i>
                 </div>
                 <div class="card-info">
-                    <span class="card-label">Сальдо</span>
+                    <span class="card-label">{{ 'FINANCIAL_BLOCK.DASHBOARD.BALANCE' | translate }}</span>
                     <span class="card-value" [ngClass]="{'text-green-500': balance >= 0, 'text-red-500': balance < 0}">
                         {{ formatCurrency(balance) }}
                     </span>
@@ -48,7 +48,7 @@
         <!-- Monthly Dynamics Chart -->
         <div class="chart-card chart-large">
             <div class="chart-header">
-                <h3>Динамика по месяцам</h3>
+                <h3>{{ 'FINANCIAL_BLOCK.DASHBOARD.MONTHLY_DYNAMICS' | translate }}</h3>
                 <span class="chart-icon"><i class="pi pi-chart-bar"></i></span>
             </div>
             <div class="chart-body">
@@ -65,7 +65,7 @@
             <!-- Debit vs Credit -->
             <div class="chart-card chart-small">
                 <div class="chart-header">
-                    <h3>Дебит vs Кредит</h3>
+                    <h3>{{ 'FINANCIAL_BLOCK.DEBIT_CREDIT.DEBIT' | translate }} vs {{ 'FINANCIAL_BLOCK.DEBIT_CREDIT.CREDIT' | translate }}</h3>
                     <span class="chart-icon"><i class="pi pi-chart-pie"></i></span>
                 </div>
                 <div class="chart-body-small">
@@ -80,7 +80,7 @@
             <!-- Expenses by Category -->
             <div class="chart-card chart-small">
                 <div class="chart-header">
-                    <h3>Расходы по категориям</h3>
+                    <h3>{{ 'FINANCIAL_BLOCK.DASHBOARD.EXPENSE_STRUCTURE' | translate }}</h3>
                     <span class="chart-icon"><i class="pi pi-percentage"></i></span>
                 </div>
                 <div class="chart-body-small">
@@ -107,7 +107,7 @@
                     pInputText
                     [(ngModel)]="searchText"
                     (ngModelChange)="applyFilters()"
-                    placeholder="Поиск..."
+                    placeholder="..."
                 />
             </p-inputGroup>
 
@@ -118,7 +118,7 @@
                 selectionMode="range"
                 [showIcon]="true"
                 dateFormat="dd.mm.yy"
-                placeholder="Период"
+                [placeholder]="'FINANCIAL_BLOCK.KPI.PERIOD' | translate"
                 class="date-picker"
             ></p-datepicker>
 
@@ -129,7 +129,7 @@
                 (ngModelChange)="applyFilters()"
                 optionLabel="label"
                 optionValue="value"
-                placeholder="Категория"
+                [placeholder]="'FINANCIAL_BLOCK.DEBIT_CREDIT.CATEGORY' | translate"
                 [showClear]="true"
                 class="filter-select"
             ></p-select>
@@ -141,7 +141,7 @@
                 (ngModelChange)="applyFilters()"
                 optionLabel="label"
                 optionValue="value"
-                placeholder="Статус"
+                [placeholder]="'FINANCIAL_BLOCK.COMMON.STATUS' | translate"
                 [showClear]="true"
                 class="filter-select"
             ></p-select>
@@ -162,7 +162,7 @@
                 severity="secondary"
                 [outlined]="true"
                 (onClick)="clearFilters()"
-                pTooltip="Сбросить фильтры"
+                [pTooltip]="'FINANCIAL_BLOCK.COMMON.CLEAR' | translate"
             ></p-button>
         </div>
 
@@ -176,7 +176,7 @@
                 (onClick)="exportToExcel()"
             ></p-button>
             <p-button
-                label="Добавить"
+                [label]="'FINANCIAL_BLOCK.COMMON.ADD' | translate"
                 icon="pi pi-plus"
                 (onClick)="openNewTransaction()"
             ></p-button>
@@ -192,31 +192,31 @@
             [rows]="10"
             [rowsPerPageOptions]="[5, 10, 25, 50]"
             [showCurrentPageReport]="true"
-            currentPageReportTemplate="Показано {first} - {last} из {totalRecords} записей"
+            currentPageReportTemplate="{first} - {last} / {totalRecords}"
             [sortField]="'date'"
             [sortOrder]="-1"
         >
             <ng-template pTemplate="header">
                 <tr>
                     <th pSortableColumn="date" style="width: 120px">
-                        Дата <p-sortIcon field="date"></p-sortIcon>
+                        {{ 'FINANCIAL_BLOCK.COMMON.DATE' | translate }} <p-sortIcon field="date"></p-sortIcon>
                     </th>
                     <th pSortableColumn="description">
-                        Описание <p-sortIcon field="description"></p-sortIcon>
+                        {{ 'FINANCIAL_BLOCK.DEBIT_CREDIT.DESCRIPTION' | translate }} <p-sortIcon field="description"></p-sortIcon>
                     </th>
-                    <th style="width: 140px">Категория</th>
+                    <th style="width: 140px">{{ 'FINANCIAL_BLOCK.DEBIT_CREDIT.CATEGORY' | translate }}</th>
                     <th pSortableColumn="counterparty" style="width: 160px">
-                        Контрагент <p-sortIcon field="counterparty"></p-sortIcon>
+                        {{ 'FINANCIAL_BLOCK.DEBIT_CREDIT.COUNTERPARTY' | translate }} <p-sortIcon field="counterparty"></p-sortIcon>
                     </th>
                     <th pSortableColumn="debit" style="width: 130px; text-align: right">
-                        Дебит <p-sortIcon field="debit"></p-sortIcon>
+                        {{ 'FINANCIAL_BLOCK.DEBIT_CREDIT.DEBIT' | translate }} <p-sortIcon field="debit"></p-sortIcon>
                     </th>
                     <th pSortableColumn="credit" style="width: 130px; text-align: right">
-                        Кредит <p-sortIcon field="credit"></p-sortIcon>
+                        {{ 'FINANCIAL_BLOCK.DEBIT_CREDIT.CREDIT' | translate }} <p-sortIcon field="credit"></p-sortIcon>
                     </th>
-                    <th style="width: 130px; text-align: right">Баланс</th>
-                    <th style="width: 110px">Статус</th>
-                    <th style="width: 130px; text-align: center">Действия</th>
+                    <th style="width: 130px; text-align: right">{{ 'FINANCIAL_BLOCK.DASHBOARD.BALANCE' | translate }}</th>
+                    <th style="width: 110px">{{ 'FINANCIAL_BLOCK.COMMON.STATUS' | translate }}</th>
+                    <th style="width: 130px; text-align: center">{{ 'FINANCIAL_BLOCK.COMMON.ACTIONS' | translate }}</th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-transaction>
@@ -261,7 +261,7 @@
                                 [text]="true"
                                 severity="info"
                                 (onClick)="editTransaction(transaction)"
-                                pTooltip="Редактировать"
+                                [pTooltip]="'FINANCIAL_BLOCK.COMMON.EDIT' | translate"
                             ></p-button>
                             <p-button
                                 icon="pi pi-copy"
@@ -269,7 +269,6 @@
                                 [text]="true"
                                 severity="secondary"
                                 (onClick)="duplicateTransaction(transaction)"
-                                pTooltip="Дублировать"
                             ></p-button>
                             <p-button
                                 icon="pi pi-trash"
@@ -277,7 +276,7 @@
                                 [text]="true"
                                 severity="danger"
                                 (onClick)="deleteTransaction(transaction)"
-                                pTooltip="Удалить"
+                                [pTooltip]="'FINANCIAL_BLOCK.COMMON.DELETE' | translate"
                             ></p-button>
                         </div>
                     </td>
@@ -285,7 +284,7 @@
             </ng-template>
             <ng-template pTemplate="footer">
                 <tr class="font-bold">
-                    <td colspan="4" class="text-right">ИТОГО:</td>
+                    <td colspan="4" class="text-right">{{ 'FINANCIAL_BLOCK.COMMON.TOTAL' | translate }}:</td>
                     <td class="text-right text-green-600">+{{ formatCurrency(totalDebit) }}</td>
                     <td class="text-right text-red-600">-{{ formatCurrency(totalCredit) }}</td>
                     <td class="text-right" [ngClass]="{'text-green-600': balance >= 0, 'text-red-600': balance < 0}">
@@ -299,7 +298,7 @@
                     <td colspan="9" class="text-center p-4">
                         <div class="flex flex-column align-items-center gap-2">
                             <i class="pi pi-inbox text-4xl text-500"></i>
-                            <span class="text-500">Транзакции не найдены</span>
+                            <span class="text-500">{{ 'FINANCIAL_BLOCK.COMMON.NO_DATA' | translate }}</span>
                         </div>
                     </td>
                 </tr>
@@ -311,7 +310,7 @@
 <!-- Transaction Dialog -->
 <p-dialog
     [(visible)]="transactionDialog"
-    [header]="isEditMode ? 'Редактирование транзакции' : 'Новая транзакция'"
+    [header]="isEditMode ? ('FINANCIAL_BLOCK.COMMON.EDIT' | translate) : ('FINANCIAL_BLOCK.DEBIT_CREDIT.ADD_TRANSACTION' | translate)"
     [modal]="true"
     [style]="{ width: '520px', maxWidth: '95vw' }"
     [closable]="true"
@@ -321,7 +320,7 @@
     <div class="dialog-form">
         <!-- Date -->
         <div class="form-field">
-            <label for="date">Дата <span class="required">*</span></label>
+            <label for="date">{{ 'FINANCIAL_BLOCK.COMMON.DATE' | translate }} <span class="required">*</span></label>
             <p-datepicker
                 id="date"
                 [(ngModel)]="currentTransaction.date"
@@ -333,31 +332,29 @@
 
         <!-- Description -->
         <div class="form-field">
-            <label for="description">Описание <span class="required">*</span></label>
+            <label for="description">{{ 'FINANCIAL_BLOCK.DEBIT_CREDIT.DESCRIPTION' | translate }} <span class="required">*</span></label>
             <input
                 id="description"
                 type="text"
                 pInputText
                 [(ngModel)]="currentTransaction.description"
-                placeholder="Введите описание операции"
             />
         </div>
 
         <!-- Counterparty -->
         <div class="form-field">
-            <label for="counterparty">Контрагент <span class="required">*</span></label>
+            <label for="counterparty">{{ 'FINANCIAL_BLOCK.DEBIT_CREDIT.COUNTERPARTY' | translate }} <span class="required">*</span></label>
             <input
                 id="counterparty"
                 type="text"
                 pInputText
                 [(ngModel)]="currentTransaction.counterparty"
-                placeholder="Введите название контрагента"
             />
         </div>
 
         <!-- Category -->
         <div class="form-field">
-            <label for="category">Категория</label>
+            <label for="category">{{ 'FINANCIAL_BLOCK.DEBIT_CREDIT.CATEGORY' | translate }}</label>
             <p-select
                 id="category"
                 [options]="categories"
@@ -372,7 +369,7 @@
         <div class="form-row">
             <div class="form-field">
                 <label for="debit" class="label-debit">
-                    <i class="pi pi-arrow-down-left"></i> Дебит (приход)
+                    <i class="pi pi-arrow-down-left"></i> {{ 'FINANCIAL_BLOCK.DEBIT_CREDIT.DEBIT' | translate }}
                 </label>
                 <p-inputNumber
                     id="debit"
@@ -386,7 +383,7 @@
             </div>
             <div class="form-field">
                 <label for="credit" class="label-credit">
-                    <i class="pi pi-arrow-up-right"></i> Кредит (расход)
+                    <i class="pi pi-arrow-up-right"></i> {{ 'FINANCIAL_BLOCK.DEBIT_CREDIT.CREDIT' | translate }}
                 </label>
                 <p-inputNumber
                     id="credit"
@@ -402,7 +399,7 @@
 
         <!-- Status -->
         <div class="form-field">
-            <label for="status">Статус</label>
+            <label for="status">{{ 'FINANCIAL_BLOCK.COMMON.STATUS' | translate }}</label>
             <p-select
                 id="status"
                 [options]="statuses"
@@ -417,14 +414,14 @@
     <ng-template pTemplate="footer">
         <div class="dialog-footer">
             <p-button
-                label="Отмена"
+                [label]="'FINANCIAL_BLOCK.COMMON.CANCEL' | translate"
                 severity="secondary"
                 [outlined]="true"
                 icon="pi pi-times"
                 (onClick)="transactionDialog = false"
             ></p-button>
             <p-button
-                [label]="isEditMode ? 'Сохранить' : 'Добавить'"
+                [label]="isEditMode ? ('FINANCIAL_BLOCK.COMMON.SAVE' | translate) : ('FINANCIAL_BLOCK.COMMON.ADD' | translate)"
                 [icon]="isEditMode ? 'pi pi-save' : 'pi pi-plus'"
                 (onClick)="saveTransaction()"
             ></p-button>

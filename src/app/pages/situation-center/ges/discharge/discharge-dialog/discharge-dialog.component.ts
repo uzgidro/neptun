@@ -2,7 +2,7 @@ import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, Simp
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MessageService, PrimeTemplate } from 'primeng/api';
 import { Organization } from '@/core/interfaces/organizations';
-import { DischargeModel, WaterDischargePayload } from '@/core/interfaces/discharge';
+import { DischargeModel } from '@/core/interfaces/discharge';
 import { dateRangeValidator } from '@/core/validators/date-range.validator';
 import { Dialog } from 'primeng/dialog';
 import { Select } from 'primeng/select';
@@ -15,11 +15,12 @@ import { Message } from 'primeng/message';
 import { NgClass } from '@angular/common';
 import { DischargeService } from '@/core/services/discharge.service';
 import { OrganizationService } from '@/core/services/organization.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-discharge-dialog',
     standalone: true,
-    imports: [Dialog, ReactiveFormsModule, Select, FormsModule, FloatLabel, DatePicker, InputNumber, Textarea, Message, PrimeTemplate, NgClass, Button],
+    imports: [Dialog, ReactiveFormsModule, Select, FormsModule, FloatLabel, DatePicker, InputNumber, Textarea, Message, PrimeTemplate, NgClass, Button, TranslateModule],
     templateUrl: './discharge-dialog.component.html'
 })
 export class DischargeDialogComponent implements OnInit, OnChanges {
@@ -35,9 +36,10 @@ export class DischargeDialogComponent implements OnInit, OnChanges {
     loading: boolean = false;
 
     private dischargeService = inject(DischargeService);
-    private organizationService = inject(OrganizationService)
+    private organizationService = inject(OrganizationService);
     private messageService = inject(MessageService);
     private fb = inject(FormBuilder);
+    private translate = inject(TranslateService);
 
     get maxDate(): Date {
         return new Date();
@@ -106,7 +108,7 @@ export class DischargeDialogComponent implements OnInit, OnChanges {
         this.submitted = true;
 
         if (this.waterDischargeForm.invalid) {
-            console.warn('Форма невалидна');
+            console.warn('Form is invalid');
             return;
         }
 
@@ -120,12 +122,20 @@ export class DischargeDialogComponent implements OnInit, OnChanges {
         if (this.isEditMode) {
             this.dischargeService.editDischarge(this.modelToEdit!.id, formData).subscribe({
                 next: () => {
-                    this.messageService.add({ severity: 'success', summary: 'Успешно', detail: 'Обновлена запись о водосбросе' });
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: this.translate.instant('COMMON.SUCCESS'),
+                        detail: this.translate.instant('SITUATION_CENTER.DISCHARGE.UPDATED')
+                    });
                     this.save.emit();
                     this.closeDialog();
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка сохранения', detail: err.error?.message || 'Не удалось сохранить данные' });
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: this.translate.instant('COMMON.ERROR'),
+                        detail: err.error?.message || this.translate.instant('SITUATION_CENTER.DISCHARGE.UPDATE_ERROR')
+                    });
                 }
             });
         } else {
@@ -134,12 +144,20 @@ export class DischargeDialogComponent implements OnInit, OnChanges {
 
             this.dischargeService.addDischarge(formData).subscribe({
                 next: () => {
-                    this.messageService.add({ severity: 'success', summary: 'Успешно', detail: 'Новая запись о водосбросе добавлена' });
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: this.translate.instant('COMMON.SUCCESS'),
+                        detail: this.translate.instant('SITUATION_CENTER.DISCHARGE.CREATED')
+                    });
                     this.save.emit();
                     this.closeDialog();
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка сохранения', detail: err.error?.message || 'Не удалось сохранить данные' });
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: this.translate.instant('COMMON.ERROR'),
+                        detail: err.error?.message || this.translate.instant('SITUATION_CENTER.DISCHARGE.CREATE_ERROR')
+                    });
                 }
             });
         }
@@ -153,8 +171,8 @@ export class DischargeDialogComponent implements OnInit, OnChanges {
             error: () => {
                 this.messageService.add({
                     severity: 'warning',
-                    summary: 'Ошибка',
-                    detail: 'Не удалось загрузить данные'
+                    summary: this.translate.instant('COMMON.ERROR'),
+                    detail: this.translate.instant('SITUATION_CENTER.COMMON.DATA_NOT_FOUND')
                 });
             },
             complete: () => {

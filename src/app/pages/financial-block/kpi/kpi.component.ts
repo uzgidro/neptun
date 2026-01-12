@@ -20,6 +20,7 @@ import { TextareaModule } from 'primeng/textarea';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { KnobModule } from 'primeng/knob';
 import { FinancialDashboardService } from '../dashboard/services/financial-dashboard.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 interface KpiCategory {
     label: string;
@@ -76,7 +77,8 @@ interface KpiRecord {
         ChartModule,
         TextareaModule,
         ProgressBarModule,
-        KnobModule
+        KnobModule,
+        TranslateModule
     ],
     providers: [ConfirmationService, MessageService],
     templateUrl: './kpi.component.html',
@@ -101,52 +103,13 @@ export class KpiComponent implements OnInit {
     // Overall KPI value for gauge
     overallKpi: number = 0;
 
-    // Dropdown options
-    categories: KpiCategory[] = [
-        { label: 'Производство', value: 'production', icon: 'pi pi-bolt' },
-        { label: 'Финансы', value: 'financial', icon: 'pi pi-wallet' },
-        { label: 'Операционные', value: 'operational', icon: 'pi pi-cog' },
-        { label: 'HR', value: 'hr', icon: 'pi pi-users' }
-    ];
-
-    periods: KpiPeriod[] = [
-        { label: 'Месяц', value: 'month' },
-        { label: 'Квартал', value: 'quarter' },
-        { label: 'Год', value: 'year' }
-    ];
-
-    units: KpiUnit[] = [
-        { label: '%', value: 'percent' },
-        { label: 'кВт*ч', value: 'kwh' },
-        { label: 'МВт*ч', value: 'mwh' },
-        { label: 'UZS', value: 'uzs' },
-        { label: 'млн UZS', value: 'mln_uzs' },
-        { label: 'шт', value: 'pcs' },
-        { label: 'дни', value: 'days' },
-        { label: 'часы', value: 'hours' },
-        { label: 'чел', value: 'people' }
-    ];
-
-    departments = [
-        { label: 'Производственный отдел', value: 'production' },
-        { label: 'Финансовый отдел', value: 'finance' },
-        { label: 'Технический отдел', value: 'technical' },
-        { label: 'IT отдел', value: 'it' },
-        { label: 'Отдел кадров', value: 'hr' },
-        { label: 'Административный отдел', value: 'admin' }
-    ];
-
-    statuses = [
-        { label: 'Выполнено', value: 'achieved' },
-        { label: 'Внимание', value: 'warning' },
-        { label: 'Критично', value: 'critical' }
-    ];
-
-    trends = [
-        { label: 'Рост', value: 'up', icon: 'pi pi-arrow-up' },
-        { label: 'Падение', value: 'down', icon: 'pi pi-arrow-down' },
-        { label: 'Стабильно', value: 'stable', icon: 'pi pi-minus' }
-    ];
+    // Dropdown options - initialized in initTranslations()
+    categories: KpiCategory[] = [];
+    periods: KpiPeriod[] = [];
+    units: KpiUnit[] = [];
+    departments: { label: string; value: string }[] = [];
+    statuses: { label: string; value: string }[] = [];
+    trends: { label: string; value: string; icon: string }[] = [];
 
     // Charts
     radarChartData: any;
@@ -159,6 +122,7 @@ export class KpiComponent implements OnInit {
     statusChartOptions: any;
 
     private dashboardService = inject(FinancialDashboardService);
+    private translate = inject(TranslateService);
 
     constructor(
         private confirmationService: ConfirmationService,
@@ -166,10 +130,66 @@ export class KpiComponent implements OnInit {
     ) {}
 
     ngOnInit() {
+        this.initTranslations();
         this.loadKpis();
         this.applyFilters();
         this.initCharts();
         this.updateDashboardData();
+
+        this.translate.onLangChange.subscribe(() => {
+            this.initTranslations();
+            this.updateCharts();
+        });
+    }
+
+    private initTranslations(): void {
+        const t = this.translate;
+
+        this.categories = [
+            { label: t.instant('FINANCIAL_BLOCK.KPI.CATEGORY_PRODUCTION'), value: 'production', icon: 'pi pi-bolt' },
+            { label: t.instant('FINANCIAL_BLOCK.KPI.CATEGORY_FINANCIAL'), value: 'financial', icon: 'pi pi-wallet' },
+            { label: t.instant('FINANCIAL_BLOCK.KPI.CATEGORY_OPERATIONAL'), value: 'operational', icon: 'pi pi-cog' },
+            { label: t.instant('FINANCIAL_BLOCK.KPI.CATEGORY_HR'), value: 'hr', icon: 'pi pi-users' }
+        ];
+
+        this.periods = [
+            { label: t.instant('FINANCIAL_BLOCK.KPI.PERIOD_MONTH'), value: 'month' },
+            { label: t.instant('FINANCIAL_BLOCK.KPI.PERIOD_QUARTER'), value: 'quarter' },
+            { label: t.instant('FINANCIAL_BLOCK.KPI.PERIOD_YEAR'), value: 'year' }
+        ];
+
+        this.units = [
+            { label: t.instant('FINANCIAL_BLOCK.KPI.UNIT_PERCENT'), value: 'percent' },
+            { label: t.instant('FINANCIAL_BLOCK.KPI.UNIT_KWH'), value: 'kwh' },
+            { label: t.instant('FINANCIAL_BLOCK.KPI.UNIT_MWH'), value: 'mwh' },
+            { label: t.instant('FINANCIAL_BLOCK.KPI.UNIT_UZS'), value: 'uzs' },
+            { label: t.instant('FINANCIAL_BLOCK.KPI.UNIT_MLN_UZS'), value: 'mln_uzs' },
+            { label: t.instant('FINANCIAL_BLOCK.KPI.UNIT_PCS'), value: 'pcs' },
+            { label: t.instant('FINANCIAL_BLOCK.KPI.UNIT_DAYS'), value: 'days' },
+            { label: t.instant('FINANCIAL_BLOCK.KPI.UNIT_HOURS'), value: 'hours' },
+            { label: t.instant('FINANCIAL_BLOCK.KPI.UNIT_PEOPLE'), value: 'people' }
+        ];
+
+        this.departments = [
+            { label: t.instant('FINANCIAL_BLOCK.KPI.DEPT_PRODUCTION'), value: 'production' },
+            { label: t.instant('FINANCIAL_BLOCK.KPI.DEPT_FINANCE'), value: 'finance' },
+            { label: t.instant('FINANCIAL_BLOCK.KPI.DEPT_TECHNICAL'), value: 'technical' },
+            { label: t.instant('FINANCIAL_BLOCK.KPI.DEPT_IT'), value: 'it' },
+            { label: t.instant('FINANCIAL_BLOCK.KPI.DEPT_HR'), value: 'hr' },
+            { label: t.instant('FINANCIAL_BLOCK.KPI.DEPT_ADMIN'), value: 'admin' }
+        ];
+
+        this.statuses = [
+            { label: t.instant('FINANCIAL_BLOCK.KPI.STATUS_ACHIEVED'), value: 'achieved' },
+            { label: t.instant('FINANCIAL_BLOCK.KPI.STATUS_WARNING'), value: 'warning' },
+            { label: t.instant('FINANCIAL_BLOCK.KPI.STATUS_CRITICAL'), value: 'critical' }
+        ];
+
+        this.trends = [
+            { label: t.instant('FINANCIAL_BLOCK.KPI.TREND_UP'), value: 'up', icon: 'pi pi-arrow-up' },
+            { label: t.instant('FINANCIAL_BLOCK.KPI.TREND_DOWN'), value: 'down', icon: 'pi pi-arrow-down' },
+            { label: t.instant('FINANCIAL_BLOCK.KPI.TREND_STABLE'), value: 'stable', icon: 'pi pi-minus' }
+        ];
     }
 
     private updateDashboardData(): void {
@@ -356,8 +376,8 @@ export class KpiComponent implements OnInit {
         if (!this.currentKpi.name) {
             this.messageService.add({
                 severity: 'warn',
-                summary: 'Внимание',
-                detail: 'Введите название показателя'
+                summary: this.translate.instant('COMMON.WARNING'),
+                detail: this.translate.instant('FINANCIAL_BLOCK.KPI.ENTER_NAME')
             });
             return;
         }
@@ -365,8 +385,8 @@ export class KpiComponent implements OnInit {
         if (this.currentKpi.targetValue === 0 && this.currentKpi.unit !== 'pcs') {
             this.messageService.add({
                 severity: 'warn',
-                summary: 'Внимание',
-                detail: 'Укажите целевое значение'
+                summary: this.translate.instant('COMMON.WARNING'),
+                detail: this.translate.instant('FINANCIAL_BLOCK.KPI.SPECIFY_TARGET')
             });
             return;
         }
@@ -378,16 +398,16 @@ export class KpiComponent implements OnInit {
             }
             this.messageService.add({
                 severity: 'success',
-                summary: 'Успешно',
-                detail: 'Показатель обновлён'
+                summary: this.translate.instant('COMMON.SUCCESS'),
+                detail: this.translate.instant('FINANCIAL_BLOCK.KPI.KPI_UPDATED')
             });
         } else {
             this.currentKpi.id = Math.max(...this.kpis.map(k => k.id), 0) + 1;
             this.kpis.push({ ...this.currentKpi });
             this.messageService.add({
                 severity: 'success',
-                summary: 'Успешно',
-                detail: 'Показатель добавлен'
+                summary: this.translate.instant('COMMON.SUCCESS'),
+                detail: this.translate.instant('FINANCIAL_BLOCK.KPI.KPI_ADDED')
             });
         }
 
@@ -398,19 +418,19 @@ export class KpiComponent implements OnInit {
 
     deleteKpi(kpi: KpiRecord) {
         this.confirmationService.confirm({
-            message: `Вы уверены, что хотите удалить показатель "${kpi.name}"?`,
-            header: 'Подтверждение удаления',
+            message: `${this.translate.instant('FINANCIAL_BLOCK.KPI.DELETE_CONFIRM')} "${kpi.name}"?`,
+            header: this.translate.instant('COMMON.CONFIRM_DELETE'),
             icon: 'pi pi-exclamation-triangle',
-            acceptLabel: 'Да',
-            rejectLabel: 'Нет',
+            acceptLabel: this.translate.instant('COMMON.YES'),
+            rejectLabel: this.translate.instant('COMMON.NO'),
             accept: () => {
                 this.kpis = this.kpis.filter(k => k.id !== kpi.id);
                 this.applyFilters();
                 this.updateDashboardData();
                 this.messageService.add({
                     severity: 'success',
-                    summary: 'Успешно',
-                    detail: 'Показатель удалён'
+                    summary: this.translate.instant('COMMON.SUCCESS'),
+                    detail: this.translate.instant('FINANCIAL_BLOCK.KPI.KPI_DELETED')
                 });
             }
         });
@@ -439,9 +459,9 @@ export class KpiComponent implements OnInit {
 
     getStatusLabel(status: string): string {
         switch (status) {
-            case 'achieved': return 'Выполнено';
-            case 'warning': return 'Внимание';
-            case 'critical': return 'Критично';
+            case 'achieved': return this.translate.instant('FINANCIAL_BLOCK.KPI.STATUS_ACHIEVED');
+            case 'warning': return this.translate.instant('FINANCIAL_BLOCK.KPI.STATUS_WARNING');
+            case 'critical': return this.translate.instant('FINANCIAL_BLOCK.KPI.STATUS_CRITICAL');
             default: return status;
         }
     }
@@ -501,26 +521,29 @@ export class KpiComponent implements OnInit {
 
     // Export to Excel
     exportToExcel() {
+        const t = this.translate;
+        const cols = 'FINANCIAL_BLOCK.KPI.EXPORT_COLUMNS';
+
         const data = this.filteredKpis.map(k => ({
-            'Показатель': k.name,
-            'Категория': this.getCategoryLabel(k.category),
-            'Отдел': this.getDepartmentLabel(k.department),
-            'Период': this.getPeriodLabel(k.period),
-            'Ед.изм.': this.getUnitLabel(k.unit),
-            'Цель': k.targetValue,
-            'Факт': k.actualValue,
-            'Выполнение %': this.getAchievementPercent(k).toFixed(1),
-            'Статус': this.getStatusLabel(this.getKpiStatus(k)),
-            'Вес': k.weight,
-            'Ответственный': k.responsiblePerson,
-            'Примечания': k.notes
+            [t.instant(`${cols}.INDICATOR`)]: k.name,
+            [t.instant(`${cols}.CATEGORY`)]: this.getCategoryLabel(k.category),
+            [t.instant(`${cols}.DEPARTMENT`)]: this.getDepartmentLabel(k.department),
+            [t.instant(`${cols}.PERIOD`)]: this.getPeriodLabel(k.period),
+            [t.instant(`${cols}.UNIT`)]: this.getUnitLabel(k.unit),
+            [t.instant(`${cols}.TARGET`)]: k.targetValue,
+            [t.instant(`${cols}.ACTUAL`)]: k.actualValue,
+            [t.instant(`${cols}.PERFORMANCE`)]: this.getAchievementPercent(k).toFixed(1),
+            [t.instant(`${cols}.STATUS`)]: this.getStatusLabel(this.getKpiStatus(k)),
+            [t.instant(`${cols}.WEIGHT`)]: k.weight,
+            [t.instant(`${cols}.RESPONSIBLE`)]: k.responsiblePerson,
+            [t.instant(`${cols}.NOTES`)]: k.notes
         }));
 
         // Convert to CSV
         const headers = Object.keys(data[0]);
         const csvContent = [
             headers.join(';'),
-            ...data.map(row => headers.map(h => row[h as keyof typeof row]).join(';'))
+            ...data.map(row => headers.map(h => (row as any)[h]).join(';'))
         ].join('\n');
 
         // Add BOM for Excel to recognize UTF-8
@@ -539,8 +562,8 @@ export class KpiComponent implements OnInit {
 
         this.messageService.add({
             severity: 'success',
-            summary: 'Экспорт',
-            detail: 'Файл успешно экспортирован'
+            summary: t.instant('COMMON.EXPORT'),
+            detail: t.instant('COMMON.EXPORT_SUCCESS')
         });
     }
 
@@ -695,7 +718,7 @@ export class KpiComponent implements OnInit {
         this.radarChartData = {
             labels: labels,
             datasets: [{
-                label: 'Выполнение KPI',
+                label: this.translate.instant('FINANCIAL_BLOCK.KPI.CHART_KPI_PERFORMANCE'),
                 data: data,
                 backgroundColor: 'rgba(59, 130, 246, 0.2)',
                 borderColor: '#3B82F6',
@@ -721,7 +744,7 @@ export class KpiComponent implements OnInit {
             labels: labels,
             datasets: [
                 {
-                    label: 'Цель',
+                    label: this.translate.instant('FINANCIAL_BLOCK.KPI.TARGET'),
                     data: targetData,
                     backgroundColor: 'rgba(59, 130, 246, 0.7)',
                     borderColor: '#3B82F6',
@@ -729,7 +752,7 @@ export class KpiComponent implements OnInit {
                     borderRadius: 4
                 },
                 {
-                    label: 'Факт',
+                    label: this.translate.instant('FINANCIAL_BLOCK.KPI.ACTUAL'),
                     data: actualData,
                     backgroundColor: 'rgba(34, 197, 94, 0.7)',
                     borderColor: '#22C55E',
@@ -741,14 +764,21 @@ export class KpiComponent implements OnInit {
     }
 
     updateLineChart() {
-        const months = ['Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'];
+        const months = [
+            this.translate.instant('COMMON.MONTHS.JUL'),
+            this.translate.instant('COMMON.MONTHS.AUG'),
+            this.translate.instant('COMMON.MONTHS.SEP'),
+            this.translate.instant('COMMON.MONTHS.OCT'),
+            this.translate.instant('COMMON.MONTHS.NOV'),
+            this.translate.instant('COMMON.MONTHS.DEC')
+        ];
         // Simulated historical data
         const historicalData = [82, 85, 88, 86, 91, this.overallKpi];
 
         this.lineChartData = {
             labels: months,
             datasets: [{
-                label: 'Общий KPI',
+                label: this.translate.instant('FINANCIAL_BLOCK.KPI.OVERALL_KPI'),
                 data: historicalData,
                 fill: true,
                 backgroundColor: 'rgba(59, 130, 246, 0.1)',
@@ -768,7 +798,11 @@ export class KpiComponent implements OnInit {
         const critical = this.criticalCount;
 
         this.statusChartData = {
-            labels: ['Выполнено', 'Внимание', 'Критично'],
+            labels: [
+                this.translate.instant('FINANCIAL_BLOCK.KPI.STATUS_ACHIEVED'),
+                this.translate.instant('FINANCIAL_BLOCK.KPI.STATUS_WARNING'),
+                this.translate.instant('FINANCIAL_BLOCK.KPI.STATUS_CRITICAL')
+            ],
             datasets: [{
                 data: [achieved, warning, critical],
                 backgroundColor: ['#22C55E', '#F59E0B', '#EF4444'],
