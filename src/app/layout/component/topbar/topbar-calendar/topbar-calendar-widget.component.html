@@ -186,7 +186,7 @@
 </p-dialog>
 
 <p-dialog [(visible)]="statisticsDialogVisible" [header]="statisticsDialogHeader" [modal]="true"
-          [style]="{ width: '700px' }" [breakpoints]="{ '960px': '85vw', '640px': '95vw' }">
+          [dismissableMask]="true" [style]="{ width: '700px' }" [breakpoints]="{ '960px': '85vw', '640px': '95vw' }">
     @if (loadingStatistics) {
         <div class="flex items-center justify-center p-8">
             <i class="pi pi-spin pi-spinner text-4xl"></i>
