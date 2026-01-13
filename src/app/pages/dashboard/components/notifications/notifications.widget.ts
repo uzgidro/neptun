@@ -3,7 +3,7 @@ import { ButtonDirective, ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
 import { DatePipe, NgClass } from '@angular/common';
 import { PastEventsService } from '@/core/services/past-events.service';
-import { DateGroup, Event, EventType } from '@/core/interfaces/past-events';
+import { DateGroup, PastEvent, EventType } from '@/core/interfaces/past-events';
 import { FileResponse } from '@/core/interfaces/files';
 import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
@@ -52,20 +52,20 @@ export class NotificationsWidget implements OnInit {
         return this.expandedEvents.has(eventDate);
     }
 
-    getEventKey(event: Event): string {
+    getEventKey(event: PastEvent): string {
         return event.date + event.entity_type + event.entity_id + event.organization_id;
     }
 
-    shouldShowExpandButton(event: Event): boolean {
+    shouldShowExpandButton(event: PastEvent): boolean {
         return event.description.length > 120 || this.hasMediaFiles(event);
     }
 
-    hasMediaFiles(event: Event): boolean {
+    hasMediaFiles(event: PastEvent): boolean {
         if (!event.files || event.files.length === 0) return false;
         return event.files.some((file) => this.isImageFile(file.file_name) || this.isVideoFile(file.file_name));
     }
 
-    getMediaFiles(event: Event): FileResponse[] {
+    getMediaFiles(event: PastEvent): FileResponse[] {
         if (!event.files) return [];
         return event.files.filter((file) => this.isImageFile(file.file_name) || this.isVideoFile(file.file_name));
     }
@@ -104,7 +104,7 @@ export class NotificationsWidget implements OnInit {
         }
     }
 
-    getEventIcon(type: EventType, event?: Event): string {
+    getEventIcon(type: EventType, event?: PastEvent): string {
         // Check for entity_type first
         if (event?.entity_type) {
             const entityIcons: Record<string, string> = {
@@ -151,7 +151,7 @@ export class NotificationsWidget implements OnInit {
         return colors[type] || 'text-blue-500';
     }
 
-    openImageViewer(event: Event, index: number) {
+    openImageViewer(event: PastEvent, index: number) {
         if (event.files) {
             this.selectedImageUrl = event.files[index].url;
             this.imageViewerHeader = `${event.organization_name}`;

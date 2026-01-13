@@ -2,7 +2,7 @@ import { FileResponse } from './files';
 
 export type EventType = 'info' | 'warning' | 'danger' | 'success';
 
-export interface Event {
+export interface PastEvent {
     type: EventType;
     date: string;
     organization_id?: number;
@@ -15,5 +15,11 @@ export interface Event {
 
 export interface DateGroup {
     date: string;
-    events: Event[];
+    events: PastEvent[];
+}
+
+export interface PastEventsByTypeResponse {
+    date: string;
+    type: string;
+    events: PastEvent[];
 }
