@@ -69,7 +69,7 @@
     "REMEMBER_ME": "Meni eslab qol",
     "FORGOT_PASSWORD": "Parolni unutdingizmi",
     "LOGIN_ERROR": "Login va/yoki parol noto'g'ri",
-    "TITLE": "Boshqaruv raisi plansheti",
+    "TITLE": "Boshqaruv Raisi plansheti",
     "COMPANY": "\"O'zbekgidroenergo\" AJ"
   },
   "MENU": {
@@ -134,11 +134,11 @@
     "PRIVATE_INVESTMENTS": "Xususiy investitsiyalar hisobidan (DXS)",
     "STATE_GUARANTEE_CREDITS": "Davlat kafolati ostidagi kreditlar hisobidan",
     "PLANNING_EVENTS": "Voqealar",
-    "CHAIRMAN_RECEPTION": "Boshqaruv raisi qabulxonasi",
+    "CHAIRMAN_RECEPTION": "Boshqaruv Raisi qabulxonasi",
     "TABLET": "Planshet",
     "TABLET_ADMIN": "Administrator plansheti",
-    "TABLET_FIRST_DEPUTY": "Boshqaruv raisi birinchi o'rinbosari plansheti",
-    "TABLET_CHAIRMAN": "Boshqaruv raisi plansheti",
+    "TABLET_FIRST_DEPUTY": "Boshqaruv Raisi birinchi o'rinbosari plansheti",
+    "TABLET_CHAIRMAN": "Boshqaruv Raisi plansheti",
     "TABLET_ASSISTANT": "Yordamchi plansheti",
     "TABLET_INVESTMENT": "Investitsiya boshlig'i plansheti",
     "TABLET_DUTY": "Navbatchi plansheti",
