@@ -11,11 +11,12 @@ import { AuthService } from '@/core/services/auth.service';
 import { finalize } from 'rxjs';
 import { NgOptimizedImage } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
+import { LanguageSwitcherComponent } from '@/layout/component/topbar/language-switcher/language-switcher.component';
 
 @Component({
     selector: 'app-login',
     standalone: true,
-    imports: [ButtonModule, CheckboxModule, InputTextModule, PasswordModule, FormsModule, RouterModule, RippleModule, AppFloatingConfigurator, NgOptimizedImage, TranslateModule],
+    imports: [ButtonModule, CheckboxModule, InputTextModule, PasswordModule, FormsModule, RouterModule, RippleModule, AppFloatingConfigurator, NgOptimizedImage, TranslateModule, LanguageSwitcherComponent],
     templateUrl: 'login.component.html'
 })
 export class LoginComponent {
