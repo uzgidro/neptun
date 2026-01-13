@@ -3,66 +3,66 @@
     <div class="flex gap-4 mb-4 items-stretch">
         <div class="card mb-0 flex-1 h-full">
             <div class="flex justify-between items-center mb-2">
-                <span class="text-muted-color font-medium">Всего потерь</span>
+                <span class="text-muted-color font-medium">{{ 'HRM.PERSONNEL_LOSS.TOTAL_LOSSES' | translate }}</span>
                 <div class="flex items-center justify-center bg-blue-100 dark:bg-blue-400/10 rounded-border"
                      style="width: 2.5rem; height: 2.5rem">
                     <i class="pi pi-users text-blue-500 text-xl!"></i>
                 </div>
             </div>
             <div class="text-surface-900 dark:text-surface-0 font-medium text-xl mb-1">
-                {{ stats.total }} человек
+                {{ stats.total }} {{ 'HRM.PERSONNEL_LOSS.PEOPLE' | translate }}
             </div>
             <div class="flex gap-1.5">
                 <span class="text-primary font-medium">{{ stats.thisYear }}</span>
-                <span class="text-muted-color">за этот год</span>
+                <span class="text-muted-color">{{ 'HRM.PERSONNEL_LOSS.THIS_YEAR' | translate }}</span>
             </div>
         </div>
 
         <div class="card mb-0 flex-1 h-full">
             <div class="flex justify-between items-center mb-2">
-                <span class="text-muted-color font-medium">За этот год</span>
+                <span class="text-muted-color font-medium">{{ 'HRM.PERSONNEL_LOSS.FOR_THIS_YEAR' | translate }}</span>
                 <div class="flex items-center justify-center bg-orange-100 dark:bg-orange-400/10 rounded-border"
                      style="width: 2.5rem; height: 2.5rem">
                     <i class="pi pi-calendar text-orange-500 text-xl!"></i>
                 </div>
             </div>
             <div class="text-surface-900 dark:text-surface-0 font-medium text-xl mb-1">
-                {{ stats.thisYear }} человек
+                {{ stats.thisYear }} {{ 'HRM.PERSONNEL_LOSS.PEOPLE' | translate }}
             </div>
             <div class="flex gap-1.5">
-                <span class="text-muted-color">текущий год</span>
+                <span class="text-muted-color">{{ 'HRM.PERSONNEL_LOSS.CURRENT_YEAR' | translate }}</span>
             </div>
         </div>
 
         <div class="card mb-0 flex-1 h-full">
             <div class="flex justify-between items-center mb-2">
-                <span class="text-muted-color font-medium">Увольнения</span>
+                <span class="text-muted-color font-medium">{{ 'HRM.PERSONNEL_LOSS.DISMISSALS' | translate }}</span>
                 <div class="flex items-center justify-center bg-yellow-100 dark:bg-yellow-400/10 rounded-border"
                      style="width: 2.5rem; height: 2.5rem">
                     <i class="pi pi-sign-out text-yellow-500 text-xl!"></i>
                 </div>
             </div>
             <div class="text-surface-900 dark:text-surface-0 font-medium text-xl mb-1">
-                {{ stats.dismissals }} человек
+                {{ stats.dismissals }} {{ 'HRM.PERSONNEL_LOSS.PEOPLE' | translate }}
             </div>
             <div class="flex gap-1.5">
-                <span class="text-muted-color">всего уволено</span>
+                <span class="text-muted-color">{{ 'HRM.PERSONNEL_LOSS.TOTAL_DISMISSED' | translate }}</span>
             </div>
         </div>
 
         <div class="card mb-0 flex-1 h-full">
             <div class="flex justify-between items-center mb-2">
-                <span class="text-muted-color font-medium">Смерти</span>
+                <span class="text-muted-color font-medium">{{ 'HRM.PERSONNEL_LOSS.DEATHS' | translate }}</span>
                 <div class="flex items-center justify-center bg-red-100 dark:bg-red-400/10 rounded-border"
                      style="width: 2.5rem; height: 2.5rem">
                     <i class="pi pi-heart text-red-500 text-xl!"></i>
                 </div>
             </div>
             <div class="text-surface-900 dark:text-surface-0 font-medium text-xl mb-1">
-                {{ stats.deaths }} человек
+                {{ stats.deaths }} {{ 'HRM.PERSONNEL_LOSS.PEOPLE' | translate }}
             </div>
             <div class="flex gap-1.5">
-                <span class="text-muted-color">вечная память</span>
+                <span class="text-muted-color">{{ 'HRM.PERSONNEL_LOSS.ETERNAL_MEMORY' | translate }}</span>
             </div>
         </div>
     </div>
@@ -73,7 +73,7 @@
     <div class="card mb-4 memorial-section">
         <div class="flex items-center gap-2 mb-4">
             <i class="pi pi-heart text-red-500 text-xl"></i>
-            <span class="font-semibold text-xl">Вечная память</span>
+            <span class="font-semibold text-xl">{{ 'HRM.PERSONNEL_LOSS.ETERNAL_MEMORY' | translate }}</span>
         </div>
         <div class="grid">
             @for (person of deceased; track person.id) {
@@ -103,7 +103,7 @@
 
 <!-- Таблица -->
 <div class="card">
-    <div class="font-semibold text-xl mb-4">Учёт потерь личного состава</div>
+    <div class="font-semibold text-xl mb-4">{{ 'HRM.PERSONNEL_LOSS.TITLE' | translate }}</div>
 
     <p-table
         #dt
@@ -121,7 +121,7 @@
                 <div class="flex flex-wrap gap-2">
                     <p-iconfield>
                         <p-inputicon><i class="pi pi-search"></i></p-inputicon>
-                        <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Поиск" />
+                        <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" [placeholder]="'COMMON.SEARCH' | translate" />
                     </p-iconfield>
 
                     <p-select
@@ -129,7 +129,7 @@
                         [options]="lossTypes"
                         optionLabel="label"
                         optionValue="value"
-                        placeholder="Тип"
+                        [placeholder]="'HRM.PERSONNEL_LOSS.TYPE' | translate"
                         (onChange)="applyFilters()"
                         [style]="{ minWidth: '150px' }">
                     </p-select>
@@ -139,7 +139,7 @@
                         [options]="years"
                         optionLabel="label"
                         optionValue="value"
-                        placeholder="Год"
+                        [placeholder]="'HRM.PERSONNEL_LOSS.YEAR' | translate"
                         (onChange)="applyFilters()"
                         [style]="{ minWidth: '120px' }">
                     </p-select>
@@ -147,7 +147,7 @@
 
                 <button pButton (click)="openDialog()">
                     <i class="pi pi-plus" pButtonIcon></i>
-                    <span pButtonLabel>Добавить запись</span>
+                    <span pButtonLabel>{{ 'HRM.PERSONNEL_LOSS.ADD_RECORD' | translate }}</span>
                 </button>
             </div>
         </ng-template>
@@ -155,14 +155,14 @@
         <ng-template #header>
             <tr>
                 <th style="width: 4rem"></th>
-                <th pSortableColumn="name" style="min-width: 12rem">ФИО</th>
-                <th style="min-width: 10rem">Должность</th>
-                <th style="min-width: 10rem">Организация</th>
-                <th pSortableColumn="lossType" style="min-width: 8rem">Тип</th>
-                <th pSortableColumn="lossDate" style="min-width: 8rem">Дата</th>
-                <th style="min-width: 6rem">Стаж</th>
-                <th style="min-width: 12rem">Причина</th>
-                <th style="width: 8rem">Действия</th>
+                <th pSortableColumn="name" style="min-width: 12rem">{{ 'HRM.PERSONNEL_LOSS.FULL_NAME' | translate }}</th>
+                <th style="min-width: 10rem">{{ 'HRM.PERSONNEL_LOSS.POSITION' | translate }}</th>
+                <th style="min-width: 10rem">{{ 'HRM.PERSONNEL_LOSS.ORGANIZATION' | translate }}</th>
+                <th pSortableColumn="lossType" style="min-width: 8rem">{{ 'HRM.PERSONNEL_LOSS.TYPE' | translate }}</th>
+                <th pSortableColumn="lossDate" style="min-width: 8rem">{{ 'HRM.PERSONNEL_LOSS.DATE' | translate }}</th>
+                <th style="min-width: 6rem">{{ 'HRM.PERSONNEL_LOSS.EXPERIENCE' | translate }}</th>
+                <th style="min-width: 12rem">{{ 'HRM.PERSONNEL_LOSS.REASON' | translate }}</th>
+                <th style="width: 8rem">{{ 'HRM.ORGANIZATIONS.ACTIONS' | translate }}</th>
             </tr>
         </ng-template>
 
@@ -200,14 +200,14 @@
                                 icon="pi pi-pencil"
                                 (click)="openEditDialog(loss)"
                                 class="p-button-rounded p-button-text p-button-warning"
-                                pTooltip="Редактировать"
+                                [pTooltip]="'COMMON.EDIT' | translate"
                                 tooltipPosition="top">
                         </button>
                         <button pButton
                                 icon="pi pi-trash"
                                 (click)="openDeleteDialog(loss)"
                                 class="p-button-rounded p-button-text p-button-danger"
-                                pTooltip="Удалить"
+                                [pTooltip]="'COMMON.DELETE' | translate"
                                 tooltipPosition="top">
                         </button>
                     </div>
@@ -219,7 +219,7 @@
             <tr>
                 <td colspan="9" class="text-center py-4">
                     <i class="pi pi-inbox text-4xl text-color-secondary mb-2"></i>
-                    <p class="m-0 text-color-secondary">Нет записей</p>
+                    <p class="m-0 text-color-secondary">{{ 'HRM.PERSONNEL_LOSS.NO_RECORDS' | translate }}</p>
                 </td>
             </tr>
         </ng-template>
@@ -237,42 +237,42 @@
 <!-- Диалог создания/редактирования -->
 <app-dialog
     [(visible)]="displayDialog"
-    [header]="isEditMode ? 'Редактировать запись' : 'Новая запись'"
+    [header]="isEditMode ? ('HRM.PERSONNEL_LOSS.EDIT_RECORD' | translate) : ('HRM.PERSONNEL_LOSS.NEW_RECORD' | translate)"
     [form]="lossForm"
-    [saveLabel]="isEditMode ? 'Обновить' : 'Сохранить'"
+    [saveLabel]="isEditMode ? ('HRM.ORGANIZATIONS.UPDATE' | translate) : ('COMMON.SAVE' | translate)"
     width="40vw"
     (save)="onSubmit()"
     (cancel)="closeDialog()">
     <form class="p-4" [formGroup]="lossForm" (ngSubmit)="onSubmit()">
         <app-input-text
             formControlName="name"
-            label="ФИО"
+            [label]="'HRM.PERSONNEL_LOSS.FULL_NAME' | translate"
             [submitted]="submitted"
-            errorMessage="ФИО обязательно"
+            [errorMessage]="'HRM.PERSONNEL_LOSS.FIO_REQUIRED' | translate"
             [required]="true">
         </app-input-text>
 
         <app-select
             formControlName="lossType"
-            label="Тип потери"
+            [label]="'HRM.PERSONNEL_LOSS.LOSS_TYPE' | translate"
             [items]="lossTypeOptions"
             [submitted]="submitted"
-            errorMessage="Тип обязателен"
+            [errorMessage]="'HRM.PERSONNEL_LOSS.TYPE_REQUIRED' | translate"
             [required]="true">
         </app-select>
 
         <app-date-picker
             formControlName="lossDate"
-            label="Дата события"
+            [label]="'HRM.PERSONNEL_LOSS.EVENT_DATE' | translate"
             [submitted]="submitted"
             [showTime]="false"
-            errorMessage="Дата обязательна"
+            [errorMessage]="'HRM.PERSONNEL_LOSS.DATE_REQUIRED' | translate"
             [required]="true">
         </app-date-picker>
 
         <app-date-picker
             formControlName="hireDate"
-            label="Дата приёма на работу"
+            [label]="'HRM.PERSONNEL_LOSS.HIRE_DATE' | translate"
             [submitted]="submitted"
             [showTime]="false"
             [required]="false">
@@ -280,7 +280,7 @@
 
         <app-select
             formControlName="organization_id"
-            label="Организация"
+            [label]="'HRM.PERSONNEL_LOSS.ORGANIZATION' | translate"
             [items]="organizations"
             [submitted]="submitted"
             [required]="false">
@@ -288,7 +288,7 @@
 
         <app-textarea
             formControlName="reason"
-            label="Причина"
+            [label]="'HRM.PERSONNEL_LOSS.REASON' | translate"
             [submitted]="submitted"
             [required]="false"
             [rows]="2">
@@ -296,7 +296,7 @@
 
         <app-textarea
             formControlName="achievements"
-            label="Достижения / Заслуги"
+            [label]="'HRM.PERSONNEL_LOSS.ACHIEVEMENTS' | translate"
             [submitted]="submitted"
             [required]="false"
             [rows]="2">
@@ -304,7 +304,7 @@
 
         <app-textarea
             formControlName="notes"
-            label="Примечания"
+            [label]="'HRM.PERSONNEL_LOSS.NOTES' | translate"
             [submitted]="submitted"
             [required]="false"
             [rows]="2">
@@ -315,6 +315,6 @@
 <!-- Диалог удаления -->
 <app-delete-confirmation
     [(visible)]="displayDeleteDialog"
-    [message]="'Вы уверены, что хотите удалить запись о ' + (selectedLoss?.name || '') + '?'"
+    [message]="('HRM.PERSONNEL_LOSS.DELETE_CONFIRM' | translate) + ' ' + (selectedLoss?.name || '') + '?'"
     (onConfirm)="confirmDelete()">
 </app-delete-confirmation>

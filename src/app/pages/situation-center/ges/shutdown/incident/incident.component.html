@@ -1,6 +1,6 @@
 @if (authService.isSc()) {
     <div class="mb-6">
-        <p-button label="Добавить инцидент" icon="pi pi-plus" (click)="openNew()" />
+        <p-button [label]="'SITUATION_CENTER.SHUTDOWN.ADD_INCIDENT' | translate" icon="pi pi-plus" (click)="openNew()" />
     </div>
 }
 
@@ -16,35 +16,35 @@
     [sortOrder]="-1"
 >
     <ng-template #caption>
-        <div class="text-lg font-bold">ЧП - Инциденты</div>
+        <div class="text-lg font-bold">{{ 'SITUATION_CENTER.SHUTDOWN.INCIDENTS_TITLE' | translate }}</div>
     </ng-template>
     <ng-template pTemplate="header">
         <tr>
             <th pSortableColumn="incident_date" style="width: 25%">
-                Время инцидента
+                {{ 'SITUATION_CENTER.SHUTDOWN.INCIDENT_TIME' | translate }}
                 <p-sortIcon field="incident_date"></p-sortIcon>
             </th>
 
             <th pSortableColumn="organization" style="width: 35%">
-                Название объекта
+                {{ 'SITUATION_CENTER.COMMON.OBJECT_NAME' | translate }}
                 <p-sortIcon field="organization"></p-sortIcon>
             </th>
 
             <th style="width: 40%">
-                Описание
+                {{ 'SITUATION_CENTER.COMMON.DESCRIPTION' | translate }}
             </th>
 
             <th style="width: 15%">
-                Создал
+                {{ 'SITUATION_CENTER.COMMON.CREATED_BY' | translate }}
             </th>
 
             <th style="width: 10%">
-                Файлы
+                {{ 'SITUATION_CENTER.COMMON.FILES' | translate }}
             </th>
 
             @if (authService.isSc()) {
                 <th style="width: 10%">
-                    Действия
+                    {{ 'SITUATION_CENTER.COMMON.ACTIONS' | translate }}
                 </th>
             }
         </tr>
@@ -56,7 +56,7 @@
                 {{ incident.incident_date | date: 'HH:mm dd.MM.yyyy' }}
             </td>
             <td>
-                {{ incident.organization || 'Все объекты' }}
+                {{ incident.organization || ('SITUATION_CENTER.SHUTDOWN.ALL_OBJECTS' | translate) }}
             </td>
             <td>
                 {{ incident.description }}
@@ -72,7 +72,7 @@
                         severity="secondary"
                         [text]="true"
                         (click)="showFiles(incident)"
-                        pTooltip="Просмотр файлов"
+                        [pTooltip]="'SITUATION_CENTER.COMMON.VIEW_FILES' | translate"
                     />
                 } @else {
                     <span class="text-color-secondary">—</span>
@@ -86,7 +86,7 @@
                         [text]="true"
                         [rounded]="true"
                         (click)="editIncident(incident)"
-                        pTooltip="Редактировать"
+                        [pTooltip]="'SITUATION_CENTER.COMMON.EDIT' | translate"
                     />
                     <p-button
                         icon="pi pi-trash"
@@ -94,7 +94,7 @@
                         [text]="true"
                         [rounded]="true"
                         (click)="deleteIncident(incident)"
-                        pTooltip="Удалить"
+                        [pTooltip]="'SITUATION_CENTER.COMMON.DELETE' | translate"
                     />
                 </td>
             }
@@ -104,7 +104,7 @@
     <ng-template pTemplate="emptymessage">
         <tr>
             <td [attr.colspan]="authService.isSc() ? 6 : 5" class="text-center">
-                Инциденты за выбранную дату не найдены.
+                {{ 'SITUATION_CENTER.SHUTDOWN.NO_INCIDENTS' | translate }}
             </td>
         </tr>
     </ng-template>
@@ -113,7 +113,7 @@
 
 <app-dialog
     [(visible)]="isFormOpen"
-    [header]="isEditMode ? 'Редактировать Событие' : 'Новое Событие'"
+    [header]="isEditMode ? ('SITUATION_CENTER.SHUTDOWN.EDIT_EVENT' | translate) : ('SITUATION_CENTER.SHUTDOWN.NEW_EVENT' | translate)"
     [form]="form"
     [submitting]="isLoading"
     (save)="onSubmit()"
@@ -122,12 +122,12 @@
     <form class="p-4" [formGroup]="form" (ngSubmit)="onSubmit()">
 
         <app-select
-            label="Объект"
+            [label]="'SITUATION_CENTER.COMMON.OBJECT' | translate"
             formControlName="organization"
             [items]="organizations"
             [loading]="orgsLoading"
             [submitted]="submitted"
-            errorMessage="Выберите организацию">
+            [errorMessage]="'SITUATION_CENTER.COMMON.SELECT_ORGANIZATION' | translate">
         </app-select>
 
         <div class="flex items-center gap-2 mb-4 mt-2">
@@ -136,18 +136,18 @@
                 [binary]="true"
                 inputId="applies_to_all"
             />
-            <label for="applies_to_all" class="cursor-pointer">Применить ко всем объектам</label>
+            <label for="applies_to_all" class="cursor-pointer">{{ 'SITUATION_CENTER.SHUTDOWN.APPLY_TO_ALL' | translate }}</label>
         </div>
 
         <app-date-picker
-            label="Дата события"
+            [label]="'SITUATION_CENTER.SHUTDOWN.EVENT_DATE' | translate"
             formControlName="incident_time"
             [submitted]="submitted"
-            errorMessage="Укажите дату">
+            [errorMessage]="'SITUATION_CENTER.COMMON.SPECIFY_DATE' | translate">
         </app-date-picker>
 
         <app-textarea
-            label="Описание"
+            [label]="'SITUATION_CENTER.COMMON.DESCRIPTION' | translate"
             formControlName="description"
             [submitted]="submitted"
             [required]="false">
@@ -161,7 +161,7 @@
         }
 
         <app-file-upload
-            [label]="isEditMode ? 'Добавить новые файлы' : 'Прикрепить файлы'"
+            [label]="isEditMode ? ('SITUATION_CENTER.COMMON.ADD_NEW_FILES' | translate) : ('SITUATION_CENTER.COMMON.ATTACH_FILES' | translate)"
             [files]="selectedFiles"
             (filesChange)="onFileSelect($event)"
             (removeFile)="removeFile($event)">
@@ -173,6 +173,6 @@
 
 <app-file-viewer
     [(visible)]="showFilesDialog"
-    [header]="'Файлы инцидента'"
+    [header]="'SITUATION_CENTER.SHUTDOWN.INCIDENT_FILES' | translate"
     [files]="selectedIncidentForFiles?.files || []">
 </app-file-viewer>

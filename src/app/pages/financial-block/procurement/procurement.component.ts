@@ -18,6 +18,7 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { ChartModule } from 'primeng/chart';
 import { TextareaModule } from 'primeng/textarea';
 import { FinancialDashboardService } from '../dashboard/services/financial-dashboard.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 interface ProcurementCategory {
     label: string;
@@ -80,7 +81,8 @@ interface ProcurementRecord {
         InputGroupModule,
         InputGroupAddonModule,
         ChartModule,
-        TextareaModule
+        TextareaModule,
+        TranslateModule
     ],
     providers: [ConfirmationService, MessageService],
     templateUrl: './procurement.component.html',
@@ -103,50 +105,12 @@ export class ProcurementComponent implements OnInit {
     selectedPriority: string | null = null;
     selectedDepartment: string | null = null;
 
-    // Dropdown options
-    categories: ProcurementCategory[] = [
-        { label: 'Оборудование', value: 'equipment', icon: 'pi pi-cog' },
-        { label: 'Материалы', value: 'materials', icon: 'pi pi-box' },
-        { label: 'Запчасти', value: 'spare_parts', icon: 'pi pi-wrench' },
-        { label: 'Услуги', value: 'services', icon: 'pi pi-briefcase' },
-        { label: 'IT', value: 'it', icon: 'pi pi-desktop' },
-        { label: 'Канцелярия', value: 'office', icon: 'pi pi-pencil' },
-        { label: 'Прочее', value: 'other', icon: 'pi pi-ellipsis-h' }
-    ];
-
-    statuses: ProcurementStatus[] = [
-        { label: 'Заявка', value: 'request' },
-        { label: 'На согласовании', value: 'approval' },
-        { label: 'Одобрено', value: 'approved' },
-        { label: 'Закупается', value: 'purchasing' },
-        { label: 'Доставлено', value: 'delivered' },
-        { label: 'Отменено', value: 'cancelled' }
-    ];
-
-    priorities: ProcurementPriority[] = [
-        { label: 'Низкий', value: 'low' },
-        { label: 'Средний', value: 'medium' },
-        { label: 'Высокий', value: 'high' },
-        { label: 'Срочный', value: 'urgent' }
-    ];
-
-    units: ProcurementUnit[] = [
-        { label: 'шт', value: 'pcs' },
-        { label: 'кг', value: 'kg' },
-        { label: 'м', value: 'm' },
-        { label: 'л', value: 'l' },
-        { label: 'комплект', value: 'set' },
-        { label: 'упаковка', value: 'pack' }
-    ];
-
-    departments = [
-        { label: 'Производственный отдел', value: 'production' },
-        { label: 'Технический отдел', value: 'technical' },
-        { label: 'Административный отдел', value: 'admin' },
-        { label: 'IT отдел', value: 'it' },
-        { label: 'Бухгалтерия', value: 'accounting' },
-        { label: 'Отдел кадров', value: 'hr' }
-    ];
+    // Dropdown options - initialized in initTranslations()
+    categories: ProcurementCategory[] = [];
+    statuses: ProcurementStatus[] = [];
+    priorities: ProcurementPriority[] = [];
+    units: ProcurementUnit[] = [];
+    departments: { label: string; value: string }[] = [];
 
     // Charts
     categoryChartData: any;
@@ -159,6 +123,7 @@ export class ProcurementComponent implements OnInit {
     supplierChartOptions: any;
 
     private dashboardService = inject(FinancialDashboardService);
+    private translate = inject(TranslateService);
 
     constructor(
         private confirmationService: ConfirmationService,
@@ -166,10 +131,64 @@ export class ProcurementComponent implements OnInit {
     ) {}
 
     ngOnInit() {
+        this.initTranslations();
         this.loadProcurements();
         this.applyFilters();
         this.initCharts();
         this.updateDashboardData();
+
+        this.translate.onLangChange.subscribe(() => {
+            this.initTranslations();
+            this.updateCharts();
+        });
+    }
+
+    private initTranslations(): void {
+        const t = this.translate;
+
+        this.categories = [
+            { label: t.instant('FINANCIAL_BLOCK.PROCUREMENT.CATEGORY_EQUIPMENT'), value: 'equipment', icon: 'pi pi-cog' },
+            { label: t.instant('FINANCIAL_BLOCK.PROCUREMENT.CATEGORY_MATERIALS'), value: 'materials', icon: 'pi pi-box' },
+            { label: t.instant('FINANCIAL_BLOCK.PROCUREMENT.CATEGORY_SPARE_PARTS'), value: 'spare_parts', icon: 'pi pi-wrench' },
+            { label: t.instant('FINANCIAL_BLOCK.PROCUREMENT.CATEGORY_SERVICES'), value: 'services', icon: 'pi pi-briefcase' },
+            { label: t.instant('FINANCIAL_BLOCK.PROCUREMENT.CATEGORY_IT'), value: 'it', icon: 'pi pi-desktop' },
+            { label: t.instant('FINANCIAL_BLOCK.PROCUREMENT.CATEGORY_OFFICE'), value: 'office', icon: 'pi pi-pencil' },
+            { label: t.instant('FINANCIAL_BLOCK.PROCUREMENT.CATEGORY_OTHER'), value: 'other', icon: 'pi pi-ellipsis-h' }
+        ];
+
+        this.statuses = [
+            { label: t.instant('FINANCIAL_BLOCK.PROCUREMENT.STATUS_REQUEST'), value: 'request' },
+            { label: t.instant('FINANCIAL_BLOCK.PROCUREMENT.STATUS_APPROVAL'), value: 'approval' },
+            { label: t.instant('FINANCIAL_BLOCK.PROCUREMENT.STATUS_APPROVED'), value: 'approved' },
+            { label: t.instant('FINANCIAL_BLOCK.PROCUREMENT.STATUS_PURCHASING'), value: 'purchasing' },
+            { label: t.instant('FINANCIAL_BLOCK.PROCUREMENT.STATUS_DELIVERED'), value: 'delivered' },
+            { label: t.instant('FINANCIAL_BLOCK.PROCUREMENT.STATUS_CANCELLED'), value: 'cancelled' }
+        ];
+
+        this.priorities = [
+            { label: t.instant('FINANCIAL_BLOCK.PROCUREMENT.PRIORITY_LOW'), value: 'low' },
+            { label: t.instant('FINANCIAL_BLOCK.PROCUREMENT.PRIORITY_MEDIUM'), value: 'medium' },
+            { label: t.instant('FINANCIAL_BLOCK.PROCUREMENT.PRIORITY_HIGH'), value: 'high' },
+            { label: t.instant('FINANCIAL_BLOCK.PROCUREMENT.PRIORITY_URGENT'), value: 'urgent' }
+        ];
+
+        this.units = [
+            { label: t.instant('FINANCIAL_BLOCK.PROCUREMENT.UNIT_PCS'), value: 'pcs' },
+            { label: t.instant('FINANCIAL_BLOCK.PROCUREMENT.UNIT_KG'), value: 'kg' },
+            { label: t.instant('FINANCIAL_BLOCK.PROCUREMENT.UNIT_M'), value: 'm' },
+            { label: t.instant('FINANCIAL_BLOCK.PROCUREMENT.UNIT_L'), value: 'l' },
+            { label: t.instant('FINANCIAL_BLOCK.PROCUREMENT.UNIT_SET'), value: 'set' },
+            { label: t.instant('FINANCIAL_BLOCK.PROCUREMENT.UNIT_PACK'), value: 'pack' }
+        ];
+
+        this.departments = [
+            { label: t.instant('FINANCIAL_BLOCK.PROCUREMENT.DEPT_PRODUCTION'), value: 'production' },
+            { label: t.instant('FINANCIAL_BLOCK.PROCUREMENT.DEPT_TECHNICAL'), value: 'technical' },
+            { label: t.instant('FINANCIAL_BLOCK.PROCUREMENT.DEPT_ADMIN'), value: 'admin' },
+            { label: t.instant('FINANCIAL_BLOCK.PROCUREMENT.DEPT_IT'), value: 'it' },
+            { label: t.instant('FINANCIAL_BLOCK.PROCUREMENT.DEPT_ACCOUNTING'), value: 'accounting' },
+            { label: t.instant('FINANCIAL_BLOCK.PROCUREMENT.DEPT_HR'), value: 'hr' }
+        ];
     }
 
     private updateDashboardData(): void {
@@ -343,8 +362,8 @@ export class ProcurementComponent implements OnInit {
         if (!this.currentProcurement.itemName || !this.currentProcurement.supplier) {
             this.messageService.add({
                 severity: 'warn',
-                summary: 'Внимание',
-                detail: 'Заполните обязательные поля'
+                summary: this.translate.instant('COMMON.WARNING'),
+                detail: this.translate.instant('FINANCIAL_BLOCK.PROCUREMENT.FILL_REQUIRED')
             });
             return;
         }
@@ -352,8 +371,8 @@ export class ProcurementComponent implements OnInit {
         if (!this.currentProcurement.unitPrice || this.currentProcurement.unitPrice <= 0) {
             this.messageService.add({
                 severity: 'warn',
-                summary: 'Внимание',
-                detail: 'Укажите цену за единицу'
+                summary: this.translate.instant('COMMON.WARNING'),
+                detail: this.translate.instant('FINANCIAL_BLOCK.PROCUREMENT.SPECIFY_PRICE')
             });
             return;
         }
@@ -368,16 +387,16 @@ export class ProcurementComponent implements OnInit {
             }
             this.messageService.add({
                 severity: 'success',
-                summary: 'Успешно',
-                detail: 'Запись обновлена'
+                summary: this.translate.instant('COMMON.SUCCESS'),
+                detail: this.translate.instant('FINANCIAL_BLOCK.PROCUREMENT.PROCUREMENT_UPDATED')
             });
         } else {
             this.currentProcurement.id = Math.max(...this.procurements.map(p => p.id), 0) + 1;
             this.procurements.push({ ...this.currentProcurement });
             this.messageService.add({
                 severity: 'success',
-                summary: 'Успешно',
-                detail: 'Заявка добавлена'
+                summary: this.translate.instant('COMMON.SUCCESS'),
+                detail: this.translate.instant('FINANCIAL_BLOCK.PROCUREMENT.PROCUREMENT_ADDED')
             });
         }
 
@@ -388,19 +407,19 @@ export class ProcurementComponent implements OnInit {
 
     deleteProcurement(procurement: ProcurementRecord) {
         this.confirmationService.confirm({
-            message: `Вы уверены, что хотите удалить заявку "${procurement.requestNumber}"?`,
-            header: 'Подтверждение удаления',
+            message: `${this.translate.instant('FINANCIAL_BLOCK.PROCUREMENT.DELETE_CONFIRM')} "${procurement.requestNumber}"?`,
+            header: this.translate.instant('COMMON.CONFIRM_DELETE'),
             icon: 'pi pi-exclamation-triangle',
-            acceptLabel: 'Да',
-            rejectLabel: 'Нет',
+            acceptLabel: this.translate.instant('COMMON.YES'),
+            rejectLabel: this.translate.instant('COMMON.NO'),
             accept: () => {
                 this.procurements = this.procurements.filter(p => p.id !== procurement.id);
                 this.updateDashboardData();
                 this.applyFilters();
                 this.messageService.add({
                     severity: 'success',
-                    summary: 'Успешно',
-                    detail: 'Заявка удалена'
+                    summary: this.translate.instant('COMMON.SUCCESS'),
+                    detail: this.translate.instant('FINANCIAL_BLOCK.PROCUREMENT.PROCUREMENT_DELETED')
                 });
             }
         });
@@ -470,50 +489,53 @@ export class ProcurementComponent implements OnInit {
 
     // Export to Excel
     exportToExcel() {
+        const t = this.translate;
+        const cols = 'FINANCIAL_BLOCK.PROCUREMENT.EXPORT_COLUMNS';
+
         const data = this.filteredProcurements.map(p => ({
-            'Номер заявки': p.requestNumber,
-            'Дата заявки': new Date(p.requestDate).toLocaleDateString('ru-RU'),
-            'Наименование': p.itemName,
-            'Категория': this.getCategoryLabel(p.category),
-            'Поставщик': p.supplier,
-            'Кол-во': p.quantity,
-            'Ед.изм.': this.getUnitLabel(p.unit),
-            'Цена за ед.': p.unitPrice,
-            'Сумма': p.totalAmount,
-            'Отдел': this.getDepartmentLabel(p.department),
-            'Приоритет': this.getPriorityLabel(p.priority),
-            'Статус': this.getStatusLabel(p.status),
-            'План. дата': p.plannedDeliveryDate ? new Date(p.plannedDeliveryDate).toLocaleDateString('ru-RU') : '',
-            'Факт. дата': p.actualDeliveryDate ? new Date(p.actualDeliveryDate).toLocaleDateString('ru-RU') : '',
-            'Ответственный': p.responsiblePerson,
-            'Примечания': p.notes
+            [t.instant(`${cols}.REQUEST_NUMBER`)]: p.requestNumber,
+            [t.instant(`${cols}.REQUEST_DATE`)]: new Date(p.requestDate).toLocaleDateString('ru-RU'),
+            [t.instant(`${cols}.ITEM_NAME`)]: p.itemName,
+            [t.instant(`${cols}.CATEGORY`)]: this.getCategoryLabel(p.category),
+            [t.instant(`${cols}.SUPPLIER`)]: p.supplier,
+            [t.instant(`${cols}.QUANTITY`)]: p.quantity,
+            [t.instant(`${cols}.UNIT`)]: this.getUnitLabel(p.unit),
+            [t.instant(`${cols}.UNIT_PRICE`)]: p.unitPrice,
+            [t.instant(`${cols}.TOTAL`)]: p.totalAmount,
+            [t.instant(`${cols}.DEPARTMENT`)]: this.getDepartmentLabel(p.department),
+            [t.instant(`${cols}.PRIORITY`)]: this.getPriorityLabel(p.priority),
+            [t.instant(`${cols}.STATUS`)]: this.getStatusLabel(p.status),
+            [t.instant(`${cols}.PLANNED_DATE`)]: p.plannedDeliveryDate ? new Date(p.plannedDeliveryDate).toLocaleDateString('ru-RU') : '',
+            [t.instant(`${cols}.ACTUAL_DATE`)]: p.actualDeliveryDate ? new Date(p.actualDeliveryDate).toLocaleDateString('ru-RU') : '',
+            [t.instant(`${cols}.RESPONSIBLE`)]: p.responsiblePerson,
+            [t.instant(`${cols}.NOTES`)]: p.notes
         }));
 
         // Add totals row
         data.push({
-            'Номер заявки': '',
-            'Дата заявки': '',
-            'Наименование': 'ИТОГО',
-            'Категория': '',
-            'Поставщик': '',
-            'Кол-во': '' as any,
-            'Ед.изм.': '',
-            'Цена за ед.': '' as any,
-            'Сумма': this.totalAmount,
-            'Отдел': '',
-            'Приоритет': '',
-            'Статус': '',
-            'План. дата': '',
-            'Факт. дата': '',
-            'Ответственный': '',
-            'Примечания': ''
+            [t.instant(`${cols}.REQUEST_NUMBER`)]: '',
+            [t.instant(`${cols}.REQUEST_DATE`)]: '',
+            [t.instant(`${cols}.ITEM_NAME`)]: t.instant(`${cols}.TOTAL_ROW`),
+            [t.instant(`${cols}.CATEGORY`)]: '',
+            [t.instant(`${cols}.SUPPLIER`)]: '',
+            [t.instant(`${cols}.QUANTITY`)]: '' as any,
+            [t.instant(`${cols}.UNIT`)]: '',
+            [t.instant(`${cols}.UNIT_PRICE`)]: '' as any,
+            [t.instant(`${cols}.TOTAL`)]: this.totalAmount,
+            [t.instant(`${cols}.DEPARTMENT`)]: '',
+            [t.instant(`${cols}.PRIORITY`)]: '',
+            [t.instant(`${cols}.STATUS`)]: '',
+            [t.instant(`${cols}.PLANNED_DATE`)]: '',
+            [t.instant(`${cols}.ACTUAL_DATE`)]: '',
+            [t.instant(`${cols}.RESPONSIBLE`)]: '',
+            [t.instant(`${cols}.NOTES`)]: ''
         });
 
         // Convert to CSV
         const headers = Object.keys(data[0]);
         const csvContent = [
             headers.join(';'),
-            ...data.map(row => headers.map(h => row[h as keyof typeof row]).join(';'))
+            ...data.map(row => headers.map(h => (row as any)[h]).join(';'))
         ].join('\n');
 
         // Add BOM for Excel to recognize UTF-8
@@ -532,8 +554,8 @@ export class ProcurementComponent implements OnInit {
 
         this.messageService.add({
             severity: 'success',
-            summary: 'Экспорт',
-            detail: 'Файл успешно экспортирован'
+            summary: t.instant('COMMON.EXPORT'),
+            detail: t.instant('COMMON.EXPORT_SUCCESS')
         });
     }
 
@@ -697,7 +719,20 @@ export class ProcurementComponent implements OnInit {
     }
 
     updateMonthlyChart() {
-        const months = ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'];
+        const months = [
+            this.translate.instant('COMMON.MONTHS.JAN'),
+            this.translate.instant('COMMON.MONTHS.FEB'),
+            this.translate.instant('COMMON.MONTHS.MAR'),
+            this.translate.instant('COMMON.MONTHS.APR'),
+            this.translate.instant('COMMON.MONTHS.MAY'),
+            this.translate.instant('COMMON.MONTHS.JUN'),
+            this.translate.instant('COMMON.MONTHS.JUL'),
+            this.translate.instant('COMMON.MONTHS.AUG'),
+            this.translate.instant('COMMON.MONTHS.SEP'),
+            this.translate.instant('COMMON.MONTHS.OCT'),
+            this.translate.instant('COMMON.MONTHS.NOV'),
+            this.translate.instant('COMMON.MONTHS.DEC')
+        ];
         const requestedByMonth: number[] = new Array(12).fill(0);
         const deliveredByMonth: number[] = new Array(12).fill(0);
 
@@ -717,7 +752,7 @@ export class ProcurementComponent implements OnInit {
             labels: months,
             datasets: [
                 {
-                    label: 'Заявки',
+                    label: this.translate.instant('FINANCIAL_BLOCK.PROCUREMENT.CHART_REQUESTS'),
                     data: requestedByMonth,
                     backgroundColor: 'rgba(59, 130, 246, 0.7)',
                     borderColor: '#3B82F6',
@@ -725,7 +760,7 @@ export class ProcurementComponent implements OnInit {
                     borderRadius: 4
                 },
                 {
-                    label: 'Доставлено',
+                    label: this.translate.instant('FINANCIAL_BLOCK.PROCUREMENT.CHART_DELIVERED'),
                     data: deliveredByMonth,
                     backgroundColor: 'rgba(34, 197, 94, 0.7)',
                     borderColor: '#22C55E',

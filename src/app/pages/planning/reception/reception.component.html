@@ -8,7 +8,7 @@
         [paginator]="true"
         [rowsPerPageOptions]="[10, 25, 50]"
         [showCurrentPageReport]="true"
-        currentPageReportTemplate="Показано {first} - {last} из {totalRecords} записей"
+        [currentPageReportTemplate]="'PLANNING.COMMON.PAGE_REPORT' | translate"
         [globalFilterFields]="['name', 'visitor', 'description', 'status']"
         [rowHover]="true"
         [showGridlines]="true"
@@ -16,7 +16,7 @@
     >
         <ng-template #caption>
             <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-                <span class="text-xl text-900 font-bold">Приемы</span>
+                <span class="text-xl text-900 font-bold">{{ 'PLANNING.RECEPTION.TITLE' | translate }}</span>
                 <div class="flex gap-2">
                     <p-iconfield iconPosition="left">
                         <p-inputicon class="pi pi-search" />
@@ -24,12 +24,12 @@
                             pInputText
                             type="text"
                             (input)="onGlobalFilter(rt, $event)"
-                            placeholder="Поиск..."
+                            [placeholder]="'PLANNING.COMMON.SEARCH' | translate"
                             class="w-full"
                         />
                     </p-iconfield>
                     <p-button
-                        label="Добавить"
+                        [label]="'PLANNING.COMMON.ADD' | translate"
                         icon="pi pi-plus"
                         (onClick)="openNew()"
                         severity="success"
@@ -41,28 +41,28 @@
         <ng-template #header>
             <tr>
                 <th pSortableColumn="name" style="min-width: 12rem">
-                    Название
+                    {{ 'PLANNING.COMMON.NAME' | translate }}
                     <p-sortIcon field="name" />
                 </th>
                 <th pSortableColumn="date" style="min-width: 10rem">
-                    Дата
+                    {{ 'PLANNING.COMMON.DATE' | translate }}
                     <p-sortIcon field="date" />
                 </th>
                 <th pSortableColumn="visitor" style="min-width: 12rem">
-                    Посетитель
+                    {{ 'PLANNING.RECEPTION.VISITOR' | translate }}
                     <p-sortIcon field="visitor" />
                 </th>
                 <th pSortableColumn="description" style="min-width: 15rem">
-                    Описание
+                    {{ 'PLANNING.COMMON.DESCRIPTION' | translate }}
                 </th>
                 <th pSortableColumn="status" style="min-width: 10rem">
-                    Статус
+                    {{ 'PLANNING.COMMON.STATUS' | translate }}
                     <p-sortIcon field="status" />
                 </th>
                 <th pSortableColumn="status_change_reason" style="min-width: 15rem">
                     Комментарий
                 </th>
-                <th style="min-width: 10rem">Действия</th>
+                <th style="min-width: 10rem">{{ 'PLANNING.COMMON.ACTIONS' | translate }}</th>
             </tr>
         </ng-template>
 
@@ -96,7 +96,7 @@
                                 severity="success"
                                 [text]="true"
                                 [rounded]="true"
-                                pTooltip="Одобрить"
+                                [pTooltip]="'PLANNING.RECEPTION.APPROVE' | translate"
                                 [disabled]="reception.status === 'true'"
                             />
                         }
@@ -107,7 +107,7 @@
                                 severity="danger"
                                 [text]="true"
                                 [rounded]="true"
-                                pTooltip="Отклонить"
+                                [pTooltip]="'PLANNING.RECEPTION.REJECT' | translate"
                                 [disabled]="reception.status === 'false'"
                             />
                         }
@@ -127,7 +127,7 @@
                             severity="info"
                             [text]="true"
                             [rounded]="true"
-                            pTooltip="Редактировать"
+                            [pTooltip]="'PLANNING.COMMON.EDIT' | translate"
                         />
                         <p-button
                             icon="pi pi-trash"
@@ -135,7 +135,7 @@
                             severity="secondary"
                             [text]="true"
                             [rounded]="true"
-                            pTooltip="Удалить"
+                            [pTooltip]="'PLANNING.COMMON.DELETE' | translate"
                         />
                     </div>
                 </td>
@@ -144,13 +144,13 @@
 
         <ng-template #emptymessage>
             <tr>
-                <td colspan="8" class="text-center">Нет данных</td>
+                <td colspan="8" class="text-center">{{ 'PLANNING.COMMON.NO_DATA' | translate }}</td>
             </tr>
         </ng-template>
 
         <ng-template #loadingbody>
             <tr>
-                <td colspan="8" class="text-center">Загрузка...</td>
+                <td colspan="8" class="text-center">{{ 'PLANNING.COMMON.LOADING' | translate }}</td>
             </tr>
         </ng-template>
     </p-table>
@@ -159,7 +159,7 @@
 <!-- Create/Edit Dialog -->
 <app-dialog
     [(visible)]="dialogVisible"
-    [header]="selectedReception ? 'Редактировать прием' : 'Новый прием'"
+    [header]="selectedReception ? ('PLANNING.RECEPTION.EDIT' | translate) : ('PLANNING.RECEPTION.NEW' | translate)"
     [form]="receptionForm"
     (save)="saveReception()"
     (cancel)="hideDialog()"
@@ -167,24 +167,24 @@
     <form class="p-4" [formGroup]="receptionForm" (ngSubmit)="saveReception()">
 
         <app-input-text
-            label="Название"
+            [label]="'PLANNING.COMMON.NAME' | translate"
             formControlName="name"
             [submitted]="submitted"
-            errorMessage="Укажите название"
+            [errorMessage]="'PLANNING.RECEPTION.SPECIFY_NAME' | translate"
         />
 
         <app-date-picker
-            label="Дата"
+            [label]="'PLANNING.COMMON.DATE' | translate"
             formControlName="date"
             [submitted]="submitted"
-            errorMessage="Укажите дату"
+            [errorMessage]="'PLANNING.RECEPTION.SPECIFY_DATE' | translate"
         />
 
         <app-input-text
-            label="Посетитель"
+            [label]="'PLANNING.RECEPTION.VISITOR' | translate"
             formControlName="visitor"
             [submitted]="submitted"
-            errorMessage="Укажите посетителя"
+            [errorMessage]="'PLANNING.RECEPTION.VISITOR_REQUIRED' | translate"
         />
 
         <div class="field">
@@ -221,7 +221,7 @@
         </div>
 
         <app-textarea
-            label="Описание"
+            [label]="'PLANNING.COMMON.DESCRIPTION' | translate"
             formControlName="description"
             [submitted]="submitted"
             [required]="false"

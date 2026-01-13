@@ -20,6 +20,7 @@ import { SelectComponent } from '@/layout/component/dialog/select/select.compone
 import { TextareaComponent } from '@/layout/component/dialog/textarea/textarea.component';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
 import { DeleteConfirmationComponent } from '@/layout/component/dialog/delete-confirmation/delete-confirmation.component';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-resolutions',
@@ -43,7 +44,8 @@ import { DeleteConfirmationComponent } from '@/layout/component/dialog/delete-co
         SelectComponent,
         TextareaComponent,
         DatePickerComponent,
-        DeleteConfirmationComponent
+        DeleteConfirmationComponent,
+        TranslateModule
     ],
     templateUrl: './resolutions.component.html',
     styleUrl: './resolutions.component.scss'
@@ -59,32 +61,40 @@ export class ResolutionsComponent implements OnInit, OnDestroy {
     selectedResolution: Resolution | null = null;
 
     currentType: ResolutionType = 'president';
-    pageTitle = 'Постановления';
+    pageTitle = '';
 
     resolutionForm: FormGroup;
 
     selectedStatus: ResolutionStatus | null = null;
 
-    statusOptions = [
-        { name: 'Все статусы', value: null },
-        { name: 'Действующий', value: 'active' },
-        { name: 'Черновик', value: 'draft' },
-        { name: 'Отменён', value: 'cancelled' },
-        { name: 'Истёк', value: 'expired' }
-    ];
-
-    statusFormOptions = [
-        { name: 'Действующий', value: 'active' },
-        { name: 'Черновик', value: 'draft' },
-        { name: 'Отменён', value: 'cancelled' },
-        { name: 'Истёк', value: 'expired' }
-    ];
+    statusOptions: { name: string; value: string | null }[] = [];
+    statusFormOptions: { name: string; value: string }[] = [];
 
     private resolutionService = inject(ResolutionService);
     private messageService = inject(MessageService);
     private fb = inject(FormBuilder);
     private route = inject(ActivatedRoute);
+    private translate = inject(TranslateService);
     private destroy$ = new Subject<void>();
+
+    private initOptions(): void {
+        this.statusOptions = [
+            { name: this.translate.instant('MAIL.COMMON.ALL_STATUSES'), value: null },
+            { name: this.translate.instant('MAIL.RESOLUTIONS.STATUS.ACTIVE'), value: 'active' },
+            { name: this.translate.instant('MAIL.RESOLUTIONS.STATUS.DRAFT'), value: 'draft' },
+            { name: this.translate.instant('MAIL.RESOLUTIONS.STATUS.CANCELLED'), value: 'cancelled' },
+            { name: this.translate.instant('MAIL.RESOLUTIONS.STATUS.EXPIRED'), value: 'expired' }
+        ];
+
+        this.statusFormOptions = [
+            { name: this.translate.instant('MAIL.RESOLUTIONS.STATUS.ACTIVE'), value: 'active' },
+            { name: this.translate.instant('MAIL.RESOLUTIONS.STATUS.DRAFT'), value: 'draft' },
+            { name: this.translate.instant('MAIL.RESOLUTIONS.STATUS.CANCELLED'), value: 'cancelled' },
+            { name: this.translate.instant('MAIL.RESOLUTIONS.STATUS.EXPIRED'), value: 'expired' }
+        ];
+
+        this.pageTitle = this.resolutionService.getPageTitle(this.currentType);
+    }
 
     constructor() {
         this.resolutionForm = this.fb.group({
@@ -100,6 +110,8 @@ export class ResolutionsComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.initOptions();
+
         this.route.queryParams
             .pipe(takeUntil(this.destroy$))
             .subscribe(params => {
@@ -112,6 +124,10 @@ export class ResolutionsComponent implements OnInit, OnDestroy {
                 this.pageTitle = this.resolutionService.getPageTitle(this.currentType);
                 this.loadResolutions();
             });
+
+        this.translate.onLangChange.pipe(takeUntil(this.destroy$)).subscribe(() => {
+            this.initOptions();
+        });
     }
 
     private loadResolutions() {
@@ -209,12 +225,20 @@ export class ResolutionsComponent implements OnInit, OnDestroy {
                 .pipe(takeUntil(this.destroy$))
                 .subscribe({
                     next: () => {
-                        this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Постановление обновлено' });
+                        this.messageService.add({
+                            severity: 'success',
+                            summary: this.translate.instant('MAIL.COMMON.SUCCESS'),
+                            detail: this.translate.instant('MAIL.RESOLUTIONS.UPDATED')
+                        });
                         this.loadResolutions();
                         this.closeDialog();
                     },
                     error: () => {
-                        this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось обновить постановление' });
+                        this.messageService.add({
+                            severity: 'error',
+                            summary: this.translate.instant('MAIL.COMMON.ERROR'),
+                            detail: this.translate.instant('MAIL.RESOLUTIONS.UPDATE_ERROR')
+                        });
                     }
                 });
         } else {
@@ -223,12 +247,20 @@ export class ResolutionsComponent implements OnInit, OnDestroy {
                 .pipe(takeUntil(this.destroy$))
                 .subscribe({
                     next: () => {
-                        this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Постановление создано' });
+                        this.messageService.add({
+                            severity: 'success',
+                            summary: this.translate.instant('MAIL.COMMON.SUCCESS'),
+                            detail: this.translate.instant('MAIL.RESOLUTIONS.CREATED')
+                        });
                         this.loadResolutions();
                         this.closeDialog();
                     },
                     error: () => {
-                        this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось создать постановление' });
+                        this.messageService.add({
+                            severity: 'error',
+                            summary: this.translate.instant('MAIL.COMMON.ERROR'),
+                            detail: this.translate.instant('MAIL.RESOLUTIONS.CREATE_ERROR')
+                        });
                     }
                 });
         }
@@ -239,6 +271,11 @@ export class ResolutionsComponent implements OnInit, OnDestroy {
         this.displayDeleteDialog = true;
     }
 
+    get deleteConfirmMessage(): string {
+        return this.translate.instant('MAIL.COMMON.DELETE_CONFIRM') + ' ' +
+               (this.selectedResolution?.number || '') + '?';
+    }
+
     confirmDelete() {
         if (!this.selectedResolution) return;
 
@@ -247,13 +284,21 @@ export class ResolutionsComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
-                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Постановление удалено' });
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: this.translate.instant('MAIL.COMMON.SUCCESS'),
+                        detail: this.translate.instant('MAIL.RESOLUTIONS.DELETED')
+                    });
                     this.loadResolutions();
                     this.displayDeleteDialog = false;
                     this.selectedResolution = null;
                 },
                 error: () => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось удалить постановление' });
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: this.translate.instant('MAIL.COMMON.ERROR'),
+                        detail: this.translate.instant('MAIL.RESOLUTIONS.DELETE_ERROR')
+                    });
                 }
             });
     }

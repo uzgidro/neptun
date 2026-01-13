@@ -1,5 +1,5 @@
 <div class="card">
-    <div class="font-semibold text-xl mb-4">Письма</div>
+    <div class="font-semibold text-xl mb-4">{{ 'MAIL.LETTERS.TITLE' | translate }}</div>
 
     <p-table
         #dt
@@ -17,7 +17,7 @@
                 <div class="flex flex-wrap gap-2">
                     <p-iconfield>
                         <p-inputicon><i class="pi pi-search"></i></p-inputicon>
-                        <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Поиск" />
+                        <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" [placeholder]="'MAIL.COMMON.SEARCH' | translate" />
                     </p-iconfield>
 
                     <p-select
@@ -25,7 +25,7 @@
                         [options]="typeOptions"
                         optionLabel="name"
                         optionValue="value"
-                        placeholder="Тип"
+                        [placeholder]="'MAIL.COMMON.TYPE' | translate"
                         (onChange)="applyFilters()"
                         [style]="{ minWidth: '150px' }">
                     </p-select>
@@ -35,7 +35,7 @@
                         [options]="statusOptions"
                         optionLabel="name"
                         optionValue="value"
-                        placeholder="Статус"
+                        [placeholder]="'MAIL.COMMON.STATUS' | translate"
                         (onChange)="applyFilters()"
                         [style]="{ minWidth: '150px' }">
                     </p-select>
@@ -43,7 +43,7 @@
 
                 <button pButton (click)="openDialog()">
                     <i class="pi pi-plus" pButtonIcon></i>
-                    <span pButtonLabel>Новое письмо</span>
+                    <span pButtonLabel>{{ 'MAIL.LETTERS.NEW' | translate }}</span>
                 </button>
             </div>
         </ng-template>
@@ -51,28 +51,28 @@
         <ng-template #header>
             <tr>
                 <th pSortableColumn="number" style="min-width: 8rem">
-                    Номер
+                    {{ 'MAIL.COMMON.NUMBER' | translate }}
                     <p-sortIcon field="number" />
                 </th>
                 <th pSortableColumn="date" style="min-width: 7rem">
-                    Дата
+                    {{ 'MAIL.COMMON.DATE' | translate }}
                     <p-sortIcon field="date" />
                 </th>
                 <th pSortableColumn="type" style="min-width: 8rem">
-                    Тип
+                    {{ 'MAIL.COMMON.TYPE' | translate }}
                     <p-sortIcon field="type" />
                 </th>
-                <th style="min-width: 10rem">От кого</th>
-                <th style="min-width: 10rem">Кому</th>
+                <th style="min-width: 10rem">{{ 'MAIL.COMMON.FROM' | translate }}</th>
+                <th style="min-width: 10rem">{{ 'MAIL.COMMON.TO' | translate }}</th>
                 <th pSortableColumn="subject" style="min-width: 12rem">
-                    Тема
+                    {{ 'MAIL.COMMON.SUBJECT' | translate }}
                     <p-sortIcon field="subject" />
                 </th>
                 <th pSortableColumn="status" style="min-width: 8rem">
-                    Статус
+                    {{ 'MAIL.COMMON.STATUS' | translate }}
                     <p-sortIcon field="status" />
                 </th>
-                <th style="width: 8rem">Действия</th>
+                <th style="width: 8rem">{{ 'MAIL.COMMON.ACTIONS' | translate }}</th>
             </tr>
         </ng-template>
 
@@ -116,14 +116,14 @@
                                 icon="pi pi-pencil"
                                 (click)="openEditDialog(letter)"
                                 class="p-button-rounded p-button-text p-button-warning"
-                                pTooltip="Редактировать"
+                                [pTooltip]="'MAIL.COMMON.EDIT' | translate"
                                 tooltipPosition="top">
                         </button>
                         <button pButton
                                 icon="pi pi-trash"
                                 (click)="openDeleteDialog(letter)"
                                 class="p-button-rounded p-button-text p-button-danger"
-                                pTooltip="Удалить"
+                                [pTooltip]="'MAIL.COMMON.DELETE' | translate"
                                 tooltipPosition="top">
                         </button>
                     </div>
@@ -135,7 +135,7 @@
             <tr>
                 <td colspan="8" class="text-center py-4">
                     <i class="pi pi-inbox text-4xl text-color-secondary mb-2"></i>
-                    <p class="m-0 text-color-secondary">Нет писем</p>
+                    <p class="m-0 text-color-secondary">{{ 'MAIL.LETTERS.NO_DATA' | translate }}</p>
                 </td>
             </tr>
         </ng-template>
@@ -143,7 +143,7 @@
         <ng-template #loadingbody>
             <tr>
                 <td colspan="8" class="text-center py-4">
-                    Загрузка...
+                    {{ 'MAIL.COMMON.LOADING' | translate }}
                 </td>
             </tr>
         </ng-template>
@@ -152,66 +152,66 @@
 
 <app-dialog
     [(visible)]="displayDialog"
-    [header]="isEditMode ? 'Редактировать письмо' : 'Новое письмо'"
+    [header]="isEditMode ? ('MAIL.LETTERS.EDIT' | translate) : ('MAIL.LETTERS.NEW' | translate)"
     [form]="letterForm"
-    [saveLabel]="isEditMode ? 'Обновить' : 'Сохранить'"
+    [saveLabel]="isEditMode ? ('MAIL.COMMON.UPDATE' | translate) : ('MAIL.COMMON.SAVE' | translate)"
     width="45vw"
     (save)="onSubmit()"
     (cancel)="closeDialog()">
     <form class="p-4" [formGroup]="letterForm" (ngSubmit)="onSubmit()">
         <app-input-text
             formControlName="number"
-            label="Номер письма"
+            [label]="'MAIL.LETTERS.NUMBER_LABEL' | translate"
             [submitted]="submitted"
-            errorMessage="Номер обязателен"
+            [errorMessage]="'MAIL.COMMON.NUMBER_REQUIRED' | translate"
             [required]="true">
         </app-input-text>
 
         <app-date-picker
             formControlName="date"
-            label="Дата"
+            [label]="'MAIL.COMMON.DATE' | translate"
             [submitted]="submitted"
             [showTime]="false"
-            errorMessage="Дата обязательна"
+            [errorMessage]="'MAIL.COMMON.DATE_REQUIRED' | translate"
             [required]="true">
         </app-date-picker>
 
         <app-select
             formControlName="type"
-            label="Тип письма"
+            [label]="'MAIL.LETTERS.TYPE_LABEL' | translate"
             [items]="typeFormOptions"
             [submitted]="submitted"
-            errorMessage="Тип обязателен"
+            [errorMessage]="'MAIL.COMMON.TYPE_REQUIRED' | translate"
             [required]="true">
         </app-select>
 
         <app-input-text
             formControlName="from"
-            label="От кого"
+            [label]="'MAIL.COMMON.FROM' | translate"
             [submitted]="submitted"
-            errorMessage="Поле обязательно"
+            [errorMessage]="'MAIL.COMMON.FIELD_REQUIRED' | translate"
             [required]="true">
         </app-input-text>
 
         <app-input-text
             formControlName="to"
-            label="Кому"
+            [label]="'MAIL.COMMON.TO' | translate"
             [submitted]="submitted"
-            errorMessage="Поле обязательно"
+            [errorMessage]="'MAIL.COMMON.FIELD_REQUIRED' | translate"
             [required]="true">
         </app-input-text>
 
         <app-input-text
             formControlName="subject"
-            label="Тема"
+            [label]="'MAIL.COMMON.SUBJECT' | translate"
             [submitted]="submitted"
-            errorMessage="Тема обязательна"
+            [errorMessage]="'MAIL.COMMON.SUBJECT_REQUIRED' | translate"
             [required]="true">
         </app-input-text>
 
         <app-textarea
             formControlName="content"
-            label="Содержание"
+            [label]="'MAIL.COMMON.CONTENT' | translate"
             [submitted]="submitted"
             [required]="false"
             [rows]="3">
@@ -219,10 +219,10 @@
 
         <app-select
             formControlName="status"
-            label="Статус"
+            [label]="'MAIL.COMMON.STATUS' | translate"
             [items]="statusFormOptions"
             [submitted]="submitted"
-            errorMessage="Статус обязателен"
+            [errorMessage]="'MAIL.COMMON.STATUS_REQUIRED' | translate"
             [required]="true">
         </app-select>
     </form>
@@ -230,6 +230,6 @@
 
 <app-delete-confirmation
     [(visible)]="displayDeleteDialog"
-    [message]="'Вы уверены, что хотите удалить письмо ' + (selectedLetter?.number || '') + '?'"
+    [message]="deleteConfirmMessage"
     (onConfirm)="confirmDelete()">
 </app-delete-confirmation>

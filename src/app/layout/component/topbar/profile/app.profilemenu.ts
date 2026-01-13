@@ -6,11 +6,12 @@ import { RouterModule } from '@angular/router';
 import { JwtService } from '@/core/services/jwt.service';
 import { Contact } from '@/core/interfaces/contact';
 import { ContactService } from '@/core/services/contact.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-profile-menu',
     standalone: true,
-    imports: [CommonModule, Popover, RouterModule],
+    imports: [CommonModule, Popover, RouterModule, TranslateModule],
     template: `
         <button type="button" class="layout-topbar-action" (click)="profilePopover.toggle($event)">
             @if (contact?.icon?.url) {
@@ -18,7 +19,7 @@ import { ContactService } from '@/core/services/contact.service';
             } @else {
                 <i class="pi pi-user"></i>
             }
-            <span>{{ contact?.name || 'Пользователь' }}</span>
+            <span>{{ contact?.name || ('MENU.USER' | translate) }}</span>
         </button>
         <p-popover #profilePopover [style]="{ width: '300px' }">
             <div class="p-4">
@@ -42,7 +43,7 @@ import { ContactService } from '@/core/services/contact.service';
                 <hr class="my-4 border-t border-surface" />
                 <a (click)="logout()" class="cursor-pointer flex items-center gap-2 p-2 rounded-border-sm hover:bg-surface-100 dark:hover:bg-surface-800/70">
                     <i class="pi pi-sign-out"></i>
-                    <span>Выйти</span>
+                    <span>{{ 'AUTH.LOGOUT' | translate }}</span>
                 </a>
             </div>
         </p-popover>

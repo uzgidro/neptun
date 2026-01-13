@@ -14,6 +14,7 @@ import {
     AddInvestActiveProjectRequest,
     EditInvestActiveProjectRequest
 } from '@/core/services/invest-active-project.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-invest-project-dialog',
@@ -28,7 +29,8 @@ import {
         Textarea,
         PrimeTemplate,
         NgClass,
-        ButtonDirective
+        ButtonDirective,
+        TranslateModule
     ],
     templateUrl: './invest-project-dialog.component.html',
     styleUrl: './invest-project-dialog.component.scss'
@@ -46,6 +48,7 @@ export class InvestProjectDialogComponent implements OnInit, OnChanges {
     private projectService = inject(InvestActiveProjectService);
     private messageService = inject(MessageService);
     private fb = inject(FormBuilder);
+    private translateService = inject(TranslateService);
 
     get isEditMode(): boolean {
         return !!this.projectToEdit;

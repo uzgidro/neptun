@@ -1,6 +1,6 @@
 @if (authService.isSc()) {
     <div class="mb-6">
-        <p-button label="Добавить водосброс" icon="pi pi-plus" (click)="openNew()" />
+        <p-button [label]="'SITUATION_CENTER.DISCHARGE.ADD_DISCHARGE' | translate" icon="pi pi-plus" (click)="openNew()" />
     </div>
 }
 
@@ -19,8 +19,7 @@
     [globalFilterFields]="['organization.name', 'reason', 'created_by.name']"
 >
     <ng-template #caption>
-        <div class="flex justify-between items-center">
-            <div class="text-lg font-bold">Холостые водосбросы</div>
+        <div class="flex justify-end items-center gap-3">
             <p-iconfield>
                 <p-inputicon>
                     <i class="pi pi-search"></i>
@@ -30,10 +29,11 @@
                     pInputText
                     type="text"
                     (input)="shd.filterGlobal(searchInput.value, 'contains')"
-                    placeholder="Поиск..."
+                    [placeholder]="'COMMON.SEARCH' | translate"
                     class="w-full"
                 />
             </p-iconfield>
+            <app-date [date]="selectedDate" [syncQueryParams]="false" (dateChange)="onDateChanged($event)"></app-date>
         </div>
     </ng-template>
 
@@ -41,49 +41,49 @@
         <tr>
             <th pSortableColumn="started_at" style="min-width: 12rem">
                 <div class="flex items-center gap-2">
-                    Начало
+                    {{ 'SITUATION_CENTER.SHUTDOWN.START' | translate }}
                     <p-sortIcon field="started_at" />
                     <p-columnFilter type="date" field="started_at" display="menu" />
                 </div>
             </th>
             <th pSortableColumn="ended_at" style="min-width: 12rem">
                 <div class="flex items-center gap-2">
-                    Конец
+                    {{ 'SITUATION_CENTER.SHUTDOWN.END' | translate }}
                     <p-sortIcon field="ended_at" />
                     <p-columnFilter type="date" field="ended_at" display="menu" />
                 </div>
             </th>
             <th pSortableColumn="flow_rate" style="min-width: 10rem">
                 <div class="flex items-center gap-2">
-                    Поток, м³/с
+                    {{ 'SITUATION_CENTER.DISCHARGE.FLOW_RATE' | translate }}
                     <p-sortIcon field="flow_rate" />
                     <p-columnFilter type="numeric" field="flow_rate" display="menu" />
                 </div>
             </th>
             <th pSortableColumn="total_volume" style="min-width: 10rem">
                 <div class="flex items-center gap-2">
-                    Объём, млн. м³
+                    {{ 'SITUATION_CENTER.DISCHARGE.TOTAL_VOLUME' | translate }}
                     <p-sortIcon field="total_volume" />
                     <p-columnFilter type="numeric" field="total_volume" display="menu" />
                 </div>
             </th>
             <th pSortableColumn="reason" style="min-width: 12rem">
                 <div class="flex items-center gap-2">
-                    Причина
+                    {{ 'SITUATION_CENTER.SHUTDOWN.REASON' | translate }}
                     <p-sortIcon field="reason" />
                     <p-columnFilter type="text" field="reason" display="menu" />
                 </div>
             </th>
             <th pSortableColumn="created_by.name" style="min-width: 10rem">
                 <div class="flex items-center gap-2">
-                    Создал
+                    {{ 'SITUATION_CENTER.COMMON.CREATED_BY' | translate }}
                     <p-sortIcon field="created_by.name" />
                     <p-columnFilter type="text" field="created_by.name" display="menu" />
                 </div>
             </th>
-            <th style="width: 10%">Файлы</th>
+            <th style="width: 10%">{{ 'SITUATION_CENTER.COMMON.FILES' | translate }}</th>
             @if (authService.isSc()) {
-                <th style="width: 10%">Действия</th>
+                <th style="width: 10%">{{ 'SITUATION_CENTER.COMMON.ACTIONS' | translate }}</th>
             }
         </tr>
     </ng-template>
@@ -122,7 +122,7 @@
                         severity="secondary"
                         [text]="true"
                         (click)="showFiles(discharge)"
-                        pTooltip="Просмотр файлов"
+                        [pTooltip]="'SITUATION_CENTER.COMMON.VIEW_FILES' | translate"
                     />
                 } @else {
                     <span class="text-color-secondary">—</span>
@@ -136,7 +136,7 @@
                         [text]="true"
                         [rounded]="true"
                         (click)="editDischarge(discharge)"
-                        pTooltip="Редактировать"
+                        [pTooltip]="'SITUATION_CENTER.COMMON.EDIT' | translate"
                     />
                     <p-button
                         icon="pi pi-trash"
@@ -144,7 +144,7 @@
                         [text]="true"
                         [rounded]="true"
                         (click)="deleteDischarge(discharge)"
-                        pTooltip="Удалить"
+                        [pTooltip]="'SITUATION_CENTER.COMMON.DELETE' | translate"
                     />
                 </td>
             }
@@ -154,7 +154,7 @@
     <ng-template pTemplate="emptymessage">
         <tr>
             <td [attr.colspan]="authService.isSc() ? 8 : 7" class="text-center">
-                Водосбросы за выбранную дату не найдены.
+                {{ 'SITUATION_CENTER.DISCHARGE.NO_DISCHARGES' | translate }}
             </td>
         </tr>
     </ng-template>
@@ -163,7 +163,7 @@
 
 <app-dialog
     [(visible)]="isFormOpen"
-    [header]="isEditMode ? 'Редактировать Водосброс' : 'Новый Водосброс'"
+    [header]="isEditMode ? ('SITUATION_CENTER.DISCHARGE.EDIT_DISCHARGE' | translate) : ('SITUATION_CENTER.DISCHARGE.NEW_DISCHARGE' | translate)"
     [form]="form"
     [submitting]="isLoading"
     (save)="onSubmit()"
@@ -172,37 +172,37 @@
     <form class="p-4" [formGroup]="form" (ngSubmit)="onSubmit()">
 
         <app-select
-            label="Объект"
+            [label]="'SITUATION_CENTER.COMMON.OBJECT' | translate"
             formControlName="organization"
             [items]="organizations"
             [loading]="orgsLoading"
             [submitted]="submitted"
-            errorMessage="Выберите организацию">
+            [errorMessage]="'SITUATION_CENTER.COMMON.SELECT_ORGANIZATION' | translate">
         </app-select>
 
         <app-date-picker
-            label="Начало водосброса"
+            [label]="'SITUATION_CENTER.DISCHARGE.DISCHARGE_START' | translate"
             formControlName="started_at"
             [submitted]="submitted"
-            errorMessage="Укажите дату начала">
+            [errorMessage]="'SITUATION_CENTER.DISCHARGE.SPECIFY_START_DATE' | translate">
         </app-date-picker>
 
         <app-date-picker
-            label="Конец водосброса"
+            [label]="'SITUATION_CENTER.DISCHARGE.DISCHARGE_END' | translate"
             formControlName="ended_at"
             [submitted]="submitted"
             [required]="false">
         </app-date-picker>
 
         <app-input-number
-            label="Поток, м³/с"
+            [label]="'SITUATION_CENTER.DISCHARGE.FLOW_RATE' | translate"
             formControlName="flow_rate"
             [submitted]="submitted"
-            errorMessage="Укажите значение потока">
+            [errorMessage]="'SITUATION_CENTER.DISCHARGE.SPECIFY_FLOW' | translate">
         </app-input-number>
 
         <app-textarea
-            label="Причина"
+            [label]="'SITUATION_CENTER.SHUTDOWN.REASON' | translate"
             formControlName="reason"
             [submitted]="submitted"
             [required]="false">
@@ -216,7 +216,7 @@
         }
 
         <app-file-upload
-            [label]="isEditMode ? 'Добавить новые файлы' : 'Прикрепить файлы'"
+            [label]="isEditMode ? ('SITUATION_CENTER.COMMON.ADD_NEW_FILES' | translate) : ('SITUATION_CENTER.COMMON.ATTACH_FILES' | translate)"
             [files]="selectedFiles"
             (filesChange)="onFileSelect($event)"
             (removeFile)="removeFile($event)">
@@ -228,6 +228,6 @@
 
 <app-file-viewer
     [(visible)]="showFilesDialog"
-    [header]="'Файлы водосброса'"
+    [header]="'SITUATION_CENTER.DISCHARGE.DISCHARGE_FILES' | translate"
     [files]="selectedDischargeForFiles?.files || []">
 </app-file-viewer>

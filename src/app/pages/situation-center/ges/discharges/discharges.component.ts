@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { ShutdownDischargeComponent } from '@/pages/situation-center/ges/shutdown/shutdown_discharges/shutdown-discharge.component';
-import { DateWidget } from '@/layout/component/widget/date/date.widget';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-discharges',
-    imports: [ShutdownDischargeComponent, DateWidget],
+    imports: [ShutdownDischargeComponent, TranslateModule],
     templateUrl: './discharges.component.html',
     styleUrl: './discharges.component.scss'
 })

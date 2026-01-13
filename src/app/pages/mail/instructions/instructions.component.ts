@@ -19,6 +19,7 @@ import { SelectComponent } from '@/layout/component/dialog/select/select.compone
 import { TextareaComponent } from '@/layout/component/dialog/textarea/textarea.component';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
 import { DeleteConfirmationComponent } from '@/layout/component/dialog/delete-confirmation/delete-confirmation.component';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-instructions',
@@ -42,7 +43,8 @@ import { DeleteConfirmationComponent } from '@/layout/component/dialog/delete-co
         SelectComponent,
         TextareaComponent,
         DatePickerComponent,
-        DeleteConfirmationComponent
+        DeleteConfirmationComponent,
+        TranslateModule
     ],
     templateUrl: './instructions.component.html',
     styleUrl: './instructions.component.scss'
@@ -62,40 +64,48 @@ export class InstructionsComponent implements OnInit, OnDestroy {
     selectedCategory: InstructionCategory | null = null;
     selectedStatus: InstructionStatus | null = null;
 
-    categoryOptions = [
-        { name: 'Все категории', value: null },
-        { name: 'Безопасность', value: 'safety' },
-        { name: 'Эксплуатация', value: 'operation' },
-        { name: 'Техническая', value: 'technical' },
-        { name: 'Административная', value: 'administrative' },
-        { name: 'Прочее', value: 'other' }
-    ];
-
-    categoryFormOptions = [
-        { name: 'Безопасность', value: 'safety' },
-        { name: 'Эксплуатация', value: 'operation' },
-        { name: 'Техническая', value: 'technical' },
-        { name: 'Административная', value: 'administrative' },
-        { name: 'Прочее', value: 'other' }
-    ];
-
-    statusOptions = [
-        { name: 'Все статусы', value: null },
-        { name: 'Действующая', value: 'active' },
-        { name: 'Архивная', value: 'archived' },
-        { name: 'На утверждении', value: 'pending' }
-    ];
-
-    statusFormOptions = [
-        { name: 'Действующая', value: 'active' },
-        { name: 'Архивная', value: 'archived' },
-        { name: 'На утверждении', value: 'pending' }
-    ];
+    categoryOptions: { name: string; value: string | null }[] = [];
+    categoryFormOptions: { name: string; value: string }[] = [];
+    statusOptions: { name: string; value: string | null }[] = [];
+    statusFormOptions: { name: string; value: string }[] = [];
 
     private instructionService = inject(InstructionService);
     private messageService = inject(MessageService);
     private fb = inject(FormBuilder);
+    private translate = inject(TranslateService);
     private destroy$ = new Subject<void>();
+
+    private initOptions(): void {
+        this.categoryOptions = [
+            { name: this.translate.instant('MAIL.COMMON.ALL_CATEGORIES'), value: null },
+            { name: this.translate.instant('MAIL.INSTRUCTIONS.CATEGORY.SAFETY'), value: 'safety' },
+            { name: this.translate.instant('MAIL.INSTRUCTIONS.CATEGORY.OPERATION'), value: 'operation' },
+            { name: this.translate.instant('MAIL.INSTRUCTIONS.CATEGORY.TECHNICAL'), value: 'technical' },
+            { name: this.translate.instant('MAIL.INSTRUCTIONS.CATEGORY.ADMINISTRATIVE'), value: 'administrative' },
+            { name: this.translate.instant('MAIL.INSTRUCTIONS.CATEGORY.OTHER'), value: 'other' }
+        ];
+
+        this.categoryFormOptions = [
+            { name: this.translate.instant('MAIL.INSTRUCTIONS.CATEGORY.SAFETY'), value: 'safety' },
+            { name: this.translate.instant('MAIL.INSTRUCTIONS.CATEGORY.OPERATION'), value: 'operation' },
+            { name: this.translate.instant('MAIL.INSTRUCTIONS.CATEGORY.TECHNICAL'), value: 'technical' },
+            { name: this.translate.instant('MAIL.INSTRUCTIONS.CATEGORY.ADMINISTRATIVE'), value: 'administrative' },
+            { name: this.translate.instant('MAIL.INSTRUCTIONS.CATEGORY.OTHER'), value: 'other' }
+        ];
+
+        this.statusOptions = [
+            { name: this.translate.instant('MAIL.COMMON.ALL_STATUSES'), value: null },
+            { name: this.translate.instant('MAIL.INSTRUCTIONS.STATUS.ACTIVE'), value: 'active' },
+            { name: this.translate.instant('MAIL.INSTRUCTIONS.STATUS.ARCHIVED'), value: 'archived' },
+            { name: this.translate.instant('MAIL.INSTRUCTIONS.STATUS.PENDING'), value: 'pending' }
+        ];
+
+        this.statusFormOptions = [
+            { name: this.translate.instant('MAIL.INSTRUCTIONS.STATUS.ACTIVE'), value: 'active' },
+            { name: this.translate.instant('MAIL.INSTRUCTIONS.STATUS.ARCHIVED'), value: 'archived' },
+            { name: this.translate.instant('MAIL.INSTRUCTIONS.STATUS.PENDING'), value: 'pending' }
+        ];
+    }
 
     constructor() {
         this.instructionForm = this.fb.group({
@@ -110,7 +120,12 @@ export class InstructionsComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.initOptions();
         this.loadInstructions();
+
+        this.translate.onLangChange.pipe(takeUntil(this.destroy$)).subscribe(() => {
+            this.initOptions();
+        });
     }
 
     private loadInstructions() {
@@ -206,12 +221,20 @@ export class InstructionsComponent implements OnInit, OnDestroy {
                 .pipe(takeUntil(this.destroy$))
                 .subscribe({
                     next: () => {
-                        this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Инструкция обновлена' });
+                        this.messageService.add({
+                            severity: 'success',
+                            summary: this.translate.instant('MAIL.COMMON.SUCCESS'),
+                            detail: this.translate.instant('MAIL.INSTRUCTIONS.UPDATED')
+                        });
                         this.loadInstructions();
                         this.closeDialog();
                     },
                     error: () => {
-                        this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось обновить инструкцию' });
+                        this.messageService.add({
+                            severity: 'error',
+                            summary: this.translate.instant('MAIL.COMMON.ERROR'),
+                            detail: this.translate.instant('MAIL.INSTRUCTIONS.UPDATE_ERROR')
+                        });
                     }
                 });
         } else {
@@ -220,12 +243,20 @@ export class InstructionsComponent implements OnInit, OnDestroy {
                 .pipe(takeUntil(this.destroy$))
                 .subscribe({
                     next: () => {
-                        this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Инструкция создана' });
+                        this.messageService.add({
+                            severity: 'success',
+                            summary: this.translate.instant('MAIL.COMMON.SUCCESS'),
+                            detail: this.translate.instant('MAIL.INSTRUCTIONS.CREATED')
+                        });
                         this.loadInstructions();
                         this.closeDialog();
                     },
                     error: () => {
-                        this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось создать инструкцию' });
+                        this.messageService.add({
+                            severity: 'error',
+                            summary: this.translate.instant('MAIL.COMMON.ERROR'),
+                            detail: this.translate.instant('MAIL.INSTRUCTIONS.CREATE_ERROR')
+                        });
                     }
                 });
         }
@@ -236,6 +267,11 @@ export class InstructionsComponent implements OnInit, OnDestroy {
         this.displayDeleteDialog = true;
     }
 
+    get deleteConfirmMessage(): string {
+        return this.translate.instant('MAIL.COMMON.DELETE_CONFIRM') + ' ' +
+               (this.selectedInstruction?.number || '') + '?';
+    }
+
     confirmDelete() {
         if (!this.selectedInstruction) return;
 
@@ -244,13 +280,21 @@ export class InstructionsComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
-                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Инструкция удалена' });
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: this.translate.instant('MAIL.COMMON.SUCCESS'),
+                        detail: this.translate.instant('MAIL.INSTRUCTIONS.DELETED')
+                    });
                     this.loadInstructions();
                     this.displayDeleteDialog = false;
                     this.selectedInstruction = null;
                 },
                 error: () => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось удалить инструкцию' });
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: this.translate.instant('MAIL.COMMON.ERROR'),
+                        detail: this.translate.instant('MAIL.INSTRUCTIONS.DELETE_ERROR')
+                    });
                 }
             });
     }

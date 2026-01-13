@@ -1,11 +1,11 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
-import { Button, ButtonDirective, ButtonIcon, ButtonLabel } from 'primeng/button';
-import { Ripple } from 'primeng/ripple';
+import { ButtonDirective, ButtonIcon } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { DecimalPipe, NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Organization } from '@/core/interfaces/organizations';
 import { DashboardService } from '@/core/services/dashboard.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 interface expandedRows {
     [key: string]: boolean;
@@ -13,7 +13,7 @@ interface expandedRows {
 
 @Component({
     selector: 'app-ges-widget',
-    imports: [ButtonDirective, TableModule, FormsModule, ButtonIcon, NgClass, DecimalPipe],
+    imports: [ButtonDirective, TableModule, FormsModule, ButtonIcon, NgClass, DecimalPipe, TranslateModule],
     templateUrl: './ges.widget.html',
     styleUrl: './ges.widget.scss'
 })
@@ -33,7 +33,7 @@ class GesWidget implements OnInit {
         this.loading = true;
         this.dashboardService.getOrganizationsCascades().subscribe({
             next: (res) => {
-                this.cascades = res.map(cascade => ({
+                this.cascades = res.map((cascade) => ({
                     ...cascade,
                     contacts: this.sortContacts(cascade.contacts)
                 }));

@@ -1,12 +1,14 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { Resolution, ResolutionPayload, ResolutionType, ResolutionStatus } from '../interfaces/resolution';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ResolutionService {
+    private translate = inject(TranslateService);
     private resolutions: Resolution[] = [
         // Президент
         {
@@ -170,14 +172,14 @@ export class ResolutionService {
     }
 
     getTypeLabel(type: ResolutionType): string {
-        const labels: Record<ResolutionType, string> = {
-            president: 'Президент',
-            cabinet: 'Кабинет министров',
-            decree: 'Указ',
-            order: 'Приказ',
-            agreement: 'Совместное соглашение'
+        const keys: Record<ResolutionType, string> = {
+            president: 'MAIL.RESOLUTIONS.TYPE.PRESIDENT',
+            cabinet: 'MAIL.RESOLUTIONS.TYPE.CABINET',
+            decree: 'MAIL.RESOLUTIONS.TYPE.DECREE',
+            order: 'MAIL.RESOLUTIONS.TYPE.ORDER',
+            agreement: 'MAIL.RESOLUTIONS.TYPE.AGREEMENT'
         };
-        return labels[type] || type;
+        return this.translate.instant(keys[type]) || type;
     }
 
     getTypeSeverity(type: ResolutionType): string {
@@ -192,13 +194,13 @@ export class ResolutionService {
     }
 
     getStatusLabel(status: ResolutionStatus): string {
-        const labels: Record<ResolutionStatus, string> = {
-            draft: 'Черновик',
-            active: 'Действующий',
-            cancelled: 'Отменён',
-            expired: 'Истёк'
+        const keys: Record<ResolutionStatus, string> = {
+            draft: 'MAIL.RESOLUTIONS.STATUS.DRAFT',
+            active: 'MAIL.RESOLUTIONS.STATUS.ACTIVE',
+            cancelled: 'MAIL.RESOLUTIONS.STATUS.CANCELLED',
+            expired: 'MAIL.RESOLUTIONS.STATUS.EXPIRED'
         };
-        return labels[status] || status;
+        return this.translate.instant(keys[status]) || status;
     }
 
     getStatusSeverity(status: ResolutionStatus): string {
@@ -212,13 +214,13 @@ export class ResolutionService {
     }
 
     getPageTitle(type: ResolutionType): string {
-        const titles: Record<ResolutionType, string> = {
-            president: 'Постановления Президента',
-            cabinet: 'Постановления Кабинета министров',
-            decree: 'Указы',
-            order: 'Приказы',
-            agreement: 'Совместные соглашения'
+        const keys: Record<ResolutionType, string> = {
+            president: 'MAIL.RESOLUTIONS.TITLE_PRESIDENT',
+            cabinet: 'MAIL.RESOLUTIONS.TITLE_CABINET',
+            decree: 'MAIL.RESOLUTIONS.TITLE_DECREE',
+            order: 'MAIL.RESOLUTIONS.TITLE_ORDER',
+            agreement: 'MAIL.RESOLUTIONS.TITLE_AGREEMENT'
         };
-        return titles[type] || 'Постановления';
+        return this.translate.instant(keys[type]) || this.translate.instant('MAIL.RESOLUTIONS.TITLE');
     }
 }

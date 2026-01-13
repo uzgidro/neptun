@@ -5,11 +5,13 @@ import { MessageService } from 'primeng/api';
 import { GesShutdownComponent } from '@/pages/situation-center/ges/shutdown/ges-shutdown/ges-shutdown.component';
 import { ShutdownDischargeComponent } from '@/pages/situation-center/ges/shutdown/shutdown_discharges/shutdown-discharge.component';
 import { OrganizationService } from '@/core/services/organization.service';
+import { TimeService } from '@/core/services/time.service';
+import { TranslateModule } from '@ngx-translate/core';
 import { DateWidget } from '@/layout/component/widget/date/date.widget';
 
 @Component({
     selector: 'app-shutdown',
-    imports: [TableModule, ReactiveFormsModule, FormsModule, GesShutdownComponent, DateWidget],
+    imports: [TableModule, ReactiveFormsModule, FormsModule, GesShutdownComponent, DateWidget, TranslateModule],
     templateUrl: './shutdown.component.html',
     styleUrl: './shutdown.component.scss'
 })

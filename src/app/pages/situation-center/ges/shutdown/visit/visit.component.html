@@ -1,6 +1,6 @@
 @if (authService.isSc()) {
     <div class="mb-6">
-        <p-button label="Добавить визит" icon="pi pi-plus" (click)="openNew()" />
+        <p-button [label]="'SITUATION_CENTER.VISIT.ADD_VISIT' | translate" icon="pi pi-plus" (click)="openNew()" />
     </div>
 }
 
@@ -16,38 +16,38 @@
     [sortOrder]="-1"
 >
     <ng-template #caption>
-        <div class="text-lg font-bold">Визиты - Посещения</div>
+        <div class="text-lg font-bold">{{ 'SITUATION_CENTER.VISIT.TITLE' | translate }}</div>
     </ng-template>
     <ng-template pTemplate="header">
         <tr>
             <th pSortableColumn="visit_date">
-                Дата визита <p-sortIcon field="visit_date"></p-sortIcon>
+                {{ 'SITUATION_CENTER.VISIT.VISIT_DATE' | translate }} <p-sortIcon field="visit_date"></p-sortIcon>
             </th>
 
             <th pSortableColumn="organization_name">
-                Название объекта <p-sortIcon field="organization_name"></p-sortIcon>
+                {{ 'SITUATION_CENTER.COMMON.OBJECT_NAME' | translate }} <p-sortIcon field="organization_name"></p-sortIcon>
             </th>
 
             <th>
-                Описание
+                {{ 'SITUATION_CENTER.COMMON.DESCRIPTION' | translate }}
             </th>
 
             <th pSortableColumn="responsible_name">
-                Ответственный <p-sortIcon field="responsible_name"></p-sortIcon>
+                {{ 'SITUATION_CENTER.VISIT.RESPONSIBLE' | translate }} <p-sortIcon field="responsible_name"></p-sortIcon>
             </th>
 
             <th pSortableColumn="created_by_user">
-                Создал
+                {{ 'SITUATION_CENTER.COMMON.CREATED_BY' | translate }}
                 <p-sortIcon field="created_by_user"></p-sortIcon>
             </th>
 
             <th style="width: 10%">
-                Файлы
+                {{ 'SITUATION_CENTER.COMMON.FILES' | translate }}
             </th>
 
             @if (authService.isSc()) {
                 <th style="width: 10%">
-                    Действия
+                    {{ 'SITUATION_CENTER.COMMON.ACTIONS' | translate }}
                 </th>
             }
         </tr>
@@ -78,7 +78,7 @@
                         severity="secondary"
                         [text]="true"
                         (click)="showFiles(visit)"
-                        pTooltip="Просмотр файлов"
+                        [pTooltip]="'SITUATION_CENTER.COMMON.VIEW_FILES' | translate"
                     />
                 } @else {
                     <span class="text-color-secondary">—</span>
@@ -92,7 +92,7 @@
                         [text]="true"
                         [rounded]="true"
                         (click)="editVisit(visit)"
-                        pTooltip="Редактировать"
+                        [pTooltip]="'SITUATION_CENTER.COMMON.EDIT' | translate"
                     />
                     <p-button
                         icon="pi pi-trash"
@@ -100,7 +100,7 @@
                         [text]="true"
                         [rounded]="true"
                         (click)="deleteVisit(visit.id)"
-                        pTooltip="Удалить"
+                        [pTooltip]="'SITUATION_CENTER.COMMON.DELETE' | translate"
                     />
                 </td>
             }
@@ -110,7 +110,7 @@
     <ng-template pTemplate="emptymessage">
         <tr>
             <td [attr.colspan]="authService.isSc() ? 7 : 6" class="text-center">
-                Визиты за выбранную дату не найдены.
+                {{ 'SITUATION_CENTER.VISIT.NO_VISITS' | translate }}
             </td>
         </tr>
     </ng-template>
@@ -119,7 +119,7 @@
 
 <app-dialog
     [(visible)]="isFormOpen"
-    [header]="isEditMode ? 'Редактировать Визит' : 'Новый Визит'"
+    [header]="isEditMode ? ('SITUATION_CENTER.VISIT.EDIT_VISIT' | translate) : ('SITUATION_CENTER.VISIT.NEW_VISIT' | translate)"
     [form]="form"
     [submitting]="isLoading"
     (save)="onSubmit()"
@@ -128,33 +128,33 @@
     <form class="p-4" [formGroup]="form" (ngSubmit)="onSubmit()">
 
         <app-select
-            label="Объект"
+            [label]="'SITUATION_CENTER.COMMON.OBJECT' | translate"
             formControlName="organization"
             [items]="organizations"
             [loading]="orgsLoading"
             [submitted]="submitted"
-            errorMessage="Выберите организацию">
+            [errorMessage]="'SITUATION_CENTER.COMMON.SELECT_ORGANIZATION' | translate">
         </app-select>
 
         <app-date-picker
-            label="Дата визита"
+            [label]="'SITUATION_CENTER.VISIT.VISIT_DATE' | translate"
             formControlName="visit_date"
             [submitted]="submitted"
-            errorMessage="Укажите дату">
+            [errorMessage]="'SITUATION_CENTER.COMMON.SPECIFY_DATE' | translate">
         </app-date-picker>
 
         <app-input-text
-            label="Ответственный"
+            [label]="'SITUATION_CENTER.VISIT.RESPONSIBLE' | translate"
             formControlName="responsible_name"
             [submitted]="submitted"
-            errorMessage="Укажите ответственного">
+            [errorMessage]="'SITUATION_CENTER.VISIT.SPECIFY_RESPONSIBLE' | translate">
         </app-input-text>
 
         <app-textarea
-            label="Описание"
+            [label]="'SITUATION_CENTER.COMMON.DESCRIPTION' | translate"
             formControlName="description"
             [submitted]="submitted"
-            errorMessage="Укажите описание">
+            [errorMessage]="'SITUATION_CENTER.VISIT.SPECIFY_DESCRIPTION' | translate">
         </app-textarea>
 
         @if (isEditMode && currentVisit?.files && (currentVisit?.files?.length ?? 0) > 0) {
@@ -165,7 +165,7 @@
         }
 
         <app-file-upload
-            [label]="isEditMode ? 'Добавить новые файлы' : 'Прикрепить файлы'"
+            [label]="isEditMode ? ('SITUATION_CENTER.COMMON.ADD_NEW_FILES' | translate) : ('SITUATION_CENTER.COMMON.ATTACH_FILES' | translate)"
             [files]="selectedFiles"
             (filesChange)="onFileSelect($event)"
             (removeFile)="removeFile($event)">
@@ -177,6 +177,6 @@
 
 <app-file-viewer
     [(visible)]="showFilesDialog"
-    [header]="'Файлы визита'"
+    [header]="'SITUATION_CENTER.VISIT.VISIT_FILES' | translate"
     [files]="selectedVisitForFiles?.files || []">
 </app-file-viewer>

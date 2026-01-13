@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MenuitemComponent } from '../menuitem/menuitem.component';
 import { WeatherWidget } from '@/pages/dashboard/components/weather/weather.widget';
 import { MenuItems } from '@/core/interfaces/menuitems';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-menu',
@@ -13,202 +14,196 @@ import { MenuItems } from '@/core/interfaces/menuitems';
 })
 export class MenuComponent implements OnInit {
     model: MenuItems[] = [];
+    private translate = inject(TranslateService);
 
     ngOnInit() {
+        this.buildMenu();
+        this.translate.onLangChange.subscribe(() => {
+            this.buildMenu();
+        });
+    }
+
+    private t(key: string): string {
+        return this.translate.instant(key);
+    }
+
+    private buildMenu() {
         this.model = [
             {
                 items: [
                     {
-                        label: 'Главная',
+                        label: this.t('MENU.HOME'),
                         routerLink: ['/dashboard']
                     },
                     {
-                        label: 'Кадровый персонал (HRM)',
+                        label: this.t('MENU.HRM'),
                         role: ['admin', 'rais'],
                         items: [
-                            { label: 'Организации', role: ['rais'], routerLink: ['/organizations'] },
-                            { label: 'Дни рождения', role: ['rais'], routerLink: ['/birthdays'] },
-                            { label: 'Потеря личного состава', role: ['rais'], routerLink: ['/personnel-loss'] },
-                            { label: 'Работники', role: ['admin'], routerLink: ['/employees'] },
-                            { label: 'Должности', role: ['admin'], routerLink: ['/positions'] },
-                            { label: 'Отделы', role: ['admin'], routerLink: ['/departments'] },
-                            { label: 'Пользователи', role: ['admin'], routerLink: ['/users'] },
-                            { label: 'Роли', role: ['admin'], routerLink: ['/roles'] }
+                            { label: this.t('MENU.ORGANIZATIONS'), role: ['rais'], routerLink: ['/organizations'] },
+                            { label: this.t('MENU.BIRTHDAYS'), role: ['rais'], routerLink: ['/birthdays'] },
+                            { label: this.t('MENU.PERSONNEL_LOSS'), role: ['rais'], routerLink: ['/personnel-loss'] },
+                            { label: this.t('MENU.EMPLOYEES'), role: ['admin'], routerLink: ['/employees'] },
+                            { label: this.t('MENU.POSITIONS'), role: ['admin'], routerLink: ['/positions'] },
+                            { label: this.t('MENU.DEPARTMENTS'), role: ['admin'], routerLink: ['/departments'] },
+                            { label: this.t('MENU.USERS'), role: ['admin'], routerLink: ['/users'] },
+                            { label: this.t('MENU.ROLES'), role: ['admin'], routerLink: ['/roles'] }
                         ]
                     },
                     {
-                        label: 'Ситуационный центр',
+                        label: this.t('MENU.SITUATION_CENTER'),
                         role: ['rais', 'sc'],
                         items: [
                             {
-                                label: 'Информация о ГЭС',
+                                label: this.t('MENU.GES_INFO'),
                                 role: ['rais', 'sc'],
                                 items: [
                                     {
-                                        label: 'ГЭС',
+                                        label: this.t('MENU.GES'),
                                         role: ['rais', 'sc'],
                                         routerLink: ['/viewer'],
                                         queryParams: { type: 'production' },
                                         routerLinkActiveOptions: { queryParams: 'exact' }
                                     },
                                     {
-                                        label: 'Малые и микро ГЭС',
+                                        label: this.t('MENU.SMALL_GES'),
                                         role: ['rais', 'sc'],
                                         routerLink: ['/viewer'],
                                         queryParams: { type: 'minimicro' },
                                         routerLinkActiveOptions: { queryParams: 'exact' }
                                     },
                                     {
-                                        label: 'Солнечные станции',
+                                        label: this.t('MENU.SUN'),
                                         role: ['rais', 'sc'],
                                         routerLink: ['/viewer'],
                                         queryParams: { type: 'sun' },
                                         routerLinkActiveOptions: { queryParams: 'exact' }
                                     },
                                     {
-                                        label: 'Аварийные отключение',
+                                        label: this.t('MENU.EMERGENCY_SHUTDOWN'),
                                         role: ['rais', 'sc'],
                                         routerLink: ['/shutdowns']
                                     },
                                     {
-                                        label: 'Холостые водосбросы',
+                                        label: this.t('MENU.DISCHARGE'),
                                         role: ['rais', 'sc'],
                                         routerLink: ['/discharges']
                                     }
                                 ]
                             },
                             {
-                                label: 'Информация о водохранилищах',
+                                label: this.t('MENU.RESERVOIR_INFO'),
                                 role: ['rais', 'sc'],
                                 items: [
                                     {
-                                        label: 'Сводка',
+                                        label: this.t('MENU.RESERVOIR_SUMMARY'),
                                         role: ['rais', 'sc'],
                                         routerLink: ['/reservoir-summary']
                                     },
                                     {
-                                        label: 'Сводка PDF',
+                                        label: this.t('MENU.RESERVOIR_SUMMARY_PDF'),
                                         role: ['rais', 'sc'],
                                         routerLink: ['/reservoir-summary/pdf']
                                     },
                                     {
-                                        label: 'Гидротехнические сооружения',
+                                        label: this.t('MENU.HYDRAULIC_STRUCTURES'),
                                         role: ['rais', 'sc'],
                                         routerLink: ['/reservoir-device']
                                     }
                                 ]
                             },
                             {
-                                label: 'Прочая информация',
+                                label: this.t('MENU.OTHER_INFO'),
                                 role: ['rais', 'sc'],
                                 items: [
-                                    // {
-                                    //     label: 'События',
-                                    //     role: ['rais', 'sc']
-                                    // },
                                     {
-                                        label: 'Землетрясение',
+                                        label: this.t('MENU.EARTHQUAKE'),
                                         role: ['rais', 'sc'],
                                         url: 'https://soep.uz/',
                                         target: '_blank'
                                     },
                                     {
-                                        label: 'Инциденты',
+                                        label: this.t('MENU.INCIDENTS'),
                                         role: ['rais', 'sc'],
                                         routerLink: ['/incidents']
                                     },
                                     {
-                                        label: 'Визиты',
+                                        label: this.t('MENU.VISITS'),
                                         role: ['rais', 'sc'],
                                         routerLink: ['/visits']
                                     }
                                 ]
                             },
-                            { label: 'Категории', role: ['sc'], routerLink: ['/categories'] },
-                            { label: 'Файлы', role: ['sc'], routerLink: ['/files'] }
+                            { label: this.t('MENU.CATEGORIES'), role: ['sc'], routerLink: ['/categories'] },
+                            { label: this.t('MENU.FILES'), role: ['sc'], routerLink: ['/files'] }
                         ]
                     },
                     {
-                        label: 'Инвестиционный блок',
+                        label: this.t('MENU.INVESTMENT_BLOCK'),
                         role: ['rais', 'investment'],
                         items: [
-                            { label: 'Проекты в активной фазе', role: ['rais', 'investment'], routerLink: ['/invest-active'] },
+                            { label: this.t('MENU.ACTIVE_PHASE_PROJECTS'), role: ['rais', 'investment'], routerLink: ['/invest-active'] },
                             {
-                                label: 'Перспективные проекты',
+                                label: this.t('MENU.PERSPECTIVE_PROJECTS'),
                                 role: ['rais', 'investment'],
                                 items: [
-                                    { label: 'За счет собственных средств', role: ['rais', 'investment'], routerLink: ['/invest-perspective'], queryParams: { type_id: 1 }, routerLinkActiveOptions: { queryParams: 'exact' } },
-                                    { label: 'За счет частных инвестиций (ГЧП)', role: ['rais', 'investment'], routerLink: ['/invest-perspective'], queryParams: { type_id: 2 }, routerLinkActiveOptions: { queryParams: 'exact' } },
-                                    { label: 'За счет кредитов под государственной гарантией', role: ['rais', 'investment'], routerLink: ['/invest-perspective'], queryParams: { type_id: 3 }, routerLinkActiveOptions: { queryParams: 'exact' } }
+                                    { label: this.t('MENU.OWN_FUNDS'), role: ['rais', 'investment'], routerLink: ['/invest-perspective'], queryParams: { type_id: 1 }, routerLinkActiveOptions: { queryParams: 'exact' } },
+                                    { label: this.t('MENU.PRIVATE_INVESTMENTS'), role: ['rais', 'investment'], routerLink: ['/invest-perspective'], queryParams: { type_id: 2 }, routerLinkActiveOptions: { queryParams: 'exact' } },
+                                    { label: this.t('MENU.STATE_GUARANTEE_CREDITS'), role: ['rais', 'investment'], routerLink: ['/invest-perspective'], queryParams: { type_id: 3 }, routerLinkActiveOptions: { queryParams: 'exact' } }
                                 ]
                             }
                         ]
                     },
                     {
-                        label: 'Финансовый блок',
+                        label: this.t('MENU.FINANCIAL'),
                         role: ['rais'],
                         items: [
-                            { label: 'Общий дашборд', role: ['rais'], routerLink: ['/financial-dashboard'] },
-                            { label: 'Дебит / кредит', role: ['rais'], routerLink: ['/debit-credit'] },
-                            { label: 'Затраты на ремонт', role: ['rais'], routerLink: ['/repair-costs'] },
-                            { label: 'Закупки', role: ['rais'], routerLink: ['/procurement'] },
-                            { label: 'KPI', role: ['rais'], routerLink: ['/kpi'] },
-                            { label: 'Заработная плата', role: ['rais'], routerLink: ['/salary'] }
+                            { label: this.t('MENU.GENERAL_DASHBOARD'), role: ['rais'], routerLink: ['/financial-dashboard'] },
+                            { label: this.t('MENU.DEBIT_CREDIT'), role: ['rais'], routerLink: ['/debit-credit'] },
+                            { label: this.t('MENU.REPAIR_COSTS'), role: ['rais'], routerLink: ['/repair-costs'] },
+                            { label: this.t('MENU.PROCUREMENT'), role: ['rais'], routerLink: ['/procurement'] },
+                            { label: this.t('MENU.KPI'), role: ['rais'], routerLink: ['/kpi'] },
+                            { label: this.t('MENU.SALARY'), role: ['rais'], routerLink: ['/salary'] }
                         ]
                     },
                     {
-                        label: 'Планирование',
+                        label: this.t('MENU.PLANNING'),
                         role: ['rais', 'assistant', 'sc'],
                         items: [
                             // { label: 'Встречи', role: ['rais'], routerLink: ['/planning'], queryParams: { type: 'meeting' }, routerLinkActiveOptions: { queryParams: 'exact' } },
                             // { label: 'Созвоны', role: ['rais'], routerLink: ['/planning'], queryParams: { type: 'call' }, routerLinkActiveOptions: { queryParams: 'exact' } },
                             // { label: 'Переговоры', role: ['rais'], routerLink: ['/planning'], queryParams: { type: 'negotiation' }, routerLinkActiveOptions: { queryParams: 'exact' } },
                             // { label: 'ВКС', role: ['rais'], routerLink: ['/planning'], queryParams: { type: 'vcs' }, routerLinkActiveOptions: { queryParams: 'exact' } },
-                            { label: 'События', role: ['rais', 'assistant'], routerLink: ['/planning/events'] },
-                            { label: 'Приемная Председателя Правления', role: ['rais', 'assistant', 'sc'], routerLink: ['/planning/reception'] }
+                            { label: this.t('MENU.PLANNING_EVENTS'), role: ['rais', 'assistant'], routerLink: ['/planning/events'] },
+                            { label: this.t('MENU.CHAIRMAN_RECEPTION'), role: ['rais', 'assistant', 'sc'], routerLink: ['/planning/reception'] }
                         ]
                     },
                     {
-                        label: 'Канцелярия',
+                        label: this.t('MENU.CHANCELLERY'),
                         role: ['rais'],
                         items: [
-                            { label: 'Приказы', role: ['rais'], routerLink: ['/mail/orders'] },
-                            { label: 'Рапорты', role: ['rais'], routerLink: ['/mail/reports'] },
-                            { label: 'Письма', role: ['rais'], routerLink: ['/mail/letters'] },
-                            { label: 'Инструкции', role: ['rais'], routerLink: ['/mail/instructions'] },
+                            { label: this.t('MENU.CHANCELLERY_ORDERS'), role: ['rais'], routerLink: ['/mail/orders'] },
+                            { label: this.t('MENU.CHANCELLERY_REPORTS'), role: ['rais'], routerLink: ['/mail/reports'] },
+                            { label: this.t('MENU.CHANCELLERY_LETTERS'), role: ['rais'], routerLink: ['/mail/letters'] },
+                            { label: this.t('MENU.CHANCELLERY_INSTRUCTIONS'), role: ['rais'], routerLink: ['/mail/instructions'] },
                             {
-                                label: 'Нормативно правовая документация',
+                                label: this.t('MENU.REGULATORY_DOCS'),
                                 role: ['rais'],
                                 items: [
-                                    { label: 'Законы Республики Узбекистан', role: ['rais'] },
-                                    { label: 'Постановления Президента Республики Узбекистан', role: ['rais'], routerLink: ['/mail/resolutions'], queryParams: { type: 'president' }, routerLinkActiveOptions: { queryParams: 'exact' } },
-                                    { label: 'Указы Президента Республики Узбекистан', role: ['rais'], routerLink: ['/mail/resolutions'], queryParams: { type: 'decree' }, routerLinkActiveOptions: { queryParams: 'exact' } },
-                                    { label: 'Постановления Кабинета министров', role: ['rais'], routerLink: ['/mail/resolutions'], queryParams: { type: 'cabinet' }, routerLinkActiveOptions: { queryParams: 'exact' } },
-                                    { label: 'Приказы министерств и ведомств', role: ['rais'], routerLink: ['/mail/resolutions'], queryParams: { type: 'order' }, routerLinkActiveOptions: { queryParams: 'exact' } },
-                                    { label: 'Совместные соглашения(NDA)', role: ['rais'], routerLink: ['/mail/resolutions'], queryParams: { type: 'agreement' }, routerLinkActiveOptions: { queryParams: 'exact' } },
-                                    { label: 'Иные документы', role: ['rais'] }
+                                    { label: this.t('MENU.LAWS_RUZ'), role: ['rais'] },
+                                    { label: this.t('MENU.PRESIDENT_RESOLUTIONS'), role: ['rais'], routerLink: ['/mail/resolutions'], queryParams: { type: 'president' }, routerLinkActiveOptions: { queryParams: 'exact' } },
+                                    { label: this.t('MENU.PRESIDENT_DECREES'), role: ['rais'], routerLink: ['/mail/resolutions'], queryParams: { type: 'decree' }, routerLinkActiveOptions: { queryParams: 'exact' } },
+                                    { label: this.t('MENU.CABINET_RESOLUTIONS'), role: ['rais'], routerLink: ['/mail/resolutions'], queryParams: { type: 'cabinet' }, routerLinkActiveOptions: { queryParams: 'exact' } },
+                                    { label: this.t('MENU.MINISTRY_ORDERS'), role: ['rais'], routerLink: ['/mail/resolutions'], queryParams: { type: 'order' }, routerLinkActiveOptions: { queryParams: 'exact' } },
+                                    { label: this.t('MENU.JOINT_AGREEMENTS'), role: ['rais'], routerLink: ['/mail/resolutions'], queryParams: { type: 'agreement' }, routerLinkActiveOptions: { queryParams: 'exact' } },
+                                    { label: this.t('MENU.OTHER_DOCS'), role: ['rais'] }
                                 ]
                             }
                         ]
                     },
-                    { label: 'Звонки', role: ['rais'], routerLink: ['/calls'] },
-                    { label: 'Пресс-служба', role: ['rais'], routerLink: ['/media/news'] }
+                    { label: this.t('MENU.CALLS'), role: ['rais'], routerLink: ['/calls'] },
+                    { label: this.t('MENU.PRESS_SERVICE'), role: ['rais'], routerLink: ['/media/news'] }
                 ]
             }
         ];
-
-        // this.investmentService.getTypes().subscribe((types) => {
-        //     const investBlock = this.model[0].items?.find((item) => item.label === 'Инвестиционный блок');
-        //     if (investBlock && investBlock.items) {
-        //         const dynamicItems = types.map((t) => ({
-        //             label: t.name,
-        //             role: ['rais', 'investment'],
-        //             routerLink: ['/invest-perspective'],
-        //             queryParams: { type_id: t.id },
-        //             routerLinkActiveOptions: { queryParams: 'exact' }
-        //         }));
-        //         investBlock.items = [...investBlock.items, ...dynamicItems];
-        //     }
-        // });
     }
 }

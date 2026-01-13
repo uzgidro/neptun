@@ -14,6 +14,7 @@ import { DischargeService } from '@/core/services/discharge.service';
 import { ExportService } from '@/core/services/export.service';
 import { DatePicker } from 'primeng/datepicker';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 interface expandedRows {
     [key: string]: boolean;
@@ -37,7 +38,8 @@ interface expandedRows {
         DeleteConfirmationComponent,
         ApproveConfirmationComponent,
         NgClass,
-        DatePicker
+        DatePicker,
+        TranslateModule
     ],
     templateUrl: './discharge.component.html',
     styleUrl: './discharge.component.scss'
@@ -61,6 +63,7 @@ export class DischargeComponent implements OnInit {
     private exportService = inject(ExportService);
     private router: Router = inject(Router);
     private route: ActivatedRoute = inject(ActivatedRoute);
+    private translate = inject(TranslateService);
 
     isExpanded = false;
 
@@ -76,7 +79,7 @@ export class DischargeComponent implements OnInit {
                 this.loading = false;
             },
             error: (err) => {
-                console.error('Ошибка загрузки данных:', err);
+                console.error('Error loading data:', err);
                 this.loading = false;
             }
         });
@@ -105,25 +108,30 @@ export class DischargeComponent implements OnInit {
 
     exportExcel() {
         const flatData = this.flattenDataForExport(this.dischargeByCascades);
-        this.exportService.exportToExcel(flatData, 'Холостой водосброс');
+        this.exportService.exportToExcel(flatData, this.translate.instant('SITUATION_CENTER.DISCHARGE.TITLE'));
     }
 
     private flattenDataForExport(cascades: Cascade[]): any[] {
         const flatData: any[] = [];
+        const t = this.translate;
         cascades.forEach((cascade) => {
             cascade.hpps.forEach((hpp) => {
                 hpp.discharges.forEach((discharge) => {
                     flatData.push({
-                        Каскад: cascade.name,
-                        ГЭС: hpp.name,
-                        Начало: discharge.started_at,
-                        Конец: discharge.ended_at,
-                        'Поток, м³/с': discharge.flow_rate,
-                        'Объём, млн. м³': discharge.total_volume,
-                        Причина: discharge.reason,
-                        Создал: discharge.created_by?.name,
-                        Подтвердил: discharge.approved === true ? 'Да' : discharge.approved === false ? 'Нет' : 'Ожидает',
-                        'Кто подтвердил': discharge.updated_by?.name
+                        [t.instant('SITUATION_CENTER.DISCHARGE.CASCADE_NAME')]: cascade.name,
+                        [t.instant('SITUATION_CENTER.DISCHARGE.GES_NAME')]: hpp.name,
+                        [t.instant('SITUATION_CENTER.COMMON.START')]: discharge.started_at,
+                        [t.instant('SITUATION_CENTER.COMMON.END')]: discharge.ended_at,
+                        [t.instant('SITUATION_CENTER.DISCHARGE.FLOW_RATE')]: discharge.flow_rate,
+                        [t.instant('SITUATION_CENTER.DISCHARGE.VOLUME')]: discharge.total_volume,
+                        [t.instant('SITUATION_CENTER.COMMON.REASON')]: discharge.reason,
+                        [t.instant('SITUATION_CENTER.COMMON.CREATED_BY')]: discharge.created_by?.name,
+                        [t.instant('SITUATION_CENTER.DISCHARGE.CONFIRMED_BY')]: discharge.approved === true
+                            ? t.instant('COMMON.YES')
+                            : discharge.approved === false
+                                ? t.instant('COMMON.NO')
+                                : t.instant('SITUATION_CENTER.COMMON.PENDING'),
+                        [t.instant('SITUATION_CENTER.DISCHARGE.CONFIRMED_BY') + ' (' + t.instant('COMMON.NAME') + ')']: discharge.updated_by?.name
                     });
                 });
             });
@@ -132,8 +140,8 @@ export class DischargeComponent implements OnInit {
     }
 
     openDelete(id: number): void {
-        this.selectedId = id; // Сохраняем ID
-        this.showDeleteDialog = true; // Открываем диалог
+        this.selectedId = id;
+        this.showDeleteDialog = true;
     }
 
     openApprove(id: number): void {

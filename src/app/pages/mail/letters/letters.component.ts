@@ -19,6 +19,7 @@ import { SelectComponent } from '@/layout/component/dialog/select/select.compone
 import { TextareaComponent } from '@/layout/component/dialog/textarea/textarea.component';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
 import { DeleteConfirmationComponent } from '@/layout/component/dialog/delete-confirmation/delete-confirmation.component';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-letters',
@@ -42,7 +43,8 @@ import { DeleteConfirmationComponent } from '@/layout/component/dialog/delete-co
         SelectComponent,
         TextareaComponent,
         DatePickerComponent,
-        DeleteConfirmationComponent
+        DeleteConfirmationComponent,
+        TranslateModule
     ],
     templateUrl: './letters.component.html',
     styleUrl: './letters.component.scss'
@@ -62,36 +64,44 @@ export class LettersComponent implements OnInit, OnDestroy {
     selectedType: LetterType | null = null;
     selectedStatus: LetterStatus | null = null;
 
-    typeOptions = [
-        { name: 'Все типы', value: null },
-        { name: 'Входящее', value: 'incoming' },
-        { name: 'Исходящее', value: 'outgoing' }
-    ];
-
-    typeFormOptions = [
-        { name: 'Входящее', value: 'incoming' },
-        { name: 'Исходящее', value: 'outgoing' }
-    ];
-
-    statusOptions = [
-        { name: 'Все статусы', value: null },
-        { name: 'Черновик', value: 'draft' },
-        { name: 'Отправлено', value: 'sent' },
-        { name: 'Получено', value: 'received' },
-        { name: 'Прочитано', value: 'read' }
-    ];
-
-    statusFormOptions = [
-        { name: 'Черновик', value: 'draft' },
-        { name: 'Отправлено', value: 'sent' },
-        { name: 'Получено', value: 'received' },
-        { name: 'Прочитано', value: 'read' }
-    ];
+    typeOptions: { name: string; value: string | null }[] = [];
+    typeFormOptions: { name: string; value: string }[] = [];
+    statusOptions: { name: string; value: string | null }[] = [];
+    statusFormOptions: { name: string; value: string }[] = [];
 
     private letterService = inject(LetterService);
     private messageService = inject(MessageService);
     private fb = inject(FormBuilder);
+    private translate = inject(TranslateService);
     private destroy$ = new Subject<void>();
+
+    private initOptions(): void {
+        this.typeOptions = [
+            { name: this.translate.instant('MAIL.COMMON.ALL_TYPES'), value: null },
+            { name: this.translate.instant('MAIL.LETTERS.TYPE.INCOMING'), value: 'incoming' },
+            { name: this.translate.instant('MAIL.LETTERS.TYPE.OUTGOING'), value: 'outgoing' }
+        ];
+
+        this.typeFormOptions = [
+            { name: this.translate.instant('MAIL.LETTERS.TYPE.INCOMING'), value: 'incoming' },
+            { name: this.translate.instant('MAIL.LETTERS.TYPE.OUTGOING'), value: 'outgoing' }
+        ];
+
+        this.statusOptions = [
+            { name: this.translate.instant('MAIL.COMMON.ALL_STATUSES'), value: null },
+            { name: this.translate.instant('MAIL.LETTERS.STATUS.DRAFT'), value: 'draft' },
+            { name: this.translate.instant('MAIL.LETTERS.STATUS.SENT'), value: 'sent' },
+            { name: this.translate.instant('MAIL.LETTERS.STATUS.RECEIVED'), value: 'received' },
+            { name: this.translate.instant('MAIL.LETTERS.STATUS.READ'), value: 'read' }
+        ];
+
+        this.statusFormOptions = [
+            { name: this.translate.instant('MAIL.LETTERS.STATUS.DRAFT'), value: 'draft' },
+            { name: this.translate.instant('MAIL.LETTERS.STATUS.SENT'), value: 'sent' },
+            { name: this.translate.instant('MAIL.LETTERS.STATUS.RECEIVED'), value: 'received' },
+            { name: this.translate.instant('MAIL.LETTERS.STATUS.READ'), value: 'read' }
+        ];
+    }
 
     constructor() {
         this.letterForm = this.fb.group({
@@ -107,7 +117,12 @@ export class LettersComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.initOptions();
         this.loadLetters();
+
+        this.translate.onLangChange.pipe(takeUntil(this.destroy$)).subscribe(() => {
+            this.initOptions();
+        });
     }
 
     private loadLetters() {
@@ -205,12 +220,20 @@ export class LettersComponent implements OnInit, OnDestroy {
                 .pipe(takeUntil(this.destroy$))
                 .subscribe({
                     next: () => {
-                        this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Письмо обновлено' });
+                        this.messageService.add({
+                            severity: 'success',
+                            summary: this.translate.instant('MAIL.COMMON.SUCCESS'),
+                            detail: this.translate.instant('MAIL.LETTERS.UPDATED')
+                        });
                         this.loadLetters();
                         this.closeDialog();
                     },
                     error: () => {
-                        this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось обновить письмо' });
+                        this.messageService.add({
+                            severity: 'error',
+                            summary: this.translate.instant('MAIL.COMMON.ERROR'),
+                            detail: this.translate.instant('MAIL.LETTERS.UPDATE_ERROR')
+                        });
                     }
                 });
         } else {
@@ -219,12 +242,20 @@ export class LettersComponent implements OnInit, OnDestroy {
                 .pipe(takeUntil(this.destroy$))
                 .subscribe({
                     next: () => {
-                        this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Письмо создано' });
+                        this.messageService.add({
+                            severity: 'success',
+                            summary: this.translate.instant('MAIL.COMMON.SUCCESS'),
+                            detail: this.translate.instant('MAIL.LETTERS.CREATED')
+                        });
                         this.loadLetters();
                         this.closeDialog();
                     },
                     error: () => {
-                        this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось создать письмо' });
+                        this.messageService.add({
+                            severity: 'error',
+                            summary: this.translate.instant('MAIL.COMMON.ERROR'),
+                            detail: this.translate.instant('MAIL.LETTERS.CREATE_ERROR')
+                        });
                     }
                 });
         }
@@ -235,6 +266,11 @@ export class LettersComponent implements OnInit, OnDestroy {
         this.displayDeleteDialog = true;
     }
 
+    get deleteConfirmMessage(): string {
+        return this.translate.instant('MAIL.COMMON.DELETE_CONFIRM') + ' ' +
+               (this.selectedLetter?.number || '') + '?';
+    }
+
     confirmDelete() {
         if (!this.selectedLetter) return;
 
@@ -243,13 +279,21 @@ export class LettersComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
-                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Письмо удалено' });
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: this.translate.instant('MAIL.COMMON.SUCCESS'),
+                        detail: this.translate.instant('MAIL.LETTERS.DELETED')
+                    });
                     this.loadLetters();
                     this.displayDeleteDialog = false;
                     this.selectedLetter = null;
                 },
                 error: () => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось удалить письмо' });
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: this.translate.instant('MAIL.COMMON.ERROR'),
+                        detail: this.translate.instant('MAIL.LETTERS.DELETE_ERROR')
+                    });
                 }
             });
     }

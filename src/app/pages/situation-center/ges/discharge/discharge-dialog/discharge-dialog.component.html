@@ -1,6 +1,6 @@
 <p-dialog
     [(visible)]="display"
-    [header]="isEditMode ? 'Редактировать водосброс' : 'Добавить водосброс'"
+    [header]="isEditMode ? ('SITUATION_CENTER.DISCHARGE.EDIT_DISCHARGE' | translate) : ('SITUATION_CENTER.DISCHARGE.ADD_DISCHARGE' | translate)"
     [modal]="true"
     styleClass="p-fluid"
     [breakpoints]="{ '960px': '75vw' }"
@@ -32,10 +32,10 @@
                             </div>
                         </ng-template>
                     </p-select>
-                    <label for="organization">Организация</label>
+                    <label for="organization">{{ 'SITUATION_CENTER.DISCHARGE.ORGANIZATION' | translate }}</label>
                 </p-floatlabel>
                 @if (submitted && waterDischargeForm.controls['organization'].errors) {
-                    <p-message severity="error">Организация обязательна</p-message>
+                    <p-message severity="error">{{ 'SITUATION_CENTER.DISCHARGE.ORGANIZATION_REQUIRED' | translate }}</p-message>
                 }
             </div>
 
@@ -53,11 +53,11 @@
                                        [showTime]="true"
                                        [hourFormat]="'24'"
                                        [maxDate]="maxDate" />
-                        <label for="started_at">Начало сброса</label>
+                        <label for="started_at">{{ 'SITUATION_CENTER.DISCHARGE.DISCHARGE_START' | translate }}</label>
                     </p-floatlabel>
 
                     @if (submitted && waterDischargeForm.controls['started_at'].errors?.['required']) {
-                        <p-message severity="error" variant="simple" size="small">Укажите начало сброса.</p-message>
+                        <p-message severity="error" variant="simple" size="small">{{ 'SITUATION_CENTER.DISCHARGE.SPECIFY_START' | translate }}</p-message>
                     }
                 </div>
 
@@ -72,13 +72,13 @@
                                        [showTime]="true"
                                        [hourFormat]="'24'"
                                        [maxDate]="maxDate" />
-                        <label for="ended_at">Конец сброса</label>
+                        <label for="ended_at">{{ 'SITUATION_CENTER.DISCHARGE.DISCHARGE_END' | translate }}</label>
                     </p-floatlabel>
                 </div>
             </div>
             @if (waterDischargeForm.errors?.['dateRange'] && (submitted || waterDischargeForm.controls['ended_at'].dirty)) {
                 <p-message severity="error" variant="simple" size="small" class="block -mt-2 mb-3">
-                    Конечная дата не может быть раньше начальной
+                    {{ 'SITUATION_CENTER.DISCHARGE.END_BEFORE_START' | translate }}
                 </p-message>
             }
 
@@ -87,14 +87,14 @@
                                 inputId="flow_rate"
                                 [invalid]="submitted && waterDischargeForm.controls['flow_rate'].invalid"
                                 formControlName="flow_rate" />
-                <label for="flow_rate">Расход, м³/с</label>
+                <label for="flow_rate">{{ 'SITUATION_CENTER.DISCHARGE.FLOW' | translate }}</label>
             </p-floatlabel>
 
             @if (submitted && waterDischargeForm.controls['flow_rate'].errors?.['required']) {
-                <p-message severity="error" variant="simple" size="small">Укажите поток.</p-message>
+                <p-message severity="error" variant="simple" size="small">{{ 'SITUATION_CENTER.DISCHARGE.SPECIFY_FLOW' | translate }}</p-message>
             }
             @if (submitted && waterDischargeForm.controls['flow_rate'].errors?.['min']) {
-                <p-message severity="error" variant="simple" size="small">Поток не может быть отрицательным.</p-message>
+                <p-message severity="error" variant="simple" size="small">{{ 'SITUATION_CENTER.DISCHARGE.FLOW_NEGATIVE' | translate }}</p-message>
             }
 
             <p-floatlabel class="w-full my-4" variant="on">
@@ -104,14 +104,14 @@
                   class="w-full"
                   [autoResize]="true"
                   rows="3"></textarea>
-                <label for="reason">Причина (обоснование)</label>
+                <label for="reason">{{ 'SITUATION_CENTER.DISCHARGE.REASON_LABEL' | translate }}</label>
             </p-floatlabel>
         </form>
     </ng-template>
 
     <ng-template pTemplate="footer">
-        <p-button label="Отмена" (click)="closeDialog()" styleClass="p-button-text" />
-        <p-button label="Сохранить" type="submit" (click)="onSubmit()" />
+        <p-button [label]="'COMMON.CANCEL' | translate" (click)="closeDialog()" styleClass="p-button-text" />
+        <p-button [label]="'COMMON.SAVE' | translate" type="submit" (click)="onSubmit()" />
     </ng-template>
 </p-dialog>
 

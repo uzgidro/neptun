@@ -1,6 +1,6 @@
 @if (authService.isSc()) {
     <div class="mb-6">
-        <p-button label="Добавить аварийное отключение" icon="pi pi-plus" (click)="openNew()" />
+        <p-button [label]="'SITUATION_CENTER.SHUTDOWN.ADD_EMERGENCY_SHUTDOWN' | translate" icon="pi pi-plus" (click)="openNew()" />
     </div>
 }
 
@@ -17,50 +17,50 @@
     [sortOrder]="-1"
 >
     <ng-template #caption>
-        <div class="text-lg font-bold">ГЭСы - Аварийные отключения</div>
+        <div class="text-lg font-bold">{{ 'SITUATION_CENTER.SHUTDOWN.GES_EMERGENCY_TITLE' | translate }}</div>
     </ng-template>
     <ng-template pTemplate="header">
         <tr>
             <th pSortableColumn="organization_name">
-                Название ГЭС
+                {{ 'SITUATION_CENTER.SHUTDOWN.GES_NAME' | translate }}
                 <p-sortIcon field="organization_name"></p-sortIcon>
             </th>
 
             <th pSortableColumn="started_at">
-                Начало
+                {{ 'SITUATION_CENTER.SHUTDOWN.START' | translate }}
                 <p-sortIcon field="started_at"></p-sortIcon>
             </th>
 
             <th pSortableColumn="ended_at">
-                Конец
+                {{ 'SITUATION_CENTER.SHUTDOWN.END' | translate }}
                 <p-sortIcon field="ended_at"></p-sortIcon>
             </th>
 
             <th pSortableColumn="reason">
-                Причина
+                {{ 'SITUATION_CENTER.SHUTDOWN.REASON' | translate }}
                 <p-sortIcon field="reason"></p-sortIcon>
             </th>
 
             <th pSortableColumn="generation_loss">
-                Потеряно мощности, к.Вт*ч
+                {{ 'SITUATION_CENTER.SHUTDOWN.POWER_LOSS' | translate }}
                 <p-sortIcon field="generation_loss"></p-sortIcon>
             </th>
             <th pSortableColumn="idle_discharge_voleme">
-                Холостой сброс, тыс. м³
+                {{ 'SITUATION_CENTER.SHUTDOWN.IDLE_DISCHARGE' | translate }}
                 <p-sortIcon field="idle_discharge_voleme"></p-sortIcon>
             </th>
 
             <th pSortableColumn="created_by.name">
-                Создал
+                {{ 'SITUATION_CENTER.COMMON.CREATED_BY' | translate }}
                 <p-sortIcon field="created_by.name"></p-sortIcon>
             </th>
 
             <th style="width: 10%">
-                Файлы
+                {{ 'SITUATION_CENTER.COMMON.FILES' | translate }}
             </th>
 
             @if (authService.isSc()) {
-                <th style="width: 10%">Действия</th>
+                <th style="width: 10%">{{ 'SITUATION_CENTER.COMMON.ACTIONS' | translate }}</th>
             }
         </tr>
     </ng-template>
@@ -96,7 +96,7 @@
                         severity="secondary"
                         [text]="true"
                         (click)="showFiles(shutdown)"
-                        pTooltip="Просмотр файлов"
+                        [pTooltip]="'SITUATION_CENTER.COMMON.VIEW_FILES' | translate"
                     />
                 } @else {
                     <span class="text-color-secondary">—</span>
@@ -110,7 +110,7 @@
                         [text]="true"
                         [rounded]="true"
                         (click)="editShutdown(shutdown)"
-                        pTooltip="Редактировать"
+                        [pTooltip]="'SITUATION_CENTER.COMMON.EDIT' | translate"
                     />
                     <p-button
                         icon="pi pi-trash"
@@ -118,7 +118,7 @@
                         [text]="true"
                         [rounded]="true"
                         (click)="deleteShutdown(shutdown.id)"
-                        pTooltip="Удалить"
+                        [pTooltip]="'SITUATION_CENTER.COMMON.DELETE' | translate"
                     />
                 </td>
             }
@@ -128,7 +128,7 @@
     <ng-template pTemplate="emptymessage">
         <tr>
             <td [attr.colspan]="authService.isSc() ? 9 : 8" class="text-center">
-                Аварийные отключения за выбранную дату не найдены.
+                {{ 'SITUATION_CENTER.SHUTDOWN.NO_EMERGENCY_SHUTDOWNS' | translate }}
             </td>
         </tr>
     </ng-template>
@@ -149,50 +149,50 @@
     [sortOrder]="-1"
 >
     <ng-template #caption>
-        <div class="text-lg font-bold">Микро ГЭСы - Аварийные отключения</div>
+        <div class="text-lg font-bold">{{ 'SITUATION_CENTER.SHUTDOWN.MICRO_GES_EMERGENCY_TITLE' | translate }}</div>
     </ng-template>
     <ng-template pTemplate="header">
         <tr>
             <th pSortableColumn="organization_name">
-                Название ГЭС
+                {{ 'SITUATION_CENTER.SHUTDOWN.GES_NAME' | translate }}
                 <p-sortIcon field="organization_name"></p-sortIcon>
             </th>
 
             <th pSortableColumn="started_at">
-                Начало
+                {{ 'SITUATION_CENTER.SHUTDOWN.START' | translate }}
                 <p-sortIcon field="started_at"></p-sortIcon>
             </th>
 
             <th pSortableColumn="ended_at">
-                Конец
+                {{ 'SITUATION_CENTER.SHUTDOWN.END' | translate }}
                 <p-sortIcon field="ended_at"></p-sortIcon>
             </th>
 
             <th pSortableColumn="reason">
-                Причина
+                {{ 'SITUATION_CENTER.SHUTDOWN.REASON' | translate }}
                 <p-sortIcon field="reason"></p-sortIcon>
             </th>
 
             <th pSortableColumn="generation_loss">
-                Потеряно мощности, к.Вт*ч
+                {{ 'SITUATION_CENTER.SHUTDOWN.POWER_LOSS' | translate }}
                 <p-sortIcon field="generation_loss"></p-sortIcon>
             </th>
             <th pSortableColumn="idle_discharge_voleme">
-                Холостой сброс, тыс. м³
+                {{ 'SITUATION_CENTER.SHUTDOWN.IDLE_DISCHARGE' | translate }}
                 <p-sortIcon field="idle_discharge_voleme"></p-sortIcon>
             </th>
 
             <th pSortableColumn="created_by.name">
-                Создал
+                {{ 'SITUATION_CENTER.COMMON.CREATED_BY' | translate }}
                 <p-sortIcon field="created_by.name"></p-sortIcon>
             </th>
 
             <th style="width: 10%">
-                Файлы
+                {{ 'SITUATION_CENTER.COMMON.FILES' | translate }}
             </th>
 
             @if (authService.isSc()) {
-                <th style="width: 10%">Действия</th>
+                <th style="width: 10%">{{ 'SITUATION_CENTER.COMMON.ACTIONS' | translate }}</th>
             }
         </tr>
     </ng-template>
@@ -228,7 +228,7 @@
                         severity="secondary"
                         [text]="true"
                         (click)="showFiles(shutdown)"
-                        pTooltip="Просмотр файлов"
+                        [pTooltip]="'SITUATION_CENTER.COMMON.VIEW_FILES' | translate"
                     />
                 } @else {
                     <span class="text-color-secondary">—</span>
@@ -242,7 +242,7 @@
                         [text]="true"
                         [rounded]="true"
                         (click)="editShutdown(shutdown)"
-                        pTooltip="Редактировать"
+                        [pTooltip]="'SITUATION_CENTER.COMMON.EDIT' | translate"
                     />
                     <p-button
                         icon="pi pi-trash"
@@ -250,7 +250,7 @@
                         [text]="true"
                         [rounded]="true"
                         (click)="deleteShutdown(shutdown.id)"
-                        pTooltip="Удалить"
+                        [pTooltip]="'SITUATION_CENTER.COMMON.DELETE' | translate"
                     />
                 </td>
             }
@@ -260,7 +260,7 @@
     <ng-template pTemplate="emptymessage">
         <tr>
             <td [attr.colspan]="authService.isSc() ? 9 : 8" class="text-center">
-                Аварийные отключения за выбранную дату не найдены.
+                {{ 'SITUATION_CENTER.SHUTDOWN.NO_EMERGENCY_SHUTDOWNS' | translate }}
             </td>
         </tr>
     </ng-template>
@@ -281,50 +281,50 @@
     [sortOrder]="-1"
 >
     <ng-template #caption>
-        <div class="text-lg font-bold">Мини ГЭСы - Аварийные отключения</div>
+        <div class="text-lg font-bold">{{ 'SITUATION_CENTER.SHUTDOWN.MINI_GES_EMERGENCY_TITLE' | translate }}</div>
     </ng-template>
     <ng-template pTemplate="header">
         <tr>
             <th pSortableColumn="organization_name">
-                Название ГЭС
+                {{ 'SITUATION_CENTER.SHUTDOWN.GES_NAME' | translate }}
                 <p-sortIcon field="organization_name"></p-sortIcon>
             </th>
 
             <th pSortableColumn="started_at">
-                Начало
+                {{ 'SITUATION_CENTER.SHUTDOWN.START' | translate }}
                 <p-sortIcon field="started_at"></p-sortIcon>
             </th>
 
             <th pSortableColumn="ended_at">
-                Конец
+                {{ 'SITUATION_CENTER.SHUTDOWN.END' | translate }}
                 <p-sortIcon field="ended_at"></p-sortIcon>
             </th>
 
             <th pSortableColumn="reason">
-                Причина
+                {{ 'SITUATION_CENTER.SHUTDOWN.REASON' | translate }}
                 <p-sortIcon field="reason"></p-sortIcon>
             </th>
 
             <th pSortableColumn="generation_loss">
-                Потеряно мощности, к.Вт*ч
+                {{ 'SITUATION_CENTER.SHUTDOWN.POWER_LOSS' | translate }}
                 <p-sortIcon field="generation_loss"></p-sortIcon>
             </th>
             <th pSortableColumn="idle_discharge_voleme">
-                Холостой сброс, тыс. м³
+                {{ 'SITUATION_CENTER.SHUTDOWN.IDLE_DISCHARGE' | translate }}
                 <p-sortIcon field="idle_discharge_voleme"></p-sortIcon>
             </th>
 
             <th pSortableColumn="created_by.name">
-                Создал
+                {{ 'SITUATION_CENTER.COMMON.CREATED_BY' | translate }}
                 <p-sortIcon field="created_by.name"></p-sortIcon>
             </th>
 
             <th style="width: 10%">
-                Файлы
+                {{ 'SITUATION_CENTER.COMMON.FILES' | translate }}
             </th>
 
             @if (authService.isSc()) {
-                <th style="width: 10%">Действия</th>
+                <th style="width: 10%">{{ 'SITUATION_CENTER.COMMON.ACTIONS' | translate }}</th>
             }
         </tr>
     </ng-template>
@@ -360,7 +360,7 @@
                         severity="secondary"
                         [text]="true"
                         (click)="showFiles(shutdown)"
-                        pTooltip="Просмотр файлов"
+                        [pTooltip]="'SITUATION_CENTER.COMMON.VIEW_FILES' | translate"
                     />
                 } @else {
                     <span class="text-color-secondary">—</span>
@@ -374,7 +374,7 @@
                         [text]="true"
                         [rounded]="true"
                         (click)="editShutdown(shutdown)"
-                        pTooltip="Редактировать"
+                        [pTooltip]="'SITUATION_CENTER.COMMON.EDIT' | translate"
                     />
                     <p-button
                         icon="pi pi-trash"
@@ -382,7 +382,7 @@
                         [text]="true"
                         [rounded]="true"
                         (click)="deleteShutdown(shutdown.id)"
-                        pTooltip="Удалить"
+                        [pTooltip]="'SITUATION_CENTER.COMMON.DELETE' | translate"
                     />
                 </td>
             }
@@ -392,7 +392,7 @@
     <ng-template pTemplate="emptymessage">
         <tr>
             <td [attr.colspan]="authService.isSc() ? 9 : 8" class="text-center">
-                Аварийные отключения за выбранную дату не найдены.
+                {{ 'SITUATION_CENTER.SHUTDOWN.NO_EMERGENCY_SHUTDOWNS' | translate }}
             </td>
         </tr>
     </ng-template>
@@ -402,7 +402,7 @@
 
 <app-dialog
     [(visible)]="isFormOpen"
-    [header]="isEditMode ? 'Редактировать Событие' : 'Новое Событие'"
+    [header]="isEditMode ? ('SITUATION_CENTER.SHUTDOWN.EDIT_EVENT' | translate) : ('SITUATION_CENTER.SHUTDOWN.NEW_EVENT' | translate)"
     [form]="form"
     [submitting]="isLoading"
     (save)="onSubmit()"
@@ -411,45 +411,44 @@
     <form class="p-4" [formGroup]="form" (ngSubmit)="onSubmit()">
 
         <app-group-select
-
-            label="Объект"
+            [label]="'SITUATION_CENTER.COMMON.OBJECT' | translate"
             formControlName="organization"
             [items]="organizations"
             [loading]="orgsLoading"
             [submitted]="submitted"
-            errorMessage="Выберите организацию">
+            [errorMessage]="'SITUATION_CENTER.COMMON.SELECT_ORGANIZATION' | translate">
         </app-group-select>
 
         <app-date-picker
-            label="Начало аварии"
+            [label]="'SITUATION_CENTER.SHUTDOWN.EMERGENCY_START' | translate"
             formControlName="start_time"
             [submitted]="submitted"
-            errorMessage="Укажите дату">
+            [errorMessage]="'SITUATION_CENTER.COMMON.SPECIFY_DATE' | translate">
         </app-date-picker>
 
         <app-date-picker
-            label="Конец аварии"
+            [label]="'SITUATION_CENTER.SHUTDOWN.EMERGENCY_END' | translate"
             formControlName="end_time"
             [submitted]="submitted"
             [required]="false">
         </app-date-picker>
 
         <app-textarea
-            label="Причина"
+            [label]="'SITUATION_CENTER.SHUTDOWN.REASON' | translate"
             formControlName="reason"
             [submitted]="submitted"
             [required]="false">
         </app-textarea>
 
         <app-input-number
-            label="Потерянная мощность"
+            [label]="'SITUATION_CENTER.SHUTDOWN.LOST_POWER' | translate"
             formControlName="generation_loss"
             [submitted]="submitted"
             [required]="false">
         </app-input-number>
 
         <app-input-number
-            label="Холостой сброс, тыс. м³"
+            [label]="'SITUATION_CENTER.SHUTDOWN.IDLE_DISCHARGE' | translate"
             formControlName="idle_discharge_volume"
             [submitted]="submitted"
             [required]="false">
@@ -463,7 +462,7 @@
         }
 
         <app-file-upload
-            [label]="isEditMode ? 'Добавить новые файлы' : 'Прикрепить файлы'"
+            [label]="isEditMode ? ('SITUATION_CENTER.COMMON.ADD_NEW_FILES' | translate) : ('SITUATION_CENTER.COMMON.ATTACH_FILES' | translate)"
             [files]="selectedFiles"
             (filesChange)="onFileSelect($event)"
             (removeFile)="removeFile($event)">
@@ -475,6 +474,6 @@
 
 <app-file-viewer
     [(visible)]="showFilesDialog"
-    [header]="'Файлы события'"
+    [header]="'SITUATION_CENTER.SHUTDOWN.EVENT_FILES' | translate"
     [files]="selectedShutdownForFiles?.files || []">
 </app-file-viewer>

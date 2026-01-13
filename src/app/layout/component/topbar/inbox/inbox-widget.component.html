@@ -6,14 +6,14 @@
     } @else {
         <i class="pi pi-inbox"></i>
     }
-    <span>Приемная</span>
+    <span>{{ 'TOPBAR.RECEPTION' | translate }}</span>
 </button>
 
 <p-popover #inboxPopover (onShow)="onPopoverShow()" [style]="{ width: '400px', maxHeight: '500px' }">
     <ng-template pTemplate="content">
         <div class="p-4 border-b border-surface">
-            <div class="font-semibold text-lg">Ожидающие приемы</div>
-            <div class="text-sm text-surface-500">Требуют рассмотрения</div>
+            <div class="font-semibold text-lg">{{ 'TOPBAR.PENDING_RECEPTIONS' | translate }}</div>
+            <div class="text-sm text-surface-500">{{ 'TOPBAR.REQUIRE_REVIEW' | translate }}</div>
         </div>
 
         <div class="overflow-y-auto" style="max-height: 400px;">
@@ -63,7 +63,7 @@
             } @else {
                 <div class="text-center p-8 text-surface-500">
                     <i class="pi pi-inbox text-4xl mb-3 block"></i>
-                    <div>Нет ожидающих приемов</div>
+                    <div>{{ 'TOPBAR.NO_PENDING_RECEPTIONS' | translate }}</div>
                 </div>
             }
         </div>
@@ -84,13 +84,13 @@
     } @else if (selectedReceptionDetails) {
         <div class="flex flex-col gap-4">
             <div>
-                <div class="font-semibold text-surface-500 mb-1">Название</div>
+                <div class="font-semibold text-surface-500 mb-1">{{ 'TOPBAR.TITLE' | translate }}</div>
                 <div class="text-lg">{{ selectedReceptionDetails.name }}</div>
             </div>
 
             <div class="grid grid-cols-2 gap-4">
                 <div>
-                    <div class="font-semibold text-surface-500 mb-1">Дата</div>
+                    <div class="font-semibold text-surface-500 mb-1">{{ 'TOPBAR.DATE' | translate }}</div>
                     <div class="flex items-center gap-2">
                         <i class="pi pi-calendar text-surface-500"></i>
                         <span>{{ selectedReceptionDetails.date | date: 'dd.MM.yyyy' }}</span>
@@ -98,7 +98,7 @@
                 </div>
 
                 <div>
-                    <div class="font-semibold text-surface-500 mb-1">Статус</div>
+                    <div class="font-semibold text-surface-500 mb-1">{{ 'TOPBAR.STATUS' | translate }}</div>
                     <p-tag
                         [value]="getStatusLabel(selectedReceptionDetails)"
                         [severity]="getStatusSeverity(selectedReceptionDetails)"
@@ -107,7 +107,7 @@
             </div>
 
             <div>
-                <div class="font-semibold text-surface-500 mb-1">Посетитель</div>
+                <div class="font-semibold text-surface-500 mb-1">{{ 'TOPBAR.VISITOR' | translate }}</div>
                 <div class="flex items-center gap-2">
                     <i class="pi pi-user text-surface-500"></i>
                     <span>{{ selectedReceptionDetails.visitor }}</span>
@@ -116,7 +116,7 @@
 
             @if (selectedReceptionDetails.together) {
                 <div>
-                    <div class="font-semibold text-surface-500 mb-1">Совместно</div>
+                    <div class="font-semibold text-surface-500 mb-1">{{ 'TOPBAR.TOGETHER' | translate }}</div>
                     <div class="flex items-center gap-2">
                         <i class="pi pi-users text-surface-500"></i>
                         <span>{{ selectedReceptionDetails.together }}</span>
@@ -126,7 +126,7 @@
 
             @if (selectedReceptionDetails.description) {
                 <div>
-                    <div class="font-semibold text-surface-500 mb-1">Описание</div>
+                    <div class="font-semibold text-surface-500 mb-1">{{ 'TOPBAR.DESCRIPTION' | translate }}</div>
                     <div class="whitespace-pre-wrap p-3 bg-surface-50 dark:bg-surface-800 rounded-border">
                         {{ selectedReceptionDetails.description }}
                     </div>
@@ -135,7 +135,7 @@
 
             @if (selectedReceptionDetails.status_change_reason) {
                 <div>
-                    <div class="font-semibold text-surface-500 mb-1">Комментарий</div>
+                    <div class="font-semibold text-surface-500 mb-1">{{ 'TOPBAR.COMMENT' | translate }}</div>
                     <div class="whitespace-pre-wrap p-3 bg-surface-50 dark:bg-surface-800 rounded-border">
                         {{ selectedReceptionDetails.status_change_reason }}
                     </div>
@@ -144,7 +144,7 @@
 
             <div class="grid grid-cols-2 gap-4 text-sm">
                 <div>
-                    <div class="font-semibold text-surface-500 mb-1">Создано</div>
+                    <div class="font-semibold text-surface-500 mb-1">{{ 'TOPBAR.CREATED' | translate }}</div>
                     <div class="text-surface-600">
                         {{ selectedReceptionDetails.created_at | date: 'dd.MM.yyyy HH:mm' }}
                     </div>
@@ -157,7 +157,7 @@
 
                 @if (selectedReceptionDetails.updated_at) {
                     <div>
-                        <div class="font-semibold text-surface-500 mb-1">Обновлено</div>
+                        <div class="font-semibold text-surface-500 mb-1">{{ 'TOPBAR.UPDATED' | translate }}</div>
                         <div class="text-surface-600">
                             {{ selectedReceptionDetails.updated_at | date: 'dd.MM.yyyy HH:mm' }}
                         </div>
@@ -176,19 +176,19 @@
         @if (selectedReceptionDetails && selectedReceptionDetails.status === 'default') {
             <div class="flex gap-2">
                 <p-button
-                    label="Одобрить"
+                    [label]="'TOPBAR.APPROVE' | translate"
                     icon="pi pi-check"
                     severity="success"
                     (onClick)="approveReception(selectedReceptionDetails)"
                 />
                 <p-button
-                    label="Отклонить"
+                    [label]="'TOPBAR.REJECT' | translate"
                     icon="pi pi-times"
                     severity="danger"
                     (onClick)="rejectReception(selectedReceptionDetails)"
                 />
                 <p-button
-                    label="Перенести"
+                    [label]="'TOPBAR.RESCHEDULE' | translate"
                     icon="pi pi-calendar"
                     severity="secondary"
                     [outlined]="true"
@@ -202,7 +202,7 @@
 <!-- Reject Dialog -->
 <p-dialog
     [(visible)]="rejectDialogVisible"
-    header="Отклонить прием"
+    [header]="'TOPBAR.REJECT_DIALOG_HEADER' | translate"
     [modal]="true"
     [style]="{ width: '500px' }"
     [breakpoints]="{ '960px': '75vw', '640px': '90vw' }"
@@ -213,25 +213,25 @@
                 <div class="p-3 bg-surface-50 dark:bg-surface-800 rounded-border">
                     <div class="font-semibold mb-1">{{ selectedReceptionForReject.name }}</div>
                     <div class="text-sm text-surface-500">
-                        Посетитель: {{ selectedReceptionForReject.visitor }}
+                        {{ 'TOPBAR.VISITOR_LABEL' | translate }} {{ selectedReceptionForReject.visitor }}
                     </div>
                     @if (selectedReceptionForReject.together) {
                         <div class="text-sm text-surface-500">
-                            Совместно: {{ selectedReceptionForReject.together }}
+                            {{ 'TOPBAR.TOGETHER_LABEL' | translate }} {{ selectedReceptionForReject.together }}
                         </div>
                     }
                     <div class="text-sm text-surface-500">
-                        Дата: {{ selectedReceptionForReject.date | date: 'dd.MM.yyyy HH:mm' }}
+                        {{ 'TOPBAR.DATE_LABEL' | translate }} {{ selectedReceptionForReject.date | date: 'dd.MM.yyyy HH:mm' }}
                     </div>
                 </div>
             }
 
             <app-textarea
-                label="Причина отклонения"
+                [label]="'TOPBAR.REJECTION_REASON' | translate"
                 formControlName="reason"
                 [submitted]="submittedReject"
                 [required]="true"
-                errorMessage="Укажите причину отклонения"
+                [errorMessage]="'TOPBAR.SPECIFY_REJECTION_REASON' | translate"
             />
         </div>
     </form>
@@ -239,14 +239,14 @@
     <ng-template #footer>
         <div class="flex gap-2">
             <p-button
-                label="Отмена"
+                [label]="'TOPBAR.CANCEL' | translate"
                 icon="pi pi-times"
                 severity="secondary"
                 [outlined]="true"
                 (onClick)="closeRejectDialog()"
             />
             <p-button
-                label="Отклонить"
+                [label]="'TOPBAR.REJECT' | translate"
                 icon="pi pi-check"
                 severity="danger"
                 (onClick)="saveRejection()"
@@ -258,7 +258,7 @@
 <!-- Reschedule Dialog -->
 <p-dialog
     [(visible)]="rescheduleDialogVisible"
-    header="Перенести прием"
+    [header]="'TOPBAR.RESCHEDULE_DIALOG_HEADER' | translate"
     [modal]="true"
     [style]="{ width: '500px' }"
     [breakpoints]="{ '960px': '75vw', '640px': '90vw' }"
@@ -267,37 +267,37 @@
         <div class="flex flex-col gap-4">
             @if (selectedReceptionForReschedule) {
                 <div class="p-3 bg-surface-50 dark:bg-surface-800 rounded-border">
-                    <div class="font-semibold mb-1">Текущий прием:</div>
+                    <div class="font-semibold mb-1">{{ 'TOPBAR.CURRENT_RECEPTION' | translate }}</div>
                     <div class="text-sm">{{ selectedReceptionForReschedule.name }}</div>
                     <div class="text-sm text-surface-500">
-                        Посетитель: {{ selectedReceptionForReschedule.visitor }}
+                        {{ 'TOPBAR.VISITOR_LABEL' | translate }} {{ selectedReceptionForReschedule.visitor }}
                     </div>
                     @if (selectedReceptionForReschedule.together) {
                         <div class="text-sm text-surface-500">
-                            Совместно: {{ selectedReceptionForReschedule.together }}
+                            {{ 'TOPBAR.TOGETHER_LABEL' | translate }} {{ selectedReceptionForReschedule.together }}
                         </div>
                     }
                     <div class="text-sm text-surface-500">
-                        Текущая дата: {{ selectedReceptionForReschedule.date | date: 'dd.MM.yyyy HH:mm' }}
+                        {{ 'TOPBAR.CURRENT_DATE' | translate }} {{ selectedReceptionForReschedule.date | date: 'dd.MM.yyyy HH:mm' }}
                     </div>
                 </div>
             }
 
             <app-date-picker
-                label="Новая дата и время"
+                [label]="'TOPBAR.NEW_DATE_TIME' | translate"
                 formControlName="date"
                 [submitted]="submittedReschedule"
                 [showTime]="true"
                 [required]="true"
-                errorMessage="Укажите новую дату и время"
+                [errorMessage]="'TOPBAR.SPECIFY_NEW_DATE_TIME' | translate"
             />
 
             <app-textarea
-                label="Причина переноса"
+                [label]="'TOPBAR.RESCHEDULE_REASON' | translate"
                 formControlName="reason"
                 [submitted]="submittedReschedule"
                 [required]="true"
-                errorMessage="Укажите причину переноса"
+                [errorMessage]="'TOPBAR.SPECIFY_RESCHEDULE_REASON' | translate"
             />
         </div>
     </form>
@@ -305,14 +305,14 @@
     <ng-template #footer>
         <div class="flex gap-2">
             <p-button
-                label="Отмена"
+                [label]="'TOPBAR.CANCEL' | translate"
                 icon="pi pi-times"
                 severity="secondary"
                 [outlined]="true"
                 (onClick)="closeRescheduleDialog()"
             />
             <p-button
-                label="Сохранить"
+                [label]="'TOPBAR.SAVE' | translate"
                 icon="pi pi-check"
                 severity="primary"
                 (onClick)="saveReschedule()"

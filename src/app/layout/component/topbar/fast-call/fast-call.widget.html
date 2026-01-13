@@ -1,13 +1,13 @@
 <button type="button" class="layout-topbar-action" (click)="phonePopover.toggle($event)">
     <i class="pi pi-phone text-green-600"></i>
-    <span>Звонок</span>
+    <span>{{ 'TOPBAR.CALL' | translate }}</span>
 </button>
 <p-popover #phonePopover [style]="{ width: '500px' }">
     <p-table [value]="contacts" dataKey="id" [rows]="5" [paginator]="true">
         <ng-template pTemplate="header">
             <tr>
-                <th>Имя</th>
-                <th style="width: 10rem">Действие</th>
+                <th>{{ 'TOPBAR.NAME' | translate }}</th>
+                <th style="width: 10rem">{{ 'TOPBAR.ACTION' | translate }}</th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-contact>

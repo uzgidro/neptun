@@ -1,6 +1,6 @@
 <div class="card mb-8! h-full">
     <div class="flex flex-row justify-between items-center mb-6" >
-        <span class="font-semibold text-xl">Гидроэлектростанции</span>
+        <span class="font-semibold text-xl">{{ 'DASHBOARD.GES' | translate }}</span>
         <!--<button pButton outlined (click)="expandAll()">
             <i pButtonIcon class="pi pi-fw"
                [ngClass]="{ 'pi-window-minimize': expanded, 'pi-window-maximize': !expanded }"></i>
@@ -13,16 +13,16 @@
             <tr>
                 <th style="width: 3rem">№</th>
                 <th style="width: 2rem"></th>
-                <th class="whitespace-nowrap" pSortableColumn="name">Название
+                <th class="whitespace-nowrap" pSortableColumn="name">{{ 'COMMON.NAME' | translate }}
                     <p-sortIcon field="name" />
                 </th>
-                <th class="whitespace-break-spaces" pSortableColumn="ascue_metrics.active">Мощность, МВт
+                <th class="whitespace-break-spaces" pSortableColumn="ascue_metrics.active">{{ 'DASHBOARD.POWER_MW' | translate }}
                     <p-sortIcon field="ascue_metrics.active" />
                 </th>
-                <th class="whitespace-nowrap" pSortableColumn="ascue_metrics.active_agg_count">Аггрегаты
+                <th class="whitespace-nowrap" pSortableColumn="ascue_metrics.active_agg_count">{{ 'DASHBOARD.AGGREGATES' | translate }}
                     <p-sortIcon field="ascue_metrics.active_agg_count" />
                 </th>
-                <th class="whitespace-nowrap" pSortableColumn="current_discharge">Холостой сброс, м³/с
+                <th class="whitespace-nowrap" pSortableColumn="current_discharge">{{ 'DASHBOARD.DISCHARGE' | translate }}
                     <p-sortIcon field="current_discharge" />
                 </th>
             </tr>
@@ -82,18 +82,18 @@
                                 <tr>
                                     <th style="width: 2rem"></th>
                                     <th pSortableColumn="name">
-                                        Название
+                                        {{ 'COMMON.NAME' | translate }}
                                         <p-sortIcon field="name" />
                                     </th>
-                                    <th pSortableColumn="ascue_metrics.active">Активная энергия, МВт*ч
+                                    <th pSortableColumn="ascue_metrics.active">{{ 'DASHBOARD.ACTIVE_ENERGY' | translate }}
                                         <p-sortIcon field="ascue_metrics.active" />
                                     </th>
                                     <th pSortableColumn="ascue_metrics.active_agg_count">
-                                        Аггрегаты
+                                        {{ 'DASHBOARD.AGGREGATES' | translate }}
                                         <p-sortIcon field="ascue_metrics.active_agg_count" />
                                     </th>
                                     <th pSortableColumn="current_discharge">
-                                        Холостой сброс, м³/с
+                                        {{ 'DASHBOARD.DISCHARGE' | translate }}
                                         <p-sortIcon field="current_discharge" />
                                     </th>
                                 </tr>
@@ -117,7 +117,7 @@
                             </ng-template>
                             <ng-template #emptymessage>
                                 <tr>
-                                    <td colspan="5">Нет данных</td>
+                                    <td colspan="5">{{ 'COMMON.NO_DATA' | translate }}</td>
                                 </tr>
                             </ng-template>
                         </p-table>

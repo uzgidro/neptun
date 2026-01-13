@@ -10,6 +10,7 @@ import { isSameDay, parseISO } from 'date-fns';
 import { Dialog } from 'primeng/dialog';
 import { ButtonDirective, ButtonIcon } from 'primeng/button';
 import { Tooltip } from 'primeng/tooltip';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CalendarEventsService } from '@/core/services/calendar-events.service';
 import { CalendarResponse, DayCounts } from '@/core/interfaces/calendar-events';
 import { PastEventsService } from '@/core/services/past-events.service';
@@ -19,12 +20,13 @@ import { Reception } from '@/core/interfaces/reception';
 
 @Component({
     selector: 'app-topbar-calendar',
-    imports: [DatePicker, DatePipe, Popover, PrimeTemplate, FormsModule, NgClass, Dialog, Tooltip, ButtonDirective, ButtonIcon],
+    imports: [DatePicker, DatePipe, Popover, PrimeTemplate, FormsModule, NgClass, Dialog, Tooltip, ButtonDirective, ButtonIcon, TranslateModule],
     templateUrl: './topbar-calendar-widget.component.html',
     styleUrl: './topbar-calendar-widget.component.scss'
 })
 export class TopbarCalendarWidget implements OnInit {
     eventManagementService = inject(EventManagementService);
+    private translate = inject(TranslateService);
     calendarEventsService = inject(CalendarEventsService);
     pastEventsService = inject(PastEventsService);
     receptionService = inject(ReceptionService);
@@ -146,7 +148,7 @@ export class TopbarCalendarWidget implements OnInit {
     openEventDetails(eventId: number) {
         this.loadingEventDetails = true;
         this.eventDialogVisible = true;
-        this.eventDialogHeader = 'Информация о событии';
+        this.eventDialogHeader = this.translate.instant('TOPBAR.EVENT_INFO');
 
         this.eventManagementService.getEventById(eventId).subscribe({
             next: (event) => {
@@ -164,7 +166,7 @@ export class TopbarCalendarWidget implements OnInit {
     openReceptionDetails(receptionId: number) {
         this.loadingReceptionDetails = true;
         this.receptionDialogVisible = true;
-        this.receptionDialogHeader = 'Информация о приеме';
+        this.receptionDialogHeader = this.translate.instant('TOPBAR.RECEPTION_INFO');
 
         this.receptionService.getReception(receptionId).subscribe({
             next: (reception) => {
@@ -300,13 +302,13 @@ export class TopbarCalendarWidget implements OnInit {
 
         // Мапим тип для заголовка
         const headerMap = {
-            incidents: 'Инциденты',
-            shutdowns: 'Аварийные отключения',
-            discharges: 'Холостые водосбросы',
-            visits: 'Визиты'
+            incidents: this.translate.instant('TOPBAR.INCIDENTS_TITLE'),
+            shutdowns: this.translate.instant('TOPBAR.SHUTDOWNS_TITLE'),
+            discharges: this.translate.instant('TOPBAR.DISCHARGES_TITLE'),
+            visits: this.translate.instant('TOPBAR.VISITS_TITLE')
         };
 
-        this.statisticsDialogHeader = `${headerMap[type]} - ${this.selectedDate.toLocaleDateString('ru-RU')}`;
+        this.statisticsDialogHeader = `${headerMap[type]} - ${this.selectedDate.toLocaleDateString()}`;
         this.statisticsDialogVisible = true;
         this.loadingStatistics = true;
 

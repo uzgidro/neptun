@@ -4,10 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TimeService } from '@/core/services/time.service';
 import { Subject, takeUntil } from 'rxjs';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-date',
-    imports: [DatePicker, FormsModule],
+    imports: [DatePicker, FormsModule, TranslateModule],
     templateUrl: './date.widget.html',
     styleUrl: './date.widget.scss'
 })

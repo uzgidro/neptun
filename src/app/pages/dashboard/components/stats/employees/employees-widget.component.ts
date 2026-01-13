@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
 import { TableModule } from 'primeng/table';
 import { DecimalPipe } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 export interface OrganizationOption {
     name: string;
@@ -77,7 +78,7 @@ const ORGANIZATIONS: OrganizationOption[] = [
 
 @Component({
     selector: 'app-employees-widget',
-    imports: [DialogComponent, TableModule, DecimalPipe],
+    imports: [DialogComponent, TableModule, DecimalPipe, TranslateModule],
     templateUrl: './employees-widget.component.html',
     styleUrl: './employees-widget.component.scss'
 })

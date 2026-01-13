@@ -24,6 +24,7 @@ import { TextareaComponent } from '@/layout/component/dialog/textarea/textarea.c
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
 import { DeleteConfirmationComponent } from '@/layout/component/dialog/delete-confirmation/delete-confirmation.component';
 import { ChartModule } from 'primeng/chart';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-personnel-loss',
@@ -50,7 +51,8 @@ import { ChartModule } from 'primeng/chart';
         TextareaComponent,
         DatePickerComponent,
         DeleteConfirmationComponent,
-        ChartModule
+        ChartModule,
+        TranslateModule
     ],
     templateUrl: './personnel-loss.component.html',
     styleUrl: './personnel-loss.component.scss'
@@ -74,23 +76,8 @@ export class PersonnelLossComponent implements OnInit, OnDestroy {
     selectedType: LossType | null = null;
     selectedYear: number | null = null;
 
-    lossTypes = [
-        { label: 'Все типы', value: null },
-        { label: 'Увольнение', value: 'dismissal' },
-        { label: 'Смерть', value: 'death' },
-        { label: 'Пенсия', value: 'retirement' },
-        { label: 'Перевод', value: 'transfer' },
-        { label: 'Другое', value: 'other' }
-    ];
-
-    lossTypeOptions = [
-        { name: 'Увольнение', value: 'dismissal' },
-        { name: 'Смерть', value: 'death' },
-        { name: 'Пенсия', value: 'retirement' },
-        { name: 'Перевод', value: 'transfer' },
-        { name: 'Другое', value: 'other' }
-    ];
-
+    lossTypes: { label: string; value: LossType | null }[] = [];
+    lossTypeOptions: { name: string; value: LossType }[] = [];
     years: { label: string; value: number | null }[] = [];
 
     chartData: any;
@@ -99,8 +86,28 @@ export class PersonnelLossComponent implements OnInit, OnDestroy {
     private personnelLossService = inject(PersonnelLossService);
     private organizationService = inject(OrganizationService);
     private messageService = inject(MessageService);
+    private translate = inject(TranslateService);
     private fb = inject(FormBuilder);
     private destroy$ = new Subject<void>();
+
+    private initOptions(): void {
+        this.lossTypes = [
+            { label: this.translate.instant('HRM.PERSONNEL_LOSS.ALL_TYPES'), value: null },
+            { label: this.translate.instant('HRM.PERSONNEL_LOSS.DISMISSAL'), value: 'dismissal' },
+            { label: this.translate.instant('HRM.PERSONNEL_LOSS.DEATH'), value: 'death' },
+            { label: this.translate.instant('HRM.PERSONNEL_LOSS.RETIREMENT'), value: 'retirement' },
+            { label: this.translate.instant('HRM.PERSONNEL_LOSS.TRANSFER'), value: 'transfer' },
+            { label: this.translate.instant('HRM.PERSONNEL_LOSS.OTHER'), value: 'other' }
+        ];
+
+        this.lossTypeOptions = [
+            { name: this.translate.instant('HRM.PERSONNEL_LOSS.DISMISSAL'), value: 'dismissal' },
+            { name: this.translate.instant('HRM.PERSONNEL_LOSS.DEATH'), value: 'death' },
+            { name: this.translate.instant('HRM.PERSONNEL_LOSS.RETIREMENT'), value: 'retirement' },
+            { name: this.translate.instant('HRM.PERSONNEL_LOSS.TRANSFER'), value: 'transfer' },
+            { name: this.translate.instant('HRM.PERSONNEL_LOSS.OTHER'), value: 'other' }
+        ];
+    }
 
     constructor() {
         this.lossForm = this.fb.group({
@@ -118,13 +125,20 @@ export class PersonnelLossComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.initOptions();
         this.loadData();
         this.loadOrganizations();
+
+        this.translate.onLangChange.pipe(takeUntil(this.destroy$)).subscribe(() => {
+            this.initOptions();
+            this.initYears();
+            this.initChart();
+        });
     }
 
     private initYears() {
         const currentYear = new Date().getFullYear();
-        this.years = [{ label: 'Все годы', value: null }];
+        this.years = [{ label: this.translate.instant('HRM.PERSONNEL_LOSS.ALL_YEARS'), value: null }];
         for (let year = currentYear; year >= currentYear - 10; year--) {
             this.years.push({ label: year.toString(), value: year });
         }
@@ -182,7 +196,7 @@ export class PersonnelLossComponent implements OnInit, OnDestroy {
             labels: this.stats.byMonth.map(m => m.month),
             datasets: [
                 {
-                    label: 'Потери по месяцам',
+                    label: this.translate.instant('HRM.PERSONNEL_LOSS.LOSSES_BY_MONTH'),
                     data: this.stats.byMonth.map(m => m.count),
                     backgroundColor: 'rgba(99, 102, 241, 0.2)',
                     borderColor: 'rgb(99, 102, 241)',
@@ -291,12 +305,12 @@ export class PersonnelLossComponent implements OnInit, OnDestroy {
                 .pipe(takeUntil(this.destroy$))
                 .subscribe({
                     next: () => {
-                        this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Запись обновлена' });
+                        this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SAVE'), detail: this.translate.instant('HRM.PERSONNEL_LOSS.SUCCESS_UPDATED') });
                         this.loadData();
                         this.closeDialog();
                     },
                     error: () => {
-                        this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось обновить запись' });
+                        this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.CANCEL'), detail: this.translate.instant('HRM.PERSONNEL_LOSS.ERROR_UPDATE') });
                     }
                 });
         } else {
@@ -305,12 +319,12 @@ export class PersonnelLossComponent implements OnInit, OnDestroy {
                 .pipe(takeUntil(this.destroy$))
                 .subscribe({
                     next: () => {
-                        this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Запись создана' });
+                        this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SAVE'), detail: this.translate.instant('HRM.PERSONNEL_LOSS.SUCCESS_CREATED') });
                         this.loadData();
                         this.closeDialog();
                     },
                     error: () => {
-                        this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось создать запись' });
+                        this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.CANCEL'), detail: this.translate.instant('HRM.PERSONNEL_LOSS.ERROR_CREATE') });
                     }
                 });
         }
@@ -329,13 +343,13 @@ export class PersonnelLossComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
-                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Запись удалена' });
+                    this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.DELETE'), detail: this.translate.instant('HRM.PERSONNEL_LOSS.SUCCESS_DELETED') });
                     this.loadData();
                     this.displayDeleteDialog = false;
                     this.selectedLoss = null;
                 },
                 error: () => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось удалить запись' });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.CANCEL'), detail: this.translate.instant('HRM.PERSONNEL_LOSS.ERROR_DELETE') });
                 }
             });
     }
@@ -370,10 +384,10 @@ export class PersonnelLossComponent implements OnInit, OnDestroy {
         const lastDigit = years % 10;
         const lastTwoDigits = years % 100;
 
-        if (lastTwoDigits >= 11 && lastTwoDigits <= 14) return `${years} лет`;
-        if (lastDigit === 1) return `${years} год`;
-        if (lastDigit >= 2 && lastDigit <= 4) return `${years} года`;
-        return `${years} лет`;
+        if (lastTwoDigits >= 11 && lastTwoDigits <= 14) return `${years} ${this.translate.instant('HRM.PERSONNEL_LOSS.YEARS_LABEL_MANY')}`;
+        if (lastDigit === 1) return `${years} ${this.translate.instant('HRM.PERSONNEL_LOSS.YEAR_LABEL')}`;
+        if (lastDigit >= 2 && lastDigit <= 4) return `${years} ${this.translate.instant('HRM.PERSONNEL_LOSS.YEARS_LABEL')}`;
+        return `${years} ${this.translate.instant('HRM.PERSONNEL_LOSS.YEARS_LABEL_MANY')}`;
     }
 
     ngOnDestroy() {

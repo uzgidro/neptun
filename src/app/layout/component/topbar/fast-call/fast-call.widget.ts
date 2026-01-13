@@ -5,10 +5,11 @@ import { ButtonDirective } from 'primeng/button';
 import { Avatar } from 'primeng/avatar';
 import { FastCallService } from '@/core/services/fast-call.service';
 import { FastCall } from '@/core/interfaces/fast-call';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-fast-call',
-    imports: [Popover, TableModule, ButtonDirective, Avatar],
+    imports: [Popover, TableModule, ButtonDirective, Avatar, TranslateModule],
     templateUrl: './fast-call.widget.html',
     styleUrl: './fast-call.widget.scss'
 })

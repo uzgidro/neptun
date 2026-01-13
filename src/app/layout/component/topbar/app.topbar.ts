@@ -13,13 +13,15 @@ import { AppConfigurator } from '@/layout/component/app.configurator';
 import { TopbarCalendarWidget } from '@/layout/component/topbar/topbar-calendar/topbar-calendar-widget.component';
 import { FastCallWidget } from '@/layout/component/topbar/fast-call/fast-call.widget';
 import { InboxWidget } from '@/layout/component/topbar/inbox/inbox-widget.component';
+import { LanguageSwitcherComponent } from '@/layout/component/topbar/language-switcher/language-switcher.component';
 import { updateSurfacePalette } from '@primeuix/themes';
 import { AuthService } from '@/core/services/auth.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-topbar',
     standalone: true,
-    imports: [RouterModule, CommonModule, StyleClassModule, ProfileMenu, PopoverModule, TableModule, ToastModule, FormsModule, AppConfigurator, TopbarCalendarWidget, NgOptimizedImage, FastCallWidget, InboxWidget],
+    imports: [RouterModule, CommonModule, StyleClassModule, ProfileMenu, PopoverModule, TableModule, ToastModule, FormsModule, AppConfigurator, TopbarCalendarWidget, NgOptimizedImage, FastCallWidget, InboxWidget, LanguageSwitcherComponent, TranslateModule],
     providers: [MessageService],
     template: ` <div class="layout-topbar">
         <div class="layout-topbar-logo-container">
@@ -30,19 +32,19 @@ import { AuthService } from '@/core/services/auth.service';
                 <img ngSrc="/images/logo-x.png" alt="" width="52" height="22" />
                 <span class="text-nowrap">
                     @if (authService.hasRole('admin')) {
-                        Планшет администратора
+                        {{ 'MENU.TABLET_ADMIN' | translate }}
                     } @else if (authService.hasRole('first deputy')) {
-                        Планшет Первого заместителя Председателя правления
+                        {{ 'MENU.TABLET_FIRST_DEPUTY' | translate }}
                     } @else if (authService.hasRole('rais')) {
-                        Планшет Председателя правления
+                        {{ 'MENU.TABLET_CHAIRMAN' | translate }}
                     } @else if (authService.hasRole('assistant')) {
-                        Планшет помощника
+                        {{ 'MENU.TABLET_ASSISTANT' | translate }}
                     } @else if (authService.hasRole('investment')) {
-                        Планшет начальника инвестиций
+                        {{ 'MENU.TABLET_INVESTMENT' | translate }}
                     } @else if (authService.hasRole('sc')) {
-                        Планшет дежурного
+                        {{ 'MENU.TABLET_DUTY' | translate }}
                     } @else {
-                        Планшет
+                        {{ 'MENU.TABLET' | translate }}
                     }
                 </span>
             </a>
@@ -56,6 +58,7 @@ import { AuthService } from '@/core/services/auth.service';
             </a>
 
             <div class="layout-config-menu">
+                <app-language-switcher></app-language-switcher>
                 <button type="button" class="layout-topbar-action" (click)="toggleDarkMode()">
                     <i [ngClass]="{ 'pi ': true, 'pi-moon': layoutService.isDarkTheme(), 'pi-sun': !layoutService.isDarkTheme() }"></i>
                 </button>
