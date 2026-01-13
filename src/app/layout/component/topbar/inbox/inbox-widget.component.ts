@@ -11,6 +11,7 @@ import { OverlayBadge } from 'primeng/overlaybadge';
 import { Button } from 'primeng/button';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
 import { TextareaComponent } from '@/layout/component/dialog/textarea/textarea.component';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-inbox',
@@ -24,7 +25,8 @@ import { TextareaComponent } from '@/layout/component/dialog/textarea/textarea.c
         Button,
         ReactiveFormsModule,
         DatePickerComponent,
-        TextareaComponent
+        TextareaComponent,
+        TranslateModule
     ],
     templateUrl: './inbox-widget.component.html',
     styleUrl: './inbox-widget.component.scss'
@@ -33,6 +35,7 @@ export class InboxWidget implements OnInit {
     receptionService = inject(ReceptionService);
     messageService = inject(MessageService);
     fb = inject(FormBuilder);
+    private translate = inject(TranslateService);
 
     pendingReceptions = signal<Reception[]>([]);
     loading = false;
@@ -89,7 +92,7 @@ export class InboxWidget implements OnInit {
     openReceptionDetails(receptionId: number) {
         this.loadingReceptionDetails = true;
         this.receptionDialogVisible = true;
-        this.receptionDialogHeader = 'Информация о приеме';
+        this.receptionDialogHeader = this.translate.instant('TOPBAR.RECEPTION_INFO');
 
         this.receptionService.getReception(receptionId).subscribe({
             next: (reception) => {
@@ -120,15 +123,15 @@ export class InboxWidget implements OnInit {
 
     getStatusLabel(reception: Reception): string {
         if (reception.status === 'true' && reception.status_change_reason) {
-            return 'Перенесено';
+            return this.translate.instant('TOPBAR.STATUS_RESCHEDULED');
         }
         switch (reception.status) {
             case 'true':
-                return 'Одобрено';
+                return this.translate.instant('TOPBAR.STATUS_APPROVED');
             case 'false':
-                return 'Отклонено';
+                return this.translate.instant('TOPBAR.STATUS_REJECTED');
             default:
-                return 'Ожидание';
+                return this.translate.instant('TOPBAR.STATUS_PENDING');
         }
     }
 
@@ -137,7 +140,7 @@ export class InboxWidget implements OnInit {
             next: () => {
                 this.messageService.add({
                     severity: 'success',
-                    summary: 'Прием одобрен'
+                    summary: this.translate.instant('TOPBAR.RECEPTION_APPROVED')
                 });
                 this.receptionDialogVisible = false;
                 this.loadPendingReceptions();
@@ -145,7 +148,7 @@ export class InboxWidget implements OnInit {
             error: (err) => {
                 this.messageService.add({
                     severity: 'error',
-                    summary: 'Ошибка одобрения приема',
+                    summary: this.translate.instant('TOPBAR.APPROVAL_ERROR'),
                     detail: err.message
                 });
             }
@@ -169,8 +172,8 @@ export class InboxWidget implements OnInit {
         if (this.rejectForm.invalid) {
             this.messageService.add({
                 severity: 'warn',
-                summary: 'Предупреждение',
-                detail: 'Укажите причину отклонения'
+                summary: this.translate.instant('COMMON.WARNING'),
+                detail: this.translate.instant('TOPBAR.SPECIFY_REJECTION_REASON')
             });
             return;
         }
@@ -184,7 +187,7 @@ export class InboxWidget implements OnInit {
                 next: () => {
                     this.messageService.add({
                         severity: 'success',
-                        summary: 'Прием отклонен'
+                        summary: this.translate.instant('TOPBAR.RECEPTION_REJECTED')
                     });
                     this.closeRejectDialog();
                     this.loadPendingReceptions();
@@ -192,7 +195,7 @@ export class InboxWidget implements OnInit {
                 error: (err) => {
                     this.messageService.add({
                         severity: 'error',
-                        summary: 'Ошибка отклонения приема',
+                        summary: this.translate.instant('TOPBAR.REJECTION_ERROR'),
                         detail: err.message
                     });
                 }
@@ -222,8 +225,8 @@ export class InboxWidget implements OnInit {
         if (this.rescheduleForm.invalid) {
             this.messageService.add({
                 severity: 'warn',
-                summary: 'Предупреждение',
-                detail: 'Заполните обязательные поля'
+                summary: this.translate.instant('COMMON.WARNING'),
+                detail: this.translate.instant('COMMON.FILL_REQUIRED')
             });
             return;
         }
@@ -240,8 +243,8 @@ export class InboxWidget implements OnInit {
                 next: () => {
                     this.messageService.add({
                         severity: 'success',
-                        summary: 'Прием перенесен',
-                        detail: 'Дата и время обновлены, прием одобрен'
+                        summary: this.translate.instant('TOPBAR.RECEPTION_RESCHEDULED'),
+                        detail: this.translate.instant('TOPBAR.DATE_UPDATED_APPROVED')
                     });
                     this.closeRescheduleDialog();
                     this.loadPendingReceptions();
@@ -249,7 +252,7 @@ export class InboxWidget implements OnInit {
                 error: (err) => {
                     this.messageService.add({
                         severity: 'error',
-                        summary: 'Ошибка переноса приема',
+                        summary: this.translate.instant('TOPBAR.RESCHEDULE_ERROR'),
                         detail: err.message
                     });
                 }

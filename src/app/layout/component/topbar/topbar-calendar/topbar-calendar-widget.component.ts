@@ -10,15 +10,17 @@ import { isSameDay, parseISO } from 'date-fns';
 import { Dialog } from 'primeng/dialog';
 import { ButtonDirective, ButtonIcon } from 'primeng/button';
 import { Tooltip } from 'primeng/tooltip';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-topbar-calendar',
-    imports: [DatePicker, DatePipe, Popover, PrimeTemplate, FormsModule, NgClass, Dialog, Tooltip, ButtonDirective, ButtonIcon],
+    imports: [DatePicker, DatePipe, Popover, PrimeTemplate, FormsModule, NgClass, Dialog, Tooltip, ButtonDirective, ButtonIcon, TranslateModule],
     templateUrl: './topbar-calendar-widget.component.html',
     styleUrl: './topbar-calendar-widget.component.scss'
 })
 export class TopbarCalendarWidget implements OnInit {
     eventManagementService = inject(EventManagementService);
+    private translate = inject(TranslateService);
 
     allEvents = signal<Event[]>([]);
     selectedDate: Date = new Date();
@@ -68,7 +70,7 @@ export class TopbarCalendarWidget implements OnInit {
     openEventDetails(eventId: number) {
         this.loadingEventDetails = true;
         this.eventDialogVisible = true;
-        this.eventDialogHeader = 'Информация о событии';
+        this.eventDialogHeader = this.translate.instant('TOPBAR.EVENT_INFO');
 
         this.eventManagementService.getEventById(eventId).subscribe({
             next: (event) => {

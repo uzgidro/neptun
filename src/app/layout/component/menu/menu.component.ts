@@ -95,17 +95,17 @@ export class MenuComponent implements OnInit {
                                 role: ['rais', 'sc'],
                                 items: [
                                     {
-                                        label: 'Сводка',
+                                        label: this.t('MENU.RESERVOIR_SUMMARY'),
                                         role: ['rais', 'sc'],
                                         routerLink: ['/reservoir-summary']
                                     },
                                     {
-                                        label: 'Сводка PDF',
+                                        label: this.t('MENU.RESERVOIR_SUMMARY_PDF'),
                                         role: ['rais', 'sc'],
                                         routerLink: ['/reservoir-summary/pdf']
                                     },
                                     {
-                                        label: 'Гидротехнические сооружения',
+                                        label: this.t('MENU.HYDRAULIC_STRUCTURES'),
                                         role: ['rais', 'sc'],
                                         routerLink: ['/reservoir-device']
                                     }
@@ -122,12 +122,12 @@ export class MenuComponent implements OnInit {
                                         target: '_blank'
                                     },
                                     {
-                                        label: 'Инциденты',
+                                        label: this.t('MENU.INCIDENTS'),
                                         role: ['rais', 'sc'],
                                         routerLink: ['/incidents']
                                     },
                                     {
-                                        label: 'Визиты',
+                                        label: this.t('MENU.VISITS'),
                                         role: ['rais', 'sc'],
                                         routerLink: ['/visits']
                                     }
@@ -173,8 +173,8 @@ export class MenuComponent implements OnInit {
                             // { label: 'Созвоны', role: ['rais'], routerLink: ['/planning'], queryParams: { type: 'call' }, routerLinkActiveOptions: { queryParams: 'exact' } },
                             // { label: 'Переговоры', role: ['rais'], routerLink: ['/planning'], queryParams: { type: 'negotiation' }, routerLinkActiveOptions: { queryParams: 'exact' } },
                             // { label: 'ВКС', role: ['rais'], routerLink: ['/planning'], queryParams: { type: 'vcs' }, routerLinkActiveOptions: { queryParams: 'exact' } },
-                            { label: 'События', role: ['rais', 'assistant'], routerLink: ['/planning/events'] },
-                            { label: 'Приемная Председателя Правления', role: ['rais', 'assistant', 'sc'], routerLink: ['/planning/reception'] }
+                            { label: this.t('MENU.PLANNING_EVENTS'), role: ['rais', 'assistant'], routerLink: ['/planning/events'] },
+                            { label: this.t('MENU.CHAIRMAN_RECEPTION'), role: ['rais', 'assistant', 'sc'], routerLink: ['/planning/reception'] }
                         ]
                     },
                     {
