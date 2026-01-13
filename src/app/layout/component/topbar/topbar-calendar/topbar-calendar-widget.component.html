@@ -61,7 +61,7 @@
                     <div class="my-3 border-t border-surface"></div>
                 }
                 <div class="font-semibold mb-2 text-green-600 dark:text-green-400">
-                    Приемы:
+                    {{ 'TOPBAR.RECEPTIONS' | translate }}
                 </div>
                 @for (reception of selectedDayReceptions(); track reception.id) {
                     <div (click)="openReceptionDetails(reception.id); calendarPopover.toggle($event)"
@@ -71,14 +71,14 @@
                                 {{ reception.name }} ({{ reception.date | date: 'HH:mm' }})
                             </div>
                             <div class="text-xs text-surface-500">
-                                Посетитель: {{ reception.visitor }}
+                                {{ 'TOPBAR.VISITOR_LABEL' | translate }} {{ reception.visitor }}
                             </div>
                         </div>
                         <button pButton
                                 type="button"
                                 class="p-button-text p-button-rounded p-button-sm"
                                 (click)="openReceptionDetails(reception.id); $event.stopPropagation()"
-                                pTooltip="Подробнее"
+                                [pTooltip]="'TOPBAR.MORE' | translate"
                                 tooltipPosition="left">
                             <i class="pi pi-info-circle" pButtonIcon></i>
                         </button>
@@ -93,28 +93,28 @@
                             (click)="onStatisticClick('incidents', selectedDayCounts()!.incidents); calendarPopover.hide()"
                             class="flex justify-between p-2 rounded-border transition-colors"
                             [ngClass]="selectedDayCounts()!.incidents > 0 ? 'cursor-pointer hover:bg-surface-100 dark:hover:bg-surface-800' : 'opacity-60'">
-                            <span>Инциденты:</span>
+                            <span>{{ 'TOPBAR.INCIDENTS_LABEL' | translate }}</span>
                             <span class="font-medium">{{ selectedDayCounts()!.incidents }}</span>
                         </div>
                         <div
                             (click)="onStatisticClick('shutdowns', selectedDayCounts()!.shutdowns); calendarPopover.hide()"
                             class="flex justify-between p-2 rounded-border transition-colors"
                             [ngClass]="selectedDayCounts()!.shutdowns > 0 ? 'cursor-pointer hover:bg-surface-100 dark:hover:bg-surface-800' : 'opacity-60'">
-                            <span>Аварийные отключения:</span>
+                            <span>{{ 'TOPBAR.EMERGENCY_SHUTDOWNS_LABEL' | translate }}</span>
                             <span class="font-medium">{{ selectedDayCounts()!.shutdowns }}</span>
                         </div>
                         <div
                             (click)="onStatisticClick('discharges', selectedDayCounts()!.discharges); calendarPopover.hide()"
                             class="flex justify-between p-2 rounded-border transition-colors"
                             [ngClass]="selectedDayCounts()!.discharges > 0 ? 'cursor-pointer hover:bg-surface-100 dark:hover:bg-surface-800' : 'opacity-60'">
-                            <span>Холостые водосбросы:</span>
+                            <span>{{ 'TOPBAR.IDLE_DISCHARGES_LABEL' | translate }}</span>
                             <span class="font-medium">{{ selectedDayCounts()!.discharges }}</span>
                         </div>
                         <div
                             (click)="onStatisticClick('visits', selectedDayCounts()!.visits); calendarPopover.hide()"
                             class="flex justify-between p-2 rounded-border transition-colors"
                             [ngClass]="selectedDayCounts()!.visits > 0 ? 'cursor-pointer hover:bg-surface-100 dark:hover:bg-surface-800' : 'opacity-60'">
-                            <span>Визиты:</span>
+                            <span>{{ 'TOPBAR.VISITS_LABEL' | translate }}</span>
                             <span class="font-medium">{{ selectedDayCounts()!.visits }}</span>
                         </div>
                     </div>
@@ -284,7 +284,7 @@
                             @if (event.files && event.files.length > 0) {
                                 <div class="mt-3 pt-3 border-t border-surface">
                                     <div class="text-xs font-semibold text-surface-500 mb-2">
-                                        Файлы ({{ event.files.length }})
+                                        {{ 'TOPBAR.FILES_COUNT' | translate }} ({{ event.files.length }})
                                     </div>
                                     <div class="flex flex-wrap gap-2">
                                         @for (file of event.files; track file.id) {
@@ -312,7 +312,7 @@
         </div>
     } @else {
         <div class="text-center p-8 text-surface-500">
-            Нет данных для отображения
+            {{ 'TOPBAR.NO_DATA_TO_DISPLAY' | translate }}
         </div>
     }
 </p-dialog>
@@ -326,33 +326,33 @@
     } @else if (selectedReceptionDetails) {
         <div class="flex flex-col gap-4">
             <div>
-                <div class="font-semibold text-surface-500 mb-1">Название</div>
+                <div class="font-semibold text-surface-500 mb-1">{{ 'TOPBAR.TITLE' | translate }}</div>
                 <div>{{ selectedReceptionDetails.name }}</div>
             </div>
 
             <div class="grid grid-cols-2 gap-4">
                 <div>
-                    <div class="font-semibold text-surface-500 mb-1">Дата и время</div>
+                    <div class="font-semibold text-surface-500 mb-1">{{ 'TOPBAR.DATE_TIME' | translate }}</div>
                     <div>{{ selectedReceptionDetails.date | date: 'dd.MM.yyyy HH:mm' }}</div>
                 </div>
 
                 <div>
-                    <div class="font-semibold text-surface-500 mb-1">Статус</div>
+                    <div class="font-semibold text-surface-500 mb-1">{{ 'TOPBAR.STATUS' | translate }}</div>
                     <div>
                         @switch (selectedReceptionDetails.status) {
                             @case ('true') {
                                 <span class="px-2 py-1 text-xs font-medium rounded bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300">
-                                    Состоялся
+                                    {{ 'TOPBAR.STATUS_HELD' | translate }}
                                 </span>
                             }
                             @case ('false') {
                                 <span class="px-2 py-1 text-xs font-medium rounded bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300">
-                                    Не состоялся
+                                    {{ 'TOPBAR.STATUS_NOT_HELD' | translate }}
                                 </span>
                             }
                             @case ('default') {
                                 <span class="px-2 py-1 text-xs font-medium rounded bg-gray-100 text-gray-700 dark:bg-gray-900 dark:text-gray-300">
-                                    Запланирован
+                                    {{ 'TOPBAR.STATUS_SCHEDULED' | translate }}
                                 </span>
                             }
                         }
@@ -361,27 +361,27 @@
             </div>
 
             <div>
-                <div class="font-semibold text-surface-500 mb-1">Посетитель</div>
+                <div class="font-semibold text-surface-500 mb-1">{{ 'TOPBAR.VISITOR' | translate }}</div>
                 <div>{{ selectedReceptionDetails.visitor }}</div>
             </div>
 
             @if (selectedReceptionDetails.together) {
                 <div>
-                    <div class="font-semibold text-surface-500 mb-1">Сопровождающие</div>
+                    <div class="font-semibold text-surface-500 mb-1">{{ 'TOPBAR.COMPANIONS' | translate }}</div>
                     <div>{{ selectedReceptionDetails.together }}</div>
                 </div>
             }
 
             @if (selectedReceptionDetails.description) {
                 <div>
-                    <div class="font-semibold text-surface-500 mb-1">Описание</div>
+                    <div class="font-semibold text-surface-500 mb-1">{{ 'TOPBAR.DESCRIPTION' | translate }}</div>
                     <div class="whitespace-pre-wrap">{{ selectedReceptionDetails.description }}</div>
                 </div>
             }
 
             @if (selectedReceptionDetails.status_change_reason) {
                 <div>
-                    <div class="font-semibold text-surface-500 mb-1">Причина изменения статуса</div>
+                    <div class="font-semibold text-surface-500 mb-1">{{ 'TOPBAR.STATUS_CHANGE_REASON' | translate }}</div>
                     <div class="whitespace-pre-wrap">{{ selectedReceptionDetails.status_change_reason }}</div>
                 </div>
             }
@@ -389,15 +389,15 @@
             <div class="grid grid-cols-2 gap-4">
                 @if (selectedReceptionDetails.informed !== undefined) {
                     <div>
-                        <div class="font-semibold text-surface-500 mb-1">Информирование</div>
+                        <div class="font-semibold text-surface-500 mb-1">{{ 'TOPBAR.INFORMATION' | translate }}</div>
                         <div>
                             @if (selectedReceptionDetails.informed) {
                                 <span class="text-green-600 dark:text-green-400">
-                                    <i class="pi pi-check-circle mr-1"></i>Проинформирован
+                                    <i class="pi pi-check-circle mr-1"></i>{{ 'TOPBAR.INFORMED' | translate }}
                                 </span>
                             } @else {
                                 <span class="text-red-600 dark:text-red-400">
-                                    <i class="pi pi-times-circle mr-1"></i>Не проинформирован
+                                    <i class="pi pi-times-circle mr-1"></i>{{ 'TOPBAR.NOT_INFORMED' | translate }}
                                 </span>
                             }
                         </div>
@@ -406,7 +406,7 @@
 
                 @if (selectedReceptionDetails.informed_by) {
                     <div>
-                        <div class="font-semibold text-surface-500 mb-1">Проинформировал</div>
+                        <div class="font-semibold text-surface-500 mb-1">{{ 'TOPBAR.INFORMED_BY' | translate }}</div>
                         <div>{{ selectedReceptionDetails.informed_by.name }}</div>
                     </div>
                 }
@@ -416,7 +416,7 @@
                 <div class="grid grid-cols-2 gap-4 text-sm text-surface-500">
                     @if (selectedReceptionDetails.created_by) {
                         <div>
-                            <div class="font-semibold mb-1">Создал</div>
+                            <div class="font-semibold mb-1">{{ 'TOPBAR.CREATED_BY' | translate }}</div>
                             <div>{{ selectedReceptionDetails.created_by.name }}</div>
                             <div class="text-xs">{{ selectedReceptionDetails.created_at | date: 'dd.MM.yyyy HH:mm' }}</div>
                         </div>
@@ -424,7 +424,7 @@
 
                     @if (selectedReceptionDetails.updated_by) {
                         <div>
-                            <div class="font-semibold mb-1">Обновил</div>
+                            <div class="font-semibold mb-1">{{ 'TOPBAR.UPDATED_BY' | translate }}</div>
                             <div>{{ selectedReceptionDetails.updated_by.name }}</div>
                             <div class="text-xs">{{ selectedReceptionDetails.updated_at | date: 'dd.MM.yyyy HH:mm' }}</div>
                         </div>

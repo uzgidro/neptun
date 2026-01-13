@@ -166,7 +166,7 @@ export class TopbarCalendarWidget implements OnInit {
     openReceptionDetails(receptionId: number) {
         this.loadingReceptionDetails = true;
         this.receptionDialogVisible = true;
-        this.receptionDialogHeader = 'Информация о приеме';
+        this.receptionDialogHeader = this.translate.instant('TOPBAR.RECEPTION_INFO');
 
         this.receptionService.getReception(receptionId).subscribe({
             next: (reception) => {
@@ -302,13 +302,13 @@ export class TopbarCalendarWidget implements OnInit {
 
         // Мапим тип для заголовка
         const headerMap = {
-            incidents: 'Инциденты',
-            shutdowns: 'Аварийные отключения',
-            discharges: 'Холостые водосбросы',
-            visits: 'Визиты'
+            incidents: this.translate.instant('TOPBAR.INCIDENTS_TITLE'),
+            shutdowns: this.translate.instant('TOPBAR.SHUTDOWNS_TITLE'),
+            discharges: this.translate.instant('TOPBAR.DISCHARGES_TITLE'),
+            visits: this.translate.instant('TOPBAR.VISITS_TITLE')
         };
 
-        this.statisticsDialogHeader = `${headerMap[type]} - ${this.selectedDate.toLocaleDateString('ru-RU')}`;
+        this.statisticsDialogHeader = `${headerMap[type]} - ${this.selectedDate.toLocaleDateString()}`;
         this.statisticsDialogVisible = true;
         this.loadingStatistics = true;
 
