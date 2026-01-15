@@ -22,7 +22,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { Instruction, InstructionFilters, InstructionPayload } from '@/core/interfaces/chancellery/instruction';
 import { DocumentType, FileResponse } from '@/core/interfaces/chancellery/document-base';
-import { ChangeStatusRequest, DocumentStatus, StatusHistoryEntry } from '@/core/interfaces/chancellery/document-status';
+import { ChangeStatusRequest, DocumentStatus, StatusHistoryEntry, StatusSeverity } from '@/core/interfaces/chancellery/document-status';
 import { InstructionService } from '@/core/services/chancellery/instruction.service';
 import { DocumentStatusService } from '@/core/services/chancellery/document-status.service';
 
@@ -386,7 +386,7 @@ export class InstructionsComponent implements OnInit, OnDestroy {
         return this.selectedDocument?.files.filter((f) => this.existingFileIds.includes(f.id)) || [];
     }
 
-    getStatusSeverity(code: string): string {
+    getStatusSeverity(code: string): StatusSeverity {
         return this.statusService.getStatusSeverity(code);
     }
     formatDate(dateStr: string | null | undefined): string {

@@ -24,7 +24,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { Decree, DecreeFilters, DecreePayload } from '@/core/interfaces/chancellery/decree';
 import { DocumentType, FileResponse } from '@/core/interfaces/chancellery/document-base';
-import { ChangeStatusRequest, DocumentStatus, StatusHistoryEntry } from '@/core/interfaces/chancellery/document-status';
+import { ChangeStatusRequest, DocumentStatus, StatusHistoryEntry, StatusSeverity } from '@/core/interfaces/chancellery/document-status';
 import { DecreeService } from '@/core/services/chancellery/decree.service';
 import { DocumentStatusService } from '@/core/services/chancellery/document-status.service';
 
@@ -461,7 +461,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
     // UI Helpers
     // =========================================================================
 
-    getStatusSeverity(code: string): string {
+    getStatusSeverity(code: string): StatusSeverity {
         return this.statusService.getStatusSeverity(code);
     }
 
