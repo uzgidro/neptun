@@ -22,7 +22,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { Letter, LetterPayload, LetterFilters } from '@/core/interfaces/chancellery/letter';
 import { DocumentType, FileResponse } from '@/core/interfaces/chancellery/document-base';
-import { DocumentStatus, StatusHistoryEntry, ChangeStatusRequest } from '@/core/interfaces/chancellery/document-status';
+import { DocumentStatus, StatusHistoryEntry, ChangeStatusRequest, StatusSeverity } from '@/core/interfaces/chancellery/document-status';
 import { LetterService } from '@/core/services/chancellery/letter.service';
 import { DocumentStatusService } from '@/core/services/chancellery/document-status.service';
 
@@ -374,7 +374,7 @@ export class LettersComponent implements OnInit, OnDestroy {
     onExistingFileRemoved(fileId: number): void { this.existingFileIds = this.existingFileIds.filter(id => id !== fileId); }
     getExistingFiles(): FileResponse[] { return this.selectedDocument?.files.filter(f => this.existingFileIds.includes(f.id)) || []; }
 
-    getStatusSeverity(code: string): string { return this.statusService.getStatusSeverity(code); }
+    getStatusSeverity(code: string): StatusSeverity { return this.statusService.getStatusSeverity(code); }
     formatDate(dateStr: string | null | undefined): string { return dateStr ? new Date(dateStr).toLocaleDateString('ru-RU') : '—'; }
     private formatDateForApi(date: Date | string): string {
         if (typeof date === 'string') return date;

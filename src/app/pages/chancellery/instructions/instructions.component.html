@@ -94,32 +94,32 @@
                 <td>
                     <div class="flex justify-center gap-1">
                         <button pButton
-                                icon="pi pi-history"
                                 (click)="openHistoryDialog(doc)"
                                 class="p-button-rounded p-button-text p-button-info"
                                 [pTooltip]="'CHANCELLERY.ACTIONS.HISTORY' | translate"
                                 tooltipPosition="top">
+                            <i pButtonIcon class="pi pi-history"></i>
                         </button>
                         <button pButton
-                                icon="pi pi-sync"
                                 (click)="openStatusDialog(doc)"
                                 class="p-button-rounded p-button-text p-button-help"
                                 [pTooltip]="'CHANCELLERY.ACTIONS.CHANGE_STATUS' | translate"
                                 tooltipPosition="top">
+                            <i pButtonIcon class="pi pi-sync"></i>
                         </button>
                         <button pButton
-                                icon="pi pi-pencil"
                                 (click)="openEditDialog(doc)"
                                 class="p-button-rounded p-button-text p-button-warning"
                                 [pTooltip]="'COMMON.EDIT' | translate"
                                 tooltipPosition="top">
+                            <i pButtonIcon class="pi pi-pencil"></i>
                         </button>
                         <button pButton
-                                icon="pi pi-trash"
                                 (click)="openDeleteDialog(doc)"
                                 class="p-button-rounded p-button-text p-button-danger"
                                 [pTooltip]="'COMMON.DELETE' | translate"
                                 tooltipPosition="top">
+                            <i pButtonIcon class="pi pi-trash"></i>
                         </button>
                     </div>
                 </td>
