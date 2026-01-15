@@ -5,12 +5,11 @@ import { ActivatedRoute } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { MessageService } from 'primeng/api';
 import { Table, TableModule } from 'primeng/table';
-import { ButtonDirective } from 'primeng/button';
+import { ButtonDirective, ButtonIcon } from 'primeng/button';
 import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
 import { InputText } from 'primeng/inputtext';
 import { Tooltip } from 'primeng/tooltip';
-import { DatePicker } from 'primeng/datepicker';
 import { Tag } from 'primeng/tag';
 import { Dialog } from 'primeng/dialog';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -39,7 +38,6 @@ import { LegalDocumentService } from '@/core/services/legal-document.service';
         InputIcon,
         InputText,
         Tooltip,
-        DatePicker,
         Tag,
         Dialog,
         DialogComponent,
@@ -48,7 +46,8 @@ import { LegalDocumentService } from '@/core/services/legal-document.service';
         SelectComponent,
         DeleteConfirmationComponent,
         FileUploadComponent,
-        TranslateModule
+        TranslateModule,
+        ButtonIcon
     ],
     templateUrl: './legal-documents.component.html',
     styleUrl: './legal-documents.component.scss'
@@ -80,8 +79,10 @@ export class LegalDocumentsComponent implements OnInit, OnDestroy {
     typeId: number | null = null;
     pageTitle = '';
 
-    // Date range filter
-    dateRange: Date[] | null = null;
+    // Date filter
+    startDate: Date | null = null;
+    endDate: Date | null = null;
+    today: Date = new Date();
 
     // Delete confirmation
     deleteConfirmMessage = '';
@@ -157,13 +158,11 @@ export class LegalDocumentsComponent implements OnInit, OnDestroy {
             filters.type_id = this.typeId;
         }
 
-        if (this.dateRange && this.dateRange.length === 2) {
-            if (this.dateRange[0]) {
-                filters.start_date = this.formatDateForApi(this.dateRange[0]);
-            }
-            if (this.dateRange[1]) {
-                filters.end_date = this.formatDateForApi(this.dateRange[1]);
-            }
+        if (this.startDate) {
+            filters.start_date = this.formatDateForApi(this.startDate);
+        }
+        if (this.endDate) {
+            filters.end_date = this.formatDateForApi(this.endDate);
         }
 
         this.legalDocumentService
@@ -190,7 +189,8 @@ export class LegalDocumentsComponent implements OnInit, OnDestroy {
     }
 
     clearFilters(): void {
-        this.dateRange = null;
+        this.startDate = null;
+        this.endDate = null;
         this.loadDocuments();
     }
 

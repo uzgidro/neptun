@@ -17,27 +17,35 @@
                 <div class="flex flex-wrap gap-2 items-center">
                     <p-iconfield>
                         <p-inputicon><i class="pi pi-search"></i></p-inputicon>
-                        <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" [placeholder]="'LEGAL_DOCUMENTS.FILTERS.SEARCH' | translate" />
+                        <input pInputText type="text" (input)="onGlobalFilter(dt, $event)"
+                               [placeholder]="'LEGAL_DOCUMENTS.FILTERS.SEARCH' | translate" />
                     </p-iconfield>
 
-                    <p-datepicker
-                        [(ngModel)]="dateRange"
-                        selectionMode="range"
-                        [placeholder]="'LEGAL_DOCUMENTS.FILTERS.DATE_RANGE' | translate"
-                        dateFormat="dd.mm.yy"
-                        [showIcon]="true"
-                        [showButtonBar]="true"
-                        (onClose)="applyDateFilter()"
-                        [style]="{ minWidth: '220px' }">
-                    </p-datepicker>
+                    <app-date-picker
+                        [(ngModel)]="startDate"
+                        [label]="'LEGAL_DOCUMENTS.FILTERS.DATE_FROM' | translate"
+                        [showTime]="false"
+                        [required]="false"
+                        [maxDate]="endDate || today"
+                        (ngModelChange)="applyDateFilter()">
+                    </app-date-picker>
 
-                    @if (dateRange && dateRange.length > 0) {
+                    <app-date-picker
+                        [(ngModel)]="endDate"
+                        [label]="'LEGAL_DOCUMENTS.FILTERS.DATE_TO' | translate"
+                        [showTime]="false"
+                        [required]="false"
+                        [maxDate]="today"
+                        (ngModelChange)="applyDateFilter()">
+                    </app-date-picker>
+
+                    @if (startDate || endDate) {
                         <button pButton
-                                icon="pi pi-filter-slash"
                                 class="p-button-outlined p-button-secondary"
                                 (click)="clearFilters()"
                                 [pTooltip]="'LEGAL_DOCUMENTS.FILTERS.CLEAR' | translate"
                                 tooltipPosition="top">
+                            <i pButtonIcon class="pi pi-filter-slash"></i>
                         </button>
                     }
                 </div>
@@ -196,7 +204,9 @@
                 <!-- Existing Files -->
                 @if (isEditMode && getExistingFiles().length > 0) {
                     <div class="mb-3">
-                        <div class="text-sm text-color-secondary mb-2">{{ 'LEGAL_DOCUMENTS.FILES.EXISTING' | translate }}</div>
+                        <div
+                            class="text-sm text-color-secondary mb-2">{{ 'LEGAL_DOCUMENTS.FILES.EXISTING' | translate }}
+                        </div>
                         <div class="flex flex-wrap gap-2">
                             @for (file of getExistingFiles(); track file.id) {
                                 <div class="flex items-center gap-2 p-2 surface-100 border-round">
