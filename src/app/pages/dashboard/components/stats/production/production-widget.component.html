@@ -21,7 +21,7 @@
                 'text-red-500': data.change_direction === 'down',
                 'text-muted-color': data.change_direction === 'neutral'
             }">
-                {{ data.change_direction === 'up' ? '+' : (data.change_direction === 'down' ? '-' : '') }}{{ data.change_percent | number: '1.0-2' }}%
+                {{ data.change_direction === 'up' ? '+' : '' }}{{ data.change_percent | number: '1.0-2' }}%
             </span>
             <span class="text-muted-color">{{ 'COMMON.PER_DAY' | translate }}</span>
         </div>

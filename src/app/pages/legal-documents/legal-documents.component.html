@@ -1,0 +1,285 @@
+<div class="card">
+    <div class="font-semibold text-xl mb-4">{{ pageTitle }}</div>
+
+    <p-table
+        #dt
+        [value]="documents"
+        dataKey="id"
+        [rows]="10"
+        [loading]="loading"
+        [rowHover]="true"
+        [showGridlines]="true"
+        [paginator]="true"
+        [globalFilterFields]="['name', 'number']"
+    >
+        <ng-template #caption>
+            <div class="flex flex-column md:flex-row justify-between items-start md:items-center gap-3">
+                <div class="flex flex-wrap gap-2 items-center">
+                    <p-iconfield>
+                        <p-inputicon><i class="pi pi-search"></i></p-inputicon>
+                        <input pInputText type="text" (input)="onGlobalFilter(dt, $event)"
+                               [placeholder]="'LEGAL_DOCUMENTS.FILTERS.SEARCH' | translate" />
+                    </p-iconfield>
+
+                    <app-date-picker
+                        [(ngModel)]="startDate"
+                        [label]="'LEGAL_DOCUMENTS.FILTERS.DATE_FROM' | translate"
+                        [showTime]="false"
+                        [required]="false"
+                        [maxDate]="endDate || today"
+                        (ngModelChange)="applyDateFilter()">
+                    </app-date-picker>
+
+                    <app-date-picker
+                        [(ngModel)]="endDate"
+                        [label]="'LEGAL_DOCUMENTS.FILTERS.DATE_TO' | translate"
+                        [showTime]="false"
+                        [required]="false"
+                        [maxDate]="today"
+                        (ngModelChange)="applyDateFilter()">
+                    </app-date-picker>
+
+                    @if (startDate || endDate) {
+                        <button pButton
+                                class="p-button-outlined p-button-secondary"
+                                (click)="clearFilters()"
+                                [pTooltip]="'LEGAL_DOCUMENTS.FILTERS.CLEAR' | translate"
+                                tooltipPosition="top">
+                            <i pButtonIcon class="pi pi-filter-slash"></i>
+                        </button>
+                    }
+                </div>
+
+                <button pButton (click)="openDialog()" class="p-button-success">
+                    <i class="pi pi-plus mr-2"></i>
+                    <span>{{ 'LEGAL_DOCUMENTS.NEW' | translate }}</span>
+                </button>
+            </div>
+        </ng-template>
+
+        <ng-template #header>
+            <tr>
+                <th pSortableColumn="number" style="min-width: 8rem">
+                    {{ 'LEGAL_DOCUMENTS.FIELDS.NUMBER' | translate }}
+                    <p-sortIcon field="number" />
+                </th>
+                <th pSortableColumn="document_date" style="min-width: 8rem">
+                    {{ 'LEGAL_DOCUMENTS.FIELDS.DOCUMENT_DATE' | translate }}
+                    <p-sortIcon field="document_date" />
+                </th>
+                <th pSortableColumn="name" style="min-width: 20rem">
+                    {{ 'LEGAL_DOCUMENTS.FIELDS.NAME' | translate }}
+                    <p-sortIcon field="name" />
+                </th>
+                @if (!typeId) {
+                    <th style="min-width: 12rem">{{ 'LEGAL_DOCUMENTS.FIELDS.TYPE' | translate }}</th>
+                }
+                <th style="min-width: 6rem">{{ 'LEGAL_DOCUMENTS.FIELDS.FILES' | translate }}</th>
+                <th style="width: 8rem">{{ 'LEGAL_DOCUMENTS.FIELDS.ACTIONS' | translate }}</th>
+            </tr>
+        </ng-template>
+
+        <ng-template #body let-doc>
+            <tr>
+                <td>
+                    <span class="font-semibold">{{ doc.number || '—' }}</span>
+                </td>
+                <td>{{ formatDate(doc.document_date) }}</td>
+                <td>
+                    <span class="line-clamp-2">{{ doc.name }}</span>
+                </td>
+                @if (!typeId) {
+                    <td>
+                        <p-tag [value]="doc.type.name" severity="info"></p-tag>
+                    </td>
+                }
+                <td>
+                    @if (doc.files && doc.files.length > 0) {
+                        <button pButton
+                                class="p-button-text p-button-sm"
+                                (click)="showFiles(doc)"
+                                [pTooltip]="'LEGAL_DOCUMENTS.FILES.VIEW' | translate"
+                                tooltipPosition="top">
+                            <i class="pi pi-paperclip mr-1"></i>
+                            <span>{{ doc.files.length }}</span>
+                        </button>
+                    } @else {
+                        <span class="text-color-secondary">—</span>
+                    }
+                </td>
+                <td>
+                    <div class="flex justify-center gap-1">
+                        <button pButton
+                                icon="pi pi-pencil"
+                                (click)="openEditDialog(doc)"
+                                class="p-button-rounded p-button-text p-button-warning"
+                                [pTooltip]="'COMMON.EDIT' | translate"
+                                tooltipPosition="top">
+                        </button>
+                        <button pButton
+                                icon="pi pi-trash"
+                                (click)="openDeleteDialog(doc)"
+                                class="p-button-rounded p-button-text p-button-danger"
+                                [pTooltip]="'COMMON.DELETE' | translate"
+                                tooltipPosition="top">
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template #emptymessage>
+            <tr>
+                <td [attr.colspan]="typeId ? 5 : 6" class="text-center py-8">
+                    <i class="pi pi-inbox text-4xl text-color-secondary mb-3 block"></i>
+                    <p class="m-0 text-color-secondary">{{ 'LEGAL_DOCUMENTS.NO_DATA' | translate }}</p>
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template #loadingbody>
+            <tr>
+                <td [attr.colspan]="typeId ? 5 : 6" class="text-center py-4">
+                    {{ 'LEGAL_DOCUMENTS.LOADING' | translate }}
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<!-- Create/Edit Dialog -->
+<app-dialog
+    [(visible)]="displayDialog"
+    [header]="isEditMode ? ('LEGAL_DOCUMENTS.EDIT' | translate) : ('LEGAL_DOCUMENTS.NEW' | translate)"
+    [form]="documentForm"
+    [saveLabel]="isEditMode ? ('COMMON.UPDATE' | translate) : ('COMMON.SAVE' | translate)"
+    [submitting]="saving"
+    width="50vw"
+    (save)="onSubmit()"
+    (cancel)="closeDialog()">
+    <form class="p-4" [formGroup]="documentForm" (ngSubmit)="onSubmit()">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="col-span-2">
+                <app-input-text
+                    formControlName="name"
+                    [label]="'LEGAL_DOCUMENTS.FIELDS.NAME' | translate"
+                    [submitted]="submitted"
+                    [errorMessage]="'LEGAL_DOCUMENTS.VALIDATION.NAME_REQUIRED' | translate"
+                    [required]="true">
+                </app-input-text>
+            </div>
+
+            <app-input-text
+                formControlName="number"
+                [label]="'LEGAL_DOCUMENTS.FIELDS.NUMBER' | translate"
+                [submitted]="submitted"
+                [required]="false">
+            </app-input-text>
+
+            <app-date-picker
+                formControlName="document_date"
+                [label]="'LEGAL_DOCUMENTS.FIELDS.DOCUMENT_DATE' | translate"
+                [submitted]="submitted"
+                [showTime]="false"
+                [errorMessage]="'LEGAL_DOCUMENTS.VALIDATION.DATE_REQUIRED' | translate"
+                [required]="true">
+            </app-date-picker>
+
+            @if (!typeId) {
+                <div class="col-span-2">
+                    <app-select
+                        formControlName="type_id"
+                        [label]="'LEGAL_DOCUMENTS.FIELDS.TYPE' | translate"
+                        [items]="documentTypes"
+                        [submitted]="submitted"
+                        [required]="false">
+                    </app-select>
+                </div>
+            }
+
+            <!-- Files Section -->
+            <div class="col-span-2">
+                <div class="font-medium mb-2">{{ 'LEGAL_DOCUMENTS.FIELDS.FILES' | translate }}</div>
+
+                <!-- Existing Files -->
+                @if (isEditMode && getExistingFiles().length > 0) {
+                    <div class="mb-3">
+                        <div
+                            class="text-sm text-color-secondary mb-2">{{ 'LEGAL_DOCUMENTS.FILES.EXISTING' | translate }}
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            @for (file of getExistingFiles(); track file.id) {
+                                <div class="flex items-center gap-2 p-2 surface-100 border-round">
+                                    <i class="pi pi-file text-primary"></i>
+                                    <a [href]="file.url" target="_blank" class="text-primary hover:underline text-sm">
+                                        {{ file.original_name }}
+                                    </a>
+                                    <button pButton
+                                            icon="pi pi-times"
+                                            class="p-button-rounded p-button-text p-button-danger p-button-sm"
+                                            (click)="onExistingFileRemoved(file.id)"
+                                            type="button">
+                                    </button>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+
+                <!-- Upload New Files -->
+                <app-file-upload
+                    [label]="'LEGAL_DOCUMENTS.FILES.UPLOAD' | translate"
+                    [multiple]="true"
+                    accept="*/*"
+                    [files]="selectedFiles"
+                    (filesSelected)="onFilesSelected($event)"
+                    (fileRemoved)="onFileRemoved($event)">
+                </app-file-upload>
+            </div>
+        </div>
+    </form>
+</app-dialog>
+
+<!-- Delete Confirmation -->
+<app-delete-confirmation
+    [(visible)]="displayDeleteDialog"
+    [message]="deleteConfirmMessage"
+    (onConfirm)="confirmDelete()">
+</app-delete-confirmation>
+
+<!-- Files View Dialog -->
+<p-dialog
+    [(visible)]="displayFilesDialog"
+    [header]="'LEGAL_DOCUMENTS.FILES.VIEW' | translate"
+    [modal]="true"
+    [style]="{ width: '500px' }"
+    [dismissableMask]="true">
+    @if (selectedDocumentForFiles?.files?.length) {
+        <div class="flex flex-column gap-2">
+            @for (file of selectedDocumentForFiles!.files!; track file.id) {
+                <a [href]="file.url"
+                   target="_blank"
+                   class="flex items-center gap-3 p-3 surface-100 border-round hover:surface-200 transition-colors no-underline text-color">
+                    @if (file.mime_type === 'application/pdf') {
+                        <i class="pi pi-file-pdf text-2xl text-red-500"></i>
+                    } @else if (file.mime_type.includes('word')) {
+                        <i class="pi pi-file-word text-2xl text-blue-500"></i>
+                    } @else if (file.mime_type.includes('excel') || file.mime_type.includes('spreadsheet')) {
+                        <i class="pi pi-file-excel text-2xl text-green-500"></i>
+                    } @else {
+                        <i class="pi pi-file text-2xl text-color-secondary"></i>
+                    }
+                    <div class="flex-1">
+                        <div class="font-medium">{{ file.original_name }}</div>
+                        <div class="text-sm text-color-secondary">{{ (file.size / 1024 / 1024).toFixed(2) }} MB</div>
+                    </div>
+                    <i class="pi pi-download text-primary"></i>
+                </a>
+            }
+        </div>
+    } @else {
+        <div class="text-center py-4 text-color-secondary">
+            {{ 'LEGAL_DOCUMENTS.FILES.NO_FILES' | translate }}
+        </div>
+    }
+</p-dialog>

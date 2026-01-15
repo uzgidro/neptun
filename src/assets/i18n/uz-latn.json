@@ -147,6 +147,19 @@
     "CHANCELLERY_REPORTS": "Hisobotlar",
     "CHANCELLERY_LETTERS": "Xatlar",
     "CHANCELLERY_INSTRUCTIONS": "Ko'rsatmalar",
+    "LEGAL_LIBRARY": "Normativ-huquqiy kutubxona",
+    "LEGAL_LIBRARY_ALL": "Barcha hujjatlar",
+    "LEGAL_LIBRARY_LAWS": "Qonunlar va normativ hujjatlar",
+    "LEGAL_LIBRARY_PRESIDENT_DECREES": "Prezident farmonlari",
+    "LEGAL_LIBRARY_PRESIDENT_RESOLUTIONS": "Prezident qarorlari",
+    "LEGAL_LIBRARY_PRESIDENT_ORDERS": "Prezident farmoyishlari",
+    "LEGAL_LIBRARY_GOVT_RESOLUTIONS": "Hukumat qarorlari",
+    "LEGAL_LIBRARY_CABINET_ORDERS": "Vazirlar Mahkamasi farmoyishlari",
+    "LEGAL_LIBRARY_DEPT_ACTS": "Idoraviy normativ hujjatlar",
+    "LEGAL_LIBRARY_LEGISLATION": "Qonunchilik to'plami",
+    "LEGAL_LIBRARY_OTHER": "Boshqa ro'yxatlar",
+    "LEGAL_LIBRARY_UHE_ORDERS": "O'zbekgidroenergo buyruqlari",
+    "LEGAL_LIBRARY_UHE_PROTOCOLS": "O'zbekgidroenergo bayonnomalari",
     "REGULATORY_DOCS": "Normativ-huquqiy hujjatlar",
     "LAWS_RUZ": "O'zbekiston Respublikasi qonunlari",
     "PRESIDENT_RESOLUTIONS": "O'zbekiston Respublikasi Prezidentining qarorlari",
@@ -261,7 +274,8 @@
     "VOLUME": "Hajm, mln. m³",
     "ACTIVE_ENERGY": "Faol energiya, MVt*soat",
     "DEBIT_FOR": "Debet",
-    "CREDIT_FOR": "Kredit"
+    "CREDIT_FOR": "Kredit",
+    "LAST_UPDATED": "Oxirgi yangilanish"
   },
   "CALENDAR": {
     "TITLE": "Kalendar",
@@ -1214,6 +1228,55 @@
       "DELETE_ERROR": "Tadbirni o'chirib bo'lmadi",
       "DELETE_CONFIRM": "Bu tadbirni o'chirishni xohlaysizmi",
       "DELETE_HEADER": "O'chirishni tasdiqlash"
+    }
+  },
+  "LEGAL_DOCUMENTS": {
+    "TITLE": "Normativ-huquqiy kutubxona",
+    "ALL_DOCUMENTS": "Barcha hujjatlar",
+    "NEW": "Hujjat qo'shish",
+    "EDIT": "Hujjatni tahrirlash",
+    "NO_DATA": "Hujjatlar yo'q",
+    "LOADING": "Yuklanmoqda...",
+    "CREATED": "Hujjat muvaffaqiyatli yaratildi",
+    "UPDATED": "Hujjat muvaffaqiyatli yangilandi",
+    "DELETED": "Hujjat muvaffaqiyatli o'chirildi",
+    "CREATE_ERROR": "Hujjatni yaratib bo'lmadi",
+    "UPDATE_ERROR": "Hujjatni yangilab bo'lmadi",
+    "DELETE_ERROR": "Hujjatni o'chirib bo'lmadi",
+    "DELETE_CONFIRM": "Bu hujjatni o'chirishni xohlaysizmi",
+    "DELETE_HEADER": "O'chirishni tasdiqlash",
+    "ERRORS": {
+      "LOAD_ERROR": "Ma'lumotlarni yuklab bo'lmadi",
+      "LOAD_TYPES_ERROR": "Hujjat turlarini yuklab bo'lmadi"
+    },
+    "FIELDS": {
+      "NAME": "Nomi",
+      "NUMBER": "Raqami",
+      "DOCUMENT_DATE": "Hujjat sanasi",
+      "TYPE": "Hujjat turi",
+      "FILES": "Fayllar",
+      "FILES_COUNT": "Fayllar soni",
+      "CREATED_AT": "Yaratilgan sana",
+      "CREATED_BY": "Yaratdi",
+      "ACTIONS": "Harakatlar"
+    },
+    "VALIDATION": {
+      "NAME_REQUIRED": "Nomi shart",
+      "DATE_REQUIRED": "Hujjat sanasi shart"
+    },
+    "FILES": {
+      "EXISTING": "Ilova qilingan fayllar",
+      "UPLOAD": "Fayllarni yuklash",
+      "VIEW": "Fayllarni ko'rish",
+      "NO_FILES": "Fayllar yo'q"
+    },
+    "FILTERS": {
+      "SEARCH": "Nomi yoki raqami bo'yicha qidiruv",
+      "DATE_RANGE": "Davr",
+      "DATE_FROM": "Sanadan",
+      "DATE_TO": "Sanagacha",
+      "CLEAR": "Filtrlarni tozalash",
+      "ALL_TYPES": "Barcha turlar"
     }
   },
   "CALLS": {

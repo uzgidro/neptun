@@ -1,8 +1,9 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { ButtonDirective, ButtonIcon } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { DecimalPipe, NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { interval, Subscription } from 'rxjs';
 import { Organization } from '@/core/interfaces/organizations';
 import { DashboardService } from '@/core/services/dashboard.service';
 import { TranslateModule } from '@ngx-translate/core';
@@ -17,19 +18,28 @@ interface expandedRows {
     templateUrl: './ges.widget.html',
     styleUrl: './ges.widget.scss'
 })
-class GesWidget implements OnInit {
+class GesWidget implements OnInit, OnDestroy {
     cascades: Organization[] = [];
 
     expandedRows: expandedRows = {};
 
     loading: boolean = false;
 
+    lastUpdated: Date | null = null;
+
     private dashboardService: DashboardService = inject(DashboardService);
+    private refreshSubscription?: Subscription;
 
     @Input() expanded: boolean = false;
     @Output() expansionChange = new EventEmitter<boolean>();
 
     ngOnInit(): void {
+        this.loadData();
+        // Auto-refresh every 2 minutes
+        this.refreshSubscription = interval(120000).subscribe(() => this.loadData());
+    }
+
+    private loadData(): void {
         this.loading = true;
         this.dashboardService.getOrganizationsCascades().subscribe({
             next: (res) => {
@@ -37,6 +47,7 @@ class GesWidget implements OnInit {
                     ...cascade,
                     contacts: this.sortContacts(cascade.contacts)
                 }));
+                this.lastUpdated = new Date();
             },
             error: (err) => {
                 console.log(err);
@@ -45,6 +56,20 @@ class GesWidget implements OnInit {
                 this.loading = false;
             }
         });
+    }
+
+    refresh(): void {
+        this.loadData();
+    }
+
+    getTimeAgo(): string {
+        if (!this.lastUpdated) return '';
+        const seconds = Math.floor((new Date().getTime() - this.lastUpdated.getTime()) / 1000);
+        if (seconds < 60) return 'только что';
+        const minutes = Math.floor(seconds / 60);
+        if (minutes < 60) return `${minutes} мин. назад`;
+        const hours = Math.floor(minutes / 60);
+        return `${hours} ч. назад`;
     }
 
     private sortContacts(contacts: any[]): any[] {
@@ -62,6 +87,10 @@ class GesWidget implements OnInit {
     expandAll() {
         this.expanded = !this.expanded;
         this.expansionChange.emit(this.expanded);
+    }
+
+    ngOnDestroy(): void {
+        this.refreshSubscription?.unsubscribe();
     }
 }
 

@@ -1,15 +1,18 @@
 {
   "COMMON": {
     "SAVE": "Сохранить",
+    "UPDATE": "Обновить",
     "CANCEL": "Отмена",
     "DELETE": "Удалить",
     "EDIT": "Редактировать",
     "ADD": "Добавить",
     "SEARCH": "Поиск",
     "LOADING": "Загрузка...",
+    "ACTIONS": "Действия",
     "YES": "Да",
     "NO": "Нет",
     "CLOSE": "Закрыть",
+    "REMOVE": "Удалить",
     "BACK": "Назад",
     "NEXT": "Далее",
     "SUBMIT": "Отправить",
@@ -147,6 +150,19 @@
     "CHANCELLERY_REPORTS": "Рапорты",
     "CHANCELLERY_LETTERS": "Письма",
     "CHANCELLERY_INSTRUCTIONS": "Инструкции",
+    "LEGAL_LIBRARY": "Нормативно-правовая библиотека",
+    "LEGAL_LIBRARY_ALL": "Все документы",
+    "LEGAL_LIBRARY_LAWS": "Законы и нормативные акты",
+    "LEGAL_LIBRARY_PRESIDENT_DECREES": "Указы Президента",
+    "LEGAL_LIBRARY_PRESIDENT_RESOLUTIONS": "Постановления Президента",
+    "LEGAL_LIBRARY_PRESIDENT_ORDERS": "Распоряжения Президента",
+    "LEGAL_LIBRARY_GOVT_RESOLUTIONS": "Постановления Правительства",
+    "LEGAL_LIBRARY_CABINET_ORDERS": "Распоряжения Кабинета Министров",
+    "LEGAL_LIBRARY_DEPT_ACTS": "Ведомственные нормативные акты",
+    "LEGAL_LIBRARY_LEGISLATION": "Собрание законодательства",
+    "LEGAL_LIBRARY_OTHER": "Иные перечни",
+    "LEGAL_LIBRARY_UHE_ORDERS": "Приказы Узбекгидроэнерго",
+    "LEGAL_LIBRARY_UHE_PROTOCOLS": "Протоколы Узбекгидроэнерго",
     "REGULATORY_DOCS": "Нормативно правовая документация",
     "LAWS_RUZ": "Законы Республики Узбекистан",
     "PRESIDENT_RESOLUTIONS": "Постановления Президента Республики Узбекистан",
@@ -261,7 +277,8 @@
     "VOLUME": "Объём, млн. м³",
     "ACTIVE_ENERGY": "Активная энергия, МВт*ч",
     "DEBIT_FOR": "Дебит за",
-    "CREDIT_FOR": "Кредит за"
+    "CREDIT_FOR": "Кредит за",
+    "LAST_UPDATED": "Последнее обновление"
   },
   "CALENDAR": {
     "TITLE": "Календарь",
@@ -1149,6 +1166,126 @@
       }
     }
   },
+  "CHANCELLERY": {
+    "COMMON": {
+      "DELETE_CONFIRM": "Вы уверены, что хотите удалить"
+    },
+    "ERRORS": {
+      "LOAD_ERROR": "Не удалось загрузить данные"
+    },
+    "FILTERS": {
+      "ALL_TYPES": "Все типы",
+      "ALL_STATUSES": "Все статусы",
+      "TYPE": "Тип",
+      "STATUS": "Статус"
+    },
+    "FIELDS": {
+      "NAME": "Название",
+      "NUMBER": "Номер",
+      "DOCUMENT_DATE": "Дата документа",
+      "TYPE": "Тип",
+      "STATUS": "Статус",
+      "DUE_DATE": "Срок исполнения",
+      "DESCRIPTION": "Описание",
+      "FILES": "Файлы"
+    },
+    "VALIDATION": {
+      "NAME_REQUIRED": "Название обязательно",
+      "DATE_REQUIRED": "Дата обязательна",
+      "TYPE_REQUIRED": "Тип обязателен"
+    },
+    "FILES": {
+      "EXISTING": "Прикреплённые файлы",
+      "UPLOAD": "Загрузить файлы"
+    },
+    "ACTIONS": {
+      "HISTORY": "История статусов",
+      "CHANGE_STATUS": "Изменить статус"
+    },
+    "STATUS_CHANGE": {
+      "TITLE": "Изменение статуса",
+      "CURRENT_STATUS": "Текущий статус",
+      "NEW_STATUS": "Новый статус",
+      "COMMENT": "Комментарий",
+      "COMMENT_PLACEHOLDER": "Введите комментарий к изменению статуса...",
+      "SUCCESS": "Статус успешно изменён",
+      "ERROR": "Не удалось изменить статус"
+    },
+    "STATUS_HISTORY": {
+      "TITLE": "История изменений статуса",
+      "NO_HISTORY": "История изменений пуста",
+      "LOAD_ERROR": "Не удалось загрузить историю"
+    },
+    "STATUSES": {
+      "DRAFT": "Черновик",
+      "PENDING_APPROVAL": "На согласовании",
+      "APPROVED": "Утверждён",
+      "REJECTED": "Отклонён",
+      "IN_EXECUTION": "На исполнении",
+      "EXECUTED": "Исполнен",
+      "CANCELLED": "Отменён"
+    },
+    "TYPES": {
+      "DECREE": "Приказ",
+      "REPORT": "Рапорт",
+      "LETTER": "Письмо",
+      "INSTRUCTION": "Инструкция",
+      "LEGAL_DOCUMENT": "НПД"
+    },
+    "LINKED_DOCS": {
+      "TITLE": "Связанные документы",
+      "ADD": "Добавить связь",
+      "NO_DOCUMENTS": "Нет связанных документов"
+    },
+    "DECREES": {
+      "TITLE": "Приказы",
+      "NEW": "Новый приказ",
+      "EDIT": "Редактировать приказ",
+      "NO_DATA": "Нет приказов",
+      "CREATED": "Приказ создан",
+      "UPDATED": "Приказ обновлён",
+      "DELETED": "Приказ удалён",
+      "CREATE_ERROR": "Не удалось создать приказ",
+      "UPDATE_ERROR": "Не удалось обновить приказ",
+      "DELETE_ERROR": "Не удалось удалить приказ"
+    },
+    "REPORTS": {
+      "TITLE": "Рапорты",
+      "NEW": "Новый рапорт",
+      "EDIT": "Редактировать рапорт",
+      "NO_DATA": "Нет рапортов",
+      "CREATED": "Рапорт создан",
+      "UPDATED": "Рапорт обновлён",
+      "DELETED": "Рапорт удалён",
+      "CREATE_ERROR": "Не удалось создать рапорт",
+      "UPDATE_ERROR": "Не удалось обновить рапорт",
+      "DELETE_ERROR": "Не удалось удалить рапорт"
+    },
+    "LETTERS": {
+      "TITLE": "Письма",
+      "NEW": "Новое письмо",
+      "EDIT": "Редактировать письмо",
+      "NO_DATA": "Нет писем",
+      "CREATED": "Письмо создано",
+      "UPDATED": "Письмо обновлено",
+      "DELETED": "Письмо удалено",
+      "CREATE_ERROR": "Не удалось создать письмо",
+      "UPDATE_ERROR": "Не удалось обновить письмо",
+      "DELETE_ERROR": "Не удалось удалить письмо"
+    },
+    "INSTRUCTIONS": {
+      "TITLE": "Инструкции",
+      "NEW": "Новая инструкция",
+      "EDIT": "Редактировать инструкцию",
+      "NO_DATA": "Нет инструкций",
+      "CREATED": "Инструкция создана",
+      "UPDATED": "Инструкция обновлена",
+      "DELETED": "Инструкция удалена",
+      "CREATE_ERROR": "Не удалось создать инструкцию",
+      "UPDATE_ERROR": "Не удалось обновить инструкцию",
+      "DELETE_ERROR": "Не удалось удалить инструкцию"
+    }
+  },
   "PLANNING": {
     "COMMON": {
       "SEARCH": "Поиск...",
@@ -1239,6 +1376,55 @@
       "DELETE_ERROR": "Не удалось удалить событие",
       "DELETE_CONFIRM": "Вы уверены, что хотите удалить событие",
       "DELETE_HEADER": "Подтверждение удаления"
+    }
+  },
+  "LEGAL_DOCUMENTS": {
+    "TITLE": "Нормативно-правовая библиотека",
+    "ALL_DOCUMENTS": "Все документы",
+    "NEW": "Добавить документ",
+    "EDIT": "Редактировать документ",
+    "NO_DATA": "Нет документов",
+    "LOADING": "Загрузка...",
+    "CREATED": "Документ успешно создан",
+    "UPDATED": "Документ успешно обновлен",
+    "DELETED": "Документ успешно удален",
+    "CREATE_ERROR": "Не удалось создать документ",
+    "UPDATE_ERROR": "Не удалось обновить документ",
+    "DELETE_ERROR": "Не удалось удалить документ",
+    "DELETE_CONFIRM": "Вы уверены, что хотите удалить документ",
+    "DELETE_HEADER": "Подтверждение удаления",
+    "ERRORS": {
+      "LOAD_ERROR": "Не удалось загрузить данные",
+      "LOAD_TYPES_ERROR": "Не удалось загрузить типы документов"
+    },
+    "FIELDS": {
+      "NAME": "Название",
+      "NUMBER": "Номер",
+      "DOCUMENT_DATE": "Дата документа",
+      "TYPE": "Тип документа",
+      "FILES": "Файлы",
+      "FILES_COUNT": "Файлов",
+      "CREATED_AT": "Дата создания",
+      "CREATED_BY": "Создал",
+      "ACTIONS": "Действия"
+    },
+    "VALIDATION": {
+      "NAME_REQUIRED": "Название обязательно",
+      "DATE_REQUIRED": "Дата документа обязательна"
+    },
+    "FILES": {
+      "EXISTING": "Прикреплённые файлы",
+      "UPLOAD": "Загрузить файлы",
+      "VIEW": "Просмотр файлов",
+      "NO_FILES": "Нет файлов"
+    },
+    "FILTERS": {
+      "SEARCH": "Поиск по названию или номеру",
+      "DATE_RANGE": "Период",
+      "DATE_FROM": "Дата от",
+      "DATE_TO": "Дата до",
+      "CLEAR": "Сбросить фильтры",
+      "ALL_TYPES": "Все типы"
     }
   },
   "CALLS": {
