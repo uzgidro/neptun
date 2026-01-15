@@ -277,7 +277,8 @@
     "VOLUME": "Объём, млн. м³",
     "ACTIVE_ENERGY": "Активная энергия, МВт*ч",
     "DEBIT_FOR": "Дебит за",
-    "CREDIT_FOR": "Кредит за"
+    "CREDIT_FOR": "Кредит за",
+    "LAST_UPDATED": "Последнее обновление"
   },
   "CALENDAR": {
     "TITLE": "Календарь",

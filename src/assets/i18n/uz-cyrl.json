@@ -274,7 +274,8 @@
     "VOLUME": "Ҳажм, млн. м³",
     "ACTIVE_ENERGY": "Фаол энергия, МВт*соат",
     "DEBIT_FOR": "Дебет",
-    "CREDIT_FOR": "Кредит"
+    "CREDIT_FOR": "Кредит",
+    "LAST_UPDATED": "Охирги янгиланиш"
   },
   "CALENDAR": {
     "TITLE": "Календар",

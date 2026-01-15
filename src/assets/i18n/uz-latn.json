@@ -274,7 +274,8 @@
     "VOLUME": "Hajm, mln. m³",
     "ACTIVE_ENERGY": "Faol energiya, MVt*soat",
     "DEBIT_FOR": "Debet",
-    "CREDIT_FOR": "Kredit"
+    "CREDIT_FOR": "Kredit",
+    "LAST_UPDATED": "Oxirgi yangilanish"
   },
   "CALENDAR": {
     "TITLE": "Kalendar",
