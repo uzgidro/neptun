@@ -17,3 +17,10 @@ export * from './decree';
 export * from './report';
 export * from './letter';
 export * from './instruction';
+export type {
+    LegalDocument,
+    LegalDocumentType,
+    LegalDocumentPayload,
+    LegalDocumentFilters,
+    CreateLegalDocumentResponse
+} from './legal-document';

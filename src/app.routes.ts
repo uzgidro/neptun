@@ -36,6 +36,7 @@ import { OrdersComponent } from '@/pages/chancellery/orders/orders.component';
 import { ReportsComponent } from '@/pages/chancellery/reports/reports.component';
 import { LettersComponent } from '@/pages/chancellery/letters/letters.component';
 import { InstructionsComponent } from '@/pages/chancellery/instructions/instructions.component';
+import { LegalDocumentsComponent } from '@/pages/legal-documents/legal-documents.component';
 import { CallsComponent } from '@/pages/calls/calls.component';
 import { NewsComponent } from '@/pages/media/news/news.component';
 import { InvestActiveProjectsComponent } from '@/pages/invest/invest-active-projects/invest-active-projects.component';
@@ -87,6 +88,7 @@ export const appRoutes: Routes = [
             { path: 'chancellery/reports', component: ReportsComponent, canActivate: [raisGuard] },
             { path: 'chancellery/letters', component: LettersComponent, canActivate: [raisGuard] },
             { path: 'chancellery/instructions', component: InstructionsComponent, canActivate: [raisGuard] },
+            { path: 'legal-documents', component: LegalDocumentsComponent, canActivate: [raisGuard] },
             { path: 'calls', component: CallsComponent, canActivate: [raisGuard] },
             { path: 'media/news', component: NewsComponent, canActivate: [raisGuard] },
         ]

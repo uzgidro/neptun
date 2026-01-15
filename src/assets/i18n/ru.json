@@ -150,6 +150,19 @@
     "CHANCELLERY_REPORTS": "Рапорты",
     "CHANCELLERY_LETTERS": "Письма",
     "CHANCELLERY_INSTRUCTIONS": "Инструкции",
+    "LEGAL_LIBRARY": "Нормативно-правовая библиотека",
+    "LEGAL_LIBRARY_ALL": "Все документы",
+    "LEGAL_LIBRARY_LAWS": "Законы и нормативные акты",
+    "LEGAL_LIBRARY_PRESIDENT_DECREES": "Указы Президента",
+    "LEGAL_LIBRARY_PRESIDENT_RESOLUTIONS": "Постановления Президента",
+    "LEGAL_LIBRARY_PRESIDENT_ORDERS": "Распоряжения Президента",
+    "LEGAL_LIBRARY_GOVT_RESOLUTIONS": "Постановления Правительства",
+    "LEGAL_LIBRARY_CABINET_ORDERS": "Распоряжения Кабинета Министров",
+    "LEGAL_LIBRARY_DEPT_ACTS": "Ведомственные нормативные акты",
+    "LEGAL_LIBRARY_LEGISLATION": "Собрание законодательства",
+    "LEGAL_LIBRARY_OTHER": "Иные перечни",
+    "LEGAL_LIBRARY_UHE_ORDERS": "Приказы Узбекгидроэнерго",
+    "LEGAL_LIBRARY_UHE_PROTOCOLS": "Протоколы Узбекгидроэнерго",
     "REGULATORY_DOCS": "Нормативно правовая документация",
     "LAWS_RUZ": "Законы Республики Узбекистан",
     "PRESIDENT_RESOLUTIONS": "Постановления Президента Республики Узбекистан",
@@ -1362,6 +1375,55 @@
       "DELETE_ERROR": "Не удалось удалить событие",
       "DELETE_CONFIRM": "Вы уверены, что хотите удалить событие",
       "DELETE_HEADER": "Подтверждение удаления"
+    }
+  },
+  "LEGAL_DOCUMENTS": {
+    "TITLE": "Нормативно-правовая библиотека",
+    "ALL_DOCUMENTS": "Все документы",
+    "NEW": "Добавить документ",
+    "EDIT": "Редактировать документ",
+    "NO_DATA": "Нет документов",
+    "LOADING": "Загрузка...",
+    "CREATED": "Документ успешно создан",
+    "UPDATED": "Документ успешно обновлен",
+    "DELETED": "Документ успешно удален",
+    "CREATE_ERROR": "Не удалось создать документ",
+    "UPDATE_ERROR": "Не удалось обновить документ",
+    "DELETE_ERROR": "Не удалось удалить документ",
+    "DELETE_CONFIRM": "Вы уверены, что хотите удалить документ",
+    "DELETE_HEADER": "Подтверждение удаления",
+    "ERRORS": {
+      "LOAD_ERROR": "Не удалось загрузить данные",
+      "LOAD_TYPES_ERROR": "Не удалось загрузить типы документов"
+    },
+    "FIELDS": {
+      "NAME": "Название",
+      "NUMBER": "Номер",
+      "DOCUMENT_DATE": "Дата документа",
+      "TYPE": "Тип документа",
+      "FILES": "Файлы",
+      "FILES_COUNT": "Файлов",
+      "CREATED_AT": "Дата создания",
+      "CREATED_BY": "Создал",
+      "ACTIONS": "Действия"
+    },
+    "VALIDATION": {
+      "NAME_REQUIRED": "Название обязательно",
+      "DATE_REQUIRED": "Дата документа обязательна"
+    },
+    "FILES": {
+      "EXISTING": "Прикреплённые файлы",
+      "UPLOAD": "Загрузить файлы",
+      "VIEW": "Просмотр файлов",
+      "NO_FILES": "Нет файлов"
+    },
+    "FILTERS": {
+      "SEARCH": "Поиск по названию или номеру",
+      "DATE_RANGE": "Период",
+      "DATE_FROM": "Дата от",
+      "DATE_TO": "Дата до",
+      "CLEAR": "Сбросить фильтры",
+      "ALL_TYPES": "Все типы"
     }
   },
   "CALLS": {

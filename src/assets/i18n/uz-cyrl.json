@@ -147,6 +147,19 @@
     "CHANCELLERY_REPORTS": "Ҳисоботлар",
     "CHANCELLERY_LETTERS": "Хатлар",
     "CHANCELLERY_INSTRUCTIONS": "Кўрсатмалар",
+    "LEGAL_LIBRARY": "Норматив-ҳуқуқий кутубхона",
+    "LEGAL_LIBRARY_ALL": "Барча ҳужжатлар",
+    "LEGAL_LIBRARY_LAWS": "Қонунлар ва норматив ҳужжатлар",
+    "LEGAL_LIBRARY_PRESIDENT_DECREES": "Президент фармонлари",
+    "LEGAL_LIBRARY_PRESIDENT_RESOLUTIONS": "Президент қарорлари",
+    "LEGAL_LIBRARY_PRESIDENT_ORDERS": "Президент фармойишлари",
+    "LEGAL_LIBRARY_GOVT_RESOLUTIONS": "Ҳукумат қарорлари",
+    "LEGAL_LIBRARY_CABINET_ORDERS": "Вазирлар Маҳкамаси фармойишлари",
+    "LEGAL_LIBRARY_DEPT_ACTS": "Идоравий норматив ҳужжатлар",
+    "LEGAL_LIBRARY_LEGISLATION": "Қонунчилик тўплами",
+    "LEGAL_LIBRARY_OTHER": "Бошқа рўйхатлар",
+    "LEGAL_LIBRARY_UHE_ORDERS": "Ўзбекгидроэнерго буйруқлари",
+    "LEGAL_LIBRARY_UHE_PROTOCOLS": "Ўзбекгидроэнерго баённомалари",
     "REGULATORY_DOCS": "Норматив-ҳуқуқий ҳужжатлар",
     "LAWS_RUZ": "Ўзбекистон Республикаси қонунлари",
     "PRESIDENT_RESOLUTIONS": "Ўзбекистон Республикаси Президентининг қарорлари",
@@ -1214,6 +1227,55 @@
       "DELETE_ERROR": "Тадбирни ўчириб бўлмади",
       "DELETE_CONFIRM": "Бу тадбирни ўчиришни хоҳлайсизми",
       "DELETE_HEADER": "Ўчиришни тасдиқлаш"
+    }
+  },
+  "LEGAL_DOCUMENTS": {
+    "TITLE": "Норматив-ҳуқуқий кутубхона",
+    "ALL_DOCUMENTS": "Барча ҳужжатлар",
+    "NEW": "Ҳужжат қўшиш",
+    "EDIT": "Ҳужжатни таҳрирлаш",
+    "NO_DATA": "Ҳужжатлар йўқ",
+    "LOADING": "Юкланмоқда...",
+    "CREATED": "Ҳужжат муваффақиятли яратилди",
+    "UPDATED": "Ҳужжат муваффақиятли янгиланди",
+    "DELETED": "Ҳужжат муваффақиятли ўчирилди",
+    "CREATE_ERROR": "Ҳужжатни яратиб бўлмади",
+    "UPDATE_ERROR": "Ҳужжатни янгилаб бўлмади",
+    "DELETE_ERROR": "Ҳужжатни ўчириб бўлмади",
+    "DELETE_CONFIRM": "Бу ҳужжатни ўчиришни хоҳлайсизми",
+    "DELETE_HEADER": "Ўчиришни тасдиқлаш",
+    "ERRORS": {
+      "LOAD_ERROR": "Маълумотларни юклаб бўлмади",
+      "LOAD_TYPES_ERROR": "Ҳужжат турларини юклаб бўлмади"
+    },
+    "FIELDS": {
+      "NAME": "Номи",
+      "NUMBER": "Рақами",
+      "DOCUMENT_DATE": "Ҳужжат санаси",
+      "TYPE": "Ҳужжат тури",
+      "FILES": "Файллар",
+      "FILES_COUNT": "Файллар сони",
+      "CREATED_AT": "Яратилган сана",
+      "CREATED_BY": "Яратди",
+      "ACTIONS": "Ҳаракатлар"
+    },
+    "VALIDATION": {
+      "NAME_REQUIRED": "Номи шарт",
+      "DATE_REQUIRED": "Ҳужжат санаси шарт"
+    },
+    "FILES": {
+      "EXISTING": "Илова қилинган файллар",
+      "UPLOAD": "Файлларни юклаш",
+      "VIEW": "Файлларни кўриш",
+      "NO_FILES": "Файллар йўқ"
+    },
+    "FILTERS": {
+      "SEARCH": "Номи ёки рақами бўйича қидирув",
+      "DATE_RANGE": "Давр",
+      "DATE_FROM": "Санадан",
+      "DATE_TO": "Санагача",
+      "CLEAR": "Филтрларни тозалаш",
+      "ALL_TYPES": "Барча турлар"
     }
   },
   "CALLS": {
