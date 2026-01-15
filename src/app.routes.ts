@@ -32,11 +32,10 @@ import { ProcurementComponent } from '@/pages/financial-block/procurement/procur
 import { KpiComponent } from '@/pages/financial-block/kpi/kpi.component';
 import { SalaryComponent } from '@/pages/financial-block/salary/salary.component';
 import { FinancialDashboardComponent } from '@/pages/financial-block/dashboard/financial-dashboard.component';
-import { OrdersComponent } from '@/pages/mail/orders/orders.component';
-import { ReportsComponent } from '@/pages/mail/reports/reports.component';
-import { LettersComponent } from '@/pages/mail/letters/letters.component';
-import { InstructionsComponent } from '@/pages/mail/instructions/instructions.component';
-import { ResolutionsComponent } from '@/pages/mail/resolutions/resolutions.component';
+import { OrdersComponent } from '@/pages/chancellery/orders/orders.component';
+import { ReportsComponent } from '@/pages/chancellery/reports/reports.component';
+import { LettersComponent } from '@/pages/chancellery/letters/letters.component';
+import { InstructionsComponent } from '@/pages/chancellery/instructions/instructions.component';
 import { CallsComponent } from '@/pages/calls/calls.component';
 import { NewsComponent } from '@/pages/media/news/news.component';
 import { InvestActiveProjectsComponent } from '@/pages/invest/invest-active-projects/invest-active-projects.component';
@@ -84,11 +83,10 @@ export const appRoutes: Routes = [
             { path: 'visits', component: VisitsComponent, canActivate: [raisGuard] },
             { path: 'incidents', component: IncidentsComponent, canActivate: [raisGuard] },
             { path: 'reservoir-device', component: ReservoirsDeviceComponent, canActivate: [raisGuard] },
-            { path: 'mail/orders', component: OrdersComponent, canActivate: [raisGuard] },
-            { path: 'mail/reports', component: ReportsComponent, canActivate: [raisGuard] },
-            { path: 'mail/letters', component: LettersComponent, canActivate: [raisGuard] },
-            { path: 'mail/instructions', component: InstructionsComponent, canActivate: [raisGuard] },
-            { path: 'mail/resolutions', component: ResolutionsComponent, canActivate: [raisGuard] },
+            { path: 'chancellery/orders', component: OrdersComponent, canActivate: [raisGuard] },
+            { path: 'chancellery/reports', component: ReportsComponent, canActivate: [raisGuard] },
+            { path: 'chancellery/letters', component: LettersComponent, canActivate: [raisGuard] },
+            { path: 'chancellery/instructions', component: InstructionsComponent, canActivate: [raisGuard] },
             { path: 'calls', component: CallsComponent, canActivate: [raisGuard] },
             { path: 'media/news', component: NewsComponent, canActivate: [raisGuard] },
         ]

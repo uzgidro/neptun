@@ -181,23 +181,10 @@ export class MenuComponent implements OnInit {
                         label: this.t('MENU.CHANCELLERY'),
                         role: ['rais'],
                         items: [
-                            { label: this.t('MENU.CHANCELLERY_ORDERS'), role: ['rais'], routerLink: ['/mail/orders'] },
-                            { label: this.t('MENU.CHANCELLERY_REPORTS'), role: ['rais'], routerLink: ['/mail/reports'] },
-                            { label: this.t('MENU.CHANCELLERY_LETTERS'), role: ['rais'], routerLink: ['/mail/letters'] },
-                            { label: this.t('MENU.CHANCELLERY_INSTRUCTIONS'), role: ['rais'], routerLink: ['/mail/instructions'] },
-                            {
-                                label: this.t('MENU.REGULATORY_DOCS'),
-                                role: ['rais'],
-                                items: [
-                                    { label: this.t('MENU.LAWS_RUZ'), role: ['rais'] },
-                                    { label: this.t('MENU.PRESIDENT_RESOLUTIONS'), role: ['rais'], routerLink: ['/mail/resolutions'], queryParams: { type: 'president' }, routerLinkActiveOptions: { queryParams: 'exact' } },
-                                    { label: this.t('MENU.PRESIDENT_DECREES'), role: ['rais'], routerLink: ['/mail/resolutions'], queryParams: { type: 'decree' }, routerLinkActiveOptions: { queryParams: 'exact' } },
-                                    { label: this.t('MENU.CABINET_RESOLUTIONS'), role: ['rais'], routerLink: ['/mail/resolutions'], queryParams: { type: 'cabinet' }, routerLinkActiveOptions: { queryParams: 'exact' } },
-                                    { label: this.t('MENU.MINISTRY_ORDERS'), role: ['rais'], routerLink: ['/mail/resolutions'], queryParams: { type: 'order' }, routerLinkActiveOptions: { queryParams: 'exact' } },
-                                    { label: this.t('MENU.JOINT_AGREEMENTS'), role: ['rais'], routerLink: ['/mail/resolutions'], queryParams: { type: 'agreement' }, routerLinkActiveOptions: { queryParams: 'exact' } },
-                                    { label: this.t('MENU.OTHER_DOCS'), role: ['rais'] }
-                                ]
-                            }
+                            { label: this.t('MENU.CHANCELLERY_ORDERS'), role: ['rais'], routerLink: ['/chancellery/orders'] },
+                            { label: this.t('MENU.CHANCELLERY_REPORTS'), role: ['rais'], routerLink: ['/chancellery/reports'] },
+                            { label: this.t('MENU.CHANCELLERY_LETTERS'), role: ['rais'], routerLink: ['/chancellery/letters'] },
+                            { label: this.t('MENU.CHANCELLERY_INSTRUCTIONS'), role: ['rais'], routerLink: ['/chancellery/instructions'] }
                         ]
                     },
                     { label: this.t('MENU.CALLS'), role: ['rais'], routerLink: ['/calls'] },
