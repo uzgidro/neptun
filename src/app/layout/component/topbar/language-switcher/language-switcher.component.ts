@@ -9,7 +9,7 @@ import { SelectButton } from 'primeng/selectbutton';
     standalone: true,
     imports: [CommonModule, FormsModule, SelectButton],
     template: `
-        <p-selectbutton
+        <p-select-button
             [options]="languageOptions"
             [(ngModel)]="selectedLang"
             (onChange)="onLanguageChange($event)"
@@ -34,14 +34,15 @@ export class LanguageSwitcherComponent {
     languageOptions = [
         { label: 'RU', value: 'ru' },
         { label: 'UZ', value: 'uz-latn' },
-        { label: 'ЎЗ', value: 'uz-cyrl' }
+        { label: 'ЎЗ', value: 'uz-cyrl' },
+        { label: 'EN', value: 'en' }
     ];
 
     get selectedLang(): string {
         return this.languageService.getCurrentLanguage().code;
     }
 
-    set selectedLang(value: string) {
+    set selectedLang(_: string) {
         // Setter needed for ngModel binding
     }
 

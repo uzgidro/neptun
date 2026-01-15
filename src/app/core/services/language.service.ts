@@ -16,7 +16,8 @@ export class LanguageService {
     readonly languages: Language[] = [
         { code: 'ru', name: 'Русский', flag: '🇷🇺' },
         { code: 'uz-latn', name: "O'zbekcha (Lotin)", flag: '🇺🇿' },
-        { code: 'uz-cyrl', name: 'Ўзбекча (Кирилл)', flag: '🇺🇿' }
+        { code: 'uz-cyrl', name: 'Ўзбекча (Кирилл)', flag: '🇺🇿' },
+        { code: 'en', name: 'English', flag: '🇬🇧' }
     ];
 
     constructor(private translate: TranslateService) {
