@@ -39,6 +39,7 @@
 
     <ng-template pTemplate="header">
         <tr>
+            <th style="width: 4rem">№</th>
             <th pSortableColumn="started_at" style="min-width: 12rem">
                 <div class="flex items-center gap-2">
                     {{ 'SITUATION_CENTER.SHUTDOWN.START' | translate }}
@@ -90,6 +91,9 @@
 
     <ng-template pTemplate="groupheader" let-discharge>
         <tr>
+            <td class="bg-gray-200 dark:bg-gray-900">
+                <span class="font-bold text-lg">{{ getOrganizationIndex(discharge.organization.name) }}</span>
+            </td>
             <td class="bg-gray-200 dark:bg-gray-900" colspan="2">
                 <span class="font-bold text-lg">{{ discharge.organization.name }}</span>
             </td>
@@ -108,6 +112,7 @@
 
     <ng-template pTemplate="body" let-discharge>
         <tr>
+            <td>{{ getRowIndex(discharge) }}</td>
             <td>{{ discharge.started_at | date:'dd.MM.yyyy HH:mm' }}</td>
             <td>{{ discharge.ended_at ? (discharge.ended_at | date:'dd.MM.yyyy HH:mm') : '-' }}</td>
             <td>{{ discharge.flow_rate | number: '1.0-2' }}</td>
@@ -153,7 +158,7 @@
 
     <ng-template pTemplate="emptymessage">
         <tr>
-            <td [attr.colspan]="authService.isSc() ? 8 : 7" class="text-center">
+            <td [attr.colspan]="authService.isSc() ? 9 : 8" class="text-center">
                 {{ 'SITUATION_CENTER.DISCHARGE.NO_DISCHARGES' | translate }}
             </td>
         </tr>
