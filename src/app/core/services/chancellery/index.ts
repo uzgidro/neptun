@@ -7,6 +7,7 @@ export { BaseDocumentService } from './base-document.service';
 
 // Shared services
 export { DocumentStatusService } from './document-status.service';
+export { DocumentSignatureService } from './document-signature.service';
 
 // Document type services
 export { DecreeService } from './decree.service';

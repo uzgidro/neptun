@@ -12,7 +12,10 @@ export type StatusCode =
     | 'rejected'
     | 'in_execution'
     | 'executed'
-    | 'cancelled';
+    | 'cancelled'
+    | 'pending_signature'
+    | 'signed'
+    | 'signature_rejected';
 
 /** Full document status from /document-statuses endpoint */
 export interface DocumentStatus {
@@ -59,5 +62,8 @@ export const STATUS_DISPLAY_CONFIG: Record<StatusCode, Omit<StatusDisplayConfig,
     rejected: { code: 'rejected', severity: 'danger', icon: 'pi pi-times-circle' },
     in_execution: { code: 'in_execution', severity: 'info', icon: 'pi pi-spinner' },
     executed: { code: 'executed', severity: 'success', icon: 'pi pi-verified' },
-    cancelled: { code: 'cancelled', severity: 'secondary', icon: 'pi pi-ban' }
+    cancelled: { code: 'cancelled', severity: 'secondary', icon: 'pi pi-ban' },
+    pending_signature: { code: 'pending_signature', severity: 'warn', icon: 'pi pi-pen-to-square' },
+    signed: { code: 'signed', severity: 'success', icon: 'pi pi-check-square' },
+    signature_rejected: { code: 'signature_rejected', severity: 'danger', icon: 'pi pi-times' }
 };

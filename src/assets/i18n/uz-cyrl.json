@@ -143,6 +143,7 @@
     "TABLET_INVESTMENT": "Инвестиция бошлиғи планшети",
     "TABLET_DUTY": "Навбатчи планшети",
     "CHANCELLERY": "Девонхона",
+    "CHANCELLERY_PENDING_SIGNATURES": "Имзо кутилмоқда",
     "CHANCELLERY_ORDERS": "Буйруқлар",
     "CHANCELLERY_REPORTS": "Ҳисоботлар",
     "CHANCELLERY_LETTERS": "Хатлар",
@@ -275,7 +276,10 @@
     "ACTIVE_ENERGY": "Фаол энергия, МВт*соат",
     "DEBIT_FOR": "Дебет",
     "CREDIT_FOR": "Кредит",
-    "LAST_UPDATED": "Охирги янгиланиш"
+    "LAST_UPDATED": "Охирги янгиланиш",
+    "JUST_NOW": "ҳозиргина",
+    "MINUTES_AGO": "дақ. олдин",
+    "HOURS_AGO": "соат олдин"
   },
   "CALENDAR": {
     "TITLE": "Календар",
@@ -1136,6 +1140,161 @@
         "ORDER": "Буйруқ",
         "AGREEMENT": "Қўшма келишув"
       }
+    }
+  },
+  "CHANCELLERY": {
+    "COMMON": {
+      "DELETE_CONFIRM": "Ҳақиқатан ҳам ўчирмоқчимисиз"
+    },
+    "ERRORS": {
+      "LOAD_ERROR": "Маълумотларни юклаб бўлмади"
+    },
+    "FILTERS": {
+      "ALL_TYPES": "Барча турлар",
+      "ALL_STATUSES": "Барча ҳолатлар",
+      "TYPE": "Тур",
+      "STATUS": "Ҳолат"
+    },
+    "FIELDS": {
+      "NAME": "Номи",
+      "NUMBER": "Рақам",
+      "DOCUMENT_DATE": "Ҳужжат санаси",
+      "TYPE": "Тур",
+      "STATUS": "Ҳолат",
+      "DUE_DATE": "Муддат",
+      "DESCRIPTION": "Тавсиф",
+      "FILES": "Файллар"
+    },
+    "VALIDATION": {
+      "NAME_REQUIRED": "Ном киритиш шарт",
+      "DATE_REQUIRED": "Сана киритиш шарт",
+      "TYPE_REQUIRED": "Тур киритиш шарт"
+    },
+    "FILES": {
+      "EXISTING": "Илова қилинган файллар",
+      "UPLOAD": "Файлларни юклаш"
+    },
+    "ACTIONS": {
+      "HISTORY": "Ҳолат тарихи",
+      "CHANGE_STATUS": "Ҳолатни ўзгартириш"
+    },
+    "STATUS_CHANGE": {
+      "TITLE": "Ҳолатни ўзгартириш",
+      "CURRENT_STATUS": "Жорий ҳолат",
+      "NEW_STATUS": "Янги ҳолат",
+      "COMMENT": "Изоҳ",
+      "COMMENT_PLACEHOLDER": "Ҳолат ўзгариши учун изоҳ киритинг...",
+      "SUCCESS": "Ҳолат муваффақиятли ўзгартирилди",
+      "ERROR": "Ҳолатни ўзгартириб бўлмади"
+    },
+    "STATUS_HISTORY": {
+      "TITLE": "Ҳолат ўзгаришлари тарихи",
+      "NO_HISTORY": "Тарих йўқ",
+      "LOAD_ERROR": "Тарихни юклаб бўлмади"
+    },
+    "STATUSES": {
+      "DRAFT": "Қоралама",
+      "PENDING_APPROVAL": "Тасдиқлашда",
+      "APPROVED": "Тасдиқланган",
+      "REJECTED": "Рад этилган",
+      "IN_EXECUTION": "Бажарилмоқда",
+      "EXECUTED": "Бажарилган",
+      "CANCELLED": "Бекор қилинган",
+      "PENDING_SIGNATURE": "Имзо кутилмоқда",
+      "SIGNED": "Имзоланган",
+      "SIGNATURE_REJECTED": "Имзо рад этилган"
+    },
+    "TYPES": {
+      "DECREE": "Буйруқ",
+      "REPORT": "Ҳисобот",
+      "LETTER": "Хат",
+      "INSTRUCTION": "Кўрсатма",
+      "LEGAL_DOCUMENT": "Норматив-ҳуқуқий ҳужжат"
+    },
+    "LINKED_DOCS": {
+      "TITLE": "Боғланган ҳужжатлар",
+      "ADD": "Боғланиш қўшиш",
+      "NO_DOCUMENTS": "Боғланган ҳужжатлар йўқ"
+    },
+    "DECREES": {
+      "TITLE": "Буйруқлар",
+      "NEW": "Янги буйруқ",
+      "EDIT": "Буйруқни таҳрирлаш",
+      "NO_DATA": "Буйруқлар йўқ",
+      "CREATED": "Буйруқ яратилди",
+      "UPDATED": "Буйруқ янгиланди",
+      "DELETED": "Буйруқ ўчирилди",
+      "CREATE_ERROR": "Буйруқни яратиб бўлмади",
+      "UPDATE_ERROR": "Буйруқни янгилаб бўлмади",
+      "DELETE_ERROR": "Буйруқни ўчириб бўлмади"
+    },
+    "REPORTS": {
+      "TITLE": "Ҳисоботлар",
+      "NEW": "Янги ҳисобот",
+      "EDIT": "Ҳисоботни таҳрирлаш",
+      "NO_DATA": "Ҳисоботлар йўқ",
+      "CREATED": "Ҳисобот яратилди",
+      "UPDATED": "Ҳисобот янгиланди",
+      "DELETED": "Ҳисобот ўчирилди",
+      "CREATE_ERROR": "Ҳисоботни яратиб бўлмади",
+      "UPDATE_ERROR": "Ҳисоботни янгилаб бўлмади",
+      "DELETE_ERROR": "Ҳисоботни ўчириб бўлмади"
+    },
+    "LETTERS": {
+      "TITLE": "Хатлар",
+      "NEW": "Янги хат",
+      "EDIT": "Хатни таҳрирлаш",
+      "NO_DATA": "Хатлар йўқ",
+      "CREATED": "Хат яратилди",
+      "UPDATED": "Хат янгиланди",
+      "DELETED": "Хат ўчирилди",
+      "CREATE_ERROR": "Хатни яратиб бўлмади",
+      "UPDATE_ERROR": "Хатни янгилаб бўлмади",
+      "DELETE_ERROR": "Хатни ўчириб бўлмади"
+    },
+    "INSTRUCTIONS": {
+      "TITLE": "Кўрсатмалар",
+      "NEW": "Янги кўрсатма",
+      "EDIT": "Кўрсатмани таҳрирлаш",
+      "NO_DATA": "Кўрсатмалар йўқ",
+      "CREATED": "Кўрсатма яратилди",
+      "UPDATED": "Кўрсатма янгиланди",
+      "DELETED": "Кўрсатма ўчирилди",
+      "CREATE_ERROR": "Кўрсатмани яратиб бўлмади",
+      "UPDATE_ERROR": "Кўрсатмани янгилаб бўлмади",
+      "DELETE_ERROR": "Кўрсатмани ўчириб бўлмади"
+    },
+    "SIGNATURE": {
+      "PAGE_TITLE": "Имзо кутаётган ҳужжатлар",
+      "DOC_TYPE": "Ҳужжат тури",
+      "ORGANIZATION": "Ташкилот",
+      "RESPONSIBLE": "Масъул",
+      "PENDING_COUNT": "Жами ҳужжатлар",
+      "NO_PENDING": "Имзо кутаётган ҳужжатлар йўқ",
+      "LOAD_ERROR": "Ҳужжатларни юклаб бўлмади",
+      "SIGN_TITLE": "Ҳужжатни имзолаш",
+      "SIGN_DESCRIPTION": "Ҳужжатни имзоланг ва керак бўлса резолюция қўшинг.",
+      "SIGN": "Имзолаш",
+      "SIGN_SUCCESS": "Ҳужжат имзоланди",
+      "SIGN_ERROR": "Ҳужжатни имзолаб бўлмади",
+      "REJECT_TITLE": "Имзони рад этиш",
+      "REJECT_DESCRIPTION": "Рад этиш сабабини кўрсатинг.",
+      "REJECT": "Рад этиш",
+      "REJECT_SUCCESS": "Имзо рад этилди",
+      "REJECT_ERROR": "Рад этиб бўлмади",
+      "RESOLUTION": "Резолюция",
+      "RESOLUTION_PLACEHOLDER": "Резолюция матнини киритинг...",
+      "ASSIGNED_EXECUTOR": "Ижрочи",
+      "SELECT_EXECUTOR": "Ижрочини танланг",
+      "ASSIGNED_DUE_DATE": "Бажариш муддати",
+      "REJECTION_REASON": "Рад этиш сабаби",
+      "REJECTION_REASON_PLACEHOLDER": "Сабабни кўрсатинг...",
+      "HISTORY_TITLE": "Имзолар тарихи",
+      "VIEW_HISTORY": "Имзолар тарихи",
+      "NO_HISTORY": "Тарих бўш",
+      "HISTORY_LOAD_ERROR": "Тарихни юклаб бўлмади",
+      "ACTION_SIGNED": "Имзоланган",
+      "ACTION_REJECTED": "Рад этилган"
     }
   },
   "PLANNING": {

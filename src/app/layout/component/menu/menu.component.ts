@@ -181,6 +181,7 @@ export class MenuComponent implements OnInit {
                         label: this.t('MENU.CHANCELLERY'),
                         role: ['rais', 'chancellery'],
                         items: [
+                            { label: this.t('MENU.CHANCELLERY_PENDING_SIGNATURES'), icon: 'pi pi-pen-to-square', role: ['rais', 'chancellery'], routerLink: ['/chancellery/pending-signatures'] },
                             { label: this.t('MENU.CHANCELLERY_ORDERS'), role: ['rais', 'chancellery'], routerLink: ['/chancellery/orders'] },
                             { label: this.t('MENU.CHANCELLERY_REPORTS'), role: ['rais', 'chancellery'], routerLink: ['/chancellery/reports'] },
                             { label: this.t('MENU.CHANCELLERY_LETTERS'), role: ['rais', 'chancellery'], routerLink: ['/chancellery/letters'] },

@@ -11,6 +11,7 @@
 // Base interfaces
 export * from './document-base';
 export * from './document-status';
+export * from './signature';
 
 // Type-specific interfaces
 export * from './decree';

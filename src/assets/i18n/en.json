@@ -146,6 +146,7 @@
     "TABLET_INVESTMENT": "Investment Director Tablet",
     "TABLET_DUTY": "Duty Officer Tablet",
     "CHANCELLERY": "Chancellery",
+    "CHANCELLERY_PENDING_SIGNATURES": "Pending Signatures",
     "CHANCELLERY_ORDERS": "Orders",
     "CHANCELLERY_REPORTS": "Reports",
     "CHANCELLERY_LETTERS": "Letters",
@@ -278,7 +279,10 @@
     "ACTIVE_ENERGY": "Active Energy, MWh",
     "DEBIT_FOR": "Debit for",
     "CREDIT_FOR": "Credit for",
-    "LAST_UPDATED": "Last Updated"
+    "LAST_UPDATED": "Last Updated",
+    "JUST_NOW": "just now",
+    "MINUTES_AGO": "min. ago",
+    "HOURS_AGO": "h. ago"
   },
   "CALENDAR": {
     "TITLE": "Calendar",
@@ -1224,7 +1228,10 @@
       "REJECTED": "Rejected",
       "IN_EXECUTION": "In Execution",
       "EXECUTED": "Executed",
-      "CANCELLED": "Cancelled"
+      "CANCELLED": "Cancelled",
+      "PENDING_SIGNATURE": "Pending Signature",
+      "SIGNED": "Signed",
+      "SIGNATURE_REJECTED": "Signature Rejected"
     },
     "TYPES": {
       "DECREE": "Order",
@@ -1285,6 +1292,38 @@
       "CREATE_ERROR": "Failed to create instruction",
       "UPDATE_ERROR": "Failed to update instruction",
       "DELETE_ERROR": "Failed to delete instruction"
+    },
+    "SIGNATURE": {
+      "PAGE_TITLE": "Documents for Signature",
+      "DOC_TYPE": "Document Type",
+      "ORGANIZATION": "Organization",
+      "RESPONSIBLE": "Responsible",
+      "PENDING_COUNT": "Total Documents",
+      "NO_PENDING": "No documents pending signature",
+      "LOAD_ERROR": "Failed to load documents",
+      "SIGN_TITLE": "Sign Document",
+      "SIGN_DESCRIPTION": "Sign the document and add a resolution if needed.",
+      "SIGN": "Sign",
+      "SIGN_SUCCESS": "Document signed",
+      "SIGN_ERROR": "Failed to sign document",
+      "REJECT_TITLE": "Reject Signature",
+      "REJECT_DESCRIPTION": "Specify the reason for rejection.",
+      "REJECT": "Reject",
+      "REJECT_SUCCESS": "Signature rejected",
+      "REJECT_ERROR": "Failed to reject",
+      "RESOLUTION": "Resolution",
+      "RESOLUTION_PLACEHOLDER": "Enter resolution text...",
+      "ASSIGNED_EXECUTOR": "Executor",
+      "SELECT_EXECUTOR": "Select executor",
+      "ASSIGNED_DUE_DATE": "Due Date",
+      "REJECTION_REASON": "Rejection Reason",
+      "REJECTION_REASON_PLACEHOLDER": "Specify reason...",
+      "HISTORY_TITLE": "Signature History",
+      "VIEW_HISTORY": "Signature History",
+      "NO_HISTORY": "History is empty",
+      "HISTORY_LOAD_ERROR": "Failed to load history",
+      "ACTION_SIGNED": "Signed",
+      "ACTION_REJECTED": "Rejected"
     }
   },
   "PLANNING": {
