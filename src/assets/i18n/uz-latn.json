@@ -143,6 +143,7 @@
     "TABLET_INVESTMENT": "Investitsiya boshlig'i plansheti",
     "TABLET_DUTY": "Navbatchi plansheti",
     "CHANCELLERY": "Devonxona",
+    "CHANCELLERY_PENDING_SIGNATURES": "Imzo kutilmoqda",
     "CHANCELLERY_ORDERS": "Buyruqlar",
     "CHANCELLERY_REPORTS": "Hisobotlar",
     "CHANCELLERY_LETTERS": "Xatlar",
@@ -275,7 +276,10 @@
     "ACTIVE_ENERGY": "Faol energiya, MVt*soat",
     "DEBIT_FOR": "Debet",
     "CREDIT_FOR": "Kredit",
-    "LAST_UPDATED": "Oxirgi yangilanish"
+    "LAST_UPDATED": "Oxirgi yangilanish",
+    "JUST_NOW": "hozirgina",
+    "MINUTES_AGO": "daq. oldin",
+    "HOURS_AGO": "soat oldin"
   },
   "CALENDAR": {
     "TITLE": "Kalendar",
@@ -1136,6 +1140,161 @@
         "ORDER": "Buyruq",
         "AGREEMENT": "Qo'shma kelishuv"
       }
+    }
+  },
+  "CHANCELLERY": {
+    "COMMON": {
+      "DELETE_CONFIRM": "Haqiqatan ham o'chirmoqchimisiz"
+    },
+    "ERRORS": {
+      "LOAD_ERROR": "Ma'lumotlarni yuklab bo'lmadi"
+    },
+    "FILTERS": {
+      "ALL_TYPES": "Barcha turlar",
+      "ALL_STATUSES": "Barcha holatlar",
+      "TYPE": "Tur",
+      "STATUS": "Holat"
+    },
+    "FIELDS": {
+      "NAME": "Nomi",
+      "NUMBER": "Raqam",
+      "DOCUMENT_DATE": "Hujjat sanasi",
+      "TYPE": "Tur",
+      "STATUS": "Holat",
+      "DUE_DATE": "Muddat",
+      "DESCRIPTION": "Tavsif",
+      "FILES": "Fayllar"
+    },
+    "VALIDATION": {
+      "NAME_REQUIRED": "Nom kiritish shart",
+      "DATE_REQUIRED": "Sana kiritish shart",
+      "TYPE_REQUIRED": "Tur kiritish shart"
+    },
+    "FILES": {
+      "EXISTING": "Ilova qilingan fayllar",
+      "UPLOAD": "Fayllarni yuklash"
+    },
+    "ACTIONS": {
+      "HISTORY": "Holat tarixi",
+      "CHANGE_STATUS": "Holatni o'zgartirish"
+    },
+    "STATUS_CHANGE": {
+      "TITLE": "Holatni o'zgartirish",
+      "CURRENT_STATUS": "Joriy holat",
+      "NEW_STATUS": "Yangi holat",
+      "COMMENT": "Izoh",
+      "COMMENT_PLACEHOLDER": "Holat o'zgarishi uchun izoh kiriting...",
+      "SUCCESS": "Holat muvaffaqiyatli o'zgartirildi",
+      "ERROR": "Holatni o'zgartirib bo'lmadi"
+    },
+    "STATUS_HISTORY": {
+      "TITLE": "Holat o'zgarishlari tarixi",
+      "NO_HISTORY": "Tarix yo'q",
+      "LOAD_ERROR": "Tarixni yuklab bo'lmadi"
+    },
+    "STATUSES": {
+      "DRAFT": "Qoralama",
+      "PENDING_APPROVAL": "Tasdiqlashda",
+      "APPROVED": "Tasdiqlangan",
+      "REJECTED": "Rad etilgan",
+      "IN_EXECUTION": "Bajarilmoqda",
+      "EXECUTED": "Bajarilgan",
+      "CANCELLED": "Bekor qilingan",
+      "PENDING_SIGNATURE": "Imzo kutilmoqda",
+      "SIGNED": "Imzolangan",
+      "SIGNATURE_REJECTED": "Imzo rad etilgan"
+    },
+    "TYPES": {
+      "DECREE": "Buyruq",
+      "REPORT": "Hisobot",
+      "LETTER": "Xat",
+      "INSTRUCTION": "Ko'rsatma",
+      "LEGAL_DOCUMENT": "Normativ-huquqiy hujjat"
+    },
+    "LINKED_DOCS": {
+      "TITLE": "Bog'langan hujjatlar",
+      "ADD": "Bog'lanish qo'shish",
+      "NO_DOCUMENTS": "Bog'langan hujjatlar yo'q"
+    },
+    "DECREES": {
+      "TITLE": "Buyruqlar",
+      "NEW": "Yangi buyruq",
+      "EDIT": "Buyruqni tahrirlash",
+      "NO_DATA": "Buyruqlar yo'q",
+      "CREATED": "Buyruq yaratildi",
+      "UPDATED": "Buyruq yangilandi",
+      "DELETED": "Buyruq o'chirildi",
+      "CREATE_ERROR": "Buyruqni yaratib bo'lmadi",
+      "UPDATE_ERROR": "Buyruqni yangilab bo'lmadi",
+      "DELETE_ERROR": "Buyruqni o'chirib bo'lmadi"
+    },
+    "REPORTS": {
+      "TITLE": "Hisobotlar",
+      "NEW": "Yangi hisobot",
+      "EDIT": "Hisobotni tahrirlash",
+      "NO_DATA": "Hisobotlar yo'q",
+      "CREATED": "Hisobot yaratildi",
+      "UPDATED": "Hisobot yangilandi",
+      "DELETED": "Hisobot o'chirildi",
+      "CREATE_ERROR": "Hisobotni yaratib bo'lmadi",
+      "UPDATE_ERROR": "Hisobotni yangilab bo'lmadi",
+      "DELETE_ERROR": "Hisobotni o'chirib bo'lmadi"
+    },
+    "LETTERS": {
+      "TITLE": "Xatlar",
+      "NEW": "Yangi xat",
+      "EDIT": "Xatni tahrirlash",
+      "NO_DATA": "Xatlar yo'q",
+      "CREATED": "Xat yaratildi",
+      "UPDATED": "Xat yangilandi",
+      "DELETED": "Xat o'chirildi",
+      "CREATE_ERROR": "Xatni yaratib bo'lmadi",
+      "UPDATE_ERROR": "Xatni yangilab bo'lmadi",
+      "DELETE_ERROR": "Xatni o'chirib bo'lmadi"
+    },
+    "INSTRUCTIONS": {
+      "TITLE": "Ko'rsatmalar",
+      "NEW": "Yangi ko'rsatma",
+      "EDIT": "Ko'rsatmani tahrirlash",
+      "NO_DATA": "Ko'rsatmalar yo'q",
+      "CREATED": "Ko'rsatma yaratildi",
+      "UPDATED": "Ko'rsatma yangilandi",
+      "DELETED": "Ko'rsatma o'chirildi",
+      "CREATE_ERROR": "Ko'rsatmani yaratib bo'lmadi",
+      "UPDATE_ERROR": "Ko'rsatmani yangilab bo'lmadi",
+      "DELETE_ERROR": "Ko'rsatmani o'chirib bo'lmadi"
+    },
+    "SIGNATURE": {
+      "PAGE_TITLE": "Imzo kutayotgan hujjatlar",
+      "DOC_TYPE": "Hujjat turi",
+      "ORGANIZATION": "Tashkilot",
+      "RESPONSIBLE": "Mas'ul",
+      "PENDING_COUNT": "Jami hujjatlar",
+      "NO_PENDING": "Imzo kutayotgan hujjatlar yo'q",
+      "LOAD_ERROR": "Hujjatlarni yuklab bo'lmadi",
+      "SIGN_TITLE": "Hujjatni imzolash",
+      "SIGN_DESCRIPTION": "Hujjatni imzolang va kerak bo'lsa rezolyutsiya qo'shing.",
+      "SIGN": "Imzolash",
+      "SIGN_SUCCESS": "Hujjat imzolandi",
+      "SIGN_ERROR": "Hujjatni imzolab bo'lmadi",
+      "REJECT_TITLE": "Imzoni rad etish",
+      "REJECT_DESCRIPTION": "Rad etish sababini ko'rsating.",
+      "REJECT": "Rad etish",
+      "REJECT_SUCCESS": "Imzo rad etildi",
+      "REJECT_ERROR": "Rad etib bo'lmadi",
+      "RESOLUTION": "Rezolyutsiya",
+      "RESOLUTION_PLACEHOLDER": "Rezolyutsiya matnini kiriting...",
+      "ASSIGNED_EXECUTOR": "Ijrochi",
+      "SELECT_EXECUTOR": "Ijrochini tanlang",
+      "ASSIGNED_DUE_DATE": "Bajarish muddati",
+      "REJECTION_REASON": "Rad etish sababi",
+      "REJECTION_REASON_PLACEHOLDER": "Sababni ko'rsating...",
+      "HISTORY_TITLE": "Imzolar tarixi",
+      "VIEW_HISTORY": "Imzolar tarixi",
+      "NO_HISTORY": "Tarix bo'sh",
+      "HISTORY_LOAD_ERROR": "Tarixni yuklab bo'lmadi",
+      "ACTION_SIGNED": "Imzolangan",
+      "ACTION_REJECTED": "Rad etilgan"
     }
   },
   "PLANNING": {

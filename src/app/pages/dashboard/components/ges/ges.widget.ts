@@ -6,7 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { interval, Subscription } from 'rxjs';
 import { Organization } from '@/core/interfaces/organizations';
 import { DashboardService } from '@/core/services/dashboard.service';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 interface expandedRows {
     [key: string]: boolean;
@@ -28,6 +28,7 @@ class GesWidget implements OnInit, OnDestroy {
     lastUpdated: Date | null = null;
 
     private dashboardService: DashboardService = inject(DashboardService);
+    private translate: TranslateService = inject(TranslateService);
     private refreshSubscription?: Subscription;
 
     @Input() expanded: boolean = false;
@@ -65,11 +66,11 @@ class GesWidget implements OnInit, OnDestroy {
     getTimeAgo(): string {
         if (!this.lastUpdated) return '';
         const seconds = Math.floor((new Date().getTime() - this.lastUpdated.getTime()) / 1000);
-        if (seconds < 60) return 'только что';
+        if (seconds < 60) return this.translate.instant('DASHBOARD.JUST_NOW');
         const minutes = Math.floor(seconds / 60);
-        if (minutes < 60) return `${minutes} мин. назад`;
+        if (minutes < 60) return `${minutes} ${this.translate.instant('DASHBOARD.MINUTES_AGO')}`;
         const hours = Math.floor(minutes / 60);
-        return `${hours} ч. назад`;
+        return `${hours} ${this.translate.instant('DASHBOARD.HOURS_AGO')}`;
     }
 
     private sortContacts(contacts: any[]): any[] {

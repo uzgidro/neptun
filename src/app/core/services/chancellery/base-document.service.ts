@@ -15,6 +15,12 @@ import {
     StatusSeverity,
     STATUS_DISPLAY_CONFIG
 } from '@/core/interfaces/chancellery/document-status';
+import {
+    SignDocumentRequest,
+    SignatureResponse,
+    RejectSignatureRequest,
+    Signature
+} from '@/core/interfaces/chancellery/signature';
 import { BASE_URL } from '@/core/services/api.service';
 
 /**
@@ -118,6 +124,31 @@ export abstract class BaseDocumentService<
      */
     changeStatus(id: number, request: ChangeStatusRequest): Observable<void> {
         return this.http.patch<void>(`${this.apiUrl}/${id}/status`, request);
+    }
+
+    // =========================================================================
+    // Signature Operations
+    // =========================================================================
+
+    /**
+     * Sign a document with optional resolution
+     */
+    signDocument(id: number, request: SignDocumentRequest): Observable<SignatureResponse> {
+        return this.http.post<SignatureResponse>(`${this.apiUrl}/${id}/sign`, request);
+    }
+
+    /**
+     * Reject a document signature with optional reason
+     */
+    rejectSignature(id: number, request: RejectSignatureRequest): Observable<SignatureResponse> {
+        return this.http.post<SignatureResponse>(`${this.apiUrl}/${id}/reject-signature`, request);
+    }
+
+    /**
+     * Get signature history for a document
+     */
+    getSignatures(id: number): Observable<Signature[]> {
+        return this.http.get<Signature[]>(`${this.apiUrl}/${id}/signatures`);
     }
 
     // =========================================================================

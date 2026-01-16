@@ -146,6 +146,7 @@
     "TABLET_INVESTMENT": "Планшет начальника инвестиций",
     "TABLET_DUTY": "Планшет дежурного",
     "CHANCELLERY": "Канцелярия",
+    "CHANCELLERY_PENDING_SIGNATURES": "На подпись",
     "CHANCELLERY_ORDERS": "Приказы",
     "CHANCELLERY_REPORTS": "Рапорты",
     "CHANCELLERY_LETTERS": "Письма",
@@ -278,7 +279,10 @@
     "ACTIVE_ENERGY": "Активная энергия, МВт*ч",
     "DEBIT_FOR": "Дебит за",
     "CREDIT_FOR": "Кредит за",
-    "LAST_UPDATED": "Последнее обновление"
+    "LAST_UPDATED": "Последнее обновление",
+    "JUST_NOW": "только что",
+    "MINUTES_AGO": "мин. назад",
+    "HOURS_AGO": "ч. назад"
   },
   "CALENDAR": {
     "TITLE": "Календарь",
@@ -1223,7 +1227,10 @@
       "REJECTED": "Отклонён",
       "IN_EXECUTION": "На исполнении",
       "EXECUTED": "Исполнен",
-      "CANCELLED": "Отменён"
+      "CANCELLED": "Отменён",
+      "PENDING_SIGNATURE": "На подписании",
+      "SIGNED": "Подписан",
+      "SIGNATURE_REJECTED": "Отклонён при подписании"
     },
     "TYPES": {
       "DECREE": "Приказ",
@@ -1284,6 +1291,38 @@
       "CREATE_ERROR": "Не удалось создать инструкцию",
       "UPDATE_ERROR": "Не удалось обновить инструкцию",
       "DELETE_ERROR": "Не удалось удалить инструкцию"
+    },
+    "SIGNATURE": {
+      "PAGE_TITLE": "Документы на подпись",
+      "DOC_TYPE": "Тип документа",
+      "ORGANIZATION": "Организация",
+      "RESPONSIBLE": "Ответственный",
+      "PENDING_COUNT": "Всего документов",
+      "NO_PENDING": "Нет документов, ожидающих подписи",
+      "LOAD_ERROR": "Не удалось загрузить документы",
+      "SIGN_TITLE": "Подписание документа",
+      "SIGN_DESCRIPTION": "Подпишите документ и при необходимости добавьте резолюцию.",
+      "SIGN": "Подписать",
+      "SIGN_SUCCESS": "Документ подписан",
+      "SIGN_ERROR": "Не удалось подписать документ",
+      "REJECT_TITLE": "Отклонение подписи",
+      "REJECT_DESCRIPTION": "Укажите причину отклонения.",
+      "REJECT": "Отклонить",
+      "REJECT_SUCCESS": "Подпись отклонена",
+      "REJECT_ERROR": "Не удалось отклонить",
+      "RESOLUTION": "Резолюция",
+      "RESOLUTION_PLACEHOLDER": "Введите текст резолюции...",
+      "ASSIGNED_EXECUTOR": "Исполнитель",
+      "SELECT_EXECUTOR": "Выберите исполнителя",
+      "ASSIGNED_DUE_DATE": "Срок исполнения",
+      "REJECTION_REASON": "Причина отклонения",
+      "REJECTION_REASON_PLACEHOLDER": "Укажите причину...",
+      "HISTORY_TITLE": "История подписей",
+      "VIEW_HISTORY": "История подписей",
+      "NO_HISTORY": "История пуста",
+      "HISTORY_LOAD_ERROR": "Не удалось загрузить историю",
+      "ACTION_SIGNED": "Подписано",
+      "ACTION_REJECTED": "Отклонено"
     }
   },
   "PLANNING": {
