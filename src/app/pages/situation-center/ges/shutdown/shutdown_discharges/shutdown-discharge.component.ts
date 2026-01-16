@@ -323,4 +323,16 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
         const orgDischarges = this.discharges.filter((d) => d.organization.name === organizationName);
         return orgDischarges.reduce((acc, d) => acc + d.total_volume, 0);
     }
+
+    getOrganizationIndex(organizationName: string): number {
+        const uniqueOrgs = [...new Set(this.discharges.map((d) => d.organization.name))];
+        return uniqueOrgs.indexOf(organizationName) + 1;
+    }
+
+    getRowIndex(discharge: IdleDischargeResponse): string {
+        const orgIndex = this.getOrganizationIndex(discharge.organization.name);
+        const orgDischarges = this.discharges.filter((d) => d.organization.name === discharge.organization.name);
+        const indexInOrg = orgDischarges.findIndex((d) => d.id === discharge.id) + 1;
+        return `${orgIndex}.${indexInOrg}`;
+    }
 }
