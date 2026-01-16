@@ -1156,7 +1156,7 @@
       "STATUS": "Holat"
     },
     "FIELDS": {
-      "NAME": "Nomi",
+      "NAME": "Qisqacha mazmuni",
       "NUMBER": "Raqam",
       "DOCUMENT_DATE": "Hujjat sanasi",
       "TYPE": "Tur",
@@ -1166,7 +1166,7 @@
       "FILES": "Fayllar"
     },
     "VALIDATION": {
-      "NAME_REQUIRED": "Nom kiritish shart",
+      "NAME_REQUIRED": "Qisqacha mazmuni kiritish shart",
       "DATE_REQUIRED": "Sana kiritish shart",
       "TYPE_REQUIRED": "Tur kiritish shart"
     },
@@ -1266,7 +1266,7 @@
     },
     "SIGNATURE": {
       "PAGE_TITLE": "Imzo kutayotgan hujjatlar",
-      "DOC_TYPE": "Hujjat turi",
+      "DOC_TYPE": "Hujjat ko'rinishi",
       "ORGANIZATION": "Tashkilot",
       "RESPONSIBLE": "Mas'ul",
       "PENDING_COUNT": "Jami hujjatlar",
