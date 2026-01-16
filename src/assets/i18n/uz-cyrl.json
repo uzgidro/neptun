@@ -1156,7 +1156,7 @@
       "STATUS": "Ҳолат"
     },
     "FIELDS": {
-      "NAME": "Номи",
+      "NAME": "Қисқача мазмуни",
       "NUMBER": "Рақам",
       "DOCUMENT_DATE": "Ҳужжат санаси",
       "TYPE": "Тур",
@@ -1166,7 +1166,7 @@
       "FILES": "Файллар"
     },
     "VALIDATION": {
-      "NAME_REQUIRED": "Ном киритиш шарт",
+      "NAME_REQUIRED": "Қисқача мазмуни киритиш шарт",
       "DATE_REQUIRED": "Сана киритиш шарт",
       "TYPE_REQUIRED": "Тур киритиш шарт"
     },
@@ -1266,7 +1266,7 @@
     },
     "SIGNATURE": {
       "PAGE_TITLE": "Имзо кутаётган ҳужжатлар",
-      "DOC_TYPE": "Ҳужжат тури",
+      "DOC_TYPE": "Ҳужжат кўриниши",
       "ORGANIZATION": "Ташкилот",
       "RESPONSIBLE": "Масъул",
       "PENDING_COUNT": "Жами ҳужжатлар",

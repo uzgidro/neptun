@@ -128,7 +128,7 @@
 <app-sign-document-dialog
     [(visible)]="displaySignDialog"
     [documentName]="getSelectedDocumentName()"
-    [users]="users"
+    [contacts]="contacts"
     [saving]="saving"
     (confirm)="onSignConfirm($event)"
     (cancel)="displaySignDialog = false">

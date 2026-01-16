@@ -1185,7 +1185,7 @@
       "STATUS": "Status"
     },
     "FIELDS": {
-      "NAME": "Name",
+      "NAME": "Brief Summary",
       "NUMBER": "Number",
       "DOCUMENT_DATE": "Document Date",
       "TYPE": "Type",
@@ -1195,7 +1195,7 @@
       "FILES": "Files"
     },
     "VALIDATION": {
-      "NAME_REQUIRED": "Name is required",
+      "NAME_REQUIRED": "Brief summary is required",
       "DATE_REQUIRED": "Date is required",
       "TYPE_REQUIRED": "Type is required"
     },
@@ -1295,7 +1295,7 @@
     },
     "SIGNATURE": {
       "PAGE_TITLE": "Documents for Signature",
-      "DOC_TYPE": "Document Type",
+      "DOC_TYPE": "Document Kind",
       "ORGANIZATION": "Organization",
       "RESPONSIBLE": "Responsible",
       "PENDING_COUNT": "Total Documents",

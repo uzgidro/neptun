@@ -6,7 +6,7 @@ import { Select } from 'primeng/select';
 import { Textarea } from 'primeng/textarea';
 import { ButtonDirective, ButtonLabel } from 'primeng/button';
 import { SignDocumentRequest } from '@/core/interfaces/chancellery/signature';
-import { Users } from '@/core/interfaces/users';
+import { Contact } from '@/core/interfaces/contact';
 import { TranslateModule } from '@ngx-translate/core';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
 
@@ -68,7 +68,7 @@ import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-
                     <p-select
                         id="executor"
                         formControlName="assigned_executor_id"
-                        [options]="users"
+                        [options]="contacts"
                         optionLabel="name"
                         optionValue="id"
                         [placeholder]="'CHANCELLERY.SIGNATURE.SELECT_EXECUTOR' | translate"
@@ -105,7 +105,7 @@ import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-
 export class SignDocumentDialogComponent implements OnChanges {
     @Input() visible = false;
     @Input() documentName = '';
-    @Input() users: Users[] = [];
+    @Input() contacts: Contact[] = [];
     @Input() saving = false;
 
     @Output() visibleChange = new EventEmitter<boolean>();

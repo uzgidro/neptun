@@ -20,9 +20,9 @@ import {
     Signature,
     SignDocumentRequest
 } from '@/core/interfaces/chancellery/signature';
-import { Users } from '@/core/interfaces/users';
+import { Contact } from '@/core/interfaces/contact';
 import { DocumentSignatureService } from '@/core/services/chancellery/document-signature.service';
-import { ApiService } from '@/core/services/api.service';
+import { ContactService } from '@/core/services/contact.service';
 
 import {
     RejectSignatureDialogComponent,
@@ -46,7 +46,7 @@ export class PendingSignaturesComponent implements OnInit, OnDestroy {
     // Data
     documents: PendingDocument[] = [];
     filteredDocuments: PendingDocument[] = [];
-    users: Users[] = [];
+    contacts: Contact[] = [];
 
     // UI State
     loading = true;
@@ -66,7 +66,7 @@ export class PendingSignaturesComponent implements OnInit, OnDestroy {
 
     // Services
     private signatureService = inject(DocumentSignatureService);
-    private apiService = inject(ApiService);
+    private contactService = inject(ContactService);
     private messageService = inject(MessageService);
     private translate = inject(TranslateService);
     private destroy$ = new Subject<void>();
@@ -84,13 +84,13 @@ export class PendingSignaturesComponent implements OnInit, OnDestroy {
 
         forkJoin({
             documents: this.signatureService.getPendingDocuments(),
-            users: this.apiService.getUsers()
+            contacts: this.contactService.getContacts()
         })
             .pipe(takeUntil(this.destroy$))
             .subscribe({
-                next: ({ documents, users }) => {
+                next: ({ documents, contacts }) => {
                     this.documents = documents;
-                    this.users = users;
+                    this.contacts = contacts;
                     this.buildFilterOptions();
                     this.applyFilters();
                 },
