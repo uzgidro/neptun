@@ -11,7 +11,7 @@
                 <i class="pi pi-sync"></i>
             </div>
             <div class="stat-info">
-                <span class="stat-value neon-text">{{ activeDischargesCount }}</span>
+                <span class="stat-value neon-text">{{ activeCount }}</span>
                 <span class="stat-label">Активных</span>
             </div>
         </div>
@@ -20,8 +20,8 @@
                 <i class="pi pi-chart-line"></i>
             </div>
             <div class="stat-info">
-                <span class="stat-value">{{ totalFlowRate | number:'1.1-1' }}</span>
-                <span class="stat-label">м³/с общий расход</span>
+                <span class="stat-value">{{ totalDischarge | number:'1.1-1' }}</span>
+                <span class="stat-label">м³/с общий</span>
             </div>
         </div>
     </div>
@@ -29,55 +29,36 @@
     <!-- Discharges List -->
     <div class="discharges-list">
         @for (discharge of discharges; track discharge.id) {
-            <div class="discharge-item" [class.ongoing]="discharge.isOngoing">
+            <div class="discharge-item ongoing">
                 <div class="discharge-header">
-                    <span class="reservoir-name">{{ discharge.reservoirName }}</span>
-                    @if (discharge.isOngoing) {
-                        <span class="status-badge">
-                            <span class="pulse-dot"></span>
-                            Активен
-                        </span>
-                    }
-                </div>
-                <div class="discharge-metrics">
-                    <div class="metric">
-                        <span class="metric-icon">
-                            <i class="pi pi-arrow-right"></i>
-                        </span>
-                        <span class="metric-value" [class]="'intensity-' + getFlowIntensity(discharge.flowRate)">
-                            {{ discharge.flowRate | number:'1.1-1' }}
-                        </span>
-                        <span class="metric-unit">м³/с</span>
-                    </div>
-                    <div class="metric">
-                        <span class="metric-icon">
-                            <i class="pi pi-database"></i>
-                        </span>
-                        <span class="metric-value">{{ discharge.totalVolume | number:'1.1-1' }}</span>
-                        <span class="metric-unit">тыс.м³</span>
-                    </div>
-                </div>
-                <!-- Flow intensity bar -->
-                <div class="flow-bar-container">
-                    <div class="flow-bar"
-                         [class]="'intensity-' + getFlowIntensity(discharge.flowRate)"
-                         [style.width.%]="(discharge.flowRate / 300) * 100">
-                    </div>
+                    <span class="reservoir-name">{{ discharge.name }}</span>
+                    <span class="discharge-value">
+                        {{ discharge.currentDischarge | number:'1.1-1' }} <small>м³/с</small>
+                    </span>
                 </div>
             </div>
         }
 
-        @if (discharges.length === 0) {
+        @if (discharges.length === 0 && !loading) {
             <div class="no-discharges">
                 <i class="pi pi-check-circle"></i>
                 <span>Нет активных водосбросов</span>
             </div>
         }
+
+        @if (loading) {
+            <div class="no-discharges">
+                <i class="pi pi-spin pi-spinner"></i>
+                <span>Загрузка...</span>
+            </div>
+        }
     </div>
 
-    <!-- Total Volume Footer -->
-    <div class="discharge-footer">
-        <span class="footer-label">Общий объём за сутки:</span>
-        <span class="footer-value">{{ totalVolume | number:'1.0-0' }} <small>тыс.м³</small></span>
+    <!-- Footer -->
+    <div class="widget-footer">
+        <span class="last-updated">Последнее обновление: {{ getTimeAgo() }}</span>
+        <button class="refresh-btn" (click)="refresh()" [disabled]="loading">
+            <i class="pi pi-refresh" [class.pi-spin]="loading"></i>
+        </button>
     </div>
 </div>
