@@ -568,6 +568,101 @@
       "PREVIOUS_YEARS": "Oldingi yillar",
       "INFLOW_TO_DATE": "Bugungi kunga oqib kirish, mln. m³",
       "MODSNOW": "MODSNOW, qor qoplami %"
+    },
+    "DASHBOARD": {
+      "HEADER": {
+        "TITLE": "Boshqaruv Raisi plansheti",
+        "TO_HOME": "Bosh sahifaga"
+      },
+      "MONITORING": {
+        "TITLE": "Suv resurslari",
+        "RESERVOIRS_COUNT": "Suv omborlari",
+        "VOLUME": "Hajm",
+        "LEVEL": "Daraja",
+        "INFLOW": "Oqib kirish",
+        "RELEASE": "Chiqarish",
+        "INFLOW_TOTAL": "m³/s oqib kirish"
+      },
+      "DISCHARGES": {
+        "TITLE": "Bo'sh suv tashlab yuborish",
+        "ACTIVE_COUNT": "Faollar",
+        "TOTAL_FLOW": "m³/s jami",
+        "NO_ACTIVE": "Faol suv tashlab yuborishlar yo'q"
+      },
+      "STATION_STATUS": {
+        "TITLE": "Agregatlar holati",
+        "TOTAL": "Jami",
+        "TOTAL_POWER": "Umumiy quvvat",
+        "STATUS_WORKING": "Ishlamoqda",
+        "STATUS_IDLE": "To'xtagan",
+        "STATUS_REPAIR": "Ta'mirda"
+      },
+      "SHUTDOWNS": {
+        "TITLE": "Favqulodda o'chirishlar",
+        "SHUTDOWNS_COUNT": "O'chirishlar",
+        "LOSSES_KWH": "kWh yo'qotishlar",
+        "COMPLETED": "tugallandi",
+        "NO_REASON": "Sabab ko'rsatilmagan",
+        "ALL_WORKING": "Barcha stansiyalar ishlamoqda",
+        "TYPE_GES": "GES",
+        "TYPE_MINI": "mini",
+        "TYPE_MICRO": "mikro"
+      },
+      "POWER_GENERATION": {
+        "YEAR_START": "Yil boshidan",
+        "MONTH_START": "Oy boshidan",
+        "PER_DAY": "Kuniga"
+      },
+      "MAP": {
+        "TITLE": "Interaktiv xarita",
+        "LOADING_DATA": "Ma'lumotlar yuklanmoqda...",
+        "DATA_UNAVAILABLE": "Ma'lumotlar mavjud emas",
+        "TOTAL_AGGREGATES": "Jami agregatlar",
+        "SPILLWAY_DISCHARGES": "Bo'sh suv tashlab yuborish",
+        "NO_ACTIVE_DISCHARGES": "Faol suv tashlab yuborishlar yo'q",
+        "EMERGENCY_SHUTDOWNS": "Favqulodda o'chirishlar",
+        "NO_ACTIVE_SHUTDOWNS": "Faol o'chirishlar yo'q",
+        "RESERVOIRS": "Suv omborlari",
+        "NO_RESERVOIRS": "Suv omborlari yo'q"
+      },
+      "COMMON": {
+        "LOADING": "Yuklanmoqda...",
+        "NO_DATA": "Ma'lumot yo'q",
+        "UPDATED": "Yangilangan:",
+        "LAST_UPDATE": "Oxirgi yangilanish:"
+      },
+      "TIME": {
+        "JUST_NOW": "hozirgina",
+        "MINUTES_AGO": "{{count}} daq. oldin",
+        "HOURS_AGO": "{{count}} soat oldin",
+        "MINUTES_SHORT": "daq",
+        "HOURS_SHORT": "soat",
+        "DAYS_SHORT": "kun"
+      },
+      "UNITS": {
+        "MLN_M3": "mln m³",
+        "M3_S": "m³/s",
+        "MW": "MVt",
+        "KWH": "kWh",
+        "MLN_KWH": "mln kWh",
+        "M": "m"
+      },
+      "REGIONS": {
+        "FERGANA": "Farg'ona viloyati",
+        "TASHKENT": "Toshkent viloyati",
+        "NAMANGAN": "Namangan viloyati",
+        "ANDIJAN": "Andijon viloyati",
+        "SYRDARYA": "Sirdaryo viloyati",
+        "JIZZAKH": "Jizzax viloyati",
+        "SAMARKAND": "Samarqand viloyati",
+        "KASHKADARYA": "Qashqadaryo viloyati",
+        "SURKHANDARYA": "Surxondaryo viloyati",
+        "KARAKALPAKSTAN": "Qoraqalpog'iston Respublikasi",
+        "NAVOI": "Navoiy viloyati",
+        "KHOREZM": "Xorazm viloyati",
+        "BUKHARA": "Buxoro viloyati",
+        "TASHKENT_CITY": "Toshkent shahri"
+      }
     }
   },
   "FINANCIAL_BLOCK": {

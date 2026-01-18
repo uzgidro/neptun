@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { Subscription, interval } from 'rxjs';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { GesShutdownService } from '@/core/services/ges-shutdown.service';
 import { ShutdownDto, GesShutdownDto } from '@/core/interfaces/ges-shutdown';
 
@@ -18,12 +19,13 @@ interface ShutdownItem {
 @Component({
     selector: 'sc-shutdowns',
     standalone: true,
-    imports: [DecimalPipe],
+    imports: [DecimalPipe, TranslateModule],
     templateUrl: './sc-shutdowns.component.html',
     styleUrl: './sc-shutdowns.component.scss'
 })
 export class ScShutdownsComponent implements OnInit, OnDestroy {
     private shutdownService = inject(GesShutdownService);
+    private translateService = inject(TranslateService);
     private refreshSubscription?: Subscription;
 
     shutdowns: ShutdownItem[] = [];
@@ -90,11 +92,11 @@ export class ScShutdownsComponent implements OnInit, OnDestroy {
     getTimeAgo(): string {
         if (!this.lastUpdated) return '';
         const seconds = Math.floor((new Date().getTime() - this.lastUpdated.getTime()) / 1000);
-        if (seconds < 60) return 'только что';
+        if (seconds < 60) return this.translateService.instant('SITUATION_CENTER.DASHBOARD.TIME.JUST_NOW');
         const minutes = Math.floor(seconds / 60);
-        if (minutes < 60) return `${minutes} мин. назад`;
+        if (minutes < 60) return this.translateService.instant('SITUATION_CENTER.DASHBOARD.TIME.MINUTES_AGO', { count: minutes });
         const hours = Math.floor(minutes / 60);
-        return `${hours} ч. назад`;
+        return this.translateService.instant('SITUATION_CENTER.DASHBOARD.TIME.HOURS_AGO', { count: hours });
     }
 
     get totalLostGeneration(): number {
@@ -110,12 +112,12 @@ export class ScShutdownsComponent implements OnInit, OnDestroy {
     }
 
     getTypeLabel(type: string): string {
-        const labels: Record<string, string> = {
-            'ges': 'ГЭС',
-            'mini': 'мини',
-            'micro': 'микро'
+        const labelKeys: Record<string, string> = {
+            'ges': 'SITUATION_CENTER.DASHBOARD.SHUTDOWNS.TYPE_GES',
+            'mini': 'SITUATION_CENTER.DASHBOARD.SHUTDOWNS.TYPE_MINI',
+            'micro': 'SITUATION_CENTER.DASHBOARD.SHUTDOWNS.TYPE_MICRO'
         };
-        return labels[type] || type;
+        return labelKeys[type] ? this.translateService.instant(labelKeys[type]) : type;
     }
 
     getTypeClass(type: string): string {
@@ -129,13 +131,13 @@ export class ScShutdownsComponent implements OnInit, OnDestroy {
         const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
 
         if (hours < 1) {
-            return `${minutes} мин`;
+            return `${minutes} ${this.translateService.instant('SITUATION_CENTER.DASHBOARD.TIME.MINUTES_SHORT')}`;
         }
         if (hours < 24) {
-            return `${hours} ч`;
+            return `${hours} ${this.translateService.instant('SITUATION_CENTER.DASHBOARD.TIME.HOURS_SHORT')}`;
         }
         const days = Math.floor(hours / 24);
-        return `${days} дн`;
+        return `${days} ${this.translateService.instant('SITUATION_CENTER.DASHBOARD.TIME.DAYS_SHORT')}`;
     }
 
     ngOnDestroy(): void {

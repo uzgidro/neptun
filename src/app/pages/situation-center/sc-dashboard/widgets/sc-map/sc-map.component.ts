@@ -1,5 +1,6 @@
 import { Component, inject, OnDestroy } from '@angular/core';
 import { DatePipe, DecimalPipe } from '@angular/common';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { UzMapComponent } from '@/pages/situation-center/sc-dashboard/widgets/sc-map/uzbekistan-map/uz-map.component';
 import { DashboardService } from '@/core/services/dashboard.service';
 import { GesShutdownService } from '@/core/services/ges-shutdown.service';
@@ -97,13 +98,14 @@ interface StationMarker {
 @Component({
     selector: 'sc-map',
     standalone: true,
-    imports: [UzMapComponent, DatePipe, DecimalPipe],
+    imports: [UzMapComponent, DatePipe, DecimalPipe, TranslateModule],
     templateUrl: './sc-map.component.html',
     styleUrl: './sc-map.component.scss'
 })
 export class ScMapComponent implements OnDestroy {
     private dashboardService = inject(DashboardService);
     private shutdownService = inject(GesShutdownService);
+    private translateService = inject(TranslateService);
     private destroy$ = new Subject<void>();
 
     selectedStation: StationMarker | null = null;
@@ -115,22 +117,22 @@ export class ScMapComponent implements OnDestroy {
     isLoadingRegionData = false;
     hasRegionMapping = false;
 
-    // Region names mapping
-    regionNames: Record<string, string> = {
-        'UZFA': 'Ферганская область',
-        'UZTO': 'Ташкентская область',
-        'UZNG': 'Наманганская область',
-        'UZAN': 'Андижанская область',
-        'UZSI': 'Сырдарьинская область',
-        'UZJI': 'Джизакская область',
-        'UZSA': 'Самаркандская область',
-        'UZQA': 'Кашкадарьинская область',
-        'UZSU': 'Сурхандарьинская область',
-        'UZQR': 'Республика Каракалпакстан',
-        'UZNW': 'Навоийская область',
-        'UZXO': 'Хорезмская область',
-        'UZBU': 'Бухарская область',
-        'UZTK': 'Ташкент'
+    // Region key mapping
+    regionKeyMap: Record<string, string> = {
+        'UZFA': 'SITUATION_CENTER.DASHBOARD.REGIONS.FERGANA',
+        'UZTO': 'SITUATION_CENTER.DASHBOARD.REGIONS.TASHKENT',
+        'UZNG': 'SITUATION_CENTER.DASHBOARD.REGIONS.NAMANGAN',
+        'UZAN': 'SITUATION_CENTER.DASHBOARD.REGIONS.ANDIJAN',
+        'UZSI': 'SITUATION_CENTER.DASHBOARD.REGIONS.SYRDARYA',
+        'UZJI': 'SITUATION_CENTER.DASHBOARD.REGIONS.JIZZAKH',
+        'UZSA': 'SITUATION_CENTER.DASHBOARD.REGIONS.SAMARKAND',
+        'UZQA': 'SITUATION_CENTER.DASHBOARD.REGIONS.KASHKADARYA',
+        'UZSU': 'SITUATION_CENTER.DASHBOARD.REGIONS.SURKHANDARYA',
+        'UZQR': 'SITUATION_CENTER.DASHBOARD.REGIONS.KARAKALPAKSTAN',
+        'UZNW': 'SITUATION_CENTER.DASHBOARD.REGIONS.NAVOI',
+        'UZXO': 'SITUATION_CENTER.DASHBOARD.REGIONS.KHOREZM',
+        'UZBU': 'SITUATION_CENTER.DASHBOARD.REGIONS.BUKHARA',
+        'UZTK': 'SITUATION_CENTER.DASHBOARD.REGIONS.TASHKENT_CITY'
     };
 
     ngOnDestroy(): void {
@@ -245,7 +247,8 @@ export class ScMapComponent implements OnDestroy {
     }
 
     getRegionName(id: string): string {
-        return this.regionNames[id] || id;
+        const key = this.regionKeyMap[id];
+        return key ? this.translateService.instant(key) : id;
     }
 
     // Mock station markers with positions on the map

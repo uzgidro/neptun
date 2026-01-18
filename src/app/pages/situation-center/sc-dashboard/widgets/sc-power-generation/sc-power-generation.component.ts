@@ -1,19 +1,20 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { interval, Subscription } from 'rxjs';
+import { TranslateModule } from '@ngx-translate/core';
 import { DashboardService, ProductionStatsResponse } from '@/core/services/dashboard.service';
 
 interface ProductionMetric {
-    label: string;
+    labelKey: string;
     value: number;
-    unit: string;
+    unitKey: string;
     icon: string;
 }
 
 @Component({
     selector: 'sc-power-generation',
     standalone: true,
-    imports: [DecimalPipe],
+    imports: [DecimalPipe, TranslateModule],
     templateUrl: './sc-power-generation.component.html',
     styleUrl: './sc-power-generation.component.scss'
 })
@@ -28,9 +29,9 @@ export class ScPowerGenerationComponent implements OnInit, OnDestroy {
 
     // Production metrics
     productionMetrics: ProductionMetric[] = [
-        { label: 'С начала года', value: 0, unit: 'млн кВт·ч', icon: 'pi-calendar' },
-        { label: 'С начала месяца', value: 0, unit: 'млн кВт·ч', icon: 'pi-calendar-minus' },
-        { label: 'За сутки', value: 0, unit: 'млн кВт·ч', icon: 'pi-clock' }
+        { labelKey: 'SITUATION_CENTER.DASHBOARD.POWER_GENERATION.YEAR_START', value: 0, unitKey: 'SITUATION_CENTER.DASHBOARD.UNITS.MLN_KWH', icon: 'pi-calendar' },
+        { labelKey: 'SITUATION_CENTER.DASHBOARD.POWER_GENERATION.MONTH_START', value: 0, unitKey: 'SITUATION_CENTER.DASHBOARD.UNITS.MLN_KWH', icon: 'pi-calendar-minus' },
+        { labelKey: 'SITUATION_CENTER.DASHBOARD.POWER_GENERATION.PER_DAY', value: 0, unitKey: 'SITUATION_CENTER.DASHBOARD.UNITS.MLN_KWH', icon: 'pi-clock' }
     ];
 
     loading = true;
@@ -49,9 +50,9 @@ export class ScPowerGenerationComponent implements OnInit, OnDestroy {
                 this.currentDayGeneration = data.current.value;
 
                 this.productionMetrics = [
-                    { label: 'С начала года', value: data.year_total, unit: 'млн кВт·ч', icon: 'pi-calendar' },
-                    { label: 'С начала месяца', value: data.month_total, unit: 'млн кВт·ч', icon: 'pi-calendar-minus' },
-                    { label: 'За сутки', value: data.current.value, unit: 'млн кВт·ч', icon: 'pi-clock' }
+                    { labelKey: 'SITUATION_CENTER.DASHBOARD.POWER_GENERATION.YEAR_START', value: data.year_total, unitKey: 'SITUATION_CENTER.DASHBOARD.UNITS.MLN_KWH', icon: 'pi-calendar' },
+                    { labelKey: 'SITUATION_CENTER.DASHBOARD.POWER_GENERATION.MONTH_START', value: data.month_total, unitKey: 'SITUATION_CENTER.DASHBOARD.UNITS.MLN_KWH', icon: 'pi-calendar-minus' },
+                    { labelKey: 'SITUATION_CENTER.DASHBOARD.POWER_GENERATION.PER_DAY', value: data.current.value, unitKey: 'SITUATION_CENTER.DASHBOARD.UNITS.MLN_KWH', icon: 'pi-clock' }
                 ];
 
                 if (this.loading) {

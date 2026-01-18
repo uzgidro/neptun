@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { Subscription, interval } from 'rxjs';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { DashboardService } from '@/core/services/dashboard.service';
 import { Organization } from '@/core/interfaces/organizations';
 
@@ -13,12 +14,13 @@ interface DischargeItem {
 @Component({
     selector: 'sc-discharges',
     standalone: true,
-    imports: [DecimalPipe],
+    imports: [DecimalPipe, TranslateModule],
     templateUrl: './sc-discharges.component.html',
     styleUrl: './sc-discharges.component.scss'
 })
 export class ScDischargesComponent implements OnInit, OnDestroy {
     private dashboardService = inject(DashboardService);
+    private translateService = inject(TranslateService);
     private refreshSubscription?: Subscription;
 
     discharges: DischargeItem[] = [];
@@ -73,11 +75,11 @@ export class ScDischargesComponent implements OnInit, OnDestroy {
     getTimeAgo(): string {
         if (!this.lastUpdated) return '';
         const seconds = Math.floor((new Date().getTime() - this.lastUpdated.getTime()) / 1000);
-        if (seconds < 60) return 'только что';
+        if (seconds < 60) return this.translateService.instant('SITUATION_CENTER.DASHBOARD.TIME.JUST_NOW');
         const minutes = Math.floor(seconds / 60);
-        if (minutes < 60) return `${minutes} мин. назад`;
+        if (minutes < 60) return this.translateService.instant('SITUATION_CENTER.DASHBOARD.TIME.MINUTES_AGO', { count: minutes });
         const hours = Math.floor(minutes / 60);
-        return `${hours} ч. назад`;
+        return this.translateService.instant('SITUATION_CENTER.DASHBOARD.TIME.HOURS_AGO', { count: hours });
     }
 
     get totalDischarge(): number {

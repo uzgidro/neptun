@@ -1,7 +1,7 @@
 <div class="sc-station-status neon-card">
     <div class="widget-title">
         <i class="pi pi-cog title-icon"></i>
-        <span>Статус агрегатов</span>
+        <span>{{ 'SITUATION_CENTER.DASHBOARD.STATION_STATUS.TITLE' | translate }}</span>
     </div>
 
     <!-- Chart Container -->
@@ -11,20 +11,20 @@
             <!-- Center Counter -->
             <div class="chart-center">
                 <span class="center-value counter-digit">{{ totalUnits }}</span>
-                <span class="center-label">Всего</span>
+                <span class="center-label">{{ 'SITUATION_CENTER.DASHBOARD.STATION_STATUS.TOTAL' | translate }}</span>
             </div>
         </div>
     </div>
 
     <!-- Legend -->
     <div class="status-legend">
-        @for (status of statusData; track status.label) {
+        @for (status of statusData; track status.labelKey) {
             <div class="legend-item">
                 <div class="legend-indicator">
                     <span class="status-indicator" [class]="status.cssClass"></span>
                 </div>
                 <div class="legend-info">
-                    <span class="legend-label">{{ status.label }}</span>
+                    <span class="legend-label">{{ status.labelKey | translate }}</span>
                     <div class="legend-stats">
                         <span class="legend-value">{{ status.value }}</span>
                         <span class="legend-percent">({{ getPercentage(status.value) }}%)</span>
@@ -42,13 +42,13 @@
 
     <!-- Total Power -->
     <div class="total-power">
-        <span class="power-label">Суммарная мощность:</span>
-        <span class="power-value">{{ totalPower | number:'1.1-1' }} МВт</span>
+        <span class="power-label">{{ 'SITUATION_CENTER.DASHBOARD.STATION_STATUS.TOTAL_POWER' | translate }}:</span>
+        <span class="power-value">{{ totalPower | number:'1.1-1' }} {{ 'SITUATION_CENTER.DASHBOARD.UNITS.MW' | translate }}</span>
     </div>
 
     <!-- Footer -->
     <div class="widget-footer">
-        <span class="last-updated">Последнее обновление: {{ getTimeAgo() }}</span>
+        <span class="last-updated">{{ 'SITUATION_CENTER.DASHBOARD.COMMON.LAST_UPDATE' | translate }} {{ getTimeAgo() }}</span>
         <button class="refresh-btn" (click)="refresh()" [disabled]="loading">
             <i class="pi pi-refresh" [class.pi-spin]="loading"></i>
         </button>

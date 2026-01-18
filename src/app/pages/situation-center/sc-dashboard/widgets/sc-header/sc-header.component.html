@@ -1,6 +1,6 @@
 <div class="sc-header neon-card">
     <div class="header-left">
-        <a routerLink="/" class="home-btn" title="На главную">
+        <a routerLink="/" class="home-btn" [title]="'SITUATION_CENTER.DASHBOARD.HEADER.TO_HOME' | translate">
             <i class="pi pi-home"></i>
         </a>
         @if (weather) {
@@ -23,10 +23,20 @@
     </div>
 
     <div class="header-center">
-        <h1 class="header-title">Планшет Председателя правления</h1>
+        <h1 class="header-title">{{ 'SITUATION_CENTER.DASHBOARD.HEADER.TITLE' | translate }}</h1>
     </div>
 
     <div class="header-right">
-        <span class="time neon-text">{{ currentDate | date:'dd.MM.yyyy HH:mm:ss':'':'ru' }}</span>
+        <div class="language-switcher">
+            @for (lang of languages; track lang.code) {
+                <button
+                    class="lang-btn"
+                    [class.active]="currentLang === lang.code"
+                    (click)="setLanguage(lang.code)">
+                    {{ lang.label }}
+                </button>
+            }
+        </div>
+        <span class="time neon-text">{{ currentDate | date:'dd.MM.yyyy HH:mm:ss' }}</span>
     </div>
 </div>

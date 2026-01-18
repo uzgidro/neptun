@@ -122,6 +122,42 @@
     color: var(--sc-text-muted);
 }
 
+// Language Switcher
+.language-switcher {
+    display: flex;
+    gap: 4px;
+    padding: 4px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    border-radius: 8px;
+}
+
+.lang-btn {
+    padding: 4px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--sc-text-muted, #8892b0);
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+
+    &:hover {
+        color: var(--sc-neon-cyan, #00d4ff);
+        background: rgba(0, 212, 255, 0.1);
+    }
+
+    &.active {
+        color: #ffffff;
+        background: rgba(0, 212, 255, 0.2);
+        border-color: rgba(0, 212, 255, 0.5);
+        box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+    }
+}
+
 // DateTime
 .time {
     font-size: 18px;

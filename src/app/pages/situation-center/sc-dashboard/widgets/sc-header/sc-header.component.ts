@@ -3,8 +3,10 @@ import { DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { interval, Subscription } from 'rxjs';
 import { finalize } from 'rxjs/operators';
+import { TranslateModule } from '@ngx-translate/core';
 import { LocationService } from '@/core/services/location.service';
 import { WeatherService } from '@/core/services/weather.service';
+import { LanguageService } from '@/core/services/language.service';
 
 interface WeatherData {
     city: string;
@@ -16,7 +18,7 @@ interface WeatherData {
 @Component({
     selector: 'sc-header',
     standalone: true,
-    imports: [DatePipe, RouterLink],
+    imports: [DatePipe, RouterLink, TranslateModule],
     templateUrl: './sc-header.component.html',
     styleUrl: './sc-header.component.scss'
 })
@@ -30,6 +32,23 @@ export class ScHeaderComponent implements OnInit, OnDestroy {
 
     private locationService = inject(LocationService);
     private weatherService = inject(WeatherService);
+    private languageService = inject(LanguageService);
+
+    // Language switcher
+    languages = [
+        { code: 'ru', label: 'RU' },
+        { code: 'en', label: 'EN' },
+        { code: 'uz-cyrl', label: 'ЎЗ' },
+        { code: 'uz-latn', label: 'UZ' }
+    ];
+
+    get currentLang(): string {
+        return this.languageService.getCurrentLanguage().code;
+    }
+
+    setLanguage(code: string): void {
+        this.languageService.setLanguage(code);
+    }
 
     ngOnInit(): void {
         // Update time every second

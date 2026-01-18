@@ -2,11 +2,12 @@ import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { ChartModule } from 'primeng/chart';
 import { Subscription, interval } from 'rxjs';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { DashboardService } from '@/core/services/dashboard.service';
 import { Organization } from '@/core/interfaces/organizations';
 
 interface StatusItem {
-    label: string;
+    labelKey: string;
     value: number;
     color: string;
     cssClass: string;
@@ -15,18 +16,19 @@ interface StatusItem {
 @Component({
     selector: 'sc-station-status',
     standalone: true,
-    imports: [ChartModule, DecimalPipe],
+    imports: [ChartModule, DecimalPipe, TranslateModule],
     templateUrl: './sc-station-status.component.html',
     styleUrl: './sc-station-status.component.scss'
 })
 export class ScStationStatusComponent implements OnInit, OnDestroy {
     private dashboardService = inject(DashboardService);
+    private translateService = inject(TranslateService);
     private refreshSubscription?: Subscription;
 
     statusData: StatusItem[] = [
-        { label: 'В работе', value: 0, color: '#ff4757', cssClass: 'status-active' },
-        { label: 'Простаивают', value: 0, color: '#00ff88', cssClass: 'status-stopped' },
-        { label: 'В ремонте', value: 0, color: '#ffd32a', cssClass: 'status-repair' }
+        { labelKey: 'SITUATION_CENTER.DASHBOARD.STATION_STATUS.STATUS_WORKING', value: 0, color: '#ff4757', cssClass: 'status-active' },
+        { labelKey: 'SITUATION_CENTER.DASHBOARD.STATION_STATUS.STATUS_IDLE', value: 0, color: '#00ff88', cssClass: 'status-stopped' },
+        { labelKey: 'SITUATION_CENTER.DASHBOARD.STATION_STATUS.STATUS_REPAIR', value: 0, color: '#ffd32a', cssClass: 'status-repair' }
     ];
 
     totalUnits = 0;
@@ -68,11 +70,11 @@ export class ScStationStatusComponent implements OnInit, OnDestroy {
     getTimeAgo(): string {
         if (!this.lastUpdated) return '';
         const seconds = Math.floor((new Date().getTime() - this.lastUpdated.getTime()) / 1000);
-        if (seconds < 60) return 'только что';
+        if (seconds < 60) return this.translateService.instant('SITUATION_CENTER.DASHBOARD.TIME.JUST_NOW');
         const minutes = Math.floor(seconds / 60);
-        if (minutes < 60) return `${minutes} мин. назад`;
+        if (minutes < 60) return this.translateService.instant('SITUATION_CENTER.DASHBOARD.TIME.MINUTES_AGO', { count: minutes });
         const hours = Math.floor(minutes / 60);
-        return `${hours} ч. назад`;
+        return this.translateService.instant('SITUATION_CENTER.DASHBOARD.TIME.HOURS_AGO', { count: hours });
     }
 
     private calculateAggregates(cascades: Organization[]): void {
@@ -96,9 +98,9 @@ export class ScStationStatusComponent implements OnInit, OnDestroy {
         });
 
         this.statusData = [
-            { label: 'В работе', value: active, color: '#ff4757', cssClass: 'status-active' },
-            { label: 'Простаивают', value: pending, color: '#00ff88', cssClass: 'status-stopped' },
-            { label: 'В ремонте', value: repair, color: '#ffd32a', cssClass: 'status-repair' }
+            { labelKey: 'SITUATION_CENTER.DASHBOARD.STATION_STATUS.STATUS_WORKING', value: active, color: '#ff4757', cssClass: 'status-active' },
+            { labelKey: 'SITUATION_CENTER.DASHBOARD.STATION_STATUS.STATUS_IDLE', value: pending, color: '#00ff88', cssClass: 'status-stopped' },
+            { labelKey: 'SITUATION_CENTER.DASHBOARD.STATION_STATUS.STATUS_REPAIR', value: repair, color: '#ffd32a', cssClass: 'status-repair' }
         ];
 
         this.totalUnits = active + pending + repair;
@@ -124,7 +126,7 @@ export class ScStationStatusComponent implements OnInit, OnDestroy {
 
     private updateChart(): void {
         this.chartData = {
-            labels: this.statusData.map(s => s.label),
+            labels: this.statusData.map(s => this.translateService.instant(s.labelKey)),
             datasets: [
                 {
                     data: this.statusData.map(s => s.value),
