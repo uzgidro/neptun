@@ -1,14 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
+import { Subscription, interval } from 'rxjs';
+import { GesShutdownService } from '@/core/services/ges-shutdown.service';
+import { ShutdownDto, GesShutdownDto } from '@/core/interfaces/ges-shutdown';
 
 interface ShutdownItem {
     id: number;
     stationName: string;
     stationType: 'ges' | 'mini' | 'micro';
-    reason: string;
+    reason: string | null;
     startTime: Date;
-    lostGeneration: number;
-    downtime: number; // hours
+    endTime: Date | null;
+    lostGeneration: number | null;
+    isOngoing: boolean;
 }
 
 @Component({
@@ -18,53 +22,91 @@ interface ShutdownItem {
     templateUrl: './sc-shutdowns.component.html',
     styleUrl: './sc-shutdowns.component.scss'
 })
-export class ScShutdownsComponent {
-    // Mock shutdown data
-    shutdowns: ShutdownItem[] = [
-        {
-            id: 1,
-            stationName: 'Чирчикская ГЭС',
-            stationType: 'ges',
-            reason: 'Плановое ТО',
-            startTime: new Date(Date.now() - 3600000 * 5), // 5 hours ago
-            lostGeneration: 125.5,
-            downtime: 5
-        },
-        {
-            id: 2,
-            stationName: 'Ходжикентская ГЭС',
-            stationType: 'ges',
-            reason: 'Замена подшипников',
-            startTime: new Date(Date.now() - 3600000 * 12), // 12 hours ago
-            lostGeneration: 280.3,
-            downtime: 12
-        },
-        {
-            id: 3,
-            stationName: 'мини ГЭС-7',
-            stationType: 'mini',
-            reason: 'Аварийная остановка',
-            startTime: new Date(Date.now() - 3600000 * 2), // 2 hours ago
-            lostGeneration: 18.7,
-            downtime: 2
-        },
-        {
-            id: 4,
-            stationName: 'микро ГЭС Арнасай',
-            stationType: 'micro',
-            reason: 'Низкий уровень воды',
-            startTime: new Date(Date.now() - 3600000 * 8), // 8 hours ago
-            lostGeneration: 5.2,
-            downtime: 8
-        }
-    ];
+export class ScShutdownsComponent implements OnInit, OnDestroy {
+    private shutdownService = inject(GesShutdownService);
+    private refreshSubscription?: Subscription;
 
-    // Summary stats
+    shutdowns: ShutdownItem[] = [];
+    loading = true;
+    lastUpdated: Date | null = null;
+
+    ngOnInit(): void {
+        this.loadData();
+        this.refreshSubscription = interval(120000).subscribe(() => this.loadData());
+    }
+
+    private loadData(): void {
+        this.loading = true;
+        this.shutdownService.getShutdowns().subscribe({
+            next: (data: GesShutdownDto) => {
+                console.log(data);
+                this.processShutdowns(data);
+                this.lastUpdated = new Date();
+                this.loading = false;
+            },
+            error: (err) => {
+                console.error('Error loading shutdowns:', err);
+                this.loading = false;
+            }
+        });
+    }
+
+    private processShutdowns(data: GesShutdownDto): void {
+        const items: ShutdownItem[] = [];
+
+        const addShutdowns = (list: ShutdownDto[], type: 'ges' | 'mini' | 'micro') => {
+            list.forEach(shutdown => {
+                items.push({
+                    id: shutdown.id,
+                    stationName: shutdown.organization_name,
+                    stationType: type,
+                    reason: shutdown.reason,
+                    startTime: shutdown.started_at,
+                    endTime: shutdown.ended_at,
+                    lostGeneration: shutdown.generation_loss,
+                    isOngoing: shutdown.ended_at === null
+                });
+            });
+        };
+
+        addShutdowns(data.ges, 'ges');
+        addShutdowns(data.mini, 'mini');
+        addShutdowns(data.micro, 'micro');
+
+        // Sort: ongoing first, then by start time (most recent first)
+        items.sort((a, b) => {
+            if (a.isOngoing !== b.isOngoing) {
+                return a.isOngoing ? -1 : 1;
+            }
+            return b.startTime.getTime() - a.startTime.getTime();
+        });
+
+        this.shutdowns = items;
+    }
+
+    refresh(): void {
+        this.loadData();
+    }
+
+    getTimeAgo(): string {
+        if (!this.lastUpdated) return '';
+        const seconds = Math.floor((new Date().getTime() - this.lastUpdated.getTime()) / 1000);
+        if (seconds < 60) return 'только что';
+        const minutes = Math.floor(seconds / 60);
+        if (minutes < 60) return `${minutes} мин. назад`;
+        const hours = Math.floor(minutes / 60);
+        return `${hours} ч. назад`;
+    }
+
     get totalLostGeneration(): number {
-        return this.shutdowns.reduce((sum, s) => sum + s.lostGeneration, 0);
+        return this.shutdowns.reduce((sum, s) => sum + (s.lostGeneration || 0), 0);
     }
 
     get activeShutdownsCount(): number {
+        return this.shutdowns.filter(s => s.isOngoing).length;
+    }
+
+    get totalShutdownsCount(): number {
         return this.shutdowns.length;
     }
 
@@ -81,10 +123,23 @@ export class ScShutdownsComponent {
         return `type-${type}`;
     }
 
-    formatDowntime(hours: number): string {
+    getDowntime(shutdown: ShutdownItem): string {
+        const endTime = shutdown.endTime || new Date();
+        const diffMs = endTime.getTime() - shutdown.startTime.getTime();
+        const hours = Math.floor(diffMs / (1000 * 60 * 60));
+        const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+
         if (hours < 1) {
-            return `${Math.round(hours * 60)} мин`;
+            return `${minutes} мин`;
         }
-        return `${hours} ч`;
+        if (hours < 24) {
+            return `${hours} ч`;
+        }
+        const days = Math.floor(hours / 24);
+        return `${days} дн`;
+    }
+
+    ngOnDestroy(): void {
+        this.refreshSubscription?.unsubscribe();
     }
 }

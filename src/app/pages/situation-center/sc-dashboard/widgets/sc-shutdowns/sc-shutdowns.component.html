@@ -7,47 +7,72 @@
     <!-- Summary -->
     <div class="shutdowns-summary">
         <div class="summary-item">
-            <span class="summary-value neon-text-red">{{ activeShutdownsCount }}</span>
+            <span class="summary-value color-red">{{ activeShutdownsCount }}</span>
             <span class="summary-label">Отключений</span>
         </div>
         <div class="summary-divider"></div>
         <div class="summary-item">
-            <span class="summary-value neon-text-yellow">{{ totalLostGeneration | number:'1.1-1' }}</span>
-            <span class="summary-label">МВтч потерь</span>
+            <span class="summary-value color-yellow">{{ totalLostGeneration | number:'1.1-1' }}</span>
+            <span class="summary-label">КВтч потерь</span>
         </div>
     </div>
 
     <!-- Shutdowns List -->
     <div class="shutdowns-list">
         @for (shutdown of shutdowns; track shutdown.id) {
-            <div class="shutdown-item">
+            <div class="shutdown-item" [class.completed]="!shutdown.isOngoing">
                 <div class="shutdown-header">
                     <div class="station-info">
-                        <span class="station-type" [class]="getTypeClass(shutdown.stationType)">
-                            {{ getTypeLabel(shutdown.stationType) }}
-                        </span>
+                        <div class="station-badges">
+                            <span class="station-type" [class]="getTypeClass(shutdown.stationType)">
+                                {{ getTypeLabel(shutdown.stationType) }}
+                            </span>
+                            @if (!shutdown.isOngoing) {
+                                <span class="status-badge completed">
+                                    <i class="pi pi-check"></i>
+                                    завершено
+                                </span>
+                            }
+                        </div>
                         <span class="station-name">{{ shutdown.stationName }}</span>
                     </div>
-                    <span class="downtime">
+                    <span class="downtime" [class.completed]="!shutdown.isOngoing">
                         <i class="pi pi-clock"></i>
-                        {{ formatDowntime(shutdown.downtime) }}
+                        {{ getDowntime(shutdown) }}
                     </span>
                 </div>
                 <div class="shutdown-details">
-                    <span class="reason">{{ shutdown.reason }}</span>
-                    <span class="lost-generation">
-                        <i class="pi pi-bolt"></i>
-                        -{{ shutdown.lostGeneration | number:'1.1-1' }} МВтч
-                    </span>
+                    <span class="reason">{{ shutdown.reason || 'Причина не указана' }}</span>
+                    @if (shutdown.lostGeneration) {
+                        <span class="lost-generation">
+                            <i class="pi pi-bolt"></i>
+                            -{{ shutdown.lostGeneration | number:'1.1-1' }} КВтч
+                        </span>
+                    }
                 </div>
             </div>
         }
 
-        @if (shutdowns.length === 0) {
+        @if (shutdowns.length === 0 && !loading) {
             <div class="no-shutdowns">
                 <i class="pi pi-check-circle"></i>
                 <span>Все станции в работе</span>
             </div>
         }
+
+        @if (loading) {
+            <div class="no-shutdowns">
+                <i class="pi pi-spin pi-spinner"></i>
+                <span>Загрузка...</span>
+            </div>
+        }
+    </div>
+
+    <!-- Footer -->
+    <div class="widget-footer">
+        <span class="last-updated">Последнее обновление: {{ getTimeAgo() }}</span>
+        <button class="refresh-btn" (click)="refresh()" [disabled]="loading">
+            <i class="pi pi-refresh" [class.pi-spin]="loading"></i>
+        </button>
     </div>
 </div>
