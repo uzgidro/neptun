@@ -6,10 +6,20 @@ import { Organization } from '@/core/interfaces/organizations';
 import { HttpParams } from '@angular/common/http';
 import { DashboardResponse } from '@/core/interfaces/ges-production';
 
+export interface ProductionStatsResponse {
+    current: {
+        date: string;
+        value: number;
+    };
+    month_total: number;
+    year_total: number;
+}
+
 const DASHBOARD = '/dashboard';
 const RESERVOIR = '/reservoir';
 const CASCADES = '/cascades';
-const PRODUCTION = '/production'
+const PRODUCTION = '/production';
+const PRODUCTION_STATS = '/production-stats';
 
 @Injectable({
     providedIn: 'root'
@@ -29,5 +39,9 @@ export class DashboardService extends ApiService {
 
     getGESProduction(): Observable<DashboardResponse> {
         return this.http.get<DashboardResponse>(BASE_URL + DASHBOARD + PRODUCTION);
+    }
+
+    getProductionStats(): Observable<ProductionStatsResponse> {
+        return this.http.get<ProductionStatsResponse>(BASE_URL + DASHBOARD + PRODUCTION_STATS);
     }
 }

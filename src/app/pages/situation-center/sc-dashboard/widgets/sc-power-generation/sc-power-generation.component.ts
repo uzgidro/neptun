@@ -1,6 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { interval, Subscription } from 'rxjs';
+import { DashboardService, ProductionStatsResponse } from '@/core/services/dashboard.service';
 
 interface ProductionMetric {
     label: string;
@@ -17,37 +18,66 @@ interface ProductionMetric {
     styleUrl: './sc-power-generation.component.scss'
 })
 export class ScPowerGenerationComponent implements OnInit, OnDestroy {
-    // Main counter - total generation in GWh
-    totalGeneration = 29515.847;
+    private dashboardService = inject(DashboardService);
+
+    // Main counter - current day generation in MWh
+    currentDayGeneration = 0;
     displayedGeneration = 0;
     private counterSubscription?: Subscription;
-    private incrementSubscription?: Subscription;
+    private refreshSubscription?: Subscription;
 
     // Production metrics
     productionMetrics: ProductionMetric[] = [
-        { label: 'За год', value: 85.9, unit: 'GWh', icon: 'pi-calendar' },
-        { label: 'За месяц', value: 1556.7, unit: 'MWh', icon: 'pi-calendar-minus' },
-        { label: 'За сутки', value: 234.90, unit: 'MWh', icon: 'pi-clock' }
+        { label: 'С начала года', value: 0, unit: 'млн кВт·ч', icon: 'pi-calendar' },
+        { label: 'С начала месяца', value: 0, unit: 'млн кВт·ч', icon: 'pi-calendar-minus' },
+        { label: 'За сутки', value: 0, unit: 'млн кВт·ч', icon: 'pi-clock' }
     ];
 
-    // Current power output
-    currentPower = 1247.5; // MW
+    loading = true;
 
     ngOnInit(): void {
-        this.animateCounter();
-        this.startRealTimeIncrement();
+        this.loadProductionStats();
+        // Refresh every 5 minutes
+        this.refreshSubscription = interval(300000).subscribe(() => {
+            this.loadProductionStats();
+        });
+    }
+
+    private loadProductionStats(): void {
+        this.dashboardService.getProductionStats().subscribe({
+            next: (data: ProductionStatsResponse) => {
+                this.currentDayGeneration = data.current.value;
+
+                this.productionMetrics = [
+                    { label: 'С начала года', value: data.year_total, unit: 'млн кВт·ч', icon: 'pi-calendar' },
+                    { label: 'С начала месяца', value: data.month_total, unit: 'млн кВт·ч', icon: 'pi-calendar-minus' },
+                    { label: 'За сутки', value: data.current.value, unit: 'млн кВт·ч', icon: 'pi-clock' }
+                ];
+
+                if (this.loading) {
+                    this.animateCounter();
+                    this.loading = false;
+                } else {
+                    this.displayedGeneration = this.currentDayGeneration;
+                }
+            },
+            error: (err) => {
+                console.error('Error loading production stats:', err);
+                this.loading = false;
+            }
+        });
     }
 
     private animateCounter(): void {
-        const duration = 2000; // 2 seconds
-        const steps = 60;
-        const stepValue = this.totalGeneration / steps;
+        const duration = 1500;
+        const steps = 40;
+        const stepValue = this.currentDayGeneration / steps;
         let currentStep = 0;
 
         this.counterSubscription = interval(duration / steps).subscribe(() => {
             currentStep++;
             if (currentStep >= steps) {
-                this.displayedGeneration = this.totalGeneration;
+                this.displayedGeneration = this.currentDayGeneration;
                 this.counterSubscription?.unsubscribe();
             } else {
                 this.displayedGeneration = stepValue * currentStep;
@@ -55,25 +85,8 @@ export class ScPowerGenerationComponent implements OnInit, OnDestroy {
         });
     }
 
-    private startRealTimeIncrement(): void {
-        // Simulate real-time generation increment
-        this.incrementSubscription = interval(3000).subscribe(() => {
-            // Add small random increment (simulating real-time generation)
-            const increment = Math.random() * 0.005;
-            this.totalGeneration += increment;
-            this.displayedGeneration = this.totalGeneration;
-        });
-    }
-
-    formatMainCounter(value: number): string {
-        return value.toLocaleString('ru-RU', {
-            minimumFractionDigits: 3,
-            maximumFractionDigits: 3
-        });
-    }
-
     ngOnDestroy(): void {
         this.counterSubscription?.unsubscribe();
-        this.incrementSubscription?.unsubscribe();
+        this.refreshSubscription?.unsubscribe();
     }
 }

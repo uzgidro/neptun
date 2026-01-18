@@ -5,112 +5,182 @@
 
 .sc-power-generation {
     height: 100%;
-    padding: 10px 16px !important;
+    padding: 12px 20px !important;
 }
 
 .power-layout {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 20px;
+    justify-content: center;
     height: 100%;
 }
 
-// Main Counter
-.main-counter {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-.counter-label {
-    font-size: 9px;
-    color: var(--sc-text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 2px;
-}
-
-.counter-value {
-    display: flex;
-    align-items: baseline;
-    gap: 4px;
-}
-
-.counter-digits {
-    font-size: 28px;
-    font-weight: 700;
-    font-family: 'Courier New', monospace;
-    letter-spacing: 1px;
-}
-
-.counter-unit {
-    font-size: 12px;
-    color: var(--sc-text-secondary);
-    font-weight: 500;
-}
-
-// Metrics Row
 .metrics-row {
     display: flex;
-    align-items: center;
-    gap: 16px;
-    flex: 1;
+    align-items: stretch;
+    gap: 20px;
+    width: 100%;
     justify-content: center;
 }
 
-.metric-item {
+// Base card styles
+.metric-card {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 6px 12px;
-    background: rgba(0, 212, 255, 0.05);
-    border-radius: 6px;
-    border: 1px solid rgba(0, 212, 255, 0.1);
+    gap: 16px;
+    padding: 16px 24px;
+    border-radius: 12px;
+    flex: 1;
+    max-width: 320px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        border-radius: 10px 10px 0 0;
+    }
+
+    &:hover {
+        transform: translateY(-2px);
+    }
+}
+
+.metric-icon-wrapper {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
 }
 
 .metric-icon {
-    font-size: 14px;
-    color: var(--sc-neon-cyan);
+    font-size: 24px;
 }
 
 .metric-content {
     display: flex;
     flex-direction: column;
+    gap: 4px;
 }
 
 .metric-label {
-    font-size: 8px;
-    color: var(--sc-text-muted);
-    text-transform: uppercase;
-}
-
-.metric-value {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--sc-text-primary);
-
-    small {
-        font-size: 10px;
-        opacity: 0.7;
-    }
-}
-
-// Current Power
-.current-power {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-}
-
-.power-label {
-    font-size: 9px;
+    font-size: 12px;
     color: var(--sc-text-muted);
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    font-weight: 500;
 }
 
-.power-value {
-    font-size: 20px;
+.metric-value {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+}
+
+.metric-number {
+    font-size: 26px;
     font-weight: 700;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 0.5px;
+}
+
+.metric-unit {
+    font-size: 12px;
+    color: var(--sc-text-secondary);
+    font-weight: 500;
+}
+
+// Card 0 - Year (Green)
+.metric-card-0 {
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.1) 0%, rgba(0, 255, 136, 0.02) 100%);
+    border: 1px solid rgba(0, 255, 136, 0.25);
+
+    &::before {
+        background: linear-gradient(90deg, var(--sc-neon-green), transparent);
+    }
+
+    &:hover {
+        border-color: rgba(0, 255, 136, 0.5);
+        box-shadow: 0 8px 32px rgba(0, 255, 136, 0.15);
+    }
+
+    .metric-icon-wrapper {
+        background: rgba(0, 255, 136, 0.15);
+    }
+
+    .metric-icon {
+        color: var(--sc-neon-green);
+        text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+    }
+
+    .metric-number {
+        color: var(--sc-neon-green);
+        text-shadow: 0 0 8px rgba(0, 255, 136, 0.4);
+    }
+}
+
+// Card 1 - Month (Cyan)
+.metric-card-1 {
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 212, 255, 0.02) 100%);
+    border: 1px solid rgba(0, 212, 255, 0.25);
+
+    &::before {
+        background: linear-gradient(90deg, var(--sc-neon-cyan), transparent);
+    }
+
+    &:hover {
+        border-color: rgba(0, 212, 255, 0.5);
+        box-shadow: 0 8px 32px rgba(0, 212, 255, 0.15);
+    }
+
+    .metric-icon-wrapper {
+        background: rgba(0, 212, 255, 0.15);
+    }
+
+    .metric-icon {
+        color: var(--sc-neon-cyan);
+        text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+    }
+
+    .metric-number {
+        color: var(--sc-neon-cyan);
+        text-shadow: 0 0 8px rgba(0, 212, 255, 0.4);
+    }
+}
+
+// Card 2 - Day (Yellow/Orange)
+.metric-card-2 {
+    background: linear-gradient(135deg, rgba(255, 211, 42, 0.1) 0%, rgba(255, 159, 67, 0.02) 100%);
+    border: 1px solid rgba(255, 211, 42, 0.25);
+
+    &::before {
+        background: linear-gradient(90deg, var(--sc-neon-yellow), var(--sc-neon-orange));
+    }
+
+    &:hover {
+        border-color: rgba(255, 211, 42, 0.5);
+        box-shadow: 0 8px 32px rgba(255, 211, 42, 0.15);
+    }
+
+    .metric-icon-wrapper {
+        background: rgba(255, 211, 42, 0.15);
+    }
+
+    .metric-icon {
+        color: var(--sc-neon-yellow);
+        text-shadow: 0 0 10px rgba(255, 211, 42, 0.5);
+    }
+
+    .metric-number {
+        color: var(--sc-neon-yellow);
+        text-shadow: 0 0 8px rgba(255, 211, 42, 0.4);
+    }
 }
