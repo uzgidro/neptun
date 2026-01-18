@@ -77,18 +77,18 @@ export class ScStationStatusComponent implements OnInit, OnDestroy {
         let pending = 0;
         let repair = 0;
 
-        const processOrg = (org: Organization) => {
-            if (org.ascue_metrics) {
-                active += org.ascue_metrics.active_agg_count || 0;
-                pending += org.ascue_metrics.pending_agg_count || 0;
-                repair += org.ascue_metrics.repair_agg_count || 0;
+        // Берём только детей (items), не родителей - чтобы избежать двойного подсчёта
+        cascades.forEach(cascade => {
+            if (cascade.items && cascade.items.length > 0) {
+                cascade.items.forEach(child => {
+                    if (child.ascue_metrics) {
+                        active += child.ascue_metrics.active_agg_count || 0;
+                        pending += child.ascue_metrics.pending_agg_count || 0;
+                        repair += child.ascue_metrics.repair_agg_count || 0;
+                    }
+                });
             }
-            if (org.items && org.items.length > 0) {
-                org.items.forEach(item => processOrg(item));
-            }
-        };
-
-        cascades.forEach(cascade => processOrg(cascade));
+        });
 
         this.statusData = [
             { label: 'В работе', value: active, color: '#ff4757', cssClass: 'status-active' },
