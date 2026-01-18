@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiService, BASE_URL } from '@/core/services/api.service';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ReservoirResponse } from '@/core/interfaces/reservoir';
 import { Organization } from '@/core/interfaces/organizations';
 import { HttpParams } from '@angular/common/http';
@@ -34,7 +35,56 @@ export class DashboardService extends ApiService {
     }
 
     getOrganizationsCascades(): Observable<Organization[]> {
-        return this.http.get<Organization[]>(BASE_URL + DASHBOARD + CASCADES);
+        return this.http.get<Organization[]>(BASE_URL + DASHBOARD + CASCADES).pipe(
+            map(cascades => this.normalizeCascades(cascades))
+        );
+    }
+
+    /**
+     * Нормализация данных каскадов:
+     * - Обнуление отрицательных значений pending/repair у детей
+     * - Пересчёт агрегатов родителя на основе детей
+     */
+    private normalizeCascades(cascades: Organization[]): Organization[] {
+        return cascades.map(cascade => this.normalizeOrganization(cascade));
+    }
+
+    private normalizeOrganization(org: Organization): Organization {
+        // Если есть дочерние элементы - обрабатываем их
+        if (org.items && org.items.length > 0) {
+            // Нормализуем детей
+            org.items = org.items.map(child => {
+                if (child.ascue_metrics) {
+                    // Обнуляем отрицательные значения
+                    if (child.ascue_metrics.pending_agg_count < 0) {
+                        child.ascue_metrics.pending_agg_count = 0;
+                        child.ascue_metrics.repair_agg_count = 0;
+                    }
+                }
+                return child;
+            });
+
+            // Пересчитываем агрегаты родителя на основе детей
+            if (org.ascue_metrics) {
+                let totalActive = 0;
+                let totalPending = 0;
+                let totalRepair = 0;
+
+                org.items.forEach(child => {
+                    if (child.ascue_metrics) {
+                        totalActive += child.ascue_metrics.active_agg_count || 0;
+                        totalPending += child.ascue_metrics.pending_agg_count || 0;
+                        totalRepair += child.ascue_metrics.repair_agg_count || 0;
+                    }
+                });
+
+                org.ascue_metrics.active_agg_count = totalActive;
+                org.ascue_metrics.pending_agg_count = totalPending;
+                org.ascue_metrics.repair_agg_count = totalRepair;
+            }
+        }
+
+        return org;
     }
 
     getGESProduction(): Observable<DashboardResponse> {

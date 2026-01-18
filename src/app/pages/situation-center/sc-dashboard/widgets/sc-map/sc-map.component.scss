@@ -56,6 +56,27 @@
     }
 }
 
+// Map Content (split view wrapper)
+.map-content {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+    gap: 12px;
+    overflow: hidden;
+
+    &.split-view {
+        .map-container {
+            flex: 0 0 50%;
+        }
+
+        .region-panel {
+            flex: 0 0 calc(50% - 12px);
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+}
+
 // Map Container
 .map-container {
     position: relative;
@@ -65,6 +86,80 @@
     border-radius: 6px;
     overflow: hidden;
     border: 1px solid rgba(0, 212, 255, 0.1);
+    transition: flex 0.4s ease;
+}
+
+// Region Panel
+.region-panel {
+    flex: 0 0 0;
+    background: rgba(0, 20, 40, 0.9);
+    border-radius: 6px;
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    overflow: hidden;
+    opacity: 0;
+    transform: translateX(20px);
+    transition: all 0.4s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background: rgba(0, 212, 255, 0.1);
+    border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+}
+
+.panel-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.close-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s;
+
+    &:hover {
+        color: #ff5566;
+    }
+
+    i {
+        font-size: 14px;
+    }
+}
+
+.panel-body {
+    flex: 1;
+    padding: 16px;
+    overflow-y: auto;
+}
+
+.region-id {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.id-label {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+}
+
+.id-value {
+    font-size: 20px;
+    font-weight: 700;
+    color: #00e5ff;
 }
 
 .svg-map {

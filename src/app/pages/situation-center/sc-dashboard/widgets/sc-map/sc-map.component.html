@@ -4,24 +4,28 @@
             <i class="pi pi-map title-icon"></i>
             <span>Интерактивная карта</span>
         </div>
-        <div class="map-legend">
-            <div class="legend-item">
-                <span class="legend-dot active"></span>
-                <span>В работе</span>
-            </div>
-            <div class="legend-item">
-                <span class="legend-dot stopped"></span>
-                <span>Остановлены</span>
-            </div>
-            <div class="legend-item">
-                <span class="legend-dot repair"></span>
-                <span>В ремонте</span>
-            </div>
-        </div>
     </div>
 
-    <div class="map-container">
-        <!-- SVG Map -->
-        <app-uz-map></app-uz-map>
+    <div class="map-content" [class.split-view]="selectedRegionId">
+        <div class="map-container">
+            <app-uz-map (regionClick)="onRegionClick($event)"></app-uz-map>
+        </div>
+
+        @if (selectedRegionId) {
+            <div class="region-panel">
+                <div class="panel-header">
+                    <span class="panel-title">{{ getRegionName(selectedRegionId) }}</span>
+                    <button class="close-btn" (click)="closePanel()">
+                        <i class="pi pi-times"></i>
+                    </button>
+                </div>
+                <div class="panel-body">
+                    <div class="region-id">
+                        <span class="id-label">ID региона:</span>
+                        <span class="id-value">{{ selectedRegionId }}</span>
+                    </div>
+                </div>
+            </div>
+        }
     </div>
 </div>

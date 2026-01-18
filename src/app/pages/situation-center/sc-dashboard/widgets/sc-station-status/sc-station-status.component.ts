@@ -46,6 +46,7 @@ export class ScStationStatusComponent implements OnInit, OnDestroy {
         this.loading = true;
         this.dashboardService.getOrganizationsCascades().subscribe({
             next: (cascades: Organization[]) => {
+                console.log(cascades);
                 this.calculateAggregates(cascades);
                 this.updateChart();
                 this.lastUpdated = new Date();

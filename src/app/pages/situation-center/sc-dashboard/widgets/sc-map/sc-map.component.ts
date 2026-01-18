@@ -22,6 +22,41 @@ interface StationMarker {
 export class ScMapComponent {
     selectedStation: StationMarker | null = null;
     hoveredStation: StationMarker | null = null;
+    selectedRegionId: string | null = null;
+
+    // Region names mapping
+    regionNames: Record<string, string> = {
+        'UZFA': 'Ферганская область',
+        'UZTO': 'Ташкентская область',
+        'UZNG': 'Наманганская область',
+        'UZAN': 'Андижанская область',
+        'UZSI': 'Сырдарьинская область',
+        'UZJI': 'Джизакская область',
+        'UZSA': 'Самаркандская область',
+        'UZQA': 'Кашкадарьинская область',
+        'UZSU': 'Сурхандарьинская область',
+        'UZQR': 'Республика Каракалпакстан',
+        'UZNW': 'Навоийская область',
+        'UZXO': 'Хорезмская область',
+        'UZBU': 'Бухарская область',
+        'UZTK': 'Ташкент'
+    };
+
+    onRegionClick(regionId: string): void {
+        if (this.selectedRegionId === regionId) {
+            this.selectedRegionId = null;
+        } else {
+            this.selectedRegionId = regionId;
+        }
+    }
+
+    closePanel(): void {
+        this.selectedRegionId = null;
+    }
+
+    getRegionName(id: string): string {
+        return this.regionNames[id] || id;
+    }
 
     // Mock station markers with positions on the map
     stations: StationMarker[] = [
