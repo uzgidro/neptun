@@ -21,7 +21,7 @@ export class ScMonitoringComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.loadData();
-        this.refreshSubscription = interval(120000).subscribe(() => this.loadData());
+        this.refreshSubscription = interval(3600000).subscribe(() => this.loadData()); // 1 час
     }
 
     private loadData(): void {

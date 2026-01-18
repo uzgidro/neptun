@@ -32,14 +32,13 @@ export class ScShutdownsComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.loadData();
-        this.refreshSubscription = interval(120000).subscribe(() => this.loadData());
+        this.refreshSubscription = interval(600000).subscribe(() => this.loadData()); // 10 минут
     }
 
     private loadData(): void {
         this.loading = true;
         this.shutdownService.getShutdowns().subscribe({
             next: (data: GesShutdownDto) => {
-                console.log(data);
                 this.processShutdowns(data);
                 this.lastUpdated = new Date();
                 this.loading = false;

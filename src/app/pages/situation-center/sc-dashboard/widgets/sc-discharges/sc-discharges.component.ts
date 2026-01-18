@@ -27,7 +27,7 @@ export class ScDischargesComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.loadData();
-        this.refreshSubscription = interval(120000).subscribe(() => this.loadData());
+        this.refreshSubscription = interval(600000).subscribe(() => this.loadData()); // 10 минут
     }
 
     private loadData(): void {
