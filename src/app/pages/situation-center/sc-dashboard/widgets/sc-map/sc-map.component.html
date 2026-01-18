@@ -1,0 +1,96 @@
+<div class="sc-map neon-card">
+    <div class="map-header">
+        <div class="widget-title">
+            <i class="pi pi-map title-icon"></i>
+            <span>Интерактивная карта</span>
+        </div>
+        <div class="map-legend">
+            <div class="legend-item">
+                <span class="legend-dot active"></span>
+                <span>В работе</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-dot stopped"></span>
+                <span>Остановлены</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-dot repair"></span>
+                <span>В ремонте</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="map-container">
+        <!-- SVG Map -->
+        <app-uz-map></app-uz-map>
+
+        <!-- Station Markers -->
+        <div class="markers-layer">
+            @for (station of stations; track station.id) {
+                <div class="station-marker"
+                     [class]="getStationStatusClass(station.status)"
+                     [style.left.%]="station.x"
+                     [style.top.%]="station.y"
+                     [style.width.px]="getMarkerSize(station.type)"
+                     [style.height.px]="getMarkerSize(station.type)"
+                     (mouseenter)="onStationHover(station)"
+                     (mouseleave)="onStationHover(null)"
+                     (click)="onStationClick(station)">
+                    <i class="pi {{ getTypeIcon(station.type) }}"></i>
+
+                    <!-- Pulse animation for active stations -->
+                    @if (station.status === 'active') {
+                        <span class="marker-pulse"></span>
+                    }
+                </div>
+            }
+        </div>
+
+        <!-- Tooltip -->
+        @if (hoveredStation) {
+            <div class="station-tooltip"
+                 [style.left.%]="hoveredStation.x"
+                 [style.top.%]="hoveredStation.y">
+                <div class="tooltip-header">
+                    <span class="tooltip-name">{{ hoveredStation.name }}</span>
+                    <span class="tooltip-status" [class]="hoveredStation.status">
+                        @switch (hoveredStation.status) {
+                            @case ('active') { В работе }
+                            @case ('stopped') { Остановлена }
+                            @case ('repair') { В ремонте }
+                        }
+                    </span>
+                </div>
+                <div class="tooltip-body">
+                    <div class="tooltip-row">
+                        <span class="tooltip-label">Регион:</span>
+                        <span class="tooltip-value">{{ hoveredStation.region }}</span>
+                    </div>
+                    <div class="tooltip-row">
+                        <span class="tooltip-label">Мощность:</span>
+                        <span class="tooltip-value">{{ hoveredStation.power }} МВт</span>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Stats Footer -->
+    <div class="map-footer">
+        <div class="stat-item">
+            <i class="pi pi-bolt"></i>
+            <span class="stat-value">{{ totalStations }}</span>
+            <span class="stat-label">станций</span>
+        </div>
+        <div class="stat-item active-stat">
+            <i class="pi pi-check-circle"></i>
+            <span class="stat-value">{{ activeStationsCount }}</span>
+            <span class="stat-label">в работе</span>
+        </div>
+        <div class="stat-item">
+            <i class="pi pi-chart-line"></i>
+            <span class="stat-value">{{ totalPower }}</span>
+            <span class="stat-label">МВт общая</span>
+        </div>
+    </div>
+</div>

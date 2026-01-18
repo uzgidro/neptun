@@ -1,0 +1,174 @@
+:host {
+    display: block;
+    height: 100%;
+}
+
+.sc-monitoring {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: 100%;
+    overflow: hidden;
+}
+
+// Station Types Grid
+.station-types {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.station-card {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 8px;
+    background: rgba(0, 212, 255, 0.05);
+    border-radius: 6px;
+    border: 1px solid rgba(0, 212, 255, 0.1);
+    transition: all 0.3s ease;
+
+    &:hover {
+        background: rgba(0, 212, 255, 0.1);
+    }
+
+    &[data-color="cyan"] {
+        .station-icon {
+            background: rgba(0, 212, 255, 0.2);
+            color: var(--sc-neon-cyan);
+        }
+    }
+
+    &[data-color="blue"] {
+        .station-icon {
+            background: rgba(0, 168, 204, 0.2);
+            color: var(--sc-neon-blue);
+        }
+    }
+
+    &[data-color="purple"] {
+        .station-icon {
+            background: rgba(168, 85, 247, 0.2);
+            color: var(--sc-neon-purple);
+        }
+    }
+}
+
+.station-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    flex-shrink: 0;
+}
+
+.station-info {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.station-value {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.station-label {
+    font-size: 10px;
+    color: var(--sc-text-muted);
+    text-transform: uppercase;
+}
+
+// ASKUE Section
+.askue-section {
+    padding: 10px;
+    background: rgba(0, 255, 136, 0.05);
+    border-radius: 6px;
+    border: 1px solid rgba(0, 255, 136, 0.1);
+    flex-shrink: 0;
+}
+
+.askue-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.askue-title {
+    font-size: 10px;
+    color: var(--sc-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.askue-percentage {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.askue-bar {
+    height: 6px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 4px;
+}
+
+.askue-progress {
+    height: 100%;
+    background: linear-gradient(90deg, var(--sc-neon-green), var(--sc-neon-cyan));
+    border-radius: 3px;
+    transition: width 0.5s ease;
+    box-shadow: 0 0 8px rgba(0, 255, 136, 0.5);
+}
+
+.askue-stats {
+    font-size: 9px;
+    color: var(--sc-text-muted);
+    text-align: right;
+}
+
+// Infrastructure Grid
+.infrastructure-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.infrastructure-card {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px;
+    background: rgba(0, 168, 204, 0.05);
+    border-radius: 6px;
+    border: 1px solid rgba(0, 168, 204, 0.1);
+}
+
+.infra-icon {
+    font-size: 14px;
+    color: var(--sc-neon-blue);
+}
+
+.infra-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.infra-value {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--sc-text-primary);
+}
+
+.infra-label {
+    font-size: 8px;
+    color: var(--sc-text-muted);
+    text-transform: uppercase;
+}

@@ -1,0 +1,17 @@
+<div class="sc-header neon-card">
+    <div class="header-left">
+        <div class="weather-widget">
+            <i class="pi {{ weather.icon }} weather-icon"></i>
+            <span class="weather-temp">{{ weather.temperature }}°C</span>
+            <span class="weather-condition">{{ weather.condition }}</span>
+        </div>
+    </div>
+
+    <div class="header-center">
+        <h1 class="header-title neon-text">Планшет Председателя правления</h1>
+    </div>
+
+    <div class="header-right">
+        <span class="time neon-text">{{ currentDate | date:'dd.MM.yyyy HH:mm:ss':'':'ru' }}</span>
+    </div>
+</div>

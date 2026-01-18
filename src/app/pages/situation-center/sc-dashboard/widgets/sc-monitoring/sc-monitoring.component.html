@@ -1,0 +1,48 @@
+<div class="sc-monitoring neon-card">
+    <div class="widget-title">
+        <i class="pi pi-server title-icon"></i>
+        <span>Мониторинг объектов</span>
+    </div>
+
+    <!-- Station Types -->
+    <div class="station-types">
+        @for (metric of metrics; track metric.label) {
+            <div class="station-card" [attr.data-color]="metric.color">
+                <div class="station-icon">
+                    <i class="pi {{ metric.icon }}"></i>
+                </div>
+                <div class="station-info">
+                    <span class="station-value counter-digit">{{ metric.value }}</span>
+                    <span class="station-label">{{ metric.label }}</span>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- ASKUE Connection Status -->
+    <div class="askue-section">
+        <div class="askue-header">
+            <span class="askue-title">АСКУЭ подключение</span>
+            <span class="askue-percentage neon-text-green">{{ askueMetrics.percentage }}%</span>
+        </div>
+        <div class="askue-bar">
+            <div class="askue-progress" [style.width.%]="askueMetrics.percentage"></div>
+        </div>
+        <div class="askue-stats">
+            <span>{{ askueMetrics.connected }} / {{ askueMetrics.total }} станций</span>
+        </div>
+    </div>
+
+    <!-- Infrastructure -->
+    <div class="infrastructure-grid">
+        @for (item of infrastructure; track item.label) {
+            <div class="infrastructure-card">
+                <i class="pi {{ item.icon }} infra-icon"></i>
+                <div class="infra-info">
+                    <span class="infra-value">{{ item.value }}</span>
+                    <span class="infra-label">{{ item.label }}</span>
+                </div>
+            </div>
+        }
+    </div>
+</div>

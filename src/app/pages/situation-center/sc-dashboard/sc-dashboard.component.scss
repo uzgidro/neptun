@@ -1,0 +1,324 @@
+// Futuristic Situation Center Dashboard Styles
+// Based on "Smart Hydropower Plant" reference design
+
+:host {
+    // Color Palette
+    --sc-bg-primary: #0a1628;
+    --sc-bg-secondary: #0d1b33;
+    --sc-bg-card: rgba(13, 27, 51, 0.8);
+    --sc-bg-card-hover: rgba(13, 27, 51, 0.95);
+
+    // Neon Colors
+    --sc-neon-cyan: #00d4ff;
+    --sc-neon-blue: #00a8cc;
+    --sc-neon-green: #00ff88;
+    --sc-neon-red: #ff4757;
+    --sc-neon-yellow: #ffd32a;
+    --sc-neon-orange: #ff9f43;
+    --sc-neon-purple: #a855f7;
+
+    // Text Colors
+    --sc-text-primary: #ffffff;
+    --sc-text-secondary: rgba(255, 255, 255, 0.7);
+    --sc-text-muted: rgba(255, 255, 255, 0.5);
+
+    // Effects
+    --sc-glow-cyan: 0 0 20px rgba(0, 212, 255, 0.5);
+    --sc-glow-green: 0 0 20px rgba(0, 255, 136, 0.5);
+    --sc-glow-red: 0 0 20px rgba(255, 71, 87, 0.5);
+    --sc-glow-yellow: 0 0 20px rgba(255, 211, 42, 0.5);
+
+    // Gradients
+    --sc-border-gradient: linear-gradient(135deg, var(--sc-neon-cyan), var(--sc-neon-blue));
+    --sc-card-gradient: linear-gradient(180deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 168, 204, 0.05) 100%);
+
+    // Sizes
+    --sc-border-radius: 8px;
+    --sc-card-padding: 12px;
+
+    display: block;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.sc-dashboard {
+    background: var(--sc-bg-primary);
+    height: 100vh;
+    padding: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+
+    // Background pattern
+    background-image:
+        radial-gradient(ellipse at top, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(ellipse at bottom right, rgba(0, 168, 204, 0.05) 0%, transparent 50%);
+}
+
+// Header Area
+.sc-header-area {
+    display: block;
+    flex-shrink: 0;
+    margin-bottom: 12px;
+}
+
+// Main Grid Layout - Fixed height
+.sc-grid {
+    display: grid;
+    grid-template-columns: 240px 1fr 240px;
+    gap: 12px;
+    flex: 1;
+    min-height: 0; // Important for flex child overflow
+
+    @media (max-width: 1400px) {
+        grid-template-columns: 220px 1fr 220px;
+    }
+
+    @media (max-width: 1200px) {
+        grid-template-columns: 200px 1fr 200px;
+    }
+}
+
+// Column Layouts - Fill height
+.sc-left-column,
+.sc-right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.sc-center-column {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-height: 0;
+    overflow: hidden;
+}
+
+// Widget Base Styles
+.sc-widget {
+    display: block;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.sc-map-widget {
+    flex: 1;
+    min-height: 0;
+}
+
+.sc-power-widget {
+    flex-shrink: 0;
+    max-height: 140px;
+}
+
+// Global Card Styles (to be used by widgets)
+:host ::ng-deep {
+    .neon-card {
+        background: var(--sc-bg-card);
+        border-radius: var(--sc-border-radius);
+        padding: var(--sc-card-padding);
+        position: relative;
+        overflow: hidden;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(0, 212, 255, 0.2);
+        transition: all 0.3s ease;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+
+        // Gradient border effect
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--sc-border-gradient);
+            opacity: 0.8;
+        }
+
+        // Inner glow
+        &::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--sc-card-gradient);
+            pointer-events: none;
+            border-radius: var(--sc-border-radius);
+        }
+
+        &:hover {
+            border-color: rgba(0, 212, 255, 0.4);
+        }
+    }
+
+    // Neon Text Effects
+    .neon-text {
+        color: var(--sc-neon-cyan);
+        text-shadow: 0 0 10px rgba(0, 212, 255, 0.8),
+                     0 0 20px rgba(0, 212, 255, 0.5),
+                     0 0 30px rgba(0, 212, 255, 0.3);
+    }
+
+    .neon-text-green {
+        color: var(--sc-neon-green);
+        text-shadow: 0 0 10px rgba(0, 255, 136, 0.8),
+                     0 0 20px rgba(0, 255, 136, 0.5);
+    }
+
+    .neon-text-red {
+        color: var(--sc-neon-red);
+        text-shadow: 0 0 10px rgba(255, 71, 87, 0.8),
+                     0 0 20px rgba(255, 71, 87, 0.5);
+    }
+
+    .neon-text-yellow {
+        color: var(--sc-neon-yellow);
+        text-shadow: 0 0 10px rgba(255, 211, 42, 0.8),
+                     0 0 20px rgba(255, 211, 42, 0.5);
+    }
+
+    // Counter Digit Animation
+    .counter-digit {
+        display: inline-block;
+        font-family: 'Courier New', monospace;
+        font-weight: bold;
+        background: linear-gradient(180deg, var(--sc-neon-cyan) 0%, var(--sc-neon-blue) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: pulse-glow 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-glow {
+        0%, 100% {
+            filter: drop-shadow(0 0 5px rgba(0, 212, 255, 0.5));
+        }
+        50% {
+            filter: drop-shadow(0 0 15px rgba(0, 212, 255, 0.8));
+        }
+    }
+
+    // Status Indicator
+    .status-indicator {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        display: inline-block;
+        position: relative;
+
+        &::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            animation: status-pulse 2s ease-in-out infinite;
+        }
+
+        &.status-active {
+            background: var(--sc-neon-green);
+            box-shadow: var(--sc-glow-green);
+
+            &::after {
+                background: var(--sc-neon-green);
+            }
+        }
+
+        &.status-stopped {
+            background: var(--sc-neon-red);
+            box-shadow: var(--sc-glow-red);
+
+            &::after {
+                background: var(--sc-neon-red);
+            }
+        }
+
+        &.status-repair {
+            background: var(--sc-neon-yellow);
+            box-shadow: var(--sc-glow-yellow);
+
+            &::after {
+                background: var(--sc-neon-yellow);
+            }
+        }
+    }
+
+    @keyframes status-pulse {
+        0%, 100% {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+        50% {
+            transform: translate(-50%, -50%) scale(1.5);
+            opacity: 0;
+        }
+    }
+
+    // Widget Title - Compact
+    .widget-title {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--sc-text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex-shrink: 0;
+
+        .title-icon {
+            color: var(--sc-neon-cyan);
+            font-size: 14px;
+        }
+    }
+
+    // Scrollbar Styling
+    ::-webkit-scrollbar {
+        width: 4px;
+        height: 4px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 2px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: var(--sc-neon-cyan);
+        border-radius: 2px;
+        opacity: 0.5;
+
+        &:hover {
+            opacity: 1;
+        }
+    }
+
+    // Fade-in Animation
+    @keyframes fade-in-up {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .animate-fade-in {
+        animation: fade-in-up 0.5s ease-out forwards;
+    }
+}

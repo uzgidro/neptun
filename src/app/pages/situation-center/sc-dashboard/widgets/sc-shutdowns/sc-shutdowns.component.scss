@@ -1,0 +1,176 @@
+:host {
+    display: block;
+    height: 100%;
+}
+
+.sc-shutdowns {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: 100%;
+    overflow: hidden;
+}
+
+.widget-title .warning {
+    color: var(--sc-neon-yellow) !important;
+    text-shadow: 0 0 10px rgba(255, 211, 42, 0.8);
+}
+
+// Summary
+.shutdowns-summary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 8px;
+    background: rgba(255, 71, 87, 0.1);
+    border-radius: 6px;
+    border: 1px solid rgba(255, 71, 87, 0.2);
+    flex-shrink: 0;
+}
+
+.summary-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.summary-value {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.summary-label {
+    font-size: 8px;
+    color: var(--sc-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.summary-divider {
+    width: 1px;
+    height: 30px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+// Shutdowns List
+.shutdowns-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+}
+
+.shutdown-item {
+    padding: 8px;
+    background: rgba(255, 71, 87, 0.05);
+    border-radius: 6px;
+    border-left: 2px solid var(--sc-neon-red);
+    flex-shrink: 0;
+}
+
+.shutdown-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 4px;
+}
+
+.station-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.station-type {
+    display: inline-block;
+    padding: 1px 4px;
+    border-radius: 3px;
+    font-size: 8px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    width: fit-content;
+
+    &.type-ges {
+        background: rgba(0, 212, 255, 0.2);
+        color: var(--sc-neon-cyan);
+    }
+
+    &.type-mini {
+        background: rgba(0, 168, 204, 0.2);
+        color: var(--sc-neon-blue);
+    }
+
+    &.type-micro {
+        background: rgba(168, 85, 247, 0.2);
+        color: var(--sc-neon-purple);
+    }
+}
+
+.station-name {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--sc-text-primary);
+}
+
+.downtime {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 10px;
+    color: var(--sc-neon-yellow);
+
+    i {
+        font-size: 9px;
+    }
+}
+
+.shutdown-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.reason {
+    font-size: 9px;
+    color: var(--sc-text-secondary);
+}
+
+.lost-generation {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 10px;
+    color: var(--sc-neon-red);
+    font-weight: 600;
+
+    i {
+        font-size: 8px;
+    }
+}
+
+// No Shutdowns State
+.no-shutdowns {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 16px;
+    color: var(--sc-neon-green);
+    flex: 1;
+
+    i {
+        font-size: 24px;
+    }
+
+    span {
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+}

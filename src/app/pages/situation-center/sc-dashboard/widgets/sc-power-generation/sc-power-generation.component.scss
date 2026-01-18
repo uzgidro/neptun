@@ -1,0 +1,116 @@
+:host {
+    display: block;
+    height: 100%;
+}
+
+.sc-power-generation {
+    height: 100%;
+    padding: 10px 16px !important;
+}
+
+.power-layout {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    height: 100%;
+}
+
+// Main Counter
+.main-counter {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.counter-label {
+    font-size: 9px;
+    color: var(--sc-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+}
+
+.counter-value {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+}
+
+.counter-digits {
+    font-size: 28px;
+    font-weight: 700;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 1px;
+}
+
+.counter-unit {
+    font-size: 12px;
+    color: var(--sc-text-secondary);
+    font-weight: 500;
+}
+
+// Metrics Row
+.metrics-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: 1;
+    justify-content: center;
+}
+
+.metric-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    background: rgba(0, 212, 255, 0.05);
+    border-radius: 6px;
+    border: 1px solid rgba(0, 212, 255, 0.1);
+}
+
+.metric-icon {
+    font-size: 14px;
+    color: var(--sc-neon-cyan);
+}
+
+.metric-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.metric-label {
+    font-size: 8px;
+    color: var(--sc-text-muted);
+    text-transform: uppercase;
+}
+
+.metric-value {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--sc-text-primary);
+
+    small {
+        font-size: 10px;
+        opacity: 0.7;
+    }
+}
+
+// Current Power
+.current-power {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.power-label {
+    font-size: 9px;
+    color: var(--sc-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.power-value {
+    font-size: 20px;
+    font-weight: 700;
+}

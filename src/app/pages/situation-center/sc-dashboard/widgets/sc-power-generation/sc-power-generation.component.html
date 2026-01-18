@@ -1,0 +1,31 @@
+<div class="sc-power-generation neon-card">
+    <div class="power-layout">
+        <!-- Main Counter -->
+        <div class="main-counter">
+            <div class="counter-label">Суммарная выработка</div>
+            <div class="counter-value">
+                <span class="counter-digits neon-text">{{ formatMainCounter(displayedGeneration) }}</span>
+                <span class="counter-unit">GWh</span>
+            </div>
+        </div>
+
+        <!-- Metrics Row -->
+        <div class="metrics-row">
+            @for (metric of productionMetrics; track metric.label) {
+                <div class="metric-item">
+                    <i class="pi {{ metric.icon }} metric-icon"></i>
+                    <div class="metric-content">
+                        <span class="metric-label">{{ metric.label }}</span>
+                        <span class="metric-value">{{ metric.value | number:'1.1-1' }} <small>{{ metric.unit }}</small></span>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Current Power -->
+        <div class="current-power">
+            <span class="power-label">Мощность</span>
+            <span class="power-value neon-text-green">{{ currentPower | number:'1.0-0' }} МВт</span>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,83 @@
+<div class="sc-discharges neon-card">
+    <div class="widget-title">
+        <i class="pi pi-arrow-down title-icon water"></i>
+        <span>Водосбросы</span>
+    </div>
+
+    <!-- Summary Stats -->
+    <div class="discharge-summary">
+        <div class="summary-stat">
+            <div class="stat-icon">
+                <i class="pi pi-sync"></i>
+            </div>
+            <div class="stat-info">
+                <span class="stat-value neon-text">{{ activeDischargesCount }}</span>
+                <span class="stat-label">Активных</span>
+            </div>
+        </div>
+        <div class="summary-stat">
+            <div class="stat-icon">
+                <i class="pi pi-chart-line"></i>
+            </div>
+            <div class="stat-info">
+                <span class="stat-value">{{ totalFlowRate | number:'1.1-1' }}</span>
+                <span class="stat-label">м³/с общий расход</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Discharges List -->
+    <div class="discharges-list">
+        @for (discharge of discharges; track discharge.id) {
+            <div class="discharge-item" [class.ongoing]="discharge.isOngoing">
+                <div class="discharge-header">
+                    <span class="reservoir-name">{{ discharge.reservoirName }}</span>
+                    @if (discharge.isOngoing) {
+                        <span class="status-badge">
+                            <span class="pulse-dot"></span>
+                            Активен
+                        </span>
+                    }
+                </div>
+                <div class="discharge-metrics">
+                    <div class="metric">
+                        <span class="metric-icon">
+                            <i class="pi pi-arrow-right"></i>
+                        </span>
+                        <span class="metric-value" [class]="'intensity-' + getFlowIntensity(discharge.flowRate)">
+                            {{ discharge.flowRate | number:'1.1-1' }}
+                        </span>
+                        <span class="metric-unit">м³/с</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-icon">
+                            <i class="pi pi-database"></i>
+                        </span>
+                        <span class="metric-value">{{ discharge.totalVolume | number:'1.1-1' }}</span>
+                        <span class="metric-unit">тыс.м³</span>
+                    </div>
+                </div>
+                <!-- Flow intensity bar -->
+                <div class="flow-bar-container">
+                    <div class="flow-bar"
+                         [class]="'intensity-' + getFlowIntensity(discharge.flowRate)"
+                         [style.width.%]="(discharge.flowRate / 300) * 100">
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if (discharges.length === 0) {
+            <div class="no-discharges">
+                <i class="pi pi-check-circle"></i>
+                <span>Нет активных водосбросов</span>
+            </div>
+        }
+    </div>
+
+    <!-- Total Volume Footer -->
+    <div class="discharge-footer">
+        <span class="footer-label">Общий объём за сутки:</span>
+        <span class="footer-value">{{ totalVolume | number:'1.0-0' }} <small>тыс.м³</small></span>
+    </div>
+</div>

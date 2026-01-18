@@ -1,0 +1,53 @@
+<div class="sc-shutdowns neon-card">
+    <div class="widget-title">
+        <i class="pi pi-exclamation-triangle title-icon warning"></i>
+        <span>Текущие отключения</span>
+    </div>
+
+    <!-- Summary -->
+    <div class="shutdowns-summary">
+        <div class="summary-item">
+            <span class="summary-value neon-text-red">{{ activeShutdownsCount }}</span>
+            <span class="summary-label">Отключений</span>
+        </div>
+        <div class="summary-divider"></div>
+        <div class="summary-item">
+            <span class="summary-value neon-text-yellow">{{ totalLostGeneration | number:'1.1-1' }}</span>
+            <span class="summary-label">МВтч потерь</span>
+        </div>
+    </div>
+
+    <!-- Shutdowns List -->
+    <div class="shutdowns-list">
+        @for (shutdown of shutdowns; track shutdown.id) {
+            <div class="shutdown-item">
+                <div class="shutdown-header">
+                    <div class="station-info">
+                        <span class="station-type" [class]="getTypeClass(shutdown.stationType)">
+                            {{ getTypeLabel(shutdown.stationType) }}
+                        </span>
+                        <span class="station-name">{{ shutdown.stationName }}</span>
+                    </div>
+                    <span class="downtime">
+                        <i class="pi pi-clock"></i>
+                        {{ formatDowntime(shutdown.downtime) }}
+                    </span>
+                </div>
+                <div class="shutdown-details">
+                    <span class="reason">{{ shutdown.reason }}</span>
+                    <span class="lost-generation">
+                        <i class="pi pi-bolt"></i>
+                        -{{ shutdown.lostGeneration | number:'1.1-1' }} МВтч
+                    </span>
+                </div>
+            </div>
+        }
+
+        @if (shutdowns.length === 0) {
+            <div class="no-shutdowns">
+                <i class="pi pi-check-circle"></i>
+                <span>Все станции в работе</span>
+            </div>
+        }
+    </div>
+</div>
