@@ -28,6 +28,7 @@ export class ScMonitoringComponent implements OnInit, OnDestroy {
         this.loading = true;
         this.dashboardService.getReservoirs().subscribe({
             next: (data: Reservoir[]) => {
+                console.log(data);
                 this.reservoirs = data;
                 this.lastUpdated = new Date();
                 this.loading = false;
