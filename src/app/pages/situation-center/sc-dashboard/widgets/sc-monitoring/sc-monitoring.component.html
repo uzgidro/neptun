@@ -1,48 +1,83 @@
 <div class="sc-monitoring neon-card">
     <div class="widget-title">
-        <i class="pi pi-server title-icon"></i>
-        <span>Мониторинг объектов</span>
+        <i class="pi pi-database title-icon water"></i>
+        <span>Водные ресурсы</span>
     </div>
 
-    <!-- Station Types -->
-    <div class="station-types">
-        @for (metric of metrics; track metric.label) {
-            <div class="station-card" [attr.data-color]="metric.color">
-                <div class="station-icon">
-                    <i class="pi {{ metric.icon }}"></i>
+    <!-- Summary Stats -->
+    <div class="summary-row">
+        <div class="summary-item">
+            <span class="summary-value">{{ reservoirCount }}</span>
+            <span class="summary-label">Водохранилищ</span>
+        </div>
+        <div class="summary-item">
+            <span class="summary-value">{{ totalVolume | number:'1.0-0' }}</span>
+            <span class="summary-label">млн м³</span>
+        </div>
+        <div class="summary-item">
+            <span class="summary-value">{{ totalIncome | number:'1.0-0' }}</span>
+            <span class="summary-label">м³/с приток</span>
+        </div>
+    </div>
+
+    <!-- Reservoirs List -->
+    <div class="reservoirs-list">
+        @for (reservoir of reservoirs; track reservoir.organization_id) {
+            <div class="reservoir-item">
+                <div class="reservoir-header">
+                    <span class="reservoir-name">{{ reservoir.organization_name }}</span>
                 </div>
-                <div class="station-info">
-                    <span class="station-value counter-digit">{{ metric.value }}</span>
-                    <span class="station-label">{{ metric.label }}</span>
+                <div class="reservoir-metrics">
+                    <div class="metric">
+                        <span class="metric-label">Объём</span>
+                        <span class="metric-value">{{ reservoir.reservoir_metrics.current.volume | number:'1.1-1' }}</span>
+                        @if (reservoir.reservoir_metrics.diff?.volume) {
+                            <span class="metric-diff" [class.positive]="reservoir.reservoir_metrics.diff!.volume > 0" [class.negative]="reservoir.reservoir_metrics.diff!.volume < 0">
+                                {{ reservoir.reservoir_metrics.diff!.volume > 0 ? '+' : '' }}{{ reservoir.reservoir_metrics.diff!.volume | number:'1.1-1' }}
+                            </span>
+                        }
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Уровень</span>
+                        <span class="metric-value">{{ reservoir.reservoir_metrics.current.level | number:'1.2-2' }}</span>
+                        @if (reservoir.reservoir_metrics.diff?.level) {
+                            <span class="metric-diff" [class.positive]="reservoir.reservoir_metrics.diff!.level > 0" [class.negative]="reservoir.reservoir_metrics.diff!.level < 0">
+                                {{ reservoir.reservoir_metrics.diff!.level > 0 ? '+' : '' }}{{ reservoir.reservoir_metrics.diff!.level | number:'1.2-2' }}
+                            </span>
+                        }
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Приток</span>
+                        <span class="metric-value accent">{{ reservoir.reservoir_metrics.current.income | number:'1.0-0' }}</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Сброс</span>
+                        <span class="metric-value">{{ reservoir.reservoir_metrics.current.release | number:'1.0-0' }}</span>
+                    </div>
                 </div>
+            </div>
+        }
+
+        @if (reservoirs.length === 0 && !loading) {
+            <div class="no-data">
+                <i class="pi pi-info-circle"></i>
+                <span>Нет данных</span>
+            </div>
+        }
+
+        @if (loading) {
+            <div class="no-data">
+                <i class="pi pi-spin pi-spinner"></i>
+                <span>Загрузка...</span>
             </div>
         }
     </div>
 
-    <!-- ASKUE Connection Status -->
-    <div class="askue-section">
-        <div class="askue-header">
-            <span class="askue-title">АСКУЭ подключение</span>
-            <span class="askue-percentage neon-text-green">{{ askueMetrics.percentage }}%</span>
-        </div>
-        <div class="askue-bar">
-            <div class="askue-progress" [style.width.%]="askueMetrics.percentage"></div>
-        </div>
-        <div class="askue-stats">
-            <span>{{ askueMetrics.connected }} / {{ askueMetrics.total }} станций</span>
-        </div>
-    </div>
-
-    <!-- Infrastructure -->
-    <div class="infrastructure-grid">
-        @for (item of infrastructure; track item.label) {
-            <div class="infrastructure-card">
-                <i class="pi {{ item.icon }} infra-icon"></i>
-                <div class="infra-info">
-                    <span class="infra-value">{{ item.value }}</span>
-                    <span class="infra-label">{{ item.label }}</span>
-                </div>
-            </div>
-        }
+    <!-- Footer -->
+    <div class="widget-footer">
+        <span class="last-updated">Обновлено: {{ getTimeAgo() }}</span>
+        <button class="refresh-btn" (click)="refresh()" [disabled]="loading">
+            <i class="pi pi-refresh" [class.pi-spin]="loading"></i>
+        </button>
     </div>
 </div>

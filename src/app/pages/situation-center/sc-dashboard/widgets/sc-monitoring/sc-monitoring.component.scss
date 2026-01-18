@@ -11,164 +11,170 @@
     overflow: hidden;
 }
 
-// Station Types Grid
-.station-types {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    flex-shrink: 0;
+.widget-title .water {
+    color: #00e5ff !important;
 }
 
-.station-card {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 8px;
-    background: rgba(0, 212, 255, 0.05);
-    border-radius: 6px;
-    border: 1px solid rgba(0, 212, 255, 0.1);
-    transition: all 0.3s ease;
-
-    &:hover {
-        background: rgba(0, 212, 255, 0.1);
-    }
-
-    &[data-color="cyan"] {
-        .station-icon {
-            background: rgba(0, 212, 255, 0.2);
-            color: var(--sc-neon-cyan);
-        }
-    }
-
-    &[data-color="blue"] {
-        .station-icon {
-            background: rgba(0, 168, 204, 0.2);
-            color: var(--sc-neon-blue);
-        }
-    }
-
-    &[data-color="purple"] {
-        .station-icon {
-            background: rgba(168, 85, 247, 0.2);
-            color: var(--sc-neon-purple);
-        }
-    }
-}
-
-.station-icon {
-    width: 28px;
-    height: 28px;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    flex-shrink: 0;
-}
-
-.station-info {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.station-value {
-    font-size: 18px;
-    font-weight: 700;
-}
-
-.station-label {
-    font-size: 10px;
-    color: var(--sc-text-muted);
-    text-transform: uppercase;
-}
-
-// ASKUE Section
-.askue-section {
-    padding: 10px;
-    background: rgba(0, 255, 136, 0.05);
-    border-radius: 6px;
-    border: 1px solid rgba(0, 255, 136, 0.1);
-    flex-shrink: 0;
-}
-
-.askue-header {
+// Summary Row
+.summary-row {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    margin-bottom: 6px;
-}
-
-.askue-title {
-    font-size: 10px;
-    color: var(--sc-text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.askue-percentage {
-    font-size: 14px;
-    font-weight: 700;
-}
-
-.askue-bar {
-    height: 6px;
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 3px;
-    overflow: hidden;
-    margin-bottom: 4px;
-}
-
-.askue-progress {
-    height: 100%;
-    background: linear-gradient(90deg, var(--sc-neon-green), var(--sc-neon-cyan));
-    border-radius: 3px;
-    transition: width 0.5s ease;
-    box-shadow: 0 0 8px rgba(0, 255, 136, 0.5);
-}
-
-.askue-stats {
-    font-size: 9px;
-    color: var(--sc-text-muted);
-    text-align: right;
-}
-
-// Infrastructure Grid
-.infrastructure-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6px;
+    gap: 8px;
     flex-shrink: 0;
 }
 
-.infrastructure-card {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 8px;
-    background: rgba(0, 168, 204, 0.05);
-    border-radius: 6px;
-    border: 1px solid rgba(0, 168, 204, 0.1);
-}
-
-.infra-icon {
-    font-size: 14px;
-    color: var(--sc-neon-blue);
-}
-
-.infra-info {
+.summary-item {
+    flex: 1;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    padding: 8px 4px;
+    background: rgba(0, 168, 204, 0.08);
+    border-radius: 6px;
+    border: 1px solid rgba(0, 168, 204, 0.15);
 }
 
-.infra-value {
-    font-size: 14px;
+.summary-value {
+    font-size: 16px;
     font-weight: 700;
-    color: var(--sc-text-primary);
+    color: #ffffff;
 }
 
-.infra-label {
-    font-size: 8px;
-    color: var(--sc-text-muted);
+.summary-label {
+    font-size: 9px;
+    color: rgba(255, 255, 255, 0.7);
     text-transform: uppercase;
+    text-align: center;
+}
+
+// Reservoirs List
+.reservoirs-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+}
+
+.reservoir-item {
+    padding: 10px;
+    background: rgba(0, 212, 255, 0.05);
+    border-radius: 6px;
+    border: 1px solid rgba(0, 212, 255, 0.12);
+    border-left: 3px solid #00e5ff;
+    flex-shrink: 0;
+}
+
+.reservoir-header {
+    margin-bottom: 8px;
+}
+
+.reservoir-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+// Metrics Grid
+.reservoir-metrics {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 12px;
+}
+
+.metric {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+}
+
+.metric-label {
+    font-size: 9px;
+    color: rgba(255, 255, 255, 0.5);
+    min-width: 45px;
+}
+
+.metric-value {
+    font-size: 12px;
+    font-weight: 600;
+    color: #ffffff;
+
+    &.accent {
+        color: #00e5ff;
+    }
+}
+
+.metric-diff {
+    font-size: 10px;
+    font-weight: 600;
+
+    &.positive {
+        color: #00ff88;
+    }
+
+    &.negative {
+        color: #ff5566;
+    }
+}
+
+// No Data State
+.no-data {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 20px;
+    color: rgba(255, 255, 255, 0.5);
+    flex: 1;
+
+    i {
+        font-size: 24px;
+    }
+
+    span {
+        font-size: 11px;
+        text-transform: uppercase;
+    }
+}
+
+// Footer
+.widget-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: auto;
+    flex-shrink: 0;
+}
+
+.last-updated {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.refresh-btn {
+    background: transparent;
+    border: 1px solid rgba(0, 168, 204, 0.3);
+    border-radius: 6px;
+    padding: 4px 8px;
+    color: #00e5ff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover:not(:disabled) {
+        background: rgba(0, 168, 204, 0.1);
+        border-color: rgba(0, 168, 204, 0.5);
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    i {
+        font-size: 12px;
+    }
 }
