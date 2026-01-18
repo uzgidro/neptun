@@ -23,56 +23,6 @@
     <div class="map-container">
         <!-- SVG Map -->
         <app-uz-map></app-uz-map>
-
-        <!-- Station Markers -->
-        <div class="markers-layer">
-            @for (station of stations; track station.id) {
-                <div class="station-marker"
-                     [class]="getStationStatusClass(station.status)"
-                     [style.left.%]="station.x"
-                     [style.top.%]="station.y"
-                     [style.width.px]="getMarkerSize(station.type)"
-                     [style.height.px]="getMarkerSize(station.type)"
-                     (mouseenter)="onStationHover(station)"
-                     (mouseleave)="onStationHover(null)"
-                     (click)="onStationClick(station)">
-                    <i class="pi {{ getTypeIcon(station.type) }}"></i>
-
-                    <!-- Pulse animation for active stations -->
-                    @if (station.status === 'active') {
-                        <span class="marker-pulse"></span>
-                    }
-                </div>
-            }
-        </div>
-
-        <!-- Tooltip -->
-        @if (hoveredStation) {
-            <div class="station-tooltip"
-                 [style.left.%]="hoveredStation.x"
-                 [style.top.%]="hoveredStation.y">
-                <div class="tooltip-header">
-                    <span class="tooltip-name">{{ hoveredStation.name }}</span>
-                    <span class="tooltip-status" [class]="hoveredStation.status">
-                        @switch (hoveredStation.status) {
-                            @case ('active') { В работе }
-                            @case ('stopped') { Остановлена }
-                            @case ('repair') { В ремонте }
-                        }
-                    </span>
-                </div>
-                <div class="tooltip-body">
-                    <div class="tooltip-row">
-                        <span class="tooltip-label">Регион:</span>
-                        <span class="tooltip-value">{{ hoveredStation.region }}</span>
-                    </div>
-                    <div class="tooltip-row">
-                        <span class="tooltip-label">Мощность:</span>
-                        <span class="tooltip-value">{{ hoveredStation.power }} МВт</span>
-                    </div>
-                </div>
-            </div>
-        }
     </div>
 
     <!-- Stats Footer -->

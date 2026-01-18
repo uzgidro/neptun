@@ -34,8 +34,6 @@ export class ScStationStatusComponent implements OnInit {
     }
 
     private initChart(): void {
-        const documentStyle = getComputedStyle(document.documentElement);
-
         this.chartData = {
             labels: this.statusData.map(s => s.label),
             datasets: [
