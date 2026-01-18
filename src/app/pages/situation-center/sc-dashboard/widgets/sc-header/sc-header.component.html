@@ -1,10 +1,22 @@
 <div class="sc-header neon-card">
     <div class="header-left">
-        <div class="weather-widget">
-            <i class="pi {{ weather.icon }} weather-icon"></i>
-            <span class="weather-temp">{{ weather.temperature }}°C</span>
-            <span class="weather-condition">{{ weather.condition }}</span>
-        </div>
+        @if (weather) {
+            <div class="weather-widget">
+                <i class="pi {{ weather.iconClass }} weather-icon"></i>
+                <span class="weather-temp">{{ weather.temperature }}°C</span>
+                <span class="weather-condition">{{ weather.description }}</span>
+            </div>
+        } @else if (weatherLoading) {
+            <div class="weather-widget">
+                <i class="pi pi-spin pi-spinner weather-icon"></i>
+                <span class="weather-temp">--°C</span>
+            </div>
+        } @else {
+            <div class="weather-widget">
+                <i class="pi pi-cloud weather-icon"></i>
+                <span class="weather-temp">--°C</span>
+            </div>
+        }
     </div>
 
     <div class="header-center">
