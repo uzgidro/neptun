@@ -66,17 +66,17 @@
 // Main Grid Layout - Fixed height
 .sc-grid {
     display: grid;
-    grid-template-columns: 240px 1fr 240px;
+    grid-template-columns: 321px 1fr 321px;
     gap: 12px;
     flex: 1;
     min-height: 0; // Important for flex child overflow
 
     @media (max-width: 1400px) {
-        grid-template-columns: 220px 1fr 220px;
+        grid-template-columns: 293px 1fr 293px;
     }
 
     @media (max-width: 1200px) {
-        grid-template-columns: 200px 1fr 200px;
+        grid-template-columns: 266px 1fr 266px;
     }
 }
 
