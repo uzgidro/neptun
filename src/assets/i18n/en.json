@@ -90,6 +90,7 @@
     "DEPARTMENTS": "Departments",
     "USERS": "Users",
     "ROLES": "Roles",
+    "OPERATIONAL_MONITORING": "Operational Monitoring",
     "SITUATION_CENTER": "Situation Center",
     "GES_INFO": "HPP Information",
     "GES": "HPP",
@@ -571,6 +572,101 @@
       "PREVIOUS_YEARS": "Previous Years",
       "INFLOW_TO_DATE": "Inflow to Date, mln m³",
       "MODSNOW": "MODSNOW, snow cover %"
+    },
+    "DASHBOARD": {
+      "HEADER": {
+        "TITLE": "Chairman's Dashboard",
+        "TO_HOME": "Go to Home"
+      },
+      "MONITORING": {
+        "TITLE": "Water Resources",
+        "RESERVOIRS_COUNT": "Reservoirs",
+        "VOLUME": "Volume",
+        "LEVEL": "Level",
+        "INFLOW": "Inflow",
+        "RELEASE": "Release",
+        "INFLOW_TOTAL": "m³/s inflow"
+      },
+      "DISCHARGES": {
+        "TITLE": "Spillway Discharges",
+        "ACTIVE_COUNT": "Active",
+        "TOTAL_FLOW": "m³/s total",
+        "NO_ACTIVE": "No active discharges"
+      },
+      "STATION_STATUS": {
+        "TITLE": "Aggregates Status",
+        "TOTAL": "Total",
+        "TOTAL_POWER": "Total Power",
+        "STATUS_WORKING": "Working",
+        "STATUS_IDLE": "Idle",
+        "STATUS_REPAIR": "Under Repair"
+      },
+      "SHUTDOWNS": {
+        "TITLE": "Emergency Shutdowns",
+        "SHUTDOWNS_COUNT": "Shutdowns",
+        "LOSSES_KWH": "KWh losses",
+        "COMPLETED": "completed",
+        "NO_REASON": "Reason not specified",
+        "ALL_WORKING": "All stations operational",
+        "TYPE_GES": "HPP",
+        "TYPE_MINI": "mini",
+        "TYPE_MICRO": "micro"
+      },
+      "POWER_GENERATION": {
+        "YEAR_START": "Year to Date",
+        "MONTH_START": "Month to Date",
+        "PER_DAY": "Per Day"
+      },
+      "MAP": {
+        "TITLE": "Interactive Map",
+        "LOADING_DATA": "Loading data...",
+        "DATA_UNAVAILABLE": "Data unavailable",
+        "TOTAL_AGGREGATES": "Total aggregates",
+        "SPILLWAY_DISCHARGES": "Spillway Discharges",
+        "NO_ACTIVE_DISCHARGES": "No active discharges",
+        "EMERGENCY_SHUTDOWNS": "Emergency Shutdowns",
+        "NO_ACTIVE_SHUTDOWNS": "No active shutdowns",
+        "RESERVOIRS": "Reservoirs",
+        "NO_RESERVOIRS": "No reservoirs"
+      },
+      "COMMON": {
+        "LOADING": "Loading...",
+        "NO_DATA": "No data",
+        "UPDATED": "Updated:",
+        "LAST_UPDATE": "Last update:"
+      },
+      "TIME": {
+        "JUST_NOW": "just now",
+        "MINUTES_AGO": "{{count}} min. ago",
+        "HOURS_AGO": "{{count}} hr. ago",
+        "MINUTES_SHORT": "min",
+        "HOURS_SHORT": "hr",
+        "DAYS_SHORT": "d"
+      },
+      "UNITS": {
+        "MLN_M3": "mln m³",
+        "M3_S": "m³/s",
+        "MW": "MW",
+        "KWH": "kWh",
+        "MLN_KWH": "mln kWh",
+        "M": "m"
+      },
+      "REGIONS": {
+        "FERGANA": "Fergana Region",
+        "TASHKENT": "Tashkent Region",
+        "NAMANGAN": "Namangan Region",
+        "ANDIJAN": "Andijan Region",
+        "SYRDARYA": "Syrdarya Region",
+        "JIZZAKH": "Jizzakh Region",
+        "SAMARKAND": "Samarkand Region",
+        "KASHKADARYA": "Kashkadarya Region",
+        "SURKHANDARYA": "Surkhandarya Region",
+        "KARAKALPAKSTAN": "Republic of Karakalpakstan",
+        "NAVOI": "Navoi Region",
+        "KHOREZM": "Khorezm Region",
+        "BUKHARA": "Bukhara Region",
+        "TASHKENT_CITY": "Tashkent City"
+      }
     }
   },
   "FINANCIAL_BLOCK": {

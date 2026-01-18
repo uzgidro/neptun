@@ -1,0 +1,49 @@
+:host {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+:host ::ng-deep svg {
+    width: 100%;
+    height: 100%;
+    pointer-events: all;
+}
+
+// Базовые стили для всех регионов
+:host ::ng-deep svg path {
+    fill: rgba(0, 168, 204, 0.15);
+    stroke: rgba(0, 212, 255, 0.3);
+    stroke-width: 0.5;
+    transition: all 0.3s ease;
+}
+
+// Кликабельные регионы - яркие
+:host ::ng-deep svg path:not(#UZNW):not(#UZBU):not(#UZQR) {
+    fill: rgba(0, 212, 255, 0.2);
+    stroke: rgba(0, 212, 255, 0.6);
+    stroke-width: 1;
+    cursor: pointer;
+
+    &:hover {
+        fill: rgba(0, 212, 255, 0.35);
+        stroke: #00e5ff;
+        stroke-width: 1.5;
+        filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.6));
+    }
+}
+
+// Некликабельные регионы - тусклые
+:host ::ng-deep svg path#UZNW,
+:host ::ng-deep svg path#UZBU,
+:host ::ng-deep svg path#UZQR {
+    fill: rgba(100, 100, 120, 0.1);
+    stroke: rgba(150, 150, 170, 0.2);
+    stroke-width: 0.5;
+    cursor: default;
+    pointer-events: none;
+}

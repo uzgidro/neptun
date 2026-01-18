@@ -1,0 +1,64 @@
+<div class="sc-discharges neon-card">
+    <div class="widget-title">
+        <i class="pi pi-arrow-down title-icon water"></i>
+        <span>{{ 'SITUATION_CENTER.DASHBOARD.DISCHARGES.TITLE' | translate }}</span>
+    </div>
+
+    <!-- Summary Stats -->
+    <div class="discharge-summary">
+        <div class="summary-stat">
+            <div class="stat-icon">
+                <i class="pi pi-sync"></i>
+            </div>
+            <div class="stat-info">
+                <span class="stat-value">{{ activeCount }}</span>
+                <span class="stat-label">{{ 'SITUATION_CENTER.DASHBOARD.DISCHARGES.ACTIVE_COUNT' | translate }}</span>
+            </div>
+        </div>
+        <div class="summary-stat">
+            <div class="stat-icon">
+                <i class="pi pi-chart-line"></i>
+            </div>
+            <div class="stat-info">
+                <span class="stat-value">{{ totalDischarge | number:'1.1-1' }}</span>
+                <span class="stat-label">{{ 'SITUATION_CENTER.DASHBOARD.DISCHARGES.TOTAL_FLOW' | translate }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Discharges List -->
+    <div class="discharges-list">
+        @for (discharge of discharges; track discharge.id) {
+            <div class="discharge-item ongoing">
+                <div class="discharge-header">
+                    <span class="reservoir-name">{{ discharge.name }}</span>
+                    <span class="discharge-value">
+                        {{ discharge.currentDischarge | number:'1.1-1' }} <small>{{ 'SITUATION_CENTER.DASHBOARD.UNITS.M3_S' | translate }}</small>
+                    </span>
+                </div>
+            </div>
+        }
+
+        @if (discharges.length === 0 && !loading) {
+            <div class="no-discharges">
+                <i class="pi pi-check-circle"></i>
+                <span>{{ 'SITUATION_CENTER.DASHBOARD.DISCHARGES.NO_ACTIVE' | translate }}</span>
+            </div>
+        }
+
+        @if (loading) {
+            <div class="no-discharges">
+                <i class="pi pi-spin pi-spinner"></i>
+                <span>{{ 'SITUATION_CENTER.DASHBOARD.COMMON.LOADING' | translate }}</span>
+            </div>
+        }
+    </div>
+
+    <!-- Footer -->
+    <div class="widget-footer">
+        <span class="last-updated">{{ 'SITUATION_CENTER.DASHBOARD.COMMON.LAST_UPDATE' | translate }} {{ getTimeAgo() }}</span>
+        <button class="refresh-btn" (click)="refresh()" [disabled]="loading">
+            <i class="pi pi-refresh" [class.pi-spin]="loading"></i>
+        </button>
+    </div>
+</div>

@@ -41,6 +41,7 @@ import { LegalDocumentsComponent } from '@/pages/legal-documents/legal-documents
 import { CallsComponent } from '@/pages/calls/calls.component';
 import { NewsComponent } from '@/pages/media/news/news.component';
 import { InvestActiveProjectsComponent } from '@/pages/invest/invest-active-projects/invest-active-projects.component';
+import { ScDashboardComponent } from '@/pages/situation-center/sc-dashboard/sc-dashboard.component';
 
 
 export const appRoutes: Routes = [
@@ -95,6 +96,7 @@ export const appRoutes: Routes = [
             { path: 'media/news', component: NewsComponent, canActivate: [raisGuard] },
         ]
     },
+    { path: 'monitoring', component: ScDashboardComponent, canActivate: [authGuard] },
     { path: 'notfound', component: Notfound },
     { path: 'auth', loadChildren: () => import('./app/pages/auth/auth.routes') },
     { path: '**', redirectTo: '/notfound' }

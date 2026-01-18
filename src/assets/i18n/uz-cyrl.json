@@ -87,6 +87,7 @@
     "DEPARTMENTS": "Бўлимлар",
     "USERS": "Фойдаланувчилар",
     "ROLES": "Роллар",
+    "OPERATIONAL_MONITORING": "Оператив мониторинг",
     "SITUATION_CENTER": "Вазият маркази",
     "GES_INFO": "ГЭС ҳақида маълумот",
     "GES": "ГЭС",
@@ -567,6 +568,101 @@
       "PREVIOUS_YEARS": "Олдинги йиллар",
       "INFLOW_TO_DATE": "Бугунги кунга оқиб кириш, млн. м³",
       "MODSNOW": "MODSNOW, қор қоплами %"
+    },
+    "DASHBOARD": {
+      "HEADER": {
+        "TITLE": "Бошқарув Раиси планшети",
+        "TO_HOME": "Бош саҳифага"
+      },
+      "MONITORING": {
+        "TITLE": "Сув ресурслари",
+        "RESERVOIRS_COUNT": "Сув омборлари",
+        "VOLUME": "Ҳажм",
+        "LEVEL": "Даража",
+        "INFLOW": "Оқиб кириш",
+        "RELEASE": "Чиқариш",
+        "INFLOW_TOTAL": "м³/с оқиб кириш"
+      },
+      "DISCHARGES": {
+        "TITLE": "Бўш сув ташлаб юбориш",
+        "ACTIVE_COUNT": "Фаоллар",
+        "TOTAL_FLOW": "м³/с жами",
+        "NO_ACTIVE": "Фаол сув ташлаб юборишлар йўқ"
+      },
+      "STATION_STATUS": {
+        "TITLE": "Агрегатлар ҳолати",
+        "TOTAL": "Жами",
+        "TOTAL_POWER": "Умумий қувват",
+        "STATUS_WORKING": "Ишламоқда",
+        "STATUS_IDLE": "Тўхтаган",
+        "STATUS_REPAIR": "Таъмирда"
+      },
+      "SHUTDOWNS": {
+        "TITLE": "Фавқулодда ўчиришлар",
+        "SHUTDOWNS_COUNT": "Ўчиришлар",
+        "LOSSES_KWH": "кВт·с йўқотишлар",
+        "COMPLETED": "тугалланди",
+        "NO_REASON": "Сабаб кўрсатилмаган",
+        "ALL_WORKING": "Барча станциялар ишламоқда",
+        "TYPE_GES": "ГЭС",
+        "TYPE_MINI": "мини",
+        "TYPE_MICRO": "микро"
+      },
+      "POWER_GENERATION": {
+        "YEAR_START": "Йил бошидан",
+        "MONTH_START": "Ой бошидан",
+        "PER_DAY": "Кунига"
+      },
+      "MAP": {
+        "TITLE": "Интерактив харита",
+        "LOADING_DATA": "Маълумотлар юкланмоқда...",
+        "DATA_UNAVAILABLE": "Маълумотлар мавжуд эмас",
+        "TOTAL_AGGREGATES": "Жами агрегатлар",
+        "SPILLWAY_DISCHARGES": "Бўш сув ташлаб юбориш",
+        "NO_ACTIVE_DISCHARGES": "Фаол сув ташлаб юборишлар йўқ",
+        "EMERGENCY_SHUTDOWNS": "Фавқулодда ўчиришлар",
+        "NO_ACTIVE_SHUTDOWNS": "Фаол ўчиришлар йўқ",
+        "RESERVOIRS": "Сув омборлари",
+        "NO_RESERVOIRS": "Сув омборлари йўқ"
+      },
+      "COMMON": {
+        "LOADING": "Юкланмоқда...",
+        "NO_DATA": "Маълумот йўқ",
+        "UPDATED": "Янгиланган:",
+        "LAST_UPDATE": "Охирги янгиланиш:"
+      },
+      "TIME": {
+        "JUST_NOW": "ҳозиргина",
+        "MINUTES_AGO": "{{count}} дақ. олдин",
+        "HOURS_AGO": "{{count}} соат олдин",
+        "MINUTES_SHORT": "дақ",
+        "HOURS_SHORT": "соат",
+        "DAYS_SHORT": "кун"
+      },
+      "UNITS": {
+        "MLN_M3": "млн м³",
+        "M3_S": "м³/с",
+        "MW": "МВт",
+        "KWH": "кВт·с",
+        "MLN_KWH": "млн кВт·с",
+        "M": "м"
+      },
+      "REGIONS": {
+        "FERGANA": "Фарғона вилояти",
+        "TASHKENT": "Тошкент вилояти",
+        "NAMANGAN": "Наманган вилояти",
+        "ANDIJAN": "Андижон вилояти",
+        "SYRDARYA": "Сирдарё вилояти",
+        "JIZZAKH": "Жиззах вилояти",
+        "SAMARKAND": "Самарқанд вилояти",
+        "KASHKADARYA": "Қашқадарё вилояти",
+        "SURKHANDARYA": "Сурхондарё вилояти",
+        "KARAKALPAKSTAN": "Қорақалпоғистон Республикаси",
+        "NAVOI": "Навоий вилояти",
+        "KHOREZM": "Хоразм вилояти",
+        "BUKHARA": "Бухоро вилояти",
+        "TASHKENT_CITY": "Тошкент шаҳри"
+      }
     }
   },
   "FINANCIAL_BLOCK": {

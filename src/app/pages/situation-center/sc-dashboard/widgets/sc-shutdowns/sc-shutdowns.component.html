@@ -1,0 +1,78 @@
+<div class="sc-shutdowns neon-card">
+    <div class="widget-title">
+        <i class="pi pi-exclamation-triangle title-icon warning"></i>
+        <span>{{ 'SITUATION_CENTER.DASHBOARD.SHUTDOWNS.TITLE' | translate }}</span>
+    </div>
+
+    <!-- Summary -->
+    <div class="shutdowns-summary">
+        <div class="summary-item">
+            <span class="summary-value color-red">{{ activeShutdownsCount }}</span>
+            <span class="summary-label">{{ 'SITUATION_CENTER.DASHBOARD.SHUTDOWNS.SHUTDOWNS_COUNT' | translate }}</span>
+        </div>
+        <div class="summary-divider"></div>
+        <div class="summary-item">
+            <span class="summary-value color-yellow">{{ totalLostGeneration | number:'1.1-1' }}</span>
+            <span class="summary-label">{{ 'SITUATION_CENTER.DASHBOARD.SHUTDOWNS.LOSSES_KWH' | translate }}</span>
+        </div>
+    </div>
+
+    <!-- Shutdowns List -->
+    <div class="shutdowns-list">
+        @for (shutdown of shutdowns; track shutdown.id) {
+            <div class="shutdown-item" [class.completed]="!shutdown.isOngoing">
+                <div class="shutdown-header">
+                    <div class="station-info">
+                        <div class="station-badges">
+                            <span class="station-type" [class]="getTypeClass(shutdown.stationType)">
+                                {{ getTypeLabel(shutdown.stationType) }}
+                            </span>
+                            @if (!shutdown.isOngoing) {
+                                <span class="status-badge completed">
+                                    <i class="pi pi-check"></i>
+                                    {{ 'SITUATION_CENTER.DASHBOARD.SHUTDOWNS.COMPLETED' | translate }}
+                                </span>
+                            }
+                        </div>
+                        <span class="station-name">{{ shutdown.stationName }}</span>
+                    </div>
+                    <span class="downtime" [class.completed]="!shutdown.isOngoing">
+                        <i class="pi pi-clock"></i>
+                        {{ getDowntime(shutdown) }}
+                    </span>
+                </div>
+                <div class="shutdown-details">
+                    <span class="reason">{{ shutdown.reason || ('SITUATION_CENTER.DASHBOARD.SHUTDOWNS.NO_REASON' | translate) }}</span>
+                    @if (shutdown.lostGeneration) {
+                        <span class="lost-generation">
+                            <i class="pi pi-bolt"></i>
+                            -{{ shutdown.lostGeneration | number:'1.1-1' }} {{ 'SITUATION_CENTER.DASHBOARD.UNITS.KWH' | translate }}
+                        </span>
+                    }
+                </div>
+            </div>
+        }
+
+        @if (shutdowns.length === 0 && !loading) {
+            <div class="no-shutdowns">
+                <i class="pi pi-check-circle"></i>
+                <span>{{ 'SITUATION_CENTER.DASHBOARD.SHUTDOWNS.ALL_WORKING' | translate }}</span>
+            </div>
+        }
+
+        @if (loading) {
+            <div class="no-shutdowns">
+                <i class="pi pi-spin pi-spinner"></i>
+                <span>{{ 'SITUATION_CENTER.DASHBOARD.COMMON.LOADING' | translate }}</span>
+            </div>
+        }
+    </div>
+
+    <!-- Footer -->
+    <div class="widget-footer">
+        <span class="last-updated">{{ 'SITUATION_CENTER.DASHBOARD.COMMON.LAST_UPDATE' | translate }} {{ getTimeAgo() }}</span>
+        <button class="refresh-btn" (click)="refresh()" [disabled]="loading">
+            <i class="pi pi-refresh" [class.pi-spin]="loading"></i>
+        </button>
+    </div>
+</div>

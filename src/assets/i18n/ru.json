@@ -90,6 +90,7 @@
     "DEPARTMENTS": "Отделы",
     "USERS": "Пользователи",
     "ROLES": "Роли",
+    "OPERATIONAL_MONITORING": "Оперативный мониторинг",
     "SITUATION_CENTER": "Ситуационный центр",
     "GES_INFO": "Информация о ГЭС",
     "GES": "ГЭС",
@@ -570,6 +571,101 @@
       "PREVIOUS_YEARS": "Прошлые года",
       "INFLOW_TO_DATE": "Приток до сегодняшнего дня, млн. м³",
       "MODSNOW": "MODSNOW, снежный покров %"
+    },
+    "DASHBOARD": {
+      "HEADER": {
+        "TITLE": "Планшет Председателя правления",
+        "TO_HOME": "На главную"
+      },
+      "MONITORING": {
+        "TITLE": "Водные ресурсы",
+        "RESERVOIRS_COUNT": "Водохранилищ",
+        "VOLUME": "Объём",
+        "LEVEL": "Уровень",
+        "INFLOW": "Приток",
+        "RELEASE": "Сброс",
+        "INFLOW_TOTAL": "м³/с приток"
+      },
+      "DISCHARGES": {
+        "TITLE": "Холостые водосбросы",
+        "ACTIVE_COUNT": "Активных",
+        "TOTAL_FLOW": "м³/с общий",
+        "NO_ACTIVE": "Нет активных водосбросов"
+      },
+      "STATION_STATUS": {
+        "TITLE": "Статус агрегатов",
+        "TOTAL": "Всего",
+        "TOTAL_POWER": "Суммарная мощность",
+        "STATUS_WORKING": "В работе",
+        "STATUS_IDLE": "Простаивают",
+        "STATUS_REPAIR": "В ремонте"
+      },
+      "SHUTDOWNS": {
+        "TITLE": "Аварийные отключения",
+        "SHUTDOWNS_COUNT": "Отключений",
+        "LOSSES_KWH": "КВтч потерь",
+        "COMPLETED": "завершено",
+        "NO_REASON": "Причина не указана",
+        "ALL_WORKING": "Все станции в работе",
+        "TYPE_GES": "ГЭС",
+        "TYPE_MINI": "мини",
+        "TYPE_MICRO": "микро"
+      },
+      "POWER_GENERATION": {
+        "YEAR_START": "С начала года",
+        "MONTH_START": "С начала месяца",
+        "PER_DAY": "За сутки"
+      },
+      "MAP": {
+        "TITLE": "Интерактивная карта",
+        "LOADING_DATA": "Загрузка данных...",
+        "DATA_UNAVAILABLE": "Данные недоступны",
+        "TOTAL_AGGREGATES": "Итого агрегатов",
+        "SPILLWAY_DISCHARGES": "Холостые водосбросы",
+        "NO_ACTIVE_DISCHARGES": "Нет активных водосбросов",
+        "EMERGENCY_SHUTDOWNS": "Аварийные отключения",
+        "NO_ACTIVE_SHUTDOWNS": "Нет активных отключений",
+        "RESERVOIRS": "Водохранилища",
+        "NO_RESERVOIRS": "Нет водохранилищ"
+      },
+      "COMMON": {
+        "LOADING": "Загрузка...",
+        "NO_DATA": "Нет данных",
+        "UPDATED": "Обновлено:",
+        "LAST_UPDATE": "Последнее обновление:"
+      },
+      "TIME": {
+        "JUST_NOW": "только что",
+        "MINUTES_AGO": "{{count}} мин. назад",
+        "HOURS_AGO": "{{count}} ч. назад",
+        "MINUTES_SHORT": "мин",
+        "HOURS_SHORT": "ч",
+        "DAYS_SHORT": "дн"
+      },
+      "UNITS": {
+        "MLN_M3": "млн м³",
+        "M3_S": "м³/с",
+        "MW": "МВт",
+        "KWH": "КВтч",
+        "MLN_KWH": "млн кВт·ч",
+        "M": "м"
+      },
+      "REGIONS": {
+        "FERGANA": "Ферганская область",
+        "TASHKENT": "Ташкентская область",
+        "NAMANGAN": "Наманганская область",
+        "ANDIJAN": "Андижанская область",
+        "SYRDARYA": "Сырдарьинская область",
+        "JIZZAKH": "Джизакская область",
+        "SAMARKAND": "Самаркандская область",
+        "KASHKADARYA": "Кашкадарьинская область",
+        "SURKHANDARYA": "Сурхандарьинская область",
+        "KARAKALPAKSTAN": "Республика Каракалпакстан",
+        "NAVOI": "Навоийская область",
+        "KHOREZM": "Хорезмская область",
+        "BUKHARA": "Бухарская область",
+        "TASHKENT_CITY": "Ташкент"
+      }
     }
   },
   "FINANCIAL_BLOCK": {
