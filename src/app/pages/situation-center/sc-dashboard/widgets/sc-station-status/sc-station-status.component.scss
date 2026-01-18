@@ -130,6 +130,31 @@
     }
 }
 
+// Total Power
+.total-power {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    background: rgba(0, 212, 255, 0.08);
+    border-radius: 6px;
+    border: 1px solid rgba(0, 212, 255, 0.15);
+    flex-shrink: 0;
+}
+
+.power-label {
+    font-size: 11px;
+    color: var(--sc-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.power-value {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--sc-neon-green);
+}
+
 // Footer
 .widget-footer {
     display: flex;

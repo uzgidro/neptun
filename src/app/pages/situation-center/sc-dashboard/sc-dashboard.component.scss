@@ -186,7 +186,7 @@
                      0 0 20px rgba(255, 211, 42, 0.5);
     }
 
-    // Counter Digit Animation
+    // Counter Digit
     .counter-digit {
         display: inline-block;
         font-family: 'Courier New', monospace;
@@ -195,16 +195,6 @@
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
-        animation: pulse-glow 2s ease-in-out infinite;
-    }
-
-    @keyframes pulse-glow {
-        0%, 100% {
-            filter: drop-shadow(0 0 5px rgba(0, 212, 255, 0.5));
-        }
-        50% {
-            filter: drop-shadow(0 0 15px rgba(0, 212, 255, 0.8));
-        }
     }
 
     // Status Indicator

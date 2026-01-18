@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { DecimalPipe } from '@angular/common';
 import { ChartModule } from 'primeng/chart';
 import { Subscription, interval } from 'rxjs';
 import { DashboardService } from '@/core/services/dashboard.service';
@@ -14,7 +15,7 @@ interface StatusItem {
 @Component({
     selector: 'sc-station-status',
     standalone: true,
-    imports: [ChartModule],
+    imports: [ChartModule, DecimalPipe],
     templateUrl: './sc-station-status.component.html',
     styleUrl: './sc-station-status.component.scss'
 })
@@ -29,6 +30,7 @@ export class ScStationStatusComponent implements OnInit, OnDestroy {
     ];
 
     totalUnits = 0;
+    totalPower = 0;
     loading = true;
     lastUpdated: Date | null = null;
 
@@ -77,6 +79,7 @@ export class ScStationStatusComponent implements OnInit, OnDestroy {
         let active = 0;
         let pending = 0;
         let repair = 0;
+        let power = 0;
 
         // Берём только детей (items), не родителей - чтобы избежать двойного подсчёта
         cascades.forEach(cascade => {
@@ -86,6 +89,7 @@ export class ScStationStatusComponent implements OnInit, OnDestroy {
                         active += child.ascue_metrics.active_agg_count || 0;
                         pending += child.ascue_metrics.pending_agg_count || 0;
                         repair += child.ascue_metrics.repair_agg_count || 0;
+                        power += child.ascue_metrics.active || 0;
                     }
                 });
             }
@@ -98,6 +102,7 @@ export class ScStationStatusComponent implements OnInit, OnDestroy {
         ];
 
         this.totalUnits = active + pending + repair;
+        this.totalPower = power;
     }
 
     private initChartOptions(): void {

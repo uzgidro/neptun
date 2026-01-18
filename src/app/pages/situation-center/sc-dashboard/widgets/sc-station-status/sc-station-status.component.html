@@ -40,6 +40,12 @@
         }
     </div>
 
+    <!-- Total Power -->
+    <div class="total-power">
+        <span class="power-label">Суммарная мощность:</span>
+        <span class="power-value">{{ totalPower | number:'1.1-1' }} МВт</span>
+    </div>
+
     <!-- Footer -->
     <div class="widget-footer">
         <span class="last-updated">Последнее обновление: {{ getTimeAgo() }}</span>
