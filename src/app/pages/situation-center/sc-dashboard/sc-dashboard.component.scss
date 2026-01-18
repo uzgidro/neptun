@@ -228,20 +228,20 @@
         }
 
         &.status-active {
-            background: var(--sc-neon-green);
-            box-shadow: var(--sc-glow-green);
-
-            &::after {
-                background: var(--sc-neon-green);
-            }
-        }
-
-        &.status-stopped {
             background: var(--sc-neon-red);
             box-shadow: var(--sc-glow-red);
 
             &::after {
                 background: var(--sc-neon-red);
+            }
+        }
+
+        &.status-stopped {
+            background: var(--sc-neon-green);
+            box-shadow: var(--sc-glow-green);
+
+            &::after {
+                background: var(--sc-neon-green);
             }
         }
 
