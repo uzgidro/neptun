@@ -1,5 +1,8 @@
 <div class="sc-header neon-card">
     <div class="header-left">
+        <a routerLink="/" class="home-btn" title="На главную">
+            <i class="pi pi-home"></i>
+        </a>
         @if (weather) {
             <div class="weather-widget">
                 <i class="pi {{ weather.iconClass }} weather-icon"></i>

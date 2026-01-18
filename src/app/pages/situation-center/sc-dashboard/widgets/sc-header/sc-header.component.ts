@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { DatePipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { interval, Subscription } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { LocationService } from '@/core/services/location.service';
@@ -15,7 +16,7 @@ interface WeatherData {
 @Component({
     selector: 'sc-header',
     standalone: true,
-    imports: [DatePipe],
+    imports: [DatePipe, RouterLink],
     templateUrl: './sc-header.component.html',
     styleUrl: './sc-header.component.scss'
 })
