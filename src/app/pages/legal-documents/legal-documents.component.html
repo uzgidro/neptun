@@ -50,10 +50,12 @@
                     }
                 </div>
 
-                <button pButton (click)="openDialog()" class="p-button-success">
-                    <i class="pi pi-plus mr-2"></i>
-                    <span>{{ 'LEGAL_DOCUMENTS.NEW' | translate }}</span>
-                </button>
+                @if (canEdit) {
+                    <button pButton (click)="openDialog()" class="p-button-success">
+                        <i class="pi pi-plus mr-2"></i>
+                        <span>{{ 'LEGAL_DOCUMENTS.NEW' | translate }}</span>
+                    </button>
+                }
             </div>
         </ng-template>
 
@@ -75,7 +77,9 @@
                     <th style="min-width: 12rem">{{ 'LEGAL_DOCUMENTS.FIELDS.TYPE' | translate }}</th>
                 }
                 <th style="min-width: 6rem">{{ 'LEGAL_DOCUMENTS.FIELDS.FILES' | translate }}</th>
-                <th style="width: 8rem">{{ 'LEGAL_DOCUMENTS.FIELDS.ACTIONS' | translate }}</th>
+                @if (canEdit) {
+                    <th style="width: 8rem">{{ 'LEGAL_DOCUMENTS.FIELDS.ACTIONS' | translate }}</th>
+                }
             </tr>
         </ng-template>
 
@@ -107,30 +111,32 @@
                         <span class="text-color-secondary">—</span>
                     }
                 </td>
-                <td>
-                    <div class="flex justify-center gap-1">
-                        <button pButton
-                                icon="pi pi-pencil"
-                                (click)="openEditDialog(doc)"
-                                class="p-button-rounded p-button-text p-button-warning"
-                                [pTooltip]="'COMMON.EDIT' | translate"
-                                tooltipPosition="top">
-                        </button>
-                        <button pButton
-                                icon="pi pi-trash"
-                                (click)="openDeleteDialog(doc)"
-                                class="p-button-rounded p-button-text p-button-danger"
-                                [pTooltip]="'COMMON.DELETE' | translate"
-                                tooltipPosition="top">
-                        </button>
-                    </div>
-                </td>
+                @if (canEdit) {
+                    <td>
+                        <div class="flex justify-center gap-1">
+                            <button pButton
+                                    icon="pi pi-pencil"
+                                    (click)="openEditDialog(doc)"
+                                    class="p-button-rounded p-button-text p-button-warning"
+                                    [pTooltip]="'COMMON.EDIT' | translate"
+                                    tooltipPosition="top">
+                            </button>
+                            <button pButton
+                                    icon="pi pi-trash"
+                                    (click)="openDeleteDialog(doc)"
+                                    class="p-button-rounded p-button-text p-button-danger"
+                                    [pTooltip]="'COMMON.DELETE' | translate"
+                                    tooltipPosition="top">
+                            </button>
+                        </div>
+                    </td>
+                }
             </tr>
         </ng-template>
 
         <ng-template #emptymessage>
             <tr>
-                <td [attr.colspan]="typeId ? 5 : 6" class="text-center py-8">
+                <td [attr.colspan]="tableColspan" class="text-center py-8">
                     <i class="pi pi-inbox text-4xl text-color-secondary mb-3 block"></i>
                     <p class="m-0 text-color-secondary">{{ 'LEGAL_DOCUMENTS.NO_DATA' | translate }}</p>
                 </td>
@@ -139,7 +145,7 @@
 
         <ng-template #loadingbody>
             <tr>
-                <td [attr.colspan]="typeId ? 5 : 6" class="text-center py-4">
+                <td [attr.colspan]="tableColspan" class="text-center py-4">
                     {{ 'LEGAL_DOCUMENTS.LOADING' | translate }}
                 </td>
             </tr>

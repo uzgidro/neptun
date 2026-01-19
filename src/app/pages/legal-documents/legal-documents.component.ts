@@ -24,6 +24,7 @@ import { FileUploadComponent } from '@/layout/component/dialog/file-upload/file-
 import { LegalDocument, LegalDocumentFilters, LegalDocumentPayload, LegalDocumentType } from '@/core/interfaces/chancellery';
 import { FileResponse } from '@/core/interfaces/chancellery/document-base';
 import { LegalDocumentService } from '@/core/services/legal-document.service';
+import { AuthService } from '@/core/services/auth.service';
 
 @Component({
     selector: 'app-legal-documents',
@@ -93,7 +94,18 @@ export class LegalDocumentsComponent implements OnInit, OnDestroy {
     private fb = inject(FormBuilder);
     private translate = inject(TranslateService);
     private route = inject(ActivatedRoute);
+    private authService = inject(AuthService);
     private destroy$ = new Subject<void>();
+
+    // Permissions
+    canEdit = this.authService.hasRole(['chancellery', 'sc']);
+
+    get tableColspan(): number {
+        let cols = 5; // number, date, name, files, actions
+        if (!this.typeId) cols++; // type column
+        if (!this.canEdit) cols--; // no actions column
+        return cols;
+    }
 
     constructor() {
         this.documentForm = this.fb.group({
