@@ -33,7 +33,6 @@ export class MenuComponent implements OnInit {
                 items: [
                     {
                         label: this.t('MENU.OPERATIONAL_MONITORING'),
-                        role: ['rais'],
                         routerLink: ['/monitoring']
                     },
                     {
