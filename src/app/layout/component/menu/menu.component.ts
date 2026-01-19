@@ -194,24 +194,23 @@ export class MenuComponent implements OnInit {
                     },
                     {
                         label: this.t('MENU.LEGAL_LIBRARY'),
-                        role: ['rais', 'chancellery'],
                         items: [
-                            { label: this.t('MENU.LEGAL_LIBRARY_ALL'), role: ['rais', 'chancellery'], routerLink: ['/legal-documents'], routerLinkActiveOptions: { exact: true, queryParams: 'exact' } },
-                            { label: this.t('MENU.LEGAL_LIBRARY_LAWS'), role: ['rais', 'chancellery'], routerLink: ['/legal-documents'], queryParams: { type_id: 1 }, routerLinkActiveOptions: { queryParams: 'exact' } },
-                            { label: this.t('MENU.LEGAL_LIBRARY_PRESIDENT_DECREES'), role: ['rais', 'chancellery'], routerLink: ['/legal-documents'], queryParams: { type_id: 2 }, routerLinkActiveOptions: { queryParams: 'exact' } },
-                            { label: this.t('MENU.LEGAL_LIBRARY_PRESIDENT_RESOLUTIONS'), role: ['rais', 'chancellery'], routerLink: ['/legal-documents'], queryParams: { type_id: 3 }, routerLinkActiveOptions: { queryParams: 'exact' } },
-                            { label: this.t('MENU.LEGAL_LIBRARY_PRESIDENT_ORDERS'), role: ['rais', 'chancellery'], routerLink: ['/legal-documents'], queryParams: { type_id: 4 }, routerLinkActiveOptions: { queryParams: 'exact' } },
-                            { label: this.t('MENU.LEGAL_LIBRARY_GOVT_RESOLUTIONS'), role: ['rais', 'chancellery'], routerLink: ['/legal-documents'], queryParams: { type_id: 5 }, routerLinkActiveOptions: { queryParams: 'exact' } },
-                            { label: this.t('MENU.LEGAL_LIBRARY_CABINET_ORDERS'), role: ['rais', 'chancellery'], routerLink: ['/legal-documents'], queryParams: { type_id: 6 }, routerLinkActiveOptions: { queryParams: 'exact' } },
-                            { label: this.t('MENU.LEGAL_LIBRARY_DEPT_ACTS'), role: ['rais', 'chancellery'], routerLink: ['/legal-documents'], queryParams: { type_id: 7 }, routerLinkActiveOptions: { queryParams: 'exact' } },
-                            { label: this.t('MENU.LEGAL_LIBRARY_LEGISLATION'), role: ['rais', 'chancellery'], routerLink: ['/legal-documents'], queryParams: { type_id: 8 }, routerLinkActiveOptions: { queryParams: 'exact' } },
-                            { label: this.t('MENU.LEGAL_LIBRARY_OTHER'), role: ['rais', 'chancellery'], routerLink: ['/legal-documents'], queryParams: { type_id: 9 }, routerLinkActiveOptions: { queryParams: 'exact' } },
-                            { label: this.t('MENU.LEGAL_LIBRARY_UHE_ORDERS'), role: ['rais', 'chancellery'], routerLink: ['/legal-documents'], queryParams: { type_id: 10 }, routerLinkActiveOptions: { queryParams: 'exact' } },
-                            { label: this.t('MENU.LEGAL_LIBRARY_UHE_PROTOCOLS'), role: ['rais', 'chancellery'], routerLink: ['/legal-documents'], queryParams: { type_id: 11 }, routerLinkActiveOptions: { queryParams: 'exact' } }
+                            { label: this.t('MENU.LEGAL_LIBRARY_ALL'), routerLink: ['/legal-documents'], routerLinkActiveOptions: { exact: true, queryParams: 'exact' } },
+                            { label: this.t('MENU.LEGAL_LIBRARY_LAWS'), routerLink: ['/legal-documents'], queryParams: { type_id: 1 }, routerLinkActiveOptions: { queryParams: 'exact' } },
+                            { label: this.t('MENU.LEGAL_LIBRARY_PRESIDENT_DECREES'), routerLink: ['/legal-documents'], queryParams: { type_id: 2 }, routerLinkActiveOptions: { queryParams: 'exact' } },
+                            { label: this.t('MENU.LEGAL_LIBRARY_PRESIDENT_RESOLUTIONS'), routerLink: ['/legal-documents'], queryParams: { type_id: 3 }, routerLinkActiveOptions: { queryParams: 'exact' } },
+                            { label: this.t('MENU.LEGAL_LIBRARY_PRESIDENT_ORDERS'), routerLink: ['/legal-documents'], queryParams: { type_id: 4 }, routerLinkActiveOptions: { queryParams: 'exact' } },
+                            { label: this.t('MENU.LEGAL_LIBRARY_GOVT_RESOLUTIONS'), routerLink: ['/legal-documents'], queryParams: { type_id: 5 }, routerLinkActiveOptions: { queryParams: 'exact' } },
+                            { label: this.t('MENU.LEGAL_LIBRARY_CABINET_ORDERS'), routerLink: ['/legal-documents'], queryParams: { type_id: 6 }, routerLinkActiveOptions: { queryParams: 'exact' } },
+                            { label: this.t('MENU.LEGAL_LIBRARY_DEPT_ACTS'), routerLink: ['/legal-documents'], queryParams: { type_id: 7 }, routerLinkActiveOptions: { queryParams: 'exact' } },
+                            { label: this.t('MENU.LEGAL_LIBRARY_LEGISLATION'), role: ['rais'], routerLink: ['/legal-documents'], queryParams: { type_id: 8 }, routerLinkActiveOptions: { queryParams: 'exact' } },
+                            { label: this.t('MENU.LEGAL_LIBRARY_OTHER'), routerLink: ['/legal-documents'], queryParams: { type_id: 9 }, routerLinkActiveOptions: { queryParams: 'exact' } },
+                            { label: this.t('MENU.LEGAL_LIBRARY_UHE_ORDERS'), routerLink: ['/legal-documents'], queryParams: { type_id: 10 }, routerLinkActiveOptions: { queryParams: 'exact' } },
+                            { label: this.t('MENU.LEGAL_LIBRARY_UHE_PROTOCOLS'), routerLink: ['/legal-documents'], queryParams: { type_id: 11 }, routerLinkActiveOptions: { queryParams: 'exact' } }
                         ]
                     },
                     { label: this.t('MENU.CALLS'), role: ['rais'], routerLink: ['/calls'] },
-                    { label: this.t('MENU.PRESS_SERVICE'), role: ['rais'], routerLink: ['/media/news'] }
+                    { label: this.t('MENU.PRESS_SERVICE'), routerLink: ['/media/news'] }
                 ]
             }
         ];
