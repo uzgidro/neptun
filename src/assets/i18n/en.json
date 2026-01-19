@@ -130,6 +130,7 @@
     "DECREES": "Decrees",
     "AGREEMENTS": "Joint Agreements",
     "CALLS": "Calls",
+    "LEX_SEARCH": "Search on Lex.uz",
     "PRESS_SERVICE": "Press Service",
     "INVESTMENT_BLOCK": "Investment Block",
     "ACTIVE_PHASE_PROJECTS": "Active Phase Projects",
@@ -1561,6 +1562,13 @@
       "DATE_TO": "Date To",
       "CLEAR": "Clear Filters",
       "ALL_TYPES": "All Types"
+    },
+    "LEX_SEARCH": {
+      "TITLE": "Search on Lex.uz",
+      "PLACEHOLDER": "Enter document title...",
+      "NO_RESULTS": "No documents found",
+      "HINT": "Enter text to search documents on Lex.uz portal",
+      "PAGE_REPORT": "Page {currentPage} of {totalPages}"
     }
   },
   "CALLS": {
@@ -1734,5 +1742,13 @@
       "PUBLISHED": "Published",
       "CREATED": "Created"
     }
+  },
+  "LEX_SEARCH": {
+    "TITLE": "Search on Lex.uz",
+    "PLACEHOLDER": "Enter document title...",
+    "NO_RESULTS": "No documents found",
+    "HINT": "Enter text to search documents on Lex.uz portal",
+    "PAGE_REPORT": "Page {currentPage} of {totalPages}",
+    "LOADING": "Loading..."
   }
 }

@@ -127,6 +127,7 @@
     "DECREES": "Farmonlar",
     "AGREEMENTS": "Birgalikdagi kelishuvlar",
     "CALLS": "Qo'ng'iroqlar",
+    "LEX_SEARCH": "Lex.uz da qidirish",
     "PRESS_SERVICE": "Matbuot xizmati",
     "INVESTMENT_BLOCK": "Investitsiya bloki",
     "ACTIVE_PHASE_PROJECTS": "Faol bosqichdagi loyihalar",
@@ -1532,6 +1533,13 @@
       "DATE_TO": "Sanagacha",
       "CLEAR": "Filtrlarni tozalash",
       "ALL_TYPES": "Barcha turlar"
+    },
+    "LEX_SEARCH": {
+      "TITLE": "Lex.uz saytida qidirish",
+      "PLACEHOLDER": "Hujjat nomini kiriting...",
+      "NO_RESULTS": "Hujjatlar topilmadi",
+      "HINT": "Lex.uz portalida hujjatlarni qidirish uchun matn kiriting",
+      "PAGE_REPORT": "Sahifa {currentPage} / {totalPages}"
     }
   },
   "CALLS": {
@@ -1705,5 +1713,13 @@
       "PUBLISHED": "Nashr qilingan",
       "CREATED": "Yaratilgan"
     }
+  },
+  "LEX_SEARCH": {
+    "TITLE": "Lex.uz da qidirish",
+    "PLACEHOLDER": "Hujjat nomini kiriting...",
+    "NO_RESULTS": "Hujjatlar topilmadi",
+    "HINT": "Lex.uz portalida hujjatlarni qidirish uchun matn kiriting",
+    "PAGE_REPORT": "Sahifa {currentPage} / {totalPages}",
+    "LOADING": "Yuklanmoqda..."
   }
 }

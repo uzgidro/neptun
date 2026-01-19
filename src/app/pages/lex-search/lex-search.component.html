@@ -1,0 +1,77 @@
+<div class="card">
+    <div class="lex-search-header">
+        <div class="lex-search-icon">
+            <i class="pi pi-globe"></i>
+        </div>
+        <div>
+            <div class="font-semibold text-xl">{{ 'LEX_SEARCH.TITLE' | translate }}</div>
+            <div class="text-sm text-color-secondary mt-1">{{ 'LEX_SEARCH.HINT' | translate }}</div>
+        </div>
+    </div>
+
+    <!-- Search field -->
+    <div class="lex-search-input-wrapper">
+        <p-iconfield class="w-full">
+            <p-inputicon><i class="pi pi-search"></i></p-inputicon>
+            <input pInputText type="text"
+                   class="w-full"
+                   [(ngModel)]="lexSearchQuery"
+                   (input)="onLexSearchInput($event)"
+                   [placeholder]="'LEX_SEARCH.PLACEHOLDER' | translate" />
+        </p-iconfield>
+        @if (lexSearchQuery) {
+            <button pButton class="p-button-text p-button-rounded p-button-secondary lex-clear-btn"
+                    (click)="clearLexSearch()">
+                <i class="pi pi-times"></i>
+            </button>
+        }
+    </div>
+
+    <!-- Results -->
+    @if (lexLoading) {
+        <div class="lex-loading">
+            <i class="pi pi-spin pi-spinner"></i>
+            <span>{{ 'LEX_SEARCH.LOADING' | translate }}</span>
+        </div>
+    } @else if (lexSearchResults.length > 0) {
+        <div class="lex-results-list">
+            @for (doc of lexSearchResults; track doc.number) {
+                <a [href]="getLexDocumentUrl(doc)" target="_blank" class="lex-result-item">
+                    <div class="lex-result-number">{{ doc.number }}</div>
+                    <div class="lex-result-content">
+                        <div class="lex-result-badge">{{ doc.badge }}</div>
+                        <div class="lex-result-title">{{ doc.title }}</div>
+                        <div class="lex-result-meta">
+                            <p-tag [value]="doc.status"
+                                   [severity]="doc.status === 'active' ? 'success' : 'info'"
+                                   [rounded]="true">
+                            </p-tag>
+                            <span class="lex-result-link">
+                                <i class="pi pi-external-link"></i>
+                                lex.uz
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            }
+        </div>
+
+        <!-- Pagination -->
+        @if (lexTotalPages > 1) {
+            <p-paginator
+                [first]="(lexCurrentPage - 1) * 20"
+                [rows]="20"
+                [totalRecords]="lexTotalPages * 20"
+                (onPageChange)="onLexPageChange($event)"
+                [showCurrentPageReport]="true"
+                [currentPageReportTemplate]="'LEX_SEARCH.PAGE_REPORT' | translate"
+                class="mt-4">
+            </p-paginator>
+        }
+    } @else if (lexSearchQuery && !lexLoading) {
+        <div class="lex-empty-state">
+            <i class="pi pi-search"></i>
+            <p>{{ 'LEX_SEARCH.NO_RESULTS' | translate }}</p>
+        </div>
+    }
+</div>
