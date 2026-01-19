@@ -7,7 +7,8 @@ import {
     LegalDocumentPayload,
     LegalDocumentFilters,
     LegalDocumentType,
-    CreateLegalDocumentResponse
+    CreateLegalDocumentResponse,
+    LexSearchResponse
 } from '@/core/interfaces/chancellery';
 
 /**
@@ -120,5 +121,16 @@ export class LegalDocumentService {
         const month = (date.getMonth() + 1).toString().padStart(2, '0');
         const day = date.getDate().toString().padStart(2, '0');
         return `${year}-${month}-${day}`;
+    }
+
+    /**
+     * Search documents on Lex.uz
+     */
+    searchLex(searchTitle: string, page: number = 1): Observable<LexSearchResponse> {
+        const params = new HttpParams()
+            .set('searchtitle', searchTitle)
+            .set('page', page.toString());
+
+        return this.http.get<LexSearchResponse>(`${BASE_URL}/lex-search`, { params });
     }
 }

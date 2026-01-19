@@ -127,6 +127,7 @@
     "DECREES": "Фармонлар",
     "AGREEMENTS": "Биргаликдаги келишувлар",
     "CALLS": "Қўнғироқлар",
+    "LEX_SEARCH": "Lex.uz да қидириш",
     "PRESS_SERVICE": "Матбуот хизмати",
     "INVESTMENT_BLOCK": "Инвестиция блоки",
     "ACTIVE_PHASE_PROJECTS": "Фаол босқичдаги лойиҳалар",
@@ -1532,6 +1533,13 @@
       "DATE_TO": "Санагача",
       "CLEAR": "Филтрларни тозалаш",
       "ALL_TYPES": "Барча турлар"
+    },
+    "LEX_SEARCH": {
+      "TITLE": "Lex.uz сайтида қидириш",
+      "PLACEHOLDER": "Ҳужжат номини киритинг...",
+      "NO_RESULTS": "Ҳужжатлар топилмади",
+      "HINT": "Lex.uz порталида ҳужжатларни қидириш учун матн киритинг",
+      "PAGE_REPORT": "Саҳифа {currentPage} / {totalPages}"
     }
   },
   "CALLS": {
@@ -1705,5 +1713,13 @@
       "PUBLISHED": "Нашр қилинган",
       "CREATED": "Яратилган"
     }
+  },
+  "LEX_SEARCH": {
+    "TITLE": "Lex.uz да қидириш",
+    "PLACEHOLDER": "Ҳужжат номини киритинг...",
+    "NO_RESULTS": "Ҳужжатлар топилмади",
+    "HINT": "Lex.uz порталида ҳужжатларни қидириш учун матн киритинг",
+    "PAGE_REPORT": "Саҳифа {currentPage} / {totalPages}",
+    "LOADING": "Юкланмоқда..."
   }
 }

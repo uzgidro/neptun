@@ -23,5 +23,7 @@ export type {
     LegalDocumentType,
     LegalDocumentPayload,
     LegalDocumentFilters,
-    CreateLegalDocumentResponse
+    CreateLegalDocumentResponse,
+    LexSearchDocument,
+    LexSearchResponse
 } from './legal-document';

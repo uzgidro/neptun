@@ -60,3 +60,19 @@ export interface CreateLegalDocumentResponse {
         size: number;
     }>;
 }
+
+/** Lex.uz search result document */
+export interface LexSearchDocument {
+    number: number;
+    title: string;
+    url: string; // относительный путь, напр. "/ru/docs/7719581"
+    badge: string; // тип и номер документа
+    status: string; // "active" и др.
+}
+
+/** Lex.uz search API response */
+export interface LexSearchResponse {
+    documents: LexSearchDocument[];
+    current_page: number;
+    total_pages: number;
+}

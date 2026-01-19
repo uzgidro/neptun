@@ -38,6 +38,7 @@ import { LettersComponent } from '@/pages/chancellery/letters/letters.component'
 import { InstructionsComponent } from '@/pages/chancellery/instructions/instructions.component';
 import { PendingSignaturesComponent } from '@/pages/chancellery/pending-signatures/pending-signatures.component';
 import { LegalDocumentsComponent } from '@/pages/legal-documents/legal-documents.component';
+import { LexSearchComponent } from '@/pages/lex-search/lex-search.component';
 import { CallsComponent } from '@/pages/calls/calls.component';
 import { NewsComponent } from '@/pages/media/news/news.component';
 import { InvestActiveProjectsComponent } from '@/pages/invest/invest-active-projects/invest-active-projects.component';
@@ -92,6 +93,7 @@ export const appRoutes: Routes = [
             { path: 'chancellery/letters', component: LettersComponent, canActivate: [raisGuard] },
             { path: 'chancellery/instructions', component: InstructionsComponent, canActivate: [raisGuard] },
             { path: 'legal-documents', component: LegalDocumentsComponent, canActivate: [raisGuard] },
+            { path: 'lex-search', component: LexSearchComponent, canActivate: [raisGuard] },
             { path: 'calls', component: CallsComponent, canActivate: [raisGuard] },
             { path: 'media/news', component: NewsComponent, canActivate: [raisGuard] },
         ]

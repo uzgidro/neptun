@@ -130,6 +130,7 @@
     "DECREES": "Указы",
     "AGREEMENTS": "Совместные соглашения",
     "CALLS": "Звонки",
+    "LEX_SEARCH": "Поиск на Lex.uz",
     "PRESS_SERVICE": "Пресс-служба",
     "INVESTMENT_BLOCK": "Инвестиционный блок",
     "ACTIVE_PHASE_PROJECTS": "Проекты в активной фазе",
@@ -1560,6 +1561,13 @@
       "DATE_TO": "Дата до",
       "CLEAR": "Сбросить фильтры",
       "ALL_TYPES": "Все типы"
+    },
+    "LEX_SEARCH": {
+      "TITLE": "Поиск на Lex.uz",
+      "PLACEHOLDER": "Введите название документа...",
+      "NO_RESULTS": "Документы не найдены",
+      "HINT": "Введите текст для поиска документов на портале Lex.uz",
+      "PAGE_REPORT": "Страница {currentPage} из {totalPages}"
     }
   },
   "CALLS": {
@@ -1733,5 +1741,13 @@
       "PUBLISHED": "Опубликовано",
       "CREATED": "Создано"
     }
+  },
+  "LEX_SEARCH": {
+    "TITLE": "Поиск на Lex.uz",
+    "PLACEHOLDER": "Введите название документа...",
+    "NO_RESULTS": "Документы не найдены",
+    "HINT": "Введите текст для поиска документов на портале Lex.uz",
+    "PAGE_REPORT": "Страница {currentPage} из {totalPages}",
+    "LOADING": "Загрузка..."
   }
 }
