@@ -32,12 +32,12 @@ export class MenuComponent implements OnInit {
             {
                 items: [
                     {
-                        label: this.t('MENU.OPERATIONAL_MONITORING'),
-                        routerLink: ['/monitoring']
-                    },
-                    {
                         label: this.t('MENU.HOME'),
                         routerLink: ['/dashboard']
+                    },
+                    {
+                        label: this.t('MENU.OPERATIONAL_MONITORING'),
+                        routerLink: ['/monitoring']
                     },
                     {
                         label: this.t('MENU.HRM'),

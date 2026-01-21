@@ -48,7 +48,7 @@ import { ScDashboardComponent } from '@/pages/situation-center/sc-dashboard/sc-d
 export const appRoutes: Routes = [
     {
         path: '',
-        redirectTo: 'dashboard',
+        redirectTo: 'monitoring',
         pathMatch: 'full'
     },
     {
@@ -56,7 +56,7 @@ export const appRoutes: Routes = [
         component: AppLayout,
         canActivate: [authGuard],
         children: [
-            { path: 'dashboard', component: Dashboard },
+            { path: 'monitoring', component: Dashboard },
             { path: 'users', component: User, canActivate: [adminGuard] },
             { path: 'roles', component: Role, canActivate: [adminGuard] },
             { path: 'categories', component: CategoriesComponent, canActivate: [scGuard] },
@@ -98,7 +98,7 @@ export const appRoutes: Routes = [
             { path: 'media/news', component: NewsComponent, canActivate: [raisGuard] },
         ]
     },
-    { path: 'monitoring', component: ScDashboardComponent, canActivate: [authGuard] },
+    { path: 'dashboard', component: ScDashboardComponent, canActivate: [authGuard] },
     { path: 'notfound', component: Notfound },
     { path: 'auth', loadChildren: () => import('./app/pages/auth/auth.routes') },
     { path: '**', redirectTo: '/notfound' }
