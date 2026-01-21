@@ -45,16 +45,16 @@
     }
 }
 
-// Некликабельные регионы - тусклые
+// Некликабельные регионы - тёмные (без объектов), но с яркой обводкой
 :host ::ng-deep svg path#UZNW,
 :host ::ng-deep svg path#UZBU,
 :host ::ng-deep svg path#UZQR {
-    fill: rgba(100, 100, 120, 0.1);
-    stroke: rgba(255, 255, 255, 0.4);
-    stroke-width: 0.5;
+    fill: rgba(15, 20, 30, 0.85);
+    stroke: #ffffff;
+    stroke-width: 1;
     cursor: default;
     pointer-events: none;
     filter:
-        drop-shadow(0 0 2px rgba(0, 212, 255, 0.5))
-        drop-shadow(0 0 5px rgba(0, 212, 255, 0.3));
+        drop-shadow(0 0 3px rgba(0, 212, 255, 1))
+        drop-shadow(0 0 12px rgba(0, 212, 255, 0.8));
 }
