@@ -18,6 +18,7 @@ import { SelectComponent } from '@/layout/component/dialog/select/select.compone
 import { FileUploadComponent } from '@/layout/component/dialog/file-upload/file-upload.component';
 import { FileViewerComponent } from '@/layout/component/dialog/file-viewer/file-viewer.component';
 import { FileListComponent } from '@/layout/component/dialog/file-list/file-list.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-visit',
@@ -35,7 +36,8 @@ import { FileListComponent } from '@/layout/component/dialog/file-list/file-list
         SelectComponent,
         FileUploadComponent,
         FileViewerComponent,
-        FileListComponent
+        FileListComponent,
+        TranslateModule
     ],
     templateUrl: './visit.component.html',
     styleUrl: './visit.component.scss'

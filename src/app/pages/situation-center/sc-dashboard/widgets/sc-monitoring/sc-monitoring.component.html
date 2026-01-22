@@ -1,0 +1,83 @@
+<div class="sc-monitoring neon-card">
+    <div class="widget-title">
+        <i class="pi pi-database title-icon water"></i>
+        <span>{{ 'SITUATION_CENTER.DASHBOARD.MONITORING.TITLE' | translate }}</span>
+    </div>
+
+    <!-- Summary Stats -->
+    <div class="summary-row">
+        <div class="summary-item">
+            <span class="summary-value">{{ reservoirCount }}</span>
+            <span class="summary-label">{{ 'SITUATION_CENTER.DASHBOARD.MONITORING.RESERVOIRS_COUNT' | translate }}</span>
+        </div>
+        <div class="summary-item">
+            <span class="summary-value">{{ totalVolume | number:'1.0-0' }}</span>
+            <span class="summary-label">{{ 'SITUATION_CENTER.DASHBOARD.UNITS.MLN_M3' | translate }}</span>
+        </div>
+        <div class="summary-item">
+            <span class="summary-value">{{ totalIncome | number:'1.0-0' }}</span>
+            <span class="summary-label">{{ 'SITUATION_CENTER.DASHBOARD.MONITORING.INFLOW_TOTAL' | translate }}</span>
+        </div>
+    </div>
+
+    <!-- Reservoirs List -->
+    <div class="reservoirs-list">
+        @for (reservoir of reservoirs; track reservoir.organization_id) {
+            <div class="reservoir-item">
+                <div class="reservoir-header">
+                    <span class="reservoir-name">{{ reservoir.organization_name }}</span>
+                </div>
+                <div class="reservoir-metrics">
+                    <div class="metric">
+                        <span class="metric-label">{{ 'SITUATION_CENTER.DASHBOARD.MONITORING.VOLUME' | translate }}</span>
+                        <span class="metric-value">{{ reservoir.reservoir_metrics.current.volume | number:'1.1-1' }}</span>
+                        @if (reservoir.reservoir_metrics.diff?.volume) {
+                            <span class="metric-diff" [class.positive]="reservoir.reservoir_metrics.diff!.volume > 0" [class.negative]="reservoir.reservoir_metrics.diff!.volume < 0">
+                                {{ reservoir.reservoir_metrics.diff!.volume > 0 ? '+' : '' }}{{ reservoir.reservoir_metrics.diff!.volume | number:'1.1-1' }}
+                            </span>
+                        }
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">{{ 'SITUATION_CENTER.DASHBOARD.MONITORING.LEVEL' | translate }}</span>
+                        <span class="metric-value">{{ reservoir.reservoir_metrics.current.level | number:'1.2-2' }}</span>
+                        @if (reservoir.reservoir_metrics.diff?.level) {
+                            <span class="metric-diff" [class.positive]="reservoir.reservoir_metrics.diff!.level > 0" [class.negative]="reservoir.reservoir_metrics.diff!.level < 0">
+                                {{ reservoir.reservoir_metrics.diff!.level > 0 ? '+' : '' }}{{ reservoir.reservoir_metrics.diff!.level | number:'1.2-2' }}
+                            </span>
+                        }
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">{{ 'SITUATION_CENTER.DASHBOARD.MONITORING.INFLOW' | translate }}</span>
+                        <span class="metric-value accent">{{ reservoir.reservoir_metrics.current.income | number:'1.0-0' }}</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">{{ 'SITUATION_CENTER.DASHBOARD.MONITORING.RELEASE' | translate }}</span>
+                        <span class="metric-value">{{ reservoir.reservoir_metrics.current.release | number:'1.0-0' }}</span>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if (reservoirs.length === 0 && !loading) {
+            <div class="no-data">
+                <i class="pi pi-info-circle"></i>
+                <span>{{ 'SITUATION_CENTER.DASHBOARD.COMMON.NO_DATA' | translate }}</span>
+            </div>
+        }
+
+        @if (loading) {
+            <div class="no-data">
+                <i class="pi pi-spin pi-spinner"></i>
+                <span>{{ 'SITUATION_CENTER.DASHBOARD.COMMON.LOADING' | translate }}</span>
+            </div>
+        }
+    </div>
+
+    <!-- Footer -->
+    <div class="widget-footer">
+        <span class="last-updated">{{ 'SITUATION_CENTER.DASHBOARD.COMMON.UPDATED' | translate }} {{ getTimeAgo() }}</span>
+        <button class="refresh-btn" (click)="refresh()" [disabled]="loading">
+            <i class="pi pi-refresh" [class.pi-spin]="loading"></i>
+        </button>
+    </div>
+</div>

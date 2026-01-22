@@ -1,0 +1,751 @@
+:host {
+    display: block;
+    height: 100%;
+}
+
+.sc-map {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 12px !important;
+    overflow: hidden;
+}
+
+// Header
+.map-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.map-legend {
+    display: flex;
+    gap: 12px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 9px;
+    color: var(--sc-text-muted);
+}
+
+.legend-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+
+    &.active {
+        background: var(--sc-neon-green);
+        box-shadow: 0 0 4px var(--sc-neon-green);
+    }
+
+    &.stopped {
+        background: var(--sc-neon-red);
+        box-shadow: 0 0 4px var(--sc-neon-red);
+    }
+
+    &.repair {
+        background: var(--sc-neon-yellow);
+        box-shadow: 0 0 4px var(--sc-neon-yellow);
+    }
+}
+
+// Map Content (split view wrapper)
+.map-content {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+    gap: 12px;
+    overflow: hidden;
+
+    &.split-view {
+        .map-container {
+            flex: 0 0 50%;
+        }
+
+        .region-panel {
+            flex: 0 0 calc(50% - 12px);
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+}
+
+// Map Container
+.map-container {
+    position: relative;
+    flex: 1;
+    min-height: 200px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid rgba(0, 212, 255, 0.1);
+    transition: flex 0.4s ease;
+}
+
+// Region Panel
+.region-panel {
+    flex: 0 0 0;
+    background: rgba(0, 20, 40, 0.9);
+    border-radius: 6px;
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    overflow: hidden;
+    opacity: 0;
+    transform: translateX(20px);
+    transition: all 0.4s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background: rgba(0, 212, 255, 0.1);
+    border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+}
+
+.panel-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.close-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s;
+
+    &:hover {
+        color: #ff5566;
+    }
+
+    i {
+        font-size: 14px;
+    }
+}
+
+.panel-body {
+    flex: 1;
+    padding: 12px;
+    overflow-y: auto;
+}
+
+// Loading & No Data States
+.loading-state,
+.no-data-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 32px;
+    color: rgba(255, 255, 255, 0.5);
+
+    i {
+        font-size: 24px;
+        color: var(--sc-neon-cyan);
+    }
+
+    span {
+        font-size: 12px;
+    }
+}
+
+.no-data-state i {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+// Data Sections
+.data-section {
+    margin-bottom: 16px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+    border: 1px solid rgba(0, 212, 255, 0.1);
+    overflow: hidden;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    &.cascade-section {
+        border-color: rgba(0, 212, 255, 0.25);
+    }
+}
+
+// Cascade Section
+.cascade-header {
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.cascade-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    i {
+        font-size: 12px;
+        color: var(--sc-neon-cyan);
+    }
+
+    span {
+        font-size: 11px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.9);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+}
+
+.cascade-summary {
+    display: flex;
+    align-items: center;
+}
+
+.cascade-power {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--sc-neon-green);
+}
+
+// GES Item
+.ges-item {
+    padding: 10px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.03);
+    margin-bottom: 6px;
+    border-left: 3px solid var(--sc-neon-cyan);
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.ges-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.ges-name {
+    font-size: 11px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.ges-power {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--sc-neon-green);
+    margin-left: 8px;
+    white-space: nowrap;
+}
+
+.ges-aggregates {
+    display: flex;
+    gap: 12px;
+}
+
+.agg {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+    font-weight: 600;
+
+    i {
+        font-size: 10px;
+    }
+
+    &.working {
+        color: var(--sc-neon-red);
+    }
+
+    &.reserve {
+        color: var(--sc-neon-green);
+    }
+
+    &.repair {
+        color: var(--sc-neon-yellow);
+    }
+}
+
+// Cascade Footer
+.cascade-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: rgba(0, 212, 255, 0.08);
+    border-top: 1px solid rgba(0, 212, 255, 0.1);
+}
+
+.footer-label {
+    font-size: 9px;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+}
+
+.footer-aggregates {
+    display: flex;
+    gap: 12px;
+
+    .agg {
+        font-size: 11px;
+        font-weight: 700;
+    }
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    background: rgba(0, 212, 255, 0.05);
+    border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+
+    i {
+        font-size: 12px;
+        color: var(--sc-neon-cyan);
+    }
+
+    span {
+        font-size: 11px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.8);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+}
+
+.section-content {
+    padding: 8px;
+}
+
+.section-empty {
+    padding: 12px;
+    text-align: center;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.4);
+    font-style: italic;
+}
+
+// Data Row (for discharges)
+.data-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.02);
+    margin-bottom: 4px;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.data-name {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.8);
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.data-value {
+    font-size: 11px;
+    font-weight: 600;
+    margin-left: 8px;
+    white-space: nowrap;
+
+    &.discharge {
+        color: var(--sc-neon-cyan);
+    }
+}
+
+// Shutdown Items
+.shutdown-item {
+    padding: 10px;
+    border-radius: 4px;
+    background: rgba(255, 71, 87, 0.1);
+    border-left: 3px solid var(--sc-neon-red);
+    margin-bottom: 6px;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.shutdown-name {
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 4px;
+}
+
+.shutdown-reason {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 4px;
+}
+
+.shutdown-time {
+    font-size: 9px;
+    color: var(--sc-neon-red);
+}
+
+// Reservoir Items
+.reservoir-item {
+    padding: 10px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.02);
+    margin-bottom: 6px;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.reservoir-name {
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 8px;
+}
+
+.reservoir-metrics {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.metric {
+    flex: 1;
+    min-width: 60px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 6px;
+    background: rgba(0, 212, 255, 0.05);
+    border-radius: 4px;
+}
+
+.metric-label {
+    font-size: 8px;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+}
+
+.metric-value {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--sc-neon-cyan);
+}
+
+// Aggregates Grid
+.aggregates-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    padding: 8px;
+}
+
+.aggregate-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 8px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.02);
+
+    &.active {
+        background: rgba(0, 255, 136, 0.1);
+        border: 1px solid rgba(0, 255, 136, 0.2);
+
+        .aggregate-value {
+            color: var(--sc-neon-green);
+        }
+    }
+
+    &.pending {
+        background: rgba(255, 211, 42, 0.1);
+        border: 1px solid rgba(255, 211, 42, 0.2);
+
+        .aggregate-value {
+            color: var(--sc-neon-yellow);
+        }
+    }
+
+    &.repair {
+        background: rgba(255, 71, 87, 0.1);
+        border: 1px solid rgba(255, 71, 87, 0.2);
+
+        .aggregate-value {
+            color: var(--sc-neon-red);
+        }
+    }
+}
+
+.aggregate-value {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.aggregate-label {
+    font-size: 8px;
+    color: rgba(255, 255, 255, 0.6);
+    text-transform: uppercase;
+    margin-top: 4px;
+}
+
+.svg-map {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    // CSS filter to colorize the SVG for dark theme (cyan tint)
+    filter: hue-rotate(140deg) saturate(1.5) brightness(0.6);
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+// Markers Layer
+.markers-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+// Station Marker
+.station-marker {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    pointer-events: auto;
+    transition: all 0.3s ease;
+    z-index: 10;
+
+    i {
+        font-size: 10px;
+        color: white;
+        z-index: 2;
+    }
+
+    &.marker-active {
+        background: var(--sc-neon-green);
+        box-shadow: 0 0 10px var(--sc-neon-green);
+
+        &:hover {
+            transform: translate(-50%, -50%) scale(1.2);
+            box-shadow: 0 0 16px var(--sc-neon-green);
+        }
+    }
+
+    &.marker-stopped {
+        background: var(--sc-neon-red);
+        box-shadow: 0 0 10px var(--sc-neon-red);
+
+        &:hover {
+            transform: translate(-50%, -50%) scale(1.2);
+            box-shadow: 0 0 16px var(--sc-neon-red);
+        }
+    }
+
+    &.marker-repair {
+        background: var(--sc-neon-yellow);
+        box-shadow: 0 0 10px var(--sc-neon-yellow);
+
+        i {
+            color: #333;
+        }
+
+        &:hover {
+            transform: translate(-50%, -50%) scale(1.2);
+            box-shadow: 0 0 16px var(--sc-neon-yellow);
+        }
+    }
+}
+
+// Marker Pulse Animation
+.marker-pulse {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: inherit;
+    animation: marker-pulse 2s ease-out infinite;
+    z-index: 1;
+}
+
+@keyframes marker-pulse {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(2);
+        opacity: 0;
+    }
+}
+
+// Tooltip
+.station-tooltip {
+    position: absolute;
+    transform: translate(-50%, calc(-100% - 12px));
+    background: rgba(13, 27, 51, 0.95);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 6px;
+    padding: 8px;
+    min-width: 160px;
+    z-index: 100;
+    pointer-events: none;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 50%;
+        transform: translateX(-50%) rotate(45deg);
+        width: 10px;
+        height: 10px;
+        background: rgba(13, 27, 51, 0.95);
+        border-right: 1px solid rgba(0, 212, 255, 0.3);
+        border-bottom: 1px solid rgba(0, 212, 255, 0.3);
+    }
+}
+
+.tooltip-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 6px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tooltip-name {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--sc-text-primary);
+}
+
+.tooltip-status {
+    font-size: 8px;
+    padding: 1px 6px;
+    border-radius: 8px;
+    text-transform: uppercase;
+    font-weight: 600;
+
+    &.active {
+        background: rgba(0, 255, 136, 0.2);
+        color: var(--sc-neon-green);
+    }
+
+    &.stopped {
+        background: rgba(255, 71, 87, 0.2);
+        color: var(--sc-neon-red);
+    }
+
+    &.repair {
+        background: rgba(255, 211, 42, 0.2);
+        color: var(--sc-neon-yellow);
+    }
+}
+
+.tooltip-body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.tooltip-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.tooltip-label {
+    font-size: 9px;
+    color: var(--sc-text-muted);
+}
+
+.tooltip-value {
+    font-size: 9px;
+    color: var(--sc-text-primary);
+    font-weight: 500;
+}
+
+// Footer Stats
+.map-footer {
+    display: flex;
+    justify-content: space-around;
+    padding: 8px 0 0;
+    margin-top: 8px;
+    border-top: 1px solid rgba(0, 212, 255, 0.1);
+    flex-shrink: 0;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    i {
+        font-size: 12px;
+        color: var(--sc-neon-cyan);
+    }
+
+    &.active-stat i {
+        color: var(--sc-neon-green);
+    }
+}
+
+.stat-value {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--sc-text-primary);
+}
+
+.stat-label {
+    font-size: 8px;
+    color: var(--sc-text-muted);
+    text-transform: uppercase;
+}

@@ -7,10 +7,11 @@ import { MessageService } from 'primeng/api';
 import { ReservoirDeviceService } from '@/core/services/reservoir-device.service';
 import { PatchReservoirDeviceSummaryItem, PatchReservoirDeviceSummaryRequest, ReservoirDeviceSummaryResponse } from '@/core/interfaces/reservoir-device';
 import { AuthService } from '@/core/services/auth.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-reservoir-device',
-  imports: [TableModule, Button, InputNumberModule, FormsModule],
+  imports: [TableModule, Button, InputNumberModule, FormsModule, TranslateModule],
   templateUrl: './reservoir-device.component.html',
   styleUrl: './reservoir-device.component.scss'
 })

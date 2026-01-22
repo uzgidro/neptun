@@ -1,5 +1,10 @@
 <div class="card">
-    <app-date [(date)]="selectedDate"></app-date>
+    <div class="flex justify-center mb-4">
+        <h2 class="text-2xl font-bold m-0">{{ 'SITUATION_CENTER.SHUTDOWN.TITLE' | translate }}</h2>
+    </div>
+    <div class="flex justify-end mb-6">
+        <app-date [(date)]="selectedDate"></app-date>
+    </div>
 
     <app-ges-shutdown [date]="selectedDate" (shutdownSaved)="onShutdownSaved()"></app-ges-shutdown>
 </div>

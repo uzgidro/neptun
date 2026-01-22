@@ -1,0 +1,152 @@
+<div class="card">
+    <div class="font-semibold text-xl mb-4">{{ 'CHANCELLERY.SIGNATURE.PAGE_TITLE' | translate }}</div>
+
+    <p-table
+        #dt
+        [value]="filteredDocuments"
+        dataKey="document_id"
+        [rows]="10"
+        [loading]="loading"
+        [rowHover]="true"
+        [showGridlines]="true"
+        [paginator]="true"
+        [globalFilterFields]="['name', 'number', 'type_name', 'organization', 'responsible_name']"
+    >
+        <ng-template #caption>
+            <div class="flex flex-column md:flex-row justify-between items-start md:items-center gap-3">
+                <div class="flex flex-wrap gap-2">
+                    <p-iconfield>
+                        <p-inputicon><i class="pi pi-search"></i></p-inputicon>
+                        <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" [placeholder]="'COMMON.SEARCH' | translate" />
+                    </p-iconfield>
+
+                    <p-select
+                        [(ngModel)]="selectedDocType"
+                        [options]="documentTypeOptions"
+                        optionLabel="name"
+                        optionValue="value"
+                        [placeholder]="'CHANCELLERY.SIGNATURE.DOC_TYPE' | translate"
+                        (onChange)="applyFilters()"
+                        [style]="{ minWidth: '180px' }">
+                    </p-select>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <span class="text-gray-500">{{ 'CHANCELLERY.SIGNATURE.PENDING_COUNT' | translate }}:</span>
+                    <span class="font-semibold text-primary">{{ filteredDocuments.length }}</span>
+                </div>
+            </div>
+        </ng-template>
+
+        <ng-template #header>
+            <tr>
+                <th style="min-width: 8rem">{{ 'CHANCELLERY.SIGNATURE.DOC_TYPE' | translate }}</th>
+                <th pSortableColumn="number" style="min-width: 8rem">
+                    {{ 'CHANCELLERY.FIELDS.NUMBER' | translate }}
+                    <p-sortIcon field="number" />
+                </th>
+                <th pSortableColumn="document_date" style="min-width: 8rem">
+                    {{ 'CHANCELLERY.FIELDS.DOCUMENT_DATE' | translate }}
+                    <p-sortIcon field="document_date" />
+                </th>
+                <th pSortableColumn="name" style="min-width: 15rem">
+                    {{ 'CHANCELLERY.FIELDS.NAME' | translate }}
+                    <p-sortIcon field="name" />
+                </th>
+                <th style="min-width: 10rem">{{ 'CHANCELLERY.FIELDS.TYPE' | translate }}</th>
+                <th style="min-width: 10rem">{{ 'CHANCELLERY.SIGNATURE.ORGANIZATION' | translate }}</th>
+                <th style="min-width: 10rem">{{ 'CHANCELLERY.SIGNATURE.RESPONSIBLE' | translate }}</th>
+                <th style="width: 10rem">{{ 'COMMON.ACTIONS' | translate }}</th>
+            </tr>
+        </ng-template>
+
+        <ng-template #body let-doc>
+            <tr>
+                <td>
+                    <p-tag
+                        [value]="getDocumentTypeLabel(doc.document_type)"
+                        [severity]="getDocumentTypeSeverity(doc.document_type)"
+                        [rounded]="true">
+                    </p-tag>
+                </td>
+                <td>
+                    <span class="font-semibold">{{ doc.number || '—' }}</span>
+                </td>
+                <td>{{ formatDate(doc.document_date) }}</td>
+                <td>{{ doc.name }}</td>
+                <td>{{ doc.type_name }}</td>
+                <td>{{ doc.organization || '—' }}</td>
+                <td>{{ doc.responsible_name || '—' }}</td>
+                <td>
+                    <div class="flex justify-center gap-1">
+                        <button pButton
+                                (click)="openSignDialog(doc)"
+                                class="p-button-rounded p-button-text p-button-success"
+                                [pTooltip]="'CHANCELLERY.SIGNATURE.SIGN' | translate"
+                                tooltipPosition="top">
+                            <i pButtonIcon class="pi pi-check"></i>
+                        </button>
+                        <button pButton
+                                (click)="openRejectDialog(doc)"
+                                class="p-button-rounded p-button-text p-button-danger"
+                                [pTooltip]="'CHANCELLERY.SIGNATURE.REJECT' | translate"
+                                tooltipPosition="top">
+                            <i pButtonIcon class="pi pi-times"></i>
+                        </button>
+                        <button pButton
+                                (click)="openHistoryDialog(doc)"
+                                class="p-button-rounded p-button-text p-button-info"
+                                [pTooltip]="'CHANCELLERY.SIGNATURE.VIEW_HISTORY' | translate"
+                                tooltipPosition="top">
+                            <i pButtonIcon class="pi pi-history"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template #emptymessage>
+            <tr>
+                <td colspan="8" class="text-center py-4">
+                    <i class="pi pi-inbox text-4xl text-color-secondary mb-2"></i>
+                    <p class="m-0 text-color-secondary">{{ 'CHANCELLERY.SIGNATURE.NO_PENDING' | translate }}</p>
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template #loadingbody>
+            <tr>
+                <td colspan="8" class="text-center py-4">
+                    {{ 'COMMON.LOADING' | translate }}
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<!-- Sign Document Dialog -->
+<app-sign-document-dialog
+    [(visible)]="displaySignDialog"
+    [documentName]="getSelectedDocumentName()"
+    [contacts]="contacts"
+    [saving]="saving"
+    (confirm)="onSignConfirm($event)"
+    (cancel)="displaySignDialog = false">
+</app-sign-document-dialog>
+
+<!-- Reject Signature Dialog -->
+<app-reject-signature-dialog
+    [(visible)]="displayRejectDialog"
+    [documentName]="getSelectedDocumentName()"
+    [saving]="saving"
+    (confirm)="onRejectConfirm($event)"
+    (cancel)="displayRejectDialog = false">
+</app-reject-signature-dialog>
+
+<!-- Signature History Dialog -->
+<app-signature-history-dialog
+    [(visible)]="displayHistoryDialog"
+    [signatures]="signatures"
+    [loading]="historyLoading"
+    (close)="displayHistoryDialog = false">
+</app-signature-history-dialog>

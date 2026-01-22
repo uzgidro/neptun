@@ -43,9 +43,6 @@ export class MenuComponent implements OnInit {
                         label: this.t('MENU.HRM'),
                         role: ['admin', 'rais'],
                         items: [
-                            { label: this.t('MENU.ORGANIZATIONS'), role: ['rais'], routerLink: ['/organizations'] },
-                            { label: this.t('MENU.BIRTHDAYS'), role: ['rais'], routerLink: ['/birthdays'] },
-                            { label: this.t('MENU.PERSONNEL_LOSS'), role: ['rais'], routerLink: ['/personnel-loss'] },
                             { label: this.t('MENU.EMPLOYEES'), role: ['admin'], routerLink: ['/employees'] },
                             { label: this.t('MENU.POSITIONS'), role: ['admin'], routerLink: ['/positions'] },
                             { label: this.t('MENU.DEPARTMENTS'), role: ['admin'], routerLink: ['/departments'] },

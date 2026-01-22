@@ -1,0 +1,196 @@
+:host {
+    display: block;
+    height: 100%;
+}
+
+.sc-station-status {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: 100%;
+    overflow: hidden;
+}
+
+// Chart Container
+.chart-container {
+    display: flex;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.chart-wrapper {
+    position: relative;
+    width: 120px;
+    height: 120px;
+}
+
+// Center Counter
+.chart-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.center-value {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.center-label {
+    font-size: 9px;
+    color: var(--sc-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 2px;
+}
+
+// Status Legend
+.status-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+    overflow: auto;
+}
+
+.legend-item {
+    display: grid;
+    grid-template-columns: auto 1fr 50px;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 8px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.legend-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+}
+
+.legend-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.legend-label {
+    font-size: 11px;
+    color: var(--sc-text-primary);
+    font-weight: 500;
+}
+
+.legend-stats {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.legend-value {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--sc-text-primary);
+}
+
+.legend-percent {
+    font-size: 9px;
+    color: var(--sc-text-muted);
+}
+
+.legend-bar-container {
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.legend-bar {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.5s ease;
+    box-shadow: 0 0 6px currentColor;
+}
+
+// Override PrimeNG chart canvas
+:host ::ng-deep {
+    .p-chart {
+        canvas {
+            max-width: 100%;
+            max-height: 100%;
+        }
+    }
+}
+
+// Total Power
+.total-power {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    background: rgba(0, 212, 255, 0.08);
+    border-radius: 6px;
+    border: 1px solid rgba(0, 212, 255, 0.15);
+    flex-shrink: 0;
+}
+
+.power-label {
+    font-size: 11px;
+    color: var(--sc-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.power-value {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--sc-neon-green);
+}
+
+// Footer
+.widget-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: auto;
+    flex-shrink: 0;
+}
+
+.last-updated {
+    font-size: 10px;
+    color: var(--sc-text-muted);
+}
+
+.refresh-btn {
+    background: transparent;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 6px;
+    padding: 4px 8px;
+    color: var(--sc-neon-cyan);
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover:not(:disabled) {
+        background: rgba(0, 212, 255, 0.1);
+        border-color: rgba(0, 212, 255, 0.5);
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    i {
+        font-size: 12px;
+    }
+}

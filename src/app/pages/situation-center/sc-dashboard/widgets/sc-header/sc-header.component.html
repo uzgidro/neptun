@@ -1,0 +1,42 @@
+<div class="sc-header neon-card">
+    <div class="header-left">
+        <a routerLink="/" class="home-btn" [title]="'SITUATION_CENTER.DASHBOARD.HEADER.TO_HOME' | translate">
+            <i class="pi pi-home"></i>
+        </a>
+        @if (weather) {
+            <div class="weather-widget">
+                <i class="pi {{ weather.iconClass }} weather-icon"></i>
+                <span class="weather-temp">{{ weather.temperature }}°C</span>
+                <span class="weather-condition">{{ weather.description }}</span>
+            </div>
+        } @else if (weatherLoading) {
+            <div class="weather-widget">
+                <i class="pi pi-spin pi-spinner weather-icon"></i>
+                <span class="weather-temp">--°C</span>
+            </div>
+        } @else {
+            <div class="weather-widget">
+                <i class="pi pi-cloud weather-icon"></i>
+                <span class="weather-temp">--°C</span>
+            </div>
+        }
+    </div>
+
+    <div class="header-center">
+        <h1 class="header-title">{{ 'SITUATION_CENTER.DASHBOARD.HEADER.TITLE' | translate }}</h1>
+    </div>
+
+    <div class="header-right">
+        <div class="language-switcher">
+            @for (lang of languages; track lang.code) {
+                <button
+                    class="lang-btn"
+                    [class.active]="currentLang === lang.code"
+                    (click)="setLanguage(lang.code)">
+                    {{ lang.label }}
+                </button>
+            }
+        </div>
+        <span class="time neon-text">{{ currentDate | date:'dd.MM.yyyy HH:mm:ss' }}</span>
+    </div>
+</div>

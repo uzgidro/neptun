@@ -80,10 +80,14 @@
                 {{ shutdown.reason }}
             </td>
             <td>
-                {{ shutdown.generation_loss }}
+                {{ shutdown.generation_loss ?? '-' }}
             </td>
             <td>
-                {{ shutdown.idle_discharge_volume | number: '1.0-2' }}
+                @if (shutdown.idle_discharge_volume != null) {
+                    {{ shutdown.idle_discharge_volume | number: '1.0-2' }}
+                } @else {
+                    -
+                }
             </td>
             <td>
                 {{ shutdown.created_by?.name }}
@@ -212,10 +216,14 @@
                 {{ shutdown.reason }}
             </td>
             <td>
-                {{ shutdown.generation_loss }}
+                {{ shutdown.generation_loss ?? '-' }}
             </td>
             <td>
-                {{ shutdown.idle_discharge_volume | number: '1.0-2' }}
+                @if (shutdown.idle_discharge_volume != null) {
+                    {{ shutdown.idle_discharge_volume | number: '1.0-2' }}
+                } @else {
+                    -
+                }
             </td>
             <td>
                 {{ shutdown.created_by?.name }}
@@ -344,10 +352,14 @@
                 {{ shutdown.reason }}
             </td>
             <td>
-                {{ shutdown.generation_loss }}
+                {{ shutdown.generation_loss ?? '-' }}
             </td>
             <td>
-                {{ shutdown.idle_discharge_volume | number: '1.0-2' }}
+                @if (shutdown.idle_discharge_volume != null) {
+                    {{ shutdown.idle_discharge_volume | number: '1.0-2' }}
+                } @else {
+                    -
+                }
             </td>
             <td>
                 {{ shutdown.created_by?.name }}

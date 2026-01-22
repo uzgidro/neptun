@@ -1,12 +1,14 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { Call, CallPayload, CallType, CallStatus } from '../interfaces/call';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
     providedIn: 'root'
 })
 export class CallService {
+    private translate = inject(TranslateService);
     private calls: Call[] = [
         {
             id: 1,
@@ -152,12 +154,12 @@ export class CallService {
     }
 
     getTypeLabel(type: CallType): string {
-        const labels: Record<CallType, string> = {
-            incoming: 'Входящий',
-            outgoing: 'Исходящий',
-            missed: 'Пропущенный'
+        const keys: Record<CallType, string> = {
+            incoming: 'CALLS.TYPE.INCOMING',
+            outgoing: 'CALLS.TYPE.OUTGOING',
+            missed: 'CALLS.TYPE.MISSED'
         };
-        return labels[type] || type;
+        return this.translate.instant(keys[type]) || type;
     }
 
     getTypeSeverity(type: CallType): string {
@@ -179,13 +181,13 @@ export class CallService {
     }
 
     getStatusLabel(status: CallStatus): string {
-        const labels: Record<CallStatus, string> = {
-            completed: 'Завершён',
-            no_answer: 'Нет ответа',
-            busy: 'Занято',
-            cancelled: 'Отменён'
+        const keys: Record<CallStatus, string> = {
+            completed: 'CALLS.STATUS.COMPLETED',
+            no_answer: 'CALLS.STATUS.NO_ANSWER',
+            busy: 'CALLS.STATUS.BUSY',
+            cancelled: 'CALLS.STATUS.CANCELLED'
         };
-        return labels[status] || status;
+        return this.translate.instant(keys[status]) || status;
     }
 
     getStatusSeverity(status: CallStatus): string {

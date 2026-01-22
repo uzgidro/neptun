@@ -1,0 +1,283 @@
+<div class="card">
+    <div class="font-semibold text-xl mb-4">{{ 'CHANCELLERY.REPORTS.TITLE' | translate }}</div>
+
+    <p-table
+        #dt
+        [value]="filteredDocuments"
+        dataKey="id"
+        [rows]="10"
+        [loading]="loading"
+        [rowHover]="true"
+        [showGridlines]="true"
+        [paginator]="true"
+        [globalFilterFields]="['name', 'number', 'description']"
+    >
+        <ng-template #caption>
+            <div class="flex flex-column md:flex-row justify-between items-start md:items-center gap-3">
+                <div class="flex flex-wrap gap-2">
+                    <p-iconfield>
+                        <p-inputicon><i class="pi pi-search"></i></p-inputicon>
+                        <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" [placeholder]="'COMMON.SEARCH' | translate" />
+                    </p-iconfield>
+
+                    <p-select
+                        [(ngModel)]="selectedTypeId"
+                        [options]="typeOptions"
+                        optionLabel="name"
+                        optionValue="value"
+                        [placeholder]="'CHANCELLERY.FILTERS.TYPE' | translate"
+                        (onChange)="applyFilters()"
+                        [style]="{ minWidth: '180px' }">
+                    </p-select>
+
+                    <p-select
+                        [(ngModel)]="selectedStatusId"
+                        [options]="statusOptions"
+                        optionLabel="name"
+                        optionValue="value"
+                        [placeholder]="'CHANCELLERY.FILTERS.STATUS' | translate"
+                        (onChange)="applyFilters()"
+                        [style]="{ minWidth: '180px' }">
+                    </p-select>
+                </div>
+
+                <button pButton (click)="openDialog()">
+                    <i class="pi pi-plus" pButtonIcon></i>
+                    <span pButtonLabel>{{ 'CHANCELLERY.REPORTS.NEW' | translate }}</span>
+                </button>
+            </div>
+        </ng-template>
+
+        <ng-template #header>
+            <tr>
+                <th pSortableColumn="number" style="min-width: 8rem">
+                    {{ 'CHANCELLERY.FIELDS.NUMBER' | translate }}
+                    <p-sortIcon field="number" />
+                </th>
+                <th pSortableColumn="document_date" style="min-width: 8rem">
+                    {{ 'CHANCELLERY.FIELDS.DOCUMENT_DATE' | translate }}
+                    <p-sortIcon field="document_date" />
+                </th>
+                <th pSortableColumn="name" style="min-width: 15rem">
+                    {{ 'CHANCELLERY.FIELDS.NAME' | translate }}
+                    <p-sortIcon field="name" />
+                </th>
+                <th style="min-width: 10rem">{{ 'CHANCELLERY.FIELDS.TYPE' | translate }}</th>
+                <th pSortableColumn="status.name" style="min-width: 10rem">
+                    {{ 'CHANCELLERY.FIELDS.STATUS' | translate }}
+                    <p-sortIcon field="status.name" />
+                </th>
+                <th style="min-width: 8rem">{{ 'CHANCELLERY.FIELDS.DUE_DATE' | translate }}</th>
+                <th style="width: 10rem">{{ 'COMMON.ACTIONS' | translate }}</th>
+            </tr>
+        </ng-template>
+
+        <ng-template #body let-doc>
+            <tr>
+                <td>
+                    <span class="font-semibold">{{ doc.number || '—' }}</span>
+                </td>
+                <td>{{ formatDate(doc.document_date) }}</td>
+                <td>
+                    <span [pTooltip]="doc.description || ''" tooltipPosition="top">
+                        {{ doc.name }}
+                    </span>
+                </td>
+                <td>{{ doc.type.name }}</td>
+                <td>
+                    <p-tag
+                        [value]="doc.status.name"
+                        [severity]="getStatusSeverity(doc.status.code)">
+                    </p-tag>
+                </td>
+                <td>{{ formatDate(doc.due_date) }}</td>
+                <td>
+                    <div class="flex justify-center gap-1">
+                        <button pButton
+                                icon="pi pi-history"
+                                (click)="openHistoryDialog(doc)"
+                                class="p-button-rounded p-button-text p-button-info"
+                                [pTooltip]="'CHANCELLERY.ACTIONS.HISTORY' | translate"
+                                tooltipPosition="top">
+                        </button>
+                        <button pButton
+                                icon="pi pi-sync"
+                                (click)="openStatusDialog(doc)"
+                                class="p-button-rounded p-button-text p-button-help"
+                                [pTooltip]="'CHANCELLERY.ACTIONS.CHANGE_STATUS' | translate"
+                                tooltipPosition="top">
+                        </button>
+                        <button pButton
+                                icon="pi pi-pencil"
+                                (click)="openEditDialog(doc)"
+                                class="p-button-rounded p-button-text p-button-warning"
+                                [pTooltip]="'COMMON.EDIT' | translate"
+                                tooltipPosition="top">
+                        </button>
+                        <button pButton
+                                icon="pi pi-trash"
+                                (click)="openDeleteDialog(doc)"
+                                class="p-button-rounded p-button-text p-button-danger"
+                                [pTooltip]="'COMMON.DELETE' | translate"
+                                tooltipPosition="top">
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template #emptymessage>
+            <tr>
+                <td colspan="7" class="text-center py-4">
+                    <i class="pi pi-inbox text-4xl text-color-secondary mb-2"></i>
+                    <p class="m-0 text-color-secondary">{{ 'CHANCELLERY.REPORTS.NO_DATA' | translate }}</p>
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template #loadingbody>
+            <tr>
+                <td colspan="7" class="text-center py-4">
+                    {{ 'COMMON.LOADING' | translate }}
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<!-- Create/Edit Dialog -->
+<app-dialog
+    [(visible)]="displayDialog"
+    [header]="isEditMode ? ('CHANCELLERY.REPORTS.EDIT' | translate) : ('CHANCELLERY.REPORTS.NEW' | translate)"
+    [form]="documentForm"
+    [saveLabel]="isEditMode ? ('COMMON.UPDATE' | translate) : ('COMMON.SAVE' | translate)"
+    width="50vw"
+    (save)="onSubmit()"
+    (cancel)="closeDialog()">
+    <form class="p-4" [formGroup]="documentForm" (ngSubmit)="onSubmit()">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="col-span-2">
+                <app-input-text
+                    formControlName="name"
+                    [label]="'CHANCELLERY.FIELDS.NAME' | translate"
+                    [submitted]="submitted"
+                    [errorMessage]="'CHANCELLERY.VALIDATION.NAME_REQUIRED' | translate"
+                    [required]="true">
+                </app-input-text>
+            </div>
+
+            <app-input-text
+                formControlName="number"
+                [label]="'CHANCELLERY.FIELDS.NUMBER' | translate"
+                [submitted]="submitted"
+                [required]="false">
+            </app-input-text>
+
+            <app-date-picker
+                formControlName="document_date"
+                [label]="'CHANCELLERY.FIELDS.DOCUMENT_DATE' | translate"
+                [submitted]="submitted"
+                [showTime]="false"
+                [errorMessage]="'CHANCELLERY.VALIDATION.DATE_REQUIRED' | translate"
+                [required]="true">
+            </app-date-picker>
+
+            <app-select
+                formControlName="type_id"
+                [label]="'CHANCELLERY.FIELDS.TYPE' | translate"
+                [items]="documentTypes"
+                [submitted]="submitted"
+                [errorMessage]="'CHANCELLERY.VALIDATION.TYPE_REQUIRED' | translate"
+                [required]="true">
+            </app-select>
+
+            <app-select
+                formControlName="status_id"
+                [label]="'CHANCELLERY.FIELDS.STATUS' | translate"
+                [items]="statuses"
+                [submitted]="submitted"
+                [required]="false">
+            </app-select>
+
+            <app-date-picker
+                formControlName="due_date"
+                [label]="'CHANCELLERY.FIELDS.DUE_DATE' | translate"
+                [submitted]="submitted"
+                [showTime]="false"
+                [required]="false">
+            </app-date-picker>
+
+            <div class="col-span-2">
+                <app-textarea
+                    formControlName="description"
+                    [label]="'CHANCELLERY.FIELDS.DESCRIPTION' | translate"
+                    [submitted]="submitted"
+                    [required]="false"
+                    [rows]="3">
+                </app-textarea>
+            </div>
+
+            <!-- Files Section -->
+            <div class="col-span-2">
+                <div class="font-medium mb-2">{{ 'CHANCELLERY.FIELDS.FILES' | translate }}</div>
+
+                <!-- Existing Files -->
+                @if (isEditMode && getExistingFiles().length > 0) {
+                    <div class="mb-3">
+                        <div class="text-sm text-gray-500 mb-2">{{ 'CHANCELLERY.FILES.EXISTING' | translate }}</div>
+                        <div class="flex flex-wrap gap-2">
+                            @for (file of getExistingFiles(); track file.id) {
+                                <div class="flex items-center gap-2 p-2 bg-gray-100 dark:bg-gray-800 rounded">
+                                    <i class="pi pi-file"></i>
+                                    <a [href]="file.url" target="_blank" class="text-primary hover:underline">
+                                        {{ file.original_name }}
+                                    </a>
+                                    <button pButton
+                                            icon="pi pi-times"
+                                            class="p-button-rounded p-button-text p-button-danger p-button-sm"
+                                            (click)="onExistingFileRemoved(file.id)">
+                                    </button>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+
+                <!-- Upload New Files -->
+                <app-file-upload
+                    [label]="'CHANCELLERY.FILES.UPLOAD' | translate"
+                    [multiple]="true"
+                    accept="*/*"
+                    [files]="selectedFiles"
+                    (filesSelected)="onFilesSelected($event)"
+                    (fileRemoved)="onFileRemoved($event)">
+                </app-file-upload>
+            </div>
+        </div>
+    </form>
+</app-dialog>
+
+<!-- Delete Confirmation -->
+<app-delete-confirmation
+    [(visible)]="displayDeleteDialog"
+    [message]="deleteConfirmMessage"
+    (onConfirm)="confirmDelete()">
+</app-delete-confirmation>
+
+<!-- Status Change Dialog -->
+<app-status-change-dialog
+    [(visible)]="displayStatusDialog"
+    [currentStatus]="getCurrentStatus()"
+    [availableStatuses]="getAvailableStatuses()"
+    [saving]="saving"
+    (confirm)="onStatusChange($event)"
+    (cancel)="displayStatusDialog = false">
+</app-status-change-dialog>
+
+<!-- Status History Dialog -->
+<app-status-history-dialog
+    [(visible)]="displayHistoryDialog"
+    [history]="statusHistory"
+    [loading]="historyLoading"
+    (close)="displayHistoryDialog = false">
+</app-status-history-dialog>

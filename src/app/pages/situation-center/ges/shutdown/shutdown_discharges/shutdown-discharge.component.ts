@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { MessageService, PrimeTemplate } from 'primeng/api';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -22,6 +22,8 @@ import { SelectComponent } from '@/layout/component/dialog/select/select.compone
 import { InputText } from 'primeng/inputtext';
 import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
+import { TranslateModule } from '@ngx-translate/core';
+import { DateWidget } from '@/layout/component/widget/date/date.widget';
 
 @Component({
     selector: 'app-shutdown-discharge',
@@ -43,13 +45,19 @@ import { InputIcon } from 'primeng/inputicon';
         SelectComponent,
         InputText,
         IconField,
-        InputIcon
+        InputIcon,
+        SelectComponent,
+        TranslateModule,
+        DateWidget
     ],
     templateUrl: './shutdown-discharge.component.html',
     styleUrl: './shutdown-discharge.component.scss'
 })
 export class ShutdownDischargeComponent implements OnInit, OnChanges {
     @Input() date: Date | null = null;
+    @Output() dateChange = new EventEmitter<Date>();
+
+    selectedDate: Date | null = null;
 
     discharges: IdleDischargeResponse[] = [];
     loading: boolean = false;
@@ -77,6 +85,8 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
     existingFilesToKeep: number[] = [];
 
     ngOnInit(): void {
+        this.selectedDate = this.date || new Date();
+
         this.form = this.fb.group(
             {
                 organization: this.fb.control<Organization | null>(null, [Validators.required]),
@@ -92,6 +102,13 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
 
         this.loadDischarges();
         this.loadOrganizations();
+    }
+
+    onDateChanged(newDate: Date): void {
+        this.selectedDate = newDate;
+        this.date = newDate;
+        this.dateChange.emit(newDate);
+        this.loadDischarges();
     }
 
     loadDischarges() {
@@ -305,5 +322,17 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
     getTotalVolume(organizationName: string): number {
         const orgDischarges = this.discharges.filter((d) => d.organization.name === organizationName);
         return orgDischarges.reduce((acc, d) => acc + d.total_volume, 0);
+    }
+
+    getOrganizationIndex(organizationName: string): number {
+        const uniqueOrgs = [...new Set(this.discharges.map((d) => d.organization.name))];
+        return uniqueOrgs.indexOf(organizationName) + 1;
+    }
+
+    getRowIndex(discharge: IdleDischargeResponse): string {
+        const orgIndex = this.getOrganizationIndex(discharge.organization.name);
+        const orgDischarges = this.discharges.filter((d) => d.organization.name === discharge.organization.name);
+        const indexInOrg = orgDischarges.findIndex((d) => d.id === discharge.id) + 1;
+        return `${orgIndex}.${indexInOrg}`;
     }
 }

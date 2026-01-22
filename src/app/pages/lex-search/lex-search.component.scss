@@ -1,0 +1,169 @@
+// Lex Search Styles
+.lex-search-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.lex-search-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-600, #4f46e5));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    i {
+        font-size: 1.5rem;
+        color: white;
+    }
+}
+
+.lex-search-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+
+    .lex-clear-btn {
+        position: absolute;
+        right: 0.5rem;
+    }
+}
+
+.lex-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    gap: 1rem;
+    color: var(--text-color-secondary);
+
+    i {
+        font-size: 2.5rem;
+        color: var(--primary-color);
+    }
+}
+
+.lex-results-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border: 1px solid var(--surface-border);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+
+.lex-result-item {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    text-decoration: none;
+    color: inherit;
+    background: var(--surface-card);
+    border-bottom: 1px solid var(--surface-border);
+    transition: all 0.15s ease;
+
+    &:last-child {
+        border-bottom: none;
+    }
+
+    &:hover {
+        background: var(--surface-hover);
+
+        .lex-result-number {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .lex-result-link {
+            color: var(--primary-color);
+        }
+    }
+}
+
+.lex-result-number {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: var(--surface-100);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--text-color-secondary);
+    flex-shrink: 0;
+    transition: all 0.15s ease;
+}
+
+.lex-result-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.lex-result-badge {
+    font-size: 0.75rem;
+    color: var(--primary-color);
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+}
+
+.lex-result-title {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--text-color);
+    line-height: 1.4;
+    margin-bottom: 0.5rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.lex-result-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.lex-result-link {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.75rem;
+    color: var(--text-color-secondary);
+    transition: color 0.15s ease;
+
+    i {
+        font-size: 0.7rem;
+    }
+}
+
+.lex-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    color: var(--text-color-secondary);
+
+    i {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+    }
+
+    p {
+        margin: 0;
+        font-size: 0.9375rem;
+    }
+}
