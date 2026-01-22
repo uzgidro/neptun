@@ -1,13 +1,23 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { ApiService, BASE_URL } from '@/core/services/api.service';
+import { Observable, of } from 'rxjs';
+import { delay } from 'rxjs/operators';
+import { ApiService } from '@/core/services/api.service';
+
+// Мок-данные погоды
+const MOCK_WEATHER = {
+    temperature: 22,
+    humidity: 65,
+    description: 'Ясно',
+    icon: 'sunny',
+    wind_speed: 3.5,
+    pressure: 1015
+};
 
 @Injectable({
     providedIn: 'root'
 })
 export class WeatherService extends ApiService {
     getWeatherByCoords(lat: number, lon: number): Observable<any> {
-        const url = `${BASE_URL}/api/v3/weather?lat=${lat}&lon=${lon}`;
-        return this.http.get(url);
+        return of(MOCK_WEATHER).pipe(delay(200));
     }
 }

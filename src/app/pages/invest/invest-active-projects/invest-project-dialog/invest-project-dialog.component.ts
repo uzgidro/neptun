@@ -9,29 +9,13 @@ import { Textarea } from 'primeng/textarea';
 import { ButtonDirective } from 'primeng/button';
 import { NgClass } from '@angular/common';
 import { InvestActiveProject } from '@/core/interfaces/invest-active-project';
-import {
-    InvestActiveProjectService,
-    AddInvestActiveProjectRequest,
-    EditInvestActiveProjectRequest
-} from '@/core/services/invest-active-project.service';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { AddInvestActiveProjectRequest, EditInvestActiveProjectRequest, InvestActiveProjectService } from '@/core/services/invest-active-project.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-invest-project-dialog',
     standalone: true,
-    imports: [
-        Dialog,
-        ReactiveFormsModule,
-        FormsModule,
-        FloatLabel,
-        InputText,
-        InputNumber,
-        Textarea,
-        PrimeTemplate,
-        NgClass,
-        ButtonDirective,
-        TranslateModule
-    ],
+    imports: [Dialog, ReactiveFormsModule, FormsModule, FloatLabel, InputText, InputNumber, Textarea, PrimeTemplate, NgClass, ButtonDirective, TranslateModule],
     templateUrl: './invest-project-dialog.component.html',
     styleUrl: './invest-project-dialog.component.scss'
 })
@@ -48,7 +32,6 @@ export class InvestProjectDialogComponent implements OnInit, OnChanges {
     private projectService = inject(InvestActiveProjectService);
     private messageService = inject(MessageService);
     private fb = inject(FormBuilder);
-    private translateService = inject(TranslateService);
 
     get isEditMode(): boolean {
         return !!this.projectToEdit;
@@ -120,8 +103,8 @@ export class InvestProjectDialogComponent implements OnInit, OnChanges {
             if (rawValue.project_name) editData.project_name = rawValue.project_name;
             if (rawValue.foreign_partner) editData.foreign_partner = rawValue.foreign_partner;
             if (rawValue.implementation_period) editData.implementation_period = rawValue.implementation_period;
-            if (rawValue.capacity_mw !== null) editData.capacity_mw = rawValue.capacity_mw;
-            if (rawValue.production_mln_kwh !== null) editData.production_mln_kwh = rawValue.production_mln_kwh;
+            if (rawValue.capacity_mw !== null) editData.capacity_tons = rawValue.capacity_mw;
+            if (rawValue.production_mln_kwh !== null) editData.production_mln_liters = rawValue.production_mln_kwh;
             if (rawValue.cost_mln_usd !== null) editData.cost_mln_usd = rawValue.cost_mln_usd;
             if (rawValue.status_text) editData.status_text = rawValue.status_text;
 
@@ -151,8 +134,8 @@ export class InvestProjectDialogComponent implements OnInit, OnChanges {
 
             if (rawValue.foreign_partner) addData.foreign_partner = rawValue.foreign_partner;
             if (rawValue.implementation_period) addData.implementation_period = rawValue.implementation_period;
-            if (rawValue.capacity_mw !== null) addData.capacity_mw = rawValue.capacity_mw;
-            if (rawValue.production_mln_kwh !== null) addData.production_mln_kwh = rawValue.production_mln_kwh;
+            if (rawValue.capacity_mw !== null) addData.capacity_tons = rawValue.capacity_mw;
+            if (rawValue.production_mln_kwh !== null) addData.production_mln_liters = rawValue.production_mln_kwh;
             if (rawValue.cost_mln_usd !== null) addData.cost_mln_usd = rawValue.cost_mln_usd;
             if (rawValue.status_text) addData.status_text = rawValue.status_text;
 

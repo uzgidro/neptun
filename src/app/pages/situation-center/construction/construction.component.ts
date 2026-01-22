@@ -32,7 +32,7 @@ export class ConstructionComponent implements OnInit {
         { id: 7, name: 'Бетонные работы', unit: 'п.м', project: null, fact: null, percent: '0%', left: null, planSept: null, plan_daily: null, fact_daily: null, percent_daily: '0%' },
         { id: 8, name: 'Монтаж трубопровод', unit: 'п.м', project: null, fact: null, percent: '0%', left: null, planSept: null, plan_daily: null, fact_daily: null, percent_daily: '0%' },
         // { id: 9, name: 'Итог: (ГЦ+УЦ)', unit: 'м3', project: null, fact: null, percent: '0%', left: null, planSept: null },
-        { id: 10, name: 'ЗДАНИЕ СТАНЦИИ ГЭС', isSection: true, plan_daily: null, fact_daily: null, percent_daily: '0%' },
+        { id: 10, name: 'ЗДАНИЕ ПРОИЗВОДСТВА', isSection: true, plan_daily: null, fact_daily: null, percent_daily: '0%' },
         { id: 11, name: 'Бетонные работы', unit: 'м³', project: null, fact: null, percent: '0%', left: null, planSept: null, plan_daily: null, fact_daily: null, percent_daily: '0%' },
         { id: 11, name: 'Монтаж механического оборудования', unit: 'м³', project: null, fact: null, percent: '0%', left: null, planSept: null, plan_daily: null, fact_daily: null, percent_daily: '0%' }
         // { id: 12, name: 'ПОВЕРХНОСТНЫЙ ВОДОСБРОС', isSection: true },

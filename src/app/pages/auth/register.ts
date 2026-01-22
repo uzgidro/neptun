@@ -69,17 +69,10 @@ export class Register {
             return;
         }
 
-        this.http.post('https://prime.speedwagon.uz/auth/sign-up', {
-            name: this.name,
-            password: this.password
-        }).subscribe({
-            next: () => {
-                alert('Регистрация успешна! Теперь войдите в систему.');
-                this.router.navigate(['/auth/login']);
-            },
-            error: () => {
-                this.errorMessage = 'Ошибка регистрации';
-            }
-        });
+        // Mock registration - simulate successful registration
+        setTimeout(() => {
+            alert('Регистрация успешна! Теперь войдите в систему.');
+            this.router.navigate(['/auth/login']);
+        }, 500);
     }
 }

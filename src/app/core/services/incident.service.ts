@@ -1,47 +1,47 @@
 import { Injectable } from '@angular/core';
-import { ApiService, BASE_URL } from '@/core/services/api.service';
-import { Observable } from 'rxjs';
-import { HttpParams } from '@angular/common/http';
-import { IncidentDto, IncidentPayload, IncidentResponse } from '@/core/interfaces/incidents';
-import { map } from 'rxjs/operators';
-
-const INCIDENTS = '/incidents';
+import { ApiService } from '@/core/services/api.service';
+import { Observable, of, delay } from 'rxjs';
+import { IncidentDto } from '@/core/interfaces/incidents';
 
 @Injectable({
     providedIn: 'root'
 })
 export class IncidentService extends ApiService {
+    // Mock data for incidents
     getIncidents(date?: Date): Observable<IncidentDto[]> {
-        let params = new HttpParams();
-        if (date) {
-            params = params.set('date', this.dateToYMD(date));
-        }
-        return this.http.get<IncidentResponse[]>(BASE_URL + INCIDENTS, { params: params }).pipe(
-            map(responseArray => {
-                if (!responseArray) {
-                    return [];
-                }
-
-                return responseArray.map(rawIncident => {
-                    return {
-                        ...rawIncident,
-                        incident_date: new Date(rawIncident.incident_date),
-                        created_at: new Date(rawIncident.created_at)
-                    };
-                });
-            })
-        );
+        const today = new Date();
+        const mockData: IncidentDto[] = [
+            {
+                id: 1,
+                organization_id: 5,
+                organization: 'Молокозавод №1',
+                incident_date: new Date(today.getTime() - 86400000 * 2),
+                description: 'Обнаружено отклонение температурного режима в холодильной камере',
+                created_by: { id: 1, name: 'Оператор Иванов И.И.' },
+                created_at: new Date(today.getTime() - 86400000 * 2)
+            },
+            {
+                id: 2,
+                organization_id: 7,
+                organization: 'Молокозавод №3',
+                incident_date: new Date(today.getTime() - 86400000),
+                description: 'Сбой в работе системы пастеризации',
+                created_by: { id: 2, name: 'Техник Петров П.П.' },
+                created_at: new Date(today.getTime() - 86400000)
+            }
+        ];
+        return of(mockData).pipe(delay(200));
     }
 
     addIncident(formData: FormData): Observable<any> {
-        return this.http.post(BASE_URL + INCIDENTS, formData);
+        return of({ id: Date.now(), success: true }).pipe(delay(300));
     }
 
     editIncident(id: number, formData: FormData): Observable<any> {
-        return this.http.patch(`${BASE_URL}${INCIDENTS}/${id}`, formData);
+        return of({ id, success: true }).pipe(delay(300));
     }
 
     deleteIncident(id: number): Observable<any> {
-        return this.http.delete(`${BASE_URL}${INCIDENTS}/${id}`);
+        return of({ success: true }).pipe(delay(200));
     }
 }

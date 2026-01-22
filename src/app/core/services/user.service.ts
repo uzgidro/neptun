@@ -1,27 +1,35 @@
 import { Injectable } from '@angular/core';
-import { ApiService, BASE_URL } from '@/core/services/api.service';
-import { Observable } from 'rxjs';
+import { ApiService } from '@/core/services/api.service';
+import { Observable, of } from 'rxjs';
+import { delay } from 'rxjs/operators';
 import { Users } from '@/core/interfaces/users';
 
-const USERS = '/users'
+// Мок-данные пользователей
+const MOCK_USER: Users = {
+    id: 1,
+    login: 'admin',
+    name: 'Администратор Системы',
+    roles: ['admin'],
+    role_ids: [1]
+};
 
 @Injectable({
     providedIn: 'root'
 })
 export class UserService extends ApiService {
     createUser(formData: FormData): Observable<any> {
-        return this.http.post(BASE_URL + USERS, formData);
+        return of({ ...MOCK_USER, id: Date.now() }).pipe(delay(300));
     }
 
     getUserById(id: number): Observable<Users> {
-        return this.http.get<Users>(BASE_URL + USERS + '/' + id);
+        return of({ ...MOCK_USER, id }).pipe(delay(200));
     }
 
     editUser(id: number, formData: FormData): Observable<any> {
-        return this.http.patch(BASE_URL + USERS + '/' + id, formData);
+        return of({ ...MOCK_USER, id }).pipe(delay(300));
     }
 
     deleteUser(id: number): Observable<any> {
-        return this.http.delete(BASE_URL + USERS + '/' + id);
+        return of({ success: true }).pipe(delay(200));
     }
 }

@@ -1,20 +1,23 @@
 import { Injectable } from '@angular/core';
-import { ApiService, BASE_URL } from '@/core/services/api.service';
+import { ApiService } from '@/core/services/api.service';
 import { CalendarResponse } from '@/core/interfaces/calendar-events';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { delay } from 'rxjs/operators';
 
-const CALENDAR_EVENTS = '/calendar/events';
+// Мок-данные событий календаря
+const MOCK_CALENDAR: CalendarResponse = {
+    events: [
+        { id: 1, title: 'Плановое ТО линии №1', date: new Date().toISOString(), type: 'maintenance' },
+        { id: 2, title: 'Совещание руководства', date: new Date().toISOString(), type: 'meeting' },
+        { id: 3, title: 'Приёмка сырья', date: new Date().toISOString(), type: 'delivery' }
+    ]
+} as CalendarResponse;
 
 @Injectable({
     providedIn: 'root'
 })
 export class CalendarEventsService extends ApiService {
     getCalendarEvents(year: number, month: number): Observable<CalendarResponse> {
-        return this.http.get<CalendarResponse>(BASE_URL + CALENDAR_EVENTS, {
-            params: {
-                year: year.toString(),
-                month: month.toString()
-            }
-        });
+        return of(MOCK_CALENDAR).pipe(delay(200));
     }
 }

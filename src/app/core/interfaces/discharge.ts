@@ -14,15 +14,18 @@ export interface Cascade {
     id: number;
     name: string;
     total_volume: number;
-    hpps: Hpp[];
+    hpps: Plant[];
 }
 
-export interface Hpp {
+export interface Plant {
     id: number;
     name: string;
     total_volume: number;
-    discharges: DischargeModel[]; // Массив сбросов
+    discharges: DischargeModel[]; // Массив списаний
 }
+
+// Alias for backward compatibility
+export type Hpp = Plant;
 
 export interface DischargeModel {
     id: number;

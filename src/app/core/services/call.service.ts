@@ -30,11 +30,11 @@ export class CallService {
             type: 'outgoing',
             callerName: 'Руководитель',
             callerPhone: '+998 71 234 56 78',
-            receiverName: 'Чарвакская ГЭС',
+            receiverName: 'Молокозавод №1',
             receiverPhone: '+998 70 123 45 67',
             duration: 185,
             status: 'completed',
-            notes: 'Уточнение данных по выработке',
+            notes: 'Уточнение данных по производству',
             createdAt: '2024-12-26T10:15:00Z'
         },
         {
@@ -57,7 +57,7 @@ export class CallService {
             receiverName: 'Директор',
             duration: 540,
             status: 'completed',
-            notes: 'Совещание по вопросам водохранилищ',
+            notes: 'Совещание по вопросам производства',
             createdAt: '2024-12-25T14:30:00Z'
         },
         {
@@ -67,7 +67,7 @@ export class CallService {
             type: 'outgoing',
             callerName: 'Секретарь',
             callerPhone: '+998 71 234 56 78',
-            receiverName: 'Ходжикентская ГЭС',
+            receiverName: 'Молокозавод №2',
             receiverPhone: '+998 70 234 56 78',
             duration: 0,
             status: 'busy',
@@ -78,7 +78,7 @@ export class CallService {
             date: '2024-12-24',
             time: '09:00',
             type: 'incoming',
-            callerName: 'Узбекгидроэнерго',
+            callerName: 'МолокоПром',
             callerPhone: '+998 71 150 00 00',
             receiverName: 'Заместитель директора',
             duration: 420,

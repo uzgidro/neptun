@@ -1,36 +1,43 @@
 import { Injectable } from '@angular/core';
-import { ApiService, BASE_URL } from '@/core/services/api.service';
-import { Observable } from 'rxjs';
+import { ApiService } from '@/core/services/api.service';
+import { Observable, of } from 'rxjs';
+import { delay } from 'rxjs/operators';
 import { Reception } from '@/core/interfaces/reception';
-import { HttpParams } from '@angular/common/http';
 
-const RECEPTIONS = '/receptions';
+// Мок-данные приёмов
+const MOCK_RECEPTIONS: Reception[] = [
+    { id: 1, name: 'Встреча с поставщиком', date: new Date().toISOString(), visitor: 'Алимов Бахтиёр', description: 'Обсуждение поставок', status: 'default', created_at: new Date().toISOString(), created_by_id: 1 },
+    { id: 2, name: 'Подписание договора', date: new Date().toISOString(), visitor: 'Каримова Нигора', description: 'Договор о сотрудничестве', status: 'true', created_at: new Date().toISOString(), created_by_id: 1 }
+];
 
 @Injectable({
     providedIn: 'root'
 })
 export class ReceptionService extends ApiService {
     getReceptions(status?: string): Observable<Reception[]> {
-        let params = new HttpParams();
+        let result = MOCK_RECEPTIONS;
         if (status) {
-            params = params.set('status', status);
+            result = MOCK_RECEPTIONS.filter(r => r.status === status);
         }
-        return this.http.get<Reception[]>(BASE_URL + RECEPTIONS, { params: params });
+        return of(result).pipe(delay(200));
     }
 
     getReception(id: number): Observable<Reception> {
-        return this.http.get<Reception>(BASE_URL + RECEPTIONS + '/' + id);
+        const reception = MOCK_RECEPTIONS.find(r => r.id === id) || MOCK_RECEPTIONS[0];
+        return of(reception).pipe(delay(200));
     }
 
     createReception(reception: Partial<Reception>): Observable<Reception> {
-        return this.http.post<Reception>(BASE_URL + RECEPTIONS, reception);
+        const newReception: Reception = { id: Date.now(), ...reception } as Reception;
+        return of(newReception).pipe(delay(300));
     }
 
     updateReception(id: number, reception: Partial<Reception>): Observable<Reception> {
-        return this.http.patch<Reception>(BASE_URL + RECEPTIONS + '/' + id, reception);
+        const updated: Reception = { id, ...reception } as Reception;
+        return of(updated).pipe(delay(300));
     }
 
     deleteReception(id: number): Observable<any> {
-        return this.http.delete(BASE_URL + RECEPTIONS + '/' + id);
+        return of({ success: true }).pipe(delay(200));
     }
 }

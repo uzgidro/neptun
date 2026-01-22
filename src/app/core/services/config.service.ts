@@ -15,7 +15,7 @@ export class ConfigService {
         // Load config from window object (injected by Docker/nginx at runtime)
         const runtimeConfig = (window as any).__APP_CONFIG__;
 
-        // Default configuration (fallback)
+        // Default configuration (fallback) - Mock mode
         const defaultConfig: AppConfig = {
             app: {
                 name: 'Neptun',
@@ -23,7 +23,7 @@ export class ConfigService {
                 environment: 'development'
             },
             api: {
-                baseUrl: 'https://prime.speedwagon.uz',
+                baseUrl: '', // Mock mode - no backend
                 timeout: 30000,
                 retryAttempts: 3
             },
