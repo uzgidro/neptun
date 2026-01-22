@@ -1,0 +1,362 @@
+<div class="card">
+    <div class="mb-4 flex justify-between items-start">
+        <div>
+            <h2 class="text-2xl font-semibold mb-2">{{ 'INVEST.ACTIVE_PROJECTS.TITLE' | translate }}</h2>
+            <p class="text-surface-500">{{ 'INVEST.ACTIVE_PROJECTS.SUBTITLE' | translate }}</p>
+        </div>
+        @if (canEdit) {
+            <button
+                pButton
+                (click)="openAddDialog()">
+                <span pButtonLabel>{{ 'INVEST.ACTIVE_PROJECTS.ADD_PROJECT' | translate }}</span>
+                <i pButtonIcon class="pi pi-plus"></i>
+            </button>
+        }
+    </div>
+
+    @if (loading) {
+        <div class="flex items-center justify-center py-8">
+            <i class="pi pi-spin pi-spinner text-4xl text-surface-400"></i>
+            <span class="ml-3 text-lg">{{ 'INVEST.ACTIVE_PROJECTS.LOADING' | translate }}</span>
+        </div>
+    } @else if (categories.length === 0) {
+        <div class="text-center py-8 text-surface-500">
+            <i class="pi pi-inbox text-4xl mb-3 block"></i>
+            <div>{{ 'INVEST.ACTIVE_PROJECTS.NOT_FOUND' | translate }}</div>
+        </div>
+    } @else {
+        <p-tabs [value]="0">
+            <p-tablist>
+                <p-tab [value]="0">{{ 'INVEST.ACTIVE_PROJECTS.ALL' | translate }} ({{ projects.length }})</p-tab>
+                @for (category of categories; track category; let idx = $index) {
+                    <p-tab [value]="idx + 1">{{ category }} ({{ getProjectsForCategory(category).length }})</p-tab>
+                }
+            </p-tablist>
+
+            <p-tabpanels>
+                <p-tabpanel [value]="0">
+                    <p-table
+                        #dtAll
+                        [value]="projects"
+                        [globalFilterFields]="['category', 'project_name', 'foreign_partner', 'implementation_period', 'status_text']"
+                        dataKey="id"
+                        [scrollable]="true"
+                        scrollHeight="600px"
+                        [tableStyle]="{ 'min-width': '100rem' }"
+                        class="p-datatable-gridlines">
+
+                        <ng-template pTemplate="caption">
+                            <div class="flex justify-end items-center">
+                                <p-iconfield iconPosition="left">
+                                    <p-inputicon>
+                                        <i class="pi pi-search"></i>
+                                    </p-inputicon>
+                                    <input
+                                        pInputText
+                                        type="text"
+                                        [(ngModel)]="searchValue"
+                                        (input)="dtAll.filterGlobal($any($event.target).value, 'contains')"
+                                        [placeholder]="'INVEST.ACTIVE_PROJECTS.SEARCH' | translate"
+                                        class="w-full" />
+                                </p-iconfield>
+                                @if (searchValue) {
+                                    <button
+                                        type="button"
+                                        class="ml-2"
+                                        pButton
+                                        severity="secondary"
+                                        [outlined]="true"
+                                        (click)="clear(dtAll)"
+                                        [pTooltip]="'INVEST.ACTIVE_PROJECTS.CLEAR' | translate">
+                                        <i pButtonIcon class="pi pi-times"></i>
+                                    </button>
+                                }
+                            </div>
+                        </ng-template>
+
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th style="width: 5rem" pSortableColumn="id">
+                                    ID
+                                    <p-sortIcon field="id"></p-sortIcon>
+                                </th>
+                                <th style="min-width: 12rem" pSortableColumn="category">
+                                    {{ 'INVEST.ACTIVE_PROJECTS.CATEGORY' | translate }}
+                                    <p-sortIcon field="category"></p-sortIcon>
+                                </th>
+                                <th style="min-width: 20rem" pSortableColumn="project_name">
+                                    {{ 'INVEST.ACTIVE_PROJECTS.PROJECT_NAME' | translate }}
+                                    <p-sortIcon field="project_name"></p-sortIcon>
+                                </th>
+                                <th style="min-width: 10rem" pSortableColumn="capacity_mw">
+                                    {{ 'INVEST.ACTIVE_PROJECTS.CAPACITY_MW' | translate }}
+                                    <p-sortIcon field="capacity_mw"></p-sortIcon>
+                                </th>
+                                <th style="min-width: 12rem" pSortableColumn="production_mln_kwh">
+                                    {{ 'INVEST.ACTIVE_PROJECTS.PRODUCTION_MLN_KWH' | translate }}
+                                    <p-sortIcon field="production_mln_kwh"></p-sortIcon>
+                                </th>
+                                <th style="min-width: 12rem" pSortableColumn="cost_mln_usd">
+                                    {{ 'INVEST.ACTIVE_PROJECTS.COST_MLN_USD' | translate }}
+                                    <p-sortIcon field="cost_mln_usd"></p-sortIcon>
+                                </th>
+                                <th style="min-width: 15rem" pSortableColumn="status_text">
+                                    {{ 'INVEST.ACTIVE_PROJECTS.STATUS' | translate }}
+                                    <p-sortIcon field="status_text"></p-sortIcon>
+                                </th>
+                                @if (canEdit) {
+                                    <th style="width: 10rem">{{ 'INVEST.ACTIVE_PROJECTS.ACTIONS' | translate }}</th>
+                                }
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="body" let-project>
+                            <tr>
+                                <td>{{ project.id }}</td>
+                                <td>{{ project.category }}</td>
+                                <td>
+                                    <div class="font-semibold mb-4">{{ project.project_name }}</div>
+                                    <div class="mb-4">
+                                        <span class="font-semibold">{{ 'INVEST.ACTIVE_PROJECTS.FOREIGN_PARTNER' | translate }}:</span>
+                                        <span>{{ project.foreign_partner }}</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-semibold">{{ 'INVEST.ACTIVE_PROJECTS.IMPLEMENTATION_PERIOD' | translate }}:</span>
+                                        <span>{{ project.implementation_period }}</span>
+                                    </div>
+                                </td>
+                                <td class="text-right">
+                                    @if (project.capacity_mw !== null && project.capacity_mw !== undefined) {
+                                        {{ project.capacity_mw | number: '1.2-2' }}
+                                    } @else {
+                                        <span class="text-surface-400">—</span>
+                                    }
+                                </td>
+                                <td class="text-right">
+                                    @if (project.production_mln_kwh !== null && project.production_mln_kwh !== undefined) {
+                                        {{ project.production_mln_kwh | number: '1.2-2' }}
+                                    } @else {
+                                        <span class="text-surface-400">—</span>
+                                    }
+                                </td>
+                                <td class="text-right">
+                                    @if (project.cost_mln_usd !== null && project.cost_mln_usd !== undefined) {
+                                        <span class="font-semibold">{{ project.cost_mln_usd | number: '1.2-2' }}</span>
+                                    } @else {
+                                        <span class="text-surface-400">—</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (project.status_text) {
+                                        <span class="whitespace-pre-line">{{ project.status_text }}</span>
+                                    } @else {
+                                        <span class="text-surface-400">—</span>
+                                    }
+                                </td>
+                                @if (canEdit) {
+                                    <td>
+                                        <div class="flex gap-2">
+                                            <button
+                                                pButton
+                                                severity="secondary"
+                                                [outlined]="true"
+                                                size="small"
+                                                (click)="openEditDialog(project)"
+                                                [pTooltip]="'INVEST.ACTIVE_PROJECTS.EDIT' | translate">
+                                                <i pButtonIcon class="pi pi-pencil"></i>
+                                            </button>
+                                            <button
+                                                pButton
+                                                severity="danger"
+                                                [outlined]="true"
+                                                size="small"
+                                                (click)="confirmDelete(project)"
+                                                [pTooltip]="'INVEST.ACTIVE_PROJECTS.DELETE' | translate">
+                                                <i pButtonIcon class="pi pi-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                }
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td [attr.colspan]="canEdit ? 8 : 7" class="text-center py-8">
+                                    <div class="text-surface-500">
+                                        <i class="pi pi-inbox text-4xl mb-3 block"></i>
+                                        <div>{{ 'INVEST.ACTIVE_PROJECTS.NOT_FOUND' | translate }}</div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </p-tabpanel>
+
+                @for (category of categories; track category; let idx = $index) {
+                    <p-tabpanel [value]="idx + 1">
+                        <p-table
+                            #dt
+                            [value]="getProjectsForCategory(category)"
+                            [globalFilterFields]="['project_name', 'foreign_partner', 'implementation_period', 'status_text']"
+                            dataKey="id"
+                            [scrollable]="true"
+                            scrollHeight="600px"
+                            [tableStyle]="{ 'min-width': '100rem' }"
+                            class="p-datatable-gridlines">
+
+                            <ng-template pTemplate="caption">
+                                <div class="flex justify-end items-center">
+                                    <p-iconfield iconPosition="left">
+                                        <p-inputicon>
+                                            <i class="pi pi-search"></i>
+                                        </p-inputicon>
+                                        <input
+                                            pInputText
+                                            type="text"
+                                            [(ngModel)]="searchValue"
+                                            (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                                            [placeholder]="'INVEST.ACTIVE_PROJECTS.SEARCH' | translate"
+                                            class="w-full" />
+                                    </p-iconfield>
+                                    @if (searchValue) {
+                                        <button
+                                            type="button"
+                                            class="ml-2"
+                                            pButton
+                                            severity="secondary"
+                                            [outlined]="true"
+                                            (click)="clear(dt)"
+                                            [pTooltip]="'INVEST.ACTIVE_PROJECTS.CLEAR' | translate">
+                                            <i pButtonIcon class="pi pi-times"></i>
+                                        </button>
+                                    }
+                                </div>
+                            </ng-template>
+
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th style="width: 5rem" pSortableColumn="id">
+                                        ID
+                                        <p-sortIcon field="id"></p-sortIcon>
+                                    </th>
+                                    <th style="min-width: 20rem" pSortableColumn="project_name">
+                                        {{ 'INVEST.ACTIVE_PROJECTS.PROJECT_NAME' | translate }}
+                                        <p-sortIcon field="project_name"></p-sortIcon>
+                                    </th>
+                                    <th style="min-width: 10rem" pSortableColumn="capacity_mw">
+                                        {{ 'INVEST.ACTIVE_PROJECTS.CAPACITY_MW' | translate }}
+                                        <p-sortIcon field="capacity_mw"></p-sortIcon>
+                                    </th>
+                                    <th style="min-width: 12rem" pSortableColumn="production_mln_kwh">
+                                        {{ 'INVEST.ACTIVE_PROJECTS.PRODUCTION_MLN_KWH' | translate }}
+                                        <p-sortIcon field="production_mln_kwh"></p-sortIcon>
+                                    </th>
+                                    <th style="min-width: 12rem" pSortableColumn="cost_mln_usd">
+                                        {{ 'INVEST.ACTIVE_PROJECTS.COST_MLN_USD' | translate }}
+                                        <p-sortIcon field="cost_mln_usd"></p-sortIcon>
+                                    </th>
+                                    <th style="min-width: 15rem" pSortableColumn="status_text">
+                                        {{ 'INVEST.ACTIVE_PROJECTS.STATUS' | translate }}
+                                        <p-sortIcon field="status_text"></p-sortIcon>
+                                    </th>
+                                    @if (canEdit) {
+                                        <th style="width: 10rem">{{ 'INVEST.ACTIVE_PROJECTS.ACTIONS' | translate }}</th>
+                                    }
+                                </tr>
+                            </ng-template>
+
+                            <ng-template pTemplate="body" let-project>
+                                <tr>
+                                    <td>{{ project.id }}</td>
+                                    <td>
+                                        <div class="font-semibold mb-4">{{ project.project_name }}</div>
+                                        <div class="mb-4">
+                                            <span class="font-semibold">{{ 'INVEST.ACTIVE_PROJECTS.FOREIGN_PARTNER' | translate }}:</span>
+                                            <span>{{ project.foreign_partner }}</span>
+                                        </div>
+                                        <div>
+                                            <span class="font-semibold">{{ 'INVEST.ACTIVE_PROJECTS.IMPLEMENTATION_PERIOD' | translate }}:</span>
+                                            <span>{{ project.implementation_period }}</span>
+                                        </div>
+                                    </td>
+                                    <td class="text-right">
+                                        @if (project.capacity_mw !== null && project.capacity_mw !== undefined) {
+                                            {{ project.capacity_mw | number: '1.2-2' }}
+                                        } @else {
+                                            <span class="text-surface-400">—</span>
+                                        }
+                                    </td>
+                                    <td class="text-right">
+                                        @if (project.production_mln_kwh !== null && project.production_mln_kwh !== undefined) {
+                                            {{ project.production_mln_kwh | number: '1.2-2' }}
+                                        } @else {
+                                            <span class="text-surface-400">—</span>
+                                        }
+                                    </td>
+                                    <td class="text-right">
+                                        @if (project.cost_mln_usd !== null && project.cost_mln_usd !== undefined) {
+                                            <span
+                                                class="font-semibold">{{ project.cost_mln_usd | number: '1.2-2' }}</span>
+                                        } @else {
+                                            <span class="text-surface-400">—</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (project.status_text) {
+                                            <span class="whitespace-pre-line">{{ project.status_text }}</span>
+                                        } @else {
+                                            <span class="text-surface-400">—</span>
+                                        }
+                                    </td>
+                                    @if (canEdit) {
+                                        <td>
+                                            <div class="flex gap-2">
+                                                <button
+                                                    pButton
+                                                    severity="secondary"
+                                                    [outlined]="true"
+                                                    size="small"
+                                                    (click)="openEditDialog(project)"
+                                                    [pTooltip]="'INVEST.ACTIVE_PROJECTS.EDIT' | translate">
+                                                    <i pButtonIcon class="pi pi-pencil"></i>
+                                                </button>
+                                                <button
+                                                    pButton
+                                                    severity="danger"
+                                                    [outlined]="true"
+                                                    size="small"
+                                                    (click)="confirmDelete(project)"
+                                                    [pTooltip]="'INVEST.ACTIVE_PROJECTS.DELETE' | translate">
+                                                    <i pButtonIcon class="pi pi-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    }
+                                </tr>
+                            </ng-template>
+
+                            <ng-template pTemplate="emptymessage">
+                                <tr>
+                                    <td [attr.colspan]="canEdit ? 7 : 6" class="text-center py-8">
+                                        <div class="text-surface-500">
+                                            <i class="pi pi-inbox text-4xl mb-3 block"></i>
+                                            <div>{{ 'INVEST.ACTIVE_PROJECTS.NOT_FOUND' | translate }}</div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </p-tabpanel>
+                }
+            </p-tabpanels>
+        </p-tabs>
+    }
+</div>
+
+<!-- Диалог добавления/редактирования проекта -->
+<app-invest-project-dialog
+    [(display)]="showProjectDialog"
+    [projectToEdit]="projectToEdit"
+    (save)="loadProjects()">
+</app-invest-project-dialog>

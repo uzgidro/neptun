@@ -16,6 +16,7 @@ import { FileListComponent } from '@/layout/component/dialog/file-list/file-list
 import { InputTextComponent } from '@/layout/component/dialog/input-text/input-text.component';
 import { DatePicker } from 'primeng/datepicker';
 import { FinancialDashboardService } from '../dashboard/services/financial-dashboard.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 type Status = 'Активная фаза' | 'В разработке';
 
@@ -57,7 +58,8 @@ interface InvestmentData {
         FileListComponent,
         InputTextComponent,
         FormsModule,
-        DatePicker
+        DatePicker,
+        TranslateModule
     ],
     templateUrl: './investment.component.html',
     styleUrl: './investment.component.scss'
@@ -87,13 +89,13 @@ export class InvestmentComponent implements OnInit {
     private fb: FormBuilder = inject(FormBuilder);
     private messageService: MessageService = inject(MessageService);
     private dashboardService = inject(FinancialDashboardService);
+    private translate = inject(TranslateService);
 
-    statusOptions = [
-        { name: 'Активная фаза', value: 'Активная фаза' },
-        { name: 'В разработке', value: 'В разработке' }
-    ];
+    statusOptions: { name: string; value: string }[] = [];
 
     ngOnInit(): void {
+        this.initTranslations();
+        this.translate.onLangChange.subscribe(() => this.initTranslations());
         this.form = this.fb.group({
             project_name: this.fb.control<string | null>(null),
             status: this.fb.control<{ name: string; value: Status } | null>(null),
@@ -105,6 +107,13 @@ export class InvestmentComponent implements OnInit {
         this.investments = [];
         this.applyFilter();
         this.updateDashboardData();
+    }
+
+    private initTranslations(): void {
+        this.statusOptions = [
+            { name: this.translate.instant('FINANCIAL_BLOCK.INVESTMENT.ACTIVE_PHASE'), value: 'Активная фаза' },
+            { name: this.translate.instant('FINANCIAL_BLOCK.INVESTMENT.IN_DEVELOPMENT'), value: 'В разработке' }
+        ];
     }
 
     private updateDashboardData(): void {
@@ -142,7 +151,7 @@ export class InvestmentComponent implements OnInit {
             const endFormatted = this.dateRange[1].toLocaleDateString('ru-RU');
             this.messageService.add({
                 severity: 'info',
-                summary: 'Диапазон выбран',
+                summary: this.translate.instant('FINANCIAL_BLOCK.COMMON.SELECT_DATE_RANGE'),
                 detail: `${startFormatted} - ${endFormatted}`,
                 life: 2000
             });
@@ -154,8 +163,8 @@ export class InvestmentComponent implements OnInit {
         this.applyFilter();
         this.messageService.add({
             severity: 'info',
-            summary: 'Диапазон сброшен',
-            detail: 'Показаны все даты',
+            summary: this.translate.instant('FINANCIAL_BLOCK.COMMON.CLEAR'),
+            detail: this.translate.instant('FINANCIAL_BLOCK.COMMON.ALL'),
             life: 2000
         });
     }
@@ -247,10 +256,18 @@ export class InvestmentComponent implements OnInit {
             if (index !== -1) {
                 this.investments[index] = investmentData;
             }
-            this.messageService.add({ severity: 'success', summary: 'Проект обновлен' });
+            this.messageService.add({
+                severity: 'success',
+                summary: this.translate.instant('FINANCIAL_BLOCK.COMMON.SUCCESS'),
+                detail: this.translate.instant('FINANCIAL_BLOCK.INVESTMENT.PROJECT_UPDATED')
+            });
         } else {
             this.investments.push(investmentData);
-            this.messageService.add({ severity: 'success', summary: 'Проект добавлен' });
+            this.messageService.add({
+                severity: 'success',
+                summary: this.translate.instant('FINANCIAL_BLOCK.COMMON.SUCCESS'),
+                detail: this.translate.instant('FINANCIAL_BLOCK.INVESTMENT.PROJECT_ADDED')
+            });
         }
 
         this.closeDialog();
@@ -271,9 +288,13 @@ export class InvestmentComponent implements OnInit {
     }
 
     deleteInvestment(id: number) {
-        if (confirm('Вы уверены, что хотите удалить этот проект?')) {
+        if (confirm(this.translate.instant('FINANCIAL_BLOCK.INVESTMENT.DELETE_CONFIRM'))) {
             this.investments = this.investments.filter((inv) => inv.id !== id);
-            this.messageService.add({ severity: 'success', summary: 'Проект удален' });
+            this.messageService.add({
+                severity: 'success',
+                summary: this.translate.instant('FINANCIAL_BLOCK.COMMON.SUCCESS'),
+                detail: this.translate.instant('FINANCIAL_BLOCK.INVESTMENT.PROJECT_DELETED')
+            });
             this.applyFilter();
             this.updateDashboardData();
         }

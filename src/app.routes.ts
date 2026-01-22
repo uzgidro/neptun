@@ -25,19 +25,24 @@ import { DischargesComponent } from '@/pages/situation-center/ges/discharges/dis
 import { VisitsComponent } from '@/pages/situation-center/other/visits/visits.component';
 import { IncidentsComponent } from '@/pages/situation-center/other/incidents/incidents.component';
 import { ReservoirsDeviceComponent } from '@/pages/situation-center/reservoirs-info/reservoirs-device/reservoirs-device.component';
-import { InvestmentComponent } from '@/pages/financial-block/investment/investment.component';
+import { InvestPerspectiveProjectsComponent } from '@/pages/invest/invest-perspective-projects/invest-perspective-projects.component';
 import { DebitCreditComponent } from '@/pages/financial-block/debit-credit/debit-credit.component';
 import { RepairCostsComponent } from '@/pages/financial-block/repair-costs/repair-costs.component';
 import { ProcurementComponent } from '@/pages/financial-block/procurement/procurement.component';
 import { KpiComponent } from '@/pages/financial-block/kpi/kpi.component';
 import { SalaryComponent } from '@/pages/financial-block/salary/salary.component';
 import { FinancialDashboardComponent } from '@/pages/financial-block/dashboard/financial-dashboard.component';
-import { OrdersComponent } from '@/pages/mail/orders/orders.component';
-import { ReportsComponent } from '@/pages/mail/reports/reports.component';
-import { LettersComponent } from '@/pages/mail/letters/letters.component';
-import { InstructionsComponent } from '@/pages/mail/instructions/instructions.component';
-import { ResolutionsComponent } from '@/pages/mail/resolutions/resolutions.component';
+import { OrdersComponent } from '@/pages/chancellery/orders/orders.component';
+import { ReportsComponent } from '@/pages/chancellery/reports/reports.component';
+import { LettersComponent } from '@/pages/chancellery/letters/letters.component';
+import { InstructionsComponent } from '@/pages/chancellery/instructions/instructions.component';
+import { PendingSignaturesComponent } from '@/pages/chancellery/pending-signatures/pending-signatures.component';
+import { LegalDocumentsComponent } from '@/pages/legal-documents/legal-documents.component';
+import { LexSearchComponent } from '@/pages/lex-search/lex-search.component';
 import { CallsComponent } from '@/pages/calls/calls.component';
+import { NewsComponent } from '@/pages/media/news/news.component';
+import { InvestActiveProjectsComponent } from '@/pages/invest/invest-active-projects/invest-active-projects.component';
+import { ScDashboardComponent } from '@/pages/situation-center/sc-dashboard/sc-dashboard.component';
 
 
 export const appRoutes: Routes = [
@@ -71,7 +76,8 @@ export const appRoutes: Routes = [
             { path: 'reservoir-summary', component: ReservoirsSummaryComponent, canActivate: [raisGuard] },
             { path: 'shutdowns', component: ShutdownComponent, canActivate: [raisGuard] },
             { path: 'financial-dashboard', component: FinancialDashboardComponent, canActivate: [raisGuard] },
-            { path: 'investment', component: InvestmentComponent, canActivate: [raisGuard] },
+            { path: 'invest-perspective', component: InvestPerspectiveProjectsComponent, canActivate: [raisGuard] },
+            { path: 'invest-active', component: InvestActiveProjectsComponent, canActivate: [raisGuard] },
             { path: 'debit-credit', component: DebitCreditComponent, canActivate: [raisGuard] },
             { path: 'repair-costs', component: RepairCostsComponent, canActivate: [raisGuard] },
             { path: 'procurement', component: ProcurementComponent, canActivate: [raisGuard] },
@@ -81,14 +87,18 @@ export const appRoutes: Routes = [
             { path: 'visits', component: VisitsComponent, canActivate: [raisGuard] },
             { path: 'incidents', component: IncidentsComponent, canActivate: [raisGuard] },
             { path: 'reservoir-device', component: ReservoirsDeviceComponent, canActivate: [raisGuard] },
-            { path: 'mail/orders', component: OrdersComponent, canActivate: [raisGuard] },
-            { path: 'mail/reports', component: ReportsComponent, canActivate: [raisGuard] },
-            { path: 'mail/letters', component: LettersComponent, canActivate: [raisGuard] },
-            { path: 'mail/instructions', component: InstructionsComponent, canActivate: [raisGuard] },
-            { path: 'mail/resolutions', component: ResolutionsComponent, canActivate: [raisGuard] },
+            { path: 'chancellery/pending-signatures', component: PendingSignaturesComponent, canActivate: [raisGuard] },
+            { path: 'chancellery/orders', component: OrdersComponent, canActivate: [raisGuard] },
+            { path: 'chancellery/reports', component: ReportsComponent, canActivate: [raisGuard] },
+            { path: 'chancellery/letters', component: LettersComponent, canActivate: [raisGuard] },
+            { path: 'chancellery/instructions', component: InstructionsComponent, canActivate: [raisGuard] },
+            { path: 'legal-documents', component: LegalDocumentsComponent, canActivate: [raisGuard] },
+            { path: 'lex-search', component: LexSearchComponent, canActivate: [raisGuard] },
             { path: 'calls', component: CallsComponent, canActivate: [raisGuard] },
+            { path: 'media/news', component: NewsComponent, canActivate: [raisGuard] },
         ]
     },
+    { path: 'monitoring', component: ScDashboardComponent, canActivate: [authGuard] },
     { path: 'notfound', component: Notfound },
     { path: 'auth', loadChildren: () => import('./app/pages/auth/auth.routes') },
     { path: '**', redirectTo: '/notfound' }

@@ -10,6 +10,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { registerLocaleData } from '@angular/common';
 import localeRu from '@angular/common/locales/ru';
+import { provideTranslateService } from '@ngx-translate/core';
+import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 
 registerLocaleData(localeRu);
 
@@ -20,6 +22,13 @@ export const appConfig: ApplicationConfig = {
         provideAnimationsAsync(),
         providePrimeNG({ theme: { preset: Aura, options: { darkModeSelector: '.app-dark' } } }),
         importProvidersFrom(ReactiveFormsModule),
+        provideTranslateService({
+            defaultLanguage: 'ru',
+            loader: provideTranslateHttpLoader({
+                prefix: './assets/i18n/',
+                suffix: '.json'
+            })
+        }),
         MessageService,
         { provide: LOCALE_ID, useValue: 'ru' }
     ]

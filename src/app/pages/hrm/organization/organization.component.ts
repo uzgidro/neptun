@@ -15,6 +15,7 @@ import { DeleteConfirmationComponent } from '@/layout/component/dialog/delete-co
 import { Tooltip } from 'primeng/tooltip';
 import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
 import { Ripple } from 'primeng/ripple';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-organization',
@@ -32,7 +33,8 @@ import { Ripple } from 'primeng/ripple';
         DeleteConfirmationComponent,
         Tooltip,
         DialogComponent,
-        Ripple
+        Ripple,
+        TranslateModule
     ],
     templateUrl: './organization.component.html',
     styleUrl: './organization.component.scss'
@@ -55,6 +57,7 @@ export class OrganizationComponent implements OnInit, OnDestroy {
     private organizationService = inject(OrganizationService);
     private fb = inject(FormBuilder);
     private messageService = inject(MessageService);
+    private translate = inject(TranslateService);
     private destroy$ = new Subject<void>();
 
     constructor() {
@@ -150,13 +153,13 @@ export class OrganizationComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
-                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Организация успешно создана' });
+                    this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SAVE'), detail: this.translate.instant('HRM.ORGANIZATIONS.SUCCESS_CREATED') });
                     this.loadOrganizations();
                     this.loadFlatOrganizations();
                     this.closeDialog();
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось создать организацию' });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.CANCEL'), detail: this.translate.instant('HRM.ORGANIZATIONS.ERROR_CREATE') });
                     console.error(err);
                 }
             });
@@ -168,7 +171,7 @@ export class OrganizationComponent implements OnInit, OnDestroy {
         const formValue = this.organizationForm.value;
 
         if (formValue.parent_organization_id?.id === this.selectedOrganization.id) {
-            this.messageService.add({ severity: 'warn', summary: 'Предупреждение', detail: 'Организация не может быть родителем самой себя' });
+            this.messageService.add({ severity: 'warn', summary: '', detail: this.translate.instant('HRM.ORGANIZATIONS.SELF_PARENT_WARNING') });
             return;
         }
 
@@ -182,13 +185,13 @@ export class OrganizationComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
-                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Организация успешно обновлена' });
+                    this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SAVE'), detail: this.translate.instant('HRM.ORGANIZATIONS.SUCCESS_UPDATED') });
                     this.loadOrganizations();
                     this.loadFlatOrganizations();
                     this.closeDialog();
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось обновить организацию' });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.CANCEL'), detail: this.translate.instant('HRM.ORGANIZATIONS.ERROR_UPDATE') });
                     console.error(err);
                 }
             });
@@ -207,14 +210,14 @@ export class OrganizationComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
-                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Организация успешно удалена' });
+                    this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.DELETE'), detail: this.translate.instant('HRM.ORGANIZATIONS.SUCCESS_DELETED') });
                     this.loadOrganizations();
                     this.loadFlatOrganizations();
                     this.displayDeleteDialog = false;
                     this.selectedOrganization = null;
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось удалить организацию' });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.CANCEL'), detail: this.translate.instant('HRM.ORGANIZATIONS.ERROR_DELETE') });
                     console.error(err);
                 }
             });

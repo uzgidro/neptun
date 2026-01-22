@@ -7,6 +7,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { Tag } from 'primeng/tag';
 import { Select } from 'primeng/select';
 import { ProgressSpinner } from 'primeng/progressspinner';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 interface BirthdayContact extends Contact {
     birthdayThisYear: Date;
@@ -28,7 +29,8 @@ interface MonthOption {
         FormsModule,
         Tag,
         Select,
-        ProgressSpinner
+        ProgressSpinner,
+        TranslateModule
     ],
     templateUrl: './birthdays.component.html',
     styleUrl: './birthdays.component.scss'
@@ -42,34 +44,45 @@ export class BirthdaysComponent implements OnInit, OnDestroy {
     selectedMonth: number | null = null;
     selectedPeriod: string = 'all';
 
-    months: MonthOption[] = [
-        { label: 'Все месяцы', value: null },
-        { label: 'Январь', value: 0 },
-        { label: 'Февраль', value: 1 },
-        { label: 'Март', value: 2 },
-        { label: 'Апрель', value: 3 },
-        { label: 'Май', value: 4 },
-        { label: 'Июнь', value: 5 },
-        { label: 'Июль', value: 6 },
-        { label: 'Август', value: 7 },
-        { label: 'Сентябрь', value: 8 },
-        { label: 'Октябрь', value: 9 },
-        { label: 'Ноябрь', value: 10 },
-        { label: 'Декабрь', value: 11 }
-    ];
-
-    periods = [
-        { label: 'Все', value: 'all' },
-        { label: 'Сегодня', value: 'today' },
-        { label: 'Эта неделя', value: 'week' },
-        { label: 'Этот месяц', value: 'month' }
-    ];
+    months: MonthOption[] = [];
+    periods: { label: string; value: string }[] = [];
 
     private contactService = inject(ContactService);
+    private translate = inject(TranslateService);
     private destroy$ = new Subject<void>();
 
+    private initOptions(): void {
+        this.months = [
+            { label: this.translate.instant('HRM.BIRTHDAYS.ALL_MONTHS'), value: null },
+            { label: this.translate.instant('HRM.BIRTHDAYS.JANUARY'), value: 0 },
+            { label: this.translate.instant('HRM.BIRTHDAYS.FEBRUARY'), value: 1 },
+            { label: this.translate.instant('HRM.BIRTHDAYS.MARCH'), value: 2 },
+            { label: this.translate.instant('HRM.BIRTHDAYS.APRIL'), value: 3 },
+            { label: this.translate.instant('HRM.BIRTHDAYS.MAY'), value: 4 },
+            { label: this.translate.instant('HRM.BIRTHDAYS.JUNE'), value: 5 },
+            { label: this.translate.instant('HRM.BIRTHDAYS.JULY'), value: 6 },
+            { label: this.translate.instant('HRM.BIRTHDAYS.AUGUST'), value: 7 },
+            { label: this.translate.instant('HRM.BIRTHDAYS.SEPTEMBER'), value: 8 },
+            { label: this.translate.instant('HRM.BIRTHDAYS.OCTOBER'), value: 9 },
+            { label: this.translate.instant('HRM.BIRTHDAYS.NOVEMBER'), value: 10 },
+            { label: this.translate.instant('HRM.BIRTHDAYS.DECEMBER'), value: 11 }
+        ];
+
+        this.periods = [
+            { label: this.translate.instant('HRM.BIRTHDAYS.ALL'), value: 'all' },
+            { label: this.translate.instant('HRM.BIRTHDAYS.TODAY'), value: 'today' },
+            { label: this.translate.instant('HRM.BIRTHDAYS.THIS_WEEK'), value: 'week' },
+            { label: this.translate.instant('HRM.BIRTHDAYS.THIS_MONTH'), value: 'month' }
+        ];
+    }
+
     ngOnInit() {
+        this.initOptions();
         this.loadContacts();
+
+        this.translate.onLangChange.pipe(takeUntil(this.destroy$)).subscribe(() => {
+            this.initOptions();
+        });
     }
 
     private loadContacts(): void {
@@ -167,22 +180,22 @@ export class BirthdaysComponent implements OnInit, OnDestroy {
     }
 
     getDaysLabel(days: number): string {
-        if (days === 0) return 'Сегодня!';
-        if (days === 1) return 'Завтра';
+        if (days === 0) return this.translate.instant('HRM.BIRTHDAYS.TODAY');
+        if (days === 1) return this.translate.instant('HRM.BIRTHDAYS.TOMORROW');
 
         const lastDigit = days % 10;
         const lastTwoDigits = days % 100;
 
         if (lastTwoDigits >= 11 && lastTwoDigits <= 14) {
-            return `Через ${days} дней`;
+            return this.translate.instant('HRM.BIRTHDAYS.IN_DAYS', { days });
         }
         if (lastDigit === 1) {
-            return `Через ${days} день`;
+            return this.translate.instant('HRM.BIRTHDAYS.IN_DAY', { days });
         }
         if (lastDigit >= 2 && lastDigit <= 4) {
-            return `Через ${days} дня`;
+            return this.translate.instant('HRM.BIRTHDAYS.IN_DAYS_2_4', { days });
         }
-        return `Через ${days} дней`;
+        return this.translate.instant('HRM.BIRTHDAYS.IN_DAYS', { days });
     }
 
     getTagSeverity(days: number): 'success' | 'info' | 'warn' | 'danger' | 'secondary' {
@@ -197,15 +210,15 @@ export class BirthdaysComponent implements OnInit, OnDestroy {
         const lastTwoDigits = age % 100;
 
         if (lastTwoDigits >= 11 && lastTwoDigits <= 14) {
-            return `${age} лет`;
+            return `${age} ${this.translate.instant('HRM.BIRTHDAYS.YEARS_OLD')}`;
         }
         if (lastDigit === 1) {
-            return `${age} год`;
+            return `${age} ${this.translate.instant('HRM.BIRTHDAYS.YEAR_OLD')}`;
         }
         if (lastDigit >= 2 && lastDigit <= 4) {
-            return `${age} года`;
+            return `${age} ${this.translate.instant('HRM.BIRTHDAYS.YEARS_OLD_2_4')}`;
         }
-        return `${age} лет`;
+        return `${age} ${this.translate.instant('HRM.BIRTHDAYS.YEARS_OLD')}`;
     }
 
     ngOnDestroy() {

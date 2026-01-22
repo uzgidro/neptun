@@ -10,7 +10,7 @@
                     <i class="pi pi-shopping-cart"></i>
                 </div>
                 <div class="card-info">
-                    <span class="card-label">Всего закупок</span>
+                    <span class="card-label">{{ 'FINANCIAL_BLOCK.PROCUREMENT.TOTAL_PROCUREMENTS' | translate }}</span>
                     <span class="card-value text-primary">{{ totalProcurementsCount }}</span>
                 </div>
             </div>
@@ -22,7 +22,7 @@
                     <i class="pi pi-wallet"></i>
                 </div>
                 <div class="card-info">
-                    <span class="card-label">Общая сумма</span>
+                    <span class="card-label">{{ 'FINANCIAL_BLOCK.PROCUREMENT.TOTAL_AMOUNT' | translate }}</span>
                     <span class="card-value text-blue-500">{{ formatCurrency(totalAmount) }}</span>
                 </div>
             </div>
@@ -34,7 +34,7 @@
                     <i class="pi pi-clock"></i>
                 </div>
                 <div class="card-info">
-                    <span class="card-label">В ожидании</span>
+                    <span class="card-label">{{ 'FINANCIAL_BLOCK.PROCUREMENT.STATUS_PENDING' | translate }}</span>
                     <span class="card-value text-orange-500">{{ pendingCount }}</span>
                 </div>
             </div>
@@ -46,7 +46,7 @@
                     <i class="pi pi-spin pi-spinner"></i>
                 </div>
                 <div class="card-info">
-                    <span class="card-label">В процессе</span>
+                    <span class="card-label">{{ 'FINANCIAL_BLOCK.KPI.IN_PROGRESS' | translate }}</span>
                     <span class="card-value text-cyan-500">{{ inProgressCount }}</span>
                 </div>
             </div>
@@ -58,7 +58,7 @@
                     <i class="pi pi-check-circle"></i>
                 </div>
                 <div class="card-info">
-                    <span class="card-label">Доставлено</span>
+                    <span class="card-label">{{ 'FINANCIAL_BLOCK.PROCUREMENT.STATUS_DELIVERED' | translate }}</span>
                     <span class="card-value text-green-500">{{ deliveredCount }}</span>
                 </div>
             </div>
@@ -70,7 +70,7 @@
         <!-- Monthly Dynamics Chart -->
         <div class="chart-card chart-large">
             <div class="chart-header">
-                <h3>Динамика закупок по месяцам</h3>
+                <h3>{{ 'FINANCIAL_BLOCK.DASHBOARD.MONTHLY_DYNAMICS' | translate }}</h3>
                 <span class="chart-icon"><i class="pi pi-chart-bar"></i></span>
             </div>
             <div class="chart-body">
@@ -87,7 +87,7 @@
             <!-- Status Chart -->
             <div class="chart-card chart-small">
                 <div class="chart-header">
-                    <h3>По статусам</h3>
+                    <h3>{{ 'FINANCIAL_BLOCK.COMMON.STATUS' | translate }}</h3>
                     <span class="chart-icon"><i class="pi pi-chart-pie"></i></span>
                 </div>
                 <div class="chart-body-small">
@@ -102,7 +102,7 @@
             <!-- Category Chart -->
             <div class="chart-card chart-small">
                 <div class="chart-header">
-                    <h3>По категориям</h3>
+                    <h3>{{ 'FINANCIAL_BLOCK.DEBIT_CREDIT.CATEGORY' | translate }}</h3>
                     <span class="chart-icon"><i class="pi pi-percentage"></i></span>
                 </div>
                 <div class="chart-body-small">
@@ -120,7 +120,7 @@
     <div class="supplier-chart-section">
         <div class="chart-card">
             <div class="chart-header">
-                <h3>Топ-5 поставщиков по объёму</h3>
+                <h3>{{ 'FINANCIAL_BLOCK.PROCUREMENT.SUPPLIER' | translate }}</h3>
                 <span class="chart-icon"><i class="pi pi-users"></i></span>
             </div>
             <div class="chart-body-supplier">
@@ -146,7 +146,7 @@
                     pInputText
                     [(ngModel)]="searchText"
                     (ngModelChange)="applyFilters()"
-                    placeholder="Поиск..."
+                    placeholder="..."
                 />
             </p-inputGroup>
 
@@ -157,7 +157,7 @@
                 selectionMode="range"
                 [showIcon]="true"
                 dateFormat="dd.mm.yy"
-                placeholder="Период"
+                [placeholder]="'FINANCIAL_BLOCK.KPI.PERIOD' | translate"
                 class="date-picker"
             ></p-datepicker>
 
@@ -168,7 +168,7 @@
                 (ngModelChange)="applyFilters()"
                 optionLabel="label"
                 optionValue="value"
-                placeholder="Категория"
+                [placeholder]="'FINANCIAL_BLOCK.DEBIT_CREDIT.CATEGORY' | translate"
                 [showClear]="true"
                 class="filter-select"
             ></p-select>
@@ -180,7 +180,7 @@
                 (ngModelChange)="applyFilters()"
                 optionLabel="label"
                 optionValue="value"
-                placeholder="Статус"
+                [placeholder]="'FINANCIAL_BLOCK.COMMON.STATUS' | translate"
                 [showClear]="true"
                 class="filter-select"
             ></p-select>
@@ -192,7 +192,7 @@
                 (ngModelChange)="applyFilters()"
                 optionLabel="label"
                 optionValue="value"
-                placeholder="Приоритет"
+                [placeholder]="'FINANCIAL_BLOCK.KPI.PRIORITY' | translate"
                 [showClear]="true"
                 class="filter-select"
             ></p-select>
@@ -204,7 +204,7 @@
                 (ngModelChange)="applyFilters()"
                 optionLabel="label"
                 optionValue="value"
-                placeholder="Отдел"
+                [placeholder]="'FINANCIAL_BLOCK.SALARY.DEPARTMENT' | translate"
                 [showClear]="true"
                 class="filter-select"
             ></p-select>
@@ -215,7 +215,7 @@
                 severity="secondary"
                 [outlined]="true"
                 (onClick)="clearFilters()"
-                pTooltip="Сбросить фильтры"
+                [pTooltip]="'FINANCIAL_BLOCK.COMMON.CLEAR' | translate"
             ></p-button>
         </div>
 
@@ -229,7 +229,7 @@
                 (onClick)="exportToExcel()"
             ></p-button>
             <p-button
-                label="Новая заявка"
+                [label]="'FINANCIAL_BLOCK.PROCUREMENT.ADD_PROCUREMENT' | translate"
                 icon="pi pi-plus"
                 (onClick)="openNewProcurement()"
             ></p-button>
@@ -245,33 +245,33 @@
             [rows]="10"
             [rowsPerPageOptions]="[5, 10, 25, 50]"
             [showCurrentPageReport]="true"
-            currentPageReportTemplate="Показано {first} - {last} из {totalRecords} записей"
+            currentPageReportTemplate="{first} - {last} / {totalRecords}"
             [sortField]="'requestDate'"
             [sortOrder]="-1"
         >
             <ng-template pTemplate="header">
                 <tr>
                     <th pSortableColumn="requestNumber" style="width: 130px">
-                        № заявки <p-sortIcon field="requestNumber"></p-sortIcon>
+                        № <p-sortIcon field="requestNumber"></p-sortIcon>
                     </th>
                     <th pSortableColumn="requestDate" style="width: 100px">
-                        Дата <p-sortIcon field="requestDate"></p-sortIcon>
+                        {{ 'FINANCIAL_BLOCK.COMMON.DATE' | translate }} <p-sortIcon field="requestDate"></p-sortIcon>
                     </th>
                     <th pSortableColumn="itemName">
-                        Наименование <p-sortIcon field="itemName"></p-sortIcon>
+                        {{ 'FINANCIAL_BLOCK.PROCUREMENT.ITEM_NAME' | translate }} <p-sortIcon field="itemName"></p-sortIcon>
                     </th>
-                    <th style="width: 110px">Категория</th>
+                    <th style="width: 110px">{{ 'FINANCIAL_BLOCK.DEBIT_CREDIT.CATEGORY' | translate }}</th>
                     <th pSortableColumn="supplier" style="width: 130px">
-                        Поставщик <p-sortIcon field="supplier"></p-sortIcon>
+                        {{ 'FINANCIAL_BLOCK.PROCUREMENT.SUPPLIER' | translate }} <p-sortIcon field="supplier"></p-sortIcon>
                     </th>
-                    <th style="width: 90px; text-align: center">Кол-во</th>
+                    <th style="width: 90px; text-align: center">{{ 'FINANCIAL_BLOCK.PROCUREMENT.QUANTITY' | translate }}</th>
                     <th pSortableColumn="totalAmount" style="width: 140px; text-align: right">
-                        Сумма <p-sortIcon field="totalAmount"></p-sortIcon>
+                        {{ 'FINANCIAL_BLOCK.INVESTMENT.AMOUNT' | translate }} <p-sortIcon field="totalAmount"></p-sortIcon>
                     </th>
-                    <th style="width: 100px">Приоритет</th>
-                    <th style="width: 110px">Статус</th>
-                    <th style="width: 100px">План. дата</th>
-                    <th style="width: 100px; text-align: center">Действия</th>
+                    <th style="width: 100px">{{ 'FINANCIAL_BLOCK.KPI.PRIORITY' | translate }}</th>
+                    <th style="width: 110px">{{ 'FINANCIAL_BLOCK.COMMON.STATUS' | translate }}</th>
+                    <th style="width: 100px">{{ 'FINANCIAL_BLOCK.PROCUREMENT.DELIVERY_DATE' | translate }}</th>
+                    <th style="width: 100px; text-align: center">{{ 'FINANCIAL_BLOCK.COMMON.ACTIONS' | translate }}</th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-procurement>
@@ -328,7 +328,7 @@
                                 [text]="true"
                                 severity="info"
                                 (onClick)="editProcurement(procurement)"
-                                pTooltip="Редактировать"
+                                [pTooltip]="'FINANCIAL_BLOCK.COMMON.EDIT' | translate"
                             ></p-button>
                             <p-button
                                 icon="pi pi-trash"
@@ -336,7 +336,7 @@
                                 [text]="true"
                                 severity="danger"
                                 (onClick)="deleteProcurement(procurement)"
-                                pTooltip="Удалить"
+                                [pTooltip]="'FINANCIAL_BLOCK.COMMON.DELETE' | translate"
                             ></p-button>
                         </div>
                     </td>
@@ -344,7 +344,7 @@
             </ng-template>
             <ng-template pTemplate="footer">
                 <tr class="font-bold">
-                    <td colspan="6" class="text-right">ИТОГО:</td>
+                    <td colspan="6" class="text-right">{{ 'FINANCIAL_BLOCK.COMMON.TOTAL' | translate }}:</td>
                     <td class="text-right text-blue-600">{{ formatCurrency(totalAmount) }}</td>
                     <td colspan="4"></td>
                 </tr>
@@ -354,7 +354,7 @@
                     <td colspan="11" class="text-center p-4">
                         <div class="flex flex-column align-items-center gap-2">
                             <i class="pi pi-inbox text-4xl text-500"></i>
-                            <span class="text-500">Заявки не найдены</span>
+                            <span class="text-500">{{ 'FINANCIAL_BLOCK.COMMON.NO_DATA' | translate }}</span>
                         </div>
                     </td>
                 </tr>
@@ -366,7 +366,7 @@
 <!-- Procurement Dialog -->
 <p-dialog
     [(visible)]="procurementDialog"
-    [header]="isEditMode ? 'Редактирование заявки' : 'Новая заявка на закупку'"
+    [header]="isEditMode ? ('FINANCIAL_BLOCK.COMMON.EDIT' | translate) : ('FINANCIAL_BLOCK.PROCUREMENT.ADD_PROCUREMENT' | translate)"
     [modal]="true"
     [style]="{ width: '700px', maxWidth: '95vw' }"
     [closable]="true"
@@ -377,7 +377,7 @@
         <!-- Request Number & Date Row -->
         <div class="form-row">
             <div class="form-field">
-                <label for="requestNumber">Номер заявки</label>
+                <label for="requestNumber">№</label>
                 <input
                     id="requestNumber"
                     type="text"
@@ -387,7 +387,7 @@
                 />
             </div>
             <div class="form-field">
-                <label for="requestDate">Дата заявки <span class="required">*</span></label>
+                <label for="requestDate">{{ 'FINANCIAL_BLOCK.PROCUREMENT.ORDER_DATE' | translate }} <span class="required">*</span></label>
                 <p-datepicker
                     id="requestDate"
                     [(ngModel)]="currentProcurement.requestDate"
@@ -400,20 +400,19 @@
 
         <!-- Item Name -->
         <div class="form-field">
-            <label for="itemName">Наименование товара/услуги <span class="required">*</span></label>
+            <label for="itemName">{{ 'FINANCIAL_BLOCK.PROCUREMENT.ITEM_NAME' | translate }} <span class="required">*</span></label>
             <input
                 id="itemName"
                 type="text"
                 pInputText
                 [(ngModel)]="currentProcurement.itemName"
-                placeholder="Введите наименование"
             />
         </div>
 
         <!-- Category & Department Row -->
         <div class="form-row">
             <div class="form-field">
-                <label for="category">Категория</label>
+                <label for="category">{{ 'FINANCIAL_BLOCK.DEBIT_CREDIT.CATEGORY' | translate }}</label>
                 <p-select
                     id="category"
                     [options]="categories"
@@ -424,7 +423,7 @@
                 ></p-select>
             </div>
             <div class="form-field">
-                <label for="department">Отдел-заказчик</label>
+                <label for="department">{{ 'FINANCIAL_BLOCK.SALARY.DEPARTMENT' | translate }}</label>
                 <p-select
                     id="department"
                     [options]="departments"
@@ -438,20 +437,19 @@
 
         <!-- Supplier -->
         <div class="form-field">
-            <label for="supplier">Поставщик <span class="required">*</span></label>
+            <label for="supplier">{{ 'FINANCIAL_BLOCK.PROCUREMENT.SUPPLIER' | translate }} <span class="required">*</span></label>
             <input
                 id="supplier"
                 type="text"
                 pInputText
                 [(ngModel)]="currentProcurement.supplier"
-                placeholder="Введите название поставщика"
             />
         </div>
 
         <!-- Quantity, Unit, Unit Price Row -->
         <div class="form-row-3">
             <div class="form-field">
-                <label for="quantity">Количество <span class="required">*</span></label>
+                <label for="quantity">{{ 'FINANCIAL_BLOCK.PROCUREMENT.QUANTITY' | translate }} <span class="required">*</span></label>
                 <p-inputNumber
                     id="quantity"
                     [(ngModel)]="currentProcurement.quantity"
@@ -460,7 +458,7 @@
                 ></p-inputNumber>
             </div>
             <div class="form-field">
-                <label for="unit">Ед. изм.</label>
+                <label for="unit">{{ 'FINANCIAL_BLOCK.PROCUREMENT.UNIT' | translate }}</label>
                 <p-select
                     id="unit"
                     [options]="units"
@@ -471,7 +469,7 @@
                 ></p-select>
             </div>
             <div class="form-field">
-                <label for="unitPrice">Цена за ед. <span class="required">*</span></label>
+                <label for="unitPrice">{{ 'FINANCIAL_BLOCK.PROCUREMENT.UNIT_PRICE' | translate }} <span class="required">*</span></label>
                 <p-inputNumber
                     id="unitPrice"
                     [(ngModel)]="currentProcurement.unitPrice"
@@ -487,7 +485,7 @@
         <!-- Total Amount (readonly) -->
         <div class="form-field">
             <label class="label-total">
-                <i class="pi pi-calculator"></i> Общая сумма
+                <i class="pi pi-calculator"></i> {{ 'FINANCIAL_BLOCK.PROCUREMENT.TOTAL_PRICE' | translate }}
             </label>
             <div class="total-display">
                 {{ formatCurrency(currentProcurement.totalAmount) }}
@@ -497,7 +495,7 @@
         <!-- Priority & Status Row -->
         <div class="form-row">
             <div class="form-field">
-                <label for="priority">Приоритет</label>
+                <label for="priority">{{ 'FINANCIAL_BLOCK.KPI.PRIORITY' | translate }}</label>
                 <p-select
                     id="priority"
                     [options]="priorities"
@@ -508,7 +506,7 @@
                 ></p-select>
             </div>
             <div class="form-field">
-                <label for="status">Статус</label>
+                <label for="status">{{ 'FINANCIAL_BLOCK.COMMON.STATUS' | translate }}</label>
                 <p-select
                     id="status"
                     [options]="statuses"
@@ -524,7 +522,7 @@
         <div class="form-row">
             <div class="form-field">
                 <label for="plannedDeliveryDate">
-                    <i class="pi pi-calendar"></i> Плановая дата поставки
+                    <i class="pi pi-calendar"></i> {{ 'FINANCIAL_BLOCK.PROCUREMENT.DELIVERY_DATE' | translate }}
                 </label>
                 <p-datepicker
                     id="plannedDeliveryDate"
@@ -532,12 +530,11 @@
                     [showIcon]="true"
                     dateFormat="dd.mm.yy"
                     appendTo="body"
-                    placeholder="Выберите дату"
                 ></p-datepicker>
             </div>
             <div class="form-field">
                 <label for="actualDeliveryDate">
-                    <i class="pi pi-check-circle"></i> Фактическая дата поставки
+                    <i class="pi pi-check-circle"></i> {{ 'FINANCIAL_BLOCK.COMMON.DATE' | translate }}
                 </label>
                 <p-datepicker
                     id="actualDeliveryDate"
@@ -545,32 +542,29 @@
                     [showIcon]="true"
                     dateFormat="dd.mm.yy"
                     appendTo="body"
-                    placeholder="Выберите дату"
                 ></p-datepicker>
             </div>
         </div>
 
         <!-- Responsible Person -->
         <div class="form-field">
-            <label for="responsiblePerson">Ответственный</label>
+            <label for="responsiblePerson">{{ 'FINANCIAL_BLOCK.KPI.RESPONSIBLE' | translate }}</label>
             <input
                 id="responsiblePerson"
                 type="text"
                 pInputText
                 [(ngModel)]="currentProcurement.responsiblePerson"
-                placeholder="ФИО ответственного"
             />
         </div>
 
         <!-- Notes -->
         <div class="form-field">
-            <label for="notes">Примечания</label>
+            <label for="notes">{{ 'FINANCIAL_BLOCK.COMMON.COMMENT' | translate }}</label>
             <textarea
                 id="notes"
                 pInputTextarea
                 [(ngModel)]="currentProcurement.notes"
                 rows="3"
-                placeholder="Дополнительная информация"
             ></textarea>
         </div>
     </div>
@@ -578,14 +572,14 @@
     <ng-template pTemplate="footer">
         <div class="dialog-footer">
             <p-button
-                label="Отмена"
+                [label]="'FINANCIAL_BLOCK.COMMON.CANCEL' | translate"
                 severity="secondary"
                 [outlined]="true"
                 icon="pi pi-times"
                 (onClick)="procurementDialog = false"
             ></p-button>
             <p-button
-                [label]="isEditMode ? 'Сохранить' : 'Создать заявку'"
+                [label]="isEditMode ? ('FINANCIAL_BLOCK.COMMON.SAVE' | translate) : ('FINANCIAL_BLOCK.COMMON.ADD' | translate)"
                 [icon]="isEditMode ? 'pi pi-save' : 'pi pi-plus'"
                 (onClick)="saveProcurement()"
             ></p-button>

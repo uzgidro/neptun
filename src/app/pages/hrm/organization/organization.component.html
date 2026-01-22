@@ -1,5 +1,5 @@
 <div class="card">
-    <div class="font-semibold text-xl mb-4">Организации</div>
+    <div class="font-semibold text-xl mb-4">{{ 'HRM.ORGANIZATIONS.TITLE' | translate }}</div>
     <p-table
         #dt
         [value]="organizations"
@@ -17,27 +17,27 @@
                 <div class="flex gap-2">
                     <button pButton (click)="expandAll()" class="p-button-outlined">
                         <i class="pi {{ isExpanded ? 'pi-minus' : 'pi-plus' }}" pButtonIcon></i>
-                        <span pButtonLabel>{{ isExpanded ? 'Свернуть все' : 'Развернуть все' }}</span>
+                        <span pButtonLabel>{{ isExpanded ? ('HRM.ORGANIZATIONS.COLLAPSE_ALL' | translate) : ('HRM.ORGANIZATIONS.EXPAND_ALL' | translate) }}</span>
                     </button>
                     <p-iconfield>
                         <p-inputicon>
                             <i class="pi pi-search"></i>
                         </p-inputicon>
-                        <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Поиск" />
+                        <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" [placeholder]="'COMMON.SEARCH' | translate" />
                     </p-iconfield>
                 </div>
                 <button pButton (click)="openDialog()">
                     <i class="pi pi-plus" pButtonIcon></i>
-                    <span pButtonLabel>Новая организация</span>
+                    <span pButtonLabel>{{ 'HRM.ORGANIZATIONS.NEW_ORGANIZATION' | translate }}</span>
                 </button>
             </div>
         </ng-template>
         <ng-template #header>
             <tr>
                 <th style="width: 4rem"></th>
-                <th style="min-width: 15rem">Название</th>
-                <th style="min-width: 12rem">Родительская организация</th>
-                <th style="width: 10rem">Действия</th>
+                <th style="min-width: 15rem">{{ 'COMMON.NAME' | translate }}</th>
+                <th style="min-width: 12rem">{{ 'HRM.ORGANIZATIONS.PARENT_ORGANIZATION' | translate }}</th>
+                <th style="width: 10rem">{{ 'HRM.ORGANIZATIONS.ACTIONS' | translate }}</th>
             </tr>
         </ng-template>
         <ng-template #body let-organization let-expanded="expanded">
@@ -66,14 +66,14 @@
                                 icon="pi pi-pencil"
                                 (click)="openEditDialog(organization)"
                                 class="p-button-rounded p-button-text p-button-warning"
-                                pTooltip="Редактировать"
+                                [pTooltip]="'COMMON.EDIT' | translate"
                                 tooltipPosition="top">
                         </button>
                         <button pButton
                                 icon="pi pi-trash"
                                 (click)="openDeleteDialog(organization)"
                                 class="p-button-rounded p-button-text p-button-danger"
-                                pTooltip="Удалить"
+                                [pTooltip]="'COMMON.DELETE' | translate"
                                 tooltipPosition="top">
                         </button>
                     </div>
@@ -116,9 +116,9 @@
                                 <ng-template #header>
                                     <tr>
                                         <th style="width: 4rem"></th>
-                                        <th style="min-width: 15rem">Название</th>
-                                        <th style="min-width: 12rem">Родительская организация</th>
-                                        <th style="width: 10rem">Действия</th>
+                                        <th style="min-width: 15rem">{{ 'COMMON.NAME' | translate }}</th>
+                                        <th style="min-width: 12rem">{{ 'HRM.ORGANIZATIONS.PARENT_ORGANIZATION' | translate }}</th>
+                                        <th style="width: 10rem">{{ 'HRM.ORGANIZATIONS.ACTIONS' | translate }}</th>
                                     </tr>
                                 </ng-template>
                                 <ng-template #body let-child let-expanded="expanded">
@@ -143,14 +143,14 @@
                                                         icon="pi pi-pencil"
                                                         (click)="openEditDialog(child)"
                                                         class="p-button-rounded p-button-text p-button-warning"
-                                                        pTooltip="Редактировать"
+                                                        [pTooltip]="'COMMON.EDIT' | translate"
                                                         tooltipPosition="top">
                                                 </button>
                                                 <button pButton
                                                         icon="pi pi-trash"
                                                         (click)="openDeleteDialog(child)"
                                                         class="p-button-rounded p-button-text p-button-danger"
-                                                        pTooltip="Удалить"
+                                                        [pTooltip]="'COMMON.DELETE' | translate"
                                                         tooltipPosition="top">
                                                 </button>
                                             </div>
@@ -188,7 +188,7 @@
                                 </ng-template>
                                 <ng-template #emptymessage>
                                     <tr>
-                                        <td colspan="4">Нет дочерних организаций</td>
+                                        <td colspan="4">{{ 'HRM.ORGANIZATIONS.NO_CHILDREN' | translate }}</td>
                                     </tr>
                                 </ng-template>
                             </p-table>
@@ -199,12 +199,12 @@
         </ng-template>
         <ng-template #emptymessage>
             <tr>
-                <td colspan="4">Ничего не найдено</td>
+                <td colspan="4">{{ 'HRM.ORGANIZATIONS.NOTHING_FOUND' | translate }}</td>
             </tr>
         </ng-template>
         <ng-template #loadingbody>
             <tr>
-                <td colspan="4">Идет загрузка. Ожидайте...</td>
+                <td colspan="4">{{ 'HRM.ORGANIZATIONS.LOADING' | translate }}</td>
             </tr>
         </ng-template>
     </p-table>
@@ -212,23 +212,23 @@
 
 <app-dialog
     [(visible)]="displayDialog"
-    [header]="isEditMode ? 'Редактировать организацию' : 'Новая организация'"
+    [header]="isEditMode ? ('HRM.ORGANIZATIONS.EDIT_ORGANIZATION' | translate) : ('HRM.ORGANIZATIONS.NEW_ORGANIZATION' | translate)"
     [form]="organizationForm"
-    [saveLabel]="isEditMode ? 'Обновить' : 'Сохранить'"
+    [saveLabel]="isEditMode ? ('HRM.ORGANIZATIONS.UPDATE' | translate) : ('COMMON.SAVE' | translate)"
     (save)="onSubmit()"
     (cancel)="closeDialog()">
     <form class="p-4" [formGroup]="organizationForm" (ngSubmit)="onSubmit()">
         <app-input-text
             formControlName="name"
-            label="Название"
+            [label]="'COMMON.NAME' | translate"
             [submitted]="submitted"
-            errorMessage="Название обязательно"
+            [errorMessage]="'HRM.ORGANIZATIONS.NAME_REQUIRED' | translate"
             [required]="true">
         </app-input-text>
 
         <app-select
             formControlName="parent_organization_id"
-            label="Родительская организация"
+            [label]="'HRM.ORGANIZATIONS.PARENT_ORGANIZATION' | translate"
             [items]="getAvailableParentOrganizations()"
             [submitted]="submitted"
             [required]="false"
@@ -239,6 +239,6 @@
 
 <app-delete-confirmation
     [(visible)]="displayDeleteDialog"
-    [message]="'Вы уверены, что хотите удалить организацию ' + (selectedOrganization?.name || '') + '?'"
+    [message]="('HRM.ORGANIZATIONS.DELETE_CONFIRM' | translate) + ' ' + (selectedOrganization?.name || '') + '?'"
     (onConfirm)="confirmDelete()">
 </app-delete-confirmation>

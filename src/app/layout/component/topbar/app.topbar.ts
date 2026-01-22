@@ -13,13 +13,15 @@ import { AppConfigurator } from '@/layout/component/app.configurator';
 import { TopbarCalendarWidget } from '@/layout/component/topbar/topbar-calendar/topbar-calendar-widget.component';
 import { FastCallWidget } from '@/layout/component/topbar/fast-call/fast-call.widget';
 import { InboxWidget } from '@/layout/component/topbar/inbox/inbox-widget.component';
+import { LanguageSwitcherComponent } from '@/layout/component/topbar/language-switcher/language-switcher.component';
 import { updateSurfacePalette } from '@primeuix/themes';
 import { AuthService } from '@/core/services/auth.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-topbar',
     standalone: true,
-    imports: [RouterModule, CommonModule, StyleClassModule, ProfileMenu, PopoverModule, TableModule, ToastModule, FormsModule, AppConfigurator, TopbarCalendarWidget, NgOptimizedImage, FastCallWidget, InboxWidget],
+    imports: [RouterModule, CommonModule, StyleClassModule, ProfileMenu, PopoverModule, TableModule, ToastModule, FormsModule, AppConfigurator, TopbarCalendarWidget, NgOptimizedImage, FastCallWidget, InboxWidget, LanguageSwitcherComponent, TranslateModule],
     providers: [MessageService],
     template: ` <div class="layout-topbar">
         <div class="layout-topbar-logo-container">
@@ -28,18 +30,35 @@ import { AuthService } from '@/core/services/auth.service';
             </button>
             <a class="layout-topbar-logo" routerLink="/">
                 <img ngSrc="/images/logo-x.png" alt="" width="52" height="22" />
-                <span class="text-nowrap"
-                    >Планшет
-                    @if (authService.hasRole('first deputy')) {
-                        <span>Первого заместителя</span>
+                <span class="text-nowrap">
+                    @if (authService.hasRole('admin')) {
+                        {{ 'MENU.TABLET_ADMIN' | translate }}
+                    } @else if (authService.hasRole('first deputy')) {
+                        {{ 'MENU.TABLET_FIRST_DEPUTY' | translate }}
+                    } @else if (authService.hasRole('rais')) {
+                        {{ 'MENU.TABLET_CHAIRMAN' | translate }}
+                    } @else if (authService.hasRole('assistant')) {
+                        {{ 'MENU.TABLET_ASSISTANT' | translate }}
+                    } @else if (authService.hasRole('investment')) {
+                        {{ 'MENU.TABLET_INVESTMENT' | translate }}
+                    } @else if (authService.hasRole('sc')) {
+                        {{ 'MENU.TABLET_DUTY' | translate }}
+                    } @else {
+                        {{ 'MENU.TABLET' | translate }}
                     }
-                    Председателя правления</span
-                >
+                </span>
             </a>
         </div>
 
         <div class="layout-topbar-actions">
+            <!-- Emergency SOS Button -->
+            <a href="tel:112" class="layout-topbar-action-emergency">
+                <i class="pi pi-phone"></i>
+                <span class="emergency-text">SOS</span>
+            </a>
+
             <div class="layout-config-menu">
+                <app-language-switcher></app-language-switcher>
                 <button type="button" class="layout-topbar-action" (click)="toggleDarkMode()">
                     <i [ngClass]="{ 'pi ': true, 'pi-moon': layoutService.isDarkTheme(), 'pi-sun': !layoutService.isDarkTheme() }"></i>
                 </button>
@@ -63,11 +82,11 @@ import { AuthService } from '@/core/services/auth.service';
                 <i class="pi pi-ellipsis-v"></i>
             </button>
 
-            <!-- Fast calls -->
-            <app-fast-call></app-fast-call>
-
             <div class="layout-topbar-menu hidden lg:block">
                 <div class="layout-topbar-menu-content">
+                    <!-- Fast calls -->
+                    <app-fast-call></app-fast-call>
+
                     <!--  Calendar  -->
                     <app-topbar-calendar></app-topbar-calendar>
 

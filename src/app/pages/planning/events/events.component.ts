@@ -10,6 +10,7 @@ import { TagModule } from 'primeng/tag';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import { AutoCompleteModule } from 'primeng/autocomplete';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 // Custom Dialog Components
 import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
@@ -45,6 +46,7 @@ import { Tooltip } from 'primeng/tooltip';
         ConfirmDialogModule,
         ToastModule,
         AutoCompleteModule,
+        TranslateModule,
         DialogComponent,
         InputTextComponent,
         TextareaComponent,
@@ -67,6 +69,7 @@ export class EventsComponent implements OnInit, OnDestroy {
     private fb = inject(FormBuilder);
     private messageService = inject(MessageService);
     private confirmationService = inject(ConfirmationService);
+    private translate = inject(TranslateService);
     private destroy$ = new Subject<void>();
 
     // State
@@ -158,8 +161,8 @@ export class EventsComponent implements OnInit, OnDestroy {
                     console.error('Failed to load reference data:', error);
                     this.messageService.add({
                         severity: 'error',
-                        summary: 'Ошибка',
-                        detail: 'Не удалось загрузить справочные данные'
+                        summary: this.translate.instant('PLANNING.COMMON.ERROR'),
+                        detail: this.translate.instant('PLANNING.EVENTS.LOAD_REF_ERROR')
                     });
                 }
             });
@@ -185,8 +188,8 @@ export class EventsComponent implements OnInit, OnDestroy {
                     this.loading.set(false);
                     this.messageService.add({
                         severity: 'error',
-                        summary: 'Ошибка',
-                        detail: 'Не удалось загрузить события'
+                        summary: this.translate.instant('PLANNING.COMMON.ERROR'),
+                        detail: this.translate.instant('PLANNING.EVENTS.LOAD_ERROR')
                     });
                 }
             });
@@ -206,21 +209,6 @@ export class EventsComponent implements OnInit, OnDestroy {
         if (formValue.dateTo) filters.dateTo = formValue.dateTo.toISOString();
 
         return Object.keys(filters).length > 0 ? filters : undefined;
-    }
-
-    /**
-     * Apply filters
-     */
-    applyFilters() {
-        this.loadEvents();
-    }
-
-    /**
-     * Clear all filters
-     */
-    clearFilters() {
-        this.filterForm.reset();
-        this.loadEvents();
     }
 
     /**
@@ -356,17 +344,6 @@ export class EventsComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Format file size
-     */
-    formatFileSize(bytes: number): string {
-        if (!bytes || bytes === 0) return '0 Bytes';
-        const k = 1024;
-        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-        const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
-    }
-
-    /**
      * Submit form (create or update)
      */
     onSubmit() {
@@ -376,8 +353,8 @@ export class EventsComponent implements OnInit, OnDestroy {
         if (this.eventForm.invalid) {
             this.messageService.add({
                 severity: 'warn',
-                summary: 'Внимание',
-                detail: 'Пожалуйста, заполните все обязательные поля'
+                summary: this.translate.instant('PLANNING.COMMON.WARNING'),
+                detail: this.translate.instant('PLANNING.COMMON.PLEASE_FILL_REQUIRED')
             });
             return;
         }
@@ -399,11 +376,11 @@ export class EventsComponent implements OnInit, OnDestroy {
             .createEvent(formData)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
-                next: (response) => {
+                next: () => {
                     this.messageService.add({
                         severity: 'success',
-                        summary: 'Успех',
-                        detail: 'Событие успешно создано'
+                        summary: this.translate.instant('PLANNING.COMMON.SUCCESS'),
+                        detail: this.translate.instant('PLANNING.EVENTS.CREATED')
                     });
                     this.displayDialog.set(false);
                     this.loadEvents();
@@ -412,8 +389,8 @@ export class EventsComponent implements OnInit, OnDestroy {
                     console.error('Failed to create event:', error);
                     this.messageService.add({
                         severity: 'error',
-                        summary: 'Ошибка',
-                        detail: error.error?.error || 'Не удалось создать событие'
+                        summary: this.translate.instant('PLANNING.COMMON.ERROR'),
+                        detail: error.error?.error || this.translate.instant('PLANNING.EVENTS.CREATE_ERROR')
                     });
                 }
             });
@@ -436,8 +413,8 @@ export class EventsComponent implements OnInit, OnDestroy {
                 next: () => {
                     this.messageService.add({
                         severity: 'success',
-                        summary: 'Успех',
-                        detail: 'Событие успешно обновлено'
+                        summary: this.translate.instant('PLANNING.COMMON.SUCCESS'),
+                        detail: this.translate.instant('PLANNING.EVENTS.UPDATED')
                     });
                     this.displayDialog.set(false);
                     this.loadEvents();
@@ -446,8 +423,8 @@ export class EventsComponent implements OnInit, OnDestroy {
                     console.error('Failed to update event:', error);
                     this.messageService.add({
                         severity: 'error',
-                        summary: 'Ошибка',
-                        detail: error.error?.error || 'Не удалось обновить событие'
+                        summary: this.translate.instant('PLANNING.COMMON.ERROR'),
+                        detail: error.error?.error || this.translate.instant('PLANNING.EVENTS.UPDATE_ERROR')
                     });
                 }
             });
@@ -505,11 +482,11 @@ export class EventsComponent implements OnInit, OnDestroy {
      */
     deleteEvent(event: Event) {
         this.confirmationService.confirm({
-            message: `Вы уверены, что хотите удалить событие "${event.name}"?`,
-            header: 'Подтверждение удаления',
+            message: `${this.translate.instant('PLANNING.EVENTS.DELETE_CONFIRM')} "${event.name}"?`,
+            header: this.translate.instant('PLANNING.EVENTS.DELETE_HEADER'),
             icon: 'pi pi-exclamation-triangle',
-            acceptLabel: 'Да',
-            rejectLabel: 'Отмена',
+            acceptLabel: this.translate.instant('PLANNING.COMMON.YES'),
+            rejectLabel: this.translate.instant('PLANNING.COMMON.CANCEL'),
             accept: () => {
                 this.eventService
                     .deleteEvent(event.id)
@@ -518,8 +495,8 @@ export class EventsComponent implements OnInit, OnDestroy {
                         next: () => {
                             this.messageService.add({
                                 severity: 'success',
-                                summary: 'Успех',
-                                detail: 'Событие успешно удалено'
+                                summary: this.translate.instant('PLANNING.COMMON.SUCCESS'),
+                                detail: this.translate.instant('PLANNING.EVENTS.DELETED')
                             });
                             this.loadEvents();
                         },
@@ -527,8 +504,8 @@ export class EventsComponent implements OnInit, OnDestroy {
                             console.error('Failed to delete event:', error);
                             this.messageService.add({
                                 severity: 'error',
-                                summary: 'Ошибка',
-                                detail: 'Не удалось удалить событие'
+                                summary: this.translate.instant('PLANNING.COMMON.ERROR'),
+                                detail: this.translate.instant('PLANNING.EVENTS.DELETE_ERROR')
                             });
                         }
                     });

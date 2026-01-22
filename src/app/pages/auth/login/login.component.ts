@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
@@ -10,11 +10,12 @@ import { AppFloatingConfigurator } from '@/layout/component/app.floatingconfigur
 import { AuthService } from '@/core/services/auth.service';
 import { finalize } from 'rxjs';
 import { NgOptimizedImage } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-login',
     standalone: true,
-    imports: [ButtonModule, CheckboxModule, InputTextModule, PasswordModule, FormsModule, RouterModule, RippleModule, AppFloatingConfigurator, NgOptimizedImage],
+    imports: [ButtonModule, CheckboxModule, InputTextModule, PasswordModule, FormsModule, RouterModule, RippleModule, AppFloatingConfigurator, NgOptimizedImage, TranslateModule],
     templateUrl: 'login.component.html'
 })
 export class LoginComponent {
@@ -28,10 +29,8 @@ export class LoginComponent {
 
     errorMessage: string | null = null;
 
-    constructor(
-        private authService: AuthService,
-        private router: Router
-    ) {}
+    private authService: AuthService = inject(AuthService);
+    private router: Router = inject(Router);
 
     signIn() {
         this.loading = true;
@@ -45,7 +44,7 @@ export class LoginComponent {
                     this.router.navigate(['/']);
                 },
                 error: () => {
-                    this.errorMessage = 'Логин и/или пароль не верны';
+                    this.errorMessage = 'AUTH.LOGIN_ERROR';
                 }
             });
     }

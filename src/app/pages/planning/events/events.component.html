@@ -1,8 +1,8 @@
 <div class="card">
     <div class="flex justify-between items-center mb-4">
-        <h2 class="text-2xl font-bold">Все события</h2>
+        <h2 class="text-2xl font-bold">{{ 'PLANNING.EVENTS.TITLE' | translate }}</h2>
         <p-button
-            label="Создать событие"
+            [label]="'PLANNING.EVENTS.NEW' | translate"
             icon="pi pi-plus"
             (onClick)="openCreateDialog()"
         ></p-button>
@@ -77,28 +77,28 @@
         [rowsPerPageOptions]="[10, 25, 50]"
         [showCurrentPageReport]="true"
         [scrollable]="true"
-        currentPageReportTemplate="Показано {first} - {last} из {totalRecords}"
+        [currentPageReportTemplate]="'PLANNING.COMMON.PAGE_REPORT' | translate"
         [globalFilterFields]="['name', 'description', 'location', 'responsible_contact.name']"
     >
         <ng-template pTemplate="header">
             <tr>
-                <th pSortableColumn="name">Название
+                <th pSortableColumn="name">{{ 'PLANNING.COMMON.NAME' | translate }}
                     <p-sortIcon field="name"></p-sortIcon>
                 </th>
-                <th pSortableColumn="event_type.name">Тип
+                <th pSortableColumn="event_type.name">{{ 'PLANNING.EVENTS.TYPE' | translate }}
                     <p-sortIcon field="event_type.name"></p-sortIcon>
                 </th>
-                <th pSortableColumn="event_status.name">Статус
+                <th pSortableColumn="event_status.name">{{ 'PLANNING.COMMON.STATUS' | translate }}
                     <p-sortIcon field="event_status.name"></p-sortIcon>
                 </th>
-                <th pSortableColumn="event_date">Дата
+                <th pSortableColumn="event_date">{{ 'PLANNING.COMMON.DATE' | translate }}
                     <p-sortIcon field="event_date"></p-sortIcon>
                 </th>
-                <th>Место</th>
-                <th>Организация</th>
-                <th>Ответственный</th>
-                <th>Файлы</th>
-                <th style="width: 150px">Действия</th>
+                <th>{{ 'PLANNING.EVENTS.LOCATION' | translate }}</th>
+                <th>{{ 'PLANNING.EVENTS.ORGANIZATION' | translate }}</th>
+                <th>{{ 'PLANNING.EVENTS.RESPONSIBLE' | translate }}</th>
+                <th>{{ 'PLANNING.EVENTS.FILES' | translate }}</th>
+                <th style="width: 150px">{{ 'PLANNING.COMMON.ACTIONS' | translate }}</th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-event>
@@ -128,7 +128,7 @@
                             severity="secondary"
                             [text]="true"
                             (click)="showFiles(event)"
-                            pTooltip="Просмотр файлов"
+                            [pTooltip]="'PLANNING.EVENTS.VIEW_FILES' | translate"
                         />
                     } @else {
                         <span class="text-color-secondary">—</span>
@@ -141,7 +141,7 @@
                             [rounded]="true"
                             [text]="true"
                             (onClick)="openEditDialog(event)"
-                            pTooltip="Редактировать"
+                            [pTooltip]="'PLANNING.COMMON.EDIT' | translate"
                         ></p-button>
                         <p-button
                             icon="pi pi-trash"
@@ -149,7 +149,7 @@
                             [text]="true"
                             severity="danger"
                             (onClick)="deleteEvent(event)"
-                            pTooltip="Удалить"
+                            [pTooltip]="'PLANNING.COMMON.DELETE' | translate"
                         ></p-button>
                     </div>
                 </td>
@@ -157,7 +157,7 @@
         </ng-template>
         <ng-template pTemplate="emptymessage">
             <tr>
-                <td colspan="9" class="text-center py-4">Событий не найдено</td>
+                <td colspan="9" class="text-center py-4">{{ 'PLANNING.EVENTS.NO_EVENTS' | translate }}</td>
             </tr>
         </ng-template>
     </p-table>
@@ -165,10 +165,10 @@
 
 <!-- Create/Edit Dialog -->
 <app-dialog
-    [header]="isEditMode() ? 'Редактировать событие' : 'Создать событие'"
+    [header]="isEditMode() ? ('PLANNING.EVENTS.EDIT' | translate) : ('PLANNING.EVENTS.NEW' | translate)"
     [(visible)]="displayDialog"
     [form]="eventForm"
-    [saveLabel]="isEditMode() ? 'Сохранить' : 'Создать'"
+    [saveLabel]="isEditMode() ? ('PLANNING.COMMON.SAVE' | translate) : ('PLANNING.COMMON.CREATE' | translate)"
     (save)="onSubmit()"
     (cancel)="closeDialog()"
 >
@@ -176,16 +176,16 @@
         <div class="grid grid-cols-1 gap-4">
             <!-- Name -->
             <app-input-text
-                label="Название"
+                [label]="'PLANNING.COMMON.NAME' | translate"
                 formControlName="name"
                 [submitted]="submitted"
                 [required]="true"
-                errorMessage="Название обязательно для заполнения"
+                [errorMessage]="'PLANNING.COMMON.NAME_REQUIRED' | translate"
             ></app-input-text>
 
             <!-- Description -->
             <app-textarea
-                label="Описание"
+                [label]="'PLANNING.COMMON.DESCRIPTION' | translate"
                 formControlName="description"
                 [rows]="3"
                 [required]="false"
@@ -193,33 +193,33 @@
 
             <!-- Location -->
             <app-input-text
-                label="Место"
+                [label]="'PLANNING.EVENTS.LOCATION' | translate"
                 formControlName="location"
                 [required]="false"
             ></app-input-text>
 
             <!-- Event Date -->
             <app-date-picker
-                label="Дата и время"
+                [label]="'PLANNING.EVENTS.DATE_TIME' | translate"
                 formControlName="event_date"
                 [submitted]="submitted"
                 [showTime]="true"
-                errorMessage="Дата обязательна для заполнения"
+                [errorMessage]="'PLANNING.COMMON.DATE_REQUIRED' | translate"
             ></app-date-picker>
 
             <!-- Event Type -->
             <app-select
-                label="Тип события"
+                [label]="'PLANNING.EVENTS.EVENT_TYPE' | translate"
                 formControlName="event_type_id"
                 [items]="eventTypes"
                 [submitted]="submitted"
-                errorMessage="Тип события обязателен для заполнения"
+                [errorMessage]="'PLANNING.EVENTS.EVENT_TYPE_REQUIRED' | translate"
             ></app-select>
 
             <!-- Event Status (only for edit) -->
             @if (isEditMode()) {
                 <app-select
-                    label="Статус события"
+                    [label]="'PLANNING.EVENTS.EVENT_STATUS' | translate"
                     formControlName="event_status_id"
                     [items]="eventStatuses"
                     [submitted]="false"
@@ -228,7 +228,7 @@
 
             <!-- Organization -->
             <app-select
-                label="Организация"
+                [label]="'PLANNING.EVENTS.ORGANIZATION' | translate"
                 formControlName="organization_id"
                 [items]="organizations"
                 [submitted]="false"
@@ -238,10 +238,10 @@
             <div class="field">
                 <div class="flex justify-between items-center mb-2">
                     <label class="font-semibold">
-                        Ответственное лицо <span class="text-red-500">*</span>
+                        {{ 'PLANNING.EVENTS.RESPONSIBLE_PERSON' | translate }} <span class="text-red-500">*</span>
                     </label>
                     <p-button
-                        [label]="showCreateContact ? 'Выбрать существующего' : 'Создать нового'"
+                        [label]="showCreateContact ? ('PLANNING.EVENTS.SELECT_EXISTING' | translate) : ('PLANNING.EVENTS.CREATE_NEW' | translate)"
                         icon="pi pi-refresh"
                         (onClick)="toggleContactMode()"
                         [text]="true"
@@ -256,7 +256,7 @@
                         [suggestions]="filteredContacts"
                         (completeMethod)="searchContacts($event)"
                         optionLabel="name"
-                        placeholder="Начните вводить имя"
+                        [placeholder]="'PLANNING.EVENTS.START_TYPING_NAME' | translate"
                         [dropdown]="true"
                         class="w-full"
                         [appendTo]="'body'"
@@ -268,18 +268,18 @@
                 @if (showCreateContact) {
                     <div class="grid grid-cols-2 gap-3">
                         <app-input-text
-                            label="ФИО"
+                            [label]="'PLANNING.EVENTS.FIO' | translate"
                             formControlName="responsible_fio"
                             [submitted]="submitted"
                             [required]="true"
-                            errorMessage="ФИО обязательно"
+                            [errorMessage]="'PLANNING.EVENTS.FIO_REQUIRED' | translate"
                         ></app-input-text>
                         <app-input-text
-                            label="Телефон"
+                            [label]="'PLANNING.EVENTS.PHONE' | translate"
                             formControlName="responsible_phone"
                             [submitted]="submitted"
                             [required]="true"
-                            errorMessage="Телефон обязателен"
+                            [errorMessage]="'PLANNING.EVENTS.PHONE_REQUIRED' | translate"
                         ></app-input-text>
                     </div>
                 }
@@ -294,7 +294,7 @@
             }
 
             <app-file-upload
-                [label]="isEditMode() ? 'Добавить новые файлы' : 'Прикрепить файлы'"
+                [label]="isEditMode() ? ('PLANNING.EVENTS.ADD_NEW_FILES' | translate) : ('PLANNING.EVENTS.ATTACH_FILES' | translate)"
                 [files]="selectedFiles"
                 (filesChange)="onFileSelect($event)"
                 (removeFile)="removeFile($event)">
@@ -306,7 +306,7 @@
 <!-- File Viewer Dialog -->
 <app-file-viewer
     [(visible)]="showFilesDialog"
-    [header]="'Файлы события'"
+    [header]="'PLANNING.EVENTS.EVENT_FILES' | translate"
     [files]="selectedEventForFiles?.files || []">
 </app-file-viewer>
 

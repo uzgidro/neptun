@@ -18,6 +18,7 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { ChartModule } from 'primeng/chart';
 import { TextareaModule } from 'primeng/textarea';
 import { FinancialDashboardService } from '../dashboard/services/financial-dashboard.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 interface RepairCategory {
     label: string;
@@ -63,7 +64,8 @@ interface RepairRecord {
         InputGroupModule,
         InputGroupAddonModule,
         ChartModule,
-        TextareaModule
+        TextareaModule,
+        TranslateModule
     ],
     providers: [ConfirmationService, MessageService],
     templateUrl: './repair-costs.component.html',
@@ -86,28 +88,9 @@ export class RepairCostsComponent implements OnInit {
     selectedRepairType: string | null = null;
 
     // Dropdown options
-    categories: RepairCategory[] = [
-        { label: 'Электрика', value: 'electrical', icon: 'pi pi-bolt' },
-        { label: 'Механика', value: 'mechanical', icon: 'pi pi-cog' },
-        { label: 'Строительство', value: 'construction', icon: 'pi pi-building' },
-        { label: 'Сантехника', value: 'plumbing', icon: 'pi pi-filter' },
-        { label: 'Кондиционирование', value: 'hvac', icon: 'pi pi-sun' },
-        { label: 'IT оборудование', value: 'it', icon: 'pi pi-desktop' },
-        { label: 'Прочее', value: 'other', icon: 'pi pi-ellipsis-h' }
-    ];
-
-    repairTypes: RepairType[] = [
-        { label: 'Плановый', value: 'planned' },
-        { label: 'Внеплановый', value: 'unplanned' },
-        { label: 'Аварийный', value: 'emergency' }
-    ];
-
-    statuses = [
-        { label: 'Запланирован', value: 'scheduled' },
-        { label: 'В работе', value: 'in_progress' },
-        { label: 'Завершён', value: 'completed' },
-        { label: 'Отменён', value: 'cancelled' }
-    ];
+    categories: RepairCategory[] = [];
+    repairTypes: RepairType[] = [];
+    statuses: { label: string; value: string }[] = [];
 
     // Charts
     categoryChartData: any;
@@ -118,6 +101,7 @@ export class RepairCostsComponent implements OnInit {
     plannedVsActualOptions: any;
 
     private dashboardService = inject(FinancialDashboardService);
+    private translate = inject(TranslateService);
 
     constructor(
         private confirmationService: ConfirmationService,
@@ -125,10 +109,42 @@ export class RepairCostsComponent implements OnInit {
     ) {}
 
     ngOnInit() {
+        this.initTranslations();
         this.loadRepairs();
         this.applyFilters();
         this.initCharts();
         this.updateDashboardData();
+
+        this.translate.onLangChange.subscribe(() => {
+            this.initTranslations();
+            this.updateCharts();
+        });
+    }
+
+    private initTranslations(): void {
+        const t = this.translate;
+        this.categories = [
+            { label: t.instant('FINANCIAL_BLOCK.REPAIR_COSTS.CATEGORY_ELECTRICAL'), value: 'electrical', icon: 'pi pi-bolt' },
+            { label: t.instant('FINANCIAL_BLOCK.REPAIR_COSTS.CATEGORY_MECHANICAL'), value: 'mechanical', icon: 'pi pi-cog' },
+            { label: t.instant('FINANCIAL_BLOCK.REPAIR_COSTS.CATEGORY_CONSTRUCTION'), value: 'construction', icon: 'pi pi-building' },
+            { label: t.instant('FINANCIAL_BLOCK.REPAIR_COSTS.CATEGORY_PLUMBING'), value: 'plumbing', icon: 'pi pi-filter' },
+            { label: t.instant('FINANCIAL_BLOCK.REPAIR_COSTS.CATEGORY_HVAC'), value: 'hvac', icon: 'pi pi-sun' },
+            { label: t.instant('FINANCIAL_BLOCK.REPAIR_COSTS.CATEGORY_IT'), value: 'it', icon: 'pi pi-desktop' },
+            { label: t.instant('FINANCIAL_BLOCK.REPAIR_COSTS.CATEGORY_OTHER'), value: 'other', icon: 'pi pi-ellipsis-h' }
+        ];
+
+        this.repairTypes = [
+            { label: t.instant('FINANCIAL_BLOCK.REPAIR_COSTS.TYPE_PLANNED'), value: 'planned' },
+            { label: t.instant('FINANCIAL_BLOCK.REPAIR_COSTS.TYPE_UNPLANNED'), value: 'unplanned' },
+            { label: t.instant('FINANCIAL_BLOCK.REPAIR_COSTS.TYPE_EMERGENCY'), value: 'emergency' }
+        ];
+
+        this.statuses = [
+            { label: t.instant('FINANCIAL_BLOCK.REPAIR_COSTS.STATUS_SCHEDULED'), value: 'scheduled' },
+            { label: t.instant('FINANCIAL_BLOCK.REPAIR_COSTS.STATUS_IN_PROGRESS'), value: 'in_progress' },
+            { label: t.instant('FINANCIAL_BLOCK.REPAIR_COSTS.STATUS_COMPLETED'), value: 'completed' },
+            { label: t.instant('FINANCIAL_BLOCK.REPAIR_COSTS.STATUS_CANCELLED'), value: 'cancelled' }
+        ];
     }
 
     private updateDashboardData(): void {
@@ -272,8 +288,8 @@ export class RepairCostsComponent implements OnInit {
         if (!this.currentRepair.objectName || !this.currentRepair.contractor) {
             this.messageService.add({
                 severity: 'warn',
-                summary: 'Внимание',
-                detail: 'Заполните обязательные поля'
+                summary: this.translate.instant('FINANCIAL_BLOCK.COMMON.WARNING'),
+                detail: this.translate.instant('FINANCIAL_BLOCK.COMMON.FILL_REQUIRED')
             });
             return;
         }
@@ -281,8 +297,8 @@ export class RepairCostsComponent implements OnInit {
         if (!this.currentRepair.plannedCost || this.currentRepair.plannedCost <= 0) {
             this.messageService.add({
                 severity: 'warn',
-                summary: 'Внимание',
-                detail: 'Укажите плановую стоимость'
+                summary: this.translate.instant('FINANCIAL_BLOCK.COMMON.WARNING'),
+                detail: this.translate.instant('FINANCIAL_BLOCK.REPAIR_COSTS.SPECIFY_PLANNED_COST')
             });
             return;
         }
@@ -294,16 +310,16 @@ export class RepairCostsComponent implements OnInit {
             }
             this.messageService.add({
                 severity: 'success',
-                summary: 'Успешно',
-                detail: 'Запись обновлена'
+                summary: this.translate.instant('FINANCIAL_BLOCK.COMMON.SUCCESS'),
+                detail: this.translate.instant('FINANCIAL_BLOCK.REPAIR_COSTS.REPAIR_UPDATED')
             });
         } else {
             this.currentRepair.id = Math.max(...this.repairs.map(r => r.id), 0) + 1;
             this.repairs.push({ ...this.currentRepair });
             this.messageService.add({
                 severity: 'success',
-                summary: 'Успешно',
-                detail: 'Запись добавлена'
+                summary: this.translate.instant('FINANCIAL_BLOCK.COMMON.SUCCESS'),
+                detail: this.translate.instant('FINANCIAL_BLOCK.REPAIR_COSTS.REPAIR_ADDED')
             });
         }
 
@@ -314,19 +330,19 @@ export class RepairCostsComponent implements OnInit {
 
     deleteRepair(repair: RepairRecord) {
         this.confirmationService.confirm({
-            message: `Вы уверены, что хотите удалить запись "${repair.objectName}"?`,
-            header: 'Подтверждение удаления',
+            message: `${this.translate.instant('FINANCIAL_BLOCK.REPAIR_COSTS.DELETE_CONFIRM')} "${repair.objectName}"?`,
+            header: this.translate.instant('FINANCIAL_BLOCK.COMMON.CONFIRM_DELETE'),
             icon: 'pi pi-exclamation-triangle',
-            acceptLabel: 'Да',
-            rejectLabel: 'Нет',
+            acceptLabel: this.translate.instant('FINANCIAL_BLOCK.COMMON.YES'),
+            rejectLabel: this.translate.instant('FINANCIAL_BLOCK.COMMON.NO'),
             accept: () => {
                 this.repairs = this.repairs.filter(r => r.id !== repair.id);
                 this.applyFilters();
                 this.updateDashboardData();
                 this.messageService.add({
                     severity: 'success',
-                    summary: 'Успешно',
-                    detail: 'Запись удалена'
+                    summary: this.translate.instant('FINANCIAL_BLOCK.COMMON.SUCCESS'),
+                    detail: this.translate.instant('FINANCIAL_BLOCK.REPAIR_COSTS.REPAIR_DELETED')
                 });
             }
         });
@@ -390,38 +406,51 @@ export class RepairCostsComponent implements OnInit {
 
     // Export to Excel
     exportToExcel() {
+        const t = this.translate;
+        const dateCol = t.instant('FINANCIAL_BLOCK.REPAIR_COSTS.EXPORT_COLUMNS.DATE');
+        const objectCol = t.instant('FINANCIAL_BLOCK.REPAIR_COSTS.EXPORT_COLUMNS.OBJECT');
+        const typeCol = t.instant('FINANCIAL_BLOCK.REPAIR_COSTS.EXPORT_COLUMNS.REPAIR_TYPE');
+        const catCol = t.instant('FINANCIAL_BLOCK.REPAIR_COSTS.EXPORT_COLUMNS.CATEGORY');
+        const plannedCol = t.instant('FINANCIAL_BLOCK.REPAIR_COSTS.EXPORT_COLUMNS.PLANNED_COST');
+        const actualCol = t.instant('FINANCIAL_BLOCK.REPAIR_COSTS.EXPORT_COLUMNS.ACTUAL_COST');
+        const diffCol = t.instant('FINANCIAL_BLOCK.REPAIR_COSTS.EXPORT_COLUMNS.DIFFERENCE');
+        const contractorCol = t.instant('FINANCIAL_BLOCK.REPAIR_COSTS.EXPORT_COLUMNS.CONTRACTOR');
+        const statusCol = t.instant('FINANCIAL_BLOCK.REPAIR_COSTS.EXPORT_COLUMNS.STATUS');
+        const descCol = t.instant('FINANCIAL_BLOCK.REPAIR_COSTS.EXPORT_COLUMNS.DESCRIPTION');
+        const totalLabel = t.instant('FINANCIAL_BLOCK.REPAIR_COSTS.EXPORT_COLUMNS.TOTAL');
+
         const data = this.filteredRepairs.map(r => ({
-            'Дата': new Date(r.date).toLocaleDateString('ru-RU'),
-            'Объект': r.objectName,
-            'Тип ремонта': this.getRepairTypeLabel(r.repairType),
-            'Категория': this.getCategoryLabel(r.category),
-            'Плановая стоимость': r.plannedCost,
-            'Фактическая стоимость': r.actualCost || '',
-            'Разница': this.getCostVariance(r) || '',
-            'Подрядчик': r.contractor,
-            'Статус': this.getStatusLabel(r.status),
-            'Описание': r.description
+            [dateCol]: new Date(r.date).toLocaleDateString('ru-RU'),
+            [objectCol]: r.objectName,
+            [typeCol]: this.getRepairTypeLabel(r.repairType),
+            [catCol]: this.getCategoryLabel(r.category),
+            [plannedCol]: r.plannedCost,
+            [actualCol]: r.actualCost || '',
+            [diffCol]: this.getCostVariance(r) || '',
+            [contractorCol]: r.contractor,
+            [statusCol]: this.getStatusLabel(r.status),
+            [descCol]: r.description
         }));
 
         // Add totals row
         data.push({
-            'Дата': '',
-            'Объект': 'ИТОГО',
-            'Тип ремонта': '',
-            'Категория': '',
-            'Плановая стоимость': this.totalPlannedCost,
-            'Фактическая стоимость': this.totalActualCost,
-            'Разница': this.costDifference,
-            'Подрядчик': '',
-            'Статус': '',
-            'Описание': ''
+            [dateCol]: '',
+            [objectCol]: totalLabel,
+            [typeCol]: '',
+            [catCol]: '',
+            [plannedCol]: this.totalPlannedCost,
+            [actualCol]: this.totalActualCost,
+            [diffCol]: this.costDifference,
+            [contractorCol]: '',
+            [statusCol]: '',
+            [descCol]: ''
         });
 
         // Convert to CSV
         const headers = Object.keys(data[0]);
         const csvContent = [
             headers.join(';'),
-            ...data.map(row => headers.map(h => row[h as keyof typeof row]).join(';'))
+            ...data.map(row => headers.map(h => (row as any)[h]).join(';'))
         ].join('\n');
 
         // Add BOM for Excel to recognize UTF-8
@@ -440,8 +469,8 @@ export class RepairCostsComponent implements OnInit {
 
         this.messageService.add({
             severity: 'success',
-            summary: 'Экспорт',
-            detail: 'Файл успешно экспортирован'
+            summary: t.instant('FINANCIAL_BLOCK.COMMON.EXPORT'),
+            detail: t.instant('FINANCIAL_BLOCK.COMMON.EXPORT_SUCCESS')
         });
     }
 
@@ -582,7 +611,21 @@ export class RepairCostsComponent implements OnInit {
     }
 
     updateMonthlyChart() {
-        const months = ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'];
+        const t = this.translate;
+        const months = [
+            t.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.MONTHS.JAN'),
+            t.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.MONTHS.FEB'),
+            t.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.MONTHS.MAR'),
+            t.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.MONTHS.APR'),
+            t.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.MONTHS.MAY'),
+            t.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.MONTHS.JUN'),
+            t.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.MONTHS.JUL'),
+            t.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.MONTHS.AUG'),
+            t.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.MONTHS.SEP'),
+            t.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.MONTHS.OCT'),
+            t.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.MONTHS.NOV'),
+            t.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.MONTHS.DEC')
+        ];
         const plannedByMonth: number[] = new Array(12).fill(0);
         const actualByMonth: number[] = new Array(12).fill(0);
 
@@ -600,7 +643,7 @@ export class RepairCostsComponent implements OnInit {
             labels: months,
             datasets: [
                 {
-                    label: 'Плановые затраты',
+                    label: t.instant('FINANCIAL_BLOCK.REPAIR_COSTS.PLANNED_COSTS'),
                     data: plannedByMonth,
                     backgroundColor: 'rgba(59, 130, 246, 0.7)',
                     borderColor: '#3B82F6',
@@ -608,7 +651,7 @@ export class RepairCostsComponent implements OnInit {
                     borderRadius: 4
                 },
                 {
-                    label: 'Фактические затраты',
+                    label: t.instant('FINANCIAL_BLOCK.REPAIR_COSTS.ACTUAL_COSTS'),
                     data: actualByMonth,
                     backgroundColor: 'rgba(34, 197, 94, 0.7)',
                     borderColor: '#22C55E',
@@ -620,11 +663,15 @@ export class RepairCostsComponent implements OnInit {
     }
 
     updatePlannedVsActualChart() {
+        const t = this.translate;
         const completedPlanned = this.completedRepairs.reduce((sum, r) => sum + r.plannedCost, 0);
         const completedActual = this.completedRepairs.reduce((sum, r) => sum + (r.actualCost || 0), 0);
 
         this.plannedVsActualData = {
-            labels: ['Плановые', 'Фактические'],
+            labels: [
+                t.instant('FINANCIAL_BLOCK.REPAIR_COSTS.PLANNED_COSTS'),
+                t.instant('FINANCIAL_BLOCK.REPAIR_COSTS.ACTUAL_COSTS')
+            ],
             datasets: [{
                 data: [completedPlanned, completedActual],
                 backgroundColor: ['rgba(59, 130, 246, 0.8)', 'rgba(34, 197, 94, 0.8)'],

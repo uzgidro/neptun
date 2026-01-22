@@ -2,54 +2,46 @@
 
     <!-- HEADER -->
     <div class="dashboard-header">
-        <h2>Инвестиционный дашборд</h2>
+        <h2>{{ 'FINANCIAL_BLOCK.INVESTMENT.TITLE' | translate }}</h2>
     </div>
 
     <!-- KPI -->
     <div class="kpi-row">
         <div class="kpi-card neutral">
-            <span>Всего проектов</span>
+            <span>{{ 'FINANCIAL_BLOCK.INVESTMENT.TOTAL_PROJECTS' | translate }}</span>
             <strong>{{ filteredInvestments.length }}</strong>
         </div>
-        <div class="kpi-card debit">
-            <span>Активная фаза</span>
+        <div class="kpi-card success">
+            <span>{{ 'FINANCIAL_BLOCK.INVESTMENT.ACTIVE_PHASE' | translate }}</span>
             <strong>{{ activePhaseCount }}</strong>
         </div>
-        <div class="kpi-card credit">
-            <span>В разработке</span>
+        <div class="kpi-card warning">
+            <span>{{ 'FINANCIAL_BLOCK.INVESTMENT.IN_DEVELOPMENT' | translate }}</span>
             <strong>{{ inDevelopmentCount }}</strong>
         </div>
         <div class="kpi-card balance">
-            <span>Общая стоимость</span>
+            <span>{{ 'FINANCIAL_BLOCK.INVESTMENT.TOTAL_COST' | translate }}</span>
             <strong>{{ totalAmount | number }} UZS</strong>
         </div>
     </div>
 
     <!-- ADD BUTTON & DATE RANGE -->
     <div class="action-row mb-6">
-        <p-button label="Добавить проект" icon="pi pi-plus" (click)="openNew()" />
-        <div class="date-range-filter">
-            <p-datepicker
-                [(ngModel)]="dateRange"
-                selectionMode="range"
-                [showIcon]="true"
-                [showButtonBar]="true"
-                placeholder="Выберите диапазон дат"
-                dateFormat="dd.mm.yy"
-                (onSelect)="onDateRangeChange()"
-                (onClear)="onDateRangeClear()">
-            </p-datepicker>
-            @if (dateRange && dateRange.length > 0) {
-                <p-button
-                    icon="pi pi-times"
-                    severity="secondary"
-                    [text]="true"
-                    [rounded]="true"
-                    pTooltip="Сбросить диапазон"
-                    (click)="onDateRangeClear()">
-                </p-button>
-            }
-        </div>
+        <p-button [label]="'FINANCIAL_BLOCK.INVESTMENT.ADD_PROJECT' | translate" icon="pi pi-plus"
+                  (click)="openNew()" />
+
+        <p-datepicker
+            [(ngModel)]="dateRange"
+            selectionMode="range"
+            [showIcon]="true"
+            [showButtonBar]="true"
+            dateFormat="dd.mm.yy"
+            [placeholder]="'FINANCIAL_BLOCK.COMMON.SELECT_DATE_RANGE' | translate"
+            (onSelect)="onDateRangeChange()"
+            (onClear)="onDateRangeClear()"
+            appendTo="body"
+            styleClass="w-72">
+        </p-datepicker>
     </div>
 
     <!-- TABLE -->
@@ -67,33 +59,39 @@
             <ng-template pTemplate="header">
                 <tr>
                     <th pSortableColumn="project_name">
-                        Проект
+                        {{ 'FINANCIAL_BLOCK.INVESTMENT.PROJECT_NAME' | translate }}
                         <p-sortIcon field="project_name"></p-sortIcon>
                     </th>
                     <th pSortableColumn="status">
-                        Статус
+                        {{ 'FINANCIAL_BLOCK.COMMON.STATUS' | translate }}
                         <p-sortIcon field="status"></p-sortIcon>
                     </th>
                     <th pSortableColumn="amount">
-                        Стоимость
+                        {{ 'FINANCIAL_BLOCK.INVESTMENT.AMOUNT' | translate }}
                         <p-sortIcon field="amount"></p-sortIcon>
                     </th>
                     <th pSortableColumn="date">
-                        Дата
+                        {{ 'FINANCIAL_BLOCK.COMMON.DATE' | translate }}
                         <p-sortIcon field="date"></p-sortIcon>
                     </th>
-                    <th style="width: 10%">Файлы</th>
-                    <th>Комментарий</th>
-                    <th style="width: 10%">Действия</th>
+                    <th style="width: 10%">{{ 'FINANCIAL_BLOCK.COMMON.FILES' | translate }}</th>
+                    <th>{{ 'FINANCIAL_BLOCK.COMMON.COMMENT' | translate }}</th>
+                    <th style="width: 10%">{{ 'FINANCIAL_BLOCK.COMMON.ACTIONS' | translate }}</th>
                 </tr>
             </ng-template>
 
             <ng-template pTemplate="body" let-investment>
                 <tr>
                     <td>{{ investment.project_name }}</td>
-                    <td>{{ investment.status }}</td>
+                    <td>
+                        <span [class]="investment.status === 'Активная фаза' ? 'text-green-500' : 'text-orange-500'">
+                            {{ investment.status === 'Активная фаза'
+                                ? ('FINANCIAL_BLOCK.INVESTMENT.ACTIVE_PHASE' | translate)
+                                : ('FINANCIAL_BLOCK.INVESTMENT.IN_DEVELOPMENT' | translate) }}
+                        </span>
+                    </td>
                     <td>{{ investment.amount | number }} UZS</td>
-                    <td>{{ investment.date | date: 'dd.MM.yyyy' }}</td>
+                    <td>{{ investment.date | date:'dd.MM.yyyy' }}</td>
                     <td>
                         @if (investment.files && investment.files.length > 0) {
                             <p-button
@@ -102,7 +100,7 @@
                                 severity="secondary"
                                 [text]="true"
                                 (click)="showFiles(investment)"
-                                pTooltip="Просмотр файлов"
+                                [pTooltip]="'FINANCIAL_BLOCK.COMMON.FILES' | translate"
                             />
                         } @else {
                             <span class="text-color-secondary">—</span>
@@ -116,7 +114,7 @@
                             [text]="true"
                             [rounded]="true"
                             (click)="editInvestment(investment)"
-                            pTooltip="Редактировать"
+                            [pTooltip]="'FINANCIAL_BLOCK.COMMON.EDIT' | translate"
                         />
                         <p-button
                             icon="pi pi-trash"
@@ -124,7 +122,7 @@
                             [text]="true"
                             [rounded]="true"
                             (click)="deleteInvestment(investment.id)"
-                            pTooltip="Удалить"
+                            [pTooltip]="'FINANCIAL_BLOCK.COMMON.DELETE' | translate"
                         />
                     </td>
                 </tr>
@@ -133,7 +131,7 @@
             <ng-template pTemplate="emptymessage">
                 <tr>
                     <td colspan="7" class="text-center">
-                        Проекты не найдены.
+                        {{ 'FINANCIAL_BLOCK.COMMON.NO_DATA' | translate }}
                     </td>
                 </tr>
             </ng-template>
@@ -145,7 +143,7 @@
 <!-- DIALOG FOR ADD/EDIT -->
 <app-dialog
     [(visible)]="isFormOpen"
-    [header]="isEditMode ? 'Редактировать проект' : 'Новый проект'"
+    [header]="isEditMode ? ('FINANCIAL_BLOCK.COMMON.EDIT' | translate) : ('FINANCIAL_BLOCK.INVESTMENT.ADD_PROJECT' | translate)"
     [form]="form"
     [submitting]="isLoading"
     (save)="onSubmit()"
@@ -154,14 +152,14 @@
     <form class="p-4" [formGroup]="form" (ngSubmit)="onSubmit()">
 
         <app-input-text
-            label="Название проекта"
+            [label]="'FINANCIAL_BLOCK.INVESTMENT.PROJECT_NAME' | translate"
             formControlName="project_name"
             [submitted]="submitted"
             [required]="false">
         </app-input-text>
 
         <app-select
-            label="Статус"
+            [label]="'FINANCIAL_BLOCK.COMMON.STATUS' | translate"
             formControlName="status"
             [items]="statusOptions"
             [submitted]="submitted"
@@ -169,21 +167,21 @@
         </app-select>
 
         <app-input-number
-            label="Стоимость"
+            [label]="'FINANCIAL_BLOCK.INVESTMENT.AMOUNT' | translate"
             formControlName="amount"
             [submitted]="submitted"
             [required]="false">
         </app-input-number>
 
         <app-date-picker
-            label="Дата"
+            [label]="'FINANCIAL_BLOCK.COMMON.DATE' | translate"
             formControlName="date"
             [submitted]="submitted"
             [required]="false">
         </app-date-picker>
 
         <app-textarea
-            label="Комментарий"
+            [label]="'FINANCIAL_BLOCK.COMMON.COMMENT' | translate"
             formControlName="comment"
             [submitted]="submitted"
             [required]="false">
@@ -197,7 +195,7 @@
         }
 
         <app-file-upload
-            [label]="isEditMode ? 'Добавить новые файлы' : 'Прикрепить файлы'"
+            [label]="isEditMode ? ('FINANCIAL_BLOCK.COMMON.ADD' | translate) : ('FINANCIAL_BLOCK.COMMON.FILES' | translate)"
             [files]="selectedFiles"
             (filesChange)="onFileSelect($event)"
             (removeFile)="removeFile($event)">
@@ -210,6 +208,6 @@
 <!-- FILE VIEWER DIALOG -->
 <app-file-viewer
     [(visible)]="showFilesDialog"
-    [header]="'Файлы проекта'"
+    [header]="'FINANCIAL_BLOCK.COMMON.FILES' | translate"
     [files]="selectedInvestmentForFiles?.files || []">
 </app-file-viewer>

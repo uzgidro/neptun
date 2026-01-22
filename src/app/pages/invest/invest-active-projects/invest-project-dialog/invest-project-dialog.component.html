@@ -1,0 +1,175 @@
+<p-dialog
+    [visible]="display"
+    (visibleChange)="onVisibleChange($event)"
+    [modal]="true"
+    [header]="isEditMode ? ('INVEST.PROJECT_DIALOG.EDIT_TITLE' | translate) : ('INVEST.PROJECT_DIALOG.ADD_TITLE' | translate)"
+    [style]="{ width: '50rem' }"
+    [breakpoints]="{ '960px': '75vw', '640px': '90vw' }"
+    styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <form [formGroup]="projectForm" (ngSubmit)="onSubmit()">
+            <div class="flex flex-col gap-4">
+                <!-- Категория -->
+                <div>
+                    <p-floatlabel>
+                        <input
+                            pInputText
+                            id="category"
+                            formControlName="category"
+                            class="w-full"
+                            [ngClass]="{
+                                'ng-invalid ng-dirty': submitted && projectForm.controls['category'].errors
+                            }" />
+                        <label for="category">{{ 'INVEST.PROJECT_DIALOG.CATEGORY' | translate }} *</label>
+                    </p-floatlabel>
+                    @if (submitted && projectForm.controls['category'].errors) {
+                        <small class="text-red-500">{{ 'INVEST.PROJECT_DIALOG.CATEGORY_REQUIRED' | translate }}</small>
+                    }
+                </div>
+
+                <!-- Название проекта -->
+                <div>
+                    <p-floatlabel>
+                        <input
+                            pInputText
+                            id="project_name"
+                            formControlName="project_name"
+                            class="w-full"
+                            [ngClass]="{
+                                'ng-invalid ng-dirty': submitted && projectForm.controls['project_name'].errors
+                            }" />
+                        <label for="project_name">{{ 'INVEST.PROJECT_DIALOG.PROJECT_NAME' | translate }} *</label>
+                    </p-floatlabel>
+                    @if (submitted && projectForm.controls['project_name'].errors) {
+                        <small class="text-red-500">{{ 'INVEST.PROJECT_DIALOG.PROJECT_NAME_REQUIRED' | translate }}</small>
+                    }
+                </div>
+
+                <!-- Иностранный партнер -->
+                <div>
+                    <p-floatlabel>
+                        <input
+                            pInputText
+                            id="foreign_partner"
+                            formControlName="foreign_partner"
+                            class="w-full" />
+                        <label for="foreign_partner">{{ 'INVEST.PROJECT_DIALOG.FOREIGN_PARTNER' | translate }}</label>
+                    </p-floatlabel>
+                </div>
+
+                <!-- Срок исполнения -->
+                <div>
+                    <p-floatlabel>
+                        <input
+                            pInputText
+                            id="implementation_period"
+                            formControlName="implementation_period"
+                            class="w-full" />
+                        <label for="implementation_period">{{ 'INVEST.PROJECT_DIALOG.IMPLEMENTATION_PERIOD' | translate }}</label>
+                    </p-floatlabel>
+                </div>
+
+                <!-- Мощность (МВт) -->
+                <div>
+                    <p-floatlabel>
+                        <p-inputnumber
+                            inputId="capacity_mw"
+                            formControlName="capacity_mw"
+                            [minFractionDigits]="2"
+                            [maxFractionDigits]="2"
+                            [min]="0"
+                            styleClass="w-full"
+                            [inputStyleClass]="'w-full'"
+                            [ngClass]="{
+                                'ng-invalid ng-dirty': submitted && projectForm.controls['capacity_mw'].errors
+                            }">
+                        </p-inputnumber>
+                        <label for="capacity_mw">{{ 'INVEST.PROJECT_DIALOG.CAPACITY_MW' | translate }}</label>
+                    </p-floatlabel>
+                    @if (submitted && projectForm.controls['capacity_mw'].errors) {
+                        <small class="text-red-500">{{ 'INVEST.PROJECT_DIALOG.VALUE_POSITIVE' | translate }}</small>
+                    }
+                </div>
+
+                <!-- Производство (млн. кВт⋅ч) -->
+                <div>
+                    <p-floatlabel>
+                        <p-inputnumber
+                            inputId="production_mln_kwh"
+                            formControlName="production_mln_kwh"
+                            [minFractionDigits]="2"
+                            [maxFractionDigits]="2"
+                            [min]="0"
+                            styleClass="w-full"
+                            [inputStyleClass]="'w-full'"
+                            [ngClass]="{
+                                'ng-invalid ng-dirty': submitted && projectForm.controls['production_mln_kwh'].errors
+                            }">
+                        </p-inputnumber>
+                        <label for="production_mln_kwh">{{ 'INVEST.PROJECT_DIALOG.PRODUCTION_MLN_KWH' | translate }}</label>
+                    </p-floatlabel>
+                    @if (submitted && projectForm.controls['production_mln_kwh'].errors) {
+                        <small class="text-red-500">{{ 'INVEST.PROJECT_DIALOG.VALUE_POSITIVE' | translate }}</small>
+                    }
+                </div>
+
+                <!-- Стоимость (млн. USD) -->
+                <div>
+                    <p-floatlabel>
+                        <p-inputnumber
+                            inputId="cost_mln_usd"
+                            formControlName="cost_mln_usd"
+                            [minFractionDigits]="2"
+                            [maxFractionDigits]="2"
+                            [min]="0"
+                            styleClass="w-full"
+                            [inputStyleClass]="'w-full'"
+                            [ngClass]="{
+                                'ng-invalid ng-dirty': submitted && projectForm.controls['cost_mln_usd'].errors
+                            }">
+                        </p-inputnumber>
+                        <label for="cost_mln_usd">{{ 'INVEST.PROJECT_DIALOG.COST_MLN_USD' | translate }}</label>
+                    </p-floatlabel>
+                    @if (submitted && projectForm.controls['cost_mln_usd'].errors) {
+                        <small class="text-red-500">{{ 'INVEST.PROJECT_DIALOG.VALUE_POSITIVE' | translate }}</small>
+                    }
+                </div>
+
+                <!-- Статус -->
+                <div>
+                    <p-floatlabel>
+                        <textarea
+                            pTextarea
+                            id="status_text"
+                            formControlName="status_text"
+                            rows="4"
+                            class="w-full"
+                            [autoResize]="true">
+                        </textarea>
+                        <label for="status_text">{{ 'INVEST.PROJECT_DIALOG.STATUS' | translate }}</label>
+                    </p-floatlabel>
+                </div>
+            </div>
+        </form>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <div class="flex gap-2">
+            <button
+                pButton
+                type="button"
+                [label]="'INVEST.PROJECT_DIALOG.CANCEL' | translate"
+                severity="secondary"
+                outlined
+                (click)="closeDialog()">
+            </button>
+            <button
+                pButton
+                type="button"
+                [label]="isEditMode ? ('INVEST.PROJECT_DIALOG.SAVE' | translate) : ('INVEST.PROJECT_DIALOG.ADD' | translate)"
+                (click)="onSubmit()"
+                [disabled]="submitted && projectForm.invalid">
+            </button>
+        </div>
+    </ng-template>
+</p-dialog>

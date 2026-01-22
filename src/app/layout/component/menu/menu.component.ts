@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MenuitemComponent } from '../menuitem/menuitem.component';
 import { WeatherWidget } from '@/pages/dashboard/components/weather/weather.widget';
 import { MenuItems } from '@/core/interfaces/menuitems';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-menu',
@@ -13,308 +14,204 @@ import { MenuItems } from '@/core/interfaces/menuitems';
 })
 export class MenuComponent implements OnInit {
     model: MenuItems[] = [];
+    private translate = inject(TranslateService);
 
     ngOnInit() {
+        this.buildMenu();
+        this.translate.onLangChange.subscribe(() => {
+            this.buildMenu();
+        });
+    }
+
+    private t(key: string): string {
+        return this.translate.instant(key);
+    }
+
+    private buildMenu() {
         this.model = [
             {
                 items: [
                     {
-                        label: 'Главная',
+                        label: this.t('MENU.OPERATIONAL_MONITORING'),
+                        routerLink: ['/monitoring']
+                    },
+                    {
+                        label: this.t('MENU.HOME'),
                         routerLink: ['/dashboard']
                     },
                     {
-                        label: 'Кадровый персонал (HRM)',
+                        label: this.t('MENU.HRM'),
                         role: ['admin', 'rais'],
                         items: [
-                            { label: 'Организации', role: ['rais'], routerLink: ['/organizations'] },
-                            { label: 'Дни рождения', role: ['rais'], routerLink: ['/birthdays'] },
-                            { label: 'Потеря личного состава', role: ['rais'], routerLink: ['/personnel-loss'] },
-                            { label: 'Работники', role: ['admin'], routerLink: ['/employees'] },
-                            { label: 'Должности', role: ['admin'], routerLink: ['/positions'] },
-                            { label: 'Отделы', role: ['admin'], routerLink: ['/departments'] },
-                            { label: 'Пользователи', role: ['admin'], routerLink: ['/users'] },
-                            { label: 'Роли', role: ['admin'], routerLink: ['/roles'] }
+                            { label: this.t('MENU.ORGANIZATIONS'), role: ['rais'], routerLink: ['/organizations'] },
+                            { label: this.t('MENU.BIRTHDAYS'), role: ['rais'], routerLink: ['/birthdays'] },
+                            { label: this.t('MENU.PERSONNEL_LOSS'), role: ['rais'], routerLink: ['/personnel-loss'] },
+                            { label: this.t('MENU.EMPLOYEES'), role: ['admin'], routerLink: ['/employees'] },
+                            { label: this.t('MENU.POSITIONS'), role: ['admin'], routerLink: ['/positions'] },
+                            { label: this.t('MENU.DEPARTMENTS'), role: ['admin'], routerLink: ['/departments'] },
+                            { label: this.t('MENU.USERS'), role: ['admin'], routerLink: ['/users'] },
+                            { label: this.t('MENU.ROLES'), role: ['admin'], routerLink: ['/roles'] }
                         ]
                     },
                     {
-                        label: 'Ситуационный центр',
+                        label: this.t('MENU.SITUATION_CENTER'),
                         role: ['rais', 'sc'],
                         items: [
                             {
-                                label: 'Информация о ГЭС',
+                                label: this.t('MENU.GES_INFO'),
                                 role: ['rais', 'sc'],
                                 items: [
                                     {
-                                        label: 'ГЭС',
+                                        label: this.t('MENU.GES'),
                                         role: ['rais', 'sc'],
                                         routerLink: ['/viewer'],
                                         queryParams: { type: 'production' },
                                         routerLinkActiveOptions: { queryParams: 'exact' }
                                     },
                                     {
-                                        label: 'Малые и микро ГЭС',
+                                        label: this.t('MENU.SMALL_GES'),
                                         role: ['rais', 'sc'],
                                         routerLink: ['/viewer'],
                                         queryParams: { type: 'minimicro' },
                                         routerLinkActiveOptions: { queryParams: 'exact' }
                                     },
                                     {
-                                        label: 'Солнце',
+                                        label: this.t('MENU.SUN'),
                                         role: ['rais', 'sc'],
                                         routerLink: ['/viewer'],
                                         queryParams: { type: 'sun' },
                                         routerLinkActiveOptions: { queryParams: 'exact' }
                                     },
                                     {
-                                        label: 'Аварийные отключение',
+                                        label: this.t('MENU.EMERGENCY_SHUTDOWN'),
                                         role: ['rais', 'sc'],
                                         routerLink: ['/shutdowns']
                                     },
                                     {
-                                        label: 'Холостые водосбросы',
+                                        label: this.t('MENU.DISCHARGE'),
                                         role: ['rais', 'sc'],
                                         routerLink: ['/discharges']
                                     }
                                 ]
                             },
                             {
-                                label: 'Информация о водохранилищах',
+                                label: this.t('MENU.RESERVOIR_INFO'),
                                 role: ['rais', 'sc'],
                                 items: [
                                     {
-                                        label: 'Сводка',
+                                        label: this.t('MENU.RESERVOIR_SUMMARY'),
                                         role: ['rais', 'sc'],
                                         routerLink: ['/reservoir-summary']
                                     },
                                     {
-                                        label: 'Сводка PDF',
+                                        label: this.t('MENU.RESERVOIR_SUMMARY_PDF'),
                                         role: ['rais', 'sc'],
                                         routerLink: ['/reservoir-summary/pdf']
                                     },
                                     {
-                                        label: 'Гидротехнические сооружения',
+                                        label: this.t('MENU.HYDRAULIC_STRUCTURES'),
                                         role: ['rais', 'sc'],
                                         routerLink: ['/reservoir-device']
                                     }
                                 ]
                             },
                             {
-                                label: 'Прочая информация',
+                                label: this.t('MENU.OTHER_INFO'),
                                 role: ['rais', 'sc'],
                                 items: [
-                                    // {
-                                    //     label: 'События',
-                                    //     role: ['rais', 'sc']
-                                    // },
                                     {
-                                        label: 'Землетрясение',
+                                        label: this.t('MENU.EARTHQUAKE'),
                                         role: ['rais', 'sc'],
                                         url: 'https://soep.uz/',
                                         target: '_blank'
                                     },
                                     {
-                                        label: 'Инциденты',
+                                        label: this.t('MENU.INCIDENTS'),
                                         role: ['rais', 'sc'],
                                         routerLink: ['/incidents']
                                     },
                                     {
-                                        label: 'Визиты',
+                                        label: this.t('MENU.VISITS'),
                                         role: ['rais', 'sc'],
                                         routerLink: ['/visits']
                                     }
                                 ]
                             },
-                            { label: 'Категории', role: ['sc'], routerLink: ['/categories'] },
-                            { label: 'Файлы', role: ['sc'], routerLink: ['/files'] }
+                            { label: this.t('MENU.CATEGORIES'), role: ['sc'], routerLink: ['/categories'] },
+                            { label: this.t('MENU.FILES'), role: ['sc'], routerLink: ['/files'] }
                         ]
                     },
                     {
-                        label: 'Финансовый блок',
+                        label: this.t('MENU.INVESTMENT_BLOCK'),
+                        role: ['rais', 'investment'],
+                        items: [
+                            { label: this.t('MENU.ACTIVE_PHASE_PROJECTS'), role: ['rais', 'investment'], routerLink: ['/invest-active'] },
+                            {
+                                label: this.t('MENU.PERSPECTIVE_PROJECTS'),
+                                role: ['rais', 'investment'],
+                                items: [
+                                    { label: this.t('MENU.OWN_FUNDS'), role: ['rais', 'investment'], routerLink: ['/invest-perspective'], queryParams: { type_id: 1 }, routerLinkActiveOptions: { queryParams: 'exact' } },
+                                    { label: this.t('MENU.PRIVATE_INVESTMENTS'), role: ['rais', 'investment'], routerLink: ['/invest-perspective'], queryParams: { type_id: 2 }, routerLinkActiveOptions: { queryParams: 'exact' } },
+                                    { label: this.t('MENU.STATE_GUARANTEE_CREDITS'), role: ['rais', 'investment'], routerLink: ['/invest-perspective'], queryParams: { type_id: 3 }, routerLinkActiveOptions: { queryParams: 'exact' } }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        label: this.t('MENU.FINANCIAL'),
                         role: ['rais'],
                         items: [
-                            { label: 'Общий дашборд', role: ['rais'], routerLink: ['/financial-dashboard'] },
-                            { label: 'Дебит / кредит', role: ['rais'], routerLink: ['/debit-credit'] },
-                            { label: 'Инвестиции', role: ['rais'], routerLink: ['/investment'] },
-                            { label: 'Затраты на ремонт', role: ['rais'], routerLink: ['/repair-costs'] },
-                            { label: 'Закупки', role: ['rais'], routerLink: ['/procurement'] },
-                            { label: 'KPI', role: ['rais'], routerLink: ['/kpi'] },
-                            { label: 'Заработная плата', role: ['rais'], routerLink: ['/salary'] }
+                            { label: this.t('MENU.GENERAL_DASHBOARD'), role: ['rais'], routerLink: ['/financial-dashboard'] },
+                            { label: this.t('MENU.DEBIT_CREDIT'), role: ['rais'], routerLink: ['/debit-credit'] },
+                            { label: this.t('MENU.REPAIR_COSTS'), role: ['rais'], routerLink: ['/repair-costs'] },
+                            { label: this.t('MENU.PROCUREMENT'), role: ['rais'], routerLink: ['/procurement'] },
+                            { label: this.t('MENU.KPI'), role: ['rais'], routerLink: ['/kpi'] },
+                            { label: this.t('MENU.SALARY'), role: ['rais'], routerLink: ['/salary'] }
                         ]
                     },
                     {
-                        label: 'Планирование',
-                        role: ['rais', 'assistant'],
+                        label: this.t('MENU.PLANNING'),
+                        role: ['rais', 'assistant', 'sc'],
                         items: [
                             // { label: 'Встречи', role: ['rais'], routerLink: ['/planning'], queryParams: { type: 'meeting' }, routerLinkActiveOptions: { queryParams: 'exact' } },
                             // { label: 'Созвоны', role: ['rais'], routerLink: ['/planning'], queryParams: { type: 'call' }, routerLinkActiveOptions: { queryParams: 'exact' } },
                             // { label: 'Переговоры', role: ['rais'], routerLink: ['/planning'], queryParams: { type: 'negotiation' }, routerLinkActiveOptions: { queryParams: 'exact' } },
                             // { label: 'ВКС', role: ['rais'], routerLink: ['/planning'], queryParams: { type: 'vcs' }, routerLinkActiveOptions: { queryParams: 'exact' } },
-                            { label: 'События', role: ['rais', 'assistant'], routerLink: ['/planning/events'] },
-                            { label: 'Приемная', role: ['rais', 'assistant'], routerLink: ['/planning/reception'] }
+                            { label: this.t('MENU.PLANNING_EVENTS'), role: ['rais', 'assistant'], routerLink: ['/planning/events'] },
+                            { label: this.t('MENU.CHAIRMAN_RECEPTION'), role: ['rais', 'assistant', 'sc'], routerLink: ['/planning/reception'] }
                         ]
                     },
                     {
-                        label: 'Канцелярия',
-                        role: ['rais'],
+                        label: this.t('MENU.CHANCELLERY'),
+                        role: ['rais', 'chancellery'],
                         items: [
-                            { label: 'Приказы', role: ['rais'], routerLink: ['/mail/orders'] },
-                            { label: 'Рапорты', role: ['rais'], routerLink: ['/mail/reports'] },
-                            { label: 'Письма', role: ['rais'], routerLink: ['/mail/letters'] },
-                            { label: 'Инструкции', role: ['rais'], routerLink: ['/mail/instructions'] },
-                            {
-                                label: 'Нормативно правовая документация',
-                                role: ['rais'],
-                                items: [
-                                    { label: 'Законы Республики Узбекистан', role: ['rais'] },
-                                    { label: 'Постановления Президента Республики Узбекистан', role: ['rais'], routerLink: ['/mail/resolutions'], queryParams: { type: 'president' }, routerLinkActiveOptions: { queryParams: 'exact' } },
-                                    { label: 'Указы Президента Республики Узбекистан', role: ['rais'], routerLink: ['/mail/resolutions'], queryParams: { type: 'decree' }, routerLinkActiveOptions: { queryParams: 'exact' } },
-                                    { label: 'Постановления Кабинета министров', role: ['rais'], routerLink: ['/mail/resolutions'], queryParams: { type: 'cabinet' }, routerLinkActiveOptions: { queryParams: 'exact' } },
-                                    { label: 'Приказы министерств и ведомств', role: ['rais'], routerLink: ['/mail/resolutions'], queryParams: { type: 'order' }, routerLinkActiveOptions: { queryParams: 'exact' } },
-                                    { label: 'Совместные соглашения(NDA)', role: ['rais'], routerLink: ['/mail/resolutions'], queryParams: { type: 'agreement' }, routerLinkActiveOptions: { queryParams: 'exact' } },
-                                    { label: 'Иные документы', role: ['rais'] }
-                                ]
-                            }
+                            { label: this.t('MENU.CHANCELLERY_PENDING_SIGNATURES'), icon: 'pi pi-pen-to-square', role: ['rais', 'chancellery'], routerLink: ['/chancellery/pending-signatures'] },
+                            { label: this.t('MENU.CHANCELLERY_ORDERS'), role: ['rais', 'chancellery'], routerLink: ['/chancellery/orders'] },
+                            { label: this.t('MENU.CHANCELLERY_REPORTS'), role: ['rais', 'chancellery'], routerLink: ['/chancellery/reports'] },
+                            { label: this.t('MENU.CHANCELLERY_LETTERS'), role: ['rais', 'chancellery'], routerLink: ['/chancellery/letters'] },
+                            { label: this.t('MENU.CHANCELLERY_INSTRUCTIONS'), role: ['rais', 'chancellery'], routerLink: ['/chancellery/instructions'] }
                         ]
                     },
-                    { label: 'Звонки', role: ['rais'], routerLink: ['/calls'] },
-                    { label: 'СМИ', role: ['rais'] }
-                ]
-            }
-        ];
-    }
-
-    oldMenu() {
-        this.model = [
-            {
-                label: 'Home',
-                items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/'] }]
-            },
-            {
-                label: 'UI Components',
-                items: [
-                    { label: 'Form Layout', icon: 'pi pi-fw pi-id-card', routerLink: ['/uikit/formlayout'] },
-                    { label: 'Input', icon: 'pi pi-fw pi-check-square', routerLink: ['/uikit/input-number'] },
-                    { label: 'Button', icon: 'pi pi-fw pi-mobile', class: 'rotated-icon', routerLink: ['/uikit/button'] },
-                    { label: 'Table', icon: 'pi pi-fw pi-table', routerLink: ['/uikit/table'] },
-                    { label: 'List', icon: 'pi pi-fw pi-list', routerLink: ['/uikit/list'] },
-                    { label: 'Tree', icon: 'pi pi-fw pi-share-alt', routerLink: ['/uikit/tree'] },
-                    { label: 'Panel', icon: 'pi pi-fw pi-tablet', routerLink: ['/uikit/panel'] },
-                    { label: 'Overlay', icon: 'pi pi-fw pi-clone', routerLink: ['/uikit/overlay'] },
-                    { label: 'Media', icon: 'pi pi-fw pi-image', routerLink: ['/uikit/media'] },
-                    { label: 'Menu', icon: 'pi pi-fw pi-bars', routerLink: ['/uikit/menu'] },
-                    { label: 'Message', icon: 'pi pi-fw pi-comment', routerLink: ['/uikit/message'] },
-                    { label: 'File', icon: 'pi pi-fw pi-file', routerLink: ['/uikit/file'] },
-                    { label: 'Chart', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/uikit/charts'] },
-                    { label: 'Timeline', icon: 'pi pi-fw pi-calendar', routerLink: ['/uikit/timeline'] },
-                    { label: 'Misc', icon: 'pi pi-fw pi-circle', routerLink: ['/uikit/misc'] }
-                ]
-            },
-            {
-                label: 'Pages',
-                icon: 'pi pi-fw pi-briefcase',
-                routerLink: ['/pages'],
-                items: [
                     {
-                        label: 'Landing',
-                        icon: 'pi pi-fw pi-globe',
-                        routerLink: ['/landing']
-                    },
-                    {
-                        label: 'Auth',
-                        icon: 'pi pi-fw pi-user',
+                        label: this.t('MENU.LEGAL_LIBRARY'),
                         items: [
-                            {
-                                label: 'LoginComponent',
-                                icon: 'pi pi-fw pi-sign-in',
-                                routerLink: ['/auth/login']
-                            },
-                            {
-                                label: 'Error',
-                                icon: 'pi pi-fw pi-times-circle',
-                                routerLink: ['/auth/error']
-                            },
-                            {
-                                label: 'Access Denied',
-                                icon: 'pi pi-fw pi-lock',
-                                routerLink: ['/auth/access']
-                            }
+                            { label: this.t('MENU.LEX_SEARCH'), icon: 'pi pi-globe', routerLink: ['/lex-search'] },
+                            { label: this.t('MENU.LEGAL_LIBRARY_ALL'), routerLink: ['/legal-documents'], routerLinkActiveOptions: { exact: true, queryParams: 'exact' } },
+                            { label: this.t('MENU.LEGAL_LIBRARY_LAWS'), routerLink: ['/legal-documents'], queryParams: { type_id: 1 }, routerLinkActiveOptions: { queryParams: 'exact' } },
+                            { label: this.t('MENU.LEGAL_LIBRARY_PRESIDENT_DECREES'), routerLink: ['/legal-documents'], queryParams: { type_id: 2 }, routerLinkActiveOptions: { queryParams: 'exact' } },
+                            { label: this.t('MENU.LEGAL_LIBRARY_PRESIDENT_RESOLUTIONS'), routerLink: ['/legal-documents'], queryParams: { type_id: 3 }, routerLinkActiveOptions: { queryParams: 'exact' } },
+                            { label: this.t('MENU.LEGAL_LIBRARY_PRESIDENT_ORDERS'), routerLink: ['/legal-documents'], queryParams: { type_id: 4 }, routerLinkActiveOptions: { queryParams: 'exact' } },
+                            { label: this.t('MENU.LEGAL_LIBRARY_GOVT_RESOLUTIONS'), routerLink: ['/legal-documents'], queryParams: { type_id: 5 }, routerLinkActiveOptions: { queryParams: 'exact' } },
+                            { label: this.t('MENU.LEGAL_LIBRARY_CABINET_ORDERS'), routerLink: ['/legal-documents'], queryParams: { type_id: 6 }, routerLinkActiveOptions: { queryParams: 'exact' } },
+                            { label: this.t('MENU.LEGAL_LIBRARY_DEPT_ACTS'), routerLink: ['/legal-documents'], queryParams: { type_id: 7 }, routerLinkActiveOptions: { queryParams: 'exact' } },
+                            { label: this.t('MENU.LEGAL_LIBRARY_LEGISLATION'), role: ['rais'], routerLink: ['/legal-documents'], queryParams: { type_id: 8 }, routerLinkActiveOptions: { queryParams: 'exact' } },
+                            { label: this.t('MENU.LEGAL_LIBRARY_OTHER'), routerLink: ['/legal-documents'], queryParams: { type_id: 9 }, routerLinkActiveOptions: { queryParams: 'exact' } },
+                            { label: this.t('MENU.LEGAL_LIBRARY_UHE_ORDERS'), routerLink: ['/legal-documents'], queryParams: { type_id: 10 }, routerLinkActiveOptions: { queryParams: 'exact' } },
+                            { label: this.t('MENU.LEGAL_LIBRARY_UHE_PROTOCOLS'), routerLink: ['/legal-documents'], queryParams: { type_id: 11 }, routerLinkActiveOptions: { queryParams: 'exact' } }
                         ]
                     },
-                    {
-                        label: 'Crud',
-                        icon: 'pi pi-fw pi-pencil',
-                        routerLink: ['/pages/crud']
-                    },
-                    {
-                        label: 'Not Found',
-                        icon: 'pi pi-fw pi-exclamation-circle',
-                        routerLink: ['/pages/notfound']
-                    },
-                    {
-                        label: 'Empty',
-                        icon: 'pi pi-fw pi-circle-off',
-                        routerLink: ['/pages/empty']
-                    }
-                ]
-            },
-            {
-                label: 'Hierarchy',
-                items: [
-                    {
-                        label: 'Submenu 1',
-                        icon: 'pi pi-fw pi-bookmark',
-                        items: [
-                            {
-                                label: 'Submenu 1.1',
-                                icon: 'pi pi-fw pi-bookmark',
-                                items: [
-                                    { label: 'Submenu 1.1.1', icon: 'pi pi-fw pi-bookmark' },
-                                    { label: 'Submenu 1.1.2', icon: 'pi pi-fw pi-bookmark' },
-                                    { label: 'Submenu 1.1.3', icon: 'pi pi-fw pi-bookmark' }
-                                ]
-                            },
-                            {
-                                label: 'Submenu 1.2',
-                                icon: 'pi pi-fw pi-bookmark',
-                                items: [{ label: 'Submenu 1.2.1', icon: 'pi pi-fw pi-bookmark' }]
-                            }
-                        ]
-                    },
-                    {
-                        label: 'Submenu 2',
-                        icon: 'pi pi-fw pi-bookmark',
-                        items: [
-                            {
-                                label: 'Submenu 2.1',
-                                icon: 'pi pi-fw pi-bookmark',
-                                items: [
-                                    { label: 'Submenu 2.1.1', icon: 'pi pi-fw pi-bookmark' },
-                                    { label: 'Submenu 2.1.2', icon: 'pi pi-fw pi-bookmark' }
-                                ]
-                            },
-                            {
-                                label: 'Submenu 2.2',
-                                icon: 'pi pi-fw pi-bookmark',
-                                items: [{ label: 'Submenu 2.2.1', icon: 'pi pi-fw pi-bookmark' }]
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                label: 'Get Started',
-                items: [
-                    {
-                        label: 'Documentation',
-                        icon: 'pi pi-fw pi-book',
-                        routerLink: ['/documentation']
-                    },
-                    {
-                        label: 'View Source',
-                        icon: 'pi pi-fw pi-github',
-                        url: 'https://github.com/primefaces/sakai-ng',
-                        target: '_blank'
-                    }
+                    { label: this.t('MENU.CALLS'), role: ['rais'], routerLink: ['/calls'] },
+                    { label: this.t('MENU.PRESS_SERVICE'), routerLink: ['/media/news'] }
                 ]
             }
         ];

@@ -17,6 +17,7 @@ import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { ChartModule } from 'primeng/chart';
 import { FinancialDashboardService } from '../dashboard/services/financial-dashboard.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 interface Category {
     label: string;
@@ -55,7 +56,8 @@ interface Transaction {
         ToastModule,
         InputGroupModule,
         InputGroupAddonModule,
-        ChartModule
+        ChartModule,
+        TranslateModule
     ],
     providers: [ConfirmationService, MessageService],
     templateUrl: './debit-credit.component.html',
@@ -78,27 +80,9 @@ export class DebitCreditComponent implements OnInit {
     transactionTypeFilter: string | null = null;
 
     // Dropdown options
-    categories: Category[] = [
-        { label: 'Продажи', value: 'sales', icon: 'pi pi-shopping-cart' },
-        { label: 'Аренда', value: 'rent', icon: 'pi pi-home' },
-        { label: 'Зарплата', value: 'salary', icon: 'pi pi-users' },
-        { label: 'Закупки', value: 'purchases', icon: 'pi pi-box' },
-        { label: 'Услуги', value: 'services', icon: 'pi pi-briefcase' },
-        { label: 'Налоги', value: 'taxes', icon: 'pi pi-percentage' },
-        { label: 'Прочее', value: 'other', icon: 'pi pi-ellipsis-h' }
-    ];
-
-    statuses = [
-        { label: 'Проведено', value: 'completed' },
-        { label: 'Ожидание', value: 'pending' },
-        { label: 'Отменено', value: 'cancelled' }
-    ];
-
-    transactionTypes = [
-        { label: 'Все', value: null },
-        { label: 'Только дебит', value: 'debit' },
-        { label: 'Только кредит', value: 'credit' }
-    ];
+    categories: Category[] = [];
+    statuses: { label: string; value: string }[] = [];
+    transactionTypes: { label: string; value: string | null }[] = [];
 
     // Charts
     categoryChartData: any;
@@ -109,6 +93,7 @@ export class DebitCreditComponent implements OnInit {
     debitCreditCompareOptions: any;
 
     private dashboardService = inject(FinancialDashboardService);
+    private translate = inject(TranslateService);
 
     constructor(
         private confirmationService: ConfirmationService,
@@ -116,10 +101,41 @@ export class DebitCreditComponent implements OnInit {
     ) {}
 
     ngOnInit() {
+        this.initTranslations();
         this.loadTransactions();
         this.applyFilters();
         this.initCharts();
         this.updateDashboardData();
+
+        // Subscribe to language changes
+        this.translate.onLangChange.subscribe(() => {
+            this.initTranslations();
+            this.updateCharts();
+        });
+    }
+
+    private initTranslations(): void {
+        this.categories = [
+            { label: this.translate.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.CATEGORY_SALES'), value: 'sales', icon: 'pi pi-shopping-cart' },
+            { label: this.translate.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.CATEGORY_RENT'), value: 'rent', icon: 'pi pi-home' },
+            { label: this.translate.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.CATEGORY_SALARY'), value: 'salary', icon: 'pi pi-users' },
+            { label: this.translate.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.CATEGORY_PURCHASES'), value: 'purchases', icon: 'pi pi-box' },
+            { label: this.translate.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.CATEGORY_SERVICES'), value: 'services', icon: 'pi pi-briefcase' },
+            { label: this.translate.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.CATEGORY_TAXES'), value: 'taxes', icon: 'pi pi-percentage' },
+            { label: this.translate.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.CATEGORY_OTHER'), value: 'other', icon: 'pi pi-ellipsis-h' }
+        ];
+
+        this.statuses = [
+            { label: this.translate.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.STATUS_COMPLETED'), value: 'completed' },
+            { label: this.translate.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.STATUS_PENDING'), value: 'pending' },
+            { label: this.translate.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.STATUS_CANCELLED'), value: 'cancelled' }
+        ];
+
+        this.transactionTypes = [
+            { label: this.translate.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.TYPE_ALL'), value: null },
+            { label: this.translate.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.TYPE_DEBIT_ONLY'), value: 'debit' },
+            { label: this.translate.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.TYPE_CREDIT_ONLY'), value: 'credit' }
+        ];
     }
 
     private updateDashboardData(): void {
@@ -260,8 +276,8 @@ export class DebitCreditComponent implements OnInit {
         if (!this.currentTransaction.description || !this.currentTransaction.counterparty) {
             this.messageService.add({
                 severity: 'warn',
-                summary: 'Внимание',
-                detail: 'Заполните обязательные поля'
+                summary: this.translate.instant('FINANCIAL_BLOCK.COMMON.WARNING'),
+                detail: this.translate.instant('FINANCIAL_BLOCK.COMMON.FILL_REQUIRED')
             });
             return;
         }
@@ -269,8 +285,8 @@ export class DebitCreditComponent implements OnInit {
         if (!this.currentTransaction.debit && !this.currentTransaction.credit) {
             this.messageService.add({
                 severity: 'warn',
-                summary: 'Внимание',
-                detail: 'Укажите сумму дебита или кредита'
+                summary: this.translate.instant('FINANCIAL_BLOCK.COMMON.WARNING'),
+                detail: this.translate.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.SPECIFY_AMOUNT')
             });
             return;
         }
@@ -282,16 +298,16 @@ export class DebitCreditComponent implements OnInit {
             }
             this.messageService.add({
                 severity: 'success',
-                summary: 'Успешно',
-                detail: 'Транзакция обновлена'
+                summary: this.translate.instant('FINANCIAL_BLOCK.COMMON.SUCCESS'),
+                detail: this.translate.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.TRANSACTION_UPDATED')
             });
         } else {
             this.currentTransaction.id = Math.max(...this.transactions.map(t => t.id), 0) + 1;
             this.transactions.push({ ...this.currentTransaction });
             this.messageService.add({
                 severity: 'success',
-                summary: 'Успешно',
-                detail: 'Транзакция добавлена'
+                summary: this.translate.instant('FINANCIAL_BLOCK.COMMON.SUCCESS'),
+                detail: this.translate.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.TRANSACTION_ADDED')
             });
         }
 
@@ -303,11 +319,11 @@ export class DebitCreditComponent implements OnInit {
 
     deleteTransaction(transaction: Transaction) {
         this.confirmationService.confirm({
-            message: `Вы уверены, что хотите удалить транзакцию "${transaction.description}"?`,
-            header: 'Подтверждение удаления',
+            message: `${this.translate.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.DELETE_CONFIRM')} "${transaction.description}"?`,
+            header: this.translate.instant('FINANCIAL_BLOCK.COMMON.CONFIRM_DELETE'),
             icon: 'pi pi-exclamation-triangle',
-            acceptLabel: 'Да',
-            rejectLabel: 'Нет',
+            acceptLabel: this.translate.instant('FINANCIAL_BLOCK.COMMON.YES'),
+            rejectLabel: this.translate.instant('FINANCIAL_BLOCK.COMMON.NO'),
             accept: () => {
                 this.transactions = this.transactions.filter(t => t.id !== transaction.id);
                 this.calculateBalances();
@@ -315,8 +331,8 @@ export class DebitCreditComponent implements OnInit {
                 this.updateDashboardData();
                 this.messageService.add({
                     severity: 'success',
-                    summary: 'Успешно',
-                    detail: 'Транзакция удалена'
+                    summary: this.translate.instant('FINANCIAL_BLOCK.COMMON.SUCCESS'),
+                    detail: this.translate.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.TRANSACTION_DELETED')
                 });
             }
         });
@@ -335,8 +351,8 @@ export class DebitCreditComponent implements OnInit {
         this.updateDashboardData();
         this.messageService.add({
             severity: 'success',
-            summary: 'Успешно',
-            detail: 'Транзакция дублирована'
+            summary: this.translate.instant('FINANCIAL_BLOCK.COMMON.SUCCESS'),
+            detail: this.translate.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.TRANSACTION_DUPLICATED')
         });
     }
 
@@ -373,34 +389,45 @@ export class DebitCreditComponent implements OnInit {
 
     // Export to Excel
     exportToExcel() {
-        const data = this.filteredTransactions.map(t => ({
-            'Дата': new Date(t.date).toLocaleDateString('ru-RU'),
-            'Описание': t.description,
-            'Категория': this.getCategoryLabel(t.category),
-            'Контрагент': t.counterparty,
-            'Дебит': t.debit || '',
-            'Кредит': t.credit || '',
-            'Баланс': t.balance || 0,
-            'Статус': this.getStatusLabel(t.status)
+        const t = this.translate;
+        const dateCol = t.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.EXPORT_COLUMNS.DATE');
+        const descCol = t.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.EXPORT_COLUMNS.DESCRIPTION');
+        const catCol = t.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.EXPORT_COLUMNS.CATEGORY');
+        const counterCol = t.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.EXPORT_COLUMNS.COUNTERPARTY');
+        const debitCol = t.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.EXPORT_COLUMNS.DEBIT');
+        const creditCol = t.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.EXPORT_COLUMNS.CREDIT');
+        const balanceCol = t.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.EXPORT_COLUMNS.BALANCE');
+        const statusCol = t.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.EXPORT_COLUMNS.STATUS');
+        const totalLabel = t.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.EXPORT_COLUMNS.TOTAL');
+
+        const data = this.filteredTransactions.map(tr => ({
+            [dateCol]: new Date(tr.date).toLocaleDateString('ru-RU'),
+            [descCol]: tr.description,
+            [catCol]: this.getCategoryLabel(tr.category),
+            [counterCol]: tr.counterparty,
+            [debitCol]: tr.debit || '',
+            [creditCol]: tr.credit || '',
+            [balanceCol]: tr.balance || 0,
+            [statusCol]: this.getStatusLabel(tr.status)
         }));
 
         // Add totals row
         data.push({
-            'Дата': '',
-            'Описание': 'ИТОГО',
-            'Категория': '',
-            'Контрагент': '',
-            'Дебит': this.totalDebit,
-            'Кредит': this.totalCredit,
-            'Баланс': this.balance,
-            'Статус': ''
+            [dateCol]: '',
+            [descCol]: totalLabel,
+            [catCol]: '',
+            [counterCol]: '',
+            [debitCol]: this.totalDebit,
+            [creditCol]: this.totalCredit,
+            [balanceCol]: this.balance,
+            [statusCol]: ''
         });
 
         // Convert to CSV
         const headers = Object.keys(data[0]);
         const csvContent = [
             headers.join(';'),
-            ...data.map(row => headers.map(h => row[h as keyof typeof row]).join(';'))
+            ...data.map(row => headers.map(h => (row as any)[h]).join(';'))
         ].join('\n');
 
         // Add BOM for Excel to recognize UTF-8
@@ -419,8 +446,8 @@ export class DebitCreditComponent implements OnInit {
 
         this.messageService.add({
             severity: 'success',
-            summary: 'Экспорт',
-            detail: 'Файл успешно экспортирован'
+            summary: t.instant('FINANCIAL_BLOCK.COMMON.EXPORT'),
+            detail: t.instant('FINANCIAL_BLOCK.COMMON.EXPORT_SUCCESS')
         });
     }
 
@@ -560,23 +587,37 @@ export class DebitCreditComponent implements OnInit {
     }
 
     updateMonthlyChart() {
-        const months = ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'];
+        const t = this.translate;
+        const months = [
+            t.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.MONTHS.JAN'),
+            t.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.MONTHS.FEB'),
+            t.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.MONTHS.MAR'),
+            t.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.MONTHS.APR'),
+            t.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.MONTHS.MAY'),
+            t.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.MONTHS.JUN'),
+            t.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.MONTHS.JUL'),
+            t.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.MONTHS.AUG'),
+            t.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.MONTHS.SEP'),
+            t.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.MONTHS.OCT'),
+            t.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.MONTHS.NOV'),
+            t.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.MONTHS.DEC')
+        ];
         const debitByMonth: number[] = new Array(12).fill(0);
         const creditByMonth: number[] = new Array(12).fill(0);
 
         this.transactions
-            .filter(t => t.status !== 'cancelled')
-            .forEach(t => {
-                const month = t.date.getMonth();
-                debitByMonth[month] += t.debit || 0;
-                creditByMonth[month] += t.credit || 0;
+            .filter(tr => tr.status !== 'cancelled')
+            .forEach(tr => {
+                const month = tr.date.getMonth();
+                debitByMonth[month] += tr.debit || 0;
+                creditByMonth[month] += tr.credit || 0;
             });
 
         this.monthlyChartData = {
             labels: months,
             datasets: [
                 {
-                    label: 'Дебит (приход)',
+                    label: t.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.DEBIT_INCOME'),
                     data: debitByMonth,
                     backgroundColor: 'rgba(34, 197, 94, 0.7)',
                     borderColor: '#22c55e',
@@ -584,7 +625,7 @@ export class DebitCreditComponent implements OnInit {
                     borderRadius: 4
                 },
                 {
-                    label: 'Кредит (расход)',
+                    label: t.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.CREDIT_EXPENSE'),
                     data: creditByMonth,
                     backgroundColor: 'rgba(239, 68, 68, 0.7)',
                     borderColor: '#ef4444',
@@ -596,8 +637,12 @@ export class DebitCreditComponent implements OnInit {
     }
 
     updateDebitCreditCompareChart() {
+        const t = this.translate;
         this.debitCreditCompareData = {
-            labels: ['Дебит', 'Кредит'],
+            labels: [
+                t.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.DEBIT'),
+                t.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.CREDIT')
+            ],
             datasets: [{
                 data: [this.totalDebit, this.totalCredit],
                 backgroundColor: ['rgba(34, 197, 94, 0.8)', 'rgba(239, 68, 68, 0.8)'],
