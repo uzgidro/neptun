@@ -2,7 +2,7 @@ name: CI/CD Build and Deploy
 
 on:
     push:
-        branches: [ "master" ]
+        branches: [ "presentation" ]
 
 jobs:
     build-and-push:
@@ -34,8 +34,8 @@ jobs:
                     cache-from: type=gha
                     cache-to: type=gha,mode=max
                     tags: |
-                        ${{ secrets.DOCKERHUB_USERNAME }}/neptun:latest
-                        ${{ secrets.DOCKERHUB_USERNAME }}/neptun:${{ steps.slug.outputs.sha8 }}
+                        ${{ secrets.DOCKERHUB_USERNAME }}/milk-pro:latest
+                        ${{ secrets.DOCKERHUB_USERNAME }}/milk-pro:${{ steps.slug.outputs.sha8 }}
 
             -   name: Trigger Watchtower Update
                 run: |

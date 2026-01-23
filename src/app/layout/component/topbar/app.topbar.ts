@@ -21,7 +21,23 @@ import { TranslateModule } from '@ngx-translate/core';
 @Component({
     selector: 'app-topbar',
     standalone: true,
-    imports: [RouterModule, CommonModule, StyleClassModule, ProfileMenu, PopoverModule, TableModule, ToastModule, FormsModule, AppConfigurator, TopbarCalendarWidget, NgOptimizedImage, FastCallWidget, InboxWidget, LanguageSwitcherComponent, TranslateModule],
+    imports: [
+        RouterModule,
+        CommonModule,
+        StyleClassModule,
+        ProfileMenu,
+        PopoverModule,
+        TableModule,
+        ToastModule,
+        FormsModule,
+        AppConfigurator,
+        TopbarCalendarWidget,
+        NgOptimizedImage,
+        FastCallWidget,
+        InboxWidget,
+        LanguageSwitcherComponent,
+        TranslateModule
+    ],
     providers: [MessageService],
     template: ` <div class="layout-topbar">
         <div class="layout-topbar-logo-container">
@@ -29,7 +45,7 @@ import { TranslateModule } from '@ngx-translate/core';
                 <i class="pi pi-bars"></i>
             </button>
             <a class="layout-topbar-logo" routerLink="/">
-                <img ngSrc="/images/logo-x.png" alt="" width="52" height="22" />
+                <img ngSrc="/images/logo-x.png" alt="" width="40" height="22" />
                 <span class="text-nowrap">
                     @if (authService.hasRole('admin')) {
                         {{ 'MENU.TABLET_ADMIN' | translate }}

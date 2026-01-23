@@ -16,7 +16,7 @@
     </div>
     <div class="flex gap-1.5">
         <span class="text-primary font-medium">
-            {{ dc?.debit?.diff && dc?.debit?.diff! > 0 ? '+' : '' }}{{ dc?.debit?.diff ?? 0 | number: '1.0-0' }}%
+            {{ dc?.debit?.diff && dc?.debit?.diff! > 0 ? '+' : '' }}{{ dc?.debit?.diff ?? 0 | number: '1.0-1' }}%
         </span>
         <span class="text-muted-color">{{ 'COMMON.SINCE_YEAR_START' | translate }}</span>
     </div>
@@ -58,7 +58,7 @@
                 </td>
                 <td class="text-right">
                     <span [class]="item.debit.diff > 0 ? 'text-green-500' : item.debit.diff < 0 ? 'text-red-500' : ''">
-                        {{ item.debit.diff > 0 ? '+' : '' }}{{ item.debit.diff | number: '1.0-0' }}%
+                        {{ item.debit.diff > 0 ? '+' : '' }}{{ item.debit.diff | number: '1.0-1' }}%
                     </span>
                 </td>
             </tr>
@@ -90,7 +90,7 @@
                                     <td class="text-right">
                                         <span
                                             [class]="subItem.debit.diff > 0 ? 'text-green-500' : subItem.debit.diff < 0 ? 'text-red-500' : ''">
-                                            {{ subItem.debit.diff > 0 ? '+' : '' }}{{ subItem.debit.diff | number: '1.0-0' }}
+                                            {{ subItem.debit.diff > 0 ? '+' : '' }}{{ subItem.debit.diff | number: '1.0-1' }}
                                             %
                                         </span>
                                     </td>

@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
     standalone: true,
     selector: 'app-footer',
     template: `<div class="layout-footer">
-        Планшет Председателя от
+        Планшет Руководителя от
         <a href="#" class="text-primary font-bold hover:underline">АО "МолокоПром"</a>
     </div>`
 })

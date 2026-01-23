@@ -120,12 +120,6 @@ export class MenuComponent implements OnInit {
                                 role: ['rais', 'sc'],
                                 items: [
                                     {
-                                        label: this.t('MENU.EARTHQUAKE'),
-                                        role: ['rais', 'sc'],
-                                        url: 'https://soep.uz/',
-                                        target: '_blank'
-                                    },
-                                    {
                                         label: this.t('MENU.INCIDENTS'),
                                         role: ['rais', 'sc'],
                                         routerLink: ['/incidents']

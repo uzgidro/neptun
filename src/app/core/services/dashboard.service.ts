@@ -116,7 +116,7 @@ export class DashboardService extends ApiService {
         ];
         return of(mockData).pipe(
             delay(200),
-            map(cascades => this.normalizeCascades(cascades))
+            map((cascades) => this.normalizeCascades(cascades))
         );
     }
 
@@ -124,12 +124,12 @@ export class DashboardService extends ApiService {
      * Нормализация данных кластеров
      */
     private normalizeCascades(cascades: Organization[]): Organization[] {
-        return cascades.map(cascade => this.normalizeOrganization(cascade));
+        return cascades.map((cascade) => this.normalizeOrganization(cascade));
     }
 
     private normalizeOrganization(org: Organization): Organization {
         if (org.items && org.items.length > 0) {
-            org.items = org.items.map(child => {
+            org.items = org.items.map((child) => {
                 if (child.ascue_metrics) {
                     if (child.ascue_metrics.pending_agg_count < 0) {
                         child.ascue_metrics.pending_agg_count = 0;
@@ -144,7 +144,7 @@ export class DashboardService extends ApiService {
                 let totalPending = 0;
                 let totalRepair = 0;
 
-                org.items.forEach(child => {
+                org.items.forEach((child) => {
                     if (child.ascue_metrics) {
                         totalActive += child.ascue_metrics.active_agg_count || 0;
                         totalPending += child.ascue_metrics.pending_agg_count || 0;
@@ -177,10 +177,10 @@ export class DashboardService extends ApiService {
         return of({
             current: {
                 date: this.dateToYMD(today),
-                value: 28500 // литров за день
+                value: 285 // литров за день
             },
-            month_total: 856000, // литров за месяц
-            year_total: 10250000 // литров за год
+            month_total: 8560, // литров за месяц
+            year_total: 10000 // литров за год
         }).pipe(delay(200));
     }
 }

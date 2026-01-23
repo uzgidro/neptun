@@ -12,7 +12,7 @@ import { AuthService } from '@/core/services/auth.service';
             @if (authService.hasRole('first deputy')) {
                 <span> Первого заместителя</span>
             }
-            <span> Председателя правления</span>
+            <span> Руководителя</span>
         </div>
         <app-menu></app-menu>
     </div>`

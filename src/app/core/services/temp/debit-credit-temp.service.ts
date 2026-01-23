@@ -6,8 +6,8 @@ import { DCInfo } from '@/core/interfaces/debit-credit';
 
 // Мок-данные дебет/кредит
 const MOCK_DC: DCInfo = {
-    debit: { yearStartValue: 10000000000, currentValue: 15000000000, diff: 5000000000 },
-    credit: { yearStartValue: 8000000000, currentValue: 12500000000, diff: 4500000000 },
+    debit: { yearStartValue: 10000000000, currentValue: 15000000000, diff: 5000000 },
+    credit: { yearStartValue: 8000000000, currentValue: 12500000000, diff: 4500000 },
     items: [
         {
             name: 'Основное производство',
