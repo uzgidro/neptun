@@ -1,7 +1,6 @@
 import { inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import {
     DocumentResponse,
     DocumentPayload,
@@ -23,26 +22,9 @@ import {
     Signature
 } from '@/core/interfaces/chancellery/signature';
 
-// Мок-данные типов документов
-const MOCK_DOC_TYPES: DocumentType[] = [
-    { id: 1, name: 'Приказ' },
-    { id: 2, name: 'Распоряжение' },
-    { id: 3, name: 'Служебная записка' },
-    { id: 4, name: 'Письмо' }
-] as DocumentType[];
-
-const MOCK_HISTORY: StatusHistoryEntry[] = [
-    { id: 1, status: 'created', changed_by: 'Администратор', changed_at: new Date().toISOString(), comment: 'Документ создан' },
-    { id: 2, status: 'in_review', changed_by: 'Администратор', changed_at: new Date().toISOString(), comment: 'Отправлен на рассмотрение' }
-] as StatusHistoryEntry[];
-
-const MOCK_SIGNATURES: Signature[] = [
-    { id: 1, signer_name: 'Иванов И.И.', signed_at: new Date().toISOString(), status: 'signed' }
-] as Signature[];
-
 /**
  * Abstract base service for all chancellery document types.
- * Mocked version - returns static data.
+ * Provides common CRUD operations and status management.
  */
 export abstract class BaseDocumentService<
     T extends DocumentResponse = DocumentResponse,
@@ -58,47 +40,57 @@ export abstract class BaseDocumentService<
     }
 
     getAll(filters?: F): Observable<T[]> {
-        return of([] as T[]).pipe(delay(200));
+        let params = new HttpParams();
+
+        if (filters) {
+            Object.entries(filters).forEach(([key, value]) => {
+                if (value !== undefined && value !== null && value !== '') {
+                    params = params.append(key, String(value));
+                }
+            });
+        }
+
+        return this.http.get<T[]>(this.apiUrl, { params });
     }
 
     getById(id: number): Observable<T> {
-        return of({} as T).pipe(delay(200));
+        return this.http.get<T>(`${this.apiUrl}/${id}`);
     }
 
     create(payload: P | FormData): Observable<CreateDocumentResponse> {
-        return of({ id: Date.now() } as CreateDocumentResponse).pipe(delay(300));
+        return this.http.post<CreateDocumentResponse>(this.apiUrl, payload);
     }
 
     update(id: number, payload: Partial<P> | FormData): Observable<void> {
-        return of(undefined).pipe(delay(300));
+        return this.http.put<void>(`${this.apiUrl}/${id}`, payload);
     }
 
     delete(id: number): Observable<void> {
-        return of(undefined).pipe(delay(200));
+        return this.http.delete<void>(`${this.apiUrl}/${id}`);
     }
 
     getTypes(): Observable<DocumentType[]> {
-        return of(MOCK_DOC_TYPES).pipe(delay(200));
+        return this.http.get<DocumentType[]>(`${this.apiUrl}/types`);
     }
 
     getHistory(id: number): Observable<StatusHistoryEntry[]> {
-        return of(MOCK_HISTORY).pipe(delay(200));
+        return this.http.get<StatusHistoryEntry[]>(`${this.apiUrl}/${id}/history`);
     }
 
     changeStatus(id: number, request: ChangeStatusRequest): Observable<void> {
-        return of(undefined).pipe(delay(300));
+        return this.http.post<void>(`${this.apiUrl}/${id}/status`, request);
     }
 
     signDocument(id: number, request: SignDocumentRequest): Observable<SignatureResponse> {
-        return of({ success: true, message: 'Документ подписан' } as SignatureResponse).pipe(delay(300));
+        return this.http.post<SignatureResponse>(`${this.apiUrl}/${id}/sign`, request);
     }
 
     rejectSignature(id: number, request: RejectSignatureRequest): Observable<SignatureResponse> {
-        return of({ success: true, message: 'Подпись отклонена' } as SignatureResponse).pipe(delay(300));
+        return this.http.post<SignatureResponse>(`${this.apiUrl}/${id}/reject`, request);
     }
 
     getSignatures(id: number): Observable<Signature[]> {
-        return of(MOCK_SIGNATURES).pipe(delay(200));
+        return this.http.get<Signature[]>(`${this.apiUrl}/${id}/signatures`);
     }
 
     getStatusSeverity(code: string): StatusSeverity {
@@ -119,7 +111,7 @@ export abstract class BaseDocumentService<
             if (key === 'linked_documents' && Array.isArray(value)) {
                 formData.append(key, JSON.stringify(value));
             } else if (key === 'file_ids') {
-                // Skip
+                // Skip - handled separately below
             } else if (value instanceof Date) {
                 formData.append(key, this.formatDate(value));
             } else {
