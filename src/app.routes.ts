@@ -40,6 +40,16 @@ import { CallsComponent } from '@/pages/calls/calls.component';
 import { NewsComponent } from '@/pages/media/news/news.component';
 import { InvestActiveProjectsComponent } from '@/pages/invest/invest-active-projects/invest-active-projects.component';
 import { ScDashboardComponent } from '@/pages/situation-center/sc-dashboard/sc-dashboard.component';
+import { PersonnelRecordsComponent } from '@/pages/hrm/personnel-records/personnel-records.component';
+import { VacationManagementComponent } from '@/pages/hrm/vacation-management/vacation-management.component';
+import { SalaryManagementComponent } from '@/pages/hrm/salary-management/salary-management.component';
+import { RecruitingComponent } from '@/pages/hrm/recruiting/recruiting.component';
+import { TrainingComponent } from '@/pages/hrm/training/training.component';
+import { CompetencyAssessmentComponent } from '@/pages/hrm/competency-assessment/competency-assessment.component';
+import { PerformanceManagementComponent } from '@/pages/hrm/performance-management/performance-management.component';
+import { AnalyticsComponent } from '@/pages/hrm/analytics/analytics.component';
+import { HRMDashboardComponent } from '@/pages/hrm/dashboard/dashboard.component';
+import { EmployeeCabinetComponent } from '@/pages/hrm/employee-cabinet/employee-cabinet.component';
 
 
 export const appRoutes: Routes = [
@@ -61,6 +71,16 @@ export const appRoutes: Routes = [
             { path: 'positions', component: PositionComponent, canActivate: [adminGuard] },
             { path: 'departments', component: DepartmentComponent, canActivate: [adminGuard] },
             { path: 'employees', component: EmployeeComponent, canActivate: [adminGuard] },
+            { path: 'hrm/dashboard', component: HRMDashboardComponent, canActivate: [adminGuard] },
+            { path: 'hrm/my-cabinet', component: EmployeeCabinetComponent, canActivate: [authGuard] },
+            { path: 'hrm/personnel-records', component: PersonnelRecordsComponent, canActivate: [adminGuard] },
+            { path: 'hrm/vacations', component: VacationManagementComponent, canActivate: [adminGuard] },
+            { path: 'hrm/salary', component: SalaryManagementComponent, canActivate: [adminGuard] },
+            { path: 'hrm/recruiting', component: RecruitingComponent, canActivate: [adminGuard] },
+            { path: 'hrm/training', component: TrainingComponent, canActivate: [adminGuard] },
+            { path: 'hrm/competency', component: CompetencyAssessmentComponent, canActivate: [adminGuard] },
+            { path: 'hrm/performance', component: PerformanceManagementComponent, canActivate: [adminGuard] },
+            { path: 'hrm/analytics', component: AnalyticsComponent, canActivate: [adminGuard] },
             { path: 'viewer', component: DocumentViewerComponent, canActivate: [raisGuard] },
             { path: 'discharges', component: DischargesComponent, canActivate: [raisGuard] },
             { path: 'shutdowns', component: ShutdownComponent, canActivate: [raisGuard] },
