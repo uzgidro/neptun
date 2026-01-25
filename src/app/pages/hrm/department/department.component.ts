@@ -182,7 +182,7 @@ export class DepartmentComponent implements OnInit, OnDestroy {
             next: (data) => {
                 this.departments = data;
             },
-            error: (err) => console.log(err),
+            error: () => {},
             complete: () => (this.loading = false)
         });
     }
@@ -192,7 +192,7 @@ export class DepartmentComponent implements OnInit, OnDestroy {
             next: (data) => {
                 this.organizations = data;
             },
-            error: (err) => console.log(err)
+            error: () => {}
         });
     }
 

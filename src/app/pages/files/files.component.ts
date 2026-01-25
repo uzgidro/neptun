@@ -114,9 +114,7 @@ export class FilesComponent implements OnInit, OnDestroy {
             next: (data) => {
                 this.files = data;
             },
-            error: (err) => {
-                console.log(err);
-            },
+            error: () => {},
             complete: () => {
                 this.loading = false;
             }
@@ -128,9 +126,7 @@ export class FilesComponent implements OnInit, OnDestroy {
             next: (data) => {
                 this.categories = data;
             },
-            error: (err) => {
-                console.log(err);
-            }
+            error: () => {}
         });
     }
 

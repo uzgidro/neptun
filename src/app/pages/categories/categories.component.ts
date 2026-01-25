@@ -92,9 +92,7 @@ export class CategoriesComponent implements OnInit, OnDestroy {
             next: (data) => {
                 this.categories = data;
             },
-            error: (err) => {
-                console.log(err);
-            },
+            error: () => {},
             complete: () => {
                 this.loading = false;
             }

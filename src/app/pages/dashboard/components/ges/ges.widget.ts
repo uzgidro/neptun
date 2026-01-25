@@ -50,9 +50,7 @@ class GesWidget implements OnInit, OnDestroy {
                 }));
                 this.lastUpdated = new Date();
             },
-            error: (err) => {
-                console.log(err);
-            },
+            error: () => {},
             complete: () => {
                 this.loading = false;
             }

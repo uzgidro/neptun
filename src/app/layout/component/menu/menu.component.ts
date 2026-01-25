@@ -184,10 +184,6 @@ export class MenuComponent implements OnInit {
                         label: this.t('MENU.PLANNING'),
                         role: ['rais', 'assistant', 'sc'],
                         items: [
-                            // { label: 'Встречи', role: ['rais'], routerLink: ['/planning'], queryParams: { type: 'meeting' }, routerLinkActiveOptions: { queryParams: 'exact' } },
-                            // { label: 'Созвоны', role: ['rais'], routerLink: ['/planning'], queryParams: { type: 'call' }, routerLinkActiveOptions: { queryParams: 'exact' } },
-                            // { label: 'Переговоры', role: ['rais'], routerLink: ['/planning'], queryParams: { type: 'negotiation' }, routerLinkActiveOptions: { queryParams: 'exact' } },
-                            // { label: 'ВКС', role: ['rais'], routerLink: ['/planning'], queryParams: { type: 'vcs' }, routerLinkActiveOptions: { queryParams: 'exact' } },
                             { label: this.t('MENU.PLANNING_EVENTS'), role: ['rais', 'assistant'], routerLink: ['/planning/events'] },
                             { label: this.t('MENU.CHAIRMAN_RECEPTION'), role: ['rais', 'assistant', 'sc'], routerLink: ['/planning/reception'] }
                         ]

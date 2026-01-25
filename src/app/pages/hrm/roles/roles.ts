@@ -85,9 +85,7 @@ export class Role implements OnInit, OnDestroy {
             next: (data) => {
                 this.roles = data;
             },
-            error: (err) => {
-                console.log(err);
-            },
+            error: () => {},
             complete: () => {
                 this.loading = false;
             }

@@ -169,7 +169,7 @@ export class PositionComponent implements OnInit, OnDestroy {
             next: (data) => {
                 this.positions = data;
             },
-            error: (err) => console.log(err),
+            error: () => {},
             complete: () => (this.loading = false)
         });
     }
