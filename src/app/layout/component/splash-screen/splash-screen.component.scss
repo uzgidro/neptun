@@ -8,8 +8,77 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+    background: linear-gradient(135deg, #0a0f1a 0%, #1a1f3a 50%, #0a0f1a 100%);
     overflow: hidden;
+}
+
+// Background grid effect
+.bg-grid {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+        linear-gradient(rgba(59, 130, 246, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: gridPulse 4s ease-in-out infinite;
+}
+
+@keyframes gridPulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+// Energy circles
+.energy-circle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
+.circle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    border: 1px solid transparent;
+
+    &.circle-1 {
+        width: 400px;
+        height: 400px;
+        border-color: rgba(59, 130, 246, 0.2);
+        animation: circleExpand 3s ease-out infinite;
+    }
+
+    &.circle-2 {
+        width: 500px;
+        height: 500px;
+        border-color: rgba(139, 92, 246, 0.15);
+        animation: circleExpand 3s ease-out infinite 0.5s;
+    }
+
+    &.circle-3 {
+        width: 600px;
+        height: 600px;
+        border-color: rgba(59, 130, 246, 0.1);
+        animation: circleExpand 3s ease-out infinite 1s;
+    }
+}
+
+@keyframes circleExpand {
+    0% {
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1.2);
+        opacity: 0;
+    }
 }
 
 .splash-content {
@@ -17,13 +86,60 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 40px;
+    gap: 24px;
+    z-index: 2;
+}
+
+// Logo
+.logo-container {
+    margin-bottom: 10px;
+}
+
+.company-logo {
+    height: 50px;
+    width: auto;
+    filter: brightness(1.2) drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+    animation: logoGlow 2s ease-in-out infinite;
+}
+
+@keyframes logoGlow {
+    0%, 100% { filter: brightness(1.2) drop-shadow(0 0 10px rgba(255, 255, 255, 0.3)); }
+    50% { filter: brightness(1.4) drop-shadow(0 0 20px rgba(59, 130, 246, 0.5)); }
+}
+
+// Lightning section
+.lightning-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    position: relative;
+}
+
+.side-lightning {
+    width: 50px;
+    height: 120px;
+    opacity: 0;
+    transition: opacity 0.1s;
+
+    &.left {
+        transform: rotate(-15deg);
+    }
+
+    &.right {
+        transform: rotate(15deg);
+    }
+
+    &.flash {
+        opacity: 1;
+        filter: drop-shadow(0 0 20px #3b82f6);
+    }
 }
 
 .lightning-container {
     position: relative;
-    width: 150px;
-    height: 250px;
+    width: 120px;
+    height: 200px;
 }
 
 .lightning-bolt {
@@ -37,7 +153,7 @@
     }
 
     &.flash {
-        filter: drop-shadow(0 0 40px #fff) drop-shadow(0 0 80px #3b82f6);
+        filter: drop-shadow(0 0 50px #fff) drop-shadow(0 0 100px #3b82f6);
 
         .bolt-path {
             fill: #fff;
@@ -47,20 +163,20 @@
 
 @keyframes float {
     0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+    50% { transform: translateY(-8px); }
 }
 
 @keyframes pulse {
     0%, 100% { opacity: 1; }
-    50% { opacity: 0.8; }
+    50% { opacity: 0.85; }
 }
 
 .particles {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 200px;
-    height: 200px;
+    width: 250px;
+    height: 250px;
     transform: translate(-50%, -50%);
     pointer-events: none;
 }
@@ -71,17 +187,22 @@
     height: 4px;
     background: #60a5fa;
     border-radius: 50%;
+    box-shadow: 0 0 6px #60a5fa;
     animation: particleFloat 2s ease-in-out infinite;
     animation-delay: var(--delay);
 
-    &:nth-child(1) { left: 15%; top: 20%; }
-    &:nth-child(2) { left: 80%; top: 35%; }
-    &:nth-child(3) { left: 25%; top: 70%; }
-    &:nth-child(4) { left: 70%; top: 15%; }
-    &:nth-child(5) { left: 45%; top: 85%; }
-    &:nth-child(6) { left: 90%; top: 60%; }
-    &:nth-child(7) { left: 10%; top: 50%; }
-    &:nth-child(8) { left: 60%; top: 90%; }
+    &:nth-child(1) { left: 10%; top: 15%; }
+    &:nth-child(2) { left: 85%; top: 25%; }
+    &:nth-child(3) { left: 20%; top: 75%; }
+    &:nth-child(4) { left: 75%; top: 10%; }
+    &:nth-child(5) { left: 50%; top: 90%; }
+    &:nth-child(6) { left: 95%; top: 55%; }
+    &:nth-child(7) { left: 5%; top: 45%; }
+    &:nth-child(8) { left: 65%; top: 85%; }
+    &:nth-child(9) { left: 30%; top: 5%; }
+    &:nth-child(10) { left: 90%; top: 80%; }
+    &:nth-child(11) { left: 15%; top: 60%; }
+    &:nth-child(12) { left: 80%; top: 40%; }
 }
 
 @keyframes particleFloat {
@@ -91,53 +212,122 @@
     }
     50% {
         opacity: 1;
-        transform: scale(1) translateY(-20px);
+        transform: scale(1.2) translateY(-15px);
     }
 }
 
+// Power display
 .power-display {
     text-align: center;
+    margin-top: 10px;
 }
 
 .power-value {
     display: flex;
     align-items: baseline;
     justify-content: center;
-    gap: 8px;
+    gap: 10px;
 
     .number {
-        font-size: 72px;
+        font-size: 64px;
         font-weight: 700;
         color: #fff;
-        text-shadow: 0 0 30px rgba(59, 130, 246, 0.5);
+        text-shadow: 0 0 40px rgba(59, 130, 246, 0.6);
         font-variant-numeric: tabular-nums;
+        letter-spacing: -2px;
     }
 
     .unit {
-        font-size: 24px;
+        font-size: 22px;
         color: #60a5fa;
         font-weight: 500;
     }
 }
 
 .power-label {
-    font-size: 18px;
-    color: rgba(255, 255, 255, 0.6);
-    margin-top: 8px;
-    letter-spacing: 2px;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.5);
+    margin-top: 6px;
+    letter-spacing: 3px;
     text-transform: uppercase;
 }
 
+// Company name
 .company-name {
-    font-size: 28px;
+    font-size: 26px;
     color: #fff;
     font-weight: 300;
-    letter-spacing: 4px;
+    letter-spacing: 3px;
+    margin-top: 10px;
 
     .highlight {
         color: #3b82f6;
         font-weight: 600;
     }
+}
+
+// Tagline
+.tagline {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.4);
+    font-style: italic;
+    letter-spacing: 1px;
+}
+
+// Skip button
+.skip-btn {
+    position: absolute;
+    bottom: 40px;
+    right: 40px;
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.6);
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    transition: all 0.3s ease;
+    z-index: 10;
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    i {
+        font-size: 12px;
+    }
+}
+
+// Loading bar
+.loading-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.loading-progress {
+    height: 100%;
+    background: linear-gradient(90deg, #3b82f6, #8b5cf6, #3b82f6);
+    background-size: 200% 100%;
+    animation: loadingProgress 4s linear forwards, shimmer 1.5s linear infinite;
+}
+
+@keyframes loadingProgress {
+    0% { width: 0%; }
+    100% { width: 100%; }
+}
+
+@keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
 }
 
 // Responsive
@@ -151,12 +341,33 @@
     }
 
     .company-name {
-        font-size: 22px;
+        font-size: 20px;
         letter-spacing: 2px;
     }
 
     .lightning-container {
-        width: 120px;
-        height: 200px;
+        width: 100px;
+        height: 160px;
+    }
+
+    .side-lightning {
+        width: 35px;
+        height: 80px;
+    }
+
+    .circle {
+        &.circle-1 { width: 280px; height: 280px; }
+        &.circle-2 { width: 350px; height: 350px; }
+        &.circle-3 { width: 420px; height: 420px; }
+    }
+
+    .skip-btn {
+        bottom: 20px;
+        right: 20px;
+        padding: 8px 16px;
+    }
+
+    .company-logo {
+        height: 40px;
     }
 }
