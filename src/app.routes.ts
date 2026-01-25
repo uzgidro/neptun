@@ -50,6 +50,10 @@ import { PerformanceManagementComponent } from '@/pages/hrm/performance-manageme
 import { AnalyticsComponent } from '@/pages/hrm/analytics/analytics.component';
 import { HRMDashboardComponent } from '@/pages/hrm/dashboard/dashboard.component';
 import { EmployeeCabinetComponent } from '@/pages/hrm/employee-cabinet/employee-cabinet.component';
+import { TimesheetComponent } from '@/pages/hrm/timesheet/timesheet.component';
+import { HRDocumentsComponent } from '@/pages/hrm/hr-documents/hr-documents.component';
+import { AccessControlComponent } from '@/pages/hrm/access-control/access-control.component';
+import { OrgStructureComponent } from '@/pages/hrm/org-structure/org-structure.component';
 
 
 export const appRoutes: Routes = [
@@ -81,6 +85,10 @@ export const appRoutes: Routes = [
             { path: 'hrm/competency', component: CompetencyAssessmentComponent, canActivate: [adminGuard] },
             { path: 'hrm/performance', component: PerformanceManagementComponent, canActivate: [adminGuard] },
             { path: 'hrm/analytics', component: AnalyticsComponent, canActivate: [adminGuard] },
+            { path: 'hrm/timesheet', component: TimesheetComponent, canActivate: [adminGuard] },
+            { path: 'hrm/documents', component: HRDocumentsComponent, canActivate: [adminGuard] },
+            { path: 'hrm/access-control', component: AccessControlComponent, canActivate: [adminGuard] },
+            { path: 'hrm/org-structure', component: OrgStructureComponent, canActivate: [adminGuard] },
             { path: 'viewer', component: DocumentViewerComponent, canActivate: [raisGuard] },
             { path: 'discharges', component: DischargesComponent, canActivate: [raisGuard] },
             { path: 'shutdowns', component: ShutdownComponent, canActivate: [raisGuard] },
