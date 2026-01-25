@@ -1,0 +1,176 @@
+<div class="card">
+    <div class="font-semibold text-xl mb-4">Учет кадров</div>
+    <p-table
+        #dt
+        [value]="records"
+        dataKey="id"
+        [rows]="10"
+        [loading]="loading"
+        [rowHover]="true"
+        [showGridlines]="true"
+        [paginator]="true"
+        [globalFilterFields]="['employee_name', 'tab_number', 'department_name', 'position_name']"
+    >
+        <ng-template #caption>
+            <div class="flex justify-between items-center flex-column sm:flex-row">
+                <p-iconfield>
+                    <p-inputicon>
+                        <i class="pi pi-search"></i>
+                    </p-inputicon>
+                    <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Поиск" />
+                </p-iconfield>
+                <button pButton (click)="openDialog()">
+                    <i class="pi pi-plus" pButtonIcon></i>
+                    <span pButtonLabel>Новая запись</span>
+                </button>
+            </div>
+        </ng-template>
+        <ng-template #header>
+            <tr>
+                <th style="min-width: 8rem">Таб. номер</th>
+                <th pSortableColumn="employee_name" style="min-width: 14rem">ФИО сотрудника</th>
+                <th style="min-width: 10rem">Дата приема</th>
+                <th style="min-width: 12rem">Отдел</th>
+                <th style="min-width: 12rem">Должность</th>
+                <th style="min-width: 10rem">Тип договора</th>
+                <th style="min-width: 8rem">Статус</th>
+                <th style="width: 10rem">Действия</th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-record>
+            <tr>
+                <td>{{ record.tab_number }}</td>
+                <td>{{ record.employee_name }}</td>
+                <td>{{ record.hire_date | date:'dd.MM.yyyy' }}</td>
+                <td>{{ record.department_name || '—' }}</td>
+                <td>{{ record.position_name || '—' }}</td>
+                <td>{{ getContractTypeLabel(record.contract_type) }}</td>
+                <td>
+                    <p-tag [value]="getStatusLabel(record.status)" [severity]="getStatusSeverity(record.status)"></p-tag>
+                </td>
+                <td>
+                    <div class="flex justify-center gap-2">
+                        <button pButton
+                                icon="pi pi-pencil"
+                                (click)="openEditDialog(record)"
+                                class="p-button-rounded p-button-text p-button-warning"
+                                pTooltip="Редактировать"
+                                tooltipPosition="top">
+                        </button>
+                        <button pButton
+                                icon="pi pi-trash"
+                                (click)="openDeleteDialog(record)"
+                                class="p-button-rounded p-button-text p-button-danger"
+                                pTooltip="Удалить"
+                                tooltipPosition="top">
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template #emptymessage>
+            <tr>
+                <td colspan="8">Ничего не найдено</td>
+            </tr>
+        </ng-template>
+        <ng-template #loadingbody>
+            <tr>
+                <td colspan="8">Идет загрузка. Ожидайте...</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+@if (displayDialog) {
+    <app-dialog
+        [(visible)]="displayDialog"
+        [header]="isEditMode ? 'Редактировать запись' : 'Новая запись'"
+        [form]="recordForm"
+        [saveLabel]="isEditMode ? 'Обновить' : 'Сохранить'"
+        (save)="onSubmit()"
+        (cancel)="closeDialog()">
+        <form class="p-4" [formGroup]="recordForm" (ngSubmit)="onSubmit()">
+            <div class="font-semibold text-lg mb-2">Основная информация</div>
+
+            <app-select
+                formControlName="employee_id"
+                label="Сотрудник"
+                [items]="employees"
+                [submitted]="submitted"
+                errorMessage="Сотрудник обязателен"
+                [required]="true">
+            </app-select>
+
+            <app-input-text
+                formControlName="tab_number"
+                label="Табельный номер"
+                [submitted]="submitted"
+                errorMessage="Табельный номер обязателен"
+                [required]="true">
+            </app-input-text>
+
+            <app-date-picker
+                formControlName="hire_date"
+                label="Дата приема"
+                [submitted]="submitted"
+                errorMessage="Дата приема обязательна"
+                [showTime]="false"
+                [required]="true">
+            </app-date-picker>
+
+            <div class="font-semibold text-lg mb-2 mt-4">Место работы</div>
+
+            <app-select
+                formControlName="department_id"
+                label="Отдел"
+                [items]="departments"
+                [submitted]="submitted"
+                errorMessage="Отдел обязателен"
+                [required]="true">
+            </app-select>
+
+            <app-select
+                formControlName="position_id"
+                label="Должность"
+                [items]="positions"
+                [submitted]="submitted"
+                errorMessage="Должность обязательна"
+                [required]="true">
+            </app-select>
+
+            <div class="font-semibold text-lg mb-2 mt-4">Договор</div>
+
+            <app-select
+                formControlName="contract_type"
+                label="Тип договора"
+                [items]="contractTypes"
+                [submitted]="submitted"
+                errorMessage="Тип договора обязателен"
+                [required]="true">
+            </app-select>
+
+            <app-date-picker
+                formControlName="contract_end_date"
+                label="Дата окончания договора"
+                [submitted]="submitted"
+                [showTime]="false"
+                [required]="false">
+            </app-date-picker>
+
+            <app-select
+                formControlName="status"
+                label="Статус"
+                [items]="statuses"
+                [submitted]="submitted"
+                errorMessage="Статус обязателен"
+                [required]="true">
+            </app-select>
+        </form>
+    </app-dialog>
+}
+
+<app-delete-confirmation
+    [(visible)]="displayDeleteDialog"
+    [message]="'Вы уверены, что хотите удалить запись сотрудника ' + (selectedRecord?.employee_name || '') + '?'"
+    (onConfirm)="confirmDelete()">
+</app-delete-confirmation>

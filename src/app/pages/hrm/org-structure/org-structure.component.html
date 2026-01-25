@@ -1,0 +1,461 @@
+<div class="org-structure-container">
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+        <div>
+            <h1 class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">Организационная структура</h1>
+            <p class="text-surface-600 dark:text-surface-400 mt-1">Структура компании и подразделений</p>
+        </div>
+        <div class="flex gap-2">
+            <div class="flex bg-surface-100 dark:bg-surface-700 rounded-lg p-1">
+                @for (mode of viewModes; track mode.value) {
+                    <button pButton [icon]="'pi ' + mode.icon"
+                        [class]="viewMode === mode.value ? 'p-button-primary' : 'p-button-text'"
+                        [pTooltip]="mode.label"
+                        (click)="setViewMode(mode.value)">
+                    </button>
+                }
+            </div>
+            <button pButton label="Добавить" icon="pi pi-plus" (click)="openNewUnitDialog()"></button>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
+        <div class="bg-surface-0 dark:bg-surface-800 rounded-lg p-4 border border-surface-200 dark:border-surface-700 text-center">
+            <i class="pi pi-sitemap text-2xl text-purple-500 mb-2"></i>
+            <p class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">{{ stats.total_departments }}</p>
+            <p class="text-xs text-surface-500 m-0">Подразделений</p>
+        </div>
+        <div class="bg-surface-0 dark:bg-surface-800 rounded-lg p-4 border border-surface-200 dark:border-surface-700 text-center">
+            <i class="pi pi-users text-2xl text-blue-500 mb-2"></i>
+            <p class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">{{ stats.total_employees }}</p>
+            <p class="text-xs text-surface-500 m-0">Сотрудников</p>
+        </div>
+        <div class="bg-surface-0 dark:bg-surface-800 rounded-lg p-4 border border-surface-200 dark:border-surface-700 text-center">
+            <i class="pi pi-user text-2xl text-green-500 mb-2"></i>
+            <p class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">{{ stats.total_managers }}</p>
+            <p class="text-xs text-surface-500 m-0">Руководителей</p>
+        </div>
+        <div class="bg-surface-0 dark:bg-surface-800 rounded-lg p-4 border border-surface-200 dark:border-surface-700 text-center">
+            <i class="pi pi-chart-bar text-2xl text-cyan-500 mb-2"></i>
+            <p class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">{{ stats.avg_team_size }}</p>
+            <p class="text-xs text-surface-500 m-0">Средний размер</p>
+        </div>
+        <div class="bg-surface-0 dark:bg-surface-800 rounded-lg p-4 border border-surface-200 dark:border-surface-700 text-center">
+            <i class="pi pi-arrow-down text-2xl text-orange-500 mb-2"></i>
+            <p class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">{{ stats.max_depth }}</p>
+            <p class="text-xs text-surface-500 m-0">Уровней</p>
+        </div>
+        <div class="bg-surface-0 dark:bg-surface-800 rounded-lg p-4 border border-surface-200 dark:border-surface-700 text-center">
+            <i class="pi pi-exclamation-circle text-2xl text-red-500 mb-2"></i>
+            <p class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">{{ stats.vacancies }}</p>
+            <p class="text-xs text-surface-500 m-0">Без руководителя</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex gap-6">
+        <!-- Tree/Chart View -->
+        <div class="flex-1 bg-surface-0 dark:bg-surface-800 rounded-lg border border-surface-200 dark:border-surface-700 p-4 min-h-96">
+            @if (loading) {
+                <div class="flex items-center justify-center h-64">
+                    <i class="pi pi-spin pi-spinner text-4xl text-surface-400"></i>
+                </div>
+            } @else {
+                <!-- Tree View -->
+                @if (viewMode === 'tree') {
+                    <p-tree [value]="orgTree"
+                        selectionMode="single"
+                        [(selection)]="selectedNode"
+                        (onNodeSelect)="onNodeSelect($event)"
+                        (onNodeExpand)="onNodeExpand($event)"
+                        styleClass="org-tree">
+                        <ng-template let-node pTemplate="default">
+                            <div class="flex items-center gap-3 py-1">
+                                <div class="flex items-center gap-2 flex-1">
+                                    <span class="font-medium">{{ node.label }}</span>
+                                    <p-tag [value]="getUnitTypeInfo(node.data.type).label" [severity]="'secondary'" styleClass="text-xs"></p-tag>
+                                </div>
+                                <span class="text-sm text-surface-500">{{ node.data.employee_count }} чел.</span>
+                            </div>
+                        </ng-template>
+                    </p-tree>
+                }
+
+                <!-- Org Chart View -->
+                @if (viewMode === 'chart') {
+                    <div class="org-chart-wrapper overflow-auto">
+                        <p-organizationChart [value]="orgChartData" selectionMode="single" (selectionChange)="onChartNodeSelect($event)">
+                            <ng-template let-node pTemplate="department">
+                                <div class="org-chart-node p-3 text-center cursor-pointer" (click)="showUnitDetails(node.data)">
+                                    @if (node.data.head_name) {
+                                        <div class="w-12 h-12 rounded-full mx-auto mb-2 flex items-center justify-center text-white font-bold"
+                                            [style.background]="getAvatarColor(node.data.id)">
+                                            {{ getInitials(node.data.head_name) }}
+                                        </div>
+                                    } @else {
+                                        <div class="w-12 h-12 rounded-full mx-auto mb-2 bg-surface-200 dark:bg-surface-600 flex items-center justify-center">
+                                            <i class="pi pi-user text-surface-400"></i>
+                                        </div>
+                                    }
+                                    <div class="font-semibold text-surface-900 dark:text-surface-0">{{ node.data.name }}</div>
+                                    @if (node.data.head_name) {
+                                        <div class="text-sm text-surface-500">{{ node.data.head_name }}</div>
+                                    }
+                                    <div class="text-xs text-surface-400 mt-1">{{ node.data.employee_count }} сотр.</div>
+                                </div>
+                            </ng-template>
+                        </p-organizationChart>
+                    </div>
+                }
+
+                <!-- List View -->
+                @if (viewMode === 'list') {
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        @for (unit of orgUnits; track unit.id) {
+                            <div class="border border-surface-200 dark:border-surface-700 rounded-lg p-4 cursor-pointer hover:border-primary-500 transition-colors"
+                                (click)="showUnitDetails(unit)">
+                                <div class="flex items-start justify-between mb-3">
+                                    <div>
+                                        <h4 class="font-semibold text-surface-900 dark:text-surface-0 m-0">{{ unit.name }}</h4>
+                                        <span class="text-sm text-surface-500">{{ unit.code }}</span>
+                                    </div>
+                                    <p-tag [value]="getUnitTypeInfo(unit.type).label" [severity]="'secondary'" styleClass="text-xs"></p-tag>
+                                </div>
+                                @if (unit.head_name) {
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <div class="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold"
+                                            [style.background]="getAvatarColor(unit.head_id || unit.id)">
+                                            {{ getInitials(unit.head_name) }}
+                                        </div>
+                                        <div>
+                                            <div class="text-sm font-medium text-surface-700 dark:text-surface-300">{{ unit.head_name }}</div>
+                                            <div class="text-xs text-surface-500">{{ unit.head_position }}</div>
+                                        </div>
+                                    </div>
+                                }
+                                <div class="flex items-center gap-2 text-sm text-surface-500">
+                                    <i class="pi pi-users"></i>
+                                    <span>{{ unit.employee_count }} сотрудников</span>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            }
+        </div>
+
+        <!-- Details Panel -->
+        @if (showDetails && detailsUnit) {
+            <div class="w-96 bg-surface-0 dark:bg-surface-800 rounded-lg border border-surface-200 dark:border-surface-700 p-4">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-surface-900 dark:text-surface-0 m-0">Детали</h3>
+                    <button pButton icon="pi pi-times" class="p-button-text p-button-rounded p-button-sm" (click)="closeDetails()"></button>
+                </div>
+
+                <div class="mb-4">
+                    <div class="flex items-center gap-2 mb-2">
+                        <i class="pi {{ getUnitTypeInfo(detailsUnit.type).icon }} text-xl" [style.color]="'var(--' + getUnitTypeInfo(detailsUnit.type).color + '-500)'"></i>
+                        <h4 class="font-semibold text-surface-900 dark:text-surface-0 m-0">{{ detailsUnit.name }}</h4>
+                    </div>
+                    <p-tag [value]="getUnitTypeInfo(detailsUnit.type).label" [severity]="'secondary'"></p-tag>
+                </div>
+
+                @if (detailsUnit.head_name) {
+                    <div class="mb-4 p-3 bg-surface-50 dark:bg-surface-700 rounded-lg">
+                        <p class="text-xs text-surface-500 mb-2">Руководитель</p>
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold"
+                                [style.background]="getAvatarColor(detailsUnit.head_id || 0)">
+                                {{ getInitials(detailsUnit.head_name) }}
+                            </div>
+                            <div>
+                                <div class="font-medium text-surface-900 dark:text-surface-0">{{ detailsUnit.head_name }}</div>
+                                <div class="text-sm text-surface-500">{{ detailsUnit.head_position }}</div>
+                            </div>
+                        </div>
+                    </div>
+                } @else {
+                    <div class="mb-4 p-3 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
+                        <div class="flex items-center gap-2 text-orange-600 dark:text-orange-400">
+                            <i class="pi pi-exclamation-triangle"></i>
+                            <span class="text-sm">Руководитель не назначен</span>
+                        </div>
+                    </div>
+                }
+
+                <div class="grid grid-cols-2 gap-3 mb-4">
+                    <div class="p-3 bg-surface-50 dark:bg-surface-700 rounded-lg text-center">
+                        <p class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">{{ detailsUnit.employee_count }}</p>
+                        <p class="text-xs text-surface-500 m-0">Сотрудников</p>
+                    </div>
+                    <div class="p-3 bg-surface-50 dark:bg-surface-700 rounded-lg text-center">
+                        <p class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">{{ getChildUnits(detailsUnit).length }}</p>
+                        <p class="text-xs text-surface-500 m-0">Подразделений</p>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <p class="text-sm font-medium text-surface-700 dark:text-surface-300 m-0">Сотрудники ({{ detailsEmployees.length }})</p>
+                        <button pButton icon="pi pi-plus" class="p-button-text p-button-sm p-button-rounded"
+                            pTooltip="Добавить сотрудника" (click)="openAddEmployeeDialog()"></button>
+                    </div>
+                    @if (detailsEmployees.length > 0) {
+                        <div class="space-y-2 max-h-64 overflow-y-auto">
+                            @for (emp of detailsEmployees; track emp.id) {
+                                <div class="flex items-center gap-2 p-2 rounded hover:bg-surface-50 dark:hover:bg-surface-700 group">
+                                    @if (emp.photo_url) {
+                                        <img [src]="emp.photo_url" alt="" class="w-8 h-8 rounded-full object-cover">
+                                    } @else {
+                                        <div class="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold"
+                                            [style.background]="getAvatarColor(emp.id)">
+                                            {{ getInitials(emp.name) }}
+                                        </div>
+                                    }
+                                    <div class="flex-1 min-w-0 cursor-pointer" (click)="showEmployeeDetails(emp)">
+                                        <div class="text-sm font-medium text-surface-900 dark:text-surface-0 truncate">{{ emp.name }}</div>
+                                        <div class="text-xs text-surface-500 truncate">{{ emp.position }}</div>
+                                    </div>
+                                    @if (emp.is_manager) {
+                                        <i class="pi pi-star-fill text-yellow-500 text-xs"></i>
+                                    }
+                                    <div class="hidden group-hover:flex gap-1">
+                                        <button pButton icon="pi pi-pencil" class="p-button-text p-button-sm p-button-rounded"
+                                            pTooltip="Редактировать" (click)="openEditEmployeeDialog(emp)"></button>
+                                        <button pButton icon="pi pi-trash" class="p-button-text p-button-sm p-button-rounded p-button-danger"
+                                            pTooltip="Удалить" (click)="deleteEmployee(emp)"></button>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    } @else {
+                        <div class="text-center py-4 text-surface-400">
+                            <i class="pi pi-users text-2xl mb-2"></i>
+                            <p class="text-sm m-0">Нет сотрудников</p>
+                        </div>
+                    }
+                </div>
+
+                <div class="flex gap-2">
+                    <button pButton label="Редактировать" icon="pi pi-pencil" class="p-button-outlined flex-1" (click)="openEditUnitDialog(detailsUnit)"></button>
+                    <button pButton icon="pi pi-plus" class="p-button-outlined" pTooltip="Добавить подразделение" (click)="openNewUnitDialog(detailsUnit)"></button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Department Dialog -->
+<p-dialog [header]="isEditMode ? 'Редактирование подразделения' : 'Новое подразделение'"
+    [(visible)]="displayDepartmentDialog" [modal]="true" [style]="{ width: '500px' }">
+    <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-2">
+            <label class="font-medium text-surface-700 dark:text-surface-300">Название *</label>
+            <input pInputText [(ngModel)]="unitForm.name" placeholder="Название подразделения" class="w-full" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+            <div class="flex flex-col gap-2">
+                <label class="font-medium text-surface-700 dark:text-surface-300">Код *</label>
+                <input pInputText [(ngModel)]="unitForm.code" placeholder="Например: IT, HR" class="w-full" />
+            </div>
+            <div class="flex flex-col gap-2">
+                <label class="font-medium text-surface-700 dark:text-surface-300">Тип</label>
+                <p-select [options]="orgUnitTypes" [(ngModel)]="unitForm.type" optionLabel="label" optionValue="value" class="w-full"></p-select>
+            </div>
+        </div>
+
+        <div class="flex flex-col gap-2">
+            <label class="font-medium text-surface-700 dark:text-surface-300">Родительское подразделение</label>
+            <p-select [options]="orgUnits" [(ngModel)]="unitForm.parent_id" optionLabel="name" optionValue="id"
+                placeholder="Выберите родительское подразделение" [showClear]="true" class="w-full"></p-select>
+        </div>
+
+        <div class="flex flex-col gap-2">
+            <label class="font-medium text-surface-700 dark:text-surface-300">Описание</label>
+            <textarea pTextarea [(ngModel)]="unitForm.description" rows="3" class="w-full"></textarea>
+        </div>
+    </div>
+
+    <ng-template pTemplate="footer">
+        <button pButton label="Отмена" class="p-button-text" (click)="displayDepartmentDialog = false"></button>
+        <button pButton label="Сохранить" icon="pi pi-check" (click)="saveUnit()"></button>
+    </ng-template>
+</p-dialog>
+
+<!-- Employee View Dialog -->
+<p-dialog header="Информация о сотруднике" [(visible)]="displayEmployeeDialog" [modal]="true" [style]="{ width: '450px' }">
+    <div *ngIf="selectedEmployee" class="flex flex-col gap-4">
+        <div class="flex items-center gap-4">
+            @if (selectedEmployee.photo_url) {
+                <img [src]="selectedEmployee.photo_url" alt="" class="w-16 h-16 rounded-full object-cover">
+            } @else {
+                <div class="w-16 h-16 rounded-full flex items-center justify-center text-white text-xl font-bold"
+                    [style.background]="getAvatarColor(selectedEmployee.id)">
+                    {{ getInitials(selectedEmployee.name) }}
+                </div>
+            }
+            <div>
+                <h3 class="font-semibold text-surface-900 dark:text-surface-0 m-0">{{ selectedEmployee.name }}</h3>
+                <p class="text-surface-500 m-0">{{ selectedEmployee.position }}</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <p class="text-sm text-surface-500 m-0">Отдел</p>
+                <p class="font-medium text-surface-900 dark:text-surface-0 m-0">{{ selectedEmployee.department_name }}</p>
+            </div>
+            <div>
+                <p class="text-sm text-surface-500 m-0">Дата приёма</p>
+                <p class="font-medium text-surface-900 dark:text-surface-0 m-0">{{ formatDate(selectedEmployee.hire_date) }}</p>
+            </div>
+            @if (selectedEmployee.manager_name) {
+                <div>
+                    <p class="text-sm text-surface-500 m-0">Руководитель</p>
+                    <p class="font-medium text-surface-900 dark:text-surface-0 m-0">{{ selectedEmployee.manager_name }}</p>
+                </div>
+            }
+            @if (selectedEmployee.is_manager) {
+                <div>
+                    <p class="text-sm text-surface-500 m-0">Подчинённых</p>
+                    <p class="font-medium text-surface-900 dark:text-surface-0 m-0">{{ selectedEmployee.subordinates_count }}</p>
+                </div>
+            }
+            @if (selectedEmployee.email) {
+                <div>
+                    <p class="text-sm text-surface-500 m-0">Email</p>
+                    <p class="font-medium text-surface-900 dark:text-surface-0 m-0">{{ selectedEmployee.email }}</p>
+                </div>
+            }
+            @if (selectedEmployee.phone) {
+                <div>
+                    <p class="text-sm text-surface-500 m-0">Телефон</p>
+                    <p class="font-medium text-surface-900 dark:text-surface-0 m-0">{{ selectedEmployee.phone }}</p>
+                </div>
+            }
+        </div>
+
+        @if (selectedEmployee.is_manager) {
+            <div class="flex items-center gap-2 p-2 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
+                <i class="pi pi-star-fill text-yellow-500"></i>
+                <span class="text-sm text-yellow-700 dark:text-yellow-300">Руководитель подразделения</span>
+            </div>
+        }
+    </div>
+
+    <ng-template pTemplate="footer">
+        <button pButton label="Редактировать" icon="pi pi-pencil" class="p-button-outlined"
+            (click)="displayEmployeeDialog = false; openEditEmployeeDialog(selectedEmployee!)"></button>
+        <button pButton label="Закрыть" class="p-button-text" (click)="displayEmployeeDialog = false"></button>
+    </ng-template>
+</p-dialog>
+
+<!-- Employee CRUD Dialog -->
+<p-dialog [header]="isEditEmployeeMode ? 'Редактирование сотрудника' : 'Новый сотрудник'"
+    [(visible)]="displayEmployeeCrudDialog" [modal]="true" [style]="{ width: '600px' }">
+    <div class="flex flex-col gap-6 py-2">
+        <!-- Photo Upload -->
+        <div class="flex items-center gap-5 pb-4 border-b border-surface-200 dark:border-surface-700">
+            <div class="relative">
+                @if (employeeForm.photo_url) {
+                    <img [src]="employeeForm.photo_url" alt="" class="w-24 h-24 rounded-full object-cover border-2 border-surface-200 dark:border-surface-600">
+                } @else {
+                    <div class="w-24 h-24 rounded-full bg-surface-100 dark:bg-surface-700 flex items-center justify-center">
+                        <i class="pi pi-user text-4xl text-surface-400"></i>
+                    </div>
+                }
+                <label class="absolute bottom-0 right-0 w-9 h-9 rounded-full bg-primary-500 flex items-center justify-center cursor-pointer hover:bg-primary-600 transition-colors shadow-md">
+                    <i class="pi pi-camera text-white"></i>
+                    <input type="file" accept="image/*" class="hidden" (change)="onPhotoUpload($event)">
+                </label>
+            </div>
+            <div class="flex-1">
+                <p class="text-base font-medium text-surface-700 dark:text-surface-300 m-0 mb-1">Фото сотрудника</p>
+                <p class="text-sm text-surface-500 m-0">Нажмите на иконку камеры для загрузки фото</p>
+            </div>
+        </div>
+
+        <!-- Name -->
+        <div class="flex flex-col gap-2">
+            <label class="font-semibold text-surface-700 dark:text-surface-300">ФИО <span class="text-red-500">*</span></label>
+            <input pInputText [(ngModel)]="employeeForm.name" placeholder="Иванов Иван Иванович" class="w-full p-3" />
+        </div>
+
+        <!-- Position -->
+        <div class="flex flex-col gap-2">
+            <div class="flex items-center justify-between mb-1">
+                <label class="font-semibold text-surface-700 dark:text-surface-300">Должность <span class="text-red-500">*</span></label>
+                <button pButton [label]="useCustomPosition ? 'Выбрать из списка' : 'Ввести вручную'"
+                    class="p-button-text p-button-sm" (click)="toggleCustomPosition()"></button>
+            </div>
+            @if (useCustomPosition) {
+                <input pInputText [(ngModel)]="employeeForm.position_custom" placeholder="Введите должность" class="w-full p-3" />
+            } @else {
+                <p-select [options]="positionTitles" [(ngModel)]="employeeForm.position"
+                    optionLabel="label" optionValue="value" placeholder="Выберите должность"
+                    [filter]="true" filterPlaceholder="Поиск..." class="w-full"
+                    appendTo="body" [scrollHeight]="'300px'"></p-select>
+            }
+        </div>
+
+        <!-- Department -->
+        <div class="flex flex-col gap-2">
+            <label class="font-semibold text-surface-700 dark:text-surface-300">Отдел <span class="text-red-500">*</span></label>
+            <p-select [options]="orgUnits" [(ngModel)]="employeeForm.department_id"
+                optionLabel="name" optionValue="id" placeholder="Выберите отдел"
+                [filter]="true" filterPlaceholder="Поиск..." class="w-full"
+                appendTo="body" [scrollHeight]="'300px'"></p-select>
+        </div>
+
+        <!-- Manager -->
+        <div class="flex flex-col gap-2">
+            <label class="font-semibold text-surface-700 dark:text-surface-300">Руководитель</label>
+            <p-select [options]="getManagersForDepartment()" [(ngModel)]="employeeForm.manager_id"
+                optionLabel="name" optionValue="id" placeholder="Выберите руководителя (необязательно)"
+                [showClear]="true" [filter]="true" filterPlaceholder="Поиск..." class="w-full"
+                appendTo="body" [scrollHeight]="'250px'"></p-select>
+        </div>
+
+        <div class="grid grid-cols-2 gap-5">
+            <!-- Hire Date -->
+            <div class="flex flex-col gap-2">
+                <label class="font-semibold text-surface-700 dark:text-surface-300">Дата приёма</label>
+                <input pInputText type="date" [(ngModel)]="employeeForm.hire_date" class="w-full p-3" />
+            </div>
+
+            <!-- Is Manager -->
+            <div class="flex flex-col gap-2">
+                <label class="font-semibold text-surface-700 dark:text-surface-300">Статус</label>
+                <div class="flex items-center h-12 bg-surface-50 dark:bg-surface-700 rounded-lg px-3">
+                    <label class="flex items-center gap-3 cursor-pointer">
+                        <input type="checkbox" [(ngModel)]="employeeForm.is_manager" class="w-5 h-5 rounded accent-primary-500">
+                        <span class="text-surface-700 dark:text-surface-300">Руководитель</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-5">
+            <!-- Email -->
+            <div class="flex flex-col gap-2">
+                <label class="font-semibold text-surface-700 dark:text-surface-300">Email</label>
+                <input pInputText type="email" [(ngModel)]="employeeForm.email" placeholder="email@example.com" class="w-full p-3" />
+            </div>
+
+            <!-- Phone -->
+            <div class="flex flex-col gap-2">
+                <label class="font-semibold text-surface-700 dark:text-surface-300">Телефон</label>
+                <input pInputText [(ngModel)]="employeeForm.phone" placeholder="+998 90 123 45 67" class="w-full p-3" />
+            </div>
+        </div>
+    </div>
+
+    <ng-template pTemplate="footer">
+        <div class="flex justify-end gap-3 pt-2">
+            <button pButton label="Отмена" class="p-button-text" (click)="displayEmployeeCrudDialog = false"></button>
+            <button pButton [label]="isEditEmployeeMode ? 'Сохранить' : 'Добавить'" icon="pi pi-check" (click)="saveEmployee()"></button>
+        </div>
+    </ng-template>
+</p-dialog>

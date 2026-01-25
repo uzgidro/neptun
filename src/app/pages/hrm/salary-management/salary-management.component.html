@@ -1,0 +1,478 @@
+<!-- Period Selection & Summary -->
+<div class="grid grid-cols-1 lg:grid-cols-6 gap-4 mb-4">
+    <!-- Period Selection -->
+    <p-card styleClass="shadow-sm lg:col-span-2">
+        <div class="flex items-center gap-4">
+            <div>
+                <label class="block text-sm text-gray-500 mb-1">Месяц</label>
+                <select class="p-2 border rounded" [(ngModel)]="selectedMonth" (change)="onPeriodChange()">
+                    @for (month of months; track month.id) {
+                        <option [value]="month.id">{{ month.name }}</option>
+                    }
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm text-gray-500 mb-1">Год</label>
+                <select class="p-2 border rounded" [(ngModel)]="selectedYear" (change)="onPeriodChange()">
+                    @for (year of years; track year.id) {
+                        <option [value]="year.id">{{ year.name }}</option>
+                    }
+                </select>
+            </div>
+            <div class="ml-auto">
+                <button pButton (click)="calculateAllSalaries()" [disabled]="calculating" class="p-button-primary">
+                    <i class="pi pi-calculator mr-2"></i>
+                    Рассчитать
+                </button>
+            </div>
+        </div>
+    </p-card>
+
+    <!-- Summary Cards -->
+    <p-card styleClass="shadow-sm">
+        <div class="flex flex-col items-center">
+            <span class="text-xs text-gray-500">Начислено</span>
+            <span class="text-lg font-bold text-blue-600">{{ formatCurrency(totalGross) }}</span>
+        </div>
+    </p-card>
+    <p-card styleClass="shadow-sm">
+        <div class="flex flex-col items-center">
+            <span class="text-xs text-gray-500">Налоги</span>
+            <span class="text-lg font-bold text-red-600">{{ formatCurrency(totalTaxes) }}</span>
+        </div>
+    </p-card>
+    <p-card styleClass="shadow-sm">
+        <div class="flex flex-col items-center">
+            <span class="text-xs text-gray-500">К выплате</span>
+            <span class="text-lg font-bold text-green-600">{{ formatCurrency(totalNet) }}</span>
+        </div>
+    </p-card>
+    <p-card styleClass="shadow-sm">
+        <div class="flex flex-col items-center">
+            <span class="text-xs text-gray-500">Сотрудников</span>
+            <span class="text-lg font-bold">{{ salaries.length }}</span>
+        </div>
+    </p-card>
+</div>
+
+<!-- Status Summary -->
+@if (salaries.length > 0) {
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+        <div class="bg-surface-100 dark:bg-surface-700 rounded-lg p-3 text-center">
+            <span class="text-2xl font-bold">{{ calculatedCount }}</span>
+            <span class="text-sm text-gray-600 block">Рассчитано</span>
+        </div>
+        <div class="bg-orange-100 rounded-lg p-3 text-center">
+            <span class="text-2xl font-bold text-orange-600">{{ pendingApprovalCount }}</span>
+            <span class="text-sm text-gray-600 block">На утверждении</span>
+        </div>
+        <div class="bg-blue-100 rounded-lg p-3 text-center">
+            <span class="text-2xl font-bold text-blue-600">{{ approvedCount }}</span>
+            <span class="text-sm text-gray-600 block">Утверждено</span>
+        </div>
+        <div class="bg-green-100 rounded-lg p-3 text-center">
+            <span class="text-2xl font-bold text-green-600">{{ paidCount }}</span>
+            <span class="text-sm text-gray-600 block">Выплачено</span>
+        </div>
+    </div>
+}
+
+<!-- Main Table -->
+<div class="card">
+    <div class="flex justify-between items-center mb-4">
+        <div class="font-semibold text-xl">Управление зарплатой - {{ getMonthLabel(selectedMonth) }} {{ selectedYear }}</div>
+        <div class="flex gap-2">
+            @if (calculatedCount > 0) {
+                <button pButton (click)="submitAllForApproval()" class="p-button-outlined p-button-info">
+                    <i class="pi pi-send mr-2"></i>
+                    Отправить все на утверждение
+                </button>
+            }
+            @if (pendingApprovalCount > 0) {
+                <button pButton (click)="approveAll()" class="p-button-outlined p-button-success">
+                    <i class="pi pi-check-circle mr-2"></i>
+                    Утвердить все
+                </button>
+            }
+            @if (approvedCount > 0) {
+                <button pButton (click)="markAllAsPaid()" class="p-button-outlined p-button-primary">
+                    <i class="pi pi-money-bill mr-2"></i>
+                    Отметить выплату
+                </button>
+            }
+        </div>
+    </div>
+
+    <p-table
+        #dt
+        [value]="salaries"
+        dataKey="id"
+        [rows]="10"
+        [loading]="loading"
+        [rowHover]="true"
+        [showGridlines]="true"
+        [paginator]="true"
+        [globalFilterFields]="['employee_name', 'department_name', 'position_name']"
+    >
+        <ng-template #caption>
+            <div class="flex justify-between items-center flex-column sm:flex-row">
+                <p-iconfield>
+                    <p-inputicon>
+                        <i class="pi pi-search"></i>
+                    </p-inputicon>
+                    <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Поиск" />
+                </p-iconfield>
+                <div class="flex gap-2">
+                    <button pButton (click)="generatePayrollReport()" class="p-button-outlined p-button-secondary" pTooltip="Реестр зарплаты">
+                        <i class="pi pi-file-excel"></i>
+                    </button>
+                    <button pButton (click)="generateTaxReport()" class="p-button-outlined p-button-secondary" pTooltip="Отчёт в налоговую">
+                        <i class="pi pi-file-pdf"></i>
+                    </button>
+                    <button pButton (click)="generateSocialFundReport()" class="p-button-outlined p-button-secondary" pTooltip="Отчёт в соцфонд">
+                        <i class="pi pi-file"></i>
+                    </button>
+                </div>
+            </div>
+        </ng-template>
+        <ng-template #header>
+            <tr>
+                <th style="min-width: 12rem">Сотрудник</th>
+                <th style="min-width: 8rem">Отдел</th>
+                <th style="min-width: 8rem" class="text-right">Оклад</th>
+                <th style="min-width: 6rem" class="text-right">Надбавки</th>
+                <th style="min-width: 6rem" class="text-right">Премии</th>
+                <th style="min-width: 8rem" class="text-right">Начислено</th>
+                <th style="min-width: 6rem" class="text-right">Налоги</th>
+                <th style="min-width: 8rem" class="text-right">К выплате</th>
+                <th style="min-width: 6rem">Статус</th>
+                <th style="width: 10rem">Действия</th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-salary>
+            <tr>
+                <td>
+                    <div>
+                        <div class="font-semibold">{{ salary.employee_name }}</div>
+                        <div class="text-xs text-gray-500">{{ salary.position_name }}</div>
+                    </div>
+                </td>
+                <td>{{ salary.department_name }}</td>
+                <td class="text-right">{{ formatCurrency(salary.base_salary) }}</td>
+                <td class="text-right text-blue-600">{{ formatCurrency(salary.rank_allowance + salary.education_allowance + salary.seniority_allowance) }}</td>
+                <td class="text-right text-green-600">{{ formatCurrency(salary.bonuses) }}</td>
+                <td class="text-right font-semibold">{{ formatCurrency(salary.gross_salary) }}</td>
+                <td class="text-right text-red-600">{{ formatCurrency(salary.total_deductions) }}</td>
+                <td class="text-right font-bold text-green-700">{{ formatCurrency(salary.net_salary) }}</td>
+                <td>
+                    <p-tag [value]="getStatusLabel(salary.status)" [severity]="getStatusSeverity(salary.status)"></p-tag>
+                </td>
+                <td>
+                    <div class="flex justify-center gap-1">
+                        <button pButton
+                                icon="pi pi-eye"
+                                (click)="openDetailDialog(salary)"
+                                class="p-button-rounded p-button-text p-button-info"
+                                pTooltip="Детали"
+                                tooltipPosition="top">
+                        </button>
+                        @if (salary.status === 'calculated') {
+                            <button pButton
+                                    icon="pi pi-send"
+                                    (click)="submitForApproval(salary)"
+                                    class="p-button-rounded p-button-text p-button-primary"
+                                    pTooltip="На утверждение"
+                                    tooltipPosition="top">
+                            </button>
+                        }
+                        @if (salary.status === 'pending_approval') {
+                            <button pButton
+                                    icon="pi pi-check"
+                                    (click)="openApprovalDialog(salary)"
+                                    class="p-button-rounded p-button-text p-button-success"
+                                    pTooltip="Утвердить"
+                                    tooltipPosition="top">
+                            </button>
+                            <button pButton
+                                    icon="pi pi-times"
+                                    (click)="openRejectionDialog(salary)"
+                                    class="p-button-rounded p-button-text p-button-danger"
+                                    pTooltip="Отклонить"
+                                    tooltipPosition="top">
+                            </button>
+                        }
+                        @if (salary.status === 'approved') {
+                            <button pButton
+                                    icon="pi pi-money-bill"
+                                    (click)="markAsPaid(salary)"
+                                    class="p-button-rounded p-button-text p-button-success"
+                                    pTooltip="Отметить выплату"
+                                    tooltipPosition="top">
+                            </button>
+                        }
+                        <button pButton
+                                icon="pi pi-file-pdf"
+                                (click)="generatePayslip(salary)"
+                                class="p-button-rounded p-button-text p-button-secondary"
+                                pTooltip="Расчётный лист"
+                                tooltipPosition="top">
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template #emptymessage>
+            <tr>
+                <td colspan="10" class="text-center py-8">
+                    <div class="flex flex-col items-center gap-2">
+                        <i class="pi pi-calculator text-4xl text-gray-400"></i>
+                        <span class="text-gray-500">Нажмите "Рассчитать" для расчёта зарплаты за выбранный период</span>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template #loadingbody>
+            <tr>
+                <td colspan="10">Идет загрузка...</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<!-- Batch Calculation Dialog -->
+<p-dialog [(visible)]="displayBatchDialog" header="Расчёт зарплаты" [modal]="true" [style]="{ width: '500px' }" [closable]="!calculating">
+    <div class="p-4">
+        @if (calculating) {
+            <div class="text-center mb-4">
+                <i class="pi pi-spin pi-cog text-4xl text-blue-500 mb-3"></i>
+                <p class="text-lg font-semibold">Выполняется расчёт зарплаты...</p>
+                <p class="text-gray-500">{{ getMonthLabel(selectedMonth) }} {{ selectedYear }}</p>
+            </div>
+            <p-progressBar [value]="calculationProgress" [showValue]="true"></p-progressBar>
+        } @else if (lastBatchResult) {
+            <div class="text-center mb-4">
+                <i class="pi pi-check-circle text-4xl text-green-500 mb-3"></i>
+                <p class="text-lg font-semibold">Расчёт завершён!</p>
+            </div>
+            <div class="bg-surface-100 dark:bg-surface-700 rounded-lg p-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-green-600">{{ lastBatchResult.successful }}</div>
+                        <div class="text-sm text-gray-500">Успешно</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-red-600">{{ lastBatchResult.failed }}</div>
+                        <div class="text-sm text-gray-500">Ошибок</div>
+                    </div>
+                </div>
+                <hr class="my-4">
+                <div class="space-y-2">
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Итого начислено:</span>
+                        <span class="font-semibold">{{ formatCurrency(lastBatchResult.total_gross) }} сум</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Итого налогов:</span>
+                        <span class="font-semibold text-red-600">{{ formatCurrency(lastBatchResult.total_taxes) }} сум</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Итого к выплате:</span>
+                        <span class="font-bold text-green-600">{{ formatCurrency(lastBatchResult.total_net) }} сум</span>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="flex justify-end p-4 border-t">
+        <button pButton label="Закрыть" (click)="displayBatchDialog = false" [disabled]="calculating"></button>
+    </div>
+</p-dialog>
+
+<!-- Salary Detail Dialog -->
+<p-dialog [(visible)]="displayDetailDialog" header="Детали расчёта зарплаты" [modal]="true" [style]="{ width: '700px' }">
+    @if (selectedSalary) {
+        <div class="p-4">
+            <!-- Employee Info -->
+            <div class="bg-blue-50 rounded-lg p-4 mb-4">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h3 class="font-bold text-lg">{{ selectedSalary.employee_name }}</h3>
+                        <p class="text-gray-600">{{ selectedSalary.position_name }} - {{ selectedSalary.department_name }}</p>
+                    </div>
+                    <p-tag [value]="getStatusLabel(selectedSalary.status)" [severity]="getStatusSeverity(selectedSalary.status)"></p-tag>
+                </div>
+                <p class="text-sm text-gray-500 mt-2">Период: {{ getMonthLabel(selectedSalary.period_month) }} {{ selectedSalary.period_year }}</p>
+            </div>
+
+            <!-- Work Time -->
+            <div class="mb-4">
+                <h4 class="font-semibold mb-2 text-gray-700">Отработанное время</h4>
+                <div class="grid grid-cols-3 gap-4 bg-surface-100 dark:bg-surface-700 rounded-lg p-3">
+                    <div class="text-center">
+                        <div class="text-lg font-bold">{{ selectedSalary.worked_days }} / {{ selectedSalary.working_days }}</div>
+                        <div class="text-xs text-gray-500">Рабочих дней</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-lg font-bold text-blue-600">{{ selectedSalary.overtime_hours }}</div>
+                        <div class="text-xs text-gray-500">Часов переработки</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-lg font-bold text-red-600">{{ selectedSalary.absent_days }}</div>
+                        <div class="text-xs text-gray-500">Дней отсутствия</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Accruals -->
+            <div class="mb-4">
+                <h4 class="font-semibold mb-2 text-gray-700">Начисления</h4>
+                <div class="space-y-2">
+                    <div class="flex justify-between py-1 border-b">
+                        <span>Базовый оклад</span>
+                        <span class="font-semibold">{{ formatCurrency(selectedSalary.base_salary) }}</span>
+                    </div>
+                    <div class="flex justify-between py-1 border-b">
+                        <span>Надбавка за ранг</span>
+                        <span class="text-blue-600">{{ formatCurrency(selectedSalary.rank_allowance) }}</span>
+                    </div>
+                    <div class="flex justify-between py-1 border-b">
+                        <span>Надбавка за образование</span>
+                        <span class="text-blue-600">{{ formatCurrency(selectedSalary.education_allowance) }}</span>
+                    </div>
+                    <div class="flex justify-between py-1 border-b">
+                        <span>Надбавка за выслугу лет</span>
+                        <span class="text-blue-600">{{ formatCurrency(selectedSalary.seniority_allowance) }}</span>
+                    </div>
+                    @if (selectedSalary.bonuses > 0) {
+                        <div class="flex justify-between py-1 border-b">
+                            <span>Премии</span>
+                            <span class="text-green-600">{{ formatCurrency(selectedSalary.bonuses) }}</span>
+                        </div>
+                    }
+                    @if (selectedSalary.overtime_pay > 0) {
+                        <div class="flex justify-between py-1 border-b">
+                            <span>Сверхурочные</span>
+                            <span class="text-green-600">{{ formatCurrency(selectedSalary.overtime_pay) }}</span>
+                        </div>
+                    }
+                    @if (selectedSalary.absence_deduction > 0) {
+                        <div class="flex justify-between py-1 border-b">
+                            <span>Вычет за отсутствие</span>
+                            <span class="text-red-600">-{{ formatCurrency(selectedSalary.absence_deduction) }}</span>
+                        </div>
+                    }
+                    <div class="flex justify-between py-2 bg-blue-50 px-2 rounded font-bold">
+                        <span>ИТОГО НАЧИСЛЕНО</span>
+                        <span>{{ formatCurrency(selectedSalary.gross_salary) }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Deductions -->
+            <div class="mb-4">
+                <h4 class="font-semibold mb-2 text-gray-700">Удержания</h4>
+                <div class="space-y-2">
+                    <div class="flex justify-between py-1 border-b">
+                        <span>НДФЛ (10%)</span>
+                        <span class="text-red-600">{{ formatCurrency(selectedSalary.income_tax) }}</span>
+                    </div>
+                    <div class="flex justify-between py-1 border-b">
+                        <span>Соц. фонд (0.5%)</span>
+                        <span class="text-red-600">{{ formatCurrency(selectedSalary.social_fund) }}</span>
+                    </div>
+                    <div class="flex justify-between py-1 border-b">
+                        <span>Пенсионный фонд (3%)</span>
+                        <span class="text-red-600">{{ formatCurrency(selectedSalary.pension_fund) }}</span>
+                    </div>
+                    <div class="flex justify-between py-1 border-b">
+                        <span>Мед. страхование (2%)</span>
+                        <span class="text-red-600">{{ formatCurrency(selectedSalary.health_insurance) }}</span>
+                    </div>
+                    <div class="flex justify-between py-1 border-b">
+                        <span>Профсоюз (1%)</span>
+                        <span class="text-red-600">{{ formatCurrency(selectedSalary.trade_union) }}</span>
+                    </div>
+                    @if (selectedSalary.other_deductions > 0) {
+                        <div class="flex justify-between py-1 border-b">
+                            <span>Прочие удержания</span>
+                            <span class="text-red-600">{{ formatCurrency(selectedSalary.other_deductions) }}</span>
+                        </div>
+                    }
+                    <div class="flex justify-between py-2 bg-red-50 px-2 rounded font-bold">
+                        <span>ИТОГО УДЕРЖАНО</span>
+                        <span class="text-red-600">{{ formatCurrency(selectedSalary.total_deductions) }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Net Salary -->
+            <div class="bg-green-100 rounded-lg p-4 text-center">
+                <div class="text-sm text-gray-600">К ВЫПЛАТЕ</div>
+                <div class="text-3xl font-bold text-green-700">{{ formatCurrency(selectedSalary.net_salary) }} сум</div>
+            </div>
+        </div>
+        <div class="flex justify-end gap-2 p-4 border-t">
+            <button pButton label="Расчётный лист" icon="pi pi-file-pdf" class="p-button-outlined" (click)="generatePayslip(selectedSalary)"></button>
+            <button pButton label="Закрыть" (click)="displayDetailDialog = false"></button>
+        </div>
+    }
+</p-dialog>
+
+<!-- Approval Dialog -->
+<p-dialog [(visible)]="displayApprovalDialog" header="Утверждение зарплаты" [modal]="true" [style]="{ width: '450px' }">
+    @if (selectedSalary) {
+        <div class="p-4">
+            <p class="mb-4">Вы уверены, что хотите утвердить зарплату?</p>
+            <div class="bg-surface-100 dark:bg-surface-700 p-4 rounded-lg">
+                <div class="font-semibold">{{ selectedSalary.employee_name }}</div>
+                <div class="text-gray-600">{{ selectedSalary.position_name }}</div>
+                <div class="mt-2 text-lg font-bold text-green-600">{{ formatCurrency(selectedSalary.net_salary) }} сум</div>
+            </div>
+            <div class="mt-4 p-3 bg-blue-50 rounded border border-blue-200">
+                <div class="flex items-center gap-2 text-blue-700 text-sm">
+                    <i class="pi pi-info-circle"></i>
+                    <span>После утверждения зарплата будет направлена на выплату.</span>
+                </div>
+            </div>
+        </div>
+        <div class="flex justify-end gap-2 p-4 border-t">
+            <button pButton label="Отмена" class="p-button-text" (click)="displayApprovalDialog = false"></button>
+            <button pButton label="Утвердить" icon="pi pi-check" class="p-button-success" (click)="confirmApproval()"></button>
+        </div>
+    }
+</p-dialog>
+
+<!-- Rejection Dialog -->
+<p-dialog [(visible)]="displayRejectionDialog" header="Отклонение зарплаты" [modal]="true" [style]="{ width: '500px' }">
+    @if (selectedSalary) {
+        <div class="p-4">
+            <p class="mb-4">Укажите причину отклонения расчёта зарплаты</p>
+            <div class="bg-surface-100 dark:bg-surface-700 p-4 rounded-lg mb-4">
+                <div class="font-semibold">{{ selectedSalary.employee_name }}</div>
+                <div class="text-gray-600">{{ formatCurrency(selectedSalary.net_salary) }} сум</div>
+            </div>
+            <form [formGroup]="rejectionForm">
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Причина отклонения *</label>
+                    <textarea
+                        pInputText
+                        formControlName="rejection_reason"
+                        rows="3"
+                        class="w-full p-3 border rounded-lg"
+                        placeholder="Укажите причину..."></textarea>
+                </div>
+            </form>
+        </div>
+        <div class="flex justify-end gap-2 p-4 border-t">
+            <button pButton label="Отмена" class="p-button-text" (click)="displayRejectionDialog = false"></button>
+            <button pButton label="Отклонить" icon="pi pi-times" class="p-button-danger" (click)="confirmRejection()" [disabled]="rejectionForm.invalid"></button>
+        </div>
+    }
+</p-dialog>
+
+<!-- Delete Confirmation -->
+<app-delete-confirmation
+    [(visible)]="displayDeleteDialog"
+    [message]="'Вы уверены, что хотите удалить запись о зарплате?'"
+    (onConfirm)="confirmDelete()">
+</app-delete-confirmation>

@@ -1,0 +1,141 @@
+<div class="card">
+    <div class="font-semibold text-xl mb-4">Обучение и развитие</div>
+    <p-table
+        #dt
+        [value]="trainings"
+        dataKey="id"
+        [rows]="10"
+        [loading]="loading"
+        [rowHover]="true"
+        [showGridlines]="true"
+        [paginator]="true"
+        [globalFilterFields]="['title', 'provider', 'training_type']"
+    >
+        <ng-template #caption>
+            <div class="flex justify-between items-center flex-column sm:flex-row">
+                <p-iconfield>
+                    <p-inputicon>
+                        <i class="pi pi-search"></i>
+                    </p-inputicon>
+                    <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Поиск" />
+                </p-iconfield>
+                <button pButton (click)="openDialog()">
+                    <i class="pi pi-plus" pButtonIcon></i>
+                    <span pButtonLabel>Новое обучение</span>
+                </button>
+            </div>
+        </ng-template>
+        <ng-template #header>
+            <tr>
+                <th pSortableColumn="title" style="min-width: 14rem">Название</th>
+                <th style="min-width: 10rem">Тип</th>
+                <th style="min-width: 10rem">Провайдер</th>
+                <th style="min-width: 10rem">Даты</th>
+                <th style="min-width: 6rem">Часов</th>
+                <th style="min-width: 8rem">Участники</th>
+                <th style="min-width: 8rem">Статус</th>
+                <th style="width: 10rem">Действия</th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-training>
+            <tr>
+                <td>
+                    {{ training.title }}
+                    @if (training.is_online) {
+                        <i class="pi pi-globe ml-2 text-blue-500" pTooltip="Онлайн" tooltipPosition="top"></i>
+                    }
+                    @if (training.certificate_provided) {
+                        <i class="pi pi-verified ml-1 text-green-500" pTooltip="С сертификатом" tooltipPosition="top"></i>
+                    }
+                </td>
+                <td>{{ getTypeLabel(training.training_type) }}</td>
+                <td>{{ training.provider || '—' }}</td>
+                <td>{{ training.start_date | date:'dd.MM' }} - {{ training.end_date | date:'dd.MM.yyyy' }}</td>
+                <td>{{ training.duration_hours }}</td>
+                <td>{{ training.current_participants || 0 }} / {{ training.max_participants || '∞' }}</td>
+                <td>
+                    <p-tag [value]="getStatusLabel(training.status)" [severity]="getStatusSeverity(training.status)"></p-tag>
+                </td>
+                <td>
+                    <div class="flex justify-center gap-2">
+                        <button pButton
+                                icon="pi pi-pencil"
+                                (click)="openEditDialog(training)"
+                                class="p-button-rounded p-button-text p-button-warning"
+                                pTooltip="Редактировать"
+                                tooltipPosition="top">
+                        </button>
+                        <button pButton
+                                icon="pi pi-trash"
+                                (click)="openDeleteDialog(training)"
+                                class="p-button-rounded p-button-text p-button-danger"
+                                pTooltip="Удалить"
+                                tooltipPosition="top">
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template #emptymessage>
+            <tr>
+                <td colspan="8">Ничего не найдено</td>
+            </tr>
+        </ng-template>
+        <ng-template #loadingbody>
+            <tr>
+                <td colspan="8">Идет загрузка. Ожидайте...</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+@if (displayDialog) {
+    <app-dialog
+        [(visible)]="displayDialog"
+        [header]="isEditMode ? 'Редактировать обучение' : 'Новое обучение'"
+        [form]="trainingForm"
+        [saveLabel]="isEditMode ? 'Обновить' : 'Создать'"
+        (save)="onSubmit()"
+        (cancel)="closeDialog()">
+        <form class="p-4" [formGroup]="trainingForm" (ngSubmit)="onSubmit()">
+            <app-input-text formControlName="title" label="Название" [submitted]="submitted" errorMessage="Название обязательно" [required]="true"></app-input-text>
+
+            <app-select formControlName="training_type" label="Тип обучения" [items]="trainingTypes" [submitted]="submitted" errorMessage="Тип обязателен" [required]="true"></app-select>
+
+            <app-textarea formControlName="description" label="Описание" [submitted]="submitted" errorMessage="Описание обязательно" [required]="true"></app-textarea>
+
+            <app-input-text formControlName="provider" label="Провайдер" [submitted]="submitted" [required]="false"></app-input-text>
+
+            <div class="grid grid-cols-2 gap-4">
+                <app-date-picker formControlName="start_date" label="Дата начала" [submitted]="submitted" errorMessage="Дата начала обязательна" [showTime]="false" [required]="true"></app-date-picker>
+                <app-date-picker formControlName="end_date" label="Дата окончания" [submitted]="submitted" errorMessage="Дата окончания обязательна" [showTime]="false" [required]="true"></app-date-picker>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <app-input-text formControlName="duration_hours" label="Количество часов" type="number" [submitted]="submitted" errorMessage="Количество часов обязательно" [required]="true"></app-input-text>
+                <app-input-text formControlName="max_participants" label="Макс. участников" type="number" [submitted]="submitted" [required]="false"></app-input-text>
+            </div>
+
+            <app-input-text formControlName="location" label="Место проведения" [submitted]="submitted" [required]="false"></app-input-text>
+
+            <app-input-text formControlName="cost" label="Стоимость" type="number" [submitted]="submitted" [required]="false"></app-input-text>
+
+            <div class="flex gap-6 mt-4">
+                <div class="flex items-center gap-2">
+                    <p-checkbox formControlName="is_online" [binary]="true" inputId="is_online"></p-checkbox>
+                    <label for="is_online">Онлайн формат</label>
+                </div>
+                <div class="flex items-center gap-2">
+                    <p-checkbox formControlName="certificate_provided" [binary]="true" inputId="certificate"></p-checkbox>
+                    <label for="certificate">С сертификатом</label>
+                </div>
+            </div>
+        </form>
+    </app-dialog>
+}
+
+<app-delete-confirmation
+    [(visible)]="displayDeleteDialog"
+    [message]="'Вы уверены, что хотите удалить обучение ' + (selectedTraining?.title || '') + '?'"
+    (onConfirm)="confirmDelete()">
+</app-delete-confirmation>

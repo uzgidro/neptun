@@ -1,0 +1,1080 @@
+<div class="card">
+    <div class="font-semibold text-xl mb-4">Рекрутинг</div>
+
+    <!-- Статистика -->
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
+        <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 text-center">
+            <div class="text-3xl font-bold text-blue-600">{{ openVacanciesCount }}</div>
+            <div class="text-sm text-gray-600 dark:text-gray-400">Открыто вакансий</div>
+        </div>
+        <div class="bg-yellow-50 dark:bg-yellow-900/20 rounded-lg p-4 text-center">
+            <div class="text-3xl font-bold text-yellow-600">{{ pendingApprovalCount }}</div>
+            <div class="text-sm text-gray-600 dark:text-gray-400">На согласовании</div>
+        </div>
+        <div class="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-4 text-center">
+            <div class="text-3xl font-bold text-purple-600">{{ newCandidatesCount }}</div>
+            <div class="text-sm text-gray-600 dark:text-gray-400">Новых заявок</div>
+        </div>
+        <div class="bg-cyan-50 dark:bg-cyan-900/20 rounded-lg p-4 text-center">
+            <div class="text-3xl font-bold text-cyan-600">{{ interviewingCount }}</div>
+            <div class="text-sm text-gray-600 dark:text-gray-400">На собеседованиях</div>
+        </div>
+        <div class="bg-green-50 dark:bg-green-900/20 rounded-lg p-4 text-center">
+            <div class="text-3xl font-bold text-green-600">{{ offersCount }}</div>
+            <div class="text-sm text-gray-600 dark:text-gray-400">Офферы</div>
+        </div>
+        <div class="bg-teal-50 dark:bg-teal-900/20 rounded-lg p-4 text-center">
+            <div class="text-3xl font-bold text-teal-600">{{ activeOnboardingsCount }}</div>
+            <div class="text-sm text-gray-600 dark:text-gray-400">Адаптация</div>
+        </div>
+    </div>
+
+    <p-tabs [(value)]="activeTab">
+        <p-tablist>
+            <p-tab [value]="0">Вакансии</p-tab>
+            <p-tab [value]="1">Кандидаты</p-tab>
+            <p-tab [value]="2">Адаптация</p-tab>
+        </p-tablist>
+
+        <p-tabpanels>
+            <!-- Вкладка Вакансии -->
+            <p-tabpanel [value]="0">
+                <p-table
+                    #dtVacancies
+                    [value]="vacancies"
+                    dataKey="id"
+                    [rows]="10"
+                    [loading]="loading"
+                    [rowHover]="true"
+                    [showGridlines]="true"
+                    [paginator]="true"
+                    [globalFilterFields]="['title', 'department_name', 'position_name']"
+                >
+                    <ng-template #caption>
+                        <div class="flex justify-between items-center flex-column sm:flex-row">
+                            <p-iconfield>
+                                <p-inputicon>
+                                    <i class="pi pi-search"></i>
+                                </p-inputicon>
+                                <input pInputText type="text" (input)="onGlobalFilter(dtVacancies, $event)" placeholder="Поиск" />
+                            </p-iconfield>
+                            <button pButton (click)="openVacancyDialog()">
+                                <i class="pi pi-plus" pButtonIcon></i>
+                                <span pButtonLabel>Создать заявку</span>
+                            </button>
+                        </div>
+                    </ng-template>
+                    <ng-template #header>
+                        <tr>
+                            <th pSortableColumn="title" style="min-width: 14rem">Название</th>
+                            <th style="min-width: 10rem">Отдел</th>
+                            <th style="min-width: 10rem">Должность</th>
+                            <th style="min-width: 10rem">Зарплата</th>
+                            <th style="min-width: 5rem">Откликов</th>
+                            <th style="min-width: 6rem">Приоритет</th>
+                            <th style="min-width: 8rem">Статус</th>
+                            <th style="width: 12rem">Действия</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template #body let-vacancy>
+                        <tr>
+                            <td>
+                                <div class="font-medium">{{ vacancy.title }}</div>
+                                @if (vacancy.requested_by_name) {
+                                    <div class="text-xs text-gray-500">Заявитель: {{ vacancy.requested_by_name }}</div>
+                                }
+                            </td>
+                            <td>{{ vacancy.department_name || '—' }}</td>
+                            <td>{{ vacancy.position_name || '—' }}</td>
+                            <td>
+                                @if (vacancy.salary_from || vacancy.salary_to) {
+                                    {{ vacancy.salary_from | number:'1.0-0' }} - {{ vacancy.salary_to | number:'1.0-0' }}
+                                } @else {
+                                    По договоренности
+                                }
+                            </td>
+                            <td class="text-center">{{ vacancy.applications_count || 0 }}</td>
+                            <td>
+                                @if (vacancy.priority === 'high') {
+                                    <p-tag value="Высокий" severity="danger"></p-tag>
+                                } @else if (vacancy.priority === 'urgent') {
+                                    <p-tag value="Срочный" severity="danger"></p-tag>
+                                } @else {
+                                    <p-tag value="Обычный" severity="secondary"></p-tag>
+                                }
+                            </td>
+                            <td>
+                                <p-tag [value]="getStatusLabel(vacancy.status, 'vacancy')" [severity]="getVacancyStatusSeverity(vacancy.status)"></p-tag>
+                            </td>
+                            <td>
+                                <div class="flex justify-center gap-1">
+                                    @if (vacancy.status === 'draft') {
+                                        <button pButton
+                                                icon="pi pi-send"
+                                                (click)="submitForApproval(vacancy)"
+                                                class="p-button-rounded p-button-text p-button-info"
+                                                pTooltip="На согласование"
+                                                tooltipPosition="top">
+                                        </button>
+                                    }
+                                    @if (vacancy.status === 'pending_approval') {
+                                        <button pButton
+                                                icon="pi pi-check"
+                                                (click)="approveVacancy(vacancy)"
+                                                class="p-button-rounded p-button-text p-button-success"
+                                                pTooltip="Согласовать"
+                                                tooltipPosition="top">
+                                        </button>
+                                    }
+                                    @if (vacancy.status === 'approved') {
+                                        <button pButton
+                                                icon="pi pi-globe"
+                                                (click)="publishVacancy(vacancy)"
+                                                class="p-button-rounded p-button-text p-button-success"
+                                                pTooltip="Опубликовать"
+                                                tooltipPosition="top">
+                                        </button>
+                                    }
+                                    @if (vacancy.status === 'open') {
+                                        <button pButton
+                                                icon="pi pi-lock"
+                                                (click)="closeVacancy(vacancy)"
+                                                class="p-button-rounded p-button-text p-button-danger"
+                                                pTooltip="Закрыть"
+                                                tooltipPosition="top">
+                                        </button>
+                                    }
+                                    @if (vacancy.status !== 'closed' && vacancy.status !== 'cancelled') {
+                                        <button pButton
+                                                icon="pi pi-pencil"
+                                                (click)="openEditVacancyDialog(vacancy)"
+                                                class="p-button-rounded p-button-text p-button-warning"
+                                                pTooltip="Редактировать"
+                                                tooltipPosition="top">
+                                        </button>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    </ng-template>
+                    <ng-template #emptymessage>
+                        <tr>
+                            <td colspan="8">Вакансий не найдено</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </p-tabpanel>
+
+            <!-- Вкладка Кандидаты -->
+            <p-tabpanel [value]="1">
+                <p-table
+                    #dtCandidates
+                    [value]="candidates"
+                    dataKey="id"
+                    [rows]="10"
+                    [loading]="loading"
+                    [rowHover]="true"
+                    [showGridlines]="true"
+                    [paginator]="true"
+                    [globalFilterFields]="['full_name', 'email', 'vacancy_title']"
+                >
+                    <ng-template #caption>
+                        <div class="flex justify-between items-center flex-column sm:flex-row">
+                            <p-iconfield>
+                                <p-inputicon>
+                                    <i class="pi pi-search"></i>
+                                </p-inputicon>
+                                <input pInputText type="text" (input)="onGlobalFilter(dtCandidates, $event)" placeholder="Поиск" />
+                            </p-iconfield>
+                            <button pButton (click)="openCandidateDialog()">
+                                <i class="pi pi-user-plus" pButtonIcon></i>
+                                <span pButtonLabel>Добавить кандидата</span>
+                            </button>
+                        </div>
+                    </ng-template>
+                    <ng-template #header>
+                        <tr>
+                            <th pSortableColumn="full_name" style="min-width: 14rem">ФИО</th>
+                            <th style="min-width: 12rem">Вакансия</th>
+                            <th style="min-width: 8rem">Источник</th>
+                            <th style="min-width: 6rem">Этап</th>
+                            <th style="min-width: 8rem">Статус</th>
+                            <th style="width: 6rem">Рейтинг</th>
+                            <th style="width: 14rem">Действия</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template #body let-candidate>
+                        <tr>
+                            <td>
+                                <div class="font-medium">{{ candidate.full_name }}</div>
+                                <div class="text-xs text-gray-500">{{ candidate.email }}</div>
+                                <div class="text-xs text-gray-500">{{ candidate.phone }}</div>
+                            </td>
+                            <td>{{ candidate.vacancy_title || '—' }}</td>
+                            <td>
+                                @switch (candidate.source) {
+                                    @case ('gov_portal') { <span>Госпортал</span> }
+                                    @case ('job_portal') { <span>Job-сайт</span> }
+                                    @case ('referral') { <span>Рекомендация</span> }
+                                    @case ('social_media') { <span>Соцсети</span> }
+                                    @case ('direct') { <span>Напрямую</span> }
+                                    @default { <span>{{ candidate.source }}</span> }
+                                }
+                            </td>
+                            <td>
+                                <p-progressBar
+                                    [value]="getStageProgress(candidate.stage)"
+                                    [showValue]="false"
+                                    [style]="{ height: '6px' }">
+                                </p-progressBar>
+                                <div class="text-xs mt-1 text-center text-gray-500">
+                                    @for (stage of recruitingStages; track stage.value) {
+                                        @if (stage.value === candidate.stage) {
+                                            {{ stage.label }}
+                                        }
+                                    }
+                                </div>
+                            </td>
+                            <td>
+                                <p-tag [value]="getStatusLabel(candidate.status, 'candidate')" [severity]="getCandidateStatusSeverity(candidate.status)"></p-tag>
+                            </td>
+                            <td>
+                                @if (candidate.rating) {
+                                    <div class="flex items-center gap-1">
+                                        <i class="pi pi-star-fill text-yellow-500"></i>
+                                        <span>{{ candidate.rating }}/5</span>
+                                    </div>
+                                } @else {
+                                    <span class="text-gray-400">—</span>
+                                }
+                            </td>
+                            <td>
+                                <div class="flex justify-center gap-1 flex-wrap">
+                                    <button pButton
+                                            icon="pi pi-eye"
+                                            (click)="openCandidateDetail(candidate)"
+                                            class="p-button-rounded p-button-text p-button-info"
+                                            pTooltip="Подробнее"
+                                            tooltipPosition="top">
+                                    </button>
+                                    @if (candidate.status === 'new') {
+                                        <button pButton
+                                                icon="pi pi-check"
+                                                (click)="screenCandidate(candidate, true)"
+                                                class="p-button-rounded p-button-text p-button-success"
+                                                pTooltip="Пройти скрининг"
+                                                tooltipPosition="top">
+                                        </button>
+                                    }
+                                    @if (candidate.status === 'screening' || candidate.status === 'phone_interview' || candidate.status === 'interview') {
+                                        <button pButton
+                                                icon="pi pi-calendar"
+                                                (click)="openInterviewDialog(candidate)"
+                                                class="p-button-rounded p-button-text p-button-info"
+                                                pTooltip="Назначить собеседование"
+                                                tooltipPosition="top">
+                                        </button>
+                                    }
+                                    @if (candidate.status === 'interview' || candidate.status === 'reference_check') {
+                                        <button pButton
+                                                icon="pi pi-verified"
+                                                (click)="openReferenceDialog(candidate)"
+                                                class="p-button-rounded p-button-text p-button-warning"
+                                                pTooltip="Проверка рекомендаций"
+                                                tooltipPosition="top">
+                                        </button>
+                                    }
+                                    @if (candidate.status === 'reference_check' || candidate.status === 'interview') {
+                                        <button pButton
+                                                icon="pi pi-file-edit"
+                                                (click)="openOfferDialog(candidate)"
+                                                class="p-button-rounded p-button-text p-button-success"
+                                                pTooltip="Отправить оффер"
+                                                tooltipPosition="top">
+                                        </button>
+                                    }
+                                    @if (candidate.status === 'offer') {
+                                        <button pButton
+                                                icon="pi pi-thumbs-up"
+                                                (click)="acceptOffer(candidate)"
+                                                class="p-button-rounded p-button-text p-button-success"
+                                                pTooltip="Оффер принят"
+                                                tooltipPosition="top">
+                                        </button>
+                                    }
+                                    @if (candidate.status === 'offer_accepted') {
+                                        <button pButton
+                                                icon="pi pi-user-plus"
+                                                (click)="hireCandidate(candidate)"
+                                                class="p-button-rounded p-button-text p-button-success"
+                                                pTooltip="Оформить на работу"
+                                                tooltipPosition="top">
+                                        </button>
+                                    }
+                                    @if (candidate.status !== 'hired' && candidate.status !== 'rejected' && candidate.status !== 'withdrawn') {
+                                        <button pButton
+                                                icon="pi pi-times"
+                                                (click)="openRejectDialog(candidate)"
+                                                class="p-button-rounded p-button-text p-button-danger"
+                                                pTooltip="Отклонить"
+                                                tooltipPosition="top">
+                                        </button>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    </ng-template>
+                    <ng-template #emptymessage>
+                        <tr>
+                            <td colspan="7">Кандидатов не найдено</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </p-tabpanel>
+
+            <!-- Вкладка Адаптация -->
+            <p-tabpanel [value]="2">
+                <p-table
+                    #dtOnboardings
+                    [value]="onboardings"
+                    dataKey="id"
+                    [rows]="10"
+                    [loading]="loading"
+                    [rowHover]="true"
+                    [showGridlines]="true"
+                    [paginator]="true"
+                    [globalFilterFields]="['employee_name']"
+                >
+                    <ng-template #caption>
+                        <div class="flex justify-between items-center">
+                            <p-iconfield>
+                                <p-inputicon>
+                                    <i class="pi pi-search"></i>
+                                </p-inputicon>
+                                <input pInputText type="text" (input)="onGlobalFilter(dtOnboardings, $event)" placeholder="Поиск" />
+                            </p-iconfield>
+                        </div>
+                    </ng-template>
+                    <ng-template #header>
+                        <tr>
+                            <th style="min-width: 14rem">Сотрудник</th>
+                            <th style="min-width: 10rem">Дата начала</th>
+                            <th style="min-width: 10rem">Наставник</th>
+                            <th style="min-width: 10rem">Прогресс</th>
+                            <th style="min-width: 8rem">Статус</th>
+                            <th style="width: 10rem">Действия</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template #body let-onboarding>
+                        <tr>
+                            <td>
+                                <div class="font-medium">{{ onboarding.employee_name }}</div>
+                                <div class="text-xs text-gray-500">ID: {{ onboarding.employee_id }}</div>
+                            </td>
+                            <td>{{ onboarding.start_date | date:'dd.MM.yyyy' }}</td>
+                            <td>
+                                @if (onboarding.mentor_name) {
+                                    {{ onboarding.mentor_name }}
+                                } @else {
+                                    <span class="text-yellow-500">Не назначен</span>
+                                }
+                            </td>
+                            <td>
+                                <p-progressBar [value]="onboarding.overall_progress" [showValue]="true"></p-progressBar>
+                            </td>
+                            <td>
+                                <p-tag [value]="onboarding.status === 'in_progress' ? 'В процессе' : onboarding.status === 'completed' ? 'Завершен' : 'Не начат'"
+                                       [severity]="getOnboardingStatusSeverity(onboarding.status)"></p-tag>
+                            </td>
+                            <td>
+                                <div class="flex justify-center gap-1">
+                                    @if (!onboarding.mentor_id) {
+                                        <button pButton
+                                                icon="pi pi-user"
+                                                (click)="assignMentor(onboarding)"
+                                                class="p-button-rounded p-button-text p-button-info"
+                                                pTooltip="Назначить наставника"
+                                                tooltipPosition="top">
+                                        </button>
+                                    }
+                                    <button pButton
+                                            icon="pi pi-list-check"
+                                            (click)="selectedOnboarding = onboarding; displayOnboardingDialog = true"
+                                            class="p-button-rounded p-button-text p-button-success"
+                                            pTooltip="Задачи"
+                                            tooltipPosition="top">
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </ng-template>
+                    <ng-template #emptymessage>
+                        <tr>
+                            <td colspan="6">Записей адаптации не найдено</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </p-tabpanel>
+        </p-tabpanels>
+    </p-tabs>
+</div>
+
+<!-- Диалог создания/редактирования вакансии -->
+<p-dialog
+    [(visible)]="displayVacancyDialog"
+    [header]="isEditMode ? 'Редактировать вакансию' : 'Заявка на вакансию'"
+    [modal]="true"
+    [style]="{ width: '700px' }"
+    [closable]="true">
+    <form [formGroup]="vacancyForm" class="p-4">
+        <div class="grid grid-cols-1 gap-4">
+            <div class="field">
+                <label for="title" class="font-medium">Название вакансии *</label>
+                <input pInputText id="title" formControlName="title" class="w-full" />
+                @if (submitted && vacancyForm.get('title')?.errors?.['required']) {
+                    <small class="text-red-500">Название обязательно</small>
+                }
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div class="field">
+                    <label for="department" class="font-medium">Отдел *</label>
+                    <p-select
+                        id="department"
+                        formControlName="department_id"
+                        [options]="departments"
+                        optionLabel="name"
+                        placeholder="Выберите отдел"
+                        class="w-full">
+                    </p-select>
+                </div>
+                <div class="field">
+                    <label for="position" class="font-medium">Должность *</label>
+                    <p-select
+                        id="position"
+                        formControlName="position_id"
+                        [options]="positions"
+                        optionLabel="name"
+                        placeholder="Выберите должность"
+                        class="w-full">
+                    </p-select>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div class="field">
+                    <label for="employment_type" class="font-medium">Тип занятости *</label>
+                    <p-select
+                        id="employment_type"
+                        formControlName="employment_type"
+                        [options]="employmentTypes"
+                        optionLabel="label"
+                        placeholder="Выберите тип"
+                        class="w-full">
+                    </p-select>
+                </div>
+                <div class="field">
+                    <label for="priority" class="font-medium">Приоритет</label>
+                    <p-select
+                        id="priority"
+                        formControlName="priority"
+                        [options]="vacancyPriorities"
+                        optionLabel="label"
+                        placeholder="Обычный"
+                        class="w-full">
+                    </p-select>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-4">
+                <div class="field">
+                    <label for="salary_from" class="font-medium">Зарплата от</label>
+                    <p-inputNumber id="salary_from" formControlName="salary_from" class="w-full"></p-inputNumber>
+                </div>
+                <div class="field">
+                    <label for="salary_to" class="font-medium">Зарплата до</label>
+                    <p-inputNumber id="salary_to" formControlName="salary_to" class="w-full"></p-inputNumber>
+                </div>
+                <div class="field">
+                    <label for="experience" class="font-medium">Опыт (лет)</label>
+                    <p-inputNumber id="experience" formControlName="experience_years" class="w-full"></p-inputNumber>
+                </div>
+            </div>
+
+            <div class="field">
+                <label for="deadline" class="font-medium">Крайний срок закрытия</label>
+                <p-datepicker id="deadline" formControlName="deadline" [showIcon]="true" class="w-full"></p-datepicker>
+            </div>
+
+            <div class="field">
+                <label for="description" class="font-medium">Описание *</label>
+                <textarea pTextarea id="description" formControlName="description" rows="3" class="w-full"></textarea>
+            </div>
+
+            <div class="field">
+                <label for="requirements" class="font-medium">Требования *</label>
+                <textarea pTextarea id="requirements" formControlName="requirements" rows="3" class="w-full"></textarea>
+            </div>
+
+            <div class="field">
+                <label for="responsibilities" class="font-medium">Обязанности</label>
+                <textarea pTextarea id="responsibilities" formControlName="responsibilities" rows="3" class="w-full"></textarea>
+            </div>
+
+            <div class="field">
+                <label for="justification" class="font-medium">Обоснование заявки</label>
+                <textarea pTextarea id="justification" formControlName="request_justification" rows="2" class="w-full"
+                          placeholder="Почему нужен этот сотрудник?"></textarea>
+            </div>
+        </div>
+    </form>
+    <ng-template #footer>
+        <button pButton label="Отмена" icon="pi pi-times" class="p-button-text" (click)="displayVacancyDialog = false"></button>
+        <button pButton [label]="isEditMode ? 'Обновить' : 'Создать'" icon="pi pi-check" (click)="saveVacancy()"></button>
+    </ng-template>
+</p-dialog>
+
+<!-- Диалог добавления кандидата -->
+<p-dialog
+    [(visible)]="displayCandidateDialog"
+    header="Добавить кандидата"
+    [modal]="true"
+    [style]="{ width: '500px' }"
+    [closable]="true">
+    <form [formGroup]="candidateForm" class="p-4">
+        <div class="grid grid-cols-1 gap-4">
+            <div class="field">
+                <label for="vacancy" class="font-medium">Вакансия *</label>
+                <p-select
+                    id="vacancy"
+                    formControlName="vacancy_id"
+                    [options]="getVacanciesForSelect()"
+                    optionLabel="name"
+                    placeholder="Выберите вакансию"
+                    class="w-full">
+                </p-select>
+            </div>
+
+            <div class="field">
+                <label for="full_name" class="font-medium">ФИО *</label>
+                <input pInputText id="full_name" formControlName="full_name" class="w-full" />
+            </div>
+
+            <div class="field">
+                <label for="email" class="font-medium">Email *</label>
+                <input pInputText id="email" formControlName="email" type="email" class="w-full" />
+            </div>
+
+            <div class="field">
+                <label for="phone" class="font-medium">Телефон *</label>
+                <input pInputText id="phone" formControlName="phone" class="w-full" />
+            </div>
+
+            <div class="field">
+                <label for="source" class="font-medium">Источник *</label>
+                <p-select
+                    id="source"
+                    formControlName="source"
+                    [options]="candidateSources"
+                    optionLabel="label"
+                    placeholder="Выберите источник"
+                    class="w-full">
+                </p-select>
+            </div>
+
+            <div class="field">
+                <label for="salary_expectation" class="font-medium">Ожидаемая зарплата</label>
+                <p-inputNumber id="salary_expectation" formControlName="salary_expectation" class="w-full"></p-inputNumber>
+            </div>
+
+            <div class="field">
+                <label for="available_from" class="font-medium">Готов выйти с</label>
+                <p-datepicker id="available_from" formControlName="available_from" [showIcon]="true" class="w-full"></p-datepicker>
+            </div>
+
+            <div class="field">
+                <label for="cover_letter" class="font-medium">Сопроводительное письмо</label>
+                <textarea pTextarea id="cover_letter" formControlName="cover_letter" rows="3" class="w-full"></textarea>
+            </div>
+        </div>
+    </form>
+    <ng-template #footer>
+        <button pButton label="Отмена" icon="pi pi-times" class="p-button-text" (click)="displayCandidateDialog = false"></button>
+        <button pButton label="Добавить" icon="pi pi-check" (click)="saveCandidate()"></button>
+    </ng-template>
+</p-dialog>
+
+<!-- Диалог деталей кандидата -->
+<p-dialog
+    [(visible)]="displayCandidateDetailDialog"
+    [header]="selectedCandidate?.full_name || 'Карточка кандидата'"
+    [modal]="true"
+    [style]="{ width: '800px' }"
+    [closable]="true">
+    @if (selectedCandidate) {
+        <div class="p-4">
+            <!-- Основная информация -->
+            <div class="grid grid-cols-2 gap-6 mb-6">
+                <div>
+                    <h4 class="font-semibold mb-3">Контактная информация</h4>
+                    <div class="space-y-2">
+                        <div><i class="pi pi-envelope mr-2"></i>{{ selectedCandidate.email }}</div>
+                        <div><i class="pi pi-phone mr-2"></i>{{ selectedCandidate.phone }}</div>
+                        @if (selectedCandidate.salary_expectation) {
+                            <div><i class="pi pi-dollar mr-2"></i>Ожидания: {{ selectedCandidate.salary_expectation | number:'1.0-0' }}</div>
+                        }
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-3">Статус</h4>
+                    <div class="space-y-2">
+                        <div>
+                            <p-tag [value]="getStatusLabel(selectedCandidate.status, 'candidate')"
+                                   [severity]="getCandidateStatusSeverity(selectedCandidate.status)"></p-tag>
+                        </div>
+                        <div>Вакансия: {{ selectedCandidate.vacancy_title }}</div>
+                        @if (selectedCandidate.rating) {
+                            <div class="flex items-center gap-1">
+                                <span>Рейтинг:</span>
+                                <p-rating [(ngModel)]="selectedCandidate.rating" [readonly]="true"></p-rating>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Прогресс -->
+            <div class="mb-6">
+                <h4 class="font-semibold mb-3">Прогресс по этапам</h4>
+                <p-progressBar [value]="getStageProgress(selectedCandidate.stage)" [showValue]="true"></p-progressBar>
+            </div>
+
+            <!-- История собеседований -->
+            @if (selectedCandidate.interviews && selectedCandidate.interviews.length > 0) {
+                <div class="mb-6">
+                    <h4 class="font-semibold mb-3">Собеседования</h4>
+                    <div class="space-y-3">
+                        @for (interview of selectedCandidate.interviews; track interview.id) {
+                            <div class="border rounded-lg p-4">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <div class="font-medium">
+                                            @switch (interview.interview_type) {
+                                                @case ('phone') { Телефонное интервью }
+                                                @case ('hr') { HR интервью }
+                                                @case ('technical') { Техническое интервью }
+                                                @case ('panel') { Интервью с руководителем }
+                                                @case ('video') { Видео интервью }
+                                                @case ('in_person') { Очное интервью }
+                                                @case ('final') { Финальное интервью }
+                                                @default { {{ interview.interview_type }} }
+                                            }
+                                        </div>
+                                        <div class="text-sm text-gray-500">{{ interview.interviewer_name }}</div>
+                                        <div class="text-sm text-gray-500">{{ interview.scheduled_at | date:'dd.MM.yyyy HH:mm' }}</div>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        @if (interview.status === 'completed') {
+                                            <p-tag value="Проведено" severity="success"></p-tag>
+                                            @if (interview.overall_rating) {
+                                                <span class="flex items-center gap-1">
+                                                    <i class="pi pi-star-fill text-yellow-500"></i>
+                                                    {{ interview.overall_rating }}/5
+                                                </span>
+                                            }
+                                        } @else if (interview.status === 'scheduled') {
+                                            <p-tag value="Запланировано" severity="info"></p-tag>
+                                            <button pButton
+                                                    icon="pi pi-pencil"
+                                                    class="p-button-rounded p-button-text p-button-sm"
+                                                    (click)="openFeedbackDialog(selectedCandidate!, interview)"
+                                                    pTooltip="Добавить результат">
+                                            </button>
+                                        } @else {
+                                            <p-tag [value]="interview.status" severity="secondary"></p-tag>
+                                        }
+                                    </div>
+                                </div>
+                                @if (interview.feedback) {
+                                    <div class="mt-2 text-sm bg-surface-100 dark:bg-surface-700 p-2 rounded">
+                                        {{ interview.feedback }}
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+
+            <!-- Проверка рекомендаций -->
+            @if (selectedCandidate.reference_checks && selectedCandidate.reference_checks.length > 0) {
+                <div class="mb-6">
+                    <h4 class="font-semibold mb-3">Проверка рекомендаций</h4>
+                    <div class="space-y-3">
+                        @for (ref of selectedCandidate.reference_checks; track ref.id) {
+                            <div class="border rounded-lg p-4">
+                                <div class="flex justify-between">
+                                    <div>
+                                        <div class="font-medium">{{ ref.referee_name }}</div>
+                                        <div class="text-sm text-gray-500">{{ ref.referee_position }}, {{ ref.referee_company }}</div>
+                                    </div>
+                                    <div>
+                                        @if (ref.status === 'completed') {
+                                            <p-tag value="Проверено" severity="success"></p-tag>
+                                        } @else {
+                                            <p-tag value="Ожидает" severity="warn"></p-tag>
+                                            <button pButton
+                                                    icon="pi pi-check"
+                                                    class="p-button-rounded p-button-text p-button-sm ml-2"
+                                                    (click)="completeReferenceCheck(selectedCandidate!, ref)"
+                                                    pTooltip="Отметить проверенным">
+                                            </button>
+                                        }
+                                    </div>
+                                </div>
+                                @if (ref.feedback) {
+                                    <div class="mt-2 text-sm">{{ ref.feedback }}</div>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+
+            <!-- Оффер -->
+            @if (selectedCandidate.offer) {
+                <div class="mb-6">
+                    <h4 class="font-semibold mb-3">Предложение о работе</h4>
+                    <div class="border rounded-lg p-4 bg-green-50 dark:bg-green-900/20">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <div class="text-sm text-gray-500">Предложенная зарплата</div>
+                                <div class="font-medium">{{ selectedCandidate.offer.offered_salary | number:'1.0-0' }}</div>
+                            </div>
+                            <div>
+                                <div class="text-sm text-gray-500">Дата выхода</div>
+                                <div class="font-medium">{{ selectedCandidate.offer.start_date | date:'dd.MM.yyyy' }}</div>
+                            </div>
+                            <div>
+                                <div class="text-sm text-gray-500">Испытательный срок</div>
+                                <div class="font-medium">{{ selectedCandidate.offer.probation_period_months }} мес.</div>
+                            </div>
+                            <div>
+                                <div class="text-sm text-gray-500">Статус</div>
+                                <p-tag [value]="selectedCandidate.offer.status === 'sent' ? 'Отправлен' : selectedCandidate.offer.status === 'accepted' ? 'Принят' : 'Отклонен'"
+                                       [severity]="selectedCandidate.offer.status === 'accepted' ? 'success' : selectedCandidate.offer.status === 'sent' ? 'info' : 'danger'"></p-tag>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    <ng-template #footer>
+        <button pButton label="Закрыть" icon="pi pi-times" class="p-button-text" (click)="displayCandidateDetailDialog = false"></button>
+    </ng-template>
+</p-dialog>
+
+<!-- Диалог назначения собеседования -->
+<p-dialog
+    [(visible)]="displayInterviewDialog"
+    header="Назначить собеседование"
+    [modal]="true"
+    [style]="{ width: '500px' }"
+    [closable]="true">
+    <form [formGroup]="interviewForm" class="p-4">
+        <div class="grid grid-cols-1 gap-4">
+            <div class="field">
+                <label for="interview_type" class="font-medium">Тип собеседования *</label>
+                <p-select
+                    id="interview_type"
+                    formControlName="interview_type"
+                    [options]="interviewTypes"
+                    optionLabel="label"
+                    placeholder="Выберите тип"
+                    class="w-full">
+                </p-select>
+            </div>
+
+            <div class="field">
+                <label for="interviewer" class="font-medium">Интервьюер *</label>
+                <p-select
+                    id="interviewer"
+                    formControlName="interviewer_id"
+                    [options]="interviewers"
+                    optionLabel="name"
+                    placeholder="Выберите интервьюера"
+                    class="w-full">
+                </p-select>
+            </div>
+
+            <div class="field">
+                <label for="scheduled_at" class="font-medium">Дата и время *</label>
+                <p-datepicker
+                    id="scheduled_at"
+                    formControlName="scheduled_at"
+                    [showTime]="true"
+                    [showIcon]="true"
+                    class="w-full">
+                </p-datepicker>
+            </div>
+
+            <div class="field">
+                <label for="duration" class="font-medium">Длительность (мин)</label>
+                <p-inputNumber id="duration" formControlName="duration_minutes" class="w-full"></p-inputNumber>
+            </div>
+
+            <div class="field">
+                <label for="location" class="font-medium">Место проведения</label>
+                <input pInputText id="location" formControlName="location" class="w-full" placeholder="Офис / Zoom / Teams" />
+            </div>
+
+            <div class="field">
+                <label for="meeting_link" class="font-medium">Ссылка на встречу</label>
+                <input pInputText id="meeting_link" formControlName="meeting_link" class="w-full" />
+            </div>
+        </div>
+    </form>
+    <ng-template #footer>
+        <button pButton label="Отмена" icon="pi pi-times" class="p-button-text" (click)="displayInterviewDialog = false"></button>
+        <button pButton label="Назначить" icon="pi pi-calendar" (click)="scheduleInterview()"></button>
+    </ng-template>
+</p-dialog>
+
+<!-- Диалог результата собеседования -->
+<p-dialog
+    [(visible)]="displayInterviewFeedbackDialog"
+    header="Результат собеседования"
+    [modal]="true"
+    [style]="{ width: '500px' }"
+    [closable]="true">
+    <form [formGroup]="feedbackForm" class="p-4">
+        <div class="grid grid-cols-1 gap-4">
+            <div class="field">
+                <label class="font-medium">Общая оценка *</label>
+                <div class="mt-2">
+                    <p-rating formControlName="overall_rating"></p-rating>
+                </div>
+            </div>
+
+            <div class="field">
+                <label for="recommendation" class="font-medium">Рекомендация *</label>
+                <p-select
+                    id="recommendation"
+                    formControlName="recommendation"
+                    [options]="interviewRecommendations"
+                    optionLabel="label"
+                    placeholder="Выберите рекомендацию"
+                    class="w-full">
+                </p-select>
+            </div>
+
+            <div class="field">
+                <label for="strengths" class="font-medium">Сильные стороны</label>
+                <input pInputText id="strengths" formControlName="strengths" class="w-full" placeholder="Через запятую" />
+            </div>
+
+            <div class="field">
+                <label for="weaknesses" class="font-medium">Слабые стороны</label>
+                <input pInputText id="weaknesses" formControlName="weaknesses" class="w-full" placeholder="Через запятую" />
+            </div>
+
+            <div class="field">
+                <label for="feedback" class="font-medium">Комментарий *</label>
+                <textarea pTextarea id="feedback" formControlName="feedback" rows="4" class="w-full"></textarea>
+            </div>
+        </div>
+    </form>
+    <ng-template #footer>
+        <button pButton label="Отмена" icon="pi pi-times" class="p-button-text" (click)="displayInterviewFeedbackDialog = false"></button>
+        <button pButton label="Сохранить" icon="pi pi-check" (click)="saveFeedback()"></button>
+    </ng-template>
+</p-dialog>
+
+<!-- Диалог отправки оффера -->
+<p-dialog
+    [(visible)]="displayOfferDialog"
+    header="Отправить предложение о работе"
+    [modal]="true"
+    [style]="{ width: '500px' }"
+    [closable]="true">
+    <form [formGroup]="offerForm" class="p-4">
+        <div class="grid grid-cols-1 gap-4">
+            <div class="field">
+                <label for="offered_salary" class="font-medium">Предлагаемая зарплата *</label>
+                <p-inputNumber id="offered_salary" formControlName="offered_salary" class="w-full"></p-inputNumber>
+            </div>
+
+            <div class="field">
+                <label for="start_date" class="font-medium">Дата выхода *</label>
+                <p-datepicker id="start_date" formControlName="start_date" [showIcon]="true" class="w-full"></p-datepicker>
+            </div>
+
+            <div class="field">
+                <label for="probation" class="font-medium">Испытательный срок (мес) *</label>
+                <p-inputNumber id="probation" formControlName="probation_period_months" class="w-full"></p-inputNumber>
+            </div>
+
+            <div class="field">
+                <label for="benefits" class="font-medium">Бенефиты</label>
+                <input pInputText id="benefits" formControlName="benefits" class="w-full" placeholder="ДМС, обучение, питание (через запятую)" />
+            </div>
+
+            <div class="field">
+                <label for="other_terms" class="font-medium">Дополнительные условия</label>
+                <textarea pTextarea id="other_terms" formControlName="other_terms" rows="3" class="w-full"></textarea>
+            </div>
+        </div>
+    </form>
+    <ng-template #footer>
+        <button pButton label="Отмена" icon="pi pi-times" class="p-button-text" (click)="displayOfferDialog = false"></button>
+        <button pButton label="Отправить оффер" icon="pi pi-send" (click)="sendOffer()"></button>
+    </ng-template>
+</p-dialog>
+
+<!-- Диалог добавления рекомендации -->
+<p-dialog
+    [(visible)]="displayReferenceDialog"
+    header="Добавить рекомендацию для проверки"
+    [modal]="true"
+    [style]="{ width: '500px' }"
+    [closable]="true">
+    <form [formGroup]="referenceForm" class="p-4">
+        <div class="grid grid-cols-1 gap-4">
+            <div class="field">
+                <label for="referee_name" class="font-medium">ФИО рекомендателя *</label>
+                <input pInputText id="referee_name" formControlName="referee_name" class="w-full" />
+            </div>
+
+            <div class="field">
+                <label for="referee_position" class="font-medium">Должность *</label>
+                <input pInputText id="referee_position" formControlName="referee_position" class="w-full" />
+            </div>
+
+            <div class="field">
+                <label for="referee_company" class="font-medium">Компания *</label>
+                <input pInputText id="referee_company" formControlName="referee_company" class="w-full" />
+            </div>
+
+            <div class="field">
+                <label for="referee_phone" class="font-medium">Телефон *</label>
+                <input pInputText id="referee_phone" formControlName="referee_phone" class="w-full" />
+            </div>
+
+            <div class="field">
+                <label for="relationship" class="font-medium">Отношение к кандидату *</label>
+                <input pInputText id="relationship" formControlName="relationship" class="w-full" placeholder="Руководитель, коллега и т.д." />
+            </div>
+        </div>
+    </form>
+    <ng-template #footer>
+        <button pButton label="Отмена" icon="pi pi-times" class="p-button-text" (click)="displayReferenceDialog = false"></button>
+        <button pButton label="Добавить" icon="pi pi-check" (click)="addReference()"></button>
+    </ng-template>
+</p-dialog>
+
+<!-- Диалог отклонения кандидата -->
+<p-dialog
+    [(visible)]="displayRejectDialog"
+    header="Отклонить кандидата"
+    [modal]="true"
+    [style]="{ width: '450px' }"
+    [closable]="true">
+    <form [formGroup]="rejectForm" class="p-4">
+        <div class="mb-4">
+            <p>Вы уверены, что хотите отклонить кандидата <strong>{{ selectedCandidate?.full_name }}</strong>?</p>
+            <p class="text-sm text-gray-500 mt-2">Кандидат получит уведомление об отказе.</p>
+        </div>
+        <div class="field">
+            <label for="rejection_reason" class="font-medium">Причина отказа *</label>
+            <textarea pTextarea id="rejection_reason" formControlName="rejection_reason" rows="3" class="w-full"
+                      placeholder="Укажите причину отказа для внутреннего использования"></textarea>
+        </div>
+    </form>
+    <ng-template #footer>
+        <button pButton label="Отмена" icon="pi pi-times" class="p-button-text" (click)="displayRejectDialog = false"></button>
+        <button pButton label="Отклонить" icon="pi pi-times" class="p-button-danger" (click)="rejectCandidate()"></button>
+    </ng-template>
+</p-dialog>
+
+<!-- Диалог задач адаптации -->
+<p-dialog
+    [(visible)]="displayOnboardingDialog"
+    [header]="'Задачи адаптации: ' + (selectedOnboarding?.employee_name || '')"
+    [modal]="true"
+    [style]="{ width: '600px' }"
+    [closable]="true">
+    @if (selectedOnboarding) {
+        <div class="p-4">
+            <div class="mb-4">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="font-medium">Общий прогресс</span>
+                    <span>{{ selectedOnboarding.overall_progress }}%</span>
+                </div>
+                <p-progressBar [value]="selectedOnboarding.overall_progress"></p-progressBar>
+            </div>
+
+            <div class="space-y-3">
+                @for (task of selectedOnboarding.tasks; track task.id) {
+                    <div class="flex items-center justify-between border rounded-lg p-3">
+                        <div class="flex items-center gap-3">
+                            @if (task.status === 'completed') {
+                                <i class="pi pi-check-circle text-green-500 text-xl"></i>
+                            } @else if (task.status === 'in_progress') {
+                                <i class="pi pi-spin pi-spinner text-blue-500 text-xl"></i>
+                            } @else {
+                                <i class="pi pi-circle text-gray-400 text-xl"></i>
+                            }
+                            <div>
+                                <div [class]="task.status === 'completed' ? 'line-through text-gray-400' : ''">{{ task.title }}</div>
+                                <div class="text-xs text-gray-500">
+                                    @switch (task.category) {
+                                        @case ('documents') { Документы }
+                                        @case ('it_setup') { IT настройка }
+                                        @case ('training') { Обучение }
+                                        @case ('introduction') { Знакомство }
+                                        @case ('compliance') { Политики }
+                                        @default { {{ task.category }} }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        @if (task.status !== 'completed') {
+                            <button pButton
+                                    icon="pi pi-check"
+                                    class="p-button-rounded p-button-text p-button-success"
+                                    (click)="completeOnboardingTask(selectedOnboarding!, task)"
+                                    pTooltip="Отметить выполненным">
+                            </button>
+                        }
+                    </div>
+                }
+            </div>
+
+            @if (selectedOnboarding.documents_pending && selectedOnboarding.documents_pending.length > 0) {
+                <div class="mt-6">
+                    <h4 class="font-semibold mb-2">Ожидаемые документы</h4>
+                    <div class="flex flex-wrap gap-2">
+                        @for (doc of selectedOnboarding.documents_pending; track doc) {
+                            <p-tag [value]="doc" severity="warn"></p-tag>
+                        }
+                    </div>
+                </div>
+            }
+
+            @if (selectedOnboarding.documents_submitted && selectedOnboarding.documents_submitted.length > 0) {
+                <div class="mt-4">
+                    <h4 class="font-semibold mb-2">Предоставленные документы</h4>
+                    <div class="flex flex-wrap gap-2">
+                        @for (doc of selectedOnboarding.documents_submitted; track doc) {
+                            <p-tag [value]="doc" severity="success"></p-tag>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    <ng-template #footer>
+        <button pButton label="Закрыть" icon="pi pi-times" class="p-button-text" (click)="displayOnboardingDialog = false"></button>
+    </ng-template>
+</p-dialog>

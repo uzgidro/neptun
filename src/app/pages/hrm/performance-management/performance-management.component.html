@@ -1,0 +1,120 @@
+<div class="card">
+    <div class="font-semibold text-xl mb-4">Управление эффективностью</div>
+    <p-table
+        #dt
+        [value]="goals"
+        dataKey="id"
+        [rows]="10"
+        [loading]="loading"
+        [rowHover]="true"
+        [showGridlines]="true"
+        [paginator]="true"
+        [globalFilterFields]="['employee_name', 'title', 'status']"
+    >
+        <ng-template #caption>
+            <div class="flex justify-between items-center flex-column sm:flex-row">
+                <p-iconfield>
+                    <p-inputicon>
+                        <i class="pi pi-search"></i>
+                    </p-inputicon>
+                    <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Поиск" />
+                </p-iconfield>
+                <button pButton (click)="openDialog()">
+                    <i class="pi pi-plus" pButtonIcon></i>
+                    <span pButtonLabel>Новая цель</span>
+                </button>
+            </div>
+        </ng-template>
+        <ng-template #header>
+            <tr>
+                <th pSortableColumn="employee_name" style="min-width: 12rem">Сотрудник</th>
+                <th pSortableColumn="title" style="min-width: 14rem">Цель</th>
+                <th style="min-width: 8rem">Метрика</th>
+                <th style="min-width: 8rem">Цель / Факт</th>
+                <th style="min-width: 10rem">Прогресс</th>
+                <th style="min-width: 8rem">Срок</th>
+                <th style="min-width: 8rem">Статус</th>
+                <th style="width: 10rem">Действия</th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-goal>
+            <tr>
+                <td>{{ goal.employee_name }}</td>
+                <td>{{ goal.title }}</td>
+                <td>{{ goal.metric }}</td>
+                <td>{{ goal.target_value }} / {{ goal.actual_value || '—' }}</td>
+                <td>
+                    <p-progressbar [value]="goal.progress_percent" [showValue]="true" [style]="{ height: '1.5rem' }"></p-progressbar>
+                </td>
+                <td>{{ goal.due_date | date:'dd.MM.yyyy' }}</td>
+                <td>
+                    <p-tag [value]="getStatusLabel(goal.status)" [severity]="getStatusSeverity(goal.status)"></p-tag>
+                </td>
+                <td>
+                    <div class="flex justify-center gap-2">
+                        <button pButton
+                                icon="pi pi-pencil"
+                                (click)="openEditDialog(goal)"
+                                class="p-button-rounded p-button-text p-button-warning"
+                                pTooltip="Редактировать"
+                                tooltipPosition="top">
+                        </button>
+                        <button pButton
+                                icon="pi pi-trash"
+                                (click)="openDeleteDialog(goal)"
+                                class="p-button-rounded p-button-text p-button-danger"
+                                pTooltip="Удалить"
+                                tooltipPosition="top">
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template #emptymessage>
+            <tr>
+                <td colspan="8">Ничего не найдено</td>
+            </tr>
+        </ng-template>
+        <ng-template #loadingbody>
+            <tr>
+                <td colspan="8">Идет загрузка. Ожидайте...</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+@if (displayDialog) {
+    <app-dialog
+        [(visible)]="displayDialog"
+        [header]="isEditMode ? 'Редактировать цель' : 'Новая цель'"
+        [form]="goalForm"
+        [saveLabel]="isEditMode ? 'Обновить' : 'Создать'"
+        (save)="onSubmit()"
+        (cancel)="closeDialog()">
+        <form class="p-4" [formGroup]="goalForm" (ngSubmit)="onSubmit()">
+            <app-select formControlName="employee_id" label="Сотрудник" [items]="employees" [submitted]="submitted" errorMessage="Сотрудник обязателен" [required]="true"></app-select>
+
+            <app-input-text formControlName="title" label="Название цели" [submitted]="submitted" errorMessage="Название обязательно" [required]="true"></app-input-text>
+
+            <app-textarea formControlName="description" label="Описание" [submitted]="submitted" errorMessage="Описание обязательно" [required]="true"></app-textarea>
+
+            <div class="grid grid-cols-2 gap-4">
+                <app-input-text formControlName="metric" label="Метрика" [submitted]="submitted" errorMessage="Метрика обязательна" [required]="true"></app-input-text>
+                <app-input-text formControlName="target_value" label="Целевое значение" [submitted]="submitted" errorMessage="Целевое значение обязательно" [required]="true"></app-input-text>
+            </div>
+
+            <app-input-text formControlName="weight" label="Вес (%)" type="number" [submitted]="submitted" errorMessage="Вес обязателен" [required]="true"></app-input-text>
+
+            <div class="grid grid-cols-2 gap-4">
+                <app-date-picker formControlName="start_date" label="Дата начала" [submitted]="submitted" errorMessage="Дата начала обязательна" [showTime]="false" [required]="true"></app-date-picker>
+                <app-date-picker formControlName="due_date" label="Срок выполнения" [submitted]="submitted" errorMessage="Срок обязателен" [showTime]="false" [required]="true"></app-date-picker>
+            </div>
+        </form>
+    </app-dialog>
+}
+
+<app-delete-confirmation
+    [(visible)]="displayDeleteDialog"
+    [message]="'Вы уверены, что хотите удалить цель ' + (selectedGoal?.title || '') + '?'"
+    (onConfirm)="confirmDelete()">
+</app-delete-confirmation>

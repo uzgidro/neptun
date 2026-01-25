@@ -1,0 +1,120 @@
+<div class="card">
+    <div class="font-semibold text-xl mb-4">Аналитика и отчеты</div>
+
+    @if (loading) {
+        <div class="flex justify-center items-center h-64">
+            <i class="pi pi-spin pi-spinner text-4xl"></i>
+        </div>
+    } @else if (dashboard) {
+        <!-- KPI Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <p-card styleClass="shadow-sm">
+                <div class="flex flex-col items-center">
+                    <span class="text-lg text-gray-500 mb-2">Всего сотрудников</span>
+                    <span class="text-4xl font-bold text-blue-600">{{ formatNumber(dashboard.total_employees) }}</span>
+                    <span class="text-sm text-green-600 mt-1">
+                        <i class="pi pi-users"></i> Активных: {{ formatNumber(dashboard.active_employees) }}
+                    </span>
+                </div>
+            </p-card>
+
+            <p-card styleClass="shadow-sm">
+                <div class="flex flex-col items-center">
+                    <span class="text-lg text-gray-500 mb-2">Принято за месяц</span>
+                    <span class="text-4xl font-bold text-green-600">{{ formatNumber(dashboard.new_hires_this_month) }}</span>
+                    <span class="text-sm text-red-600 mt-1">
+                        <i class="pi pi-user-minus"></i> Уволено: {{ formatNumber(dashboard.terminations_this_month) }}
+                    </span>
+                </div>
+            </p-card>
+
+            <p-card styleClass="shadow-sm">
+                <div class="flex flex-col items-center">
+                    <span class="text-lg text-gray-500 mb-2">Текучесть кадров</span>
+                    <span class="text-4xl font-bold" [class.text-red-600]="dashboard.turnover_rate > 10" [class.text-orange-600]="dashboard.turnover_rate <= 10 && dashboard.turnover_rate > 5" [class.text-green-600]="dashboard.turnover_rate <= 5">
+                        {{ formatPercent(dashboard.turnover_rate) }}
+                    </span>
+                    <span class="text-sm text-gray-500 mt-1">за последние 12 мес.</span>
+                </div>
+            </p-card>
+
+            <p-card styleClass="shadow-sm">
+                <div class="flex flex-col items-center">
+                    <span class="text-lg text-gray-500 mb-2">Средний стаж</span>
+                    <span class="text-4xl font-bold text-purple-600">{{ dashboard.average_tenure.toFixed(1) }}</span>
+                    <span class="text-sm text-gray-500 mt-1">лет</span>
+                </div>
+            </p-card>
+        </div>
+
+        <!-- Charts -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            @if (departmentChartData) {
+                <p-card header="Распределение по отделам" styleClass="shadow-sm">
+                    <div style="height: 300px;">
+                        <p-chart type="pie" [data]="departmentChartData" [options]="chartOptions"></p-chart>
+                    </div>
+                </p-card>
+            }
+
+            @if (genderChartData) {
+                <p-card header="Распределение по полу" styleClass="shadow-sm">
+                    <div style="height: 300px;">
+                        <p-chart type="doughnut" [data]="genderChartData" [options]="chartOptions"></p-chart>
+                    </div>
+                </p-card>
+            }
+
+            @if (ageChartData) {
+                <p-card header="Возрастная структура" styleClass="shadow-sm">
+                    <div style="height: 300px;">
+                        <p-chart type="bar" [data]="ageChartData" [options]="chartOptions"></p-chart>
+                    </div>
+                </p-card>
+            }
+
+            @if (tenureChartData) {
+                <p-card header="Распределение по стажу" styleClass="shadow-sm">
+                    <div style="height: 300px;">
+                        <p-chart type="bar" [data]="tenureChartData" [options]="chartOptions"></p-chart>
+                    </div>
+                </p-card>
+            }
+        </div>
+
+        <!-- Quick Stats Table -->
+        @if (dashboard.headcount_by_department.length) {
+            <div class="mt-6">
+                <p-card header="Численность по отделам" styleClass="shadow-sm">
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead>
+                                <tr class="border-b">
+                                    <th class="text-left p-3">Отдел</th>
+                                    <th class="text-right p-3">Численность</th>
+                                    <th class="text-right p-3">% от общего</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (dept of dashboard.headcount_by_department; track dept.department_id) {
+                                    <tr class="border-b hover:bg-surface-100 dark:hover:bg-surface-700 transition-colors">
+                                        <td class="p-3">{{ dept.department_name }}</td>
+                                        <td class="text-right p-3 font-semibold">{{ dept.headcount }}</td>
+                                        <td class="text-right p-3">{{ formatPercent(dept.percentage) }}</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </p-card>
+            </div>
+        }
+    } @else {
+        <div class="flex justify-center items-center h-64 text-gray-500">
+            <div class="text-center">
+                <i class="pi pi-chart-bar text-6xl mb-4"></i>
+                <p>Нет данных для отображения</p>
+            </div>
+        </div>
+    }
+</div>

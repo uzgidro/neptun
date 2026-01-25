@@ -1,0 +1,370 @@
+<div class="dashboard-container">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-6">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-800 dark:text-white m-0">
+                {{ getGreeting() }}, {{ currentUser.name.split(' ')[0] }}!
+            </h1>
+            <p class="text-gray-500 mt-1">{{ currentUser.position }} | {{ currentDate | date:'EEEE, d MMMM yyyy':'':'ru' }}</p>
+        </div>
+        <div class="flex gap-2">
+            <button pButton
+                    icon="pi pi-refresh"
+                    class="p-button-text p-button-rounded"
+                    (click)="refreshDashboard()"
+                    pTooltip="Обновить"
+                    tooltipPosition="bottom">
+            </button>
+        </div>
+    </div>
+
+    @if (loading) {
+        <div class="flex justify-center items-center h-96">
+            <i class="pi pi-spin pi-spinner text-4xl text-blue-500"></i>
+        </div>
+    } @else if (dashboard) {
+        <!-- Quick Widgets -->
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
+            <div class="widget-card bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-xl p-4 shadow-lg">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <div class="text-3xl font-bold">{{ dashboard.widgets.total_employees }}</div>
+                        <div class="text-sm opacity-90">Всего сотрудников</div>
+                    </div>
+                    <i class="pi pi-users text-4xl opacity-50"></i>
+                </div>
+                <div class="text-xs mt-2 opacity-75">
+                    <i class="pi pi-check-circle mr-1"></i>Активных: {{ dashboard.widgets.active_employees }}
+                </div>
+            </div>
+
+            <div class="widget-card bg-gradient-to-br from-orange-400 to-orange-500 text-white rounded-xl p-4 shadow-lg">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <div class="text-3xl font-bold">{{ dashboard.widgets.on_vacation }}</div>
+                        <div class="text-sm opacity-90">В отпусках</div>
+                    </div>
+                    <i class="pi pi-sun text-4xl opacity-50"></i>
+                </div>
+                <div class="text-xs mt-2 opacity-75">
+                    <i class="pi pi-heart mr-1"></i>На больничном: {{ dashboard.widgets.on_sick_leave }}
+                </div>
+            </div>
+
+            <div class="widget-card bg-gradient-to-br from-green-500 to-green-600 text-white rounded-xl p-4 shadow-lg">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <div class="text-3xl font-bold">{{ dashboard.widgets.new_employees_month }}</div>
+                        <div class="text-sm opacity-90">Новички (мес)</div>
+                    </div>
+                    <i class="pi pi-user-plus text-4xl opacity-50"></i>
+                </div>
+                <div class="text-xs mt-2 opacity-75">
+                    <i class="pi pi-trending-up mr-1"></i>За этот месяц
+                </div>
+            </div>
+
+            <div class="widget-card bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-xl p-4 shadow-lg">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <div class="text-3xl font-bold">{{ dashboard.widgets.turnover_rate }}%</div>
+                        <div class="text-sm opacity-90">Текучесть</div>
+                    </div>
+                    <i class="pi pi-chart-line text-4xl opacity-50"></i>
+                </div>
+                <div class="text-xs mt-2 opacity-75">
+                    <i class="pi pi-calendar mr-1"></i>За 12 месяцев
+                </div>
+            </div>
+
+            <div class="widget-card bg-gradient-to-br from-cyan-500 to-cyan-600 text-white rounded-xl p-4 shadow-lg">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <div class="text-3xl font-bold">{{ dashboard.widgets.open_vacancies }}</div>
+                        <div class="text-sm opacity-90">Открыто вакансий</div>
+                    </div>
+                    <i class="pi pi-briefcase text-4xl opacity-50"></i>
+                </div>
+                <div class="text-xs mt-2 opacity-75">
+                    <i class="pi pi-user mr-1"></i>Кандидатов: {{ dashboard.widgets.candidates_in_process }}
+                </div>
+            </div>
+
+            <div class="widget-card bg-gradient-to-br from-pink-500 to-pink-600 text-white rounded-xl p-4 shadow-lg">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <div class="text-3xl font-bold">{{ dashboard.widgets.pending_approvals }}</div>
+                        <div class="text-sm opacity-90">На согласовании</div>
+                    </div>
+                    <i class="pi pi-inbox text-4xl opacity-50"></i>
+                </div>
+                <div class="text-xs mt-2 opacity-75">
+                    <i class="pi pi-clock mr-1"></i>Требуют внимания
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Left Column: Tasks + Quick Actions -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- My Tasks -->
+                <p-card styleClass="shadow-md">
+                    <ng-template #header>
+                        <div class="flex justify-between items-center px-4 pt-4">
+                            <div class="flex items-center gap-2">
+                                <i class="pi pi-list-check text-xl text-blue-500"></i>
+                                <span class="font-semibold text-lg">Мои задачи</span>
+                                <p-badge [value]="dashboard.tasks.length.toString()" severity="info"></p-badge>
+                            </div>
+                            <a routerLink="/hrm/tasks" class="text-sm text-blue-500 hover:underline">Все задачи</a>
+                        </div>
+                    </ng-template>
+                    <div class="space-y-3">
+                        @for (task of dashboard.tasks; track task.id) {
+                            <a [routerLink]="task.link" class="task-item flex items-center gap-4 p-3 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700 transition-colors cursor-pointer border border-transparent hover:border-gray-200 dark:hover:border-gray-700">
+                                <div class="task-icon w-10 h-10 rounded-full flex items-center justify-center"
+                                     [style.background-color]="'var(--' + task.color + '-100)'"
+                                     [style.color]="'var(--' + task.color + '-600)'">
+                                    <i class="pi {{ task.icon }}"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="font-medium text-gray-800 dark:text-white">
+                                        {{ task.title }}
+                                        @if (task.count) {
+                                            <span class="text-blue-600 font-bold">({{ task.count }})</span>
+                                        }
+                                    </div>
+                                    @if (task.due_date) {
+                                        <div class="text-sm text-gray-500">
+                                            <i class="pi pi-calendar mr-1"></i>До {{ formatDate(task.due_date) }}
+                                        </div>
+                                    }
+                                </div>
+                                <p-tag [value]="getTaskPriorityLabel(task.priority)" [severity]="getTaskPrioritySeverity(task.priority)"></p-tag>
+                                <i class="pi pi-chevron-right text-gray-400"></i>
+                            </a>
+                        }
+                        @empty {
+                            <div class="text-center py-8 text-gray-500">
+                                <i class="pi pi-check-circle text-4xl mb-2 text-green-500"></i>
+                                <p>Все задачи выполнены!</p>
+                            </div>
+                        }
+                    </div>
+                </p-card>
+
+                <!-- Quick Actions -->
+                <p-card styleClass="shadow-md">
+                    <ng-template #header>
+                        <div class="flex items-center gap-2 px-4 pt-4">
+                            <i class="pi pi-bolt text-xl text-yellow-500"></i>
+                            <span class="font-semibold text-lg">Быстрые действия</span>
+                        </div>
+                    </ng-template>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                        @for (action of quickActions; track action.id) {
+                            <a [routerLink]="action.link"
+                               class="quick-action flex flex-col items-center gap-2 p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all cursor-pointer"
+                               pRipple>
+                                <div class="w-12 h-12 rounded-full flex items-center justify-center"
+                                     [style.background-color]="'var(--' + action.color + '-100)'"
+                                     [style.color]="'var(--' + action.color + '-600)'">
+                                    <i class="pi {{ action.icon }} text-xl"></i>
+                                </div>
+                                <span class="text-sm font-medium text-center text-gray-700 dark:text-gray-300">{{ action.label }}</span>
+                            </a>
+                        }
+                    </div>
+                </p-card>
+
+                <!-- Recent Activity -->
+                <p-card styleClass="shadow-md">
+                    <ng-template #header>
+                        <div class="flex items-center gap-2 px-4 pt-4">
+                            <i class="pi pi-history text-xl text-green-500"></i>
+                            <span class="font-semibold text-lg">Недавняя активность</span>
+                        </div>
+                    </ng-template>
+                    <div class="space-y-4">
+                        @for (activity of dashboard.recentActivity; track activity.id) {
+                            <div class="flex items-start gap-3">
+                                <div class="activity-icon w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
+                                     [style.background-color]="'var(--' + activity.color + '-100)'"
+                                     [style.color]="'var(--' + activity.color + '-600)'">
+                                    <i class="pi {{ activity.icon }} text-sm"></i>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <div class="font-medium text-gray-800 dark:text-white">{{ activity.title }}</div>
+                                    <div class="text-sm text-gray-600 dark:text-gray-400 truncate">{{ activity.description }}</div>
+                                    <div class="text-xs text-gray-400 mt-1">
+                                        <i class="pi pi-user mr-1"></i>{{ activity.user_name }} · {{ getRelativeTime(activity.timestamp) }}
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </p-card>
+            </div>
+
+            <!-- Right Column: Calendar + Birthdays + Probations -->
+            <div class="space-y-6">
+                <!-- Calendar Events -->
+                <p-card styleClass="shadow-md">
+                    <ng-template #header>
+                        <div class="flex justify-between items-center px-4 pt-4">
+                            <div class="flex items-center gap-2">
+                                <i class="pi pi-calendar text-xl text-purple-500"></i>
+                                <span class="font-semibold text-lg">Календарь событий</span>
+                            </div>
+                            <a routerLink="/hrm/calendar" class="text-sm text-blue-500 hover:underline">Полный календарь</a>
+                        </div>
+                    </ng-template>
+                    <div class="space-y-3">
+                        @for (event of dashboard.events; track event.id) {
+                            <div class="event-item flex gap-3 p-3 rounded-lg border-l-4 bg-surface-100 dark:bg-surface-700"
+                                 [style.border-left-color]="'var(--' + event.color + '-500)'">
+                                <div class="event-date text-center flex-shrink-0 w-12">
+                                    <div class="text-2xl font-bold text-gray-800 dark:text-white">
+                                        {{ event.date | date:'d' }}
+                                    </div>
+                                    <div class="text-xs text-gray-500 uppercase">
+                                        {{ event.date | date:'MMM':'':'ru' }}
+                                    </div>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <div class="font-medium text-gray-800 dark:text-white">{{ event.title }}</div>
+                                    @if (event.description) {
+                                        <div class="text-sm text-gray-500 truncate">{{ event.description }}</div>
+                                    }
+                                    <div class="flex items-center gap-3 mt-1 text-xs text-gray-400">
+                                        @if (event.time) {
+                                            <span><i class="pi pi-clock mr-1"></i>{{ event.time }}</span>
+                                        }
+                                        @if (event.location) {
+                                            <span><i class="pi pi-map-marker mr-1"></i>{{ event.location }}</span>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </p-card>
+
+                <!-- Upcoming Birthdays -->
+                <p-card styleClass="shadow-md">
+                    <ng-template #header>
+                        <div class="flex items-center gap-2 px-4 pt-4">
+                            <i class="pi pi-gift text-xl text-pink-500"></i>
+                            <span class="font-semibold text-lg">Ближайшие дни рождения</span>
+                        </div>
+                    </ng-template>
+                    <div class="space-y-3">
+                        @for (birthday of dashboard.upcomingBirthdays; track birthday.employee_id) {
+                            <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700">
+                                <p-avatar
+                                    [label]="getInitials(birthday.employee_name)"
+                                    shape="circle"
+                                    [style]="{ 'background-color': 'var(--pink-100)', 'color': 'var(--pink-600)' }">
+                                </p-avatar>
+                                <div class="flex-1 min-w-0">
+                                    <div class="font-medium text-gray-800 dark:text-white truncate">{{ birthday.employee_name }}</div>
+                                    <div class="text-xs text-gray-500">{{ birthday.department_name }}</div>
+                                </div>
+                                <div class="text-right">
+                                    @if (birthday.days_until === 0) {
+                                        <p-tag value="Сегодня!" severity="danger"></p-tag>
+                                    } @else if (birthday.days_until === 1) {
+                                        <p-tag value="Завтра" severity="warn"></p-tag>
+                                    } @else {
+                                        <span class="text-sm text-gray-500">через {{ birthday.days_until }} дн.</span>
+                                    }
+                                </div>
+                            </div>
+                        }
+                        @empty {
+                            <div class="text-center py-4 text-gray-500">
+                                <p>Нет ближайших дней рождения</p>
+                            </div>
+                        }
+                    </div>
+                </p-card>
+
+                <!-- Expiring Probations -->
+                <p-card styleClass="shadow-md">
+                    <ng-template #header>
+                        <div class="flex items-center gap-2 px-4 pt-4">
+                            <i class="pi pi-clock text-xl text-orange-500"></i>
+                            <span class="font-semibold text-lg">Испытательные сроки</span>
+                        </div>
+                    </ng-template>
+                    <div class="space-y-3">
+                        @for (probation of dashboard.expiringProbations; track probation.employee_id) {
+                            <div class="p-3 rounded-lg border border-gray-200 dark:border-gray-700">
+                                <div class="flex justify-between items-start mb-2">
+                                    <div>
+                                        <div class="font-medium text-gray-800 dark:text-white">{{ probation.employee_name }}</div>
+                                        <div class="text-sm text-gray-500">{{ probation.position_name }}</div>
+                                    </div>
+                                    <p-tag [value]="getProbationStatusLabel(probation.status)" [severity]="getProbationStatusSeverity(probation.status)"></p-tag>
+                                </div>
+                                <div class="flex justify-between items-center text-sm">
+                                    <span class="text-gray-500">
+                                        <i class="pi pi-user mr-1"></i>Наставник: {{ probation.mentor_name || 'Не назначен' }}
+                                    </span>
+                                    <span class="font-medium" [class.text-red-500]="probation.days_remaining <= 7" [class.text-orange-500]="probation.days_remaining > 7 && probation.days_remaining <= 14" [class.text-gray-600]="probation.days_remaining > 14">
+                                        {{ probation.days_remaining }} дн.
+                                    </span>
+                                </div>
+                                <p-progressBar
+                                    [value]="100 - (probation.days_remaining / 90 * 100)"
+                                    [showValue]="false"
+                                    [style]="{ height: '4px' }"
+                                    class="mt-2">
+                                </p-progressBar>
+                            </div>
+                        }
+                        @empty {
+                            <div class="text-center py-4 text-gray-500">
+                                <p>Нет сотрудников на испытательном сроке</p>
+                            </div>
+                        }
+                    </div>
+                </p-card>
+
+                <!-- Notifications -->
+                @if (getUnreadNotificationsCount() > 0) {
+                    <p-card styleClass="shadow-md border-l-4 border-yellow-500">
+                        <ng-template #header>
+                            <div class="flex items-center gap-2 px-4 pt-4">
+                                <i class="pi pi-bell text-xl text-yellow-500"></i>
+                                <span class="font-semibold text-lg">Уведомления</span>
+                                <p-badge [value]="getUnreadNotificationsCount().toString()" severity="danger"></p-badge>
+                            </div>
+                        </ng-template>
+                        <div class="space-y-3">
+                            @for (notification of dashboard.notifications; track notification.id) {
+                                @if (!notification.read) {
+                                    <div class="flex items-start gap-3 p-2 rounded-lg bg-yellow-50 dark:bg-yellow-900/20">
+                                        <i class="pi {{ notification.icon }} text-yellow-600 mt-1"></i>
+                                        <div class="flex-1">
+                                            <div class="font-medium text-gray-800 dark:text-white">{{ notification.title }}</div>
+                                            <div class="text-sm text-gray-600 dark:text-gray-400">{{ notification.message }}</div>
+                                            <div class="text-xs text-gray-400 mt-1">{{ getRelativeTime(notification.created_at) }}</div>
+                                        </div>
+                                        <button pButton
+                                                icon="pi pi-check"
+                                                class="p-button-text p-button-rounded p-button-sm"
+                                                (click)="markNotificationAsRead(notification)"
+                                                pTooltip="Отметить прочитанным">
+                                        </button>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </p-card>
+                }
+            </div>
+        </div>
+    }
+</div>

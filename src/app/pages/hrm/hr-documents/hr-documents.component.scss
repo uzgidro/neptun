@@ -1,0 +1,97 @@
+.hr-documents-container {
+    padding: 1.5rem;
+}
+
+// Dialog styles
+::ng-deep {
+    .p-dialog {
+        .p-dialog-content {
+            background: var(--surface-overlay) !important;
+            color: var(--text-color) !important;
+        }
+
+        .p-dialog-header {
+            background: var(--surface-overlay) !important;
+            color: var(--text-color) !important;
+        }
+
+        .p-dialog-footer {
+            background: var(--surface-overlay) !important;
+        }
+    }
+
+    .p-confirmdialog {
+        .p-dialog-content {
+            background: var(--surface-overlay) !important;
+            color: var(--text-color) !important;
+        }
+
+        .p-dialog-header {
+            background: var(--surface-overlay) !important;
+            color: var(--text-color) !important;
+        }
+
+        .p-dialog-footer {
+            background: var(--surface-overlay) !important;
+        }
+    }
+
+    // Tabs styling
+    .p-tabs {
+        .p-tablist {
+            background: var(--surface-0);
+            border-radius: 0.5rem 0.5rem 0 0;
+
+            :host-context(.dark) & {
+                background: var(--surface-800);
+            }
+        }
+
+        .p-tabpanels {
+            background: var(--surface-0);
+            border-radius: 0 0 0.5rem 0.5rem;
+            padding: 1.5rem;
+            border: 1px solid var(--surface-200);
+            border-top: none;
+
+            :host-context(.dark) & {
+                background: var(--surface-800);
+                border-color: var(--surface-700);
+            }
+        }
+    }
+
+    // Table styling
+    .p-datatable {
+        .p-datatable-thead > tr > th {
+            background: var(--surface-50);
+            color: var(--text-color);
+            font-weight: 600;
+
+            :host-context(.dark) & {
+                background: var(--surface-700);
+            }
+        }
+
+        .p-datatable-tbody > tr {
+            background: var(--surface-0);
+
+            :host-context(.dark) & {
+                background: var(--surface-800);
+            }
+
+            &:hover {
+                background: var(--surface-50) !important;
+
+                :host-context(.dark) & {
+                    background: var(--surface-700) !important;
+                }
+            }
+        }
+    }
+}
+
+// Document number styling
+.font-mono {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
