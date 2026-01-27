@@ -7,7 +7,7 @@ import { InputIcon } from 'primeng/inputicon';
 import { InputText } from 'primeng/inputtext';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-import { Subject } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { Tooltip } from 'primeng/tooltip';
 import { Tag } from 'primeng/tag';
 import { Checkbox } from 'primeng/checkbox';
@@ -17,7 +17,8 @@ import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-
 import { DeleteConfirmationComponent } from '@/layout/component/dialog/delete-confirmation/delete-confirmation.component';
 import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
 import { TextareaComponent } from '@/layout/component/dialog/textarea/textarea.component';
-import { Training, TRAINING_TYPES, TRAINING_STATUSES } from '@/core/interfaces/hrm/training';
+import { Training, TrainingPayload, TRAINING_TYPES, TRAINING_STATUSES } from '@/core/interfaces/hrm/training';
+import { TrainingService } from '@/core/services/training.service';
 
 @Component({
     selector: 'app-training',
@@ -54,11 +55,11 @@ export class TrainingComponent implements OnInit, OnDestroy {
     isEditMode: boolean = false;
     selectedTraining: Training | null = null;
     trainingForm: FormGroup;
-    private nextId = 100;
 
     trainingTypes = TRAINING_TYPES.map(t => ({ id: t.value, name: t.label }));
     trainingStatuses = TRAINING_STATUSES.map(s => ({ id: s.value, name: s.label }));
 
+    private trainingService = inject(TrainingService);
     private fb = inject(FormBuilder);
     private messageService = inject(MessageService);
     private destroy$ = new Subject<void>();
@@ -81,162 +82,22 @@ export class TrainingComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.loadMockData();
+        this.loadTrainings();
     }
 
-    private loadMockData(): void {
-        setTimeout(() => {
-            this.trainings = [
-                {
-                    id: 1,
-                    title: 'Angular Advanced: Продвинутый курс',
-                    description: 'Углубленное изучение Angular: производительность, архитектура, тестирование',
-                    training_type: 'course',
-                    provider: 'IT Academy',
-                    start_date: '2025-02-01',
-                    end_date: '2025-02-28',
-                    duration_hours: 40,
-                    location: 'Онлайн',
-                    is_online: true,
-                    max_participants: 20,
-                    current_participants: 15,
-                    status: 'planned',
-                    cost: 45000,
-                    certificate_provided: true
+    private loadTrainings(): void {
+        this.trainingService.getTrainings()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: (data) => {
+                    this.trainings = data;
                 },
-                {
-                    id: 2,
-                    title: 'Эффективная коммуникация',
-                    description: 'Развитие навыков деловой коммуникации и презентации',
-                    training_type: 'workshop',
-                    provider: 'HR Solutions',
-                    start_date: '2025-01-15',
-                    end_date: '2025-01-16',
-                    duration_hours: 16,
-                    location: 'Конференц-зал А',
-                    is_online: false,
-                    max_participants: 15,
-                    current_participants: 12,
-                    status: 'in_progress',
-                    cost: 25000,
-                    certificate_provided: true
+                error: (err) => {
+                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось загрузить данные' });
+                    console.error(err);
                 },
-                {
-                    id: 3,
-                    title: 'Управление проектами: Основы Agile',
-                    description: 'Введение в Agile методологии, Scrum и Kanban',
-                    training_type: 'seminar',
-                    provider: 'Project Management Institute',
-                    start_date: '2024-12-10',
-                    end_date: '2024-12-12',
-                    duration_hours: 24,
-                    location: 'Онлайн',
-                    is_online: true,
-                    max_participants: 30,
-                    current_participants: 28,
-                    status: 'completed',
-                    cost: 35000,
-                    certificate_provided: true
-                },
-                {
-                    id: 4,
-                    title: 'AWS Solutions Architect',
-                    description: 'Подготовка к сертификации AWS Solutions Architect Associate',
-                    training_type: 'certification',
-                    provider: 'Amazon Web Services',
-                    start_date: '2025-03-01',
-                    end_date: '2025-04-15',
-                    duration_hours: 60,
-                    location: 'Онлайн',
-                    is_online: true,
-                    max_participants: 10,
-                    current_participants: 5,
-                    status: 'planned',
-                    cost: 80000,
-                    certificate_provided: true
-                },
-                {
-                    id: 5,
-                    title: 'Менторская программа для руководителей',
-                    description: 'Индивидуальный менторинг для развития лидерских качеств',
-                    training_type: 'mentoring',
-                    provider: 'Внутренний ресурс',
-                    start_date: '2024-11-01',
-                    end_date: '2025-02-28',
-                    duration_hours: 20,
-                    is_online: false,
-                    max_participants: 5,
-                    current_participants: 5,
-                    status: 'in_progress',
-                    cost: 0,
-                    certificate_provided: false
-                },
-                {
-                    id: 6,
-                    title: 'Охрана труда: Ежегодный инструктаж',
-                    description: 'Обязательное обучение по охране труда для всех сотрудников',
-                    training_type: 'course',
-                    provider: 'Центр охраны труда',
-                    start_date: '2024-10-01',
-                    end_date: '2024-10-15',
-                    duration_hours: 8,
-                    location: 'Учебный класс',
-                    is_online: false,
-                    max_participants: 50,
-                    current_participants: 48,
-                    status: 'completed',
-                    cost: 15000,
-                    certificate_provided: true
-                },
-                {
-                    id: 7,
-                    title: 'Python для аналитики данных',
-                    description: 'Самостоятельное изучение Python с использованием корпоративной платформы',
-                    training_type: 'self_study',
-                    provider: 'Корпоративная платформа',
-                    start_date: '2025-01-01',
-                    end_date: '2025-06-30',
-                    duration_hours: 100,
-                    location: 'Онлайн',
-                    is_online: true,
-                    status: 'planned',
-                    cost: 0,
-                    certificate_provided: true
-                },
-                {
-                    id: 8,
-                    title: 'Тимбилдинг: Командная работа',
-                    description: 'Воркшоп по развитию командного взаимодействия',
-                    training_type: 'workshop',
-                    provider: 'Team Building Pro',
-                    start_date: '2024-09-20',
-                    end_date: '2024-09-20',
-                    duration_hours: 8,
-                    location: 'Загородная база',
-                    is_online: false,
-                    max_participants: 40,
-                    current_participants: 38,
-                    status: 'completed',
-                    cost: 60000,
-                    certificate_provided: false
-                },
-                {
-                    id: 9,
-                    title: 'Информационная безопасность',
-                    description: 'Курс по основам информационной безопасности для сотрудников',
-                    training_type: 'course',
-                    start_date: '2025-01-20',
-                    end_date: '2025-01-20',
-                    duration_hours: 4,
-                    location: 'Онлайн',
-                    is_online: true,
-                    status: 'cancelled',
-                    cost: 10000,
-                    certificate_provided: true
-                }
-            ];
-            this.loading = false;
-        }, 500);
+                complete: () => (this.loading = false)
+            });
     }
 
     onGlobalFilter(table: Table, event: Event) {
@@ -288,52 +149,77 @@ export class TrainingComponent implements OnInit, OnDestroy {
         this.submitted = true;
         if (this.trainingForm.invalid) return;
 
-        const formValue = this.trainingForm.value;
-
         if (this.isEditMode && this.selectedTraining) {
-            const index = this.trainings.findIndex(t => t.id === this.selectedTraining!.id);
-            if (index !== -1) {
-                this.trainings[index] = {
-                    ...this.trainings[index],
-                    title: formValue.title,
-                    description: formValue.description,
-                    training_type: formValue.training_type?.id,
-                    provider: formValue.provider || undefined,
-                    start_date: formValue.start_date ? this.dateToYMD(formValue.start_date) : '',
-                    end_date: formValue.end_date ? this.dateToYMD(formValue.end_date) : '',
-                    duration_hours: formValue.duration_hours,
-                    location: formValue.location || undefined,
-                    is_online: formValue.is_online,
-                    max_participants: formValue.max_participants || undefined,
-                    cost: formValue.cost || undefined,
-                    certificate_provided: formValue.certificate_provided
-                };
-                this.trainings = [...this.trainings];
-            }
-            this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Обучение обновлено' });
+            this.updateTraining();
         } else {
-            const newTraining: Training = {
-                id: this.nextId++,
-                title: formValue.title,
-                description: formValue.description,
-                training_type: formValue.training_type?.id,
-                provider: formValue.provider || undefined,
-                start_date: formValue.start_date ? this.dateToYMD(formValue.start_date) : '',
-                end_date: formValue.end_date ? this.dateToYMD(formValue.end_date) : '',
-                duration_hours: formValue.duration_hours,
-                location: formValue.location || undefined,
-                is_online: formValue.is_online,
-                max_participants: formValue.max_participants || undefined,
-                current_participants: 0,
-                status: 'planned',
-                cost: formValue.cost || undefined,
-                certificate_provided: formValue.certificate_provided
-            };
-            this.trainings = [...this.trainings, newTraining];
-            this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Обучение создано' });
+            this.createTraining();
         }
+    }
 
-        this.closeDialog();
+    private createTraining(): void {
+        const formValue = this.trainingForm.value;
+        const payload: TrainingPayload = {
+            title: formValue.title,
+            description: formValue.description,
+            training_type: formValue.training_type?.id,
+            provider: formValue.provider || undefined,
+            start_date: formValue.start_date ? this.dateToYMD(formValue.start_date) : undefined,
+            end_date: formValue.end_date ? this.dateToYMD(formValue.end_date) : undefined,
+            duration_hours: formValue.duration_hours,
+            location: formValue.location || undefined,
+            is_online: formValue.is_online,
+            max_participants: formValue.max_participants || undefined,
+            cost: formValue.cost || undefined,
+            certificate_provided: formValue.certificate_provided
+        };
+
+        this.trainingService.createTraining(payload)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: () => {
+                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Обучение создано' });
+                    this.loadTrainings();
+                    this.closeDialog();
+                },
+                error: (err) => {
+                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось создать обучение' });
+                    console.error(err);
+                }
+            });
+    }
+
+    private updateTraining(): void {
+        if (!this.selectedTraining) return;
+
+        const formValue = this.trainingForm.value;
+        const payload: TrainingPayload = {
+            title: formValue.title,
+            description: formValue.description,
+            training_type: formValue.training_type?.id,
+            provider: formValue.provider || undefined,
+            start_date: formValue.start_date ? this.dateToYMD(formValue.start_date) : undefined,
+            end_date: formValue.end_date ? this.dateToYMD(formValue.end_date) : undefined,
+            duration_hours: formValue.duration_hours,
+            location: formValue.location || undefined,
+            is_online: formValue.is_online,
+            max_participants: formValue.max_participants || undefined,
+            cost: formValue.cost || undefined,
+            certificate_provided: formValue.certificate_provided
+        };
+
+        this.trainingService.updateTraining(this.selectedTraining.id, payload)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: () => {
+                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Обучение обновлено' });
+                    this.loadTrainings();
+                    this.closeDialog();
+                },
+                error: (err) => {
+                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось обновить обучение' });
+                    console.error(err);
+                }
+            });
     }
 
     openDeleteDialog(training: Training): void {
@@ -344,10 +230,20 @@ export class TrainingComponent implements OnInit, OnDestroy {
     confirmDelete(): void {
         if (!this.selectedTraining) return;
 
-        this.trainings = this.trainings.filter(t => t.id !== this.selectedTraining!.id);
-        this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Обучение удалено' });
-        this.displayDeleteDialog = false;
-        this.selectedTraining = null;
+        this.trainingService.deleteTraining(this.selectedTraining.id)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: () => {
+                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Обучение удалено' });
+                    this.loadTrainings();
+                    this.displayDeleteDialog = false;
+                    this.selectedTraining = null;
+                },
+                error: (err) => {
+                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось удалить обучение' });
+                    console.error(err);
+                }
+            });
     }
 
     getStatusSeverity(status: string): 'success' | 'info' | 'warn' | 'danger' | 'secondary' | 'contrast' {

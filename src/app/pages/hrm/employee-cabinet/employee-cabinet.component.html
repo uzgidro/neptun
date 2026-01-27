@@ -29,7 +29,7 @@
                             <p class="text-lg text-gray-600 dark:text-gray-400 mt-1">{{ profile.position_name }}</p>
                             <p class="text-sm text-gray-500">{{ profile.department_name }}</p>
                         </div>
-                        <button pButton icon="pi pi-pencil" label="Редактировать" class="p-button-outlined p-button-sm"></button>
+                        <button pButton icon="pi pi-pencil" label="Редактировать" class="p-button-outlined p-button-sm" (click)="openEditProfileDialog()"></button>
                     </div>
 
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
@@ -512,4 +512,38 @@
             </ng-template>
         </p-table>
     }
+</p-dialog>
+
+<!-- Edit Profile Dialog -->
+<p-dialog
+    [(visible)]="displayEditProfileDialog"
+    header="Редактирование профиля"
+    [modal]="true"
+    [style]="{ width: '500px' }"
+    [closable]="true">
+    <form [formGroup]="profileForm" class="p-4">
+        <div class="space-y-4">
+            <div class="field">
+                <label class="font-medium block mb-2">Телефон</label>
+                <input pInputText formControlName="phone" class="w-full" placeholder="+998 (__) ___-__-__" />
+            </div>
+
+            <div class="field">
+                <label class="font-medium block mb-2">Внутренний номер</label>
+                <input pInputText formControlName="internal_phone" class="w-full" placeholder="1234" />
+            </div>
+
+            <div class="field">
+                <label class="font-medium block mb-2">Email</label>
+                <input pInputText formControlName="email" class="w-full" placeholder="example@company.uz" />
+                @if (profileForm.get('email')?.invalid && profileForm.get('email')?.touched) {
+                    <small class="text-red-500">Введите корректный email</small>
+                }
+            </div>
+        </div>
+    </form>
+    <ng-template #footer>
+        <button pButton label="Отмена" icon="pi pi-times" class="p-button-text" (click)="displayEditProfileDialog = false"></button>
+        <button pButton label="Сохранить" icon="pi pi-check" (click)="saveProfile()"></button>
+    </ng-template>
 </p-dialog>

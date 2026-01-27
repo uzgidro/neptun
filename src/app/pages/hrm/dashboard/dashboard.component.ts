@@ -1,8 +1,8 @@
-import { Component,OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { Subject } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { Card } from 'primeng/card';
 import { ButtonDirective } from 'primeng/button';
 import { Tag } from 'primeng/tag';
@@ -11,12 +11,14 @@ import { Badge } from 'primeng/badge';
 import { Tooltip } from 'primeng/tooltip';
 import { ProgressBar } from 'primeng/progressbar';
 import { Ripple } from 'primeng/ripple';
+import { MessageService } from 'primeng/api';
 import {
     HRMDashboard,
     DashboardNotification,
     QuickAction,
     QUICK_ACTIONS
 } from '@/core/interfaces/hrm/dashboard';
+import { HRMDashboardService } from '@/core/services/hrm-dashboard.service';
 @Component({
     selector: 'app-hrm-dashboard',
     standalone: true,
@@ -40,13 +42,15 @@ export class HRMDashboardComponent implements OnInit, OnDestroy {
     dashboard: HRMDashboard | null = null;
     loading: boolean = true;
     currentUser: { name: string; position: string; avatar?: string } = {
-        name: 'Иванов Иван Петрович',
-        position: 'HR-директор'
+        name: '',
+        position: ''
     };
 
     quickActions: QuickAction[] = QUICK_ACTIONS;
     currentDate: Date = new Date();
 
+    private hrmDashboardService = inject(HRMDashboardService);
+    private messageService = inject(MessageService);
     private destroy$ = new Subject<void>();
 
     ngOnInit() {
@@ -56,255 +60,18 @@ export class HRMDashboardComponent implements OnInit, OnDestroy {
     private loadDashboardData(): void {
         this.loading = true;
 
-        setTimeout(() => {
-            this.dashboard = {
-                widgets: {
-                    total_employees: 156,
-                    active_employees: 148,
-                    on_vacation: 12,
-                    on_sick_leave: 3,
-                    new_employees_month: 5,
-                    turnover_rate: 3.2,
-                    open_vacancies: 8,
-                    candidates_in_process: 23,
-                    pending_approvals: 7,
-                    planned_trainings: 4,
-                    assessments_in_progress: 2,
-                    salary_pending_approval: 1
+        this.hrmDashboardService.getDashboard()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: (data) => {
+                    this.dashboard = data;
                 },
-                tasks: [
-                    {
-                        id: 1,
-                        type: 'vacation_approval',
-                        title: 'Согласовать заявления на отпуск',
-                        count: 3,
-                        priority: 'high',
-                        due_date: '2025-01-25',
-                        link: '/hrm/vacations',
-                        icon: 'pi-calendar',
-                        color: 'orange'
-                    },
-                    {
-                        id: 2,
-                        type: 'candidate_review',
-                        title: 'Рассмотреть резюме кандидатов',
-                        count: 5,
-                        priority: 'medium',
-                        link: '/hrm/recruiting',
-                        icon: 'pi-users',
-                        color: 'blue'
-                    },
-                    {
-                        id: 3,
-                        type: 'assessment_review',
-                        title: 'Провести оценку компетенций',
-                        count: 4,
-                        priority: 'medium',
-                        due_date: '2025-01-31',
-                        link: '/hrm/competency',
-                        icon: 'pi-chart-bar',
-                        color: 'purple'
-                    },
-                    {
-                        id: 4,
-                        type: 'salary_approval',
-                        title: 'Утвердить расчет зарплаты за январь',
-                        priority: 'urgent',
-                        due_date: '2025-01-28',
-                        link: '/hrm/salary',
-                        icon: 'pi-dollar',
-                        color: 'green'
-                    },
-                    {
-                        id: 5,
-                        type: 'probation_review',
-                        title: 'Оценить испытательный срок',
-                        count: 2,
-                        priority: 'high',
-                        due_date: '2025-01-30',
-                        link: '/hrm/personnel-records',
-                        icon: 'pi-clock',
-                        color: 'red'
-                    }
-                ],
-                events: [
-                    {
-                        id: 1,
-                        type: 'training',
-                        title: 'Начало квартального обучения',
-                        description: 'Программа развития лидерских качеств',
-                        date: '2025-01-25',
-                        time: '10:00',
-                        location: 'Конференц-зал А',
-                        icon: 'pi-book',
-                        color: 'blue'
-                    },
-                    {
-                        id: 2,
-                        type: 'meeting',
-                        title: 'Совещание по кадровому резерву',
-                        date: '2025-01-28',
-                        time: '14:00',
-                        location: 'Онлайн (Zoom)',
-                        participants: ['Соколов А.В.', 'Петрова М.И.'],
-                        icon: 'pi-users',
-                        color: 'purple'
-                    },
-                    {
-                        id: 3,
-                        type: 'deadline',
-                        title: 'Завершение оценки компетенций',
-                        description: 'Финальный срок сдачи отчетов',
-                        date: '2025-01-31',
-                        icon: 'pi-clock',
-                        color: 'red'
-                    },
-                    {
-                        id: 4,
-                        type: 'interview',
-                        title: 'Собеседование: Senior Developer',
-                        description: 'Кузнецова Мария - финальное интервью',
-                        date: '2025-01-27',
-                        time: '11:00',
-                        icon: 'pi-user',
-                        color: 'cyan'
-                    },
-                    {
-                        id: 5,
-                        type: 'training',
-                        title: 'Внедрение новых HR-политик',
-                        date: '2025-02-05',
-                        icon: 'pi-file',
-                        color: 'green'
-                    }
-                ],
-                notifications: [
-                    {
-                        id: 1,
-                        type: 'approval_request',
-                        title: 'Новая заявка на отпуск',
-                        message: 'Сидоров П.А. подал заявку на отпуск с 01.02 по 14.02',
-                        created_at: '2025-01-24T09:30:00',
-                        read: false,
-                        link: '/hrm/vacations',
-                        icon: 'pi-calendar',
-                        severity: 'info'
-                    },
-                    {
-                        id: 2,
-                        type: 'deadline_reminder',
-                        title: 'Приближается дедлайн',
-                        message: 'Расчет зарплаты должен быть утвержден до 28.01',
-                        created_at: '2025-01-24T08:00:00',
-                        read: false,
-                        icon: 'pi-exclamation-triangle',
-                        severity: 'warn'
-                    },
-                    {
-                        id: 3,
-                        type: 'new_employee',
-                        title: 'Новый сотрудник',
-                        message: 'Егорова С.П. приступила к работе в отделе продаж',
-                        created_at: '2025-01-23T10:00:00',
-                        read: true,
-                        icon: 'pi-user-plus',
-                        severity: 'success'
-                    }
-                ],
-                recentActivity: [
-                    {
-                        id: 1,
-                        type: 'vacation_approved',
-                        title: 'Отпуск согласован',
-                        description: 'Заявка на отпуск Морозова А.К. одобрена',
-                        user_name: 'Система',
-                        timestamp: '2025-01-24T11:30:00',
-                        icon: 'pi-check-circle',
-                        color: 'green'
-                    },
-                    {
-                        id: 2,
-                        type: 'employee_hired',
-                        title: 'Новый сотрудник',
-                        description: 'Егорова С.П. оформлена на должность менеджера по продажам',
-                        user_name: 'Михайлова Т.В.',
-                        timestamp: '2025-01-23T16:45:00',
-                        icon: 'pi-user-plus',
-                        color: 'blue'
-                    },
-                    {
-                        id: 3,
-                        type: 'training_completed',
-                        title: 'Обучение завершено',
-                        description: '12 сотрудников завершили курс "Эффективные коммуникации"',
-                        user_name: 'Система',
-                        timestamp: '2025-01-23T14:00:00',
-                        icon: 'pi-book',
-                        color: 'purple'
-                    },
-                    {
-                        id: 4,
-                        type: 'vacancy_published',
-                        title: 'Вакансия опубликована',
-                        description: 'Вакансия "Middle Backend разработчик" размещена на портале',
-                        user_name: 'Кузнецов С.А.',
-                        timestamp: '2025-01-22T10:30:00',
-                        icon: 'pi-briefcase',
-                        color: 'cyan'
-                    }
-                ],
-                upcomingBirthdays: [
-                    {
-                        employee_id: 45,
-                        employee_name: 'Козлова Анна Сергеевна',
-                        department_name: 'Маркетинг',
-                        position_name: 'Маркетолог',
-                        birth_date: '1990-01-26',
-                        days_until: 2
-                    },
-                    {
-                        employee_id: 78,
-                        employee_name: 'Новиков Дмитрий Александрович',
-                        department_name: 'IT отдел',
-                        position_name: 'Разработчик',
-                        birth_date: '1988-01-29',
-                        days_until: 5
-                    },
-                    {
-                        employee_id: 23,
-                        employee_name: 'Федорова Елена Викторовна',
-                        department_name: 'Бухгалтерия',
-                        position_name: 'Главный бухгалтер',
-                        birth_date: '1975-02-03',
-                        days_until: 10
-                    }
-                ],
-                expiringProbations: [
-                    {
-                        employee_id: 150,
-                        employee_name: 'Смирнов Алексей Игоревич',
-                        department_name: 'IT отдел',
-                        position_name: 'Junior разработчик',
-                        probation_end_date: '2025-01-30',
-                        days_remaining: 6,
-                        mentor_name: 'Иванов И.П.',
-                        status: 'on_track'
-                    },
-                    {
-                        employee_id: 152,
-                        employee_name: 'Волкова Ольга Петровна',
-                        department_name: 'Отдел продаж',
-                        position_name: 'Менеджер по продажам',
-                        probation_end_date: '2025-02-15',
-                        days_remaining: 22,
-                        mentor_name: 'Соколов А.В.',
-                        status: 'at_risk'
-                    }
-                ]
-            };
-
-            this.loading = false;
-        }, 500);
+                error: (err) => {
+                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось загрузить данные' });
+                    console.error(err);
+                },
+                complete: () => (this.loading = false)
+            });
     }
 
     getGreeting(): string {
@@ -386,7 +153,14 @@ export class HRMDashboardComponent implements OnInit, OnDestroy {
     }
 
     markNotificationAsRead(notification: DashboardNotification): void {
-        notification.read = true;
+        this.hrmDashboardService.markNotificationAsRead(notification.id)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: () => {
+                    notification.read = true;
+                },
+                error: (err) => console.error(err)
+            });
     }
 
     refreshDashboard(): void {

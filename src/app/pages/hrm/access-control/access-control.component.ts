@@ -16,6 +16,9 @@ import { InputGroup } from 'primeng/inputgroup';
 import { InputGroupAddon } from 'primeng/inputgroupaddon';
 import { ProgressBar } from 'primeng/progressbar';
 import { Checkbox } from 'primeng/checkbox';
+import { Subject, takeUntil, forkJoin } from 'rxjs';
+import { AccessControlService } from '@/core/services/access-control.service';
+import { ContactService } from '@/core/services/contact.service';
 import {
     AccessCard,
     AccessZone,
@@ -123,26 +126,65 @@ export class AccessControlComponent implements OnInit, OnDestroy {
 
     private messageService = inject(MessageService);
     private confirmationService = inject(ConfirmationService);
+    private accessControlService = inject(AccessControlService);
+    private contactService = inject(ContactService);
+    private destroy$ = new Subject<void>();
 
     ngOnInit(): void {
-        this.loadEmployees();
-        this.loadZones();
-        this.loadCards();
-        this.loadLogs();
-        this.loadRequests();
-        this.calculateStats();
+        this.loadAllData();
         this.startAutoRefresh();
     }
 
     ngOnDestroy(): void {
         this.stopAutoRefresh();
+        this.destroy$.next();
+        this.destroy$.complete();
+    }
+
+    private loadAllData(): void {
+        this.loading = true;
+
+        forkJoin({
+            cards: this.accessControlService.getCards(),
+            zones: this.accessControlService.getZones(),
+            logs: this.accessControlService.getLogs(),
+            requests: this.accessControlService.getRequests(),
+            employees: this.contactService.getContacts()
+        }).pipe(takeUntil(this.destroy$)).subscribe({
+            next: (data) => {
+                this.cards = data.cards;
+                this.zones = data.zones;
+                this.logs = data.logs;
+                this.requests = data.requests;
+                this.employees = data.employees.map(e => ({
+                    id: e.id,
+                    name: e.name,
+                    department: e.department?.name || '',
+                    position: e.position?.name || ''
+                }));
+                this.zoneOccupancy = this.zones.map(z => ({
+                    zone_id: z.id,
+                    zone_name: z.name,
+                    current: z.current_occupancy || 0,
+                    max: z.max_occupancy || 100,
+                    percentage: Math.round(((z.current_occupancy || 0) / (z.max_occupancy || 100)) * 100)
+                }));
+                this.calculateStats();
+                this.loading = false;
+            },
+            error: (err) => {
+                console.error('Ошибка загрузки данных:', err);
+                this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось загрузить данные' });
+                this.loading = false;
+            }
+        });
     }
 
     private startAutoRefresh(): void {
         this.refreshInterval = setInterval(() => {
             this.loadLogs();
             this.calculateStats();
-        }, 30000); // Refresh every 30 seconds
+        }, 30000);
     }
 
     private stopAutoRefresh(): void {
@@ -151,103 +193,16 @@ export class AccessControlComponent implements OnInit, OnDestroy {
         }
     }
 
-    private loadEmployees(): void {
-        this.employees = [
-            { id: 1, name: 'Иванов Иван Иванович', department: 'IT-отдел', position: 'Senior Developer' },
-            { id: 2, name: 'Петрова Анна Сергеевна', department: 'IT-отдел', position: 'Frontend Developer' },
-            { id: 3, name: 'Сидоров Пётр Николаевич', department: 'Бухгалтерия', position: 'Главный бухгалтер' },
-            { id: 4, name: 'Козлова Мария Александровна', department: 'HR-отдел', position: 'HR-менеджер' },
-            { id: 5, name: 'Новиков Алексей Дмитриевич', department: 'Юридический отдел', position: 'Юрист' }
-        ];
-    }
-
-    private loadZones(): void {
-        this.zones = [
-            { id: 1, name: 'Главный вход', code: 'MAIN', location: 'Корпус А, 1 этаж', security_level: 'public', requires_escort: false, max_occupancy: 500, current_occupancy: 127, is_active: true, readers: [] },
-            { id: 2, name: 'Офисные помещения', code: 'OFFICE', location: 'Корпус А, 2-5 этаж', security_level: 'standard', requires_escort: false, max_occupancy: 200, current_occupancy: 89, is_active: true, readers: [] },
-            { id: 3, name: 'Серверная', code: 'SERVER', location: 'Корпус Б, подвал', security_level: 'high', requires_escort: true, max_occupancy: 10, current_occupancy: 2, is_active: true, readers: [] },
-            { id: 4, name: 'Переговорные', code: 'MEETING', location: 'Корпус А, 3 этаж', security_level: 'standard', requires_escort: false, max_occupancy: 50, current_occupancy: 12, is_active: true, readers: [] },
-            { id: 5, name: 'Склад', code: 'WAREHOUSE', location: 'Корпус В', security_level: 'restricted', requires_escort: false, max_occupancy: 30, current_occupancy: 5, is_active: true, readers: [] },
-            { id: 6, name: 'Руководство', code: 'EXEC', location: 'Корпус А, 6 этаж', security_level: 'high', requires_escort: true, max_occupancy: 20, current_occupancy: 8, is_active: true, readers: [] }
-        ];
-
-        this.zoneOccupancy = this.zones.map(z => ({
-            zone_id: z.id,
-            zone_name: z.name,
-            current: z.current_occupancy || 0,
-            max: z.max_occupancy || 100,
-            percentage: Math.round(((z.current_occupancy || 0) / (z.max_occupancy || 100)) * 100)
-        }));
-    }
-
-    private loadCards(): void {
-        this.loading = true;
-
-        setTimeout(() => {
-            this.cards = [
-                {
-                    id: 1, card_number: 'AC-2025-0001', employee_id: 1, employee_name: 'Иванов Иван Иванович',
-                    employee_code: 'EMP-001', department_name: 'IT-отдел', position_name: 'Senior Developer',
-                    status: 'active', issued_at: '2025-01-10', valid_from: '2025-01-10', valid_until: '2026-01-10',
-                    access_zones: [1, 2, 3, 4], last_used_at: '2025-01-24T08:45:00', last_zone: 'Главный вход'
-                },
-                {
-                    id: 2, card_number: 'AC-2025-0002', employee_id: 2, employee_name: 'Петрова Анна Сергеевна',
-                    employee_code: 'EMP-002', department_name: 'IT-отдел', position_name: 'Frontend Developer',
-                    status: 'active', issued_at: '2025-01-10', valid_from: '2025-01-10', valid_until: '2026-01-10',
-                    access_zones: [1, 2, 4], last_used_at: '2025-01-24T09:12:00', last_zone: 'Офисные помещения'
-                },
-                {
-                    id: 3, card_number: 'AC-2025-0003', employee_id: 3, employee_name: 'Сидоров Пётр Николаевич',
-                    employee_code: 'EMP-003', department_name: 'Бухгалтерия', position_name: 'Главный бухгалтер',
-                    status: 'active', issued_at: '2025-01-10', valid_from: '2025-01-10', valid_until: '2026-01-10',
-                    access_zones: [1, 2, 4, 6], last_used_at: '2025-01-24T08:30:00', last_zone: 'Главный вход'
-                },
-                {
-                    id: 4, card_number: 'AC-2024-0045', employee_id: 4, employee_name: 'Козлова Мария Александровна',
-                    employee_code: 'EMP-004', department_name: 'HR-отдел', position_name: 'HR-менеджер',
-                    status: 'expired', issued_at: '2024-01-15', valid_from: '2024-01-15', valid_until: '2025-01-15',
-                    access_zones: [1, 2, 4], last_used_at: '2025-01-15T18:00:00', last_zone: 'Главный вход'
-                },
-                {
-                    id: 5, card_number: 'AC-2025-0005', employee_id: 5, employee_name: 'Новиков Алексей Дмитриевич',
-                    employee_code: 'EMP-005', department_name: 'Юридический отдел', position_name: 'Юрист',
-                    status: 'blocked', issued_at: '2025-01-10', valid_from: '2025-01-10', valid_until: '2026-01-10',
-                    access_zones: [1, 2], notes: 'Заблокирована по запросу СБ'
-                }
-            ];
-            this.loading = false;
-        }, 500);
-    }
-
     loadLogs(): void {
-        const now = new Date();
-        this.logs = [
-            { id: 1, timestamp: this.subtractMinutes(now, 5), card_id: 1, card_number: 'AC-2025-0001', employee_id: 1, employee_name: 'Иванов И.И.', zone_id: 2, zone_name: 'Офисные помещения', reader_id: 1, reader_name: 'Турникет 2-1', direction: 'entry', status: 'granted' },
-            { id: 2, timestamp: this.subtractMinutes(now, 12), card_id: 2, card_number: 'AC-2025-0002', employee_id: 2, employee_name: 'Петрова А.С.', zone_id: 1, zone_name: 'Главный вход', reader_id: 1, reader_name: 'Турникет 1-1', direction: 'entry', status: 'granted' },
-            { id: 3, timestamp: this.subtractMinutes(now, 18), card_id: 5, card_number: 'AC-2025-0005', employee_id: 5, employee_name: 'Новиков А.Д.', zone_id: 1, zone_name: 'Главный вход', reader_id: 1, reader_name: 'Турникет 1-2', direction: 'entry', status: 'denied', denial_reason: 'Карта заблокирована' },
-            { id: 4, timestamp: this.subtractMinutes(now, 25), card_id: 3, card_number: 'AC-2025-0003', employee_id: 3, employee_name: 'Сидоров П.Н.', zone_id: 1, zone_name: 'Главный вход', reader_id: 1, reader_name: 'Турникет 1-1', direction: 'entry', status: 'granted' },
-            { id: 5, timestamp: this.subtractMinutes(now, 45), card_id: 1, card_number: 'AC-2025-0001', employee_id: 1, employee_name: 'Иванов И.И.', zone_id: 3, zone_name: 'Серверная', reader_id: 3, reader_name: 'Дверь SERVER-1', direction: 'entry', status: 'granted' },
-            { id: 6, timestamp: this.subtractMinutes(now, 60), card_id: 1, card_number: 'AC-2025-0001', employee_id: 1, employee_name: 'Иванов И.И.', zone_id: 3, zone_name: 'Серверная', reader_id: 3, reader_name: 'Дверь SERVER-1', direction: 'exit', status: 'granted' },
-            { id: 7, timestamp: this.subtractMinutes(now, 90), card_id: 2, card_number: 'AC-2025-0002', employee_id: 2, employee_name: 'Петрова А.С.', zone_id: 3, zone_name: 'Серверная', reader_id: 3, reader_name: 'Дверь SERVER-1', direction: 'entry', status: 'denied', denial_reason: 'Нет доступа к зоне' }
-        ];
-    }
-
-    private loadRequests(): void {
-        this.requests = [
-            {
-                id: 1, employee_id: 2, employee_name: 'Петрова Анна Сергеевна', department_name: 'IT-отдел',
-                requested_zones: [3], requested_zone_names: ['Серверная'], reason: 'Для обслуживания серверов frontend',
-                valid_from: '2025-01-25', valid_until: '2025-02-25', is_temporary: true,
-                status: 'pending', requested_at: '2025-01-23T14:00:00'
-            },
-            {
-                id: 2, employee_id: 5, employee_name: 'Новиков Алексей Дмитриевич', department_name: 'Юридический отдел',
-                requested_zones: [6], requested_zone_names: ['Руководство'], reason: 'Для работы с документами руководства',
-                valid_from: '2025-01-24', is_temporary: false,
-                status: 'pending', requested_at: '2025-01-22T10:30:00'
-            }
-        ];
+        this.accessControlService.getLogs()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: (data) => {
+                    this.logs = data;
+                    this.calculateStats();
+                },
+                error: (err) => console.error(err)
+            });
     }
 
     private calculateStats(): void {
@@ -263,10 +218,6 @@ export class AccessControlComponent implements OnInit, OnDestroy {
             denied_today: this.logs.filter(l => l.status === 'denied').length,
             pending_requests: this.requests.filter(r => r.status === 'pending').length
         };
-    }
-
-    private subtractMinutes(date: Date, minutes: number): string {
-        return new Date(date.getTime() - minutes * 60000).toISOString();
     }
 
     // Filtering

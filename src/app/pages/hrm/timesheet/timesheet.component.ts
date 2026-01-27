@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ButtonDirective } from 'primeng/button';
@@ -10,6 +10,7 @@ import { Dialog } from 'primeng/dialog';
 import { InputText } from 'primeng/inputtext';
 import { Textarea } from 'primeng/textarea';
 import { MessageService } from 'primeng/api';
+import { Subject, takeUntil } from 'rxjs';
 import {
     EmployeeTimesheet,
     TimesheetDay,
@@ -20,11 +21,9 @@ import {
     DAYS_OF_WEEK,
     Holiday
 } from '@/core/interfaces/hrm/timesheet';
-
-interface Department {
-    id: number;
-    name: string;
-}
+import { TimesheetService } from '@/core/services/timesheet.service';
+import { DepartmentService } from '@/core/services/department.service';
+import { Department } from '@/core/interfaces/department';
 
 @Component({
     selector: 'app-timesheet',
@@ -44,7 +43,7 @@ interface Department {
     templateUrl: './timesheet.component.html',
     styleUrl: './timesheet.component.scss'
 })
-export class TimesheetComponent implements OnInit {
+export class TimesheetComponent implements OnInit, OnDestroy {
     // Data
     employees: EmployeeTimesheet[] = [];
     departments: Department[] = [];
@@ -92,7 +91,10 @@ export class TimesheetComponent implements OnInit {
         total_undertime_hours: 0
     };
 
+    private timesheetService = inject(TimesheetService);
+    private departmentService = inject(DepartmentService);
     private messageService = inject(MessageService);
+    private destroy$ = new Subject<void>();
 
     ngOnInit(): void {
         this.initYears();
@@ -110,26 +112,26 @@ export class TimesheetComponent implements OnInit {
     }
 
     private loadDepartments(): void {
-        this.departments = [
-            { id: 1, name: 'IT-отдел' },
-            { id: 2, name: 'Бухгалтерия' },
-            { id: 3, name: 'HR-отдел' },
-            { id: 4, name: 'Юридический отдел' },
-            { id: 5, name: 'Отдел продаж' }
-        ];
+        this.departmentService.getDepartments()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: (data) => {
+                    this.departments = data;
+                },
+                error: (err) => console.error(err)
+            });
     }
 
     private loadHolidays(): void {
-        this.holidays = [
-            { id: 1, date: '2025-01-01', name: 'Новый год', type: 'national', is_working: false },
-            { id: 2, date: '2025-01-14', name: 'День защитников Родины', type: 'national', is_working: false },
-            { id: 3, date: '2025-03-08', name: 'Международный женский день', type: 'national', is_working: false },
-            { id: 4, date: '2025-03-21', name: 'Навруз', type: 'national', is_working: false },
-            { id: 5, date: '2025-05-09', name: 'День памяти и почестей', type: 'national', is_working: false },
-            { id: 6, date: '2025-09-01', name: 'День независимости', type: 'national', is_working: false },
-            { id: 7, date: '2025-10-01', name: 'День учителя', type: 'national', is_working: false },
-            { id: 8, date: '2025-12-08', name: 'День Конституции', type: 'national', is_working: false }
-        ];
+        this.timesheetService.getHolidays(this.selectedYear)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: (data) => {
+                    this.holidays = data;
+                    this.generateCalendar();
+                },
+                error: (err) => console.error(err)
+            });
     }
 
     generateCalendar(): void {
@@ -156,104 +158,25 @@ export class TimesheetComponent implements OnInit {
     loadTimesheet(): void {
         this.loading = true;
 
-        setTimeout(() => {
-            this.employees = this.generateMockData();
-            this.calculateTotalSummary();
-            this.loading = false;
-        }, 500);
-    }
+        const filter = {
+            month: this.selectedMonth,
+            year: this.selectedYear,
+            department_id: this.selectedDepartment || undefined
+        };
 
-    private generateMockData(): EmployeeTimesheet[] {
-        const mockEmployees = [
-            { id: 1, name: 'Иванов Иван Иванович', code: 'EMP-001', dept: 'IT-отдел', position: 'Senior Developer' },
-            { id: 2, name: 'Петрова Анна Сергеевна', code: 'EMP-002', dept: 'IT-отдел', position: 'Frontend Developer' },
-            { id: 3, name: 'Сидоров Пётр Николаевич', code: 'EMP-003', dept: 'IT-отдел', position: 'Backend Developer' },
-            { id: 4, name: 'Козлова Мария Александровна', code: 'EMP-004', dept: 'Бухгалтерия', position: 'Главный бухгалтер' },
-            { id: 5, name: 'Новиков Алексей Дмитриевич', code: 'EMP-005', dept: 'HR-отдел', position: 'HR-менеджер' }
-        ];
-
-        return mockEmployees.map(emp => {
-            const days: TimesheetDay[] = this.calendarDays.map(calDay => {
-                let status: AttendanceStatus = 'present';
-                let checkIn = '09:00';
-                let checkOut = '18:00';
-                let workedHours = 8;
-                let overtimeHours = 0;
-
-                if (calDay.isWeekend) {
-                    status = 'day_off';
-                    checkIn = '';
-                    checkOut = '';
-                    workedHours = 0;
-                } else if (calDay.isHoliday) {
-                    status = 'holiday';
-                    checkIn = '';
-                    checkOut = '';
-                    workedHours = 0;
-                } else {
-                    // Random variations
-                    const rand = Math.random();
-                    if (rand < 0.05) {
-                        status = 'vacation';
-                        checkIn = '';
-                        checkOut = '';
-                        workedHours = 0;
-                    } else if (rand < 0.08) {
-                        status = 'sick_leave';
-                        checkIn = '';
-                        checkOut = '';
-                        workedHours = 0;
-                    } else if (rand < 0.1) {
-                        status = 'business_trip';
-                        workedHours = 8;
-                    } else if (rand < 0.15) {
-                        status = 'remote';
-                        checkIn = '09:30';
-                        checkOut = '18:30';
-                        workedHours = 8;
-                    } else if (rand < 0.2) {
-                        status = 'late';
-                        checkIn = '09:' + (15 + Math.floor(Math.random() * 45));
-                        checkOut = '18:30';
-                        workedHours = 7.5;
-                    } else {
-                        // Normal work with some overtime
-                        if (Math.random() < 0.2) {
-                            checkOut = '19:00';
-                            workedHours = 9;
-                            overtimeHours = 1;
-                        }
-                    }
-                }
-
-                return {
-                    date: calDay.date,
-                    day_of_week: calDay.dayOfWeek,
-                    is_weekend: calDay.isWeekend,
-                    is_holiday: calDay.isHoliday,
-                    holiday_name: calDay.holidayName,
-                    status: status,
-                    check_in: checkIn || undefined,
-                    check_out: checkOut || undefined,
-                    worked_hours: workedHours,
-                    overtime_hours: overtimeHours
-                };
+        this.timesheetService.getTimesheets(filter)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: (data) => {
+                    this.employees = data;
+                    this.calculateTotalSummary();
+                },
+                error: (err) => {
+                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось загрузить табель' });
+                    console.error(err);
+                },
+                complete: () => (this.loading = false)
             });
-
-            const summary = this.calculateEmployeeSummary(days);
-
-            return {
-                employee_id: emp.id,
-                employee_name: emp.name,
-                employee_code: emp.code,
-                department_name: emp.dept,
-                position_name: emp.position,
-                month: this.selectedMonth,
-                year: this.selectedYear,
-                days: days,
-                summary: summary
-            };
-        });
     }
 
     private calculateEmployeeSummary(days: TimesheetDay[]): TimesheetSummary {
@@ -456,12 +379,37 @@ export class TimesheetComponent implements OnInit {
 
     // Export
     exportToExcel(): void {
-        this.messageService.add({
-            severity: 'info',
-            summary: 'Экспорт',
-            detail: 'Табель экспортируется в Excel...'
-        });
-        // TODO: Implement actual Excel export
+        const filter = {
+            month: this.selectedMonth,
+            year: this.selectedYear,
+            department_id: this.selectedDepartment || undefined
+        };
+
+        this.timesheetService.exportToExcel(filter)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: (blob) => {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `timesheet_${this.selectedYear}_${this.selectedMonth}.xlsx`;
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Экспорт',
+                        detail: 'Табель успешно экспортирован'
+                    });
+                },
+                error: (err) => {
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'Ошибка',
+                        detail: 'Не удалось экспортировать табель'
+                    });
+                    console.error(err);
+                }
+            });
     }
 
     // Helpers
@@ -477,5 +425,10 @@ export class TimesheetComponent implements OnInit {
         if (this.employees.length === 0 || this.totalSummary.total_work_days === 0) return 0;
         const totalPossibleDays = this.employees.length * this.totalSummary.total_work_days;
         return Math.round((this.totalSummary.days_present / totalPossibleDays) * 100);
+    }
+
+    ngOnDestroy(): void {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

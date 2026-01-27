@@ -7,7 +7,7 @@ import { InputIcon } from 'primeng/inputicon';
 import { InputText } from 'primeng/inputtext';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-import { Subject } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { Tooltip } from 'primeng/tooltip';
 import { Tag } from 'primeng/tag';
 import { InputTextComponent } from '@/layout/component/dialog/input-text/input-text.component';
@@ -15,7 +15,14 @@ import { SelectComponent } from '@/layout/component/dialog/select/select.compone
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
 import { DeleteConfirmationComponent } from '@/layout/component/dialog/delete-confirmation/delete-confirmation.component';
 import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
-import { PersonnelRecord } from '@/core/interfaces/hrm/personnel-record';
+import { PersonnelRecord, PersonnelRecordPayload } from '@/core/interfaces/hrm/personnel-record';
+import { PersonnelRecordService } from '@/core/services/personnel-record.service';
+import { DepartmentService } from '@/core/services/department.service';
+import { PositionService } from '@/core/services/position.service';
+import { ContactService } from '@/core/services/contact.service';
+import { Department } from '@/core/interfaces/department';
+import { Position } from '@/core/interfaces/position';
+import { Contact } from '@/core/interfaces/contact';
 
 @Component({
     selector: 'app-personnel-records',
@@ -50,33 +57,11 @@ export class PersonnelRecordsComponent implements OnInit, OnDestroy {
     isEditMode: boolean = false;
     selectedRecord: PersonnelRecord | null = null;
     recordForm: FormGroup;
-    private nextId = 100;
 
-    // Mock data
-    employees = [
-        { id: 1, name: 'Иванов Иван Иванович' },
-        { id: 2, name: 'Петров Петр Петрович' },
-        { id: 3, name: 'Сидорова Анна Михайловна' },
-        { id: 4, name: 'Козлов Алексей Сергеевич' },
-        { id: 5, name: 'Новикова Елена Владимировна' }
-    ];
-
-    departments = [
-        { id: 1, name: 'IT отдел' },
-        { id: 2, name: 'Бухгалтерия' },
-        { id: 3, name: 'Отдел кадров' },
-        { id: 4, name: 'Юридический отдел' },
-        { id: 5, name: 'Отдел продаж' }
-    ];
-
-    positions = [
-        { id: 1, name: 'Разработчик' },
-        { id: 2, name: 'Бухгалтер' },
-        { id: 3, name: 'HR-менеджер' },
-        { id: 4, name: 'Юрист' },
-        { id: 5, name: 'Менеджер по продажам' },
-        { id: 6, name: 'Руководитель отдела' }
-    ];
+    // Data from services
+    employees: { id: number; name: string }[] = [];
+    departments: Department[] = [];
+    positions: Position[] = [];
 
     contractTypes = [
         { id: 'permanent', name: 'Бессрочный' },
@@ -90,6 +75,10 @@ export class PersonnelRecordsComponent implements OnInit, OnDestroy {
         { id: 'dismissed', name: 'Уволен' }
     ];
 
+    private personnelRecordService = inject(PersonnelRecordService);
+    private departmentService = inject(DepartmentService);
+    private positionService = inject(PositionService);
+    private contactService = inject(ContactService);
     private fb = inject(FormBuilder);
     private messageService = inject(MessageService);
     private destroy$ = new Subject<void>();
@@ -108,83 +97,58 @@ export class PersonnelRecordsComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.loadMockData();
+        this.loadRecords();
+        this.loadDepartments();
+        this.loadPositions();
+        this.loadEmployees();
     }
 
-    private loadMockData(): void {
-        // Simulate loading delay
-        setTimeout(() => {
-            this.records = [
-                {
-                    id: 1,
-                    employee_id: 1,
-                    employee_name: 'Иванов Иван Иванович',
-                    tab_number: 'ТН-001',
-                    hire_date: '2020-03-15',
-                    department_id: 1,
-                    department_name: 'IT отдел',
-                    position_id: 1,
-                    position_name: 'Разработчик',
-                    contract_type: 'permanent',
-                    status: 'active'
+    private loadRecords(): void {
+        this.personnelRecordService.getPersonnelRecords()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: (data) => {
+                    this.records = data;
                 },
-                {
-                    id: 2,
-                    employee_id: 2,
-                    employee_name: 'Петров Петр Петрович',
-                    tab_number: 'ТН-002',
-                    hire_date: '2019-07-01',
-                    department_id: 2,
-                    department_name: 'Бухгалтерия',
-                    position_id: 2,
-                    position_name: 'Бухгалтер',
-                    contract_type: 'permanent',
-                    status: 'active'
+                error: (err) => {
+                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось загрузить записи' });
+                    console.error(err);
                 },
-                {
-                    id: 3,
-                    employee_id: 3,
-                    employee_name: 'Сидорова Анна Михайловна',
-                    tab_number: 'ТН-003',
-                    hire_date: '2021-01-10',
-                    department_id: 3,
-                    department_name: 'Отдел кадров',
-                    position_id: 3,
-                    position_name: 'HR-менеджер',
-                    contract_type: 'temporary',
-                    contract_end_date: '2024-12-31',
-                    status: 'on_leave'
+                complete: () => (this.loading = false)
+            });
+    }
+
+    private loadDepartments(): void {
+        this.departmentService.getDepartments()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: (data) => {
+                    this.departments = data;
                 },
-                {
-                    id: 4,
-                    employee_id: 4,
-                    employee_name: 'Козлов Алексей Сергеевич',
-                    tab_number: 'ТН-004',
-                    hire_date: '2018-05-20',
-                    department_id: 4,
-                    department_name: 'Юридический отдел',
-                    position_id: 4,
-                    position_name: 'Юрист',
-                    contract_type: 'permanent',
-                    status: 'active'
+                error: (err) => console.error(err)
+            });
+    }
+
+    private loadPositions(): void {
+        this.positionService.getPositions()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: (data) => {
+                    this.positions = data;
                 },
-                {
-                    id: 5,
-                    employee_id: 5,
-                    employee_name: 'Новикова Елена Владимировна',
-                    tab_number: 'ТН-005',
-                    hire_date: '2022-09-01',
-                    department_id: 5,
-                    department_name: 'Отдел продаж',
-                    position_id: 5,
-                    position_name: 'Менеджер по продажам',
-                    contract_type: 'contract',
-                    contract_end_date: '2025-08-31',
-                    status: 'active'
-                }
-            ];
-            this.loading = false;
-        }, 500);
+                error: (err) => console.error(err)
+            });
+    }
+
+    private loadEmployees(): void {
+        this.contactService.getContacts()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: (data: Contact[]) => {
+                    this.employees = data.map(c => ({ id: c.id, name: c.name }));
+                },
+                error: (err) => console.error(err)
+            });
     }
 
     onGlobalFilter(table: Table, event: Event) {
@@ -245,52 +209,60 @@ export class PersonnelRecordsComponent implements OnInit, OnDestroy {
 
     private createRecord() {
         const formValue = this.recordForm.value;
-        const newRecord: PersonnelRecord = {
-            id: this.nextId++,
+        const payload: PersonnelRecordPayload = {
             employee_id: formValue.employee_id?.id,
-            employee_name: formValue.employee_id?.name,
             tab_number: formValue.tab_number,
-            hire_date: formValue.hire_date ? this.dateToYMD(formValue.hire_date) : '',
+            hire_date: formValue.hire_date ? this.dateToYMD(formValue.hire_date) : undefined,
             department_id: formValue.department_id?.id,
-            department_name: formValue.department_id?.name,
             position_id: formValue.position_id?.id,
-            position_name: formValue.position_id?.name,
             contract_type: formValue.contract_type?.id,
             contract_end_date: formValue.contract_end_date ? this.dateToYMD(formValue.contract_end_date) : undefined,
             status: formValue.status?.id
         };
 
-        this.records = [...this.records, newRecord];
-        this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Запись успешно создана' });
-        this.closeDialog();
+        this.personnelRecordService.createPersonnelRecord(payload)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: () => {
+                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Запись успешно создана' });
+                    this.loadRecords();
+                    this.closeDialog();
+                },
+                error: (err) => {
+                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось создать запись' });
+                    console.error(err);
+                }
+            });
     }
 
     private updateRecord() {
         if (!this.selectedRecord) return;
 
         const formValue = this.recordForm.value;
-        const index = this.records.findIndex(r => r.id === this.selectedRecord!.id);
+        const payload: PersonnelRecordPayload = {
+            employee_id: formValue.employee_id?.id,
+            tab_number: formValue.tab_number,
+            hire_date: formValue.hire_date ? this.dateToYMD(formValue.hire_date) : undefined,
+            department_id: formValue.department_id?.id,
+            position_id: formValue.position_id?.id,
+            contract_type: formValue.contract_type?.id,
+            contract_end_date: formValue.contract_end_date ? this.dateToYMD(formValue.contract_end_date) : undefined,
+            status: formValue.status?.id
+        };
 
-        if (index !== -1) {
-            this.records[index] = {
-                ...this.records[index],
-                employee_id: formValue.employee_id?.id,
-                employee_name: formValue.employee_id?.name,
-                tab_number: formValue.tab_number,
-                hire_date: formValue.hire_date ? this.dateToYMD(formValue.hire_date) : '',
-                department_id: formValue.department_id?.id,
-                department_name: formValue.department_id?.name,
-                position_id: formValue.position_id?.id,
-                position_name: formValue.position_id?.name,
-                contract_type: formValue.contract_type?.id,
-                contract_end_date: formValue.contract_end_date ? this.dateToYMD(formValue.contract_end_date) : undefined,
-                status: formValue.status?.id
-            };
-            this.records = [...this.records];
-        }
-
-        this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Запись успешно обновлена' });
-        this.closeDialog();
+        this.personnelRecordService.updatePersonnelRecord(this.selectedRecord.id, payload)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: () => {
+                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Запись успешно обновлена' });
+                    this.loadRecords();
+                    this.closeDialog();
+                },
+                error: (err) => {
+                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось обновить запись' });
+                    console.error(err);
+                }
+            });
     }
 
     openDeleteDialog(record: PersonnelRecord): void {
@@ -301,10 +273,20 @@ export class PersonnelRecordsComponent implements OnInit, OnDestroy {
     confirmDelete(): void {
         if (!this.selectedRecord) return;
 
-        this.records = this.records.filter(r => r.id !== this.selectedRecord!.id);
-        this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Запись успешно удалена' });
-        this.displayDeleteDialog = false;
-        this.selectedRecord = null;
+        this.personnelRecordService.deletePersonnelRecord(this.selectedRecord.id)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: () => {
+                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Запись успешно удалена' });
+                    this.loadRecords();
+                    this.displayDeleteDialog = false;
+                    this.selectedRecord = null;
+                },
+                error: (err) => {
+                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось удалить запись' });
+                    console.error(err);
+                }
+            });
     }
 
     getStatusSeverity(status: string): 'success' | 'info' | 'warn' | 'danger' | 'secondary' | 'contrast' {

@@ -7,7 +7,7 @@ import { InputIcon } from 'primeng/inputicon';
 import { InputText } from 'primeng/inputtext';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-import { Subject } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { Tooltip } from 'primeng/tooltip';
 import { Tag } from 'primeng/tag';
 import { SelectComponent } from '@/layout/component/dialog/select/select.component';
@@ -20,6 +20,7 @@ import { Dialog } from 'primeng/dialog';
 import {
     Vacation,
     VacationBalance,
+    VacationPayload,
     VacationValidationResult,
     VacationValidationError,
     VacationValidationWarning,
@@ -27,6 +28,9 @@ import {
     VACATION_STATUSES,
     BALANCE_REQUIRED_TYPES
 } from '@/core/interfaces/hrm/vacation';
+import { VacationService } from '@/core/services/vacation.service';
+import { ContactService } from '@/core/services/contact.service';
+import { Contact } from '@/core/interfaces/contact';
 
 interface Employee {
     id: number;
@@ -76,35 +80,22 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
     selectedEmployeeBalance: VacationBalance | null = null;
     vacationForm: FormGroup;
     rejectionForm: FormGroup;
-    private nextId = 100;
 
     // Validation results
     validationResult: VacationValidationResult | null = null;
     overlappingVacations: Vacation[] = [];
 
-    employees: Employee[] = [
-        { id: 1, name: 'Иванов Иван Иванович', department_id: 1, department_name: 'IT отдел', manager_id: 8 },
-        { id: 2, name: 'Петров Петр Петрович', department_id: 1, department_name: 'IT отдел', manager_id: 8 },
-        { id: 3, name: 'Сидорова Анна Михайловна', department_id: 2, department_name: 'Бухгалтерия', manager_id: 8 },
-        { id: 4, name: 'Козлов Алексей Сергеевич', department_id: 3, department_name: 'Юридический отдел', manager_id: 8 },
-        { id: 5, name: 'Новикова Елена Владимировна', department_id: 4, department_name: 'Отдел продаж', manager_id: 8 },
-        { id: 6, name: 'Морозов Дмитрий Александрович', department_id: 1, department_name: 'IT отдел', manager_id: 8 },
-        { id: 7, name: 'Волкова Ольга Николаевна', department_id: 2, department_name: 'Бухгалтерия', manager_id: 8 },
-        { id: 8, name: 'Соколов Андрей Викторович', department_id: 5, department_name: 'Администрация' }
-    ];
+    // Data from services
+    employees: Employee[] = [];
 
-    // Department vacation limits (max concurrent vacations)
-    departmentLimits: { [key: number]: number } = {
-        1: 2, // IT - max 2 concurrent
-        2: 1, // Accounting - max 1 concurrent
-        3: 1, // Legal - max 1 concurrent
-        4: 2, // Sales - max 2 concurrent
-        5: 1  // Administration - max 1 concurrent
-    };
+    // Department vacation limits (max concurrent vacations) - can be loaded from API
+    departmentLimits: { [key: number]: number } = {};
 
     vacationTypes = VACATION_TYPES.map(t => ({ id: t.value, name: t.label }));
     vacationStatuses = VACATION_STATUSES.map(s => ({ id: s.value, name: s.label }));
 
+    private vacationService = inject(VacationService);
+    private contactService = inject(ContactService);
     private fb = inject(FormBuilder);
     private messageService = inject(MessageService);
     private destroy$ = new Subject<void>();
@@ -138,96 +129,51 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.loadMockData();
+        this.loadVacations();
+        this.loadVacationBalances();
+        this.loadEmployees();
     }
 
-    private loadMockData(): void {
-        setTimeout(() => {
-            // Load leave balances
-            this.leaveBalances = [
-                { id: 1, employee_id: 1, employee_name: 'Иванов Иван Иванович', year: 2025, total_days: 28, used_days: 14, pending_days: 0, remaining_days: 14, carried_over_days: 0 },
-                { id: 2, employee_id: 2, employee_name: 'Петров Петр Петрович', year: 2025, total_days: 28, used_days: 6, pending_days: 0, remaining_days: 22, carried_over_days: 0 },
-                { id: 3, employee_id: 3, employee_name: 'Сидорова Анна Михайловна', year: 2025, total_days: 28, used_days: 0, pending_days: 21, remaining_days: 7, carried_over_days: 0 },
-                { id: 4, employee_id: 4, employee_name: 'Козлов Алексей Сергеевич', year: 2025, total_days: 28, used_days: 3, pending_days: 0, remaining_days: 25, carried_over_days: 0 },
-                { id: 5, employee_id: 5, employee_name: 'Новикова Елена Владимировна', year: 2025, total_days: 28, used_days: 0, pending_days: 0, remaining_days: 28, carried_over_days: 0 },
-                { id: 6, employee_id: 6, employee_name: 'Морозов Дмитрий Александрович', year: 2025, total_days: 28, used_days: 7, pending_days: 0, remaining_days: 21, carried_over_days: 0 },
-                { id: 7, employee_id: 7, employee_name: 'Волкова Ольга Николаевна', year: 2025, total_days: 28, used_days: 10, pending_days: 0, remaining_days: 18, carried_over_days: 0 },
-                { id: 8, employee_id: 8, employee_name: 'Соколов Андрей Викторович', year: 2025, total_days: 35, used_days: 0, pending_days: 0, remaining_days: 35, carried_over_days: 7 }
-            ];
+    private loadVacations(): void {
+        this.vacationService.getVacations()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: (data) => {
+                    this.vacations = data;
+                },
+                error: (err) => {
+                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось загрузить отпуска' });
+                    console.error(err);
+                },
+                complete: () => (this.loading = false)
+            });
+    }
 
-            // Load vacations
-            this.vacations = [
-                {
-                    id: 1,
-                    employee_id: 1,
-                    employee_name: 'Иванов Иван Иванович',
-                    department_id: 1,
-                    department_name: 'IT отдел',
-                    vacation_type: 'annual',
-                    start_date: '2025-07-01',
-                    end_date: '2025-07-14',
-                    days_count: 14,
-                    status: 'approved',
-                    approver_id: 8,
-                    approver_name: 'Соколов Андрей Викторович',
-                    approved_at: '2025-01-15'
+    private loadVacationBalances(): void {
+        this.vacationService.getVacationBalances()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: (data) => {
+                    this.leaveBalances = data;
                 },
-                {
-                    id: 2,
-                    employee_id: 2,
-                    employee_name: 'Петров Петр Петрович',
-                    department_id: 1,
-                    department_name: 'IT отдел',
-                    vacation_type: 'sick',
-                    start_date: '2025-01-15',
-                    end_date: '2025-01-20',
-                    days_count: 6,
-                    status: 'approved',
-                    approver_id: 8,
-                    approver_name: 'Соколов Андрей Викторович'
+                error: (err) => console.error(err)
+            });
+    }
+
+    private loadEmployees(): void {
+        this.contactService.getContacts()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: (data: Contact[]) => {
+                    this.employees = data.map(c => ({
+                        id: c.id,
+                        name: c.name,
+                        department_id: c.department?.id || 0,
+                        department_name: c.department?.name || ''
+                    }));
                 },
-                {
-                    id: 3,
-                    employee_id: 3,
-                    employee_name: 'Сидорова Анна Михайловна',
-                    department_id: 2,
-                    department_name: 'Бухгалтерия',
-                    vacation_type: 'annual',
-                    start_date: '2025-08-01',
-                    end_date: '2025-08-21',
-                    days_count: 21,
-                    status: 'pending',
-                    reason: 'Запланированный летний отпуск'
-                },
-                {
-                    id: 4,
-                    employee_id: 4,
-                    employee_name: 'Козлов Алексей Сергеевич',
-                    department_id: 3,
-                    department_name: 'Юридический отдел',
-                    vacation_type: 'unpaid',
-                    start_date: '2025-02-10',
-                    end_date: '2025-02-12',
-                    days_count: 3,
-                    status: 'rejected',
-                    rejection_reason: 'Высокая загрузка в связи с подготовкой квартального отчета'
-                },
-                {
-                    id: 5,
-                    employee_id: 6,
-                    employee_name: 'Морозов Дмитрий Александрович',
-                    department_id: 1,
-                    department_name: 'IT отдел',
-                    vacation_type: 'annual',
-                    start_date: '2025-07-05',
-                    end_date: '2025-07-18',
-                    days_count: 14,
-                    status: 'pending',
-                    reason: 'Летний отпуск'
-                }
-            ];
-            this.loading = false;
-        }, 500);
+                error: (err) => console.error(err)
+            });
     }
 
     private updateSelectedEmployeeBalance(employeeId: number): void {
@@ -430,8 +376,7 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
         }
 
         // Validate before submitting
-        const employee = this.employees.find(e => e.id === vacation.employee_id);
-        if (employee && BALANCE_REQUIRED_TYPES.includes(vacation.vacation_type)) {
+        if (BALANCE_REQUIRED_TYPES.includes(vacation.vacation_type)) {
             const balance = this.leaveBalances.find(b => b.employee_id === vacation.employee_id);
             if (balance && vacation.days_count > balance.remaining_days) {
                 this.messageService.add({
@@ -443,57 +388,57 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
             }
         }
 
-        const index = this.vacations.findIndex(v => v.id === vacation.id);
-        if (index !== -1) {
-            this.vacations[index] = { ...this.vacations[index], status: 'pending' };
-            this.vacations = [...this.vacations];
-
-            // Update pending days in balance
-            this.updatePendingDays(vacation.employee_id, vacation.days_count, 'add');
-
-            this.messageService.add({
-                severity: 'success',
-                summary: 'Отправлено',
-                detail: 'Заявка отправлена на согласование руководителю'
+        // Update vacation status via API
+        this.vacationService.updateVacation(vacation.id, { ...vacation } as VacationPayload)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: () => {
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Отправлено',
+                        detail: 'Заявка отправлена на согласование руководителю'
+                    });
+                    this.loadVacations();
+                    this.loadVacationBalances();
+                },
+                error: (err) => {
+                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось отправить заявку' });
+                    console.error(err);
+                }
             });
-        }
     }
 
     private createVacation() {
         const formValue = this.vacationForm.value;
         const startDate = new Date(formValue.start_date);
         const endDate = new Date(formValue.end_date);
-        const daysCount = this.calculateDays(startDate, endDate);
-        const employee = this.employees.find(e => e.id === formValue.employee_id.id);
 
-        const newVacation: Vacation = {
-            id: this.nextId++,
+        const payload: VacationPayload = {
             employee_id: formValue.employee_id.id,
-            employee_name: formValue.employee_id.name,
-            department_id: employee?.department_id,
-            department_name: employee?.department_name,
             vacation_type: formValue.vacation_type.id,
             start_date: this.dateToYMD(startDate),
             end_date: this.dateToYMD(endDate),
-            days_count: daysCount,
-            status: 'pending', // Directly submit for approval
-            reason: formValue.reason,
-            created_at: new Date().toISOString()
+            reason: formValue.reason
         };
 
-        this.vacations = [...this.vacations, newVacation];
-
-        // Update pending days in balance
-        if (BALANCE_REQUIRED_TYPES.includes(newVacation.vacation_type)) {
-            this.updatePendingDays(newVacation.employee_id, daysCount, 'add');
-        }
-
-        this.messageService.add({
-            severity: 'success',
-            summary: 'Успех',
-            detail: 'Заявка на отпуск создана и отправлена на согласование'
-        });
-        this.closeDialog();
+        this.vacationService.createVacation(payload)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: () => {
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Успех',
+                        detail: 'Заявка на отпуск создана и отправлена на согласование'
+                    });
+                    this.loadVacations();
+                    this.loadVacationBalances();
+                    this.closeDialog();
+                },
+                error: (err) => {
+                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось создать заявку' });
+                    console.error(err);
+                }
+            });
     }
 
     private updateVacation() {
@@ -502,38 +447,29 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
         const formValue = this.vacationForm.value;
         const startDate = new Date(formValue.start_date);
         const endDate = new Date(formValue.end_date);
-        const newDaysCount = this.calculateDays(startDate, endDate);
-        const oldDaysCount = this.selectedVacation.days_count;
-        const employee = this.employees.find(e => e.id === formValue.employee_id.id);
 
-        const index = this.vacations.findIndex(v => v.id === this.selectedVacation!.id);
-        if (index !== -1) {
-            // Update pending days difference
-            if (BALANCE_REQUIRED_TYPES.includes(formValue.vacation_type.id)) {
-                const daysDiff = newDaysCount - oldDaysCount;
-                if (daysDiff !== 0) {
-                    this.updatePendingDays(formValue.employee_id.id, Math.abs(daysDiff), daysDiff > 0 ? 'add' : 'subtract');
+        const payload: VacationPayload = {
+            employee_id: formValue.employee_id.id,
+            vacation_type: formValue.vacation_type.id,
+            start_date: this.dateToYMD(startDate),
+            end_date: this.dateToYMD(endDate),
+            reason: formValue.reason
+        };
+
+        this.vacationService.updateVacation(this.selectedVacation.id, payload)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: () => {
+                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Заявка обновлена' });
+                    this.loadVacations();
+                    this.loadVacationBalances();
+                    this.closeDialog();
+                },
+                error: (err) => {
+                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось обновить заявку' });
+                    console.error(err);
                 }
-            }
-
-            this.vacations[index] = {
-                ...this.vacations[index],
-                employee_id: formValue.employee_id.id,
-                employee_name: formValue.employee_id.name,
-                department_id: employee?.department_id,
-                department_name: employee?.department_name,
-                vacation_type: formValue.vacation_type.id,
-                start_date: this.dateToYMD(startDate),
-                end_date: this.dateToYMD(endDate),
-                days_count: newDaysCount,
-                reason: formValue.reason,
-                updated_at: new Date().toISOString()
-            };
-            this.vacations = [...this.vacations];
-        }
-
-        this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Заявка обновлена' });
-        this.closeDialog();
+            });
     }
 
     // Open approval confirmation dialog
@@ -547,33 +483,26 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
         if (!this.selectedVacation) return;
 
         const vacation = this.selectedVacation;
-        const index = this.vacations.findIndex(v => v.id === vacation.id);
 
-        if (index !== -1) {
-            // Update vacation status
-            this.vacations[index] = {
-                ...this.vacations[index],
-                status: 'approved',
-                approver_id: 8, // Current user (mock)
-                approver_name: 'Соколов Андрей Викторович',
-                approved_at: new Date().toISOString()
-            };
-            this.vacations = [...this.vacations];
-
-            // Update leave balance: move from pending to used
-            if (BALANCE_REQUIRED_TYPES.includes(vacation.vacation_type)) {
-                this.updateBalanceOnApproval(vacation.employee_id, vacation.days_count);
-            }
-
-            this.messageService.add({
-                severity: 'success',
-                summary: 'Одобрено',
-                detail: `Отпуск сотрудника ${vacation.employee_name} одобрен. Даты заблокированы в календаре.`
+        this.vacationService.approveVacation(vacation.id)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: () => {
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Одобрено',
+                        detail: `Отпуск сотрудника ${vacation.employee_name} одобрен. Даты заблокированы в календаре.`
+                    });
+                    this.loadVacations();
+                    this.loadVacationBalances();
+                    this.displayApprovalDialog = false;
+                    this.selectedVacation = null;
+                },
+                error: (err) => {
+                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось одобрить заявку' });
+                    console.error(err);
+                }
             });
-        }
-
-        this.displayApprovalDialog = false;
-        this.selectedVacation = null;
     }
 
     // Open rejection dialog
@@ -589,31 +518,26 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
 
         const vacation = this.selectedVacation;
         const rejectionReason = this.rejectionForm.value.rejection_reason;
-        const index = this.vacations.findIndex(v => v.id === vacation.id);
 
-        if (index !== -1) {
-            // Update vacation status
-            this.vacations[index] = {
-                ...this.vacations[index],
-                status: 'rejected',
-                rejection_reason: rejectionReason
-            };
-            this.vacations = [...this.vacations];
-
-            // Return pending days to balance
-            if (BALANCE_REQUIRED_TYPES.includes(vacation.vacation_type)) {
-                this.updatePendingDays(vacation.employee_id, vacation.days_count, 'subtract');
-            }
-
-            this.messageService.add({
-                severity: 'warn',
-                summary: 'Отклонено',
-                detail: `Заявка отклонена. Сотрудник ${vacation.employee_name} уведомлен.`
+        this.vacationService.rejectVacation(vacation.id, rejectionReason)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: () => {
+                    this.messageService.add({
+                        severity: 'warn',
+                        summary: 'Отклонено',
+                        detail: `Заявка отклонена. Сотрудник ${vacation.employee_name} уведомлен.`
+                    });
+                    this.loadVacations();
+                    this.loadVacationBalances();
+                    this.displayRejectionDialog = false;
+                    this.selectedVacation = null;
+                },
+                error: (err) => {
+                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось отклонить заявку' });
+                    console.error(err);
+                }
             });
-        }
-
-        this.displayRejectionDialog = false;
-        this.selectedVacation = null;
     }
 
     // Cancel vacation (by employee)
@@ -627,52 +551,23 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
             return;
         }
 
-        const index = this.vacations.findIndex(v => v.id === vacation.id);
-        if (index !== -1) {
-            this.vacations[index] = { ...this.vacations[index], status: 'cancelled' };
-            this.vacations = [...this.vacations];
-
-            // Return pending days if was pending
-            if (vacation.status === 'pending' && BALANCE_REQUIRED_TYPES.includes(vacation.vacation_type)) {
-                this.updatePendingDays(vacation.employee_id, vacation.days_count, 'subtract');
-            }
-
-            this.messageService.add({
-                severity: 'info',
-                summary: 'Отменено',
-                detail: 'Заявка на отпуск отменена'
+        this.vacationService.cancelVacation(vacation.id)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: () => {
+                    this.messageService.add({
+                        severity: 'info',
+                        summary: 'Отменено',
+                        detail: 'Заявка на отпуск отменена'
+                    });
+                    this.loadVacations();
+                    this.loadVacationBalances();
+                },
+                error: (err) => {
+                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось отменить заявку' });
+                    console.error(err);
+                }
             });
-        }
-    }
-
-    private updatePendingDays(employeeId: number, days: number, operation: 'add' | 'subtract'): void {
-        const balanceIndex = this.leaveBalances.findIndex(b => b.employee_id === employeeId);
-        if (balanceIndex !== -1) {
-            const balance = this.leaveBalances[balanceIndex];
-            if (operation === 'add') {
-                balance.pending_days += days;
-                balance.remaining_days -= days;
-            } else {
-                balance.pending_days -= days;
-                balance.remaining_days += days;
-            }
-            this.leaveBalances = [...this.leaveBalances];
-
-            // Update selected employee balance if needed
-            if (this.selectedEmployeeBalance?.employee_id === employeeId) {
-                this.selectedEmployeeBalance = balance;
-            }
-        }
-    }
-
-    private updateBalanceOnApproval(employeeId: number, days: number): void {
-        const balanceIndex = this.leaveBalances.findIndex(b => b.employee_id === employeeId);
-        if (balanceIndex !== -1) {
-            const balance = this.leaveBalances[balanceIndex];
-            balance.pending_days -= days;
-            balance.used_days += days;
-            this.leaveBalances = [...this.leaveBalances];
-        }
     }
 
     openDeleteDialog(vacation: Vacation): void {
@@ -683,17 +578,21 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
     confirmDelete(): void {
         if (!this.selectedVacation) return;
 
-        const vacation = this.selectedVacation;
-
-        // Return days if pending
-        if (vacation.status === 'pending' && BALANCE_REQUIRED_TYPES.includes(vacation.vacation_type)) {
-            this.updatePendingDays(vacation.employee_id, vacation.days_count, 'subtract');
-        }
-
-        this.vacations = this.vacations.filter(v => v.id !== vacation.id);
-        this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Заявка удалена' });
-        this.displayDeleteDialog = false;
-        this.selectedVacation = null;
+        this.vacationService.deleteVacation(this.selectedVacation.id)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: () => {
+                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Заявка удалена' });
+                    this.loadVacations();
+                    this.loadVacationBalances();
+                    this.displayDeleteDialog = false;
+                    this.selectedVacation = null;
+                },
+                error: (err) => {
+                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось удалить заявку' });
+                    console.error(err);
+                }
+            });
     }
 
     getStatusSeverity(status: string): 'success' | 'info' | 'warn' | 'danger' | 'secondary' | 'contrast' {

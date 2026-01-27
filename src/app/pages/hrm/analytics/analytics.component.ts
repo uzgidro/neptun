@@ -1,10 +1,12 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Subject } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { ChartModule } from 'primeng/chart';
 import { Card } from 'primeng/card';
+import { MessageService } from 'primeng/api';
 import { HRAnalyticsDashboard, REPORT_TYPES } from '@/core/interfaces/hrm/analytics';
+import { AnalyticsService } from '@/core/services/analytics.service';
 
 @Component({
     selector: 'app-analytics',
@@ -40,68 +42,30 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
         maintainAspectRatio: false
     };
 
+    private analyticsService = inject(AnalyticsService);
+    private messageService = inject(MessageService);
     private destroy$ = new Subject<void>();
 
     ngOnInit() {
-        this.loadMockData();
-    }
-
-    private loadMockData(): void {
-        setTimeout(() => {
-            this.dashboard = {
-                total_employees: 156,
-                active_employees: 148,
-                new_hires_this_month: 5,
-                terminations_this_month: 2,
-                turnover_rate: 8.5,
-                average_tenure: 3.2,
-                headcount_by_department: [
-                    { department_id: 1, department_name: 'IT отдел', headcount: 45, percentage: 28.8 },
-                    { department_id: 2, department_name: 'Бухгалтерия', headcount: 18, percentage: 11.5 },
-                    { department_id: 3, department_name: 'Отдел кадров', headcount: 12, percentage: 7.7 },
-                    { department_id: 4, department_name: 'Юридический отдел', headcount: 8, percentage: 5.1 },
-                    { department_id: 5, department_name: 'Отдел продаж', headcount: 32, percentage: 20.5 },
-                    { department_id: 6, department_name: 'Маркетинг', headcount: 15, percentage: 9.6 },
-                    { department_id: 7, department_name: 'Производство', headcount: 18, percentage: 11.5 },
-                    { department_id: 8, department_name: 'Администрация', headcount: 8, percentage: 5.1 }
-                ],
-                headcount_by_position: [
-                    { position_id: 1, position_name: 'Разработчик', headcount: 28, percentage: 17.9 },
-                    { position_id: 2, position_name: 'Менеджер', headcount: 22, percentage: 14.1 },
-                    { position_id: 3, position_name: 'Специалист', headcount: 45, percentage: 28.8 },
-                    { position_id: 4, position_name: 'Руководитель', headcount: 12, percentage: 7.7 },
-                    { position_id: 5, position_name: 'Аналитик', headcount: 18, percentage: 11.5 },
-                    { position_id: 6, position_name: 'Другие', headcount: 31, percentage: 19.9 }
-                ],
-                gender_distribution: {
-                    male: 89,
-                    female: 67,
-                    male_percentage: 57.1,
-                    female_percentage: 42.9
-                },
-                age_distribution: [
-                    { age_group: '18-25', count: 18, percentage: 11.5 },
-                    { age_group: '26-35', count: 62, percentage: 39.7 },
-                    { age_group: '36-45', count: 48, percentage: 30.8 },
-                    { age_group: '46-55', count: 22, percentage: 14.1 },
-                    { age_group: '56+', count: 6, percentage: 3.8 }
-                ],
-                tenure_distribution: [
-                    { tenure_group: 'Менее 1 года', count: 28, percentage: 17.9 },
-                    { tenure_group: '1-2 года', count: 35, percentage: 22.4 },
-                    { tenure_group: '2-5 лет', count: 52, percentage: 33.3 },
-                    { tenure_group: '5-10 лет', count: 31, percentage: 19.9 },
-                    { tenure_group: 'Более 10 лет', count: 10, percentage: 6.4 }
-                ]
-            };
-            this.prepareCharts();
-            this.loading = false;
-        }, 500);
+        this.loadDashboard();
     }
 
     loadDashboard(): void {
         this.loading = true;
-        this.loadMockData();
+
+        this.analyticsService.getDashboard()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: (data) => {
+                    this.dashboard = data;
+                    this.prepareCharts();
+                },
+                error: (err) => {
+                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось загрузить аналитику' });
+                    console.error(err);
+                },
+                complete: () => (this.loading = false)
+            });
     }
 
     prepareCharts(): void {

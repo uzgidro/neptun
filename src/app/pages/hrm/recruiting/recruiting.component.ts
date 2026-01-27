@@ -7,7 +7,7 @@ import { InputIcon } from 'primeng/inputicon';
 import { InputText } from 'primeng/inputtext';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-import { Subject } from 'rxjs';
+import { Subject, takeUntil, forkJoin } from 'rxjs';
 import { Tooltip } from 'primeng/tooltip';
 import { Tag } from 'primeng/tag';
 import { TabsModule } from 'primeng/tabs';
@@ -18,6 +18,9 @@ import { Textarea } from 'primeng/textarea';
 import { Select } from 'primeng/select';
 import { DatePicker } from 'primeng/datepicker';
 import { InputNumber } from 'primeng/inputnumber';
+import { RecruitingService } from '@/core/services/recruiting.service';
+import { DepartmentService } from '@/core/services/department.service';
+import { PositionService } from '@/core/services/position.service';
 import {
     Vacancy,
     Candidate,
@@ -111,34 +114,9 @@ export class RecruitingComponent implements OnInit, OnDestroy {
     private nextId = 100;
 
     // Справочники
-    departments = [
-        { id: 1, name: 'IT отдел' },
-        { id: 2, name: 'Бухгалтерия' },
-        { id: 3, name: 'Отдел кадров' },
-        { id: 4, name: 'Юридический отдел' },
-        { id: 5, name: 'Отдел продаж' },
-        { id: 6, name: 'Маркетинг' },
-        { id: 7, name: 'Администрация' }
-    ];
-
-    positions = [
-        { id: 1, name: 'Senior разработчик' },
-        { id: 2, name: 'Middle разработчик' },
-        { id: 3, name: 'Junior разработчик' },
-        { id: 4, name: 'Бухгалтер' },
-        { id: 5, name: 'HR-менеджер' },
-        { id: 6, name: 'Юрист' },
-        { id: 7, name: 'Менеджер по продажам' },
-        { id: 8, name: 'Маркетолог' },
-        { id: 9, name: 'Руководитель отдела' }
-    ];
-
-    interviewers = [
-        { id: 1, name: 'Кузнецов Сергей (HR)' },
-        { id: 2, name: 'Иванов Иван (Тех. директор)' },
-        { id: 3, name: 'Соколов Андрей (Ген. директор)' },
-        { id: 4, name: 'Михайлова Татьяна (HR)' }
-    ];
+    departments: any[] = [];
+    positions: any[] = [];
+    interviewers: any[] = [];
 
     vacancyStatuses = VACANCY_STATUSES;
     candidateStatuses = CANDIDATE_STATUSES;
@@ -153,6 +131,9 @@ export class RecruitingComponent implements OnInit, OnDestroy {
 
     private fb = inject(FormBuilder);
     private messageService = inject(MessageService);
+    private recruitingService = inject(RecruitingService);
+    private departmentService = inject(DepartmentService);
+    private positionService = inject(PositionService);
     private destroy$ = new Subject<void>();
 
     constructor() {
@@ -222,232 +203,33 @@ export class RecruitingComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.loadMockData();
+        this.loadData();
     }
 
-    private loadMockData(): void {
-        setTimeout(() => {
-            this.vacancies = [
-                {
-                    id: 1,
-                    title: 'Senior Frontend разработчик',
-                    department_id: 1,
-                    department_name: 'IT отдел',
-                    position_id: 1,
-                    position_name: 'Senior разработчик',
-                    description: 'Разработка и поддержка frontend части корпоративных приложений на Angular',
-                    requirements: 'Опыт работы от 5 лет, глубокое знание Angular, TypeScript, RxJS',
-                    responsibilities: 'Разработка UI компонентов, код-ревью, менторство junior разработчиков',
-                    experience_years: 5,
-                    salary_from: 250000,
-                    salary_to: 350000,
-                    employment_type: 'full_time',
-                    status: 'open',
-                    priority: 'high',
-                    published_at: '2024-12-01',
-                    deadline: '2025-02-01',
-                    applications_count: 15,
-                    interviews_count: 5,
-                    offers_count: 1,
-                    requested_by: 2,
-                    requested_by_name: 'Иванов Иван',
-                    request_date: '2024-11-15',
-                    approved_by: 3,
-                    approved_by_name: 'Соколов Андрей',
-                    approved_date: '2024-11-20',
-                    finance_approved: true
-                },
-                {
-                    id: 2,
-                    title: 'Middle Backend разработчик',
-                    department_id: 1,
-                    department_name: 'IT отдел',
-                    position_id: 2,
-                    position_name: 'Middle разработчик',
-                    description: 'Разработка серверной части на Python/Django',
-                    requirements: 'Опыт работы от 3 лет, знание Python, Django, PostgreSQL',
-                    experience_years: 3,
-                    salary_from: 180000,
-                    salary_to: 250000,
-                    employment_type: 'full_time',
-                    status: 'open',
-                    priority: 'normal',
-                    published_at: '2024-12-10',
-                    applications_count: 23,
-                    interviews_count: 8
-                },
-                {
-                    id: 3,
-                    title: 'HR-менеджер',
-                    department_id: 3,
-                    department_name: 'Отдел кадров',
-                    position_id: 5,
-                    position_name: 'HR-менеджер',
-                    description: 'Подбор и адаптация персонала',
-                    requirements: 'Опыт работы от 2 лет в сфере HR',
-                    experience_years: 2,
-                    salary_from: 100000,
-                    salary_to: 140000,
-                    employment_type: 'full_time',
-                    status: 'pending_approval',
-                    priority: 'normal',
-                    requested_by: 4,
-                    requested_by_name: 'Михайлова Татьяна',
-                    request_date: '2024-12-15',
-                    request_justification: 'Увеличение нагрузки на HR отдел в связи с расширением компании'
-                },
-                {
-                    id: 4,
-                    title: 'Менеджер по продажам B2B',
-                    department_id: 5,
-                    department_name: 'Отдел продаж',
-                    position_id: 7,
-                    position_name: 'Менеджер по продажам',
-                    description: 'Активные продажи корпоративным клиентам',
-                    requirements: 'Опыт в B2B продажах от 2 лет',
-                    salary_from: 120000,
-                    salary_to: 200000,
-                    employment_type: 'full_time',
-                    status: 'closed',
-                    published_at: '2024-11-01',
-                    closed_at: '2024-12-20',
-                    closed_reason: 'Позиция закрыта',
-                    applications_count: 30,
-                    hired_candidate_id: 10
-                }
-            ];
+    private loadData(): void {
+        this.loading = true;
 
-            this.candidates = [
-                {
-                    id: 1,
-                    vacancy_id: 1,
-                    vacancy_title: 'Senior Frontend разработчик',
-                    full_name: 'Смирнов Александр Павлович',
-                    email: 'smirnov.a@mail.ru',
-                    phone: '+7 (916) 123-45-67',
-                    source: 'job_portal',
-                    status: 'interview',
-                    stage: 'interview',
-                    rating: 4,
-                    hr_rating: 4,
-                    salary_expectation: 300000,
-                    experience: [
-                        { company: 'TechCorp', position: 'Frontend Developer', start_date: '2020-01-01', end_date: '2024-01-01', description: 'Разработка на Angular' }
-                    ],
-                    interviews: [
-                        { id: 1, candidate_id: 1, vacancy_id: 1, interviewer_id: 1, interviewer_name: 'Кузнецов Сергей (HR)', interview_type: 'phone', stage: 'initial', scheduled_at: '2024-12-10T10:00:00', duration_minutes: 30, status: 'completed', overall_rating: 4, recommendation: 'yes', feedback: 'Хороший кандидат, рекомендую на техническое интервью' },
-                        { id: 2, candidate_id: 1, vacancy_id: 1, interviewer_id: 2, interviewer_name: 'Иванов Иван (Тех. директор)', interview_type: 'technical', stage: 'technical', scheduled_at: '2024-12-18T14:00:00', duration_minutes: 60, status: 'scheduled' }
-                    ],
-                    created_at: '2024-12-05'
-                },
-                {
-                    id: 2,
-                    vacancy_id: 1,
-                    vacancy_title: 'Senior Frontend разработчик',
-                    full_name: 'Кузнецова Мария Игоревна',
-                    email: 'kuznetsova.m@gmail.com',
-                    phone: '+7 (925) 234-56-78',
-                    source: 'referral',
-                    status: 'offer',
-                    stage: 'offer',
-                    rating: 5,
-                    hr_rating: 5,
-                    technical_rating: 5,
-                    salary_expectation: 320000,
-                    interviews: [
-                        { id: 3, candidate_id: 2, vacancy_id: 1, interviewer_id: 1, interviewer_name: 'Кузнецов Сергей (HR)', interview_type: 'phone', stage: 'initial', scheduled_at: '2024-12-08T11:00:00', duration_minutes: 30, status: 'completed', overall_rating: 5, recommendation: 'strong_yes', feedback: 'Отличный кандидат!' },
-                        { id: 4, candidate_id: 2, vacancy_id: 1, interviewer_id: 2, interviewer_name: 'Иванов Иван (Тех. директор)', interview_type: 'technical', stage: 'technical', scheduled_at: '2024-12-12T14:00:00', duration_minutes: 90, status: 'completed', overall_rating: 5, recommendation: 'strong_yes', feedback: 'Высокий уровень технических знаний' },
-                        { id: 5, candidate_id: 2, vacancy_id: 1, interviewer_id: 3, interviewer_name: 'Соколов Андрей (Ген. директор)', interview_type: 'final', stage: 'final', scheduled_at: '2024-12-15T16:00:00', duration_minutes: 45, status: 'completed', overall_rating: 5, recommendation: 'strong_yes' }
-                    ],
-                    reference_checks: [
-                        { id: 1, candidate_id: 2, referee_name: 'Петров Сергей', referee_position: 'CTO', referee_company: 'PrevCompany', referee_phone: '+7 999 111 22 33', relationship: 'Руководитель', status: 'completed', feedback: 'Отличный специалист', rating: 5, would_rehire: true }
-                    ],
-                    offer: {
-                        id: 1,
-                        candidate_id: 2,
-                        vacancy_id: 1,
-                        offered_salary: 330000,
-                        offered_position: 'Senior Frontend разработчик',
-                        offered_department: 'IT отдел',
-                        start_date: '2025-01-15',
-                        contract_type: 'permanent',
-                        probation_period_months: 3,
-                        benefits: ['ДМС', 'Обучение', 'Гибкий график'],
-                        status: 'sent',
-                        sent_at: '2024-12-20',
-                        expires_at: '2024-12-27'
-                    },
-                    created_at: '2024-12-03'
-                },
-                {
-                    id: 3,
-                    vacancy_id: 2,
-                    vacancy_title: 'Middle Backend разработчик',
-                    full_name: 'Попов Дмитрий Сергеевич',
-                    email: 'popov.d@yandex.ru',
-                    phone: '+7 (903) 345-67-89',
-                    source: 'job_portal',
-                    status: 'screening',
-                    stage: 'screening',
-                    created_at: '2024-12-12'
-                },
-                {
-                    id: 4,
-                    vacancy_id: 2,
-                    vacancy_title: 'Middle Backend разработчик',
-                    full_name: 'Федорова Анастасия Владимировна',
-                    email: 'fedorova.a@inbox.ru',
-                    phone: '+7 (917) 456-78-90',
-                    source: 'gov_portal',
-                    status: 'new',
-                    stage: 'application',
-                    created_at: '2024-12-18'
-                },
-                {
-                    id: 5,
-                    vacancy_id: 1,
-                    vacancy_title: 'Senior Frontend разработчик',
-                    full_name: 'Белов Максим Юрьевич',
-                    email: 'belov.m@yandex.ru',
-                    phone: '+7 (909) 789-01-23',
-                    source: 'social_media',
-                    status: 'rejected',
-                    stage: 'closed',
-                    rating: 2,
-                    rejection_reason: 'Недостаточно опыта работы с Angular',
-                    rejection_date: '2024-12-10',
-                    created_at: '2024-12-08'
-                }
-            ];
-
-            this.onboardings = [
-                {
-                    id: 1,
-                    employee_id: 100,
-                    employee_name: 'Егорова Светлана Петровна',
-                    vacancy_id: 4,
-                    start_date: '2024-12-23',
-                    status: 'in_progress',
-                    mentor_id: 7,
-                    mentor_name: 'Волкова Ольга Николаевна',
-                    tasks: [
-                        { id: 1, title: 'Оформление документов', category: 'documents', status: 'completed', completed_at: '2024-12-23' },
-                        { id: 2, title: 'Создание учетной записи', category: 'it_setup', status: 'completed', completed_at: '2024-12-23' },
-                        { id: 3, title: 'Вводное обучение', category: 'training', status: 'in_progress', due_date: '2024-12-27' },
-                        { id: 4, title: 'Знакомство с командой', category: 'introduction', status: 'pending', due_date: '2024-12-24' },
-                        { id: 5, title: 'Изучение политик компании', category: 'compliance', status: 'pending', due_date: '2024-12-30' }
-                    ],
-                    documents_submitted: ['Паспорт', 'ИНН', 'СНИЛС', 'Трудовая книжка'],
-                    documents_pending: ['Фото 3x4'],
-                    email_created: true,
-                    system_access_granted: true,
-                    equipment_provided: false,
-                    overall_progress: 40
-                }
-            ];
-
-            this.loading = false;
-        }, 500);
+        forkJoin({
+            vacancies: this.recruitingService.getVacancies(),
+            candidates: this.recruitingService.getCandidates(),
+            onboardings: this.recruitingService.getOnboardings(),
+            departments: this.departmentService.getDepartments(),
+            positions: this.positionService.getPositions()
+        }).pipe(takeUntil(this.destroy$)).subscribe({
+            next: (data) => {
+                this.vacancies = data.vacancies;
+                this.candidates = data.candidates;
+                this.onboardings = data.onboardings;
+                this.departments = data.departments.map(d => ({ id: d.id, name: d.name }));
+                this.positions = data.positions.map(p => ({ id: p.id, name: p.name }));
+                this.loading = false;
+            },
+            error: (err) => {
+                console.error('Ошибка загрузки данных:', err);
+                this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось загрузить данные' });
+                this.loading = false;
+            }
+        });
     }
 
     // =====================
@@ -491,60 +273,55 @@ export class RecruitingComponent implements OnInit, OnDestroy {
         if (this.vacancyForm.invalid) return;
 
         const formValue = this.vacancyForm.value;
+        const payload: Partial<Vacancy> = {
+            title: formValue.title,
+            department_id: formValue.department_id?.id,
+            position_id: formValue.position_id?.id,
+            description: formValue.description,
+            requirements: formValue.requirements,
+            responsibilities: formValue.responsibilities,
+            experience_years: formValue.experience_years,
+            salary_from: formValue.salary_from,
+            salary_to: formValue.salary_to,
+            employment_type: formValue.employment_type?.value,
+            priority: formValue.priority?.value || 'normal',
+            deadline: formValue.deadline instanceof Date ? formValue.deadline.toISOString().split('T')[0] : formValue.deadline,
+            request_justification: formValue.request_justification
+        };
 
         if (this.isEditMode && this.selectedVacancy) {
-            const index = this.vacancies.findIndex(v => v.id === this.selectedVacancy!.id);
-            if (index !== -1) {
-                this.vacancies[index] = {
-                    ...this.vacancies[index],
-                    title: formValue.title,
-                    department_id: formValue.department_id?.id,
-                    department_name: formValue.department_id?.name,
-                    position_id: formValue.position_id?.id,
-                    position_name: formValue.position_id?.name,
-                    description: formValue.description,
-                    requirements: formValue.requirements,
-                    responsibilities: formValue.responsibilities,
-                    experience_years: formValue.experience_years,
-                    salary_from: formValue.salary_from,
-                    salary_to: formValue.salary_to,
-                    employment_type: formValue.employment_type?.value,
-                    priority: formValue.priority?.value,
-                    deadline: formValue.deadline instanceof Date ? formValue.deadline.toISOString().split('T')[0] : formValue.deadline,
-                    request_justification: formValue.request_justification
-                };
-                this.vacancies = [...this.vacancies];
-                this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Вакансия обновлена' });
-            }
+            this.recruitingService.updateVacancy(this.selectedVacancy.id, payload)
+                .pipe(takeUntil(this.destroy$))
+                .subscribe({
+                    next: (updated) => {
+                        const index = this.vacancies.findIndex(v => v.id === this.selectedVacancy!.id);
+                        if (index !== -1) {
+                            this.vacancies[index] = updated;
+                            this.vacancies = [...this.vacancies];
+                        }
+                        this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Вакансия обновлена' });
+                        this.displayVacancyDialog = false;
+                    },
+                    error: (err) => {
+                        console.error('Ошибка обновления:', err);
+                        this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось обновить вакансию' });
+                    }
+                });
         } else {
-            const newVacancy: Vacancy = {
-                id: this.nextId++,
-                title: formValue.title,
-                department_id: formValue.department_id?.id,
-                department_name: formValue.department_id?.name,
-                position_id: formValue.position_id?.id,
-                position_name: formValue.position_id?.name,
-                description: formValue.description,
-                requirements: formValue.requirements,
-                responsibilities: formValue.responsibilities,
-                experience_years: formValue.experience_years,
-                salary_from: formValue.salary_from,
-                salary_to: formValue.salary_to,
-                employment_type: formValue.employment_type?.value,
-                priority: formValue.priority?.value || 'normal',
-                deadline: formValue.deadline instanceof Date ? formValue.deadline.toISOString().split('T')[0] : formValue.deadline,
-                request_justification: formValue.request_justification,
-                status: 'draft',
-                applications_count: 0,
-                requested_by: 1,
-                requested_by_name: 'Текущий пользователь',
-                request_date: new Date().toISOString().split('T')[0]
-            };
-            this.vacancies = [...this.vacancies, newVacancy];
-            this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Вакансия создана' });
+            this.recruitingService.createVacancy(payload)
+                .pipe(takeUntil(this.destroy$))
+                .subscribe({
+                    next: (created) => {
+                        this.vacancies = [...this.vacancies, created];
+                        this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Вакансия создана' });
+                        this.displayVacancyDialog = false;
+                    },
+                    error: (err) => {
+                        console.error('Ошибка создания:', err);
+                        this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось создать вакансию' });
+                    }
+                });
         }
-
-        this.displayVacancyDialog = false;
     }
 
     submitForApproval(vacancy: Vacancy): void {
@@ -620,37 +397,38 @@ export class RecruitingComponent implements OnInit, OnDestroy {
         if (this.candidateForm.invalid) return;
 
         const formValue = this.candidateForm.value;
-        const selectedVacancy = this.vacancies.find(v => v.id === formValue.vacancy_id?.id);
-
-        const newCandidate: Candidate = {
-            id: this.nextId++,
+        const payload: Partial<Candidate> = {
             vacancy_id: formValue.vacancy_id?.id,
-            vacancy_title: selectedVacancy?.title,
             full_name: formValue.full_name,
             email: formValue.email,
             phone: formValue.phone,
             source: formValue.source?.value,
             salary_expectation: formValue.salary_expectation,
             available_from: formValue.available_from instanceof Date ? formValue.available_from.toISOString().split('T')[0] : formValue.available_from,
-            cover_letter: formValue.cover_letter,
-            status: 'new',
-            stage: 'application',
-            created_at: new Date().toISOString().split('T')[0]
+            cover_letter: formValue.cover_letter
         };
 
-        this.candidates = [...this.candidates, newCandidate];
+        this.recruitingService.createCandidate(payload)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: (created) => {
+                    this.candidates = [...this.candidates, created];
 
-        // Обновляем счетчик заявок
-        if (selectedVacancy) {
-            const vacancyIndex = this.vacancies.findIndex(v => v.id === selectedVacancy.id);
-            if (vacancyIndex !== -1) {
-                this.vacancies[vacancyIndex].applications_count = (this.vacancies[vacancyIndex].applications_count || 0) + 1;
-                this.vacancies = [...this.vacancies];
-            }
-        }
+                    // Обновляем счетчик заявок
+                    const vacancyIndex = this.vacancies.findIndex(v => v.id === created.vacancy_id);
+                    if (vacancyIndex !== -1) {
+                        this.vacancies[vacancyIndex].applications_count = (this.vacancies[vacancyIndex].applications_count || 0) + 1;
+                        this.vacancies = [...this.vacancies];
+                    }
 
-        this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Кандидат добавлен' });
-        this.displayCandidateDialog = false;
+                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Кандидат добавлен' });
+                    this.displayCandidateDialog = false;
+                },
+                error: (err) => {
+                    console.error('Ошибка добавления кандидата:', err);
+                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось добавить кандидата' });
+                }
+            });
     }
 
     // Скрининг кандидата
@@ -689,44 +467,49 @@ export class RecruitingComponent implements OnInit, OnDestroy {
         if (this.interviewForm.invalid || !this.selectedCandidate) return;
 
         const formValue = this.interviewForm.value;
-        const interviewer = this.interviewers.find(i => i.id === formValue.interviewer_id?.id);
-
-        const newInterview: Interview = {
-            id: this.nextId++,
+        const payload: Partial<Interview> = {
             candidate_id: this.selectedCandidate.id,
             vacancy_id: this.selectedCandidate.vacancy_id,
             interviewer_id: formValue.interviewer_id?.id,
-            interviewer_name: interviewer?.name,
             interview_type: formValue.interview_type?.value,
             stage: formValue.interview_type?.value === 'phone' ? 'initial' :
                    formValue.interview_type?.value === 'technical' ? 'technical' : 'manager',
             scheduled_at: formValue.scheduled_at instanceof Date ? formValue.scheduled_at.toISOString() : formValue.scheduled_at,
             duration_minutes: formValue.duration_minutes,
             location: formValue.location,
-            meeting_link: formValue.meeting_link,
-            status: 'scheduled'
+            meeting_link: formValue.meeting_link
         };
 
-        const candidateIndex = this.candidates.findIndex(c => c.id === this.selectedCandidate!.id);
-        if (candidateIndex !== -1) {
-            if (!this.candidates[candidateIndex].interviews) {
-                this.candidates[candidateIndex].interviews = [];
-            }
-            this.candidates[candidateIndex].interviews!.push(newInterview);
+        this.recruitingService.createInterview(payload)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: (created) => {
+                    const candidateIndex = this.candidates.findIndex(c => c.id === this.selectedCandidate!.id);
+                    if (candidateIndex !== -1) {
+                        if (!this.candidates[candidateIndex].interviews) {
+                            this.candidates[candidateIndex].interviews = [];
+                        }
+                        this.candidates[candidateIndex].interviews!.push(created);
 
-            // Обновляем статус кандидата
-            if (this.candidates[candidateIndex].status === 'screening' || this.candidates[candidateIndex].status === 'new') {
-                this.candidates[candidateIndex].status = 'phone_interview';
-                this.candidates[candidateIndex].stage = 'interview';
-            } else if (this.candidates[candidateIndex].status === 'phone_interview') {
-                this.candidates[candidateIndex].status = 'interview';
-            }
+                        // Обновляем статус кандидата
+                        if (this.candidates[candidateIndex].status === 'screening' || this.candidates[candidateIndex].status === 'new') {
+                            this.candidates[candidateIndex].status = 'phone_interview';
+                            this.candidates[candidateIndex].stage = 'interview';
+                        } else if (this.candidates[candidateIndex].status === 'phone_interview') {
+                            this.candidates[candidateIndex].status = 'interview';
+                        }
 
-            this.candidates = [...this.candidates];
-        }
+                        this.candidates = [...this.candidates];
+                    }
 
-        this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Собеседование запланировано' });
-        this.displayInterviewDialog = false;
+                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Собеседование запланировано' });
+                    this.displayInterviewDialog = false;
+                },
+                error: (err) => {
+                    console.error('Ошибка планирования собеседования:', err);
+                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось запланировать собеседование' });
+                }
+            });
     }
 
     openFeedbackDialog(candidate: Candidate, interview: Interview): void {
@@ -862,38 +645,40 @@ export class RecruitingComponent implements OnInit, OnDestroy {
         if (this.offerForm.invalid || !this.selectedCandidate) return;
 
         const formValue = this.offerForm.value;
-        const vacancy = this.vacancies.find(v => v.id === this.selectedCandidate!.vacancy_id);
-
-        const newOffer: JobOffer = {
-            id: this.nextId++,
+        const payload: Partial<JobOffer> = {
             candidate_id: this.selectedCandidate.id,
             vacancy_id: this.selectedCandidate.vacancy_id,
             offered_salary: formValue.offered_salary,
-            offered_position: vacancy?.position_name || '',
-            offered_department: vacancy?.department_name || '',
             start_date: formValue.start_date instanceof Date ? formValue.start_date.toISOString().split('T')[0] : formValue.start_date,
             contract_type: 'permanent',
             probation_period_months: formValue.probation_period_months,
             benefits: formValue.benefits ? formValue.benefits.split(',').map((b: string) => b.trim()) : [],
-            other_terms: formValue.other_terms,
-            status: 'sent',
-            sent_at: new Date().toISOString().split('T')[0],
-            expires_at: new Date(new Date().setDate(new Date().getDate() + 7)).toISOString().split('T')[0]
+            other_terms: formValue.other_terms
         };
 
-        const candidateIndex = this.candidates.findIndex(c => c.id === this.selectedCandidate!.id);
-        if (candidateIndex !== -1) {
-            this.candidates[candidateIndex] = {
-                ...this.candidates[candidateIndex],
-                offer: newOffer,
-                status: 'offer',
-                stage: 'offer'
-            };
-            this.candidates = [...this.candidates];
-        }
+        this.recruitingService.createOffer(payload)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: (created) => {
+                    const candidateIndex = this.candidates.findIndex(c => c.id === this.selectedCandidate!.id);
+                    if (candidateIndex !== -1) {
+                        this.candidates[candidateIndex] = {
+                            ...this.candidates[candidateIndex],
+                            offer: created,
+                            status: 'offer',
+                            stage: 'offer'
+                        };
+                        this.candidates = [...this.candidates];
+                    }
 
-        this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Оффер отправлен кандидату' });
-        this.displayOfferDialog = false;
+                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Оффер отправлен кандидату' });
+                    this.displayOfferDialog = false;
+                },
+                error: (err) => {
+                    console.error('Ошибка отправки оффера:', err);
+                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось отправить оффер' });
+                }
+            });
     }
 
     acceptOffer(candidate: Candidate): void {

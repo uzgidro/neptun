@@ -7,7 +7,7 @@ import { InputIcon } from 'primeng/inputicon';
 import { InputText } from 'primeng/inputtext';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-import { Subject } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { Tooltip } from 'primeng/tooltip';
 import { Tag } from 'primeng/tag';
 import { ProgressBar } from 'primeng/progressbar';
@@ -17,7 +17,10 @@ import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-
 import { DeleteConfirmationComponent } from '@/layout/component/dialog/delete-confirmation/delete-confirmation.component';
 import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
 import { TextareaComponent } from '@/layout/component/dialog/textarea/textarea.component';
-import { PerformanceGoal, GOAL_STATUSES, REVIEW_TYPES } from '@/core/interfaces/hrm/performance';
+import { PerformanceGoal, GoalPayload, GOAL_STATUSES, REVIEW_TYPES } from '@/core/interfaces/hrm/performance';
+import { PerformanceService } from '@/core/services/performance.service';
+import { ContactService } from '@/core/services/contact.service';
+import { Contact } from '@/core/interfaces/contact';
 
 @Component({
     selector: 'app-performance-management',
@@ -54,23 +57,15 @@ export class PerformanceManagementComponent implements OnInit, OnDestroy {
     isEditMode: boolean = false;
     selectedGoal: PerformanceGoal | null = null;
     goalForm: FormGroup;
-    private nextId = 100;
 
-    // Mock data for employees
-    employees = [
-        { id: 1, name: 'Иванов Иван Иванович' },
-        { id: 2, name: 'Петров Петр Петрович' },
-        { id: 3, name: 'Сидорова Анна Михайловна' },
-        { id: 4, name: 'Козлов Алексей Сергеевич' },
-        { id: 5, name: 'Новикова Елена Владимировна' },
-        { id: 6, name: 'Морозов Дмитрий Александрович' },
-        { id: 7, name: 'Волкова Ольга Николаевна' },
-        { id: 8, name: 'Соколов Андрей Викторович' }
-    ];
+    // Data from services
+    employees: { id: number; name: string }[] = [];
 
     goalStatuses = GOAL_STATUSES.map(s => ({ id: s.value, name: s.label }));
     reviewTypes = REVIEW_TYPES.map(t => ({ id: t.value, name: t.label }));
 
+    private performanceService = inject(PerformanceService);
+    private contactService = inject(ContactService);
     private fb = inject(FormBuilder);
     private messageService = inject(MessageService);
     private destroy$ = new Subject<void>();
@@ -89,185 +84,34 @@ export class PerformanceManagementComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.loadMockData();
+        this.loadGoals();
+        this.loadEmployees();
     }
 
-    private loadMockData(): void {
-        setTimeout(() => {
-            this.goals = [
-                {
-                    id: 1,
-                    employee_id: 1,
-                    employee_name: 'Иванов Иван Иванович',
-                    title: 'Разработка нового модуля отчетности',
-                    description: 'Создание модуля для генерации отчетов в различных форматах',
-                    metric: 'Количество реализованных отчетов',
-                    target_value: '10',
-                    actual_value: '12',
-                    weight: 40,
-                    start_date: '2024-01-01',
-                    due_date: '2024-12-31',
-                    status: 'exceeded',
-                    progress_percent: 120,
-                    rating: 5,
-                    comments: 'Отличный результат, перевыполнение плана'
+    private loadGoals(): void {
+        this.performanceService.getGoals()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: (data) => {
+                    this.goals = data;
                 },
-                {
-                    id: 2,
-                    employee_id: 1,
-                    employee_name: 'Иванов Иван Иванович',
-                    title: 'Оптимизация производительности',
-                    description: 'Улучшение времени отклика основных API эндпоинтов',
-                    metric: 'Среднее время отклика (мс)',
-                    target_value: '200',
-                    actual_value: '180',
-                    weight: 30,
-                    start_date: '2024-01-01',
-                    due_date: '2024-12-31',
-                    status: 'completed',
-                    progress_percent: 100,
-                    rating: 5
+                error: (err) => {
+                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось загрузить цели' });
+                    console.error(err);
                 },
-                {
-                    id: 3,
-                    employee_id: 2,
-                    employee_name: 'Петров Петр Петрович',
-                    title: 'Автоматизация бухгалтерской отчетности',
-                    description: 'Настройка автоматической генерации ежемесячных отчетов',
-                    metric: 'Количество автоматизированных отчетов',
-                    target_value: '15',
-                    actual_value: '12',
-                    weight: 50,
-                    start_date: '2024-01-01',
-                    due_date: '2024-12-31',
-                    status: 'in_progress',
-                    progress_percent: 80
+                complete: () => (this.loading = false)
+            });
+    }
+
+    private loadEmployees(): void {
+        this.contactService.getContacts()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: (data: Contact[]) => {
+                    this.employees = data.map(c => ({ id: c.id, name: c.name }));
                 },
-                {
-                    id: 4,
-                    employee_id: 3,
-                    employee_name: 'Сидорова Анна Михайловна',
-                    title: 'Снижение текучести кадров',
-                    description: 'Разработка и внедрение программы удержания сотрудников',
-                    metric: 'Коэффициент текучести (%)',
-                    target_value: '10',
-                    actual_value: '12',
-                    weight: 40,
-                    start_date: '2024-01-01',
-                    due_date: '2024-12-31',
-                    status: 'in_progress',
-                    progress_percent: 75
-                },
-                {
-                    id: 5,
-                    employee_id: 3,
-                    employee_name: 'Сидорова Анна Михайловна',
-                    title: 'Программа адаптации новых сотрудников',
-                    description: 'Создание и внедрение структурированной программы онбординга',
-                    metric: 'Удовлетворенность новых сотрудников (%)',
-                    target_value: '85',
-                    actual_value: '90',
-                    weight: 30,
-                    start_date: '2024-01-01',
-                    due_date: '2024-12-31',
-                    status: 'completed',
-                    progress_percent: 100,
-                    rating: 5
-                },
-                {
-                    id: 6,
-                    employee_id: 4,
-                    employee_name: 'Козлов Алексей Сергеевич',
-                    title: 'Правовой аудит договоров',
-                    description: 'Проведение полного аудита всех действующих договоров',
-                    metric: 'Количество проверенных договоров',
-                    target_value: '100',
-                    actual_value: '100',
-                    weight: 50,
-                    start_date: '2024-01-01',
-                    due_date: '2024-12-31',
-                    status: 'completed',
-                    progress_percent: 100,
-                    rating: 4
-                },
-                {
-                    id: 7,
-                    employee_id: 5,
-                    employee_name: 'Новикова Елена Владимировна',
-                    title: 'Увеличение объема продаж',
-                    description: 'Достижение плановых показателей по объему продаж',
-                    metric: 'Объем продаж (млн руб)',
-                    target_value: '50',
-                    actual_value: '35',
-                    weight: 60,
-                    start_date: '2024-01-01',
-                    due_date: '2024-12-31',
-                    status: 'in_progress',
-                    progress_percent: 70
-                },
-                {
-                    id: 8,
-                    employee_id: 6,
-                    employee_name: 'Морозов Дмитрий Александрович',
-                    title: 'Миграция на новую архитектуру',
-                    description: 'Перевод системы на микросервисную архитектуру',
-                    metric: 'Количество мигрированных сервисов',
-                    target_value: '8',
-                    actual_value: '5',
-                    weight: 50,
-                    start_date: '2024-01-01',
-                    due_date: '2024-12-31',
-                    status: 'in_progress',
-                    progress_percent: 62
-                },
-                {
-                    id: 9,
-                    employee_id: 7,
-                    employee_name: 'Волкова Ольга Николаевна',
-                    title: 'Привлечение новых клиентов',
-                    description: 'Расширение клиентской базы в корпоративном сегменте',
-                    metric: 'Количество новых клиентов',
-                    target_value: '20',
-                    actual_value: '8',
-                    weight: 40,
-                    start_date: '2024-01-01',
-                    due_date: '2024-12-31',
-                    status: 'not_achieved',
-                    progress_percent: 40,
-                    comments: 'Требуется дополнительная поддержка маркетинга'
-                },
-                {
-                    id: 10,
-                    employee_id: 8,
-                    employee_name: 'Соколов Андрей Викторович',
-                    title: 'Развитие команды',
-                    description: 'Проведение обучающих мероприятий для команды',
-                    metric: 'Количество проведенных тренингов',
-                    target_value: '12',
-                    actual_value: '10',
-                    weight: 30,
-                    start_date: '2024-01-01',
-                    due_date: '2024-12-31',
-                    status: 'in_progress',
-                    progress_percent: 83
-                },
-                {
-                    id: 11,
-                    employee_id: 8,
-                    employee_name: 'Соколов Андрей Викторович',
-                    title: 'Стратегическое планирование 2025',
-                    description: 'Разработка стратегии развития компании на 2025 год',
-                    metric: 'Готовность стратегического плана (%)',
-                    target_value: '100',
-                    weight: 40,
-                    start_date: '2024-10-01',
-                    due_date: '2025-01-31',
-                    status: 'not_started',
-                    progress_percent: 0
-                }
-            ];
-            this.loading = false;
-        }, 500);
+                error: (err) => console.error(err)
+            });
     }
 
     onGlobalFilter(table: Table, event: Event) {
@@ -315,46 +159,69 @@ export class PerformanceManagementComponent implements OnInit, OnDestroy {
         this.submitted = true;
         if (this.goalForm.invalid) return;
 
-        const formValue = this.goalForm.value;
-
         if (this.isEditMode && this.selectedGoal) {
-            const index = this.goals.findIndex(g => g.id === this.selectedGoal!.id);
-            if (index !== -1) {
-                this.goals[index] = {
-                    ...this.goals[index],
-                    employee_id: formValue.employee_id?.id,
-                    employee_name: formValue.employee_id?.name,
-                    title: formValue.title,
-                    description: formValue.description,
-                    metric: formValue.metric,
-                    target_value: formValue.target_value,
-                    weight: formValue.weight,
-                    start_date: formValue.start_date ? this.dateToYMD(formValue.start_date) : '',
-                    due_date: formValue.due_date ? this.dateToYMD(formValue.due_date) : ''
-                };
-                this.goals = [...this.goals];
-            }
-            this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Цель обновлена' });
+            this.updateGoal();
         } else {
-            const newGoal: PerformanceGoal = {
-                id: this.nextId++,
-                employee_id: formValue.employee_id?.id,
-                employee_name: formValue.employee_id?.name,
-                title: formValue.title,
-                description: formValue.description,
-                metric: formValue.metric,
-                target_value: formValue.target_value,
-                weight: formValue.weight,
-                start_date: formValue.start_date ? this.dateToYMD(formValue.start_date) : '',
-                due_date: formValue.due_date ? this.dateToYMD(formValue.due_date) : '',
-                status: 'not_started',
-                progress_percent: 0
-            };
-            this.goals = [...this.goals, newGoal];
-            this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Цель создана' });
+            this.createGoal();
         }
+    }
 
-        this.closeDialog();
+    private createGoal(): void {
+        const formValue = this.goalForm.value;
+        const payload: GoalPayload = {
+            employee_id: formValue.employee_id?.id,
+            title: formValue.title,
+            description: formValue.description,
+            metric: formValue.metric,
+            target_value: formValue.target_value,
+            weight: formValue.weight,
+            start_date: formValue.start_date ? this.dateToYMD(formValue.start_date) : undefined,
+            due_date: formValue.due_date ? this.dateToYMD(formValue.due_date) : undefined
+        };
+
+        this.performanceService.createGoal(payload)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: () => {
+                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Цель создана' });
+                    this.loadGoals();
+                    this.closeDialog();
+                },
+                error: (err) => {
+                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось создать цель' });
+                    console.error(err);
+                }
+            });
+    }
+
+    private updateGoal(): void {
+        if (!this.selectedGoal) return;
+
+        const formValue = this.goalForm.value;
+        const payload: GoalPayload = {
+            employee_id: formValue.employee_id?.id,
+            title: formValue.title,
+            description: formValue.description,
+            metric: formValue.metric,
+            target_value: formValue.target_value,
+            weight: formValue.weight,
+            start_date: formValue.start_date ? this.dateToYMD(formValue.start_date) : undefined,
+            due_date: formValue.due_date ? this.dateToYMD(formValue.due_date) : undefined
+        };
+
+        this.performanceService.updateGoal(this.selectedGoal.id, payload)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: () => {
+                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Цель обновлена' });
+                    this.loadGoals();
+                    this.closeDialog();
+                },
+                error: (err) => {
+                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось обновить цель' });
+                    console.error(err);
+                }
+            });
     }
 
     openDeleteDialog(goal: PerformanceGoal): void {
@@ -365,10 +232,20 @@ export class PerformanceManagementComponent implements OnInit, OnDestroy {
     confirmDelete(): void {
         if (!this.selectedGoal) return;
 
-        this.goals = this.goals.filter(g => g.id !== this.selectedGoal!.id);
-        this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Цель удалена' });
-        this.displayDeleteDialog = false;
-        this.selectedGoal = null;
+        this.performanceService.deleteGoal(this.selectedGoal.id)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: () => {
+                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Цель удалена' });
+                    this.loadGoals();
+                    this.displayDeleteDialog = false;
+                    this.selectedGoal = null;
+                },
+                error: (err) => {
+                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось удалить цель' });
+                    console.error(err);
+                }
+            });
     }
 
     getStatusSeverity(status: string): 'success' | 'info' | 'warn' | 'danger' | 'secondary' | 'contrast' {

@@ -7,21 +7,20 @@ import { InputIcon } from 'primeng/inputicon';
 import { InputText } from 'primeng/inputtext';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-import { Subject } from 'rxjs';
+import { Subject, takeUntil, forkJoin } from 'rxjs';
 import { Tooltip } from 'primeng/tooltip';
 import { Tag } from 'primeng/tag';
 import { Card } from 'primeng/card';
 import { Dialog } from 'primeng/dialog';
 import { ProgressBar } from 'primeng/progressbar';
 import { DeleteConfirmationComponent } from '@/layout/component/dialog/delete-confirmation/delete-confirmation.component';
+import { SalaryService } from '@/core/services/salary.service';
 import {
     Salary,
     EmployeeSalaryStructure,
-    EmployeeAttendance,
     EmployeeBonus,
     EmployeeDeduction,
     BatchCalculationResult,
-    DEFAULT_TAX_RATES,
     SALARY_STATUSES,
     SalaryStatus
 } from '@/core/interfaces/hrm/salary';
@@ -62,36 +61,19 @@ export class SalaryManagementComponent implements OnInit, OnDestroy {
 
     selectedSalary: Salary | null = null;
     rejectionForm: FormGroup;
-    private nextId = 100;
 
     // Period selection
     selectedMonth: number = new Date().getMonth() + 1;
     selectedYear: number = new Date().getFullYear();
 
-    // Mock data for employees with salary structure
-    employeeSalaryStructures: EmployeeSalaryStructure[] = [
-        { id: 1, employee_id: 1, employee_name: 'Иванов Иван Иванович', department_id: 1, department_name: 'IT отдел', position_id: 1, position_name: 'Старший разработчик', base_salary: 15000000, rank_allowance: 2000000, education_allowance: 1500000, seniority_allowance: 1000000, seniority_years: 5, effective_date: '2024-01-01', currency: 'UZS' },
-        { id: 2, employee_id: 2, employee_name: 'Петров Петр Петрович', department_id: 1, department_name: 'IT отдел', position_id: 2, position_name: 'Разработчик', base_salary: 12000000, rank_allowance: 1500000, education_allowance: 1000000, seniority_allowance: 600000, seniority_years: 3, effective_date: '2024-01-01', currency: 'UZS' },
-        { id: 3, employee_id: 3, employee_name: 'Сидорова Анна Михайловна', department_id: 2, department_name: 'Бухгалтерия', position_id: 3, position_name: 'Главный бухгалтер', base_salary: 14000000, rank_allowance: 2500000, education_allowance: 1500000, seniority_allowance: 1400000, seniority_years: 7, effective_date: '2024-01-01', currency: 'UZS' },
-        { id: 4, employee_id: 4, employee_name: 'Козлов Алексей Сергеевич', department_id: 3, department_name: 'Юридический отдел', position_id: 4, position_name: 'Юрист', base_salary: 18000000, rank_allowance: 3000000, education_allowance: 2000000, seniority_allowance: 1800000, seniority_years: 9, effective_date: '2024-01-01', currency: 'UZS' },
-        { id: 5, employee_id: 5, employee_name: 'Новикова Елена Владимировна', department_id: 4, department_name: 'Отдел продаж', position_id: 5, position_name: 'Менеджер по продажам', base_salary: 11000000, rank_allowance: 1000000, education_allowance: 500000, seniority_allowance: 200000, seniority_years: 1, effective_date: '2024-01-01', currency: 'UZS' },
-        { id: 6, employee_id: 6, employee_name: 'Морозов Дмитрий Александрович', department_id: 1, department_name: 'IT отдел', position_id: 6, position_name: 'DevOps инженер', base_salary: 16000000, rank_allowance: 2000000, education_allowance: 1500000, seniority_allowance: 800000, seniority_years: 4, effective_date: '2024-01-01', currency: 'UZS' },
-        { id: 7, employee_id: 7, employee_name: 'Волкова Ольга Николаевна', department_id: 2, department_name: 'Бухгалтерия', position_id: 7, position_name: 'Бухгалтер', base_salary: 8500000, rank_allowance: 800000, education_allowance: 500000, seniority_allowance: 400000, seniority_years: 2, effective_date: '2024-01-01', currency: 'UZS' },
-        { id: 8, employee_id: 8, employee_name: 'Соколов Андрей Викторович', department_id: 5, department_name: 'Администрация', position_id: 8, position_name: 'Генеральный директор', base_salary: 25000000, rank_allowance: 5000000, education_allowance: 3000000, seniority_allowance: 2500000, seniority_years: 10, effective_date: '2024-01-01', currency: 'UZS' }
-    ];
+    // Данные о зарплатных структурах сотрудников
+    employeeSalaryStructures: EmployeeSalaryStructure[] = [];
 
-    // Mock attendance data
-    employeeAttendance: EmployeeAttendance[] = [];
-
-    // Mock bonuses
+    // Данные о бонусах сотрудников
     employeeBonuses: EmployeeBonus[] = [];
 
-    // Mock deductions
-    employeeDeductions: EmployeeDeduction[] = [
-        { id: 1, employee_id: 2, deduction_type: 'loan', amount: 500000, is_percentage: false, start_date: '2024-01-01', end_date: '2025-12-31', description: 'Ипотечный кредит', is_active: true },
-        { id: 2, employee_id: 4, deduction_type: 'alimony', amount: 25, is_percentage: true, start_date: '2023-06-01', description: 'Алименты 25%', is_active: true },
-        { id: 3, employee_id: 5, deduction_type: 'advance', amount: 2000000, is_percentage: false, start_date: '2025-01-01', end_date: '2025-01-31', description: 'Аванс за январь', is_active: true }
-    ];
+    // Вычеты сотрудников
+    employeeDeductions: EmployeeDeduction[] = [];
 
     months = [
         { id: 1, name: 'Январь' }, { id: 2, name: 'Февраль' }, { id: 3, name: 'Март' },
@@ -102,13 +84,13 @@ export class SalaryManagementComponent implements OnInit, OnDestroy {
     years = Array.from({ length: 5 }, (_, i) => ({ id: new Date().getFullYear() - i, name: (new Date().getFullYear() - i).toString() }));
 
     salaryStatuses = SALARY_STATUSES.map(s => ({ id: s.value, name: s.label }));
-    taxRates = DEFAULT_TAX_RATES;
 
     // Last batch calculation result
     lastBatchResult: BatchCalculationResult | null = null;
 
     private fb = inject(FormBuilder);
     private messageService = inject(MessageService);
+    private salaryService = inject(SalaryService);
     private destroy$ = new Subject<void>();
 
     constructor() {
@@ -118,59 +100,29 @@ export class SalaryManagementComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.generateAttendanceData();
-        this.generateBonusData();
-        this.loadSalaries();
+        this.loadAllData();
     }
 
-    private generateAttendanceData(): void {
-        // Generate attendance data for current period
-        const workingDays = this.getWorkingDaysInMonth(this.selectedMonth, this.selectedYear);
+    private loadAllData(): void {
+        this.loading = true;
 
-        this.employeeAttendance = this.employeeSalaryStructures.map(emp => ({
-            employee_id: emp.employee_id,
-            period_month: this.selectedMonth,
-            period_year: this.selectedYear,
-            working_days: workingDays,
-            worked_days: workingDays - Math.floor(Math.random() * 3), // Random 0-2 days absent
-            sick_days: Math.random() > 0.8 ? Math.floor(Math.random() * 3) : 0,
-            vacation_days: Math.random() > 0.9 ? Math.floor(Math.random() * 5) : 0,
-            absent_days: Math.random() > 0.95 ? 1 : 0,
-            overtime_hours: Math.random() > 0.7 ? Math.floor(Math.random() * 20) : 0,
-            late_minutes: Math.floor(Math.random() * 60)
-        }));
-    }
-
-    private generateBonusData(): void {
-        // Generate random bonuses for some employees
-        this.employeeBonuses = [
-            { id: 1, employee_id: 1, bonus_type: 'performance', amount: 3000000, period_month: this.selectedMonth, period_year: this.selectedYear, description: 'Премия за выполнение проекта', approved: true },
-            { id: 2, employee_id: 3, bonus_type: 'quarterly', amount: 2500000, period_month: this.selectedMonth, period_year: this.selectedYear, description: 'Квартальная премия', approved: true },
-            { id: 3, employee_id: 6, bonus_type: 'performance', amount: 2000000, period_month: this.selectedMonth, period_year: this.selectedYear, description: 'Премия за внедрение CI/CD', approved: true },
-            { id: 4, employee_id: 8, bonus_type: 'annual', amount: 10000000, period_month: this.selectedMonth, period_year: this.selectedYear, description: 'Годовой бонус', approved: true }
-        ];
-    }
-
-    private loadSalaries(): void {
-        setTimeout(() => {
-            // Load existing salaries for selected period
-            this.salaries = [];
-            this.loading = false;
-        }, 500);
-    }
-
-    private getWorkingDaysInMonth(month: number, year: number): number {
-        // Simplified calculation - actual should consider holidays
-        const daysInMonth = new Date(year, month, 0).getDate();
-        let workingDays = 0;
-        for (let day = 1; day <= daysInMonth; day++) {
-            const date = new Date(year, month - 1, day);
-            const dayOfWeek = date.getDay();
-            if (dayOfWeek !== 0 && dayOfWeek !== 6) {
-                workingDays++;
+        forkJoin({
+            structures: this.salaryService.getSalaryStructures(),
+            bonuses: this.salaryService.getBonuses(),
+            deductions: this.salaryService.getDeductions()
+        }).pipe(takeUntil(this.destroy$)).subscribe({
+            next: (data) => {
+                this.employeeSalaryStructures = data.structures;
+                this.employeeBonuses = data.bonuses;
+                this.employeeDeductions = data.deductions;
+                this.loading = false;
+            },
+            error: (err) => {
+                console.error('Ошибка загрузки данных:', err);
+                this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось загрузить данные' });
+                this.loading = false;
             }
-        }
-        return workingDays;
+        });
     }
 
     // ==================== SALARY CALCULATION ====================
@@ -181,174 +133,33 @@ export class SalaryManagementComponent implements OnInit, OnDestroy {
         this.calculationProgress = 0;
         this.lastBatchResult = null;
 
-        const employees = this.employeeSalaryStructures;
-        const total = employees.length;
-        let processed = 0;
-        let successful = 0;
-        let failed = 0;
-        const results: Salary[] = [];
+        this.salaryService.calculateSalary(this.selectedMonth, this.selectedYear)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: (result) => {
+                    this.calculating = false;
+                    this.calculationProgress = 100;
+                    this.lastBatchResult = result;
+                    this.salaries = result.results
+                        .filter(r => r.success && r.salary)
+                        .map(r => r.salary!);
 
-        // Simulate async calculation
-        const calculateNext = (index: number) => {
-            if (index >= total) {
-                // Calculation complete
-                this.calculating = false;
-                this.salaries = results;
-
-                const totalGross = results.reduce((sum, s) => sum + s.gross_salary, 0);
-                const totalNet = results.reduce((sum, s) => sum + s.net_salary, 0);
-                const totalTaxes = results.reduce((sum, s) => sum + s.income_tax + s.social_fund + s.pension_fund + s.health_insurance, 0);
-
-                this.lastBatchResult = {
-                    total,
-                    successful,
-                    failed,
-                    results: results.map(s => ({ success: true, salary: s })),
-                    total_gross: totalGross,
-                    total_net: totalNet,
-                    total_taxes: totalTaxes
-                };
-
-                this.messageService.add({
-                    severity: 'success',
-                    summary: 'Расчёт завершён',
-                    detail: `Рассчитано ${successful} из ${total} зарплат`
-                });
-                return;
-            }
-
-            setTimeout(() => {
-                const employee = employees[index];
-                const salary = this.calculateSalaryForEmployee(employee);
-
-                if (salary) {
-                    results.push(salary);
-                    successful++;
-                } else {
-                    failed++;
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Расчёт завершён',
+                        detail: `Рассчитано ${result.successful} из ${result.total} зарплат`
+                    });
+                },
+                error: (err) => {
+                    this.calculating = false;
+                    console.error('Ошибка расчёта:', err);
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'Ошибка',
+                        detail: 'Не удалось выполнить расчёт зарплат'
+                    });
                 }
-
-                processed++;
-                this.calculationProgress = Math.round((processed / total) * 100);
-                calculateNext(index + 1);
-            }, 200); // Simulate processing time
-        };
-
-        calculateNext(0);
-    }
-
-    calculateSalaryForEmployee(empStructure: EmployeeSalaryStructure): Salary | null {
-        const attendance = this.employeeAttendance.find(a =>
-            a.employee_id === empStructure.employee_id &&
-            a.period_month === this.selectedMonth &&
-            a.period_year === this.selectedYear
-        );
-
-        if (!attendance) {
-            return null;
-        }
-
-        // 1. Calculate allowances
-        const rankAllowance = empStructure.rank_allowance;
-        const educationAllowance = empStructure.education_allowance;
-        const seniorityAllowance = empStructure.seniority_allowance;
-        const otherAllowances = 0;
-
-        // 2. Get bonuses for this period
-        const bonuses = this.employeeBonuses
-            .filter(b => b.employee_id === empStructure.employee_id &&
-                         b.period_month === this.selectedMonth &&
-                         b.period_year === this.selectedYear &&
-                         b.approved)
-            .reduce((sum, b) => sum + b.amount, 0);
-
-        // 3. Calculate overtime pay (1.5x hourly rate)
-        const hourlyRate = empStructure.base_salary / (attendance.working_days * 8);
-        const overtimePay = Math.round(attendance.overtime_hours * hourlyRate * 1.5);
-
-        // 4. Calculate absence deduction
-        const dailyRate = empStructure.base_salary / attendance.working_days;
-        const absenceDeduction = Math.round(attendance.absent_days * dailyRate);
-
-        // 5. Calculate Gross Salary
-        const grossSalary = empStructure.base_salary +
-                           rankAllowance +
-                           educationAllowance +
-                           seniorityAllowance +
-                           otherAllowances +
-                           bonuses +
-                           overtimePay -
-                           absenceDeduction;
-
-        // 6. Calculate taxes (based on Uzbekistan rates)
-        const incomeTax = Math.round(grossSalary * this.taxRates.income_tax);
-        const socialFund = Math.round(grossSalary * this.taxRates.social_fund);
-        const pensionFund = Math.round(grossSalary * this.taxRates.pension_fund);
-        const healthInsurance = Math.round(grossSalary * this.taxRates.health_insurance);
-        const tradeUnion = Math.round(grossSalary * this.taxRates.trade_union);
-
-        // 7. Get other deductions (loans, alimony, etc.)
-        const activeDeductions = this.employeeDeductions.filter(d =>
-            d.employee_id === empStructure.employee_id && d.is_active
-        );
-
-        let otherDeductions = 0;
-        for (const deduction of activeDeductions) {
-            if (deduction.is_percentage) {
-                otherDeductions += Math.round(grossSalary * (deduction.amount / 100));
-            } else {
-                otherDeductions += deduction.amount;
-            }
-        }
-
-        // 8. Calculate total deductions and net salary
-        const totalDeductions = incomeTax + socialFund + pensionFund + healthInsurance + tradeUnion + otherDeductions;
-        const netSalary = grossSalary - totalDeductions;
-
-        const salary: Salary = {
-            id: this.nextId++,
-            employee_id: empStructure.employee_id,
-            employee_name: empStructure.employee_name,
-            department_id: empStructure.department_id,
-            department_name: empStructure.department_name,
-            position_name: empStructure.position_name,
-            period_month: this.selectedMonth,
-            period_year: this.selectedYear,
-
-            base_salary: empStructure.base_salary,
-            rank_allowance: rankAllowance,
-            education_allowance: educationAllowance,
-            seniority_allowance: seniorityAllowance,
-            other_allowances: otherAllowances,
-            bonuses: bonuses,
-            overtime_pay: overtimePay,
-            absence_deduction: absenceDeduction,
-
-            gross_salary: grossSalary,
-
-            income_tax: incomeTax,
-            social_fund: socialFund,
-            pension_fund: pensionFund,
-            health_insurance: healthInsurance,
-            trade_union: tradeUnion,
-            other_deductions: otherDeductions,
-
-            total_deductions: totalDeductions,
-            net_salary: netSalary,
-
-            working_days: attendance.working_days,
-            worked_days: attendance.worked_days,
-            sick_days: attendance.sick_days,
-            vacation_days: attendance.vacation_days,
-            absent_days: attendance.absent_days,
-            overtime_hours: attendance.overtime_hours,
-
-            status: 'calculated',
-            calculated_at: new Date().toISOString(),
-            calculated_by: 'Система'
-        };
-
-        return salary;
+            });
     }
 
     // ==================== APPROVAL WORKFLOW ====================
@@ -565,9 +376,36 @@ export class SalaryManagementComponent implements OnInit, OnDestroy {
     }
 
     onPeriodChange(): void {
-        this.generateAttendanceData();
-        this.generateBonusData();
         this.salaries = [];
+        this.lastBatchResult = null;
+    }
+
+    exportPayslips(): void {
+        this.salaryService.exportPayslips(this.selectedMonth, this.selectedYear)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: (blob) => {
+                    const url = window.URL.createObjectURL(blob);
+                    const link = window.document.createElement('a');
+                    link.href = url;
+                    link.download = `payslips_${this.selectedYear}_${this.selectedMonth}.pdf`;
+                    link.click();
+                    window.URL.revokeObjectURL(url);
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Экспорт',
+                        detail: 'Расчётные листы экспортированы'
+                    });
+                },
+                error: (err) => {
+                    console.error('Ошибка экспорта:', err);
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'Ошибка',
+                        detail: 'Не удалось экспортировать расчётные листы'
+                    });
+                }
+            });
     }
 
     getStatusSeverity(status: string): 'success' | 'info' | 'warn' | 'danger' | 'secondary' | 'contrast' {

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ButtonDirective } from 'primeng/button';
@@ -12,6 +12,7 @@ import { Tag } from 'primeng/tag';
 import { Tooltip } from 'primeng/tooltip';
 import { TreeNode } from 'primeng/api';
 import { MessageService } from 'primeng/api';
+import { Subject, takeUntil } from 'rxjs';
 import {
     OrgUnit,
     OrgEmployee,
@@ -20,6 +21,7 @@ import {
     ORG_UNIT_TYPES,
     ORG_COLORS
 } from '@/core/interfaces/hrm/org-structure';
+import { OrgStructureService } from '@/core/services/org-structure.service';
 
 // Predefined position titles
 export const POSITION_TITLES = [
@@ -73,7 +75,7 @@ export interface EmployeeForm {
     templateUrl: './org-structure.component.html',
     styleUrl: './org-structure.component.scss'
 })
-export class OrgStructureComponent implements OnInit {
+export class OrgStructureComponent implements OnInit, OnDestroy {
     // Data
     orgUnits: OrgUnit[] = [];
     orgTree: TreeNode[] = [];
@@ -126,88 +128,50 @@ export class OrgStructureComponent implements OnInit {
     detailsEmployees: OrgEmployee[] = [];
 
     private messageService = inject(MessageService);
+    private orgStructureService = inject(OrgStructureService);
+    private destroy$ = new Subject<void>();
 
     ngOnInit(): void {
         this.loadOrgUnits();
         this.loadEmployees();
     }
 
+    ngOnDestroy(): void {
+        this.destroy$.next();
+        this.destroy$.complete();
+    }
+
     private loadOrgUnits(): void {
         this.loading = true;
-
-        setTimeout(() => {
-            this.orgUnits = this.generateMockOrgUnits();
-            this.buildOrgTree();
-            this.buildOrgChart();
-            this.calculateStats();
-            this.loading = false;
-        }, 500);
+        this.orgStructureService.getOrgUnits()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: (units) => {
+                    this.orgUnits = units;
+                    this.buildOrgTree();
+                    this.buildOrgChart();
+                    this.calculateStats();
+                    this.loading = false;
+                },
+                error: () => {
+                    this.loading = false;
+                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось загрузить оргструктуру' });
+                }
+            });
     }
 
     private loadEmployees(): void {
-        this.employees = [
-            { id: 1, name: 'Абдуллаев Шавкат Рахимович', position: 'Председатель Правления', department_id: 2, department_name: 'Руководство', hire_date: '2018-01-15', is_manager: true, subordinates_count: 1250 },
-            { id: 2, name: 'Каримов Бахром Тулкинович', position: 'Заместитель Председателя', department_id: 2, department_name: 'Руководство', manager_id: 1, manager_name: 'Абдуллаев Ш.Р.', hire_date: '2018-03-20', is_manager: true, subordinates_count: 200 },
-            { id: 3, name: 'Рахимова Нигора Ильхомовна', position: 'Корпоративный секретарь', department_id: 3, department_name: 'Корпоративный секретариат', manager_id: 1, manager_name: 'Абдуллаев Ш.Р.', hire_date: '2015-06-01', is_manager: true, subordinates_count: 8 },
-            { id: 4, name: 'Хамидов Улугбек Сардорович', position: 'Начальник службы внутреннего аудита', department_id: 5, department_name: 'Служба внутреннего аудита', manager_id: 1, manager_name: 'Абдуллаев Ш.Р.', hire_date: '2016-02-14', is_manager: true, subordinates_count: 10 },
-            { id: 5, name: 'Юлдашев Фаррух Анварович', position: 'Директор Департамента эксплуатации ГЭС', department_id: 17, department_name: 'Департамент эксплуатации ГЭС', manager_id: 1, manager_name: 'Абдуллаев Ш.Р.', hire_date: '2012-01-10', is_manager: true, subordinates_count: 150 },
-            { id: 6, name: 'Исмаилова Дилноза Бахтияровна', position: 'Директор Департамента цифровизации', department_id: 23, department_name: 'Департамент цифровизации и ИКТ', manager_id: 1, manager_name: 'Абдуллаев Ш.Р.', hire_date: '2019-05-15', is_manager: true, subordinates_count: 35 },
-            { id: 7, name: 'Назаров Жасур Кахрамонович', position: 'Начальник Ситуационного центра', department_id: 25, department_name: 'Ситуационный центр', manager_id: 6, manager_name: 'Исмаилова Д.Б.', hire_date: '2020-08-01', is_manager: true, subordinates_count: 12 },
-            { id: 8, name: 'Турсунов Алишер Рустамович', position: 'Начальник Управления человеческих ресурсов', department_id: 32, department_name: 'Управление человеческих ресурсов', manager_id: 1, manager_name: 'Абдуллаев Ш.Р.', hire_date: '2017-11-20', is_manager: true, subordinates_count: 12 },
-            { id: 9, name: 'Мирзаева Гулчехра Бахромовна', position: 'Главный бухгалтер', department_id: 34, department_name: 'Департамент бухгалтерского учета', manager_id: 1, manager_name: 'Абдуллаев Ш.Р.', hire_date: '2010-03-01', is_manager: true, subordinates_count: 20 },
-            { id: 10, name: 'Расулов Темур Икрамович', position: 'Директор Департамента иностранных инвестиций', department_id: 27, department_name: 'Департамент иностранных инвестиций', manager_id: 1, manager_name: 'Абдуллаев Ш.Р.', hire_date: '2014-01-15', is_manager: true, subordinates_count: 25 },
-            { id: 11, name: 'Холматов Дониёр Шухратович', position: 'Специалист по AI', department_id: 24, department_name: 'Отдел внедрения ИИ', manager_id: 6, manager_name: 'Исмаилова Д.Б.', hire_date: '2022-06-01', is_manager: false, subordinates_count: 0 },
-            { id: 12, name: 'Сафарова Мадина Равшановна', position: 'HR-специалист', department_id: 32, department_name: 'Управление человеческих ресурсов', manager_id: 8, manager_name: 'Турсунов А.Р.', hire_date: '2021-02-15', is_manager: false, subordinates_count: 0 }
-        ];
-    }
-
-    private generateMockOrgUnits(): OrgUnit[] {
-        return [
-            { id: 1, name: 'АО "Узбекгидроэнерго"', code: 'UGE', type: 'company', parent_id: null, head_id: 1, head_name: 'Председатель Правления', head_position: 'Председатель Правления', employee_count: 1250, is_active: true, created_at: '2001-01-01' },
-            { id: 2, name: 'Руководство', code: 'MGMT', type: 'department', parent_id: 1, employee_count: 15, is_active: true, created_at: '2001-01-01' },
-            { id: 3, name: 'Служба корпоративного и стратегического консультанта - Корпоративный секретариат', code: 'CORP-SEC', type: 'section', parent_id: 1, employee_count: 8, is_active: true, created_at: '2010-01-01' },
-            { id: 4, name: 'Отдел "Комплаенс-контроль" и противодействия коррупции', code: 'COMPL', type: 'section', parent_id: 1, employee_count: 6, is_active: true, created_at: '2018-01-01' },
-            { id: 5, name: 'Служба внутреннего аудита', code: 'AUDIT', type: 'section', parent_id: 1, employee_count: 10, is_active: true, created_at: '2005-01-01' },
-            { id: 6, name: 'Отдел охраны окружающей среды и кадастра', code: 'ENV', type: 'section', parent_id: 1, employee_count: 7, is_active: true, created_at: '2008-01-01' },
-            { id: 7, name: 'Секретариат при Председателе Правления', code: 'SEC-CHR', type: 'section', parent_id: 1, employee_count: 5, is_active: true, created_at: '2001-01-01' },
-            { id: 8, name: 'Руководитель Аппарата', code: 'APP-HEAD', type: 'section', parent_id: 1, employee_count: 3, is_active: true, created_at: '2001-01-01' },
-            { id: 9, name: 'Информационно-аналитический отдел', code: 'INFO-AN', type: 'section', parent_id: 1, employee_count: 8, is_active: true, created_at: '2012-01-01' },
-            { id: 10, name: 'Канцелярия', code: 'OFFICE', type: 'section', parent_id: 1, employee_count: 6, is_active: true, created_at: '2001-01-01' },
-            { id: 11, name: 'Первый отдел', code: 'FIRST', type: 'section', parent_id: 1, employee_count: 4, is_active: true, created_at: '2001-01-01' },
-            { id: 12, name: 'Пресс служба', code: 'PRESS', type: 'section', parent_id: 1, employee_count: 5, is_active: true, created_at: '2010-01-01' },
-            { id: 13, name: 'Контрольный отдел', code: 'CONTROL', type: 'section', parent_id: 1, employee_count: 7, is_active: true, created_at: '2005-01-01' },
-            { id: 14, name: 'Служба охраны труда и техники безопасности', code: 'SAFETY', type: 'section', parent_id: 1, employee_count: 12, is_active: true, created_at: '2001-01-01' },
-            { id: 15, name: 'Управление безопасности и специальных дел', code: 'SEC-SPEC', type: 'section', parent_id: 1, employee_count: 15, is_active: true, created_at: '2005-01-01' },
-            { id: 16, name: 'Отдел обеспечения информационной безопасности', code: 'INFO-SEC', type: 'section', parent_id: 1, employee_count: 8, is_active: true, created_at: '2015-01-01' },
-            { id: 17, name: 'Департамент эксплуатации гидроэлектростанций', code: 'DEP-GES', type: 'department', parent_id: 1, employee_count: 150, is_active: true, created_at: '2001-01-01' },
-            { id: 18, name: 'Управление по контролю за эксплуатацией ГЭС и их гидротехнических сооружений', code: 'GES-CTRL', type: 'section', parent_id: 17, employee_count: 25, is_active: true, created_at: '2001-01-01' },
-            { id: 19, name: 'Управление капитального строительства', code: 'CAP-BUILD', type: 'section', parent_id: 17, employee_count: 30, is_active: true, created_at: '2001-01-01' },
-            { id: 20, name: 'Департамент по организации эффективного и безопасного использования водохранилищ', code: 'DEP-WATER', type: 'department', parent_id: 1, employee_count: 45, is_active: true, created_at: '2010-01-01' },
-            { id: 21, name: 'Отдел эксплуатации и организации ремонтных работ водохранилищ', code: 'WATER-REP', type: 'section', parent_id: 20, employee_count: 20, is_active: true, created_at: '2010-01-01' },
-            { id: 22, name: 'Отдел модернизации и автоматизации водохранилищ', code: 'WATER-MOD', type: 'section', parent_id: 20, employee_count: 15, is_active: true, created_at: '2015-01-01' },
-            { id: 23, name: 'Департамент цифровизации и внедрения ИКТ', code: 'DEP-IT', type: 'department', parent_id: 1, employee_count: 35, is_active: true, created_at: '2018-01-01' },
-            { id: 24, name: 'Отдел внедрения искусственного интеллекта', code: 'AI', type: 'section', parent_id: 23, employee_count: 8, is_active: true, created_at: '2022-01-01' },
-            { id: 25, name: 'Ситуационный центр', code: 'SIT-CTR', type: 'section', parent_id: 23, employee_count: 12, is_active: true, created_at: '2020-01-01' },
-            { id: 26, name: 'Отдел организации эксплуатации электрических сетей и подстанций', code: 'ELEC-NET', type: 'section', parent_id: 1, employee_count: 20, is_active: true, created_at: '2005-01-01' },
-            { id: 27, name: 'Департамент иностранных инвестиций', code: 'DEP-INVEST', type: 'department', parent_id: 1, employee_count: 25, is_active: true, created_at: '2012-01-01' },
-            { id: 28, name: 'Управление перспективного развития и реализации проектов государственно-частного партнерства', code: 'PPP', type: 'section', parent_id: 27, employee_count: 10, is_active: true, created_at: '2015-01-01' },
-            { id: 29, name: 'Управление мониторинга инвестиционных программ, контроля закупок по иностранным инвестициям', code: 'INV-MON', type: 'section', parent_id: 27, employee_count: 8, is_active: true, created_at: '2015-01-01' },
-            { id: 30, name: 'Отдел локализации, расширения кооперационных связей в промышленности и инновационного развития', code: 'LOCAL', type: 'section', parent_id: 1, employee_count: 6, is_active: true, created_at: '2018-01-01' },
-            { id: 31, name: 'Протокол и служба организации международных отношений', code: 'INTL', type: 'section', parent_id: 1, employee_count: 7, is_active: true, created_at: '2010-01-01' },
-            { id: 32, name: 'Управление человеческих ресурсов', code: 'HR', type: 'section', parent_id: 1, employee_count: 12, is_active: true, created_at: '2001-01-01' },
-            { id: 33, name: 'Департамент экономического анализа, планирования и управления рисками', code: 'DEP-ECON', type: 'department', parent_id: 1, employee_count: 18, is_active: true, created_at: '2008-01-01' },
-            { id: 34, name: 'Департамент бухгалтерского учета и финансовой отчетности', code: 'DEP-ACC', type: 'department', parent_id: 1, employee_count: 20, is_active: true, created_at: '2001-01-01' },
-            { id: 35, name: 'Отдел налогового учета и отчетности', code: 'TAX', type: 'section', parent_id: 34, employee_count: 8, is_active: true, created_at: '2005-01-01' },
-            { id: 36, name: 'Отдел корпоративных отношений', code: 'CORP-REL', type: 'section', parent_id: 1, employee_count: 5, is_active: true, created_at: '2012-01-01' },
-            { id: 37, name: 'Департамент международных финансовых отчетов', code: 'DEP-IFRS', type: 'department', parent_id: 1, employee_count: 10, is_active: true, created_at: '2015-01-01' },
-            { id: 38, name: 'Отдел координации закупок', code: 'PROC', type: 'section', parent_id: 1, employee_count: 8, is_active: true, created_at: '2010-01-01' },
-            { id: 39, name: 'Отдел духовно-просветительской работы', code: 'SPIRIT', type: 'section', parent_id: 1, employee_count: 4, is_active: true, created_at: '2018-01-01' },
-            { id: 40, name: 'Офис трансформации и внедрения принципов ESG', code: 'ESG', type: 'section', parent_id: 1, employee_count: 6, is_active: true, created_at: '2022-01-01' },
-            { id: 41, name: 'Отдел финансирования и контроля денежных потоков', code: 'FIN-CTRL', type: 'section', parent_id: 1, employee_count: 7, is_active: true, created_at: '2008-01-01' },
-            { id: 42, name: 'Специалисты', code: 'SPEC', type: 'group', parent_id: 1, employee_count: 10, is_active: true, created_at: '2001-01-01' },
-            { id: 43, name: 'У руководителя аппарата, по административно-хозяйственной работе', code: 'ADM-ECO', type: 'section', parent_id: 8, employee_count: 15, is_active: true, created_at: '2001-01-01' },
-            { id: 44, name: 'Юридический отдел', code: 'LEGAL', type: 'section', parent_id: 1, employee_count: 8, is_active: true, created_at: '2001-01-01' }
-        ];
+        this.orgStructureService.getOrgEmployees()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: (employees) => {
+                    this.employees = employees;
+                    this.calculateStats();
+                },
+                error: () => {
+                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось загрузить сотрудников' });
+                }
+            });
     }
 
     private buildOrgTree(): void {
