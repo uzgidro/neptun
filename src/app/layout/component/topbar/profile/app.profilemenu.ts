@@ -29,9 +29,9 @@ import { TranslateModule } from '@ngx-translate/core';
                             <i class="pi pi-user text-6xl text-gray-400 mb-3"></i>
                         }
                         <div class="font-semibold text-lg text-center">{{ contact.name }}</div>
-                        @if (contact.email) {
-                            <div class="text-sm text-gray-600 text-center">{{ contact.email }}</div>
-                        }
+                        <!--                        @if (contact.email) {-->
+                        <!--                            <div class="text-sm text-gray-600 text-center">{{ contact.email }}</div>-->
+                        <!--                        }-->
                     </div>
                 } @else {
                     <div class="flex items-center justify-center p-4">
