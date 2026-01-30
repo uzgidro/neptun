@@ -2,9 +2,9 @@ name: Build & Deploy
 
 on:
     push:
-        branches: [ main, master ]
+        branches: [ presentation ]
     pull_request:
-        branches: [ main, master ]
+        branches: [ presentation ]
 
 env:
     DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/milk-pro
