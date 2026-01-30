@@ -1,140 +1,61 @@
-name: Promote to Production
+name: Promote to Prod
 
 on:
     workflow_dispatch:
         inputs:
             image_tag:
-                description: 'Image tag to promote (commit SHA from dev)'
+                description: 'Image tag to promote (SHA from dev)'
                 required: true
                 type: string
-            skip_verification:
-                description: 'Skip image verification (not recommended)'
-                required: false
-                type: boolean
-                default: false
 
 env:
     DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/neptun
-    GITOPS_REPO: ${{ github.repository_owner }}/GitOps-Repo
-    APP_PATH: apps/neptun
 
 jobs:
-    # ==========================================
-    # Verify Image Exists
-    # ==========================================
-    verify:
-        name: Verify Image
+    promote:
         runs-on: ubuntu-latest
-        if: ${{ !inputs.skip_verification }}
+        environment: production  # Требует approval в GitHub
 
         steps:
-            -   name: Login to Docker Hub
-                uses: docker/login-action@v3
-                with:
-                    username: ${{ secrets.DOCKERHUB_USERNAME }}
-                    password: ${{ secrets.DOCKERHUB_TOKEN }}
-
             -   name: Verify image exists
                 run: |
-                    echo "🔍 Verifying image: ${{ env.DOCKER_IMAGE }}:${{ inputs.image_tag }}"
-                    if docker manifest inspect ${{ env.DOCKER_IMAGE }}:${{ inputs.image_tag }} > /dev/null 2>&1; then
-                      echo "✅ Image found"
-                    else
-                      echo "❌ Image not found: ${{ env.DOCKER_IMAGE }}:${{ inputs.image_tag }}"
-                      exit 1
-                    fi
+                    docker manifest inspect ${{ env.DOCKER_IMAGE }}:${{ inputs.image_tag }} || \
+                      (echo "Image not found!" && exit 1)
 
-    # ==========================================
-    # Promote to Production
-    # ==========================================
-    promote:
-        name: Promote to Prod
-        needs: verify
-        if: always() && (needs.verify.result == 'success' || needs.verify.result == 'skipped')
-        runs-on: ubuntu-latest
-        environment: production
-
-        steps:
             -   name: Setup SSH agent
                 uses: webfactory/ssh-agent@v0.9.0
                 with:
                     ssh-private-key: ${{ secrets.GITOPS_SSH_KEY }}
 
-            -   name: Configure git
+            -   name: Promote to prod
                 run: |
+                    # Настройка git
                     git config --global user.name "github-actions[bot]"
                     git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+                    # Добавляем GitHub в known_hosts
                     mkdir -p ~/.ssh
                     ssh-keyscan github.com >> ~/.ssh/known_hosts
 
-            -   name: Update prod manifest
-                run: |
-                    git clone git@github.com:${{ env.GITOPS_REPO }}.git gitops
+                    # Клонируем gitops репо
+                    git clone git@github.com:${{ github.repository_owner }}/GitOps-Repo.git gitops
                     cd gitops
 
-                    # Update image tag
-                    sed -i "s|newTag:.*|newTag: ${{ inputs.image_tag }}|g" ${{ env.APP_PATH }}/overlays/prod/kustomization.yaml
+                    # Обновляем image tag через sed
+                    sed -i "s|newTag:.*|newTag: ${{ inputs.image_tag }}|g" apps/neptun/overlays/prod/kustomization.yaml
 
-                    # Commit and push if changed
+                    # Коммит и пуш если есть изменения
                     if [[ -n $(git status --porcelain) ]]; then
-                      git add ${{ env.APP_PATH }}/overlays/prod/kustomization.yaml
-                      git commit -m "deploy(prod): neptun @ ${{ inputs.image_tag }}"
+                      git add apps/neptun/overlays/prod/kustomization.yaml
+                      git commit -m "deploy(prod): ${{ inputs.image_tag }}"
                       git push
-                      echo "✅ Promoted to production: ${{ inputs.image_tag }}"
                     else
-                      echo "ℹ️ Already at version ${{ inputs.image_tag }}"
+                      echo "No changes to commit"
                     fi
 
-    # ==========================================
-    # Tag as Stable
-    # ==========================================
-    tag-stable:
-        name: Tag as Stable
-        needs: promote
-        runs-on: ubuntu-latest
-
-        steps:
-            -   name: Login to Docker Hub
-                uses: docker/login-action@v3
-                with:
-                    username: ${{ secrets.DOCKERHUB_USERNAME }}
-                    password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-            -   name: Tag image as stable
+            -   name: Tag as stable
                 run: |
+                    echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
                     docker pull ${{ env.DOCKER_IMAGE }}:${{ inputs.image_tag }}
                     docker tag ${{ env.DOCKER_IMAGE }}:${{ inputs.image_tag }} ${{ env.DOCKER_IMAGE }}:stable
                     docker push ${{ env.DOCKER_IMAGE }}:stable
-                    echo "✅ Tagged as stable: ${{ inputs.image_tag }}"
-
-    # ==========================================
-    # Create Release
-    # ==========================================
-    create-release:
-        name: Create Release
-        needs: [ promote, tag-stable ]
-        runs-on: ubuntu-latest
-
-        steps:
-            -   name: Checkout
-                uses: actions/checkout@v4
-                with:
-                    ref: ${{ inputs.image_tag }}
-
-            -   name: Create GitHub Release
-                uses: softprops/action-gh-release@v2
-                with:
-                    tag_name: release-${{ inputs.image_tag }}
-                    name: Production Release ${{ inputs.image_tag }}
-                    body: |
-                        ## Production Deployment
-
-                        **Image:** `${{ env.DOCKER_IMAGE }}:${{ inputs.image_tag }}`
-                        **Deployed by:** @${{ github.actor }}
-                        **Date:** ${{ github.event.repository.updated_at }}
-
-                        ### Docker Tags
-                        - `${{ inputs.image_tag }}`
-                        - `stable`
-                    draft: false
-                    prerelease: false
