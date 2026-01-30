@@ -7,9 +7,9 @@ on:
         branches: [ main, master ]
 
 env:
-    DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/milk-pro
+    DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/neptun
     GITOPS_REPO: ${{ github.repository_owner }}/GitOps-Repo
-    APP_PATH: apps/milk-pro
+    APP_PATH: apps/neptun
 
 jobs:
     build:
@@ -99,7 +99,7 @@ jobs:
                     # Commit and push if changed
                     if [[ -n $(git status --porcelain) ]]; then
                       git add ${{ env.APP_PATH }}/overlays/dev/kustomization.yaml
-                      git commit -m "deploy(dev): milk-pro @ ${{ github.sha }}"
+                      git commit -m "deploy(dev): neptun @ ${{ github.sha }}"
                       git push
                       echo "✅ Deployed to dev: ${{ github.sha }}"
                     else

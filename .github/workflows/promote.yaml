@@ -14,9 +14,9 @@ on:
                 default: false
 
 env:
-    DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/milk-pro
+    DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/neptun
     GITOPS_REPO: ${{ github.repository_owner }}/GitOps-Repo
-    APP_PATH: apps/milk-pro
+    APP_PATH: apps/neptun
 
 jobs:
     # ==========================================
@@ -78,7 +78,7 @@ jobs:
                     # Commit and push if changed
                     if [[ -n $(git status --porcelain) ]]; then
                       git add ${{ env.APP_PATH }}/overlays/prod/kustomization.yaml
-                      git commit -m "deploy(prod): milk-pro @ ${{ inputs.image_tag }}"
+                      git commit -m "deploy(prod): neptun @ ${{ inputs.image_tag }}"
                       git push
                       echo "✅ Promoted to production: ${{ inputs.image_tag }}"
                     else
