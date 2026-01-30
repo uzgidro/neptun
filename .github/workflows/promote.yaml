@@ -1,4 +1,4 @@
-name: Promote to Production
+name: Promote to Production presentation
 
 on:
     workflow_dispatch:
