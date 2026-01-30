@@ -93,7 +93,7 @@ Jenkinsfile
 # ===========================================
 # Kubernetes / Kustomize
 # ===========================================
-milk-pro/
+neptun/
 k8s/
 kubernetes/
 helm/
