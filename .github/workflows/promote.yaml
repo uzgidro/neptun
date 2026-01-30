@@ -3,18 +3,25 @@ name: Promote to Prod
 on:
     workflow_dispatch:
         inputs:
+            project:
+                description: 'Project to promote'
+                required: true
+                type: choice
+                options:
+                    - srmt-front
+                    - milk-pro
             image_tag:
                 description: 'Image tag to promote (SHA from dev)'
                 required: true
                 type: string
 
-env:
-    DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/neptun
-
 jobs:
     promote:
         runs-on: ubuntu-latest
-        environment: production  # Требует approval в GitHub
+        environment: production
+
+        env:
+            DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/${{ inputs.project }}
 
         steps:
             -   name: Verify image exists
@@ -29,25 +36,20 @@ jobs:
 
             -   name: Promote to prod
                 run: |
-                    # Настройка git
                     git config --global user.name "github-actions[bot]"
                     git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-                    # Добавляем GitHub в known_hosts
                     mkdir -p ~/.ssh
                     ssh-keyscan github.com >> ~/.ssh/known_hosts
 
-                    # Клонируем gitops репо
                     git clone git@github.com:${{ github.repository_owner }}/GitOps-Repo.git gitops
                     cd gitops
 
-                    # Обновляем image tag через sed
-                    sed -i "s|newTag:.*|newTag: ${{ inputs.image_tag }}|g" apps/neptun/overlays/prod/kustomization.yaml
+                    sed -i "s|newTag:.*|newTag: ${{ inputs.image_tag }}|g" apps/${{ inputs.project }}/overlays/prod/kustomization.yaml
 
-                    # Коммит и пуш если есть изменения
                     if [[ -n $(git status --porcelain) ]]; then
-                      git add apps/neptun/overlays/prod/kustomization.yaml
-                      git commit -m "deploy(prod): ${{ inputs.image_tag }}"
+                      git add apps/${{ inputs.project }}/overlays/prod/kustomization.yaml
+                      git commit -m "deploy(prod): ${{ inputs.project }} @ ${{ inputs.image_tag }}"
                       git push
                     else
                       echo "No changes to commit"
