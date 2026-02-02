@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ApiService, BASE_URL } from '@/core/services/api.service';
 import { Observable } from 'rxjs';
 import { HttpParams } from '@angular/common/http';
-import { GesResponse, GesContact, GesShutdown, GesDischarge, GesIncident, GesVisit, TelemetryEnvelope, DateRangeParams } from '@/core/interfaces/ges';
+import { GesResponse, GesContact, GesShutdown, GesDischarge, GesIncident, GesVisit, TelemetryEnvelope, DateRangeParams, ASCUEMetrics } from '@/core/interfaces/ges';
 import { Department } from '@/core/interfaces/department';
 
 const GES = '/ges';
@@ -82,6 +82,11 @@ export class GesService extends ApiService {
     // GET /ges/{id}/telemetry/{device_id}
     getDeviceTelemetry(id: number, deviceId: string): Observable<TelemetryEnvelope> {
         return this.http.get<TelemetryEnvelope>(`${BASE_URL}${GES}/${id}/telemetry/${deviceId}`);
+    }
+
+    // GET /ges/{id}/askue
+    getAskue(id: number): Observable<ASCUEMetrics> {
+        return this.http.get<ASCUEMetrics>(`${BASE_URL}${GES}/${id}/askue`);
     }
 
     // CRUD операции для остановов

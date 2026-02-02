@@ -6,7 +6,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ButtonDirective } from 'primeng/button';
 
 import { GesService } from '@/core/services/ges.service';
-import { GesResponse, TelemetryEnvelope, GesKpiData } from '@/core/interfaces/ges';
+import { GesResponse, TelemetryEnvelope, GesKpiData, ASCUEMetrics } from '@/core/interfaces/ges';
 
 import { GesKpiCardComponent } from '../ges-kpi-card/ges-kpi-card.component';
 import { GesAggregatesComponent } from '../ges-aggregates/ges-aggregates.component';
@@ -27,6 +27,7 @@ export class GesDashboardComponent implements OnInit, OnDestroy {
     private translate = inject(TranslateService);
 
     telemetry: TelemetryEnvelope[] = [];
+    askue: ASCUEMetrics | null = null;
     kpiData: GesKpiData = {
         shutdownsCount: 0,
         dischargesCount: 0,
@@ -52,18 +53,31 @@ export class GesDashboardComponent implements OnInit, OnDestroy {
     loadData(): void {
         this.loading = true;
 
-        // Load telemetry
-        this.gesService.getTelemetry(this.gesId).subscribe({
+        // Load ASKUE data (primary source for KPIs)
+        this.gesService.getAskue(this.gesId).subscribe({
             next: (data) => {
-                this.telemetry = data;
-                this.calculateKpi();
+                this.askue = data;
+                this.kpiData.currentPower = data.active ?? 0;
+                this.kpiData.activeAggregates = data.active_agg_count ?? 0;
+                this.kpiData.totalAggregates =
+                    (data.active_agg_count ?? 0) +
+                    (data.pending_agg_count ?? 0) +
+                    (data.repair_agg_count ?? 0);
                 this.lastUpdated = new Date();
             },
             error: () => {
-                this.loading = false;
+                // Fallback to telemetry if ASKUE is unavailable
+                this.loadTelemetryFallback();
             },
             complete: () => {
                 this.loading = false;
+            }
+        });
+
+        // Load telemetry for aggregates display
+        this.gesService.getTelemetry(this.gesId).subscribe({
+            next: (data) => {
+                this.telemetry = data;
             }
         });
 
@@ -82,7 +96,20 @@ export class GesDashboardComponent implements OnInit, OnDestroy {
         });
     }
 
-    calculateKpi(): void {
+    private loadTelemetryFallback(): void {
+        this.gesService.getTelemetry(this.gesId).subscribe({
+            next: (data) => {
+                this.telemetry = data;
+                this.calculateKpiFromTelemetry();
+                this.lastUpdated = new Date();
+            },
+            complete: () => {
+                this.loading = false;
+            }
+        });
+    }
+
+    private calculateKpiFromTelemetry(): void {
         let totalPower = 0;
         let activeCount = 0;
         let totalCount = 0;

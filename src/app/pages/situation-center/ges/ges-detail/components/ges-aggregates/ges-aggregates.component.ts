@@ -4,7 +4,7 @@ import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { TelemetryEnvelope, GesAggregate } from '@/core/interfaces/ges';
+import { TelemetryEnvelope, GesAggregate, ASCUEMetrics } from '@/core/interfaces/ges';
 
 @Component({
     selector: 'app-ges-aggregates',
@@ -16,6 +16,7 @@ import { TelemetryEnvelope, GesAggregate } from '@/core/interfaces/ges';
 export class GesAggregatesComponent implements OnChanges {
     @Input() gesId!: number;
     @Input() telemetry: TelemetryEnvelope[] = [];
+    @Input() askue: ASCUEMetrics | null = null;
 
     aggregates: GesAggregate[] = [];
 
