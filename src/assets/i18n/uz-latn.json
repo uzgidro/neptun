@@ -1721,5 +1721,143 @@
     "HINT": "Lex.uz portalida hujjatlarni qidirish uchun matn kiriting",
     "PAGE_REPORT": "Sahifa {currentPage} / {totalPages}",
     "LOADING": "Yuklanmoqda..."
+  },
+    "GES_DETAIL": {
+        "NOT_FOUND": "GES topilmadi",
+        "ERROR_LOADING": "Ma'lumotlarni yuklashda xatolik",
+        "ERROR_SAVE": "Saqlashda xatolik",
+        "ERROR_DELETE": "O'chirishda xatolik",
+        "CREATED": "Yozuv yaratildi",
+        "UPDATED": "Yozuv yangilandi",
+        "DELETED": "Yozuv o'chirildi",
+        "AGGREGATES_TITLE": "Agregatlar",
+        "MNEMONIC_TITLE": "Mnemosxema",
+        "NO_AGGREGATES": "Agregatlar haqida ma'lumot yo'q",
+        "TABS": {
+            "INFO": "Ma'lumot",
+            "CONTACTS": "Kontaktlar",
+            "SHUTDOWNS": "Favqulodda o'chirishlar",
+            "DISCHARGES": "Bo'sh tashlamalar",
+            "INCIDENTS": "Voqealar",
+            "VISITS": "Tashriflar",
+            "TELEMETRY": "Telemetriya"
+        },
+        "KPI": {
+            "CURRENT_POWER": "Aktiv quvvat",
+            "AGGREGATES": "Agregatlar",
+            "SHUTDOWNS": "Favqulodda o'chirishlar",
+            "DISCHARGES": "Bo'sh suv tashlamalari"
+        },
+        "STATUS": {
+            "ACTIVE": "Ishlamoqda",
+            "PENDING": "Kutilmoqda",
+            "REPAIR": "Ta'mirda",
+            "OFFLINE": "O'chirilgan"
+        },
+        "AGGREGATE": {
+            "NAME": "Nomi",
+            "POWER": "Quvvat",
+            "STATUS": "Holat",
+            "TEMPERATURE": "Harorat"
+        },
+        "MNEMONIC": {
+            "STATUS": "Holat",
+            "POWER": "Quvvat",
+            "NO_DATA": "Telemetriya ma'lumotlari yo'q",
+            "PLACEHOLDER": "Ma'lumotlar mavjud bo'lganda mnemosxema ko'rsatiladi"
+        },
+        "INFO": {
+            "BASIC_INFO": "Asosiy ma'lumot",
+            "NAME": "Nomi",
+            "PARENT_ORG": "Bosh tashkilot",
+            "TYPES": "Turlari",
+            "DEPARTMENTS": "Bo'limlar",
+            "DEPARTMENT_NAME": "Nomi",
+            "DEPARTMENT_DESC": "Tavsifi",
+            "NO_DEPARTMENTS": "Bo'limlar yo'q",
+            "SUB_ORGANIZATIONS": "Qo'shimcha tashkilotlar"
+        },
+        "CONTACTS": {
+            "NAME": "F.I.O.",
+            "POSITION": "Lavozim",
+            "DEPARTMENT": "Bo'lim",
+            "PHONE": "Telefon",
+            "EMAIL": "Elektron pochta",
+            "ACTIONS": "Amallar",
+            "CALL": "Qo'ng'iroq qilish",
+            "NO_CONTACTS": "Kontaktlar yo'q"
+        },
+        "FILTERS": {
+            "START_DATE": "Boshlanish sanasi",
+            "END_DATE": "Tugash sanasi",
+            "SELECT_DATE": "Sanani tanlang"
+        },
+        "COMMON": {
+            "CREATED_BY": "Yaratdi",
+            "FILES": "Fayllar",
+            "VIEW_FILES": "Fayllarni ko'rish",
+            "ATTACH_FILES": "Fayllarni biriktirish",
+            "ADD_NEW_FILES": "Yangi fayllar qo'shish"
+        },
+        "SHUTDOWNS": {
+            "ADD": "Favqulodda o'chirish qo'shish",
+            "EDIT": "Favqulodda o'chirishni tahrirlash",
+            "START": "Boshlanishi",
+            "END": "Tugashi",
+            "REASON": "Sababi",
+            "POWER_LOSS": "Quvvat yo'qotish",
+            "IDLE_DISCHARGE": "Bo'sh tashlama",
+            "FILES": "Voqea fayllari",
+            "NO_DATA": "Favqulodda o'chirishlar haqida ma'lumot yo'q"
+        },
+        "DISCHARGES": {
+            "ADD": "Bo'sh tashlama qo'shish",
+            "EDIT": "Bo'sh tashlamani tahrirlash",
+            "START": "Boshlanishi",
+            "END": "Tugashi",
+            "FLOW_RATE": "Sarf, m³/s",
+            "TOTAL_VOLUME": "Hajm, mln m³",
+            "REASON": "Sababi",
+            "STATUS": "Holat",
+            "ONGOING": "Davom etmoqda",
+            "APPROVED": "Tasdiqlangan",
+            "COMPLETED": "Tugallangan",
+            "FILES": "Bo'sh tashlama fayllari",
+            "NO_DATA": "Bo'sh tashlamalar haqida ma'lumot yo'q"
+        },
+        "INCIDENTS": {
+            "ADD": "Voqea qo'shish",
+            "EDIT": "Voqeani tahrirlash",
+            "DATE": "Sana",
+            "DESCRIPTION": "Tavsif",
+            "ORGANIZATION": "Tashkilot",
+            "FILES": "Voqea fayllari",
+            "NO_DATA": "Voqealar haqida ma'lumot yo'q"
+        },
+        "VISITS": {
+            "ADD": "Tashrif qo'shish",
+            "EDIT": "Tashrifni tahrirlash",
+            "DATE": "Sana",
+            "DESCRIPTION": "Tavsif",
+            "RESPONSIBLE": "Mas'ul",
+            "ORGANIZATION": "Tashkilot",
+            "FILES": "Tashrif fayllari",
+            "NO_DATA": "Tashriflar haqida ma'lumot yo'q"
+        },
+        "TELEMETRY": {
+            "DEVICE": "Qurilma",
+            "DEVICE_GROUP": "Qurilmalar guruhi",
+            "GROUP": "Guruh",
+            "PARAMETER": "Parametr",
+            "VALUE": "Qiymat",
+            "UNIT": "O'lch. bir.",
+            "QUALITY": "Sifat",
+            "SEVERITY": "Muhimlik",
+            "TIMESTAMP": "Vaqt",
+            "ALL_GROUPS": "Barcha guruhlar",
+            "ALL_DEVICES": "Barcha qurilmalar",
+            "TOTAL_RECORDS": "Jami yozuvlar",
+            "NO_DATA": "Telemetriya ma'lumotlari yo'q"
+        }
   }
 }
