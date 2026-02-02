@@ -38,11 +38,6 @@ jobs:
                     cache-from: type=gha
                     cache-to: type=gha,mode=max
 
-            -   name: Trigger Watchtower Update
-                run: |
-                    curl -H "Authorization: Bearer ${{ secrets.WATCHTOWER_SECRET }}" \
-                      https://${{ secrets.WATCHTOWER_HOST }}/v1/update
-
     deploy-dev:
         needs: build
         if: github.event_name != 'pull_request'
