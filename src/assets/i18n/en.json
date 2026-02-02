@@ -1750,5 +1750,143 @@
     "HINT": "Enter text to search documents on Lex.uz portal",
     "PAGE_REPORT": "Page {currentPage} of {totalPages}",
     "LOADING": "Loading..."
+  },
+    "GES_DETAIL": {
+        "NOT_FOUND": "HPP not found",
+        "ERROR_LOADING": "Error loading data",
+        "ERROR_SAVE": "Error saving",
+        "ERROR_DELETE": "Error deleting",
+        "CREATED": "Record created",
+        "UPDATED": "Record updated",
+        "DELETED": "Record deleted",
+        "AGGREGATES_TITLE": "Aggregates",
+        "MNEMONIC_TITLE": "Mnemonic Scheme",
+        "NO_AGGREGATES": "No aggregate data",
+        "TABS": {
+            "INFO": "Information",
+            "CONTACTS": "Contacts",
+            "SHUTDOWNS": "Emergency Outages",
+            "DISCHARGES": "Idle Discharges",
+            "INCIDENTS": "Incidents",
+            "VISITS": "Visits",
+            "TELEMETRY": "Telemetry"
+        },
+        "KPI": {
+            "CURRENT_POWER": "Active Power",
+            "AGGREGATES": "Aggregates",
+            "SHUTDOWNS": "Emergency Outages",
+            "DISCHARGES": "Idle Discharges"
+        },
+        "STATUS": {
+            "ACTIVE": "Active",
+            "PENDING": "Pending",
+            "REPAIR": "Repair",
+            "OFFLINE": "Offline"
+        },
+        "AGGREGATE": {
+            "NAME": "Name",
+            "POWER": "Power",
+            "STATUS": "Status",
+            "TEMPERATURE": "Temperature"
+        },
+        "MNEMONIC": {
+            "STATUS": "Status",
+            "POWER": "Power",
+            "NO_DATA": "No telemetry data",
+            "PLACEHOLDER": "Mnemonic scheme will be displayed when data is available"
+        },
+        "INFO": {
+            "BASIC_INFO": "Basic Information",
+            "NAME": "Name",
+            "PARENT_ORG": "Parent Organization",
+            "TYPES": "Types",
+            "DEPARTMENTS": "Departments",
+            "DEPARTMENT_NAME": "Name",
+            "DEPARTMENT_DESC": "Description",
+            "NO_DEPARTMENTS": "No departments",
+            "SUB_ORGANIZATIONS": "Sub-organizations"
+        },
+        "CONTACTS": {
+            "NAME": "Full Name",
+            "POSITION": "Position",
+            "DEPARTMENT": "Department",
+            "PHONE": "Phone",
+            "EMAIL": "Email",
+            "ACTIONS": "Actions",
+            "CALL": "Call",
+            "NO_CONTACTS": "No contacts"
+        },
+        "FILTERS": {
+            "START_DATE": "Start Date",
+            "END_DATE": "End Date",
+            "SELECT_DATE": "Select date"
+        },
+        "COMMON": {
+            "CREATED_BY": "Created by",
+            "FILES": "Files",
+            "VIEW_FILES": "View files",
+            "ATTACH_FILES": "Attach files",
+            "ADD_NEW_FILES": "Add new files"
+        },
+        "SHUTDOWNS": {
+            "ADD": "Add Emergency Outage",
+            "EDIT": "Edit Emergency Outage",
+            "START": "Start",
+            "END": "End",
+            "REASON": "Reason",
+            "POWER_LOSS": "Power Loss",
+            "IDLE_DISCHARGE": "Idle Discharge",
+            "FILES": "Event Files",
+            "NO_DATA": "No emergency outage data"
+        },
+        "DISCHARGES": {
+            "ADD": "Add Idle Discharge",
+            "EDIT": "Edit Idle Discharge",
+            "START": "Start",
+            "END": "End",
+            "FLOW_RATE": "Flow Rate, m³/s",
+            "TOTAL_VOLUME": "Volume, mln m³",
+            "REASON": "Reason",
+            "STATUS": "Status",
+            "ONGOING": "Ongoing",
+            "APPROVED": "Approved",
+            "COMPLETED": "Completed",
+            "FILES": "Idle Discharge Files",
+            "NO_DATA": "No idle discharge data"
+        },
+        "INCIDENTS": {
+            "ADD": "Add Incident",
+            "EDIT": "Edit Incident",
+            "DATE": "Date",
+            "DESCRIPTION": "Description",
+            "ORGANIZATION": "Organization",
+            "FILES": "Incident Files",
+            "NO_DATA": "No incident data"
+        },
+        "VISITS": {
+            "ADD": "Add Visit",
+            "EDIT": "Edit Visit",
+            "DATE": "Date",
+            "DESCRIPTION": "Description",
+            "RESPONSIBLE": "Responsible",
+            "ORGANIZATION": "Organization",
+            "FILES": "Visit Files",
+            "NO_DATA": "No visit data"
+        },
+        "TELEMETRY": {
+            "DEVICE": "Device",
+            "DEVICE_GROUP": "Device Group",
+            "GROUP": "Group",
+            "PARAMETER": "Parameter",
+            "VALUE": "Value",
+            "UNIT": "Unit",
+            "QUALITY": "Quality",
+            "SEVERITY": "Severity",
+            "TIMESTAMP": "Timestamp",
+            "ALL_GROUPS": "All Groups",
+            "ALL_DEVICES": "All Devices",
+            "TOTAL_RECORDS": "Total Records",
+            "NO_DATA": "No telemetry data"
+        }
   }
 }

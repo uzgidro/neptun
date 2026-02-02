@@ -1,0 +1,59 @@
+@if (aggregates.length > 0) {
+    <p-table
+        [value]="aggregates"
+        [scrollable]="true"
+        scrollHeight="300px"
+        styleClass="p-datatable-sm">
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="name">
+                    {{ 'GES_DETAIL.AGGREGATE.NAME' | translate }}
+                    <p-sortIcon field="name"></p-sortIcon>
+                </th>
+                <th pSortableColumn="power">
+                    {{ 'GES_DETAIL.AGGREGATE.POWER' | translate }}
+                    <p-sortIcon field="power"></p-sortIcon>
+                </th>
+                <th pSortableColumn="status">
+                    {{ 'GES_DETAIL.AGGREGATE.STATUS' | translate }}
+                    <p-sortIcon field="status"></p-sortIcon>
+                </th>
+                <th pSortableColumn="temperature">
+                    {{ 'GES_DETAIL.AGGREGATE.TEMPERATURE' | translate }}
+                    <p-sortIcon field="temperature"></p-sortIcon>
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-aggregate>
+            <tr>
+                <td>{{ aggregate.name }}</td>
+                <td>{{ aggregate.power | number:'1.2-2' }} МВт</td>
+                <td>
+                    <p-tag
+                        [value]="getStatusLabel(aggregate.status) | translate"
+                        [severity]="getStatusSeverity(aggregate.status)">
+                    </p-tag>
+                </td>
+                <td>
+                    @if (aggregate.temperature !== undefined) {
+                        {{ aggregate.temperature | number:'1.0-1' }}°C
+                    } @else {
+                        <span class="text-surface-400">—</span>
+                    }
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="4" class="text-center py-4 text-surface-500">
+                    {{ 'GES_DETAIL.NO_AGGREGATES' | translate }}
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+} @else {
+    <div class="text-center py-8 text-surface-500">
+        <i class="pi pi-cog text-4xl mb-3 block opacity-50"></i>
+        <p>{{ 'GES_DETAIL.NO_AGGREGATES' | translate }}</p>
+    </div>
+}

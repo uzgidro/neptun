@@ -1,0 +1,10 @@
+:host {
+    display: block;
+}
+
+.info-card {
+    background: var(--surface-card);
+    border: 1px solid var(--surface-border);
+    border-radius: 8px;
+    padding: 1.5rem;
+}
