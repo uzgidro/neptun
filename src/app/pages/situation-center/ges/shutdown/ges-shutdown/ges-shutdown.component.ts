@@ -19,6 +19,10 @@ import { FileUploadComponent } from '@/layout/component/dialog/file-upload/file-
 import { FileViewerComponent } from '@/layout/component/dialog/file-viewer/file-viewer.component';
 import { FileListComponent } from '@/layout/component/dialog/file-list/file-list.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { ScService } from '@/core/services/sc.service';
+import { HttpResponse } from '@angular/common/http';
+import { finalize } from 'rxjs';
+import { saveAs } from 'file-saver';
 
 @Component({
     selector: 'app-ges-shutdown',
@@ -63,7 +67,12 @@ export class GesShutdownComponent implements OnInit, OnChanges {
     private fb: FormBuilder = inject(FormBuilder);
     private organizationService: OrganizationService = inject(OrganizationService);
     private gesShutdownService: GesShutdownService = inject(GesShutdownService);
+    private scService: ScService = inject(ScService);
     private messageService: MessageService = inject(MessageService);
+
+    // Export
+    isExcelLoading = false;
+    isPdfLoading = false;
 
     // File handling
     selectedFiles: File[] = [];
@@ -283,5 +292,37 @@ export class GesShutdownComponent implements OnInit, OnChanges {
         if (changes['date'] && !changes['date'].firstChange) {
             this.loadShutdowns();
         }
+    }
+
+    get dateYMD(): string {
+        const date = this.date || new Date();
+        return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+    }
+
+    download(format: 'excel' | 'pdf') {
+        if (format === 'excel') this.isExcelLoading = true;
+        else this.isPdfLoading = true;
+
+        const dateToUse = this.date || new Date();
+
+        this.scService
+            .downloadScReport(dateToUse, format)
+            .pipe(
+                finalize(() => {
+                    this.isExcelLoading = false;
+                    this.isPdfLoading = false;
+                })
+            )
+            .subscribe({
+                next: (response: HttpResponse<Blob>) => {
+                    const extension = format === 'excel' ? 'xlsx' : 'pdf';
+                    const filename = `sc_${this.dateYMD}.${extension}`;
+                    saveAs(response.body!, filename);
+                },
+                error: (err: any) => {
+                    console.error('Ошибка при скачивании:', err);
+                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось скачать файл' });
+                }
+            });
     }
 }
