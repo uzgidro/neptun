@@ -27,6 +27,7 @@ import { DateWidget } from '@/layout/component/widget/date/date.widget';
 import { finalize } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
 import { saveAs } from 'file-saver';
+import { ScService } from '@/core/services/sc.service';
 
 @Component({
     selector: 'app-shutdown-discharge',
@@ -78,6 +79,7 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
     private fb: FormBuilder = inject(FormBuilder);
     private organizationService: OrganizationService = inject(OrganizationService);
     private dischargeService: DischargeService = inject(DischargeService);
+    private scService: ScService = inject(ScService);
     private messageService: MessageService = inject(MessageService);
 
     // File handling
@@ -354,8 +356,8 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
 
         const dateToUse = this.selectedDate || new Date();
 
-        this.dischargeService
-            .downloadDischarges(dateToUse, format)
+        this.scService
+            .downloadScReport(dateToUse, format)
             .pipe(
                 finalize(() => {
                     this.isExcelLoading = false;
