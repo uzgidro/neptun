@@ -20,6 +20,22 @@
 >
     <ng-template #caption>
         <div class="flex justify-end items-center gap-3">
+            <p-button
+                label="Excel"
+                icon="pi pi-file-excel"
+                severity="success"
+                [loading]="isExcelLoading"
+                [disabled]="!discharges || discharges.length === 0"
+                (onClick)="download('excel')">
+            </p-button>
+            <p-button
+                label="PDF"
+                icon="pi pi-file-pdf"
+                severity="danger"
+                [loading]="isPdfLoading"
+                [disabled]="!discharges || discharges.length === 0"
+                (onClick)="download('pdf')">
+            </p-button>
             <p-iconfield>
                 <p-inputicon>
                     <i class="pi pi-search"></i>
@@ -33,7 +49,7 @@
                     class="w-full"
                 />
             </p-iconfield>
-            <app-date [date]="selectedDate" [syncQueryParams]="false" (dateChange)="onDateChanged($event)"></app-date>
+            <app-date [date]="selectedDate" [syncQueryParams]="true" (dateChange)="onDateChanged($event)"></app-date>
         </div>
     </ng-template>
 
