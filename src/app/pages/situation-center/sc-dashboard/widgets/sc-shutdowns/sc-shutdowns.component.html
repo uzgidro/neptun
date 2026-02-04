@@ -15,6 +15,16 @@
             <span class="summary-value color-yellow">{{ totalLostGeneration | number:'1.1-1' }}</span>
             <span class="summary-label">{{ 'SITUATION_CENTER.DASHBOARD.SHUTDOWNS.LOSSES_KWH' | translate }}</span>
         </div>
+        @if (activeShutdownsCount > 0) {
+            <div class="summary-divider"></div>
+            <button class="alarm-btn"
+                    [class.muted]="alarmMuted"
+                    [class.needs-activation]="!alarmMuted && !isAlarmPlaying"
+                    (click)="toggleAlarm()"
+                    [title]="alarmMuted ? 'Включить сирену' : 'Выключить сирену'">
+                <i class="pi" [class.pi-volume-up]="!alarmMuted" [class.pi-volume-off]="alarmMuted"></i>
+            </button>
+        }
     </div>
 
     <!-- Shutdowns List -->

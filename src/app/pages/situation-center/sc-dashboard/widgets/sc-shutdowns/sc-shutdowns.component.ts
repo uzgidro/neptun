@@ -1,10 +1,12 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
+import { Component, OnInit, OnDestroy, inject, PLATFORM_ID } from '@angular/core';
+import { DecimalPipe, isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { Subscription, interval } from 'rxjs';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { GesShutdownService } from '@/core/services/ges-shutdown.service';
 import { ShutdownDto, GesShutdownDto } from '@/core/interfaces/ges-shutdown';
+
+const ALARM_MUTED_KEY = 'sc-alarm-muted';
 
 interface ShutdownItem {
     id: number;
@@ -29,15 +31,43 @@ export class ScShutdownsComponent implements OnInit, OnDestroy {
     private shutdownService = inject(GesShutdownService);
     private translateService = inject(TranslateService);
     private router = inject(Router);
+    private platformId = inject(PLATFORM_ID);
     private refreshSubscription?: Subscription;
+    private alarmAudio: HTMLAudioElement | null = null;
+    private userInteracted = false;
 
     shutdowns: ShutdownItem[] = [];
     loading = true;
     lastUpdated: Date | null = null;
+    alarmMuted = false;
+    isAlarmPlaying = false;
 
     ngOnInit(): void {
+        this.initAlarm();
         this.loadData();
         this.refreshSubscription = interval(600000).subscribe(() => this.loadData()); // 10 минут
+    }
+
+    private initAlarm(): void {
+        if (!isPlatformBrowser(this.platformId)) return;
+
+        // Загружаем состояние mute из localStorage
+        this.alarmMuted = localStorage.getItem(ALARM_MUTED_KEY) === 'true';
+
+        // Создаём аудио элемент
+        this.alarmAudio = new Audio('assets/audio/alarm.mp3');
+        this.alarmAudio.loop = true;
+        this.alarmAudio.volume = 0.5;
+
+        // Пробуем autoplay - если браузер заблокирует, включим после взаимодействия
+        const handleInteraction = () => {
+            this.userInteracted = true;
+            this.updateAlarmState();
+            document.removeEventListener('click', handleInteraction);
+            document.removeEventListener('keydown', handleInteraction);
+        };
+        document.addEventListener('click', handleInteraction);
+        document.addEventListener('keydown', handleInteraction);
     }
 
     private loadData(): void {
@@ -87,6 +117,35 @@ export class ScShutdownsComponent implements OnInit, OnDestroy {
         });
 
         this.shutdowns = items;
+        this.updateAlarmState();
+    }
+
+    private updateAlarmState(): void {
+        if (!this.alarmAudio) return;
+
+        const hasActiveShutdowns = this.shutdowns.some(s => s.isOngoing);
+
+        if (hasActiveShutdowns && !this.alarmMuted) {
+            this.alarmAudio.play().then(() => {
+                this.isAlarmPlaying = true;
+                this.userInteracted = true;
+            }).catch(() => {
+                this.isAlarmPlaying = false;
+                // Браузер заблокировал autoplay - кнопка будет пульсировать
+            });
+        } else {
+            this.alarmAudio.pause();
+            this.alarmAudio.currentTime = 0;
+            this.isAlarmPlaying = false;
+        }
+    }
+
+    toggleAlarm(): void {
+        this.alarmMuted = !this.alarmMuted;
+        if (isPlatformBrowser(this.platformId)) {
+            localStorage.setItem(ALARM_MUTED_KEY, String(this.alarmMuted));
+        }
+        this.updateAlarmState();
     }
 
     refresh(): void {
@@ -150,5 +209,9 @@ export class ScShutdownsComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         this.refreshSubscription?.unsubscribe();
+        if (this.alarmAudio) {
+            this.alarmAudio.pause();
+            this.alarmAudio = null;
+        }
     }
 }
