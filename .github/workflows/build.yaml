@@ -84,10 +84,10 @@ jobs:
                     git clone git@github.com:uzgidro/GitOps-Repo.git temp-repo
                     cd temp-repo
 
-                    sed -i "s|image: ${{ secrets.DOCKERHUB_USERNAME }}/neptun:.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/neptun:${{ needs.verify-image.outputs.sha8 }}|g" apps/neptun/deployment.yaml
+                    sed -i "s|image: ${{ secrets.DOCKERHUB_USERNAME }}/neptun:.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/neptun:${{ needs.verify-image.outputs.sha8 }}|g" apps/neptun/base/deployment.yaml
 
                     if [[ -n $(git status --porcelain) ]]; then
-                      git add apps/neptun/deployment.yaml
+                      git add apps/neptun/base/deployment.yaml
                       git commit -m "Update image to version ${{ needs.verify-image.outputs.sha8 }}"
                       git push origin main
                     else
