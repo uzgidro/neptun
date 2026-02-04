@@ -27,6 +27,29 @@
     border-radius: 6px;
     border: 1px solid rgba(255, 71, 87, 0.2);
     flex-shrink: 0;
+    transition: all 0.3s ease;
+
+    &.blink-alarm {
+        animation: blink-alarm 2s infinite;
+        border-color: rgba(255, 71, 87, 0.8);
+    }
+}
+
+@keyframes blink-alarm {
+    0% {
+        background: rgba(255, 71, 87, 0.1);
+        box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.4);
+    }
+
+    50% {
+        background: rgba(255, 71, 87, 0.25);
+        box-shadow: 0 0 20px 0 rgba(255, 71, 87, 0.6);
+    }
+
+    100% {
+        background: rgba(255, 71, 87, 0.1);
+        box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.4);
+    }
 }
 
 .summary-item {
@@ -62,6 +85,57 @@
     background: rgba(255, 255, 255, 0.1);
 }
 
+// Alarm Button
+.alarm-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255, 71, 87, 0.2);
+    border: 1px solid rgba(255, 71, 87, 0.4);
+    color: #ff5566;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+
+    i {
+        font-size: 14px;
+    }
+
+    &:hover {
+        background: rgba(255, 71, 87, 0.3);
+        transform: scale(1.1);
+    }
+
+    &.muted {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.2);
+        color: rgba(255, 255, 255, 0.5);
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+    }
+
+    // Пульсация когда звук не активирован
+    &.needs-activation {
+        animation: pulse-alarm-btn 1s ease-in-out infinite;
+    }
+}
+
+@keyframes pulse-alarm-btn {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.7);
+    }
+    50% {
+        transform: scale(1.1);
+        box-shadow: 0 0 0 8px rgba(255, 71, 87, 0);
+    }
+}
+
 // Shutdowns List
 .shutdowns-list {
     display: flex;
@@ -78,10 +152,24 @@
     border-radius: 6px;
     border-left: 3px solid var(--sc-neon-red);
     flex-shrink: 0;
+    transition: all 0.2s ease;
+
+    &.clickable {
+        cursor: pointer;
+
+        &:hover {
+            background: rgba(255, 71, 87, 0.12);
+            transform: translateX(2px);
+        }
+    }
 
     &.completed {
         border-left-color: #00ff88;
         background: rgba(0, 255, 136, 0.05);
+
+        &.clickable:hover {
+            background: rgba(0, 255, 136, 0.12);
+        }
     }
 }
 

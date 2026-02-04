@@ -229,9 +229,19 @@
     background: rgba(255, 255, 255, 0.03);
     margin-bottom: 6px;
     border-left: 3px solid var(--sc-neon-cyan);
+    transition: all 0.2s ease;
 
     &:last-child {
         margin-bottom: 0;
+    }
+
+    &.clickable {
+        cursor: pointer;
+
+        &:hover {
+            background: rgba(0, 212, 255, 0.1);
+            transform: translateX(2px);
+        }
     }
 }
 
@@ -359,9 +369,19 @@
     border-radius: 4px;
     background: rgba(255, 255, 255, 0.02);
     margin-bottom: 4px;
+    transition: all 0.2s ease;
 
     &:last-child {
         margin-bottom: 0;
+    }
+
+    &.clickable {
+        cursor: pointer;
+
+        &:hover {
+            background: rgba(0, 212, 255, 0.1);
+            transform: translateX(2px);
+        }
     }
 }
 
@@ -393,9 +413,19 @@
     background: rgba(255, 71, 87, 0.1);
     border-left: 3px solid var(--sc-neon-red);
     margin-bottom: 6px;
+    transition: all 0.2s ease;
 
     &:last-child {
         margin-bottom: 0;
+    }
+
+    &.clickable {
+        cursor: pointer;
+
+        &:hover {
+            background: rgba(255, 71, 87, 0.2);
+            transform: translateX(2px);
+        }
     }
 }
 
