@@ -29,7 +29,7 @@
     <!-- Discharges List -->
     <div class="discharges-list">
         @for (discharge of discharges; track discharge.id) {
-            <div class="discharge-item ongoing">
+            <div class="discharge-item ongoing clickable" (click)="navigateToGes(discharge.id)">
                 <div class="discharge-header">
                     <span class="reservoir-name">{{ discharge.name }}</span>
                     <span class="discharge-value">

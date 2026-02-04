@@ -1,5 +1,6 @@
 import { Component, inject, OnDestroy } from '@angular/core';
 import { DatePipe, DecimalPipe } from '@angular/common';
+import { Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { UzMapComponent } from '@/pages/situation-center/sc-dashboard/widgets/sc-map/uzbekistan-map/uz-map.component';
 import { DashboardService } from '@/core/services/dashboard.service';
@@ -74,7 +75,7 @@ interface RegionCascade {
 // Region data interface
 interface RegionData {
     cascades: RegionCascade[];
-    discharges: { name: string; value: number }[];
+    discharges: { id: number; name: string; value: number }[];
     shutdowns: ShutdownDto[];
     reservoirs: Reservoir[];
     aggregates: {
@@ -106,6 +107,7 @@ export class ScMapComponent implements OnDestroy {
     private dashboardService = inject(DashboardService);
     private shutdownService = inject(GesShutdownService);
     private translateService = inject(TranslateService);
+    private router = inject(Router);
     private destroy$ = new Subject<void>();
 
     selectedStation: StationMarker | null = null;
@@ -119,20 +121,20 @@ export class ScMapComponent implements OnDestroy {
 
     // Region key mapping
     regionKeyMap: Record<string, string> = {
-        'UZFA': 'SITUATION_CENTER.DASHBOARD.REGIONS.FERGANA',
-        'UZTO': 'SITUATION_CENTER.DASHBOARD.REGIONS.TASHKENT',
-        'UZNG': 'SITUATION_CENTER.DASHBOARD.REGIONS.NAMANGAN',
-        'UZAN': 'SITUATION_CENTER.DASHBOARD.REGIONS.ANDIJAN',
-        'UZSI': 'SITUATION_CENTER.DASHBOARD.REGIONS.SYRDARYA',
-        'UZJI': 'SITUATION_CENTER.DASHBOARD.REGIONS.JIZZAKH',
-        'UZSA': 'SITUATION_CENTER.DASHBOARD.REGIONS.SAMARKAND',
-        'UZQA': 'SITUATION_CENTER.DASHBOARD.REGIONS.KASHKADARYA',
-        'UZSU': 'SITUATION_CENTER.DASHBOARD.REGIONS.SURKHANDARYA',
-        'UZQR': 'SITUATION_CENTER.DASHBOARD.REGIONS.KARAKALPAKSTAN',
-        'UZNW': 'SITUATION_CENTER.DASHBOARD.REGIONS.NAVOI',
-        'UZXO': 'SITUATION_CENTER.DASHBOARD.REGIONS.KHOREZM',
-        'UZBU': 'SITUATION_CENTER.DASHBOARD.REGIONS.BUKHARA',
-        'UZTK': 'SITUATION_CENTER.DASHBOARD.REGIONS.TASHKENT_CITY'
+        UZFA: 'SITUATION_CENTER.DASHBOARD.REGIONS.FERGANA',
+        UZTO: 'SITUATION_CENTER.DASHBOARD.REGIONS.TASHKENT',
+        UZNG: 'SITUATION_CENTER.DASHBOARD.REGIONS.NAMANGAN',
+        UZAN: 'SITUATION_CENTER.DASHBOARD.REGIONS.ANDIJAN',
+        UZSI: 'SITUATION_CENTER.DASHBOARD.REGIONS.SYRDARYA',
+        UZJI: 'SITUATION_CENTER.DASHBOARD.REGIONS.JIZZAKH',
+        UZSA: 'SITUATION_CENTER.DASHBOARD.REGIONS.SAMARKAND',
+        UZQA: 'SITUATION_CENTER.DASHBOARD.REGIONS.KASHKADARYA',
+        UZSU: 'SITUATION_CENTER.DASHBOARD.REGIONS.SURKHANDARYA',
+        UZQR: 'SITUATION_CENTER.DASHBOARD.REGIONS.KARAKALPAKSTAN',
+        UZNW: 'SITUATION_CENTER.DASHBOARD.REGIONS.NAVOI',
+        UZXO: 'SITUATION_CENTER.DASHBOARD.REGIONS.KHOREZM',
+        UZBU: 'SITUATION_CENTER.DASHBOARD.REGIONS.BUKHARA',
+        UZTK: 'SITUATION_CENTER.DASHBOARD.REGIONS.TASHKENT_CITY'
     };
 
     ngOnDestroy(): void {
@@ -184,16 +186,11 @@ export class ScMapComponent implements OnDestroy {
             });
     }
 
-    private filterRegionData(
-        cascades: Organization[],
-        reservoirs: Reservoir[],
-        shutdownsDto: { ges: ShutdownDto[]; mini: ShutdownDto[]; micro: ShutdownDto[] },
-        regionOrgs: RegionOrganizations
-    ): RegionData {
+    private filterRegionData(cascades: Organization[], reservoirs: Reservoir[], shutdownsDto: { ges: ShutdownDto[]; mini: ShutdownDto[]; micro: ShutdownDto[] }, regionOrgs: RegionOrganizations): RegionData {
         // Filter cascades that have GES in the region
         const regionCascades: RegionCascade[] = cascades
-            .map(cascade => {
-                const filteredItems = (cascade.items || []).filter(item => regionOrgs.ges.includes(item.id));
+            .map((cascade) => {
+                const filteredItems = (cascade.items || []).filter((item) => regionOrgs.ges.includes(item.id));
                 if (filteredItems.length === 0) return null;
 
                 const totalPower = filteredItems.reduce((sum, item) => sum + (item.ascue_metrics?.active || 0), 0);
@@ -217,21 +214,17 @@ export class ScMapComponent implements OnDestroy {
             .filter((c): c is RegionCascade => c !== null);
 
         // Flatten cascades to get all GES
-        const regionGes = regionCascades.flatMap(c => c.items);
+        const regionGes = regionCascades.flatMap((c) => c.items);
 
         // Водосбросы (current_discharge > 0)
-        const discharges = regionGes
-            .filter(item => (item.current_discharge || 0) > 0)
-            .map(item => ({ name: item.name, value: item.current_discharge || 0 }));
+        const discharges = regionGes.filter((item) => (item.current_discharge || 0) > 0).map((item) => ({ id: item.id, name: item.name, value: item.current_discharge || 0 }));
 
         // Отключения (ended_at === null) - все типы ГЭС
         const allShutdowns = [...shutdownsDto.ges, ...shutdownsDto.mini, ...shutdownsDto.micro];
-        const shutdowns = allShutdowns
-            .filter(s => regionOrgs.ges.includes(s.organization_id))
-            .filter(s => s.ended_at === null);
+        const shutdowns = allShutdowns.filter((s) => regionOrgs.ges.includes(s.organization_id)).filter((s) => s.ended_at === null);
 
         // Водохранилища
-        const filteredReservoirs = reservoirs.filter(r => regionOrgs.reservoirs.includes(r.organization_id));
+        const filteredReservoirs = reservoirs.filter((r) => regionOrgs.reservoirs.includes(r.organization_id));
 
         // АСКУЭ агрегаты (общий итог)
         const aggregates = regionGes.reduce(
@@ -307,5 +300,10 @@ export class ScMapComponent implements OnDestroy {
 
     get totalPower(): number {
         return this.stations.reduce((sum, s) => sum + s.power, 0);
+    }
+
+    navigateToGes(id: number, event?: Event): void {
+        event?.stopPropagation();
+        this.router.navigate(['/ges', id]);
     }
 }

@@ -101,10 +101,24 @@
     border-radius: 6px;
     border-left: 3px solid var(--sc-neon-red);
     flex-shrink: 0;
+    transition: all 0.2s ease;
+
+    &.clickable {
+        cursor: pointer;
+
+        &:hover {
+            background: rgba(255, 71, 87, 0.12);
+            transform: translateX(2px);
+        }
+    }
 
     &.completed {
         border-left-color: #00ff88;
         background: rgba(0, 255, 136, 0.05);
+
+        &.clickable:hover {
+            background: rgba(0, 255, 136, 0.12);
+        }
     }
 }
 

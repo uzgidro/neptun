@@ -20,7 +20,8 @@
     <!-- Shutdowns List -->
     <div class="shutdowns-list">
         @for (shutdown of shutdowns; track shutdown.id) {
-            <div class="shutdown-item" [class.completed]="!shutdown.isOngoing">
+            <div class="shutdown-item clickable" [class.completed]="!shutdown.isOngoing"
+                 (click)="navigateToGes(shutdown.organizationId)">
                 <div class="shutdown-header">
                     <div class="station-info">
                         <div class="station-badges">

@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
+import { Router } from '@angular/router';
 import { Subscription, interval } from 'rxjs';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { GesShutdownService } from '@/core/services/ges-shutdown.service';
@@ -7,6 +8,7 @@ import { ShutdownDto, GesShutdownDto } from '@/core/interfaces/ges-shutdown';
 
 interface ShutdownItem {
     id: number;
+    organizationId: number;
     stationName: string;
     stationType: 'ges' | 'mini' | 'micro';
     reason: string | null;
@@ -26,6 +28,7 @@ interface ShutdownItem {
 export class ScShutdownsComponent implements OnInit, OnDestroy {
     private shutdownService = inject(GesShutdownService);
     private translateService = inject(TranslateService);
+    private router = inject(Router);
     private refreshSubscription?: Subscription;
 
     shutdowns: ShutdownItem[] = [];
@@ -56,9 +59,10 @@ export class ScShutdownsComponent implements OnInit, OnDestroy {
         const items: ShutdownItem[] = [];
 
         const addShutdowns = (list: ShutdownDto[], type: 'ges' | 'mini' | 'micro') => {
-            list.forEach(shutdown => {
+            list.forEach((shutdown) => {
                 items.push({
                     id: shutdown.id,
+                    organizationId: shutdown.organization_id,
                     stationName: shutdown.organization_name,
                     stationType: type,
                     reason: shutdown.reason,
@@ -104,7 +108,7 @@ export class ScShutdownsComponent implements OnInit, OnDestroy {
     }
 
     get activeShutdownsCount(): number {
-        return this.shutdowns.filter(s => s.isOngoing).length;
+        return this.shutdowns.filter((s) => s.isOngoing).length;
     }
 
     get totalShutdownsCount(): number {
@@ -113,9 +117,9 @@ export class ScShutdownsComponent implements OnInit, OnDestroy {
 
     getTypeLabel(type: string): string {
         const labelKeys: Record<string, string> = {
-            'ges': 'SITUATION_CENTER.DASHBOARD.SHUTDOWNS.TYPE_GES',
-            'mini': 'SITUATION_CENTER.DASHBOARD.SHUTDOWNS.TYPE_MINI',
-            'micro': 'SITUATION_CENTER.DASHBOARD.SHUTDOWNS.TYPE_MICRO'
+            ges: 'SITUATION_CENTER.DASHBOARD.SHUTDOWNS.TYPE_GES',
+            mini: 'SITUATION_CENTER.DASHBOARD.SHUTDOWNS.TYPE_MINI',
+            micro: 'SITUATION_CENTER.DASHBOARD.SHUTDOWNS.TYPE_MICRO'
         };
         return labelKeys[type] ? this.translateService.instant(labelKeys[type]) : type;
     }
@@ -138,6 +142,10 @@ export class ScShutdownsComponent implements OnInit, OnDestroy {
         }
         const days = Math.floor(hours / 24);
         return `${days} ${this.translateService.instant('SITUATION_CENTER.DASHBOARD.TIME.DAYS_SHORT')}`;
+    }
+
+    navigateToGes(organizationId: number): void {
+        this.router.navigate(['/ges', organizationId]);
     }
 
     ngOnDestroy(): void {
