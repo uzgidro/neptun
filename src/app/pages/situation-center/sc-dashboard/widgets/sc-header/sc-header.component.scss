@@ -122,6 +122,55 @@
     color: var(--sc-text-muted);
 }
 
+// Alarm Mute Button
+.alarm-mute-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255, 71, 87, 0.15);
+    border: 2px solid rgba(255, 71, 87, 0.4);
+    color: #ff5566;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    i {
+        font-size: 14px;
+    }
+
+    &:hover {
+        background: rgba(255, 71, 87, 0.25);
+        transform: scale(1.05);
+    }
+
+    &.muted {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.2);
+        color: rgba(255, 255, 255, 0.5);
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+    }
+
+    &.has-active:not(.muted) {
+        animation: alarm-pulse 1.5s ease-in-out infinite;
+    }
+}
+
+@keyframes alarm-pulse {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.6);
+    }
+    50% {
+        transform: scale(1.08);
+        box-shadow: 0 0 0 6px rgba(255, 71, 87, 0);
+    }
+}
+
 // Language Switcher
 .language-switcher {
     display: flex;

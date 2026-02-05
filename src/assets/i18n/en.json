@@ -611,7 +611,10 @@
         "ALL_WORKING": "All stations operational",
         "TYPE_GES": "HPP",
         "TYPE_MINI": "mini",
-        "TYPE_MICRO": "micro"
+          "TYPE_MICRO": "micro",
+          "DETAIL_TITLE": "Shutdown Details",
+          "ONGOING": "Ongoing",
+          "GO_TO_GES": "Go to station"
       },
       "POWER_GENERATION": {
         "YEAR_START": "Year to Date",

@@ -610,7 +610,10 @@
         "ALL_WORKING": "Все станции в работе",
         "TYPE_GES": "ГЭС",
         "TYPE_MINI": "мини",
-        "TYPE_MICRO": "микро"
+          "TYPE_MICRO": "микро",
+          "DETAIL_TITLE": "Детали отключения",
+          "ONGOING": "В процессе",
+          "GO_TO_GES": "Перейти к станции"
       },
       "POWER_GENERATION": {
         "YEAR_START": "С начала года",
