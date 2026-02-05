@@ -37,6 +37,10 @@ export class GesShutdownService extends ApiService {
         return this.http.delete(`${BASE_URL}${SHUTDOWNS}/${id}`);
     }
 
+    markAsViewed(id: number): Observable<void> {
+        return this.http.patch<void>(`${BASE_URL}${SHUTDOWNS}/${id}/viewed`, {});
+    }
+
     private transformToDto(shutdown: ShutdownResponse): ShutdownDto {
         return {
             ...shutdown,

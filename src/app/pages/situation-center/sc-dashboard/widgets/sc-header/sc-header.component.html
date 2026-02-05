@@ -27,6 +27,15 @@
     </div>
 
     <div class="header-right">
+        @if (authService.hasRole('rais')) {
+            <button class="alarm-mute-btn"
+                    [class.muted]="alarmService.muted"
+                    [class.has-active]="alarmService.hasActiveShutdowns"
+                    (click)="alarmService.toggleMute()"
+                    [title]="alarmService.muted ? 'Включить сирену' : 'Выключить сирену'">
+                <i class="pi" [class.pi-volume-up]="!alarmService.muted" [class.pi-volume-off]="alarmService.muted"></i>
+            </button>
+        }
         <div class="language-switcher">
             @for (lang of languages; track lang.code) {
                 <button

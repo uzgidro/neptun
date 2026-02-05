@@ -1,12 +1,16 @@
-import { Component, OnInit, OnDestroy, inject, PLATFORM_ID } from '@angular/core';
-import { DecimalPipe, isPlatformBrowser } from '@angular/common';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { DecimalPipe, DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { Subscription, interval } from 'rxjs';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { DialogModule } from 'primeng/dialog';
+import { ButtonModule } from 'primeng/button';
 import { GesShutdownService } from '@/core/services/ges-shutdown.service';
 import { ShutdownDto, GesShutdownDto } from '@/core/interfaces/ges-shutdown';
-
-const ALARM_MUTED_KEY = 'sc-alarm-muted';
+import { AlarmService } from '@/core/services/alarm.service';
+import { FileViewerComponent } from '@/layout/component/dialog/file-viewer/file-viewer.component';
+import { UserShortInfo } from '@/core/interfaces/users';
+import { FileResponse } from '@/core/interfaces/files';
 
 interface ShutdownItem {
     id: number;
@@ -18,12 +22,16 @@ interface ShutdownItem {
     endTime: Date | null;
     lostGeneration: number | null;
     isOngoing: boolean;
+    viewed: boolean;
+    createdBy: UserShortInfo | null;
+    idleDischargeVolume: number | null;
+    files?: FileResponse[];
 }
 
 @Component({
     selector: 'sc-shutdowns',
     standalone: true,
-    imports: [DecimalPipe, TranslateModule],
+    imports: [DecimalPipe, DatePipe, TranslateModule, DialogModule, ButtonModule, FileViewerComponent],
     templateUrl: './sc-shutdowns.component.html',
     styleUrl: './sc-shutdowns.component.scss'
 })
@@ -31,43 +39,20 @@ export class ScShutdownsComponent implements OnInit, OnDestroy {
     private shutdownService = inject(GesShutdownService);
     private translateService = inject(TranslateService);
     private router = inject(Router);
-    private platformId = inject(PLATFORM_ID);
+    private alarmService = inject(AlarmService);
     private refreshSubscription?: Subscription;
-    private alarmAudio: HTMLAudioElement | null = null;
-    private userInteracted = false;
 
     shutdowns: ShutdownItem[] = [];
     loading = true;
     lastUpdated: Date | null = null;
-    alarmMuted = false;
-    isAlarmPlaying = false;
+
+    showDetailDialog = false;
+    selectedShutdown: ShutdownItem | null = null;
+    showFilesDialog = false;
 
     ngOnInit(): void {
-        this.initAlarm();
         this.loadData();
         this.refreshSubscription = interval(600000).subscribe(() => this.loadData()); // 10 минут
-    }
-
-    private initAlarm(): void {
-        if (!isPlatformBrowser(this.platformId)) return;
-
-        // Загружаем состояние mute из localStorage
-        this.alarmMuted = localStorage.getItem(ALARM_MUTED_KEY) === 'true';
-
-        // Создаём аудио элемент
-        this.alarmAudio = new Audio('assets/audio/alarm.mp3');
-        this.alarmAudio.loop = true;
-        this.alarmAudio.volume = 0.5;
-
-        // Пробуем autoplay - если браузер заблокирует, включим после взаимодействия
-        const handleInteraction = () => {
-            this.userInteracted = true;
-            this.updateAlarmState();
-            document.removeEventListener('click', handleInteraction);
-            document.removeEventListener('keydown', handleInteraction);
-        };
-        document.addEventListener('click', handleInteraction);
-        document.addEventListener('keydown', handleInteraction);
     }
 
     private loadData(): void {
@@ -99,7 +84,11 @@ export class ScShutdownsComponent implements OnInit, OnDestroy {
                     startTime: shutdown.started_at,
                     endTime: shutdown.ended_at,
                     lostGeneration: shutdown.generation_loss,
-                    isOngoing: shutdown.ended_at === null
+                    isOngoing: shutdown.ended_at === null,
+                    viewed: shutdown.viewed,
+                    createdBy: shutdown.created_by,
+                    idleDischargeVolume: shutdown.idle_discharge_volume,
+                    files: shutdown.files
                 });
             });
         };
@@ -117,35 +106,18 @@ export class ScShutdownsComponent implements OnInit, OnDestroy {
         });
 
         this.shutdowns = items;
-        this.updateAlarmState();
-    }
 
-    private updateAlarmState(): void {
-        if (!this.alarmAudio) return;
-
-        const hasActiveShutdowns = this.shutdowns.some(s => s.isOngoing);
-
-        if (hasActiveShutdowns && !this.alarmMuted) {
-            this.alarmAudio.play().then(() => {
-                this.isAlarmPlaying = true;
-                this.userInteracted = true;
-            }).catch(() => {
-                this.isAlarmPlaying = false;
-                // Браузер заблокировал autoplay - кнопка будет пульсировать
-            });
-        } else {
-            this.alarmAudio.pause();
-            this.alarmAudio.currentTime = 0;
-            this.isAlarmPlaying = false;
+        // Update selected shutdown if it's still in the list
+        if (this.selectedShutdown) {
+            const updated = items.find((s) => s.id === this.selectedShutdown!.id);
+            if (updated) {
+                this.selectedShutdown = updated;
+            }
         }
-    }
 
-    toggleAlarm(): void {
-        this.alarmMuted = !this.alarmMuted;
-        if (isPlatformBrowser(this.platformId)) {
-            localStorage.setItem(ALARM_MUTED_KEY, String(this.alarmMuted));
-        }
-        this.updateAlarmState();
+        // Alarm plays only for unviewed active shutdowns
+        const hasUnviewedActive = items.some((s) => s.isOngoing && !s.viewed);
+        this.alarmService.setHasActiveShutdowns(hasUnviewedActive);
     }
 
     refresh(): void {
@@ -207,11 +179,48 @@ export class ScShutdownsComponent implements OnInit, OnDestroy {
         this.router.navigate(['/ges', organizationId]);
     }
 
+    openDetail(shutdown: ShutdownItem): void {
+        this.selectedShutdown = shutdown;
+        this.showDetailDialog = true;
+
+        if (!shutdown.viewed) {
+            this.markAsViewed(shutdown);
+        }
+    }
+
+    private markAsViewed(shutdown: ShutdownItem): void {
+        this.shutdownService.markAsViewed(shutdown.id).subscribe({
+            next: () => {
+                shutdown.viewed = true;
+                // Update alarm state after marking as viewed
+                const hasUnviewedActive = this.shutdowns.some((s) => s.isOngoing && !s.viewed);
+                this.alarmService.setHasActiveShutdowns(hasUnviewedActive);
+            },
+            error: (err) => {
+                console.error('Error marking shutdown as viewed:', err);
+            }
+        });
+    }
+
+    closeDetailDialog(): void {
+        this.showDetailDialog = false;
+        this.selectedShutdown = null;
+    }
+
+    navigateToGesFromDialog(): void {
+        if (this.selectedShutdown) {
+            this.router.navigate(['/ges', this.selectedShutdown.organizationId]);
+            this.closeDetailDialog();
+        }
+    }
+
+    openFilesDialog(): void {
+        this.showFilesDialog = true;
+    }
+
     ngOnDestroy(): void {
         this.refreshSubscription?.unsubscribe();
-        if (this.alarmAudio) {
-            this.alarmAudio.pause();
-            this.alarmAudio = null;
-        }
+        this.alarmService.stopAlarm();
+        this.alarmService.setHasActiveShutdowns(false);
     }
 }

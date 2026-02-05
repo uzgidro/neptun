@@ -607,7 +607,10 @@
         "ALL_WORKING": "Барча станциялар ишламоқда",
         "TYPE_GES": "ГЭС",
         "TYPE_MINI": "мини",
-        "TYPE_MICRO": "микро"
+          "TYPE_MICRO": "микро",
+          "DETAIL_TITLE": "Ўчириш тафсилотлари",
+          "ONGOING": "Давом этмоқда",
+          "GO_TO_GES": "Станцияга ўтиш"
       },
       "POWER_GENERATION": {
         "YEAR_START": "Йил бошидан",

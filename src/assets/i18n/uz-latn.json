@@ -607,7 +607,10 @@
         "ALL_WORKING": "Barcha stansiyalar ishlamoqda",
         "TYPE_GES": "GES",
         "TYPE_MINI": "mini",
-        "TYPE_MICRO": "mikro"
+          "TYPE_MICRO": "mikro",
+          "DETAIL_TITLE": "O'chirish tafsilotlari",
+          "ONGOING": "Davom etmoqda",
+          "GO_TO_GES": "Stansiyaga o'tish"
       },
       "POWER_GENERATION": {
         "YEAR_START": "Yil boshidan",
