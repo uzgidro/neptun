@@ -23,7 +23,7 @@ export const appConfig: ApplicationConfig = {
         providePrimeNG({ theme: { preset: Aura, options: { darkModeSelector: '.app-dark' } } }),
         importProvidersFrom(ReactiveFormsModule),
         provideTranslateService({
-            defaultLanguage: 'ru',
+            fallbackLang: 'ru',
             loader: provideTranslateHttpLoader({
                 prefix: './assets/i18n/',
                 suffix: '.json'
