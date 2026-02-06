@@ -1862,5 +1862,15 @@
             "TOTAL_RECORDS": "Жами ёзувлар",
             "NO_DATA": "Телеметрия маълумотлари йўқ"
         }
+    },
+    "UZGIDRO_NEWS": {
+        "TITLE": "UzGidro Янгиликлари",
+        "TOTAL_NEWS": "Жами янгиликлар",
+        "NEWS_COUNT": "янгилик",
+        "NO_NEWS": "Янгиликлар топилмади",
+        "VIEWS": "Кўришлар",
+        "PUBLISHED": "Нашр этилган",
+        "LOAD_ERROR": "Янгиликларни юклашда хатолик",
+        "PAGE_REPORT": "{first}-{last} кўрсатилмоқда, жами {totalRecords}"
   }
 }

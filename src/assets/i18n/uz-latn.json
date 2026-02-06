@@ -1862,5 +1862,15 @@
             "TOTAL_RECORDS": "Jami yozuvlar",
             "NO_DATA": "Telemetriya ma'lumotlari yo'q"
         }
+    },
+  "UZGIDRO_NEWS": {
+    "TITLE": "UzGidro Yangiliklari",
+    "TOTAL_NEWS": "Jami yangiliklar",
+    "NEWS_COUNT": "yangilik",
+    "NO_NEWS": "Yangiliklar topilmadi",
+    "VIEWS": "Ko'rishlar",
+    "PUBLISHED": "Nashr etilgan",
+    "LOAD_ERROR": "Yangiliklarni yuklashda xatolik",
+    "PAGE_REPORT": "{first}-{last} ko'rsatilmoqda, jami {totalRecords}"
   }
 }

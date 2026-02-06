@@ -1890,5 +1890,15 @@
             "TOTAL_RECORDS": "Всего записей",
             "NO_DATA": "Нет данных телеметрии"
         }
+    },
+    "UZGIDRO_NEWS": {
+        "TITLE": "Новости UzGidro",
+        "TOTAL_NEWS": "Всего новостей",
+        "NEWS_COUNT": "новостей",
+        "NO_NEWS": "Новости не найдены",
+        "VIEWS": "Просмотры",
+        "PUBLISHED": "Опубликовано",
+        "LOAD_ERROR": "Не удалось загрузить новости",
+        "PAGE_REPORT": "Показано {first}-{last} из {totalRecords}"
   }
 }
