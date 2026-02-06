@@ -1891,5 +1891,15 @@
             "TOTAL_RECORDS": "Total Records",
             "NO_DATA": "No telemetry data"
         }
+    },
+    "UZGIDRO_NEWS": {
+        "TITLE": "UzGidro News",
+        "TOTAL_NEWS": "Total news",
+        "NEWS_COUNT": "news",
+        "NO_NEWS": "No news found",
+        "VIEWS": "Views",
+        "PUBLISHED": "Published",
+        "LOAD_ERROR": "Failed to load news",
+        "PAGE_REPORT": "Showing {first}-{last} of {totalRecords}"
   }
 }
