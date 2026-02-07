@@ -29,19 +29,16 @@
     <div class="action-row mb-6">
         <p-button [label]="'FINANCIAL_BLOCK.INVESTMENT.ADD_PROJECT' | translate" icon="pi pi-plus"
                   (click)="openNew()" />
-
-        <p-datepicker
+        <p-date-picker
             [(ngModel)]="dateRange"
+            (onSelect)="onDateRangeChange()"
             selectionMode="range"
             [showIcon]="true"
             [showButtonBar]="true"
             dateFormat="dd.mm.yy"
             [placeholder]="'FINANCIAL_BLOCK.COMMON.SELECT_DATE_RANGE' | translate"
-            (onSelect)="onDateRangeChange()"
-            (onClear)="onDateRangeClear()"
-            appendTo="body"
-            styleClass="w-72">
-        </p-datepicker>
+            class="w-72">
+        </p-date-picker>
     </div>
 
     <!-- TABLE -->
@@ -84,8 +81,8 @@
                 <tr>
                     <td>{{ investment.project_name }}</td>
                     <td>
-                        <span [class]="investment.status === 'Активная фаза' ? 'text-green-500' : 'text-orange-500'">
-                            {{ investment.status === 'Активная фаза'
+                        <span [class]="isActivePhase(investment.status) ? 'text-green-500' : 'text-orange-500'">
+                            {{ isActivePhase(investment.status)
                                 ? ('FINANCIAL_BLOCK.INVESTMENT.ACTIVE_PHASE' | translate)
                                 : ('FINANCIAL_BLOCK.INVESTMENT.IN_DEVELOPMENT' | translate) }}
                         </span>

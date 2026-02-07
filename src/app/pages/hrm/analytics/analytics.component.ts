@@ -5,6 +5,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { ChartModule } from 'primeng/chart';
 import { Card } from 'primeng/card';
 import { MessageService } from 'primeng/api';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { HRAnalyticsDashboard, REPORT_TYPES } from '@/core/interfaces/hrm/analytics';
 import { AnalyticsService } from '@/core/services/analytics.service';
 
@@ -15,7 +16,8 @@ import { AnalyticsService } from '@/core/services/analytics.service';
         CommonModule,
         FormsModule,
         ChartModule,
-        Card
+        Card,
+        TranslateModule
     ],
     templateUrl: './analytics.component.html',
     styleUrl: './analytics.component.scss'
@@ -44,6 +46,7 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
 
     private analyticsService = inject(AnalyticsService);
     private messageService = inject(MessageService);
+    private translate = inject(TranslateService);
     private destroy$ = new Subject<void>();
 
     ngOnInit() {
@@ -61,7 +64,7 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
                     this.prepareCharts();
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось загрузить аналитику' });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('HRM.DASHBOARD.LOAD_ERROR') });
                     console.error(err);
                 },
                 complete: () => (this.loading = false)

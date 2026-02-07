@@ -1,5 +1,5 @@
 <div class="card">
-    <div class="font-semibold text-xl mb-4">Пользователи</div>
+    <div class="font-semibold text-xl mb-4">{{ 'HRM.USERS.TITLE' | translate }}</div>
     <p-table
         #ut
         [value]="users"
@@ -17,11 +17,11 @@
                     <p-inputicon>
                         <i class="pi pi-search"></i>
                     </p-inputicon>
-                    <input pInputText type="text" (input)="onGlobalFilter(ut, $event)" placeholder="Поиск" />
+                    <input pInputText type="text" (input)="onGlobalFilter(ut, $event)" [placeholder]="'COMMON.SEARCH' | translate" />
                 </p-iconfield>
                 <button pButton (click)="openDialog()">
                     <i class="pi pi-user-plus" pButtonIcon></i>
-                    <span pButtonLabel>Новый пользователь</span>
+                    <span pButtonLabel>{{ 'HRM.USERS.NEW_USER' | translate }}</span>
                 </button>
             </div>
         </ng-template>
@@ -29,21 +29,21 @@
             <tr>
                 <th style="min-width: 12rem">
                     <div class="flex justify-between items-center">
-                        Имя
+                        {{ 'HRM.USERS.NAME' | translate }}
                         <p-columnFilter type="text" field="name" display="menu"
-                                        placeholder="Search by name"></p-columnFilter>
+                                        [placeholder]="'COMMON.SEARCH' | translate"></p-columnFilter>
                     </div>
                 </th>
                 <th style="min-width: 12rem">
                     <div class="flex justify-between items-center">
-                        Роли
+                        {{ 'HRM.USERS.ROLES' | translate }}
                         <p-columnFilter type="text" field="role" display="menu"
-                                        placeholder="Search by role"></p-columnFilter>
+                                        [placeholder]="'COMMON.SEARCH' | translate"></p-columnFilter>
                     </div>
                 </th>
                 <th style="width: 10rem">
                     <div class="flex justify-center items-center">
-                        Действия
+                        {{ 'COMMON.ACTIONS' | translate }}
                     </div>
                 </th>
             </tr>
@@ -66,14 +66,14 @@
                                 icon="pi pi-pencil"
                                 (click)="openEditDialog(user)"
                                 class="p-button-rounded p-button-text p-button-warning"
-                                pTooltip="Редактировать"
+                                [pTooltip]="'COMMON.EDIT' | translate"
                                 tooltipPosition="top">
                         </button>
                         <button pButton
                                 icon="pi pi-trash"
                                 (click)="openDeleteDialog(user)"
                                 class="p-button-rounded p-button-text p-button-danger"
-                                pTooltip="Удалить"
+                                [pTooltip]="'COMMON.DELETE' | translate"
                                 tooltipPosition="top">
                         </button>
                     </div>
@@ -82,57 +82,60 @@
         </ng-template>
         <ng-template #emptymessage>
             <tr>
-                <td colspan="8">Ничего не найдено</td>
+                <td colspan="8">{{ 'HRM.USERS.NOTHING_FOUND' | translate }}</td>
             </tr>
         </ng-template>
         <ng-template #loadingbody>
             <tr>
-                <td colspan="8">Идет загрузка. Ожидайте...</td>
+                <td colspan="8">{{ 'HRM.USERS.LOADING' | translate }}</td>
             </tr>
         </ng-template>
     </p-table>
 </div>
 
 @if (displayDialog) {
-    <app-dialog [header]="isEditMode ? 'Редактировать пользователя' : 'Новый пользователь'" [(visible)]="displayDialog"
+    <app-dialog [header]="isEditMode ? ('HRM.USERS.EDIT_USER' | translate) : ('HRM.USERS.NEW_USER' | translate)" [(visible)]="displayDialog"
                 (save)="onSubmit()"
     >
         <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
             <div class="flex flex-col gap-4 p-fluid">
                 <!-- Account Information -->
-                <div class="font-semibold text-lg mb-2">Информация об аккаунте</div>
+                <div class="font-semibold text-lg mb-2">{{ 'HRM.USERS.ACCOUNT_INFO' | translate }}</div>
 
                 <app-input-text
                     formControlName="login"
-                    label="Логин"
+                    [label]="'HRM.USERS.LOGIN' | translate"
                     [submitted]="submitted"
-                    errorMessage="Логин обязателен"
+                    [errorMessage]="'HRM.USERS.LOGIN_REQUIRED' | translate"
                     [required]="true">
                 </app-input-text>
 
                 <div class="flex flex-col gap-2">
                     <label
-                        for="password">Пароль{{ isEditMode ? ' (оставьте пустым, если не хотите менять)' : '' }}</label>
+                        for="password">{{ 'HRM.USERS.PASSWORD' | translate }}{{ isEditMode ? (' ' + ('HRM.USERS.PASSWORD_HINT' | translate)) : '' }}</label>
                     <p-password id="password" formControlName="password" [toggleMask]="true"
                                 [feedback]="false"></p-password>
                     @if (submitted && userForm.controls['password'].errors?.['required']) {
-                        <small class="p-error">Пароль обязателен.</small>
+                        <small class="p-error">{{ 'HRM.USERS.PASSWORD_REQUIRED' | translate }}</small>
                     }
                 </div>
                 <div class="flex flex-col gap-2">
-                    <label for="roles">Роли</label>
+                    <label for="roles">{{ 'HRM.USERS.ROLES' | translate }}</label>
                     <p-multiSelect id="roles" [options]="allRoles" formControlName="roles" optionLabel="name"
-                                   placeholder="Выберите роли" [appendTo]="'body'"></p-multiSelect>
+                                   [placeholder]="'HRM.USERS.SELECT_ROLES' | translate" [appendTo]="'body'"></p-multiSelect>
                 </div>
 
                 <!-- Contact Information -->
-                <div class="font-semibold text-lg mb-2 mt-4">Контактная информация</div>
+                <div class="font-semibold text-lg mb-2 mt-4">{{ 'HRM.USERS.CONTACT_INFO' | translate }}</div>
 
                 @if (!isEditMode) {
                     <div class="flex flex-col gap-2">
-                        <label>Режим контакта</label>
+                        <label>{{ 'HRM.USERS.CONTACT_MODE' | translate }}</label>
                         <p-selectbutton
-                            [options]="contactModeOptions"
+                            [options]="[
+                                { label: ('HRM.USERS.NEW_CONTACT' | translate), value: 'new' },
+                                { label: ('HRM.USERS.EXISTING_CONTACT' | translate), value: 'existing' }
+                            ]"
                             [(ngModel)]="contactMode"
                             [ngModelOptions]="{standalone: true}"
                             (onChange)="onContactModeChange()"
@@ -144,14 +147,14 @@
 
                 @if (!isEditMode && contactMode === 'existing') {
                     <div class="flex flex-col gap-2">
-                        <label for="contact_id">Выберите контакт</label>
+                        <label for="contact_id">{{ 'HRM.USERS.SELECT_CONTACT' | translate }}</label>
                         <p-select
                             id="contact_id"
                             formControlName="contact_id"
                             [options]="allContacts"
                             optionLabel="name"
                             optionValue="id"
-                            placeholder="Выберите существующий контакт"
+                            [placeholder]="'HRM.USERS.SELECT_EXISTING_CONTACT' | translate"
                             [filter]="true"
                             filterBy="name,email,phone"
                             [appendTo]="'body'">
@@ -168,7 +171,7 @@
                             </ng-template>
                         </p-select>
                         @if (submitted && userForm.controls['contact_id'].errors?.['required']) {
-                            <small class="p-error">Выберите контакт.</small>
+                            <small class="p-error">{{ 'HRM.USERS.CONTACT_REQUIRED' | translate }}</small>
                         }
                     </div>
                 }
@@ -176,9 +179,9 @@
                 @if (isEditMode || contactMode === 'new') {
                     <app-input-text
                         formControlName="name"
-                        label="ФИО"
+                        [label]="'HRM.EMPLOYEES.FULL_NAME' | translate"
                         [submitted]="submitted"
-                        errorMessage="ФИО обязательно"
+                        [errorMessage]="'HRM.EMPLOYEES.NAME_REQUIRED' | translate"
                         [required]="contactMode === 'new' && !isEditMode">
                     </app-input-text>
                 }
@@ -186,7 +189,7 @@
                 @if (isEditMode || contactMode === 'new') {
                     <app-input-text
                         formControlName="email"
-                        label="Email"
+                        [label]="'HRM.EMPLOYEES.EMAIL' | translate"
                         type="email"
                         [submitted]="submitted"
                         [required]="false">
@@ -194,7 +197,7 @@
 
                     <app-input-text
                         formControlName="phone"
-                        label="Телефон"
+                        [label]="'HRM.EMPLOYEES.PHONE' | translate"
                         type="tel"
                         [submitted]="submitted"
                         [required]="false">
@@ -202,51 +205,51 @@
 
                     <app-input-text
                         formControlName="ip_phone"
-                        label="IP телефон"
+                        [label]="'HRM.EMPLOYEES.IP_PHONE' | translate"
                         [submitted]="submitted"
                         [required]="false">
                     </app-input-text>
 
                     <app-date-picker
                         formControlName="dob"
-                        label="Дата рождения"
+                        [label]="'HRM.EMPLOYEES.BIRTHDATE' | translate"
                         [submitted]="submitted">
                     </app-date-picker>
 
-                    <div class="font-semibold text-lg mb-2 mt-4">Место работы</div>
+                    <div class="font-semibold text-lg mb-2 mt-4">{{ 'HRM.EMPLOYEES.WORKPLACE' | translate }}</div>
 
                     <app-select
                         formControlName="organization_id"
-                        label="Организация"
+                        [label]="'HRM.EMPLOYEES.ORGANIZATION' | translate"
                         [items]="organizations"
                         [submitted]="submitted"
-                        errorMessage="Организация обязательна">
+                        [errorMessage]="'HRM.EMPLOYEES.ORGANIZATION_REQUIRED' | translate">
                     </app-select>
 
                     <app-select
                         formControlName="department_id"
-                        label="Отдел"
+                        [label]="'HRM.EMPLOYEES.DEPARTMENT' | translate"
                         [items]="departments"
                         [submitted]="submitted"
-                        errorMessage="Отдел обязателен">
+                        [errorMessage]="'HRM.EMPLOYEES.DEPARTMENT_REQUIRED' | translate">
                     </app-select>
 
                     <app-select
                         formControlName="position_id"
-                        label="Должность"
+                        [label]="'HRM.EMPLOYEES.POSITION' | translate"
                         [items]="positions"
                         [submitted]="submitted"
-                        errorMessage="Должность обязательна">
+                        [errorMessage]="'HRM.EMPLOYEES.POSITION_REQUIRED' | translate">
                     </app-select>
 
                     <app-input-text
                         formControlName="external_organization_name"
-                        label="Внешняя организация"
+                        [label]="'HRM.EMPLOYEES.EXTERNAL_ORGANIZATION' | translate"
                         [submitted]="submitted"
                         [required]="false">
                     </app-input-text>
                     <app-file-upload
-                        label="Загрузить фото"
+                        [label]="'HRM.EMPLOYEES.UPLOAD_PHOTO' | translate"
                         [multiple]="false"
                         [maxFileSize]="10242880"
                         accept="image/*"
@@ -259,14 +262,14 @@
             </div>
         </form>
         <ng-template pTemplate="footer">
-            <p-button label="Отмена" (click)="closeDialog()" styleClass="p-button-text" />
-            <p-button [label]="isEditMode ? 'Обновить' : 'Сохранить'" type="submit" (click)="onSubmit()" />
+            <p-button [label]="'COMMON.CANCEL' | translate" (click)="closeDialog()" styleClass="p-button-text" />
+            <p-button [label]="isEditMode ? ('COMMON.UPDATE' | translate) : ('COMMON.SAVE' | translate)" type="submit" (click)="onSubmit()" />
         </ng-template>
     </app-dialog>
 }
 
 <app-delete-confirmation
     [(visible)]="displayDeleteDialog"
-    [message]="'Вы уверены, что хотите удалить пользователя ' + (selectedUser?.name || '') + '?'"
+    [message]="('HRM.USERS.DELETE_CONFIRM' | translate) + ' ' + (selectedUser?.name || '') + '?'"
     (onConfirm)="confirmDelete()">
 </app-delete-confirmation>

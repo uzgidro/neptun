@@ -17,6 +17,7 @@ import { InputGroupAddon } from 'primeng/inputgroupaddon';
 import { ProgressBar } from 'primeng/progressbar';
 import { Checkbox } from 'primeng/checkbox';
 import { Subject, takeUntil, forkJoin } from 'rxjs';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AccessControlService } from '@/core/services/access-control.service';
 import { ContactService } from '@/core/services/contact.service';
 import {
@@ -62,7 +63,8 @@ interface Employee {
         InputGroup,
         InputGroupAddon,
         ProgressBar,
-        Checkbox
+        Checkbox,
+        TranslateModule
     ],
     providers: [ConfirmationService],
     templateUrl: './access-control.component.html',
@@ -128,6 +130,7 @@ export class AccessControlComponent implements OnInit, OnDestroy {
     private confirmationService = inject(ConfirmationService);
     private accessControlService = inject(AccessControlService);
     private contactService = inject(ContactService);
+    private translate = inject(TranslateService);
     private destroy$ = new Subject<void>();
 
     ngOnInit(): void {
@@ -173,8 +176,8 @@ export class AccessControlComponent implements OnInit, OnDestroy {
                 this.loading = false;
             },
             error: (err) => {
-                console.error('Ошибка загрузки данных:', err);
-                this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось загрузить данные' });
+                console.error('Error loading data:', err);
+                this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('HRM.ACCESS_CONTROL.LOAD_ERROR') });
                 this.loading = false;
             }
         });
@@ -231,16 +234,16 @@ export class AccessControlComponent implements OnInit, OnDestroy {
                 if (!matches) return false;
             }
             if (this.selectedCardStatus && card.status !== this.selectedCardStatus) return false;
-            if (this.selectedZone && !card.access_zones.includes(this.selectedZone)) return false;
-            return true;
+            return !(this.selectedZone && !card.access_zones.includes(this.selectedZone));
+
         });
     }
 
     get filteredLogs(): AccessLog[] {
         return this.logs.filter(log => {
             if (this.selectedLogStatus && log.status !== this.selectedLogStatus) return false;
-            if (this.selectedZone && log.zone_id !== this.selectedZone) return false;
-            return true;
+            return !(this.selectedZone && log.zone_id !== this.selectedZone);
+
         });
     }
 
@@ -273,7 +276,7 @@ export class AccessControlComponent implements OnInit, OnDestroy {
 
     saveCard(): void {
         if (!this.cardForm.employee_id) {
-            this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Выберите сотрудника' });
+            this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('HRM.ACCESS_CONTROL.SELECT_EMPLOYEE') });
             return;
         }
 
@@ -288,7 +291,7 @@ export class AccessControlComponent implements OnInit, OnDestroy {
                     access_zones: this.selectedZonesForCard
                 } as AccessCard;
             }
-            this.messageService.add({ severity: 'success', summary: 'Сохранено', detail: 'Карта обновлена' });
+            this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('HRM.ACCESS_CONTROL.CARD_UPDATED') });
         } else {
             const newCard: AccessCard = {
                 id: Math.max(...this.cards.map(c => c.id)) + 1,
@@ -305,7 +308,7 @@ export class AccessControlComponent implements OnInit, OnDestroy {
                 access_zones: this.selectedZonesForCard
             };
             this.cards.unshift(newCard);
-            this.messageService.add({ severity: 'success', summary: 'Создано', detail: 'Карта выдана' });
+            this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('HRM.ACCESS_CONTROL.CARD_ISSUED') });
         }
 
         this.displayCardDialog = false;
@@ -329,24 +332,24 @@ export class AccessControlComponent implements OnInit, OnDestroy {
         if (!this.selectedCard) return;
 
         this.selectedCard.status = 'blocked';
-        this.selectedCard.notes = this.blockReason || 'Заблокирована администратором';
+        this.selectedCard.notes = this.blockReason || this.translate.instant('HRM.ACCESS_CONTROL.BLOCKED_BY_ADMIN');
 
-        this.messageService.add({ severity: 'warn', summary: 'Заблокировано', detail: 'Карта заблокирована' });
+        this.messageService.add({ severity: 'warn', summary: this.translate.instant('HRM.ACCESS_CONTROL.BLOCKED'), detail: this.translate.instant('HRM.ACCESS_CONTROL.CARD_BLOCKED') });
         this.displayBlockDialog = false;
         this.calculateStats();
     }
 
     unblockCard(card: AccessCard): void {
         this.confirmationService.confirm({
-            message: `Разблокировать карту ${card.card_number}?`,
-            header: 'Подтверждение',
+            message: this.translate.instant('HRM.ACCESS_CONTROL.CONFIRM_UNBLOCK', { number: card.card_number }),
+            header: this.translate.instant('COMMON.CONFIRM'),
             icon: 'pi pi-question-circle',
-            acceptLabel: 'Да',
-            rejectLabel: 'Нет',
+            acceptLabel: this.translate.instant('COMMON.YES'),
+            rejectLabel: this.translate.instant('COMMON.NO'),
             accept: () => {
                 card.status = 'active';
                 card.notes = undefined;
-                this.messageService.add({ severity: 'success', summary: 'Разблокировано', detail: 'Карта разблокирована' });
+                this.messageService.add({ severity: 'success', summary: this.translate.instant('HRM.ACCESS_CONTROL.UNBLOCKED'), detail: this.translate.instant('HRM.ACCESS_CONTROL.CARD_UNBLOCKED') });
                 this.calculateStats();
             }
         });
@@ -364,7 +367,7 @@ export class AccessControlComponent implements OnInit, OnDestroy {
 
         this.selectedRequest.status = 'approved';
         this.selectedRequest.processed_at = new Date().toISOString();
-        this.selectedRequest.processed_by_name = 'Администратор';
+        this.selectedRequest.processed_by_name = this.translate.instant('HRM.ACCESS_CONTROL.ADMINISTRATOR');
 
         // Add zones to employee's card
         const card = this.cards.find(c => c.employee_id === this.selectedRequest!.employee_id);
@@ -376,7 +379,7 @@ export class AccessControlComponent implements OnInit, OnDestroy {
             });
         }
 
-        this.messageService.add({ severity: 'success', summary: 'Одобрено', detail: 'Заявка одобрена, доступ предоставлен' });
+        this.messageService.add({ severity: 'success', summary: this.translate.instant('HRM.ACCESS_CONTROL.APPROVED'), detail: this.translate.instant('HRM.ACCESS_CONTROL.REQUEST_APPROVED') });
         this.displayRequestDialog = false;
         this.calculateStats();
     }
@@ -386,10 +389,10 @@ export class AccessControlComponent implements OnInit, OnDestroy {
 
         this.selectedRequest.status = 'rejected';
         this.selectedRequest.processed_at = new Date().toISOString();
-        this.selectedRequest.processed_by_name = 'Администратор';
+        this.selectedRequest.processed_by_name = this.translate.instant('HRM.ACCESS_CONTROL.ADMINISTRATOR');
         this.selectedRequest.rejection_reason = this.rejectionReason;
 
-        this.messageService.add({ severity: 'warn', summary: 'Отклонено', detail: 'Заявка отклонена' });
+        this.messageService.add({ severity: 'warn', summary: this.translate.instant('HRM.ACCESS_CONTROL.REJECTED'), detail: this.translate.instant('HRM.ACCESS_CONTROL.REQUEST_REJECTED') });
         this.displayRequestDialog = false;
         this.calculateStats();
     }
@@ -439,15 +442,21 @@ export class AccessControlComponent implements OnInit, OnDestroy {
     }
 
     formatDateTime(dateStr: string): string {
-        return new Date(dateStr).toLocaleString('ru-RU');
+        const lang = this.translate.currentLang || 'ru';
+        const locale = lang === 'uz-latn' ? 'uz' : lang === 'uz-cyrl' ? 'uz' : lang;
+        return new Date(dateStr).toLocaleString(locale);
     }
 
     formatDate(dateStr: string): string {
-        return new Date(dateStr).toLocaleDateString('ru-RU');
+        const lang = this.translate.currentLang || 'ru';
+        const locale = lang === 'uz-latn' ? 'uz' : lang === 'uz-cyrl' ? 'uz' : lang;
+        return new Date(dateStr).toLocaleDateString(locale);
     }
 
     formatTime(dateStr: string): string {
-        return new Date(dateStr).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+        const lang = this.translate.currentLang || 'ru';
+        const locale = lang === 'uz-latn' ? 'uz' : lang === 'uz-cyrl' ? 'uz' : lang;
+        return new Date(dateStr).toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' });
     }
 
     getOccupancyColor(percentage: number): string {

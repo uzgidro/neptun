@@ -2,11 +2,11 @@
     <!-- Header -->
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
         <div>
-            <h1 class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">Табель учёта рабочего времени</h1>
+            <h1 class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">{{ 'HRM.TIMESHEET.TITLE' | translate }}</h1>
             <p class="text-surface-600 dark:text-surface-400 mt-1">{{ getMonthName(selectedMonth) }} {{ selectedYear }}</p>
         </div>
         <div class="flex gap-2">
-            <button pButton label="Экспорт в Excel" icon="pi pi-file-excel" class="p-button-success" (click)="exportToExcel()"></button>
+            <button pButton [label]="'HRM.TIMESHEET.EXPORT_EXCEL' | translate" icon="pi pi-file-excel" class="p-button-success" (click)="exportToExcel()"></button>
         </div>
     </div>
 
@@ -14,35 +14,35 @@
     <p-card styleClass="mb-4">
         <div class="flex flex-wrap gap-4 items-end">
             <div class="flex flex-col gap-2">
-                <label class="font-medium text-surface-700 dark:text-surface-300">Месяц</label>
+                <label class="font-medium text-surface-700 dark:text-surface-300">{{ 'HRM.TIMESHEET.MONTH' | translate }}</label>
                 <p-select
                     [options]="months"
                     [(ngModel)]="selectedMonth"
                     optionLabel="label"
                     optionValue="value"
-                    placeholder="Выберите месяц"
+                    [placeholder]="'HRM.TIMESHEET.SELECT_MONTH' | translate"
                     class="w-48"
                     (onChange)="onFilterChange()">
                 </p-select>
             </div>
             <div class="flex flex-col gap-2">
-                <label class="font-medium text-surface-700 dark:text-surface-300">Год</label>
+                <label class="font-medium text-surface-700 dark:text-surface-300">{{ 'HRM.TIMESHEET.YEAR' | translate }}</label>
                 <p-select
                     [options]="years"
                     [(ngModel)]="selectedYear"
-                    placeholder="Выберите год"
+                    [placeholder]="'HRM.TIMESHEET.SELECT_YEAR' | translate"
                     class="w-32"
                     (onChange)="onFilterChange()">
                 </p-select>
             </div>
             <div class="flex flex-col gap-2">
-                <label class="font-medium text-surface-700 dark:text-surface-300">Отдел</label>
+                <label class="font-medium text-surface-700 dark:text-surface-300">{{ 'HRM.TIMESHEET.DEPARTMENT' | translate }}</label>
                 <p-select
                     [options]="departments"
                     [(ngModel)]="selectedDepartment"
                     optionLabel="name"
                     optionValue="id"
-                    placeholder="Все отделы"
+                    [placeholder]="'HRM.TIMESHEET.ALL_DEPARTMENTS' | translate"
                     [showClear]="true"
                     class="w-56"
                     (onChange)="onFilterChange()">
@@ -59,7 +59,7 @@
                     <i class="pi pi-users text-green-600 dark:text-green-400 text-xl"></i>
                 </div>
                 <div>
-                    <p class="text-surface-500 dark:text-surface-400 text-sm m-0">Явка</p>
+                    <p class="text-surface-500 dark:text-surface-400 text-sm m-0">{{ 'HRM.TIMESHEET.ATTENDANCE' | translate }}</p>
                     <p class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">{{ getAttendanceRate() }}%</p>
                 </div>
             </div>
@@ -71,7 +71,7 @@
                     <i class="pi pi-calendar text-blue-600 dark:text-blue-400 text-xl"></i>
                 </div>
                 <div>
-                    <p class="text-surface-500 dark:text-surface-400 text-sm m-0">Рабочих дней</p>
+                    <p class="text-surface-500 dark:text-surface-400 text-sm m-0">{{ 'HRM.TIMESHEET.WORK_DAYS' | translate }}</p>
                     <p class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">{{ totalSummary.total_work_days }}</p>
                 </div>
             </div>
@@ -83,7 +83,7 @@
                     <i class="pi pi-clock text-cyan-600 dark:text-cyan-400 text-xl"></i>
                 </div>
                 <div>
-                    <p class="text-surface-500 dark:text-surface-400 text-sm m-0">Отработано часов</p>
+                    <p class="text-surface-500 dark:text-surface-400 text-sm m-0">{{ 'HRM.TIMESHEET.HOURS_WORKED' | translate }}</p>
                     <p class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">{{ totalSummary.total_worked_hours }}</p>
                 </div>
             </div>
@@ -95,8 +95,8 @@
                     <i class="pi pi-exclamation-triangle text-orange-600 dark:text-orange-400 text-xl"></i>
                 </div>
                 <div>
-                    <p class="text-surface-500 dark:text-surface-400 text-sm m-0">Переработки</p>
-                    <p class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">{{ totalSummary.total_overtime_hours }}ч</p>
+                    <p class="text-surface-500 dark:text-surface-400 text-sm m-0">{{ 'HRM.TIMESHEET.OVERTIME' | translate }}</p>
+                    <p class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">{{ totalSummary.total_overtime_hours }}{{ 'HRM.TIMESHEET.HOURS_SHORT' | translate }}</p>
                 </div>
             </div>
         </div>
@@ -107,7 +107,7 @@
                     <i class="pi pi-sun text-purple-600 dark:text-purple-400 text-xl"></i>
                 </div>
                 <div>
-                    <p class="text-surface-500 dark:text-surface-400 text-sm m-0">В отпуске</p>
+                    <p class="text-surface-500 dark:text-surface-400 text-sm m-0">{{ 'HRM.TIMESHEET.ON_VACATION' | translate }}</p>
                     <p class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">{{ totalSummary.days_vacation }}</p>
                 </div>
             </div>
@@ -121,7 +121,7 @@
                 <thead>
                     <tr>
                         <th class="employee-header">
-                            <div class="font-medium">Сотрудник</div>
+                            <div class="font-medium">{{ 'HRM.TIMESHEET.EMPLOYEE' | translate }}</div>
                         </th>
                         @for (day of calendarDays; track day.date) {
                             <th
@@ -134,7 +134,7 @@
                                 <div class="day-name">{{ getDayOfWeekShort(day.dayOfWeek) }}</div>
                             </th>
                         }
-                        <th class="summary-header">Итого</th>
+                        <th class="summary-header">{{ 'HRM.TIMESHEET.TOTAL' | translate }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -142,14 +142,14 @@
                         <tr>
                             <td [attr.colspan]="calendarDays.length + 2" class="text-center p-8">
                                 <i class="pi pi-spin pi-spinner text-2xl text-surface-400"></i>
-                                <p class="mt-2 text-surface-500">Загрузка данных...</p>
+                                <p class="mt-2 text-surface-500">{{ 'COMMON.LOADING' | translate }}</p>
                             </td>
                         </tr>
                     } @else if (employees.length === 0) {
                         <tr>
                             <td [attr.colspan]="calendarDays.length + 2" class="text-center p-8">
                                 <i class="pi pi-inbox text-4xl text-surface-300"></i>
-                                <p class="mt-2 text-surface-500">Нет данных за выбранный период</p>
+                                <p class="mt-2 text-surface-500">{{ 'HRM.TIMESHEET.NO_DATA' | translate }}</p>
                             </td>
                         </tr>
                     } @else {
@@ -202,7 +202,7 @@
 
     <!-- Legend -->
     <div class="mt-4 p-4 bg-surface-0 dark:bg-surface-800 rounded-lg border border-surface-200 dark:border-surface-700">
-        <h4 class="text-sm font-medium text-surface-700 dark:text-surface-300 mb-3">Обозначения:</h4>
+        <h4 class="text-sm font-medium text-surface-700 dark:text-surface-300 mb-3">{{ 'HRM.TIMESHEET.LEGEND' | translate }}</h4>
         <div class="flex flex-wrap gap-4">
             @for (status of attendanceStatuses; track status.value) {
                 <div class="flex items-center gap-2">
@@ -216,7 +216,7 @@
 
 <!-- Edit Dialog -->
 <p-dialog
-    header="Редактирование записи"
+    [header]="'HRM.TIMESHEET.EDIT_RECORD' | translate"
     [(visible)]="displayEditDialog"
     [modal]="true"
     [style]="{ width: '450px' }"
@@ -229,36 +229,36 @@
         </div>
 
         <div class="flex flex-col gap-2">
-            <label class="font-medium text-surface-700 dark:text-surface-300">Статус</label>
+            <label class="font-medium text-surface-700 dark:text-surface-300">{{ 'HRM.TIMESHEET.STATUS' | translate }}</label>
             <p-select
                 [options]="attendanceStatuses"
                 [(ngModel)]="editForm.status"
                 optionLabel="label"
                 optionValue="value"
-                placeholder="Выберите статус"
+                [placeholder]="'HRM.TIMESHEET.SELECT_STATUS' | translate"
                 class="w-full">
             </p-select>
         </div>
 
         <div class="grid grid-cols-2 gap-4">
             <div class="flex flex-col gap-2">
-                <label class="font-medium text-surface-700 dark:text-surface-300">Время прихода</label>
+                <label class="font-medium text-surface-700 dark:text-surface-300">{{ 'HRM.TIMESHEET.CHECK_IN' | translate }}</label>
                 <input pInputText type="time" [(ngModel)]="editForm.check_in" class="w-full" />
             </div>
             <div class="flex flex-col gap-2">
-                <label class="font-medium text-surface-700 dark:text-surface-300">Время ухода</label>
+                <label class="font-medium text-surface-700 dark:text-surface-300">{{ 'HRM.TIMESHEET.CHECK_OUT' | translate }}</label>
                 <input pInputText type="time" [(ngModel)]="editForm.check_out" class="w-full" />
             </div>
         </div>
 
         <div class="flex flex-col gap-2">
-            <label class="font-medium text-surface-700 dark:text-surface-300">Примечание</label>
+            <label class="font-medium text-surface-700 dark:text-surface-300">{{ 'HRM.TIMESHEET.NOTES' | translate }}</label>
             <textarea pTextarea [(ngModel)]="editForm.notes" rows="3" class="w-full"></textarea>
         </div>
     </div>
 
     <ng-template pTemplate="footer">
-        <button pButton label="Отмена" class="p-button-text" (click)="displayEditDialog = false"></button>
-        <button pButton label="Сохранить" icon="pi pi-check" (click)="saveEdit()"></button>
+        <button pButton [label]="'COMMON.CANCEL' | translate" class="p-button-text" (click)="displayEditDialog = false"></button>
+        <button pButton [label]="'COMMON.SAVE' | translate" icon="pi pi-check" (click)="saveEdit()"></button>
     </ng-template>
 </p-dialog>

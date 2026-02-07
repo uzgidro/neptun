@@ -2,11 +2,11 @@
     <!-- Header -->
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
         <div>
-            <h1 class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">Контроль доступа</h1>
-            <p class="text-surface-600 dark:text-surface-400 mt-1">Управление пропусками и мониторинг</p>
+            <h1 class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">{{ 'HRM.ACCESS_CONTROL.TITLE' | translate }}</h1>
+            <p class="text-surface-600 dark:text-surface-400 mt-1">{{ 'HRM.ACCESS_CONTROL.SUBTITLE' | translate }}</p>
         </div>
         <div class="flex gap-2">
-            <button pButton label="Выдать карту" icon="pi pi-id-card" (click)="openNewCardDialog()"></button>
+            <button pButton [label]="'HRM.ACCESS_CONTROL.ISSUE_CARD' | translate" icon="pi pi-id-card" (click)="openNewCardDialog()"></button>
         </div>
     </div>
 
@@ -16,7 +16,7 @@
             <div class="text-center">
                 <i class="pi pi-id-card text-2xl text-blue-500 mb-2"></i>
                 <p class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">{{ stats.active_cards }}</p>
-                <p class="text-xs text-surface-500 dark:text-surface-400 m-0">Активных карт</p>
+                <p class="text-xs text-surface-500 dark:text-surface-400 m-0">{{ 'HRM.ACCESS_CONTROL.ACTIVE_CARDS' | translate }}</p>
             </div>
         </div>
 
@@ -24,7 +24,7 @@
             <div class="text-center">
                 <i class="pi pi-users text-2xl text-green-500 mb-2"></i>
                 <p class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">{{ stats.current_on_site }}</p>
-                <p class="text-xs text-surface-500 dark:text-surface-400 m-0">На территории</p>
+                <p class="text-xs text-surface-500 dark:text-surface-400 m-0">{{ 'HRM.ACCESS_CONTROL.ON_SITE' | translate }}</p>
             </div>
         </div>
 
@@ -32,7 +32,7 @@
             <div class="text-center">
                 <i class="pi pi-sign-in text-2xl text-cyan-500 mb-2"></i>
                 <p class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">{{ stats.entries_today }}</p>
-                <p class="text-xs text-surface-500 dark:text-surface-400 m-0">Входов сегодня</p>
+                <p class="text-xs text-surface-500 dark:text-surface-400 m-0">{{ 'HRM.ACCESS_CONTROL.ENTRIES_TODAY' | translate }}</p>
             </div>
         </div>
 
@@ -40,7 +40,7 @@
             <div class="text-center">
                 <i class="pi pi-sign-out text-2xl text-orange-500 mb-2"></i>
                 <p class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">{{ stats.exits_today }}</p>
-                <p class="text-xs text-surface-500 dark:text-surface-400 m-0">Выходов сегодня</p>
+                <p class="text-xs text-surface-500 dark:text-surface-400 m-0">{{ 'HRM.ACCESS_CONTROL.EXITS_TODAY' | translate }}</p>
             </div>
         </div>
 
@@ -48,7 +48,7 @@
             <div class="text-center">
                 <i class="pi pi-ban text-2xl text-red-500 mb-2"></i>
                 <p class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">{{ stats.denied_today }}</p>
-                <p class="text-xs text-surface-500 dark:text-surface-400 m-0">Отказов</p>
+                <p class="text-xs text-surface-500 dark:text-surface-400 m-0">{{ 'HRM.ACCESS_CONTROL.DENIALS' | translate }}</p>
             </div>
         </div>
 
@@ -56,14 +56,14 @@
             <div class="text-center">
                 <i class="pi pi-inbox text-2xl text-purple-500 mb-2"></i>
                 <p class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">{{ stats.pending_requests }}</p>
-                <p class="text-xs text-surface-500 dark:text-surface-400 m-0">Заявок</p>
+                <p class="text-xs text-surface-500 dark:text-surface-400 m-0">{{ 'HRM.ACCESS_CONTROL.REQUESTS' | translate }}</p>
             </div>
         </div>
     </div>
 
     <!-- Zone Occupancy -->
     <div class="bg-surface-0 dark:bg-surface-800 rounded-lg p-4 mb-6 border border-surface-200 dark:border-surface-700">
-        <h3 class="text-lg font-semibold text-surface-900 dark:text-surface-0 mb-4">Заполненность зон</h3>
+        <h3 class="text-lg font-semibold text-surface-900 dark:text-surface-0 mb-4">{{ 'HRM.ACCESS_CONTROL.ZONE_OCCUPANCY' | translate }}</h3>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             @for (zone of zoneOccupancy; track zone.zone_id) {
                 <div class="flex flex-col gap-2">
@@ -83,22 +83,22 @@
         <p-tablist>
             <p-tab [value]="0">
                 <i class="pi pi-id-card mr-2"></i>
-                Карты доступа
+                {{ 'HRM.ACCESS_CONTROL.ACCESS_CARDS' | translate }}
             </p-tab>
             <p-tab [value]="1">
                 <i class="pi pi-list mr-2"></i>
-                Журнал событий
+                {{ 'HRM.ACCESS_CONTROL.EVENT_LOG' | translate }}
             </p-tab>
             <p-tab [value]="2">
                 <i class="pi pi-inbox mr-2"></i>
-                Заявки
+                {{ 'HRM.ACCESS_CONTROL.REQUESTS' | translate }}
                 @if (stats.pending_requests > 0) {
                     <span class="ml-2 bg-red-500 text-white text-xs rounded-full px-2 py-0.5">{{ stats.pending_requests }}</span>
                 }
             </p-tab>
             <p-tab [value]="3">
                 <i class="pi pi-map-marker mr-2"></i>
-                Зоны доступа
+                {{ 'HRM.ACCESS_CONTROL.ACCESS_ZONES' | translate }}
             </p-tab>
         </p-tablist>
 
@@ -109,27 +109,27 @@
                     <div class="flex-1 min-w-64">
                         <p-inputgroup>
                             <p-inputgroup-addon><i class="pi pi-search"></i></p-inputgroup-addon>
-                            <input pInputText [(ngModel)]="searchQuery" placeholder="Поиск по ФИО, номеру карты..." class="w-full" />
+                            <input pInputText [(ngModel)]="searchQuery" [placeholder]="'HRM.ACCESS_CONTROL.SEARCH_PLACEHOLDER' | translate" class="w-full" />
                         </p-inputgroup>
                     </div>
                     <p-select [options]="cardStatuses" [(ngModel)]="selectedCardStatus" optionLabel="label" optionValue="value"
-                        placeholder="Статус" [showClear]="true" class="w-40"></p-select>
+                        [placeholder]="'HRM.ACCESS_CONTROL.STATUS' | translate" [showClear]="true" class="w-40"></p-select>
                     <p-select [options]="zones" [(ngModel)]="selectedZone" optionLabel="name" optionValue="id"
-                        placeholder="Зона" [showClear]="true" class="w-48"></p-select>
-                    <button pButton icon="pi pi-filter-slash" class="p-button-outlined" pTooltip="Сбросить" (click)="clearFilters()"></button>
+                        [placeholder]="'HRM.ACCESS_CONTROL.ZONE' | translate" [showClear]="true" class="w-48"></p-select>
+                    <button pButton icon="pi pi-filter-slash" class="p-button-outlined" [pTooltip]="'HRM.ACCESS_CONTROL.RESET' | translate" (click)="clearFilters()"></button>
                 </div>
 
                 <p-table [value]="filteredCards" [loading]="loading" [paginator]="true" [rows]="10" styleClass="p-datatable-sm">
                     <ng-template pTemplate="header">
                         <tr>
-                            <th>Номер карты</th>
-                            <th>Сотрудник</th>
-                            <th>Отдел</th>
-                            <th>Статус</th>
-                            <th>Зоны доступа</th>
-                            <th>Действует до</th>
-                            <th>Последний вход</th>
-                            <th style="width: 120px">Действия</th>
+                            <th>{{ 'HRM.ACCESS_CONTROL.CARD_NUMBER' | translate }}</th>
+                            <th>{{ 'HRM.ACCESS_CONTROL.EMPLOYEE' | translate }}</th>
+                            <th>{{ 'HRM.ACCESS_CONTROL.DEPARTMENT' | translate }}</th>
+                            <th>{{ 'HRM.ACCESS_CONTROL.STATUS' | translate }}</th>
+                            <th>{{ 'HRM.ACCESS_CONTROL.ZONES' | translate }}</th>
+                            <th>{{ 'HRM.ACCESS_CONTROL.VALID_UNTIL' | translate }}</th>
+                            <th>{{ 'HRM.ACCESS_CONTROL.LAST_ENTRY' | translate }}</th>
+                            <th style="width: 120px">{{ 'HRM.ACCESS_CONTROL.ACTIONS' | translate }}</th>
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-card>
@@ -145,7 +145,7 @@
                             <td><p-tag [value]="getCardStatusLabel(card.status)" [severity]="getCardStatusSeverity(card.status)"></p-tag></td>
                             <td>
                                 <span class="text-sm" pTooltip="{{ getZoneNames(card.access_zones) }}">
-                                    {{ card.access_zones.length }} зон(ы)
+                                    {{ card.access_zones.length }} {{ 'HRM.ACCESS_CONTROL.ZONES_COUNT' | translate }}
                                 </span>
                             </td>
                             <td>{{ formatDate(card.valid_until) }}</td>
@@ -159,12 +159,12 @@
                             </td>
                             <td>
                                 <div class="flex gap-1">
-                                    <button pButton icon="pi pi-pencil" class="p-button-text p-button-sm" pTooltip="Редактировать" (click)="openEditCardDialog(card)"></button>
+                                    <button pButton icon="pi pi-pencil" class="p-button-text p-button-sm" [pTooltip]="'HRM.ACCESS_CONTROL.EDIT' | translate" (click)="openEditCardDialog(card)"></button>
                                     @if (card.status === 'active') {
-                                        <button pButton icon="pi pi-lock" class="p-button-text p-button-sm p-button-danger" pTooltip="Заблокировать" (click)="openBlockDialog(card)"></button>
+                                        <button pButton icon="pi pi-lock" class="p-button-text p-button-sm p-button-danger" [pTooltip]="'HRM.ACCESS_CONTROL.BLOCK' | translate" (click)="openBlockDialog(card)"></button>
                                     }
                                     @if (card.status === 'blocked') {
-                                        <button pButton icon="pi pi-lock-open" class="p-button-text p-button-sm p-button-success" pTooltip="Разблокировать" (click)="unblockCard(card)"></button>
+                                        <button pButton icon="pi pi-lock-open" class="p-button-text p-button-sm p-button-success" [pTooltip]="'HRM.ACCESS_CONTROL.UNBLOCK' | translate" (click)="unblockCard(card)"></button>
                                     }
                                 </div>
                             </td>
@@ -174,7 +174,7 @@
                         <tr>
                             <td colspan="8" class="text-center p-8">
                                 <i class="pi pi-id-card text-4xl text-surface-300 mb-2"></i>
-                                <p class="text-surface-500 m-0">Карты не найдены</p>
+                                <p class="text-surface-500 m-0">{{ 'HRM.ACCESS_CONTROL.NO_CARDS' | translate }}</p>
                             </td>
                         </tr>
                     </ng-template>
@@ -185,23 +185,23 @@
             <p-tabpanel [value]="1">
                 <div class="flex flex-wrap gap-4 items-end mb-4">
                     <p-select [options]="accessEventStatuses" [(ngModel)]="selectedLogStatus" optionLabel="label" optionValue="value"
-                        placeholder="Статус" [showClear]="true" class="w-40"></p-select>
+                        [placeholder]="'HRM.ACCESS_CONTROL.STATUS' | translate" [showClear]="true" class="w-40"></p-select>
                     <p-select [options]="zones" [(ngModel)]="selectedZone" optionLabel="name" optionValue="id"
-                        placeholder="Зона" [showClear]="true" class="w-48"></p-select>
-                    <button pButton icon="pi pi-refresh" class="p-button-outlined" pTooltip="Обновить" (click)="loadLogs()"></button>
+                        [placeholder]="'HRM.ACCESS_CONTROL.ZONE' | translate" [showClear]="true" class="w-48"></p-select>
+                    <button pButton icon="pi pi-refresh" class="p-button-outlined" [pTooltip]="'HRM.ACCESS_CONTROL.REFRESH' | translate" (click)="loadLogs()"></button>
                 </div>
 
                 <p-table [value]="filteredLogs" [paginator]="true" [rows]="15" styleClass="p-datatable-sm">
                     <ng-template pTemplate="header">
                         <tr>
-                            <th style="width: 160px">Время</th>
-                            <th>Сотрудник</th>
-                            <th>Карта</th>
-                            <th>Зона</th>
-                            <th>Считыватель</th>
-                            <th style="width: 100px">Направление</th>
-                            <th style="width: 120px">Статус</th>
-                            <th>Причина отказа</th>
+                            <th style="width: 160px">{{ 'HRM.ACCESS_CONTROL.TIME' | translate }}</th>
+                            <th>{{ 'HRM.ACCESS_CONTROL.EMPLOYEE' | translate }}</th>
+                            <th>{{ 'HRM.ACCESS_CONTROL.CARD' | translate }}</th>
+                            <th>{{ 'HRM.ACCESS_CONTROL.ZONE' | translate }}</th>
+                            <th>{{ 'HRM.ACCESS_CONTROL.READER' | translate }}</th>
+                            <th style="width: 100px">{{ 'HRM.ACCESS_CONTROL.DIRECTION' | translate }}</th>
+                            <th style="width: 120px">{{ 'HRM.ACCESS_CONTROL.STATUS' | translate }}</th>
+                            <th>{{ 'HRM.ACCESS_CONTROL.DENIAL_REASON' | translate }}</th>
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-log>
@@ -214,7 +214,7 @@
                             <td>
                                 <span class="inline-flex items-center gap-1">
                                     <i class="pi" [ngClass]="log.direction === 'entry' ? 'pi-sign-in text-green-500' : 'pi-sign-out text-orange-500'"></i>
-                                    {{ log.direction === 'entry' ? 'Вход' : 'Выход' }}
+                                    {{ log.direction === 'entry' ? ('HRM.ACCESS_CONTROL.ENTRY' | translate) : ('HRM.ACCESS_CONTROL.EXIT' | translate) }}
                                 </span>
                             </td>
                             <td><p-tag [value]="getAccessStatusLabel(log.status)" [severity]="getAccessStatusSeverity(log.status)"></p-tag></td>
@@ -235,14 +235,14 @@
                 <p-table [value]="requests" [paginator]="true" [rows]="10" styleClass="p-datatable-sm">
                     <ng-template pTemplate="header">
                         <tr>
-                            <th>Сотрудник</th>
-                            <th>Отдел</th>
-                            <th>Запрашиваемые зоны</th>
-                            <th>Причина</th>
-                            <th>Период</th>
-                            <th>Статус</th>
-                            <th>Дата заявки</th>
-                            <th style="width: 120px">Действия</th>
+                            <th>{{ 'HRM.ACCESS_CONTROL.EMPLOYEE' | translate }}</th>
+                            <th>{{ 'HRM.ACCESS_CONTROL.DEPARTMENT' | translate }}</th>
+                            <th>{{ 'HRM.ACCESS_CONTROL.REQUESTED_ZONES' | translate }}</th>
+                            <th>{{ 'HRM.ACCESS_CONTROL.REASON' | translate }}</th>
+                            <th>{{ 'HRM.ACCESS_CONTROL.PERIOD' | translate }}</th>
+                            <th>{{ 'HRM.ACCESS_CONTROL.STATUS' | translate }}</th>
+                            <th>{{ 'HRM.ACCESS_CONTROL.REQUEST_DATE' | translate }}</th>
+                            <th style="width: 120px">{{ 'HRM.ACCESS_CONTROL.ACTIONS' | translate }}</th>
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-request>
@@ -263,11 +263,11 @@
                                     @if (request.valid_until) {
                                         — {{ formatDate(request.valid_until) }}
                                     } @else {
-                                        — бессрочно
+                                        — {{ 'HRM.ACCESS_CONTROL.PERMANENT' | translate }}
                                     }
                                 </div>
                                 @if (request.is_temporary) {
-                                    <span class="text-xs text-orange-500">Временный</span>
+                                    <span class="text-xs text-orange-500">{{ 'HRM.ACCESS_CONTROL.TEMPORARY' | translate }}</span>
                                 }
                             </td>
                             <td><p-tag [value]="getRequestStatusLabel(request.status)" [severity]="getRequestStatusSeverity(request.status)"></p-tag></td>
@@ -275,8 +275,8 @@
                             <td>
                                 @if (request.status === 'pending') {
                                     <div class="flex gap-1">
-                                        <button pButton icon="pi pi-check" class="p-button-text p-button-sm p-button-success" pTooltip="Одобрить" (click)="openRequestDialog(request)"></button>
-                                        <button pButton icon="pi pi-times" class="p-button-text p-button-sm p-button-danger" pTooltip="Отклонить" (click)="openRequestDialog(request)"></button>
+                                        <button pButton icon="pi pi-check" class="p-button-text p-button-sm p-button-success" [pTooltip]="'HRM.ACCESS_CONTROL.APPROVE' | translate" (click)="openRequestDialog(request)"></button>
+                                        <button pButton icon="pi pi-times" class="p-button-text p-button-sm p-button-danger" [pTooltip]="'HRM.ACCESS_CONTROL.REJECT' | translate" (click)="openRequestDialog(request)"></button>
                                     </div>
                                 }
                             </td>
@@ -286,7 +286,7 @@
                         <tr>
                             <td colspan="8" class="text-center p-8">
                                 <i class="pi pi-inbox text-4xl text-surface-300 mb-2"></i>
-                                <p class="text-surface-500 m-0">Заявок нет</p>
+                                <p class="text-surface-500 m-0">{{ 'HRM.ACCESS_CONTROL.NO_REQUESTS' | translate }}</p>
                             </td>
                         </tr>
                     </ng-template>
@@ -315,13 +315,13 @@
                                 <div class="flex items-center gap-2 mb-3">
                                     <i class="pi pi-users text-surface-400"></i>
                                     <span class="text-sm text-surface-600 dark:text-surface-400">
-                                        {{ zone.current_occupancy }} / {{ zone.max_occupancy }} чел.
+                                        {{ zone.current_occupancy }} / {{ zone.max_occupancy }} {{ 'HRM.ACCESS_CONTROL.PERSONS' | translate }}
                                     </span>
                                 </div>
                                 @if (zone.requires_escort) {
                                     <div class="flex items-center gap-2 text-orange-500">
                                         <i class="pi pi-exclamation-triangle"></i>
-                                        <span class="text-sm">Требуется сопровождение</span>
+                                        <span class="text-sm">{{ 'HRM.ACCESS_CONTROL.ESCORT_REQUIRED' | translate }}</span>
                                     </div>
                                 }
                             </div>
@@ -334,29 +334,29 @@
 </div>
 
 <!-- Card Dialog -->
-<p-dialog [header]="isEditMode ? 'Редактирование карты' : 'Выдача карты'" [(visible)]="displayCardDialog"
+<p-dialog [header]="isEditMode ? ('HRM.ACCESS_CONTROL.EDIT_CARD' | translate) : ('HRM.ACCESS_CONTROL.ISSUE_CARD_TITLE' | translate)" [(visible)]="displayCardDialog"
     [modal]="true" [style]="{ width: '550px' }" [draggable]="false" [resizable]="false">
     <div class="flex flex-col gap-4">
         <div class="flex flex-col gap-2">
-            <label class="font-medium text-surface-700 dark:text-surface-300">Сотрудник *</label>
+            <label class="font-medium text-surface-700 dark:text-surface-300">{{ 'HRM.ACCESS_CONTROL.EMPLOYEE' | translate }} *</label>
             <p-select [options]="employees" [(ngModel)]="cardForm.employee_id" optionLabel="name" optionValue="id"
-                placeholder="Выберите сотрудника" [filter]="true" filterPlaceholder="Поиск..." class="w-full"
+                [placeholder]="'HRM.ACCESS_CONTROL.SELECT_EMPLOYEE' | translate" [filter]="true" [filterPlaceholder]="'COMMON.SEARCH' | translate" class="w-full"
                 [disabled]="isEditMode"></p-select>
         </div>
 
         <div class="grid grid-cols-2 gap-4">
             <div class="flex flex-col gap-2">
-                <label class="font-medium text-surface-700 dark:text-surface-300">Действует с</label>
+                <label class="font-medium text-surface-700 dark:text-surface-300">{{ 'HRM.ACCESS_CONTROL.VALID_FROM' | translate }}</label>
                 <input pInputText type="date" [(ngModel)]="cardForm.valid_from" class="w-full" />
             </div>
             <div class="flex flex-col gap-2">
-                <label class="font-medium text-surface-700 dark:text-surface-300">Действует до</label>
+                <label class="font-medium text-surface-700 dark:text-surface-300">{{ 'HRM.ACCESS_CONTROL.VALID_UNTIL' | translate }}</label>
                 <input pInputText type="date" [(ngModel)]="cardForm.valid_until" class="w-full" />
             </div>
         </div>
 
         <div class="flex flex-col gap-2">
-            <label class="font-medium text-surface-700 dark:text-surface-300">Зоны доступа</label>
+            <label class="font-medium text-surface-700 dark:text-surface-300">{{ 'HRM.ACCESS_CONTROL.ZONES' | translate }}</label>
             <div class="grid grid-cols-2 gap-2">
                 @for (zone of zones; track zone.id) {
                     <div class="flex items-center gap-2 p-2 rounded border cursor-pointer zone-selector"
@@ -373,19 +373,19 @@
         </div>
 
         <div class="flex flex-col gap-2">
-            <label class="font-medium text-surface-700 dark:text-surface-300">Примечание</label>
+            <label class="font-medium text-surface-700 dark:text-surface-300">{{ 'HRM.ACCESS_CONTROL.NOTES' | translate }}</label>
             <textarea pTextarea [(ngModel)]="cardForm.notes" rows="2" class="w-full"></textarea>
         </div>
     </div>
 
     <ng-template pTemplate="footer">
-        <button pButton label="Отмена" class="p-button-text" (click)="displayCardDialog = false"></button>
-        <button pButton label="Сохранить" icon="pi pi-check" (click)="saveCard()"></button>
+        <button pButton [label]="'COMMON.CANCEL' | translate" class="p-button-text" (click)="displayCardDialog = false"></button>
+        <button pButton [label]="'COMMON.SAVE' | translate" icon="pi pi-check" (click)="saveCard()"></button>
     </ng-template>
 </p-dialog>
 
 <!-- Block Dialog -->
-<p-dialog header="Блокировка карты" [(visible)]="displayBlockDialog" [modal]="true" [style]="{ width: '400px' }">
+<p-dialog [header]="'HRM.ACCESS_CONTROL.BLOCK_CARD' | translate" [(visible)]="displayBlockDialog" [modal]="true" [style]="{ width: '400px' }">
     <div class="flex flex-col gap-4" *ngIf="selectedCard">
         <div class="bg-surface-100 dark:bg-surface-700 rounded-lg p-3">
             <p class="font-medium text-surface-900 dark:text-surface-0 m-0">{{ selectedCard.employee_name }}</p>
@@ -393,28 +393,28 @@
         </div>
 
         <div class="flex flex-col gap-2">
-            <label class="font-medium text-surface-700 dark:text-surface-300">Причина блокировки</label>
-            <textarea pTextarea [(ngModel)]="blockReason" rows="3" placeholder="Укажите причину..." class="w-full"></textarea>
+            <label class="font-medium text-surface-700 dark:text-surface-300">{{ 'HRM.ACCESS_CONTROL.BLOCK_REASON' | translate }}</label>
+            <textarea pTextarea [(ngModel)]="blockReason" rows="3" [placeholder]="'HRM.ACCESS_CONTROL.SPECIFY_REASON' | translate" class="w-full"></textarea>
         </div>
 
         <div class="bg-red-50 dark:bg-red-900/30 rounded-lg p-3">
             <div class="flex items-start gap-2">
                 <i class="pi pi-exclamation-triangle text-red-500 mt-0.5"></i>
                 <p class="text-sm text-red-700 dark:text-red-300 m-0">
-                    После блокировки сотрудник не сможет пройти ни в одну зону.
+                    {{ 'HRM.ACCESS_CONTROL.BLOCK_WARNING' | translate }}
                 </p>
             </div>
         </div>
     </div>
 
     <ng-template pTemplate="footer">
-        <button pButton label="Отмена" class="p-button-text" (click)="displayBlockDialog = false"></button>
-        <button pButton label="Заблокировать" icon="pi pi-lock" class="p-button-danger" (click)="blockCard()"></button>
+        <button pButton [label]="'COMMON.CANCEL' | translate" class="p-button-text" (click)="displayBlockDialog = false"></button>
+        <button pButton [label]="'HRM.ACCESS_CONTROL.BLOCK' | translate" icon="pi pi-lock" class="p-button-danger" (click)="blockCard()"></button>
     </ng-template>
 </p-dialog>
 
 <!-- Request Dialog -->
-<p-dialog header="Обработка заявки" [(visible)]="displayRequestDialog" [modal]="true" [style]="{ width: '500px' }">
+<p-dialog [header]="'HRM.ACCESS_CONTROL.PROCESS_REQUEST' | translate" [(visible)]="displayRequestDialog" [modal]="true" [style]="{ width: '500px' }">
     <div class="flex flex-col gap-4" *ngIf="selectedRequest">
         <div class="bg-surface-100 dark:bg-surface-700 rounded-lg p-4">
             <p class="font-medium text-surface-900 dark:text-surface-0 m-0">{{ selectedRequest.employee_name }}</p>
@@ -422,7 +422,7 @@
         </div>
 
         <div>
-            <p class="text-sm text-surface-500 mb-1">Запрашиваемые зоны:</p>
+            <p class="text-sm text-surface-500 mb-1">{{ 'HRM.ACCESS_CONTROL.REQUESTED_ZONES' | translate }}:</p>
             <div class="flex flex-wrap gap-2">
                 @for (zone of selectedRequest.requested_zone_names; track zone) {
                     <span class="bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 px-3 py-1 rounded-full text-sm">{{ zone }}</span>
@@ -431,31 +431,31 @@
         </div>
 
         <div>
-            <p class="text-sm text-surface-500 mb-1">Причина:</p>
+            <p class="text-sm text-surface-500 mb-1">{{ 'HRM.ACCESS_CONTROL.REASON' | translate }}:</p>
             <p class="text-surface-900 dark:text-surface-0 m-0">{{ selectedRequest.reason }}</p>
         </div>
 
         <div>
-            <p class="text-sm text-surface-500 mb-1">Период:</p>
+            <p class="text-sm text-surface-500 mb-1">{{ 'HRM.ACCESS_CONTROL.PERIOD' | translate }}:</p>
             <p class="text-surface-900 dark:text-surface-0 m-0">
                 {{ formatDate(selectedRequest.valid_from) }}
                 @if (selectedRequest.valid_until) {
                     — {{ formatDate(selectedRequest.valid_until) }}
                 } @else {
-                    — бессрочно
+                    — {{ 'HRM.ACCESS_CONTROL.PERMANENT' | translate }}
                 }
             </p>
         </div>
 
         <div class="flex flex-col gap-2">
-            <label class="font-medium text-surface-700 dark:text-surface-300">Причина отклонения (при отказе)</label>
-            <textarea pTextarea [(ngModel)]="rejectionReason" rows="2" placeholder="Укажите причину отклонения..." class="w-full"></textarea>
+            <label class="font-medium text-surface-700 dark:text-surface-300">{{ 'HRM.ACCESS_CONTROL.REJECT_REASON' | translate }}</label>
+            <textarea pTextarea [(ngModel)]="rejectionReason" rows="2" [placeholder]="'HRM.ACCESS_CONTROL.SPECIFY_REJECT_REASON' | translate" class="w-full"></textarea>
         </div>
     </div>
 
     <ng-template pTemplate="footer">
-        <button pButton label="Отклонить" icon="pi pi-times" class="p-button-danger p-button-outlined" (click)="rejectRequest()"></button>
-        <button pButton label="Одобрить" icon="pi pi-check" class="p-button-success" (click)="approveRequest()"></button>
+        <button pButton [label]="'HRM.ACCESS_CONTROL.REJECT' | translate" icon="pi pi-times" class="p-button-danger p-button-outlined" (click)="rejectRequest()"></button>
+        <button pButton [label]="'HRM.ACCESS_CONTROL.APPROVE' | translate" icon="pi pi-check" class="p-button-success" (click)="approveRequest()"></button>
     </ng-template>
 </p-dialog>
 

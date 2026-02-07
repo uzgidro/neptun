@@ -2,20 +2,20 @@
     <!-- Header -->
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
         <div>
-            <h1 class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">Организационная структура</h1>
-            <p class="text-surface-600 dark:text-surface-400 mt-1">Структура компании и подразделений</p>
+            <h1 class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">{{ 'HRM.ORG_STRUCTURE.TITLE' | translate }}</h1>
+            <p class="text-surface-600 dark:text-surface-400 mt-1">{{ 'HRM.ORG_STRUCTURE.SUBTITLE' | translate }}</p>
         </div>
         <div class="flex gap-2">
             <div class="flex bg-surface-100 dark:bg-surface-700 rounded-lg p-1">
                 @for (mode of viewModes; track mode.value) {
                     <button pButton [icon]="'pi ' + mode.icon"
                         [class]="viewMode === mode.value ? 'p-button-primary' : 'p-button-text'"
-                        [pTooltip]="mode.label"
+                        [pTooltip]="mode.labelKey | translate"
                         (click)="setViewMode(mode.value)">
                     </button>
                 }
             </div>
-            <button pButton label="Добавить" icon="pi pi-plus" (click)="openNewUnitDialog()"></button>
+            <button pButton [label]="'HRM.ORG_STRUCTURE.ADD' | translate" icon="pi pi-plus" (click)="openNewUnitDialog()"></button>
         </div>
     </div>
 
@@ -24,32 +24,32 @@
         <div class="bg-surface-0 dark:bg-surface-800 rounded-lg p-4 border border-surface-200 dark:border-surface-700 text-center">
             <i class="pi pi-sitemap text-2xl text-purple-500 mb-2"></i>
             <p class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">{{ stats.total_departments }}</p>
-            <p class="text-xs text-surface-500 m-0">Подразделений</p>
+            <p class="text-xs text-surface-500 m-0">{{ 'HRM.ORG_STRUCTURE.DEPARTMENTS' | translate }}</p>
         </div>
         <div class="bg-surface-0 dark:bg-surface-800 rounded-lg p-4 border border-surface-200 dark:border-surface-700 text-center">
             <i class="pi pi-users text-2xl text-blue-500 mb-2"></i>
             <p class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">{{ stats.total_employees }}</p>
-            <p class="text-xs text-surface-500 m-0">Сотрудников</p>
+            <p class="text-xs text-surface-500 m-0">{{ 'HRM.ORG_STRUCTURE.EMPLOYEES' | translate }}</p>
         </div>
         <div class="bg-surface-0 dark:bg-surface-800 rounded-lg p-4 border border-surface-200 dark:border-surface-700 text-center">
             <i class="pi pi-user text-2xl text-green-500 mb-2"></i>
             <p class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">{{ stats.total_managers }}</p>
-            <p class="text-xs text-surface-500 m-0">Руководителей</p>
+            <p class="text-xs text-surface-500 m-0">{{ 'HRM.ORG_STRUCTURE.MANAGERS' | translate }}</p>
         </div>
         <div class="bg-surface-0 dark:bg-surface-800 rounded-lg p-4 border border-surface-200 dark:border-surface-700 text-center">
             <i class="pi pi-chart-bar text-2xl text-cyan-500 mb-2"></i>
             <p class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">{{ stats.avg_team_size }}</p>
-            <p class="text-xs text-surface-500 m-0">Средний размер</p>
+            <p class="text-xs text-surface-500 m-0">{{ 'HRM.ORG_STRUCTURE.AVG_SIZE' | translate }}</p>
         </div>
         <div class="bg-surface-0 dark:bg-surface-800 rounded-lg p-4 border border-surface-200 dark:border-surface-700 text-center">
             <i class="pi pi-arrow-down text-2xl text-orange-500 mb-2"></i>
             <p class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">{{ stats.max_depth }}</p>
-            <p class="text-xs text-surface-500 m-0">Уровней</p>
+            <p class="text-xs text-surface-500 m-0">{{ 'HRM.ORG_STRUCTURE.LEVELS' | translate }}</p>
         </div>
         <div class="bg-surface-0 dark:bg-surface-800 rounded-lg p-4 border border-surface-200 dark:border-surface-700 text-center">
             <i class="pi pi-exclamation-circle text-2xl text-red-500 mb-2"></i>
             <p class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">{{ stats.vacancies }}</p>
-            <p class="text-xs text-surface-500 m-0">Без руководителя</p>
+            <p class="text-xs text-surface-500 m-0">{{ 'HRM.ORG_STRUCTURE.NO_MANAGER' | translate }}</p>
         </div>
     </div>
 
@@ -76,7 +76,7 @@
                                     <span class="font-medium">{{ node.label }}</span>
                                     <p-tag [value]="getUnitTypeInfo(node.data.type).label" [severity]="'secondary'" styleClass="text-xs"></p-tag>
                                 </div>
-                                <span class="text-sm text-surface-500">{{ node.data.employee_count }} чел.</span>
+                                <span class="text-sm text-surface-500">{{ node.data.employee_count }} {{ 'HRM.ORG_STRUCTURE.PERSONS' | translate }}</span>
                             </div>
                         </ng-template>
                     </p-tree>
@@ -102,7 +102,7 @@
                                     @if (node.data.head_name) {
                                         <div class="text-sm text-surface-500">{{ node.data.head_name }}</div>
                                     }
-                                    <div class="text-xs text-surface-400 mt-1">{{ node.data.employee_count }} сотр.</div>
+                                    <div class="text-xs text-surface-400 mt-1">{{ node.data.employee_count }} {{ 'HRM.ORG_STRUCTURE.EMPLOYEES_SHORT' | translate }}</div>
                                 </div>
                             </ng-template>
                         </p-organizationChart>
@@ -136,7 +136,7 @@
                                 }
                                 <div class="flex items-center gap-2 text-sm text-surface-500">
                                     <i class="pi pi-users"></i>
-                                    <span>{{ unit.employee_count }} сотрудников</span>
+                                    <span>{{ unit.employee_count }} {{ 'HRM.ORG_STRUCTURE.EMPLOYEES' | translate }}</span>
                                 </div>
                             </div>
                         }
@@ -149,7 +149,7 @@
         @if (showDetails && detailsUnit) {
             <div class="w-96 bg-surface-0 dark:bg-surface-800 rounded-lg border border-surface-200 dark:border-surface-700 p-4">
                 <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-lg font-semibold text-surface-900 dark:text-surface-0 m-0">Детали</h3>
+                    <h3 class="text-lg font-semibold text-surface-900 dark:text-surface-0 m-0">{{ 'HRM.ORG_STRUCTURE.DETAILS' | translate }}</h3>
                     <button pButton icon="pi pi-times" class="p-button-text p-button-rounded p-button-sm" (click)="closeDetails()"></button>
                 </div>
 
@@ -163,7 +163,7 @@
 
                 @if (detailsUnit.head_name) {
                     <div class="mb-4 p-3 bg-surface-50 dark:bg-surface-700 rounded-lg">
-                        <p class="text-xs text-surface-500 mb-2">Руководитель</p>
+                        <p class="text-xs text-surface-500 mb-2">{{ 'HRM.ORG_STRUCTURE.MANAGER' | translate }}</p>
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold"
                                 [style.background]="getAvatarColor(detailsUnit.head_id || 0)">
@@ -179,7 +179,7 @@
                     <div class="mb-4 p-3 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
                         <div class="flex items-center gap-2 text-orange-600 dark:text-orange-400">
                             <i class="pi pi-exclamation-triangle"></i>
-                            <span class="text-sm">Руководитель не назначен</span>
+                            <span class="text-sm">{{ 'HRM.ORG_STRUCTURE.MANAGER_NOT_ASSIGNED' | translate }}</span>
                         </div>
                     </div>
                 }
@@ -187,19 +187,19 @@
                 <div class="grid grid-cols-2 gap-3 mb-4">
                     <div class="p-3 bg-surface-50 dark:bg-surface-700 rounded-lg text-center">
                         <p class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">{{ detailsUnit.employee_count }}</p>
-                        <p class="text-xs text-surface-500 m-0">Сотрудников</p>
+                        <p class="text-xs text-surface-500 m-0">{{ 'HRM.ORG_STRUCTURE.EMPLOYEES' | translate }}</p>
                     </div>
                     <div class="p-3 bg-surface-50 dark:bg-surface-700 rounded-lg text-center">
                         <p class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">{{ getChildUnits(detailsUnit).length }}</p>
-                        <p class="text-xs text-surface-500 m-0">Подразделений</p>
+                        <p class="text-xs text-surface-500 m-0">{{ 'HRM.ORG_STRUCTURE.SUBDIVISIONS' | translate }}</p>
                     </div>
                 </div>
 
                 <div class="mb-4">
                     <div class="flex items-center justify-between mb-2">
-                        <p class="text-sm font-medium text-surface-700 dark:text-surface-300 m-0">Сотрудники ({{ detailsEmployees.length }})</p>
+                        <p class="text-sm font-medium text-surface-700 dark:text-surface-300 m-0">{{ 'HRM.ORG_STRUCTURE.EMPLOYEES' | translate }} ({{ detailsEmployees.length }})</p>
                         <button pButton icon="pi pi-plus" class="p-button-text p-button-sm p-button-rounded"
-                            pTooltip="Добавить сотрудника" (click)="openAddEmployeeDialog()"></button>
+                            [pTooltip]="'HRM.ORG_STRUCTURE.ADD_EMPLOYEE' | translate" (click)="openAddEmployeeDialog()"></button>
                     </div>
                     @if (detailsEmployees.length > 0) {
                         <div class="space-y-2 max-h-64 overflow-y-auto">
@@ -222,9 +222,9 @@
                                     }
                                     <div class="hidden group-hover:flex gap-1">
                                         <button pButton icon="pi pi-pencil" class="p-button-text p-button-sm p-button-rounded"
-                                            pTooltip="Редактировать" (click)="openEditEmployeeDialog(emp)"></button>
+                                            [pTooltip]="'COMMON.EDIT' | translate" (click)="openEditEmployeeDialog(emp)"></button>
                                         <button pButton icon="pi pi-trash" class="p-button-text p-button-sm p-button-rounded p-button-danger"
-                                            pTooltip="Удалить" (click)="deleteEmployee(emp)"></button>
+                                            [pTooltip]="'COMMON.DELETE' | translate" (click)="deleteEmployee(emp)"></button>
                                     </div>
                                 </div>
                             }
@@ -232,14 +232,14 @@
                     } @else {
                         <div class="text-center py-4 text-surface-400">
                             <i class="pi pi-users text-2xl mb-2"></i>
-                            <p class="text-sm m-0">Нет сотрудников</p>
+                            <p class="text-sm m-0">{{ 'HRM.ORG_STRUCTURE.NO_EMPLOYEES' | translate }}</p>
                         </div>
                     }
                 </div>
 
                 <div class="flex gap-2">
-                    <button pButton label="Редактировать" icon="pi pi-pencil" class="p-button-outlined flex-1" (click)="openEditUnitDialog(detailsUnit)"></button>
-                    <button pButton icon="pi pi-plus" class="p-button-outlined" pTooltip="Добавить подразделение" (click)="openNewUnitDialog(detailsUnit)"></button>
+                    <button pButton [label]="'HRM.ORG_STRUCTURE.EDIT' | translate" icon="pi pi-pencil" class="p-button-outlined flex-1" (click)="openEditUnitDialog(detailsUnit)"></button>
+                    <button pButton icon="pi pi-plus" class="p-button-outlined" [pTooltip]="'HRM.ORG_STRUCTURE.ADD_SUBDIVISION' | translate" (click)="openNewUnitDialog(detailsUnit)"></button>
                 </div>
             </div>
         }
@@ -247,45 +247,45 @@
 </div>
 
 <!-- Department Dialog -->
-<p-dialog [header]="isEditMode ? 'Редактирование подразделения' : 'Новое подразделение'"
+<p-dialog [header]="isEditMode ? ('HRM.ORG_STRUCTURE.EDIT_DEPARTMENT' | translate) : ('HRM.ORG_STRUCTURE.NEW_DEPARTMENT' | translate)"
     [(visible)]="displayDepartmentDialog" [modal]="true" [style]="{ width: '500px' }">
     <div class="flex flex-col gap-4">
         <div class="flex flex-col gap-2">
-            <label class="font-medium text-surface-700 dark:text-surface-300">Название *</label>
-            <input pInputText [(ngModel)]="unitForm.name" placeholder="Название подразделения" class="w-full" />
+            <label class="font-medium text-surface-700 dark:text-surface-300">{{ 'HRM.ORG_STRUCTURE.NAME' | translate }} *</label>
+            <input pInputText [(ngModel)]="unitForm.name" [placeholder]="'HRM.ORG_STRUCTURE.NAME_PLACEHOLDER' | translate" class="w-full" />
         </div>
 
         <div class="grid grid-cols-2 gap-4">
             <div class="flex flex-col gap-2">
-                <label class="font-medium text-surface-700 dark:text-surface-300">Код *</label>
-                <input pInputText [(ngModel)]="unitForm.code" placeholder="Например: IT, HR" class="w-full" />
+                <label class="font-medium text-surface-700 dark:text-surface-300">{{ 'HRM.ORG_STRUCTURE.CODE' | translate }} *</label>
+                <input pInputText [(ngModel)]="unitForm.code" [placeholder]="'HRM.ORG_STRUCTURE.CODE_PLACEHOLDER' | translate" class="w-full" />
             </div>
             <div class="flex flex-col gap-2">
-                <label class="font-medium text-surface-700 dark:text-surface-300">Тип</label>
+                <label class="font-medium text-surface-700 dark:text-surface-300">{{ 'HRM.ORG_STRUCTURE.TYPE' | translate }}</label>
                 <p-select [options]="orgUnitTypes" [(ngModel)]="unitForm.type" optionLabel="label" optionValue="value" class="w-full"></p-select>
             </div>
         </div>
 
         <div class="flex flex-col gap-2">
-            <label class="font-medium text-surface-700 dark:text-surface-300">Родительское подразделение</label>
+            <label class="font-medium text-surface-700 dark:text-surface-300">{{ 'HRM.ORG_STRUCTURE.PARENT_DEPARTMENT' | translate }}</label>
             <p-select [options]="orgUnits" [(ngModel)]="unitForm.parent_id" optionLabel="name" optionValue="id"
-                placeholder="Выберите родительское подразделение" [showClear]="true" class="w-full"></p-select>
+                [placeholder]="'HRM.ORG_STRUCTURE.SELECT_PARENT' | translate" [showClear]="true" class="w-full"></p-select>
         </div>
 
         <div class="flex flex-col gap-2">
-            <label class="font-medium text-surface-700 dark:text-surface-300">Описание</label>
+            <label class="font-medium text-surface-700 dark:text-surface-300">{{ 'HRM.ORG_STRUCTURE.DESCRIPTION' | translate }}</label>
             <textarea pTextarea [(ngModel)]="unitForm.description" rows="3" class="w-full"></textarea>
         </div>
     </div>
 
     <ng-template pTemplate="footer">
-        <button pButton label="Отмена" class="p-button-text" (click)="displayDepartmentDialog = false"></button>
-        <button pButton label="Сохранить" icon="pi pi-check" (click)="saveUnit()"></button>
+        <button pButton [label]="'COMMON.CANCEL' | translate" class="p-button-text" (click)="displayDepartmentDialog = false"></button>
+        <button pButton [label]="'COMMON.SAVE' | translate" icon="pi pi-check" (click)="saveUnit()"></button>
     </ng-template>
 </p-dialog>
 
 <!-- Employee View Dialog -->
-<p-dialog header="Информация о сотруднике" [(visible)]="displayEmployeeDialog" [modal]="true" [style]="{ width: '450px' }">
+<p-dialog [header]="'HRM.ORG_STRUCTURE.EMPLOYEE_INFO' | translate" [(visible)]="displayEmployeeDialog" [modal]="true" [style]="{ width: '450px' }">
     <div *ngIf="selectedEmployee" class="flex flex-col gap-4">
         <div class="flex items-center gap-4">
             @if (selectedEmployee.photo_url) {
@@ -304,22 +304,22 @@
 
         <div class="grid grid-cols-2 gap-4">
             <div>
-                <p class="text-sm text-surface-500 m-0">Отдел</p>
+                <p class="text-sm text-surface-500 m-0">{{ 'HRM.ORG_STRUCTURE.DEPARTMENT' | translate }}</p>
                 <p class="font-medium text-surface-900 dark:text-surface-0 m-0">{{ selectedEmployee.department_name }}</p>
             </div>
             <div>
-                <p class="text-sm text-surface-500 m-0">Дата приёма</p>
+                <p class="text-sm text-surface-500 m-0">{{ 'HRM.ORG_STRUCTURE.HIRE_DATE_LABEL' | translate }}</p>
                 <p class="font-medium text-surface-900 dark:text-surface-0 m-0">{{ formatDate(selectedEmployee.hire_date) }}</p>
             </div>
             @if (selectedEmployee.manager_name) {
                 <div>
-                    <p class="text-sm text-surface-500 m-0">Руководитель</p>
+                    <p class="text-sm text-surface-500 m-0">{{ 'HRM.ORG_STRUCTURE.SUPERVISOR' | translate }}</p>
                     <p class="font-medium text-surface-900 dark:text-surface-0 m-0">{{ selectedEmployee.manager_name }}</p>
                 </div>
             }
             @if (selectedEmployee.is_manager) {
                 <div>
-                    <p class="text-sm text-surface-500 m-0">Подчинённых</p>
+                    <p class="text-sm text-surface-500 m-0">{{ 'HRM.ORG_STRUCTURE.SUBORDINATES' | translate }}</p>
                     <p class="font-medium text-surface-900 dark:text-surface-0 m-0">{{ selectedEmployee.subordinates_count }}</p>
                 </div>
             }
@@ -331,7 +331,7 @@
             }
             @if (selectedEmployee.phone) {
                 <div>
-                    <p class="text-sm text-surface-500 m-0">Телефон</p>
+                    <p class="text-sm text-surface-500 m-0">{{ 'HRM.EMPLOYEE_CABINET.PHONE' | translate }}</p>
                     <p class="font-medium text-surface-900 dark:text-surface-0 m-0">{{ selectedEmployee.phone }}</p>
                 </div>
             }
@@ -340,20 +340,20 @@
         @if (selectedEmployee.is_manager) {
             <div class="flex items-center gap-2 p-2 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
                 <i class="pi pi-star-fill text-yellow-500"></i>
-                <span class="text-sm text-yellow-700 dark:text-yellow-300">Руководитель подразделения</span>
+                <span class="text-sm text-yellow-700 dark:text-yellow-300">{{ 'HRM.ORG_STRUCTURE.DEPARTMENT_MANAGER' | translate }}</span>
             </div>
         }
     </div>
 
     <ng-template pTemplate="footer">
-        <button pButton label="Редактировать" icon="pi pi-pencil" class="p-button-outlined"
+        <button pButton [label]="'COMMON.EDIT' | translate" icon="pi pi-pencil" class="p-button-outlined"
             (click)="displayEmployeeDialog = false; openEditEmployeeDialog(selectedEmployee!)"></button>
-        <button pButton label="Закрыть" class="p-button-text" (click)="displayEmployeeDialog = false"></button>
+        <button pButton [label]="'HRM.ORG_STRUCTURE.CLOSE' | translate" class="p-button-text" (click)="displayEmployeeDialog = false"></button>
     </ng-template>
 </p-dialog>
 
 <!-- Employee CRUD Dialog -->
-<p-dialog [header]="isEditEmployeeMode ? 'Редактирование сотрудника' : 'Новый сотрудник'"
+<p-dialog [header]="isEditEmployeeMode ? ('HRM.ORG_STRUCTURE.EDIT_EMPLOYEE' | translate) : ('HRM.ORG_STRUCTURE.NEW_EMPLOYEE' | translate)"
     [(visible)]="displayEmployeeCrudDialog" [modal]="true" [style]="{ width: '600px' }">
     <div class="flex flex-col gap-6 py-2">
         <!-- Photo Upload -->
@@ -372,66 +372,66 @@
                 </label>
             </div>
             <div class="flex-1">
-                <p class="text-base font-medium text-surface-700 dark:text-surface-300 m-0 mb-1">Фото сотрудника</p>
-                <p class="text-sm text-surface-500 m-0">Нажмите на иконку камеры для загрузки фото</p>
+                <p class="text-base font-medium text-surface-700 dark:text-surface-300 m-0 mb-1">{{ 'HRM.ORG_STRUCTURE.EMPLOYEE_PHOTO' | translate }}</p>
+                <p class="text-sm text-surface-500 m-0">{{ 'HRM.ORG_STRUCTURE.CLICK_TO_UPLOAD' | translate }}</p>
             </div>
         </div>
 
         <!-- Name -->
         <div class="flex flex-col gap-2">
-            <label class="font-semibold text-surface-700 dark:text-surface-300">ФИО <span class="text-red-500">*</span></label>
-            <input pInputText [(ngModel)]="employeeForm.name" placeholder="Иванов Иван Иванович" class="w-full p-3" />
+            <label class="font-semibold text-surface-700 dark:text-surface-300">{{ 'HRM.ORG_STRUCTURE.FIO' | translate }} <span class="text-red-500">*</span></label>
+            <input pInputText [(ngModel)]="employeeForm.name" [placeholder]="'HRM.ORG_STRUCTURE.FIO_PLACEHOLDER' | translate" class="w-full p-3" />
         </div>
 
         <!-- Position -->
         <div class="flex flex-col gap-2">
             <div class="flex items-center justify-between mb-1">
-                <label class="font-semibold text-surface-700 dark:text-surface-300">Должность <span class="text-red-500">*</span></label>
-                <button pButton [label]="useCustomPosition ? 'Выбрать из списка' : 'Ввести вручную'"
+                <label class="font-semibold text-surface-700 dark:text-surface-300">{{ 'HRM.ORG_STRUCTURE.POSITION' | translate }} <span class="text-red-500">*</span></label>
+                <button pButton [label]="useCustomPosition ? ('HRM.ORG_STRUCTURE.SELECT_FROM_LIST' | translate) : ('HRM.ORG_STRUCTURE.ENTER_MANUALLY' | translate)"
                     class="p-button-text p-button-sm" (click)="toggleCustomPosition()"></button>
             </div>
             @if (useCustomPosition) {
-                <input pInputText [(ngModel)]="employeeForm.position_custom" placeholder="Введите должность" class="w-full p-3" />
+                <input pInputText [(ngModel)]="employeeForm.position_custom" [placeholder]="'HRM.ORG_STRUCTURE.ENTER_POSITION' | translate" class="w-full p-3" />
             } @else {
                 <p-select [options]="positionTitles" [(ngModel)]="employeeForm.position"
-                    optionLabel="label" optionValue="value" placeholder="Выберите должность"
-                    [filter]="true" filterPlaceholder="Поиск..." class="w-full"
+                    optionLabel="label" optionValue="value" [placeholder]="'HRM.ORG_STRUCTURE.SELECT_POSITION' | translate"
+                    [filter]="true" [filterPlaceholder]="'HRM.ORG_STRUCTURE.SEARCH' | translate" class="w-full"
                     appendTo="body" [scrollHeight]="'300px'"></p-select>
             }
         </div>
 
         <!-- Department -->
         <div class="flex flex-col gap-2">
-            <label class="font-semibold text-surface-700 dark:text-surface-300">Отдел <span class="text-red-500">*</span></label>
+            <label class="font-semibold text-surface-700 dark:text-surface-300">{{ 'HRM.ORG_STRUCTURE.DEPARTMENT' | translate }} <span class="text-red-500">*</span></label>
             <p-select [options]="orgUnits" [(ngModel)]="employeeForm.department_id"
-                optionLabel="name" optionValue="id" placeholder="Выберите отдел"
-                [filter]="true" filterPlaceholder="Поиск..." class="w-full"
+                optionLabel="name" optionValue="id" [placeholder]="'HRM.ORG_STRUCTURE.SELECT_DEPARTMENT' | translate"
+                [filter]="true" [filterPlaceholder]="'HRM.ORG_STRUCTURE.SEARCH' | translate" class="w-full"
                 appendTo="body" [scrollHeight]="'300px'"></p-select>
         </div>
 
         <!-- Manager -->
         <div class="flex flex-col gap-2">
-            <label class="font-semibold text-surface-700 dark:text-surface-300">Руководитель</label>
+            <label class="font-semibold text-surface-700 dark:text-surface-300">{{ 'HRM.ORG_STRUCTURE.SUPERVISOR' | translate }}</label>
             <p-select [options]="getManagersForDepartment()" [(ngModel)]="employeeForm.manager_id"
-                optionLabel="name" optionValue="id" placeholder="Выберите руководителя (необязательно)"
-                [showClear]="true" [filter]="true" filterPlaceholder="Поиск..." class="w-full"
+                optionLabel="name" optionValue="id" [placeholder]="'HRM.ORG_STRUCTURE.SELECT_MANAGER' | translate"
+                [showClear]="true" [filter]="true" [filterPlaceholder]="'HRM.ORG_STRUCTURE.SEARCH' | translate" class="w-full"
                 appendTo="body" [scrollHeight]="'250px'"></p-select>
         </div>
 
         <div class="grid grid-cols-2 gap-5">
             <!-- Hire Date -->
             <div class="flex flex-col gap-2">
-                <label class="font-semibold text-surface-700 dark:text-surface-300">Дата приёма</label>
+                <label class="font-semibold text-surface-700 dark:text-surface-300">{{ 'HRM.ORG_STRUCTURE.HIRE_DATE_LABEL' | translate }}</label>
                 <input pInputText type="date" [(ngModel)]="employeeForm.hire_date" class="w-full p-3" />
             </div>
 
             <!-- Is Manager -->
             <div class="flex flex-col gap-2">
-                <label class="font-semibold text-surface-700 dark:text-surface-300">Статус</label>
+                <label class="font-semibold text-surface-700 dark:text-surface-300">{{ 'HRM.ORG_STRUCTURE.STATUS' | translate }}</label>
                 <div class="flex items-center h-12 bg-surface-50 dark:bg-surface-700 rounded-lg px-3">
                     <label class="flex items-center gap-3 cursor-pointer">
                         <input type="checkbox" [(ngModel)]="employeeForm.is_manager" class="w-5 h-5 rounded accent-primary-500">
-                        <span class="text-surface-700 dark:text-surface-300">Руководитель</span>
+                        <span class="text-surface-700 dark:text-surface-300">{{ 'HRM.ORG_STRUCTURE.IS_MANAGER' | translate }}</span>
                     </label>
                 </div>
             </div>
@@ -446,7 +446,7 @@
 
             <!-- Phone -->
             <div class="flex flex-col gap-2">
-                <label class="font-semibold text-surface-700 dark:text-surface-300">Телефон</label>
+                <label class="font-semibold text-surface-700 dark:text-surface-300">{{ 'HRM.EMPLOYEE_CABINET.PHONE' | translate }}</label>
                 <input pInputText [(ngModel)]="employeeForm.phone" placeholder="+998 90 123 45 67" class="w-full p-3" />
             </div>
         </div>
@@ -454,8 +454,8 @@
 
     <ng-template pTemplate="footer">
         <div class="flex justify-end gap-3 pt-2">
-            <button pButton label="Отмена" class="p-button-text" (click)="displayEmployeeCrudDialog = false"></button>
-            <button pButton [label]="isEditEmployeeMode ? 'Сохранить' : 'Добавить'" icon="pi pi-check" (click)="saveEmployee()"></button>
+            <button pButton [label]="'COMMON.CANCEL' | translate" class="p-button-text" (click)="displayEmployeeCrudDialog = false"></button>
+            <button pButton [label]="isEditEmployeeMode ? ('COMMON.SAVE' | translate) : ('COMMON.ADD' | translate)" icon="pi pi-check" (click)="saveEmployee()"></button>
         </div>
     </ng-template>
 </p-dialog>

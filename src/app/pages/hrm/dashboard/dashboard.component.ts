@@ -19,6 +19,8 @@ import {
     QUICK_ACTIONS
 } from '@/core/interfaces/hrm/dashboard';
 import { HRMDashboardService } from '@/core/services/hrm-dashboard.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+
 @Component({
     selector: 'app-hrm-dashboard',
     standalone: true,
@@ -33,7 +35,8 @@ import { HRMDashboardService } from '@/core/services/hrm-dashboard.service';
         Badge,
         Tooltip,
         ProgressBar,
-        Ripple
+        Ripple,
+        TranslateModule
     ],
     templateUrl: './dashboard.component.html',
     styleUrl: './dashboard.component.scss'
@@ -51,6 +54,7 @@ export class HRMDashboardComponent implements OnInit, OnDestroy {
 
     private hrmDashboardService = inject(HRMDashboardService);
     private messageService = inject(MessageService);
+    private translate = inject(TranslateService);
     private destroy$ = new Subject<void>();
 
     ngOnInit() {
@@ -67,7 +71,7 @@ export class HRMDashboardComponent implements OnInit, OnDestroy {
                     this.dashboard = data;
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось загрузить данные' });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('HRM.DASHBOARD.LOAD_ERROR') });
                     console.error(err);
                 },
                 complete: () => (this.loading = false)
@@ -76,9 +80,9 @@ export class HRMDashboardComponent implements OnInit, OnDestroy {
 
     getGreeting(): string {
         const hour = new Date().getHours();
-        if (hour < 12) return 'Доброе утро';
-        if (hour < 18) return 'Добрый день';
-        return 'Добрый вечер';
+        if (hour < 12) return this.translate.instant('HRM.DASHBOARD.GREETING_MORNING');
+        if (hour < 18) return this.translate.instant('HRM.DASHBOARD.GREETING_AFTERNOON');
+        return this.translate.instant('HRM.DASHBOARD.GREETING_EVENING');
     }
 
     getTaskPrioritySeverity(priority: string): 'success' | 'info' | 'warn' | 'danger' | 'secondary' {
@@ -93,10 +97,10 @@ export class HRMDashboardComponent implements OnInit, OnDestroy {
 
     getTaskPriorityLabel(priority: string): string {
         switch (priority) {
-            case 'urgent': return 'Срочно';
-            case 'high': return 'Высокий';
-            case 'medium': return 'Средний';
-            case 'low': return 'Низкий';
+            case 'urgent': return this.translate.instant('HRM.DASHBOARD.PRIORITY_URGENT');
+            case 'high': return this.translate.instant('HRM.DASHBOARD.PRIORITY_HIGH');
+            case 'medium': return this.translate.instant('HRM.DASHBOARD.PRIORITY_MEDIUM');
+            case 'low': return this.translate.instant('HRM.DASHBOARD.PRIORITY_LOW');
             default: return priority;
         }
     }
@@ -112,21 +116,25 @@ export class HRMDashboardComponent implements OnInit, OnDestroy {
 
     getProbationStatusLabel(status: string): string {
         switch (status) {
-            case 'on_track': return 'По плану';
-            case 'at_risk': return 'Под вопросом';
-            case 'extended': return 'Продлён';
+            case 'on_track': return this.translate.instant('HRM.DASHBOARD.PROBATION_ON_TRACK');
+            case 'at_risk': return this.translate.instant('HRM.DASHBOARD.PROBATION_AT_RISK');
+            case 'extended': return this.translate.instant('HRM.DASHBOARD.PROBATION_EXTENDED');
             default: return status;
         }
     }
 
     formatDate(dateStr: string): string {
         const date = new Date(dateStr);
-        return date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
+        const lang = this.translate.currentLang || 'ru';
+        const locale = lang === 'uz-latn' ? 'uz' : lang === 'uz-cyrl' ? 'uz' : lang;
+        return date.toLocaleDateString(locale, { day: 'numeric', month: 'long' });
     }
 
     formatDateTime(dateStr: string): string {
         const date = new Date(dateStr);
-        return date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+        const lang = this.translate.currentLang || 'ru';
+        const locale = lang === 'uz-latn' ? 'uz' : lang === 'uz-cyrl' ? 'uz' : lang;
+        return date.toLocaleDateString(locale, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
     }
 
     formatTime(time: string): string {
@@ -141,11 +149,13 @@ export class HRMDashboardComponent implements OnInit, OnDestroy {
         const diffHours = Math.floor(diffMs / 3600000);
         const diffDays = Math.floor(diffMs / 86400000);
 
-        if (diffMins < 60) return `${diffMins} мин. назад`;
-        if (diffHours < 24) return `${diffHours} ч. назад`;
-        if (diffDays === 1) return 'Вчера';
-        if (diffDays < 7) return `${diffDays} дн. назад`;
-        return date.toLocaleDateString('ru-RU');
+        if (diffMins < 60) return `${diffMins} ${this.translate.instant('HRM.DASHBOARD.MIN_AGO')}`;
+        if (diffHours < 24) return `${diffHours} ${this.translate.instant('HRM.DASHBOARD.HOURS_AGO')}`;
+        if (diffDays === 1) return this.translate.instant('HRM.DASHBOARD.YESTERDAY');
+        if (diffDays < 7) return `${diffDays} ${this.translate.instant('HRM.DASHBOARD.DAYS_AGO')}`;
+        const lang = this.translate.currentLang || 'ru';
+        const locale = lang === 'uz-latn' ? 'uz' : lang === 'uz-cyrl' ? 'uz' : lang;
+        return date.toLocaleDateString(locale);
     }
 
     getUnreadNotificationsCount(): number {

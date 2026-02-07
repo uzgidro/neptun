@@ -15,6 +15,7 @@ import { MessageService, ConfirmationService } from 'primeng/api';
 import { InputGroup } from 'primeng/inputgroup';
 import { InputGroupAddon } from 'primeng/inputgroupaddon';
 import { Subject, takeUntil, forkJoin } from 'rxjs';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { HRDocumentsService } from '@/core/services/hr-documents.service';
 import { DepartmentService } from '@/core/services/department.service';
 import { ContactService } from '@/core/services/contact.service';
@@ -60,7 +61,8 @@ interface Employee {
         TabsModule,
         ConfirmDialog,
         InputGroup,
-        InputGroupAddon
+        InputGroupAddon,
+        TranslateModule
     ],
     providers: [ConfirmationService],
     templateUrl: './hr-documents.component.html',
@@ -125,6 +127,7 @@ export class HRDocumentsComponent implements OnInit, OnDestroy {
     private hrDocumentsService = inject(HRDocumentsService);
     private departmentService = inject(DepartmentService);
     private contactService = inject(ContactService);
+    private translate = inject(TranslateService);
     private destroy$ = new Subject<void>();
 
     ngOnInit(): void {
@@ -149,8 +152,8 @@ export class HRDocumentsComponent implements OnInit, OnDestroy {
                 this.loading = false;
             },
             error: (err) => {
-                console.error('Ошибка загрузки данных:', err);
-                this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось загрузить данные' });
+                console.error('Error loading data:', err);
+                this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('HRM.DOCUMENTS.LOAD_ERROR') });
                 this.loading = false;
             }
         });
@@ -247,8 +250,8 @@ export class HRDocumentsComponent implements OnInit, OnDestroy {
         if (!this.documentForm.title || !this.documentForm.type) {
             this.messageService.add({
                 severity: 'error',
-                summary: 'Ошибка',
-                detail: 'Заполните обязательные поля'
+                summary: this.translate.instant('COMMON.ERROR'),
+                detail: this.translate.instant('HRM.DOCUMENTS.FILL_REQUIRED')
             });
             return;
         }
@@ -261,8 +264,8 @@ export class HRDocumentsComponent implements OnInit, OnDestroy {
             }
             this.messageService.add({
                 severity: 'success',
-                summary: 'Сохранено',
-                detail: 'Документ обновлён'
+                summary: this.translate.instant('COMMON.SUCCESS'),
+                detail: this.translate.instant('HRM.DOCUMENTS.DOCUMENT_UPDATED')
             });
         } else {
             // Create new
@@ -284,8 +287,8 @@ export class HRDocumentsComponent implements OnInit, OnDestroy {
             this.documents.unshift(newDoc);
             this.messageService.add({
                 severity: 'success',
-                summary: 'Создано',
-                detail: 'Документ создан'
+                summary: this.translate.instant('COMMON.SUCCESS'),
+                detail: this.translate.instant('HRM.DOCUMENTS.DOCUMENT_CREATED')
             });
         }
 
@@ -315,17 +318,17 @@ export class HRDocumentsComponent implements OnInit, OnDestroy {
 
     deleteDocument(doc: HRDocument): void {
         this.confirmationService.confirm({
-            message: `Вы уверены, что хотите удалить документ "${doc.title}"?`,
-            header: 'Подтверждение удаления',
+            message: `${this.translate.instant('HRM.DOCUMENTS.DELETE_CONFIRM')} "${doc.title}"?`,
+            header: this.translate.instant('COMMON.CONFIRM_DELETE'),
             icon: 'pi pi-exclamation-triangle',
-            acceptLabel: 'Удалить',
-            rejectLabel: 'Отмена',
+            acceptLabel: this.translate.instant('COMMON.DELETE'),
+            rejectLabel: this.translate.instant('COMMON.CANCEL'),
             accept: () => {
                 this.documents = this.documents.filter(d => d.id !== doc.id);
                 this.messageService.add({
                     severity: 'success',
-                    summary: 'Удалено',
-                    detail: 'Документ удалён'
+                    summary: this.translate.instant('COMMON.SUCCESS'),
+                    detail: this.translate.instant('HRM.DOCUMENTS.DOCUMENT_DELETED')
                 });
                 this.calculateStats();
             }
@@ -368,8 +371,8 @@ export class HRDocumentsComponent implements OnInit, OnDestroy {
 
         this.messageService.add({
             severity: approve ? 'success' : 'warn',
-            summary: approve ? 'Подписано' : 'Отклонено',
-            detail: approve ? 'Документ подписан' : 'Документ отклонён'
+            summary: this.translate.instant(approve ? 'COMMON.SUCCESS' : 'COMMON.WARNING'),
+            detail: this.translate.instant(approve ? 'HRM.DOCUMENTS.DOCUMENT_SIGNED' : 'HRM.DOCUMENTS.DOCUMENT_REJECTED')
         });
 
         this.displaySignDialog = false;
@@ -381,8 +384,8 @@ export class HRDocumentsComponent implements OnInit, OnDestroy {
         doc.status = 'pending_signature';
         this.messageService.add({
             severity: 'success',
-            summary: 'Отправлено',
-            detail: 'Документ отправлен на подписание'
+            summary: this.translate.instant('COMMON.SUCCESS'),
+            detail: this.translate.instant('HRM.DOCUMENTS.SENT_FOR_SIGNATURE')
         });
         this.calculateStats();
     }
@@ -401,15 +404,15 @@ export class HRDocumentsComponent implements OnInit, OnDestroy {
             request.status = 'in_progress';
             this.messageService.add({
                 severity: 'info',
-                summary: 'В работе',
-                detail: 'Заявка принята в работу'
+                summary: this.translate.instant('COMMON.SUCCESS'),
+                detail: this.translate.instant('HRM.DOCUMENTS.REQUEST_ACCEPTED')
             });
         } else {
             request.status = 'rejected';
             this.messageService.add({
                 severity: 'warn',
-                summary: 'Отклонено',
-                detail: 'Заявка отклонена'
+                summary: this.translate.instant('COMMON.WARNING'),
+                detail: this.translate.instant('HRM.DOCUMENTS.REQUEST_REJECTED')
             });
         }
         this.calculateStats();
@@ -418,11 +421,11 @@ export class HRDocumentsComponent implements OnInit, OnDestroy {
     completeRequest(request: DocumentRequest): void {
         request.status = 'completed';
         request.processed_at = new Date().toISOString();
-        request.processed_by_name = 'Текущий пользователь';
+        request.processed_by_name = 'Current user';
         this.messageService.add({
             severity: 'success',
-            summary: 'Выполнено',
-            detail: 'Заявка выполнена'
+            summary: this.translate.instant('COMMON.SUCCESS'),
+            detail: this.translate.instant('HRM.DOCUMENTS.REQUEST_COMPLETED')
         });
         this.calculateStats();
     }

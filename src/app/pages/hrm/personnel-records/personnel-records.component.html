@@ -1,5 +1,5 @@
 <div class="card">
-    <div class="font-semibold text-xl mb-4">Учет кадров</div>
+    <div class="font-semibold text-xl mb-4">{{ 'HRM.PERSONNEL_RECORDS.TITLE' | translate }}</div>
     <p-table
         #dt
         [value]="records"
@@ -17,24 +17,24 @@
                     <p-inputicon>
                         <i class="pi pi-search"></i>
                     </p-inputicon>
-                    <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Поиск" />
+                    <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" [placeholder]="'COMMON.SEARCH' | translate" />
                 </p-iconfield>
                 <button pButton (click)="openDialog()">
                     <i class="pi pi-plus" pButtonIcon></i>
-                    <span pButtonLabel>Новая запись</span>
+                    <span pButtonLabel>{{ 'HRM.PERSONNEL_RECORDS.NEW_RECORD' | translate }}</span>
                 </button>
             </div>
         </ng-template>
         <ng-template #header>
             <tr>
-                <th style="min-width: 8rem">Таб. номер</th>
-                <th pSortableColumn="employee_name" style="min-width: 14rem">ФИО сотрудника</th>
-                <th style="min-width: 10rem">Дата приема</th>
-                <th style="min-width: 12rem">Отдел</th>
-                <th style="min-width: 12rem">Должность</th>
-                <th style="min-width: 10rem">Тип договора</th>
-                <th style="min-width: 8rem">Статус</th>
-                <th style="width: 10rem">Действия</th>
+                <th style="min-width: 8rem">{{ 'HRM.PERSONNEL_RECORDS.TAB_NUMBER' | translate }}</th>
+                <th pSortableColumn="employee_name" style="min-width: 14rem">{{ 'HRM.COMMON.FULL_NAME' | translate }}</th>
+                <th style="min-width: 10rem">{{ 'HRM.PERSONNEL_RECORDS.HIRE_DATE' | translate }}</th>
+                <th style="min-width: 12rem">{{ 'HRM.COMMON.DEPARTMENT' | translate }}</th>
+                <th style="min-width: 12rem">{{ 'HRM.COMMON.POSITION' | translate }}</th>
+                <th style="min-width: 10rem">{{ 'HRM.PERSONNEL_RECORDS.CONTRACT_TYPE' | translate }}</th>
+                <th style="min-width: 8rem">{{ 'HRM.COMMON.STATUS' | translate }}</th>
+                <th style="width: 10rem">{{ 'HRM.COMMON.ACTIONS' | translate }}</th>
             </tr>
         </ng-template>
         <ng-template #body let-record>
@@ -54,14 +54,14 @@
                                 icon="pi pi-pencil"
                                 (click)="openEditDialog(record)"
                                 class="p-button-rounded p-button-text p-button-warning"
-                                pTooltip="Редактировать"
+                                [pTooltip]="'COMMON.EDIT' | translate"
                                 tooltipPosition="top">
                         </button>
                         <button pButton
                                 icon="pi pi-trash"
                                 (click)="openDeleteDialog(record)"
                                 class="p-button-rounded p-button-text p-button-danger"
-                                pTooltip="Удалить"
+                                [pTooltip]="'COMMON.DELETE' | translate"
                                 tooltipPosition="top">
                         </button>
                     </div>
@@ -70,12 +70,12 @@
         </ng-template>
         <ng-template #emptymessage>
             <tr>
-                <td colspan="8">Ничего не найдено</td>
+                <td colspan="8">{{ 'COMMON.NOT_FOUND' | translate }}</td>
             </tr>
         </ng-template>
         <ng-template #loadingbody>
             <tr>
-                <td colspan="8">Идет загрузка. Ожидайте...</td>
+                <td colspan="8">{{ 'COMMON.LOADING' | translate }}</td>
             </tr>
         </ng-template>
     </p-table>
@@ -84,74 +84,74 @@
 @if (displayDialog) {
     <app-dialog
         [(visible)]="displayDialog"
-        [header]="isEditMode ? 'Редактировать запись' : 'Новая запись'"
+        [header]="isEditMode ? ('COMMON.EDIT' | translate) : ('HRM.PERSONNEL_RECORDS.NEW_RECORD' | translate)"
         [form]="recordForm"
-        [saveLabel]="isEditMode ? 'Обновить' : 'Сохранить'"
+        [saveLabel]="isEditMode ? ('COMMON.UPDATE' | translate) : ('COMMON.SAVE' | translate)"
         (save)="onSubmit()"
         (cancel)="closeDialog()">
         <form class="p-4" [formGroup]="recordForm" (ngSubmit)="onSubmit()">
-            <div class="font-semibold text-lg mb-2">Основная информация</div>
+            <div class="font-semibold text-lg mb-2">{{ 'HRM.PERSONNEL_RECORDS.BASIC_INFO' | translate }}</div>
 
             <app-select
                 formControlName="employee_id"
-                label="Сотрудник"
+                [label]="'HRM.COMMON.EMPLOYEE' | translate"
                 [items]="employees"
                 [submitted]="submitted"
-                errorMessage="Сотрудник обязателен"
+                [errorMessage]="'VALIDATION.EMPLOYEE_REQUIRED' | translate"
                 [required]="true">
             </app-select>
 
             <app-input-text
                 formControlName="tab_number"
-                label="Табельный номер"
+                [label]="'HRM.PERSONNEL_RECORDS.TAB_NUMBER' | translate"
                 [submitted]="submitted"
-                errorMessage="Табельный номер обязателен"
+                [errorMessage]="'VALIDATION.TAB_NUMBER_REQUIRED' | translate"
                 [required]="true">
             </app-input-text>
 
             <app-date-picker
                 formControlName="hire_date"
-                label="Дата приема"
+                [label]="'HRM.PERSONNEL_RECORDS.HIRE_DATE' | translate"
                 [submitted]="submitted"
-                errorMessage="Дата приема обязательна"
+                [errorMessage]="'VALIDATION.HIRE_DATE_REQUIRED' | translate"
                 [showTime]="false"
                 [required]="true">
             </app-date-picker>
 
-            <div class="font-semibold text-lg mb-2 mt-4">Место работы</div>
+            <div class="font-semibold text-lg mb-2 mt-4">{{ 'HRM.PERSONNEL_RECORDS.WORKPLACE' | translate }}</div>
 
             <app-select
                 formControlName="department_id"
-                label="Отдел"
+                [label]="'HRM.COMMON.DEPARTMENT' | translate"
                 [items]="departments"
                 [submitted]="submitted"
-                errorMessage="Отдел обязателен"
+                [errorMessage]="'VALIDATION.DEPARTMENT_REQUIRED' | translate"
                 [required]="true">
             </app-select>
 
             <app-select
                 formControlName="position_id"
-                label="Должность"
+                [label]="'HRM.COMMON.POSITION' | translate"
                 [items]="positions"
                 [submitted]="submitted"
-                errorMessage="Должность обязательна"
+                [errorMessage]="'VALIDATION.POSITION_REQUIRED' | translate"
                 [required]="true">
             </app-select>
 
-            <div class="font-semibold text-lg mb-2 mt-4">Договор</div>
+            <div class="font-semibold text-lg mb-2 mt-4">{{ 'HRM.PERSONNEL_RECORDS.CONTRACT' | translate }}</div>
 
             <app-select
                 formControlName="contract_type"
-                label="Тип договора"
+                [label]="'HRM.PERSONNEL_RECORDS.CONTRACT_TYPE' | translate"
                 [items]="contractTypes"
                 [submitted]="submitted"
-                errorMessage="Тип договора обязателен"
+                [errorMessage]="'VALIDATION.CONTRACT_TYPE_REQUIRED' | translate"
                 [required]="true">
             </app-select>
 
             <app-date-picker
                 formControlName="contract_end_date"
-                label="Дата окончания договора"
+                [label]="'HRM.PERSONNEL_RECORDS.CONTRACT_END_DATE' | translate"
                 [submitted]="submitted"
                 [showTime]="false"
                 [required]="false">
@@ -159,10 +159,10 @@
 
             <app-select
                 formControlName="status"
-                label="Статус"
+                [label]="'HRM.COMMON.STATUS' | translate"
                 [items]="statuses"
                 [submitted]="submitted"
-                errorMessage="Статус обязателен"
+                [errorMessage]="'VALIDATION.STATUS_REQUIRED' | translate"
                 [required]="true">
             </app-select>
         </form>
@@ -171,6 +171,6 @@
 
 <app-delete-confirmation
     [(visible)]="displayDeleteDialog"
-    [message]="'Вы уверены, что хотите удалить запись сотрудника ' + (selectedRecord?.employee_name || '') + '?'"
+    [message]="('HRM.PERSONNEL_RECORDS.DELETE_CONFIRM' | translate) + ' ' + (selectedRecord?.employee_name || '') + '?'"
     (onConfirm)="confirmDelete()">
 </app-delete-confirmation>

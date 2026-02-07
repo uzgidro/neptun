@@ -17,6 +17,7 @@ import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.compone
 import { TextareaComponent } from '@/layout/component/dialog/textarea/textarea.component';
 import { Card } from 'primeng/card';
 import { Dialog } from 'primeng/dialog';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import {
     Vacation,
     VacationBalance,
@@ -61,7 +62,8 @@ interface Employee {
         DialogComponent,
         TextareaComponent,
         Card,
-        Dialog
+        Dialog,
+        TranslateModule
     ],
     templateUrl: './vacation-management.component.html',
     styleUrl: './vacation-management.component.scss'

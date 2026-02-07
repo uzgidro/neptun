@@ -13,6 +13,7 @@ import { Tag } from 'primeng/tag';
 import { Card } from 'primeng/card';
 import { Dialog } from 'primeng/dialog';
 import { ProgressBar } from 'primeng/progressbar';
+import { TranslateModule } from '@ngx-translate/core';
 import { DeleteConfirmationComponent } from '@/layout/component/dialog/delete-confirmation/delete-confirmation.component';
 import { SalaryService } from '@/core/services/salary.service';
 import {
@@ -42,7 +43,8 @@ import {
         Tag,
         Card,
         Dialog,
-        ProgressBar
+        ProgressBar,
+        TranslateModule
     ],
     templateUrl: './salary-management.component.html',
     styleUrl: './salary-management.component.scss'

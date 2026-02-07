@@ -10,7 +10,8 @@ import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
 import { Tooltip } from 'primeng/tooltip';
 import { Tag } from 'primeng/tag';
-import { ProgressBar } from 'primeng/progressbar';
+import { ProgressBarModule } from 'primeng/progressbar';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { InputTextComponent } from '@/layout/component/dialog/input-text/input-text.component';
 import { SelectComponent } from '@/layout/component/dialog/select/select.component';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
@@ -41,9 +42,10 @@ import { Contact } from '@/core/interfaces/contact';
         DeleteConfirmationComponent,
         Tooltip,
         Tag,
-        ProgressBar,
+        ProgressBarModule,
         DialogComponent,
-        TextareaComponent
+        TextareaComponent,
+        TranslateModule
     ],
     templateUrl: './performance-management.component.html',
     styleUrl: './performance-management.component.scss'
@@ -68,6 +70,7 @@ export class PerformanceManagementComponent implements OnInit, OnDestroy {
     private contactService = inject(ContactService);
     private fb = inject(FormBuilder);
     private messageService = inject(MessageService);
+    private translate = inject(TranslateService);
     private destroy$ = new Subject<void>();
 
     constructor() {
@@ -96,7 +99,7 @@ export class PerformanceManagementComponent implements OnInit, OnDestroy {
                     this.goals = data;
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось загрузить цели' });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('HRM.PERFORMANCE.LOAD_ERROR') });
                     console.error(err);
                 },
                 complete: () => (this.loading = false)
@@ -183,12 +186,12 @@ export class PerformanceManagementComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
-                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Цель создана' });
+                    this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('HRM.PERFORMANCE.CREATE_SUCCESS') });
                     this.loadGoals();
                     this.closeDialog();
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось создать цель' });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('HRM.PERFORMANCE.CREATE_ERROR') });
                     console.error(err);
                 }
             });
@@ -213,12 +216,12 @@ export class PerformanceManagementComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
-                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Цель обновлена' });
+                    this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('HRM.PERFORMANCE.UPDATE_SUCCESS') });
                     this.loadGoals();
                     this.closeDialog();
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось обновить цель' });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('HRM.PERFORMANCE.UPDATE_ERROR') });
                     console.error(err);
                 }
             });
@@ -236,13 +239,13 @@ export class PerformanceManagementComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
-                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Цель удалена' });
+                    this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('HRM.PERFORMANCE.DELETE_SUCCESS') });
                     this.loadGoals();
                     this.displayDeleteDialog = false;
                     this.selectedGoal = null;
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось удалить цель' });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('HRM.PERFORMANCE.DELETE_ERROR') });
                     console.error(err);
                 }
             });

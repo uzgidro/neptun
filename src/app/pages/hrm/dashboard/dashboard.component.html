@@ -5,14 +5,14 @@
             <h1 class="text-2xl font-bold text-gray-800 dark:text-white m-0">
                 {{ getGreeting() }}, {{ currentUser.name.split(' ')[0] }}!
             </h1>
-            <p class="text-gray-500 mt-1">{{ currentUser.position }} | {{ currentDate | date:'EEEE, d MMMM yyyy':'':'ru' }}</p>
+            <p class="text-gray-500 mt-1">{{ currentUser.position }} | {{ currentDate | date:'EEEE, d MMMM yyyy' }}</p>
         </div>
         <div class="flex gap-2">
             <button pButton
                     icon="pi pi-refresh"
                     class="p-button-text p-button-rounded"
                     (click)="refreshDashboard()"
-                    pTooltip="Обновить"
+                    [pTooltip]="'HRM.DASHBOARD.REFRESH' | translate"
                     tooltipPosition="bottom">
             </button>
         </div>
@@ -29,12 +29,12 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <div class="text-3xl font-bold">{{ dashboard.widgets.total_employees }}</div>
-                        <div class="text-sm opacity-90">Всего сотрудников</div>
+                        <div class="text-sm opacity-90">{{ 'HRM.DASHBOARD.TOTAL_EMPLOYEES' | translate }}</div>
                     </div>
                     <i class="pi pi-users text-4xl opacity-50"></i>
                 </div>
                 <div class="text-xs mt-2 opacity-75">
-                    <i class="pi pi-check-circle mr-1"></i>Активных: {{ dashboard.widgets.active_employees }}
+                    <i class="pi pi-check-circle mr-1"></i>{{ 'HRM.DASHBOARD.ACTIVE' | translate }}: {{ dashboard.widgets.active_employees }}
                 </div>
             </div>
 
@@ -42,12 +42,12 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <div class="text-3xl font-bold">{{ dashboard.widgets.on_vacation }}</div>
-                        <div class="text-sm opacity-90">В отпусках</div>
+                        <div class="text-sm opacity-90">{{ 'HRM.DASHBOARD.ON_VACATION' | translate }}</div>
                     </div>
                     <i class="pi pi-sun text-4xl opacity-50"></i>
                 </div>
                 <div class="text-xs mt-2 opacity-75">
-                    <i class="pi pi-heart mr-1"></i>На больничном: {{ dashboard.widgets.on_sick_leave }}
+                    <i class="pi pi-heart mr-1"></i>{{ 'HRM.DASHBOARD.ON_SICK_LEAVE' | translate }}: {{ dashboard.widgets.on_sick_leave }}
                 </div>
             </div>
 
@@ -55,12 +55,12 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <div class="text-3xl font-bold">{{ dashboard.widgets.new_employees_month }}</div>
-                        <div class="text-sm opacity-90">Новички (мес)</div>
+                        <div class="text-sm opacity-90">{{ 'HRM.DASHBOARD.NEW_EMPLOYEES_MONTH' | translate }}</div>
                     </div>
                     <i class="pi pi-user-plus text-4xl opacity-50"></i>
                 </div>
                 <div class="text-xs mt-2 opacity-75">
-                    <i class="pi pi-trending-up mr-1"></i>За этот месяц
+                    <i class="pi pi-trending-up mr-1"></i>{{ 'HRM.DASHBOARD.THIS_MONTH' | translate }}
                 </div>
             </div>
 
@@ -68,12 +68,12 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <div class="text-3xl font-bold">{{ dashboard.widgets.turnover_rate }}%</div>
-                        <div class="text-sm opacity-90">Текучесть</div>
+                        <div class="text-sm opacity-90">{{ 'HRM.DASHBOARD.TURNOVER' | translate }}</div>
                     </div>
                     <i class="pi pi-chart-line text-4xl opacity-50"></i>
                 </div>
                 <div class="text-xs mt-2 opacity-75">
-                    <i class="pi pi-calendar mr-1"></i>За 12 месяцев
+                    <i class="pi pi-calendar mr-1"></i>{{ 'HRM.DASHBOARD.LAST_12_MONTHS' | translate }}
                 </div>
             </div>
 
@@ -81,12 +81,12 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <div class="text-3xl font-bold">{{ dashboard.widgets.open_vacancies }}</div>
-                        <div class="text-sm opacity-90">Открыто вакансий</div>
+                        <div class="text-sm opacity-90">{{ 'HRM.DASHBOARD.OPEN_VACANCIES' | translate }}</div>
                     </div>
                     <i class="pi pi-briefcase text-4xl opacity-50"></i>
                 </div>
                 <div class="text-xs mt-2 opacity-75">
-                    <i class="pi pi-user mr-1"></i>Кандидатов: {{ dashboard.widgets.candidates_in_process }}
+                    <i class="pi pi-user mr-1"></i>{{ 'HRM.DASHBOARD.CANDIDATES' | translate }}: {{ dashboard.widgets.candidates_in_process }}
                 </div>
             </div>
 
@@ -94,12 +94,12 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <div class="text-3xl font-bold">{{ dashboard.widgets.pending_approvals }}</div>
-                        <div class="text-sm opacity-90">На согласовании</div>
+                        <div class="text-sm opacity-90">{{ 'HRM.DASHBOARD.PENDING_APPROVALS' | translate }}</div>
                     </div>
                     <i class="pi pi-inbox text-4xl opacity-50"></i>
                 </div>
                 <div class="text-xs mt-2 opacity-75">
-                    <i class="pi pi-clock mr-1"></i>Требуют внимания
+                    <i class="pi pi-clock mr-1"></i>{{ 'HRM.DASHBOARD.REQUIRE_ATTENTION' | translate }}
                 </div>
             </div>
         </div>
@@ -114,10 +114,10 @@
                         <div class="flex justify-between items-center px-4 pt-4">
                             <div class="flex items-center gap-2">
                                 <i class="pi pi-list-check text-xl text-blue-500"></i>
-                                <span class="font-semibold text-lg">Мои задачи</span>
+                                <span class="font-semibold text-lg">{{ 'HRM.DASHBOARD.MY_TASKS' | translate }}</span>
                                 <p-badge [value]="dashboard.tasks.length.toString()" severity="info"></p-badge>
                             </div>
-                            <a routerLink="/hrm/tasks" class="text-sm text-blue-500 hover:underline">Все задачи</a>
+                            <a routerLink="/hrm/tasks" class="text-sm text-blue-500 hover:underline">{{ 'HRM.DASHBOARD.ALL_TASKS' | translate }}</a>
                         </div>
                     </ng-template>
                     <div class="space-y-3">
@@ -137,7 +137,7 @@
                                     </div>
                                     @if (task.due_date) {
                                         <div class="text-sm text-gray-500">
-                                            <i class="pi pi-calendar mr-1"></i>До {{ formatDate(task.due_date) }}
+                                            <i class="pi pi-calendar mr-1"></i>{{ 'HRM.DASHBOARD.DUE_DATE' | translate }} {{ formatDate(task.due_date) }}
                                         </div>
                                     }
                                 </div>
@@ -148,7 +148,7 @@
                         @empty {
                             <div class="text-center py-8 text-gray-500">
                                 <i class="pi pi-check-circle text-4xl mb-2 text-green-500"></i>
-                                <p>Все задачи выполнены!</p>
+                                <p>{{ 'HRM.DASHBOARD.ALL_TASKS_DONE' | translate }}</p>
                             </div>
                         }
                     </div>
@@ -159,7 +159,7 @@
                     <ng-template #header>
                         <div class="flex items-center gap-2 px-4 pt-4">
                             <i class="pi pi-bolt text-xl text-yellow-500"></i>
-                            <span class="font-semibold text-lg">Быстрые действия</span>
+                            <span class="font-semibold text-lg">{{ 'HRM.DASHBOARD.QUICK_ACTIONS' | translate }}</span>
                         </div>
                     </ng-template>
                     <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
@@ -183,7 +183,7 @@
                     <ng-template #header>
                         <div class="flex items-center gap-2 px-4 pt-4">
                             <i class="pi pi-history text-xl text-green-500"></i>
-                            <span class="font-semibold text-lg">Недавняя активность</span>
+                            <span class="font-semibold text-lg">{{ 'HRM.DASHBOARD.RECENT_ACTIVITY' | translate }}</span>
                         </div>
                     </ng-template>
                     <div class="space-y-4">
@@ -215,9 +215,9 @@
                         <div class="flex justify-between items-center px-4 pt-4">
                             <div class="flex items-center gap-2">
                                 <i class="pi pi-calendar text-xl text-purple-500"></i>
-                                <span class="font-semibold text-lg">Календарь событий</span>
+                                <span class="font-semibold text-lg">{{ 'HRM.DASHBOARD.CALENDAR_EVENTS' | translate }}</span>
                             </div>
-                            <a routerLink="/hrm/calendar" class="text-sm text-blue-500 hover:underline">Полный календарь</a>
+                            <a routerLink="/hrm/calendar" class="text-sm text-blue-500 hover:underline">{{ 'HRM.DASHBOARD.FULL_CALENDAR' | translate }}</a>
                         </div>
                     </ng-template>
                     <div class="space-y-3">
@@ -229,7 +229,7 @@
                                         {{ event.date | date:'d' }}
                                     </div>
                                     <div class="text-xs text-gray-500 uppercase">
-                                        {{ event.date | date:'MMM':'':'ru' }}
+                                        {{ event.date | date:'MMM' }}
                                     </div>
                                 </div>
                                 <div class="flex-1 min-w-0">
@@ -256,7 +256,7 @@
                     <ng-template #header>
                         <div class="flex items-center gap-2 px-4 pt-4">
                             <i class="pi pi-gift text-xl text-pink-500"></i>
-                            <span class="font-semibold text-lg">Ближайшие дни рождения</span>
+                            <span class="font-semibold text-lg">{{ 'HRM.DASHBOARD.UPCOMING_BIRTHDAYS' | translate }}</span>
                         </div>
                     </ng-template>
                     <div class="space-y-3">
@@ -273,18 +273,18 @@
                                 </div>
                                 <div class="text-right">
                                     @if (birthday.days_until === 0) {
-                                        <p-tag value="Сегодня!" severity="danger"></p-tag>
+                                        <p-tag [value]="'HRM.DASHBOARD.TODAY' | translate" severity="danger"></p-tag>
                                     } @else if (birthday.days_until === 1) {
-                                        <p-tag value="Завтра" severity="warn"></p-tag>
+                                        <p-tag [value]="'HRM.DASHBOARD.TOMORROW' | translate" severity="warn"></p-tag>
                                     } @else {
-                                        <span class="text-sm text-gray-500">через {{ birthday.days_until }} дн.</span>
+                                        <span class="text-sm text-gray-500">{{ 'HRM.DASHBOARD.IN_DAYS' | translate:{ days: birthday.days_until } }}</span>
                                     }
                                 </div>
                             </div>
                         }
                         @empty {
                             <div class="text-center py-4 text-gray-500">
-                                <p>Нет ближайших дней рождения</p>
+                                <p>{{ 'HRM.DASHBOARD.NO_UPCOMING_BIRTHDAYS' | translate }}</p>
                             </div>
                         }
                     </div>
@@ -295,7 +295,7 @@
                     <ng-template #header>
                         <div class="flex items-center gap-2 px-4 pt-4">
                             <i class="pi pi-clock text-xl text-orange-500"></i>
-                            <span class="font-semibold text-lg">Испытательные сроки</span>
+                            <span class="font-semibold text-lg">{{ 'HRM.DASHBOARD.PROBATION_PERIODS' | translate }}</span>
                         </div>
                     </ng-template>
                     <div class="space-y-3">
@@ -310,10 +310,10 @@
                                 </div>
                                 <div class="flex justify-between items-center text-sm">
                                     <span class="text-gray-500">
-                                        <i class="pi pi-user mr-1"></i>Наставник: {{ probation.mentor_name || 'Не назначен' }}
+                                        <i class="pi pi-user mr-1"></i>{{ 'HRM.DASHBOARD.MENTOR' | translate }}: {{ probation.mentor_name || ('HRM.DASHBOARD.NOT_ASSIGNED' | translate) }}
                                     </span>
                                     <span class="font-medium" [class.text-red-500]="probation.days_remaining <= 7" [class.text-orange-500]="probation.days_remaining > 7 && probation.days_remaining <= 14" [class.text-gray-600]="probation.days_remaining > 14">
-                                        {{ probation.days_remaining }} дн.
+                                        {{ probation.days_remaining }} {{ 'HRM.DASHBOARD.DAYS_SHORT' | translate }}
                                     </span>
                                 </div>
                                 <p-progressBar
@@ -326,7 +326,7 @@
                         }
                         @empty {
                             <div class="text-center py-4 text-gray-500">
-                                <p>Нет сотрудников на испытательном сроке</p>
+                                <p>{{ 'HRM.DASHBOARD.NO_PROBATIONS' | translate }}</p>
                             </div>
                         }
                     </div>
@@ -338,7 +338,7 @@
                         <ng-template #header>
                             <div class="flex items-center gap-2 px-4 pt-4">
                                 <i class="pi pi-bell text-xl text-yellow-500"></i>
-                                <span class="font-semibold text-lg">Уведомления</span>
+                                <span class="font-semibold text-lg">{{ 'HRM.DASHBOARD.NOTIFICATIONS' | translate }}</span>
                                 <p-badge [value]="getUnreadNotificationsCount().toString()" severity="danger"></p-badge>
                             </div>
                         </ng-template>
@@ -356,7 +356,7 @@
                                                 icon="pi pi-check"
                                                 class="p-button-text p-button-rounded p-button-sm"
                                                 (click)="markNotificationAsRead(notification)"
-                                                pTooltip="Отметить прочитанным">
+                                                [pTooltip]="'HRM.DASHBOARD.MARK_AS_READ' | translate">
                                         </button>
                                     </div>
                                 }

@@ -16,10 +16,11 @@ import { Tooltip } from 'primeng/tooltip';
 import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
 import { BaseCrudComponent } from '@/core/components/base-crud.component';
 import { takeUntil } from 'rxjs';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-department',
-    imports: [TableModule, ButtonDirective, IconField, InputIcon, InputText, ButtonLabel, ButtonIcon, ReactiveFormsModule, InputTextComponent, SelectComponent, DeleteConfirmationComponent, Tooltip, DialogComponent],
+    imports: [TableModule, ButtonDirective, IconField, InputIcon, InputText, ButtonLabel, ButtonIcon, ReactiveFormsModule, InputTextComponent, SelectComponent, DeleteConfirmationComponent, Tooltip, DialogComponent, TranslateModule],
     templateUrl: './department.component.html',
     styleUrl: './department.component.scss'
 })
@@ -30,12 +31,12 @@ export class DepartmentComponent extends BaseCrudComponent<Department, Departmen
 
     constructor() {
         super(inject(DepartmentService), {
-            createSuccess: 'Отдел успешно создан',
-            createError: 'Не удалось создать отдел',
-            updateSuccess: 'Отдел успешно обновлен',
-            updateError: 'Не удалось обновить отдел',
-            deleteSuccess: 'Отдел успешно удален',
-            deleteError: 'Не удалось удалить отдел'
+            createSuccess: 'HRM.DEPARTMENTS.SUCCESS_CREATED',
+            createError: 'HRM.DEPARTMENTS.ERROR_CREATE',
+            updateSuccess: 'HRM.DEPARTMENTS.SUCCESS_UPDATED',
+            updateError: 'HRM.DEPARTMENTS.ERROR_UPDATE',
+            deleteSuccess: 'HRM.DEPARTMENTS.SUCCESS_DELETED',
+            deleteError: 'HRM.DEPARTMENTS.ERROR_DELETE'
         });
     }
 

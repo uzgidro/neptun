@@ -1,5 +1,5 @@
 <div class="card">
-    <div class="font-semibold text-xl mb-4">Обучение и развитие</div>
+    <div class="font-semibold text-xl mb-4">{{ 'HRM.TRAINING.TITLE' | translate }}</div>
     <p-table
         #dt
         [value]="trainings"
@@ -17,24 +17,24 @@
                     <p-inputicon>
                         <i class="pi pi-search"></i>
                     </p-inputicon>
-                    <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Поиск" />
+                    <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" [placeholder]="'COMMON.SEARCH' | translate" />
                 </p-iconfield>
                 <button pButton (click)="openDialog()">
                     <i class="pi pi-plus" pButtonIcon></i>
-                    <span pButtonLabel>Новое обучение</span>
+                    <span pButtonLabel>{{ 'HRM.TRAINING.NEW_TRAINING' | translate }}</span>
                 </button>
             </div>
         </ng-template>
         <ng-template #header>
             <tr>
-                <th pSortableColumn="title" style="min-width: 14rem">Название</th>
-                <th style="min-width: 10rem">Тип</th>
-                <th style="min-width: 10rem">Провайдер</th>
-                <th style="min-width: 10rem">Даты</th>
-                <th style="min-width: 6rem">Часов</th>
-                <th style="min-width: 8rem">Участники</th>
-                <th style="min-width: 8rem">Статус</th>
-                <th style="width: 10rem">Действия</th>
+                <th pSortableColumn="title" style="min-width: 14rem">{{ 'HRM.TRAINING.NAME' | translate }}</th>
+                <th style="min-width: 10rem">{{ 'HRM.TRAINING.TYPE' | translate }}</th>
+                <th style="min-width: 10rem">{{ 'HRM.TRAINING.PROVIDER' | translate }}</th>
+                <th style="min-width: 10rem">{{ 'HRM.TRAINING.DATES' | translate }}</th>
+                <th style="min-width: 6rem">{{ 'HRM.TRAINING.HOURS' | translate }}</th>
+                <th style="min-width: 8rem">{{ 'HRM.TRAINING.PARTICIPANTS' | translate }}</th>
+                <th style="min-width: 8rem">{{ 'HRM.COMMON.STATUS' | translate }}</th>
+                <th style="width: 10rem">{{ 'HRM.COMMON.ACTIONS' | translate }}</th>
             </tr>
         </ng-template>
         <ng-template #body let-training>
@@ -42,10 +42,10 @@
                 <td>
                     {{ training.title }}
                     @if (training.is_online) {
-                        <i class="pi pi-globe ml-2 text-blue-500" pTooltip="Онлайн" tooltipPosition="top"></i>
+                        <i class="pi pi-globe ml-2 text-blue-500" [pTooltip]="'HRM.TRAINING.ONLINE' | translate" tooltipPosition="top"></i>
                     }
                     @if (training.certificate_provided) {
-                        <i class="pi pi-verified ml-1 text-green-500" pTooltip="С сертификатом" tooltipPosition="top"></i>
+                        <i class="pi pi-verified ml-1 text-green-500" [pTooltip]="'HRM.TRAINING.WITH_CERTIFICATE' | translate" tooltipPosition="top"></i>
                     }
                 </td>
                 <td>{{ getTypeLabel(training.training_type) }}</td>
@@ -62,14 +62,14 @@
                                 icon="pi pi-pencil"
                                 (click)="openEditDialog(training)"
                                 class="p-button-rounded p-button-text p-button-warning"
-                                pTooltip="Редактировать"
+                                [pTooltip]="'COMMON.EDIT' | translate"
                                 tooltipPosition="top">
                         </button>
                         <button pButton
                                 icon="pi pi-trash"
                                 (click)="openDeleteDialog(training)"
                                 class="p-button-rounded p-button-text p-button-danger"
-                                pTooltip="Удалить"
+                                [pTooltip]="'COMMON.DELETE' | translate"
                                 tooltipPosition="top">
                         </button>
                     </div>
@@ -78,12 +78,12 @@
         </ng-template>
         <ng-template #emptymessage>
             <tr>
-                <td colspan="8">Ничего не найдено</td>
+                <td colspan="8">{{ 'COMMON.NOT_FOUND' | translate }}</td>
             </tr>
         </ng-template>
         <ng-template #loadingbody>
             <tr>
-                <td colspan="8">Идет загрузка. Ожидайте...</td>
+                <td colspan="8">{{ 'COMMON.LOADING' | translate }}</td>
             </tr>
         </ng-template>
     </p-table>
@@ -92,42 +92,42 @@
 @if (displayDialog) {
     <app-dialog
         [(visible)]="displayDialog"
-        [header]="isEditMode ? 'Редактировать обучение' : 'Новое обучение'"
+        [header]="isEditMode ? ('COMMON.EDIT' | translate) : ('HRM.TRAINING.NEW_TRAINING' | translate)"
         [form]="trainingForm"
-        [saveLabel]="isEditMode ? 'Обновить' : 'Создать'"
+        [saveLabel]="isEditMode ? ('COMMON.UPDATE' | translate) : ('COMMON.CREATE' | translate)"
         (save)="onSubmit()"
         (cancel)="closeDialog()">
         <form class="p-4" [formGroup]="trainingForm" (ngSubmit)="onSubmit()">
-            <app-input-text formControlName="title" label="Название" [submitted]="submitted" errorMessage="Название обязательно" [required]="true"></app-input-text>
+            <app-input-text formControlName="title" [label]="'HRM.TRAINING.NAME' | translate" [submitted]="submitted" [errorMessage]="'VALIDATION.NAME_REQUIRED' | translate" [required]="true"></app-input-text>
 
-            <app-select formControlName="training_type" label="Тип обучения" [items]="trainingTypes" [submitted]="submitted" errorMessage="Тип обязателен" [required]="true"></app-select>
+            <app-select formControlName="training_type" [label]="'HRM.TRAINING.TYPE' | translate" [items]="trainingTypes" [submitted]="submitted" [errorMessage]="'VALIDATION.TYPE_REQUIRED' | translate" [required]="true"></app-select>
 
-            <app-textarea formControlName="description" label="Описание" [submitted]="submitted" errorMessage="Описание обязательно" [required]="true"></app-textarea>
+            <app-textarea formControlName="description" [label]="'HRM.COMMON.DESCRIPTION' | translate" [submitted]="submitted" [errorMessage]="'VALIDATION.DESCRIPTION_REQUIRED' | translate" [required]="true"></app-textarea>
 
-            <app-input-text formControlName="provider" label="Провайдер" [submitted]="submitted" [required]="false"></app-input-text>
+            <app-input-text formControlName="provider" [label]="'HRM.TRAINING.PROVIDER' | translate" [submitted]="submitted" [required]="false"></app-input-text>
 
             <div class="grid grid-cols-2 gap-4">
-                <app-date-picker formControlName="start_date" label="Дата начала" [submitted]="submitted" errorMessage="Дата начала обязательна" [showTime]="false" [required]="true"></app-date-picker>
-                <app-date-picker formControlName="end_date" label="Дата окончания" [submitted]="submitted" errorMessage="Дата окончания обязательна" [showTime]="false" [required]="true"></app-date-picker>
+                <app-date-picker formControlName="start_date" [label]="'HRM.COMMON.START_DATE' | translate" [submitted]="submitted" [errorMessage]="'VALIDATION.START_DATE_REQUIRED' | translate" [showTime]="false" [required]="true"></app-date-picker>
+                <app-date-picker formControlName="end_date" [label]="'HRM.COMMON.END_DATE' | translate" [submitted]="submitted" [errorMessage]="'VALIDATION.END_DATE_REQUIRED' | translate" [showTime]="false" [required]="true"></app-date-picker>
             </div>
 
             <div class="grid grid-cols-2 gap-4">
-                <app-input-text formControlName="duration_hours" label="Количество часов" type="number" [submitted]="submitted" errorMessage="Количество часов обязательно" [required]="true"></app-input-text>
-                <app-input-text formControlName="max_participants" label="Макс. участников" type="number" [submitted]="submitted" [required]="false"></app-input-text>
+                <app-input-text formControlName="duration_hours" [label]="'HRM.TRAINING.DURATION_HOURS' | translate" type="number" [submitted]="submitted" [errorMessage]="'VALIDATION.HOURS_REQUIRED' | translate" [required]="true"></app-input-text>
+                <app-input-text formControlName="max_participants" [label]="'HRM.TRAINING.MAX_PARTICIPANTS' | translate" type="number" [submitted]="submitted" [required]="false"></app-input-text>
             </div>
 
-            <app-input-text formControlName="location" label="Место проведения" [submitted]="submitted" [required]="false"></app-input-text>
+            <app-input-text formControlName="location" [label]="'HRM.TRAINING.LOCATION' | translate" [submitted]="submitted" [required]="false"></app-input-text>
 
-            <app-input-text formControlName="cost" label="Стоимость" type="number" [submitted]="submitted" [required]="false"></app-input-text>
+            <app-input-text formControlName="cost" [label]="'HRM.TRAINING.COST' | translate" type="number" [submitted]="submitted" [required]="false"></app-input-text>
 
             <div class="flex gap-6 mt-4">
                 <div class="flex items-center gap-2">
                     <p-checkbox formControlName="is_online" [binary]="true" inputId="is_online"></p-checkbox>
-                    <label for="is_online">Онлайн формат</label>
+                    <label for="is_online">{{ 'HRM.TRAINING.ONLINE_FORMAT' | translate }}</label>
                 </div>
                 <div class="flex items-center gap-2">
                     <p-checkbox formControlName="certificate_provided" [binary]="true" inputId="certificate"></p-checkbox>
-                    <label for="certificate">С сертификатом</label>
+                    <label for="certificate">{{ 'HRM.TRAINING.WITH_CERTIFICATE' | translate }}</label>
                 </div>
             </div>
         </form>
@@ -136,6 +136,6 @@
 
 <app-delete-confirmation
     [(visible)]="displayDeleteDialog"
-    [message]="'Вы уверены, что хотите удалить обучение ' + (selectedTraining?.title || '') + '?'"
+    [message]="('HRM.TRAINING.DELETE_CONFIRM' | translate) + ' ' + (selectedTraining?.title || '') + '?'"
     (onConfirm)="confirmDelete()">
 </app-delete-confirmation>

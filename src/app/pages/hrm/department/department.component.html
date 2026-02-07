@@ -1,5 +1,5 @@
 <div class="card">
-    <div class="font-semibold text-xl mb-4">Отделы</div>
+    <div class="font-semibold text-xl mb-4">{{ 'HRM.DEPARTMENTS.TITLE' | translate }}</div>
     <p-table
         #dt
         [value]="departments"
@@ -17,20 +17,20 @@
                     <p-inputicon>
                         <i class="pi pi-search"></i>
                     </p-inputicon>
-                    <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Поиск" />
+                    <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" [placeholder]="'COMMON.SEARCH' | translate" />
                 </p-iconfield>
                 <button pButton (click)="openDialog()">
                     <i class="pi pi-plus" pButtonIcon></i>
-                    <span pButtonLabel>Новый отдел</span>
+                    <span pButtonLabel>{{ 'HRM.DEPARTMENTS.NEW_DEPARTMENT' | translate }}</span>
                 </button>
             </div>
         </ng-template>
         <ng-template #header>
             <tr>
-                <th style="min-width: 12rem">Название</th>
-                <th style="min-width: 15rem">Описание</th>
-                <th style="min-width: 12rem">Организация</th>
-                <th style="width: 10rem">Действия</th>
+                <th style="min-width: 12rem">{{ 'HRM.DEPARTMENTS.NAME' | translate }}</th>
+                <th style="min-width: 15rem">{{ 'HRM.DEPARTMENTS.DESCRIPTION' | translate }}</th>
+                <th style="min-width: 12rem">{{ 'HRM.DEPARTMENTS.ORGANIZATION' | translate }}</th>
+                <th style="width: 10rem">{{ 'COMMON.ACTIONS' | translate }}</th>
             </tr>
         </ng-template>
         <ng-template #body let-department>
@@ -50,14 +50,14 @@
                                 icon="pi pi-pencil"
                                 (click)="openEditDialog(department)"
                                 class="p-button-rounded p-button-text p-button-warning"
-                                pTooltip="Редактировать"
+                                [pTooltip]="'COMMON.EDIT' | translate"
                                 tooltipPosition="top">
                         </button>
                         <button pButton
                                 icon="pi pi-trash"
                                 (click)="openDeleteDialog(department)"
                                 class="p-button-rounded p-button-text p-button-danger"
-                                pTooltip="Удалить"
+                                [pTooltip]="'COMMON.DELETE' | translate"
                                 tooltipPosition="top">
                         </button>
                     </div>
@@ -66,12 +66,12 @@
         </ng-template>
         <ng-template #emptymessage>
             <tr>
-                <td colspan="4">Ничего не найдено</td>
+                <td colspan="4">{{ 'HRM.DEPARTMENTS.NOTHING_FOUND' | translate }}</td>
             </tr>
         </ng-template>
         <ng-template #loadingbody>
             <tr>
-                <td colspan="4">Идет загрузка. Ожидайте...</td>
+                <td colspan="4">{{ 'HRM.DEPARTMENTS.LOADING' | translate }}</td>
             </tr>
         </ng-template>
     </p-table>
@@ -79,39 +79,39 @@
 
 <app-dialog
     [(visible)]="displayDialog"
-    [header]="isEditMode ? 'Редактировать отдел' : 'Новый отдел'"
+    [header]="isEditMode ? ('HRM.DEPARTMENTS.EDIT_DEPARTMENT' | translate) : ('HRM.DEPARTMENTS.NEW_DEPARTMENT' | translate)"
     [form]="departmentForm"
-    [saveLabel]="isEditMode ? 'Обновить' : 'Сохранить'"
+    [saveLabel]="isEditMode ? ('COMMON.UPDATE' | translate) : ('COMMON.SAVE' | translate)"
     (save)="onSubmit()"
     (cancel)="closeDialog()">
     <form class="p-4" [formGroup]="departmentForm" (ngSubmit)="onSubmit()">
         <app-input-text
             formControlName="name"
-            label="Название"
+            [label]="'HRM.DEPARTMENTS.NAME' | translate"
             [submitted]="submitted"
-            errorMessage="Название обязательно"
+            [errorMessage]="'HRM.DEPARTMENTS.NAME_REQUIRED' | translate"
             [required]="true">
         </app-input-text>
 
         <app-input-text
             formControlName="description"
-            label="Описание"
+            [label]="'HRM.DEPARTMENTS.DESCRIPTION' | translate"
             [submitted]="submitted"
             [required]="false">
         </app-input-text>
 
         <app-select
             formControlName="organization_id"
-            label="Организация"
+            [label]="'HRM.DEPARTMENTS.ORGANIZATION' | translate"
             [items]="organizations"
             [submitted]="submitted"
-            errorMessage="Организация обязательна">
+            [errorMessage]="'HRM.DEPARTMENTS.ORGANIZATION_REQUIRED' | translate">
         </app-select>
     </form>
 </app-dialog>
 
 <app-delete-confirmation
     [(visible)]="displayDeleteDialog"
-    [message]="'Вы уверены, что хотите удалить отдел ' + (selectedDepartment?.name || '') + '?'"
+    [message]="('HRM.DEPARTMENTS.DELETE_CONFIRM' | translate) + ' ' + (selectedDepartment?.name || '') + '?'"
     (onConfirm)="confirmDelete()">
 </app-delete-confirmation>

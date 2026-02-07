@@ -23,6 +23,7 @@ import { Textarea } from 'primeng/textarea';
 import { AccordionModule } from 'primeng/accordion';
 import { Timeline } from 'primeng/timeline';
 import { KnobModule } from 'primeng/knob';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { DeleteConfirmationComponent } from '@/layout/component/dialog/delete-confirmation/delete-confirmation.component';
 import {
     AssessmentSession,
@@ -75,7 +76,8 @@ import {
         Textarea,
         AccordionModule,
         Timeline,
-        KnobModule
+        KnobModule,
+        TranslateModule
     ],
     templateUrl: './competency-assessment.component.html',
     styleUrl: './competency-assessment.component.scss'

@@ -12,22 +12,23 @@ import { DeleteConfirmationComponent } from '@/layout/component/dialog/delete-co
 import { Tooltip } from 'primeng/tooltip';
 import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
 import { BaseCrudComponent } from '@/core/components/base-crud.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-position',
-    imports: [TableModule, ButtonDirective, IconField, InputIcon, InputText, ButtonLabel, ButtonIcon, ReactiveFormsModule, InputTextComponent, DeleteConfirmationComponent, Tooltip, DialogComponent],
+    imports: [TableModule, ButtonDirective, IconField, InputIcon, InputText, ButtonLabel, ButtonIcon, ReactiveFormsModule, InputTextComponent, DeleteConfirmationComponent, Tooltip, DialogComponent, TranslateModule],
     templateUrl: './position.component.html',
     styleUrl: './position.component.scss'
 })
 export class PositionComponent extends BaseCrudComponent<Position, PositionPayload> implements OnInit {
     constructor() {
         super(inject(PositionService), {
-            createSuccess: 'Должность успешно создана',
-            createError: 'Не удалось создать должность',
-            updateSuccess: 'Должность успешно обновлена',
-            updateError: 'Не удалось обновить должность',
-            deleteSuccess: 'Должность успешно удалена',
-            deleteError: 'Не удалось удалить должность'
+            createSuccess: 'HRM.POSITIONS.SUCCESS_CREATED',
+            createError: 'HRM.POSITIONS.ERROR_CREATE',
+            updateSuccess: 'HRM.POSITIONS.SUCCESS_UPDATED',
+            updateError: 'HRM.POSITIONS.ERROR_UPDATE',
+            deleteSuccess: 'HRM.POSITIONS.SUCCESS_DELETED',
+            deleteError: 'HRM.POSITIONS.ERROR_DELETE'
         });
     }
 

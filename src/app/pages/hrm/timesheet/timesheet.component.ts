@@ -11,6 +11,7 @@ import { InputText } from 'primeng/inputtext';
 import { Textarea } from 'primeng/textarea';
 import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import {
     EmployeeTimesheet,
     TimesheetDay,
@@ -38,7 +39,8 @@ import { Department } from '@/core/interfaces/department';
         Tooltip,
         Dialog,
         InputText,
-        Textarea
+        Textarea,
+        TranslateModule
     ],
     templateUrl: './timesheet.component.html',
     styleUrl: './timesheet.component.scss'
@@ -94,6 +96,7 @@ export class TimesheetComponent implements OnInit, OnDestroy {
     private timesheetService = inject(TimesheetService);
     private departmentService = inject(DepartmentService);
     private messageService = inject(MessageService);
+    private translate = inject(TranslateService);
     private destroy$ = new Subject<void>();
 
     ngOnInit(): void {
@@ -172,7 +175,7 @@ export class TimesheetComponent implements OnInit, OnDestroy {
                     this.calculateTotalSummary();
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось загрузить табель' });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('HRM.TIMESHEET.LOAD_ERROR') });
                     console.error(err);
                 },
                 complete: () => (this.loading = false)
@@ -289,10 +292,10 @@ export class TimesheetComponent implements OnInit, OnDestroy {
             tooltip += `\n${day.check_in} - ${day.check_out}`;
         }
         if (day.worked_hours) {
-            tooltip += `\nОтработано: ${day.worked_hours}ч`;
+            tooltip += `\n${this.translate.instant('HRM.TIMESHEET.WORKED')}: ${day.worked_hours}${this.translate.instant('HRM.TIMESHEET.HOURS_SHORT')}`;
         }
         if (day.overtime_hours) {
-            tooltip += `\nПереработка: ${day.overtime_hours}ч`;
+            tooltip += `\n${this.translate.instant('HRM.TIMESHEET.OVERTIME')}: ${day.overtime_hours}${this.translate.instant('HRM.TIMESHEET.HOURS_SHORT')}`;
         }
         if (day.is_holiday && day.holiday_name) {
             tooltip = day.holiday_name;
@@ -370,8 +373,8 @@ export class TimesheetComponent implements OnInit, OnDestroy {
 
         this.messageService.add({
             severity: 'success',
-            summary: 'Сохранено',
-            detail: 'Данные табеля обновлены'
+            summary: this.translate.instant('COMMON.SUCCESS'),
+            detail: this.translate.instant('HRM.TIMESHEET.DATA_UPDATED')
         });
 
         this.displayEditDialog = false;
@@ -397,15 +400,15 @@ export class TimesheetComponent implements OnInit, OnDestroy {
                     window.URL.revokeObjectURL(url);
                     this.messageService.add({
                         severity: 'success',
-                        summary: 'Экспорт',
-                        detail: 'Табель успешно экспортирован'
+                        summary: this.translate.instant('COMMON.EXPORT'),
+                        detail: this.translate.instant('HRM.TIMESHEET.EXPORT_SUCCESS')
                     });
                 },
                 error: (err) => {
                     this.messageService.add({
                         severity: 'error',
-                        summary: 'Ошибка',
-                        detail: 'Не удалось экспортировать табель'
+                        summary: this.translate.instant('COMMON.ERROR'),
+                        detail: this.translate.instant('HRM.TIMESHEET.EXPORT_ERROR')
                     });
                     console.error(err);
                 }

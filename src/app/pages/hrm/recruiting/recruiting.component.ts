@@ -1,7 +1,7 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Table, TableModule } from 'primeng/table';
-import { ButtonDirective } from 'primeng/button';
+import { ButtonDirective, ButtonIcon } from 'primeng/button';
 import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
 import { InputText } from 'primeng/inputtext';
@@ -18,6 +18,7 @@ import { Textarea } from 'primeng/textarea';
 import { Select } from 'primeng/select';
 import { DatePicker } from 'primeng/datepicker';
 import { InputNumber } from 'primeng/inputnumber';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { RecruitingService } from '@/core/services/recruiting.service';
 import { DepartmentService } from '@/core/services/department.service';
 import { PositionService } from '@/core/services/position.service';
@@ -66,7 +67,9 @@ import {
         Textarea,
         Select,
         DatePicker,
-        InputNumber
+        InputNumber,
+        TranslateModule,
+
     ],
     templateUrl: './recruiting.component.html',
     styleUrl: './recruiting.component.scss'
@@ -215,21 +218,23 @@ export class RecruitingComponent implements OnInit, OnDestroy {
             onboardings: this.recruitingService.getOnboardings(),
             departments: this.departmentService.getDepartments(),
             positions: this.positionService.getPositions()
-        }).pipe(takeUntil(this.destroy$)).subscribe({
-            next: (data) => {
-                this.vacancies = data.vacancies;
-                this.candidates = data.candidates;
-                this.onboardings = data.onboardings;
-                this.departments = data.departments.map(d => ({ id: d.id, name: d.name }));
-                this.positions = data.positions.map(p => ({ id: p.id, name: p.name }));
-                this.loading = false;
-            },
-            error: (err) => {
-                console.error('Ошибка загрузки данных:', err);
-                this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось загрузить данные' });
-                this.loading = false;
-            }
-        });
+        })
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: (data) => {
+                    this.vacancies = data.vacancies;
+                    this.candidates = data.candidates;
+                    this.onboardings = data.onboardings;
+                    this.departments = data.departments.map((d) => ({ id: d.id, name: d.name }));
+                    this.positions = data.positions.map((p) => ({ id: p.id, name: p.name }));
+                    this.loading = false;
+                },
+                error: (err) => {
+                    console.error('Ошибка загрузки данных:', err);
+                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось загрузить данные' });
+                    this.loading = false;
+                }
+            });
     }
 
     // =====================
@@ -251,16 +256,16 @@ export class RecruitingComponent implements OnInit, OnDestroy {
 
         this.vacancyForm.patchValue({
             title: vacancy.title,
-            department_id: this.departments.find(d => d.id === vacancy.department_id),
-            position_id: this.positions.find(p => p.id === vacancy.position_id),
+            department_id: this.departments.find((d) => d.id === vacancy.department_id),
+            position_id: this.positions.find((p) => p.id === vacancy.position_id),
             description: vacancy.description,
             requirements: vacancy.requirements,
             responsibilities: vacancy.responsibilities || '',
             experience_years: vacancy.experience_years,
             salary_from: vacancy.salary_from,
             salary_to: vacancy.salary_to,
-            employment_type: this.employmentTypes.find(t => t.value === vacancy.employment_type),
-            priority: this.vacancyPriorities.find(p => p.value === vacancy.priority),
+            employment_type: this.employmentTypes.find((t) => t.value === vacancy.employment_type),
+            priority: this.vacancyPriorities.find((p) => p.value === vacancy.priority),
             deadline: vacancy.deadline ? new Date(vacancy.deadline) : null,
             request_justification: vacancy.request_justification || ''
         });
@@ -290,11 +295,12 @@ export class RecruitingComponent implements OnInit, OnDestroy {
         };
 
         if (this.isEditMode && this.selectedVacancy) {
-            this.recruitingService.updateVacancy(this.selectedVacancy.id, payload)
+            this.recruitingService
+                .updateVacancy(this.selectedVacancy.id, payload)
                 .pipe(takeUntil(this.destroy$))
                 .subscribe({
                     next: (updated) => {
-                        const index = this.vacancies.findIndex(v => v.id === this.selectedVacancy!.id);
+                        const index = this.vacancies.findIndex((v) => v.id === this.selectedVacancy!.id);
                         if (index !== -1) {
                             this.vacancies[index] = updated;
                             this.vacancies = [...this.vacancies];
@@ -308,7 +314,8 @@ export class RecruitingComponent implements OnInit, OnDestroy {
                     }
                 });
         } else {
-            this.recruitingService.createVacancy(payload)
+            this.recruitingService
+                .createVacancy(payload)
                 .pipe(takeUntil(this.destroy$))
                 .subscribe({
                     next: (created) => {
@@ -325,7 +332,7 @@ export class RecruitingComponent implements OnInit, OnDestroy {
     }
 
     submitForApproval(vacancy: Vacancy): void {
-        const index = this.vacancies.findIndex(v => v.id === vacancy.id);
+        const index = this.vacancies.findIndex((v) => v.id === vacancy.id);
         if (index !== -1) {
             this.vacancies[index].status = 'pending_approval';
             this.vacancies = [...this.vacancies];
@@ -334,7 +341,7 @@ export class RecruitingComponent implements OnInit, OnDestroy {
     }
 
     approveVacancy(vacancy: Vacancy): void {
-        const index = this.vacancies.findIndex(v => v.id === vacancy.id);
+        const index = this.vacancies.findIndex((v) => v.id === vacancy.id);
         if (index !== -1) {
             this.vacancies[index] = {
                 ...this.vacancies[index],
@@ -350,7 +357,7 @@ export class RecruitingComponent implements OnInit, OnDestroy {
     }
 
     publishVacancy(vacancy: Vacancy): void {
-        const index = this.vacancies.findIndex(v => v.id === vacancy.id);
+        const index = this.vacancies.findIndex((v) => v.id === vacancy.id);
         if (index !== -1) {
             this.vacancies[index] = {
                 ...this.vacancies[index],
@@ -363,7 +370,7 @@ export class RecruitingComponent implements OnInit, OnDestroy {
     }
 
     closeVacancy(vacancy: Vacancy): void {
-        const index = this.vacancies.findIndex(v => v.id === vacancy.id);
+        const index = this.vacancies.findIndex((v) => v.id === vacancy.id);
         if (index !== -1) {
             this.vacancies[index] = {
                 ...this.vacancies[index],
@@ -408,14 +415,15 @@ export class RecruitingComponent implements OnInit, OnDestroy {
             cover_letter: formValue.cover_letter
         };
 
-        this.recruitingService.createCandidate(payload)
+        this.recruitingService
+            .createCandidate(payload)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (created) => {
                     this.candidates = [...this.candidates, created];
 
                     // Обновляем счетчик заявок
-                    const vacancyIndex = this.vacancies.findIndex(v => v.id === created.vacancy_id);
+                    const vacancyIndex = this.vacancies.findIndex((v) => v.id === created.vacancy_id);
                     if (vacancyIndex !== -1) {
                         this.vacancies[vacancyIndex].applications_count = (this.vacancies[vacancyIndex].applications_count || 0) + 1;
                         this.vacancies = [...this.vacancies];
@@ -433,7 +441,7 @@ export class RecruitingComponent implements OnInit, OnDestroy {
 
     // Скрининг кандидата
     screenCandidate(candidate: Candidate, passed: boolean): void {
-        const index = this.candidates.findIndex(c => c.id === candidate.id);
+        const index = this.candidates.findIndex((c) => c.id === candidate.id);
         if (index !== -1) {
             if (passed) {
                 this.candidates[index] = {
@@ -472,19 +480,19 @@ export class RecruitingComponent implements OnInit, OnDestroy {
             vacancy_id: this.selectedCandidate.vacancy_id,
             interviewer_id: formValue.interviewer_id?.id,
             interview_type: formValue.interview_type?.value,
-            stage: formValue.interview_type?.value === 'phone' ? 'initial' :
-                   formValue.interview_type?.value === 'technical' ? 'technical' : 'manager',
+            stage: formValue.interview_type?.value === 'phone' ? 'initial' : formValue.interview_type?.value === 'technical' ? 'technical' : 'manager',
             scheduled_at: formValue.scheduled_at instanceof Date ? formValue.scheduled_at.toISOString() : formValue.scheduled_at,
             duration_minutes: formValue.duration_minutes,
             location: formValue.location,
             meeting_link: formValue.meeting_link
         };
 
-        this.recruitingService.createInterview(payload)
+        this.recruitingService
+            .createInterview(payload)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (created) => {
-                    const candidateIndex = this.candidates.findIndex(c => c.id === this.selectedCandidate!.id);
+                    const candidateIndex = this.candidates.findIndex((c) => c.id === this.selectedCandidate!.id);
                     if (candidateIndex !== -1) {
                         if (!this.candidates[candidateIndex].interviews) {
                             this.candidates[candidateIndex].interviews = [];
@@ -525,9 +533,9 @@ export class RecruitingComponent implements OnInit, OnDestroy {
 
         const formValue = this.feedbackForm.value;
 
-        const candidateIndex = this.candidates.findIndex(c => c.id === this.selectedCandidate!.id);
+        const candidateIndex = this.candidates.findIndex((c) => c.id === this.selectedCandidate!.id);
         if (candidateIndex !== -1 && this.candidates[candidateIndex].interviews) {
-            const interviewIndex = this.candidates[candidateIndex].interviews!.findIndex(i => i.id === this.selectedInterview!.id);
+            const interviewIndex = this.candidates[candidateIndex].interviews!.findIndex((i) => i.id === this.selectedInterview!.id);
             if (interviewIndex !== -1) {
                 this.candidates[candidateIndex].interviews![interviewIndex] = {
                     ...this.candidates[candidateIndex].interviews![interviewIndex],
@@ -584,7 +592,7 @@ export class RecruitingComponent implements OnInit, OnDestroy {
             status: 'pending'
         };
 
-        const candidateIndex = this.candidates.findIndex(c => c.id === this.selectedCandidate!.id);
+        const candidateIndex = this.candidates.findIndex((c) => c.id === this.selectedCandidate!.id);
         if (candidateIndex !== -1) {
             if (!this.candidates[candidateIndex].reference_checks) {
                 this.candidates[candidateIndex].reference_checks = [];
@@ -604,9 +612,9 @@ export class RecruitingComponent implements OnInit, OnDestroy {
     }
 
     completeReferenceCheck(candidate: Candidate, reference: ReferenceCheck): void {
-        const candidateIndex = this.candidates.findIndex(c => c.id === candidate.id);
+        const candidateIndex = this.candidates.findIndex((c) => c.id === candidate.id);
         if (candidateIndex !== -1 && this.candidates[candidateIndex].reference_checks) {
-            const refIndex = this.candidates[candidateIndex].reference_checks!.findIndex(r => r.id === reference.id);
+            const refIndex = this.candidates[candidateIndex].reference_checks!.findIndex((r) => r.id === reference.id);
             if (refIndex !== -1) {
                 this.candidates[candidateIndex].reference_checks![refIndex] = {
                     ...this.candidates[candidateIndex].reference_checks![refIndex],
@@ -630,7 +638,7 @@ export class RecruitingComponent implements OnInit, OnDestroy {
         this.selectedCandidate = candidate;
         this.submitted = false;
 
-        const vacancy = this.vacancies.find(v => v.id === candidate.vacancy_id);
+        const vacancy = this.vacancies.find((v) => v.id === candidate.vacancy_id);
         this.offerForm.patchValue({
             offered_salary: candidate.salary_expectation || vacancy?.salary_to,
             start_date: new Date(new Date().setDate(new Date().getDate() + 14)),
@@ -656,11 +664,12 @@ export class RecruitingComponent implements OnInit, OnDestroy {
             other_terms: formValue.other_terms
         };
 
-        this.recruitingService.createOffer(payload)
+        this.recruitingService
+            .createOffer(payload)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (created) => {
-                    const candidateIndex = this.candidates.findIndex(c => c.id === this.selectedCandidate!.id);
+                    const candidateIndex = this.candidates.findIndex((c) => c.id === this.selectedCandidate!.id);
                     if (candidateIndex !== -1) {
                         this.candidates[candidateIndex] = {
                             ...this.candidates[candidateIndex],
@@ -682,7 +691,7 @@ export class RecruitingComponent implements OnInit, OnDestroy {
     }
 
     acceptOffer(candidate: Candidate): void {
-        const index = this.candidates.findIndex(c => c.id === candidate.id);
+        const index = this.candidates.findIndex((c) => c.id === candidate.id);
         if (index !== -1 && this.candidates[index].offer) {
             this.candidates[index].offer!.status = 'accepted';
             this.candidates[index].offer!.responded_at = new Date().toISOString().split('T')[0];
@@ -697,7 +706,7 @@ export class RecruitingComponent implements OnInit, OnDestroy {
     // =====================
 
     hireCandidate(candidate: Candidate): void {
-        const index = this.candidates.findIndex(c => c.id === candidate.id);
+        const index = this.candidates.findIndex((c) => c.id === candidate.id);
         if (index !== -1) {
             const employeeId = this.nextId++;
 
@@ -733,7 +742,7 @@ export class RecruitingComponent implements OnInit, OnDestroy {
             this.onboardings = [...this.onboardings, newOnboarding];
 
             // Закрываем вакансию
-            const vacancyIndex = this.vacancies.findIndex(v => v.id === candidate.vacancy_id);
+            const vacancyIndex = this.vacancies.findIndex((v) => v.id === candidate.vacancy_id);
             if (vacancyIndex !== -1) {
                 this.vacancies[vacancyIndex] = {
                     ...this.vacancies[vacancyIndex],
@@ -750,7 +759,7 @@ export class RecruitingComponent implements OnInit, OnDestroy {
     }
 
     assignMentor(onboarding: Onboarding): void {
-        const index = this.onboardings.findIndex(o => o.id === onboarding.id);
+        const index = this.onboardings.findIndex((o) => o.id === onboarding.id);
         if (index !== -1) {
             this.onboardings[index] = {
                 ...this.onboardings[index],
@@ -764,9 +773,9 @@ export class RecruitingComponent implements OnInit, OnDestroy {
     }
 
     completeOnboardingTask(onboarding: Onboarding, task: OnboardingTask): void {
-        const onboardingIndex = this.onboardings.findIndex(o => o.id === onboarding.id);
+        const onboardingIndex = this.onboardings.findIndex((o) => o.id === onboarding.id);
         if (onboardingIndex !== -1) {
-            const taskIndex = this.onboardings[onboardingIndex].tasks.findIndex(t => t.id === task.id);
+            const taskIndex = this.onboardings[onboardingIndex].tasks.findIndex((t) => t.id === task.id);
             if (taskIndex !== -1) {
                 this.onboardings[onboardingIndex].tasks[taskIndex] = {
                     ...this.onboardings[onboardingIndex].tasks[taskIndex],
@@ -775,7 +784,7 @@ export class RecruitingComponent implements OnInit, OnDestroy {
                 };
 
                 // Пересчитываем прогресс
-                const completedTasks = this.onboardings[onboardingIndex].tasks.filter(t => t.status === 'completed').length;
+                const completedTasks = this.onboardings[onboardingIndex].tasks.filter((t) => t.status === 'completed').length;
                 const totalTasks = this.onboardings[onboardingIndex].tasks.length;
                 this.onboardings[onboardingIndex].overall_progress = Math.round((completedTasks / totalTasks) * 100);
 
@@ -799,7 +808,7 @@ export class RecruitingComponent implements OnInit, OnDestroy {
         this.submitted = true;
         if (this.rejectForm.invalid || !this.selectedCandidate) return;
 
-        const index = this.candidates.findIndex(c => c.id === this.selectedCandidate!.id);
+        const index = this.candidates.findIndex((c) => c.id === this.selectedCandidate!.id);
         if (index !== -1) {
             this.candidates[index] = {
                 ...this.candidates[index],
@@ -825,43 +834,70 @@ export class RecruitingComponent implements OnInit, OnDestroy {
 
     getVacancyStatusSeverity(status: VacancyStatus): 'success' | 'info' | 'warn' | 'danger' | 'secondary' {
         switch (status) {
-            case 'open': return 'success';
-            case 'approved': return 'info';
-            case 'pending_approval': return 'warn';
-            case 'draft': return 'secondary';
-            case 'on_hold': return 'warn';
-            case 'closed': return 'danger';
-            case 'cancelled': return 'danger';
-            default: return 'info';
+            case 'open':
+                return 'success';
+            case 'approved':
+                return 'info';
+            case 'pending_approval':
+                return 'warn';
+            case 'draft':
+                return 'secondary';
+            case 'on_hold':
+                return 'warn';
+            case 'closed':
+                return 'danger';
+            case 'cancelled':
+                return 'danger';
+            default:
+                return 'info';
         }
     }
 
     getCandidateStatusSeverity(status: CandidateStatus): 'success' | 'info' | 'warn' | 'danger' | 'secondary' {
         switch (status) {
-            case 'hired': return 'success';
-            case 'offer_accepted': return 'success';
-            case 'offer': return 'info';
-            case 'interview': return 'info';
-            case 'phone_interview': return 'info';
-            case 'reference_check': return 'warn';
-            case 'background_check': return 'warn';
-            case 'technical_test': return 'warn';
-            case 'screening': return 'secondary';
-            case 'new': return 'secondary';
-            case 'rejected': return 'danger';
-            case 'withdrawn': return 'danger';
-            default: return 'info';
+            case 'hired':
+                return 'success';
+            case 'offer_accepted':
+                return 'success';
+            case 'offer':
+                return 'info';
+            case 'interview':
+                return 'info';
+            case 'phone_interview':
+                return 'info';
+            case 'reference_check':
+                return 'warn';
+            case 'background_check':
+                return 'warn';
+            case 'technical_test':
+                return 'warn';
+            case 'screening':
+                return 'secondary';
+            case 'new':
+                return 'secondary';
+            case 'rejected':
+                return 'danger';
+            case 'withdrawn':
+                return 'danger';
+            default:
+                return 'info';
         }
     }
 
     getOnboardingStatusSeverity(status: OnboardingStatus): 'success' | 'info' | 'warn' | 'danger' | 'secondary' {
         switch (status) {
-            case 'completed': return 'success';
-            case 'in_progress': return 'info';
-            case 'not_started': return 'secondary';
-            case 'extended': return 'warn';
-            case 'terminated': return 'danger';
-            default: return 'info';
+            case 'completed':
+                return 'success';
+            case 'in_progress':
+                return 'info';
+            case 'not_started':
+                return 'secondary';
+            case 'extended':
+                return 'warn';
+            case 'terminated':
+                return 'danger';
+            default:
+                return 'info';
         }
     }
 
@@ -869,44 +905,42 @@ export class RecruitingComponent implements OnInit, OnDestroy {
         let list: { value: string; label: string }[] = [];
         if (type === 'vacancy') list = this.vacancyStatuses;
         else if (type === 'candidate') list = this.candidateStatuses;
-        const found = list.find(s => s.value === status);
+        const found = list.find((s) => s.value === status);
         return found ? found.label : status;
     }
 
     getVacanciesForSelect() {
-        return this.vacancies
-            .filter(v => v.status === 'open')
-            .map(v => ({ id: v.id, name: v.title }));
+        return this.vacancies.filter((v) => v.status === 'open').map((v) => ({ id: v.id, name: v.title }));
     }
 
     getStageProgress(stage: RecruitingStage): number {
-        const stageInfo = this.recruitingStages.find(s => s.value === stage);
+        const stageInfo = this.recruitingStages.find((s) => s.value === stage);
         return stageInfo ? (stageInfo.order / 8) * 100 : 0;
     }
 
     // Геттеры для статистики
     get openVacanciesCount(): number {
-        return this.vacancies.filter(v => v.status === 'open').length;
+        return this.vacancies.filter((v) => v.status === 'open').length;
     }
 
     get pendingApprovalCount(): number {
-        return this.vacancies.filter(v => v.status === 'pending_approval').length;
+        return this.vacancies.filter((v) => v.status === 'pending_approval').length;
     }
 
     get newCandidatesCount(): number {
-        return this.candidates.filter(c => c.status === 'new').length;
+        return this.candidates.filter((c) => c.status === 'new').length;
     }
 
     get interviewingCount(): number {
-        return this.candidates.filter(c => ['phone_interview', 'interview', 'technical_test'].includes(c.status)).length;
+        return this.candidates.filter((c) => ['phone_interview', 'interview', 'technical_test'].includes(c.status)).length;
     }
 
     get offersCount(): number {
-        return this.candidates.filter(c => c.status === 'offer' || c.status === 'offer_accepted').length;
+        return this.candidates.filter((c) => c.status === 'offer' || c.status === 'offer_accepted').length;
     }
 
     get activeOnboardingsCount(): number {
-        return this.onboardings.filter(o => o.status === 'in_progress').length;
+        return this.onboardings.filter((o) => o.status === 'in_progress').length;
     }
 
     ngOnDestroy() {

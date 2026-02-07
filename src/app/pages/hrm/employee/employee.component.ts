@@ -22,6 +22,7 @@ import { Tooltip } from 'primeng/tooltip';
 import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
 import { BaseCrudComponent } from '@/core/components/base-crud.component';
 import { takeUntil } from 'rxjs';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-employee',
@@ -40,7 +41,8 @@ import { takeUntil } from 'rxjs';
         DeleteConfirmationComponent,
         FileUploadComponent,
         Tooltip,
-        DialogComponent
+        DialogComponent,
+        TranslateModule
     ],
     templateUrl: './employee.component.html',
     styleUrl: './employee.component.scss'
@@ -57,12 +59,12 @@ export class EmployeeComponent extends BaseCrudComponent<Contact, FormData> impl
 
     constructor() {
         super(inject(ContactService), {
-            createSuccess: 'Сотрудник успешно создан',
-            createError: 'Не удалось создать сотрудника',
-            updateSuccess: 'Сотрудник успешно обновлен',
-            updateError: 'Не удалось обновить сотрудника',
-            deleteSuccess: 'Сотрудник успешно удален',
-            deleteError: 'Не удалось удалить сотрудника'
+            createSuccess: 'HRM.EMPLOYEES.SUCCESS_CREATED',
+            createError: 'HRM.EMPLOYEES.ERROR_CREATE',
+            updateSuccess: 'HRM.EMPLOYEES.SUCCESS_UPDATED',
+            updateError: 'HRM.EMPLOYEES.ERROR_UPDATE',
+            deleteSuccess: 'HRM.EMPLOYEES.SUCCESS_DELETED',
+            deleteError: 'HRM.EMPLOYEES.ERROR_DELETE'
         });
     }
 

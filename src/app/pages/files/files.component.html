@@ -1,5 +1,5 @@
 <div class="card">
-    <div class="font-semibold text-xl mb-4">Файлы</div>
+    <div class="font-semibold text-xl mb-4">{{ 'FILES.TITLE' | translate }}</div>
     <p-table
         #ct
         [value]="files"
@@ -17,18 +17,11 @@
                     <p-inputicon>
                         <i class="pi pi-search"></i>
                     </p-inputicon>
-                    <input pInputText type="text" (input)="onGlobalFilter(ct, $event)" placeholder="Поиск" />
+                    <input pInputText type="text" (input)="onGlobalFilter(ct, $event)" [placeholder]="'COMMON.SEARCH' | translate" />
                 </p-iconfield>
-<!--                <div class="flex flex-wrap gap-2">-->
-<!--                    <p-button-group>-->
-<!--                        <p-button label="Save" icon="pi pi-check" />-->
-<!--                        <p-button label="Delete" icon="pi pi-trash" />-->
-<!--                        <p-button label="Cancel" icon="pi pi-times" />-->
-<!--                    </p-button-group>-->
-<!--                </div>-->
                 <button pButton (click)="openDialog()">
                     <i class="pi pi-upload" pButtonIcon></i>
-                    <span pButtonLabel>Добавить файлы</span>
+                    <span pButtonLabel>{{ 'FILES.ADD_FILES' | translate }}</span>
                 </button>
             </div>
         </ng-template>
@@ -36,18 +29,18 @@
             <tr>
                 <th style="min-width: 12rem">
                     <div class="flex justify-between items-center">
-                        Имя
+                        {{ 'FILES.NAME' | translate }}
                         <p-columnFilter type="text" field="name" display="menu"
-                                        placeholder="Search by name"></p-columnFilter>
+                                        [placeholder]="'COMMON.SEARCH' | translate"></p-columnFilter>
                     </div>
                 </th>
                 <th style="min-width: 12rem">
                     <div class="flex justify-between items-center">
-                        Категория
+                        {{ 'FILES.CATEGORY' | translate }}
                     </div>
                 </th>
                 <th>
-                        Действия
+                        {{ 'COMMON.ACTIONS' | translate }}
                 </th>
             </tr>
         </ng-template>
@@ -62,54 +55,54 @@
                 <td>
                     <button pButton (click)="deleteFile(f.id)" severity="danger">
                         <i class="pi pi-trash" pButtonIcon></i>
-                        <span pButtonLabel>Удалить</span>
+                        <span pButtonLabel>{{ 'COMMON.DELETE' | translate }}</span>
                     </button>
                 </td>
             </tr>
         </ng-template>
         <ng-template #emptymessage>
             <tr>
-                <td colspan="8">Ничего не найдено</td>
+                <td colspan="8">{{ 'COMMON.NO_RESULTS' | translate }}</td>
             </tr>
         </ng-template>
         <ng-template #loadingbody>
             <tr>
-                <td colspan="8">Идет загрузка. Ожидайте...</td>
+                <td colspan="8">{{ 'COMMON.LOADING' | translate }}</td>
             </tr>
         </ng-template>
     </p-table>
 </div>
 
-<p-dialog header="Добавление Файлов" [(visible)]="displayDialog" [breakpoints]="{ '960px': '75vw' }"
+<p-dialog [header]="'FILES.ADD_FILES_TITLE' | translate" [(visible)]="displayDialog" [breakpoints]="{ '960px': '75vw' }"
           [style]="{ width: '30vw' }" [modal]="true" (onHide)="closeDialog()">
     <form [formGroup]="uploadForm" class="flex flex-col gap-4">
         <div class="flex flex-col gap-2 p-fluid">
-            <label for="category">Категория</label>
+            <label for="category">{{ 'FILES.CATEGORY' | translate }}</label>
             <p-select id="category" [options]="categories" formControlName="category_id" filter optionLabel="display_name"
-                      placeholder="Выберите категорию" [appendTo]="'body'"></p-select>
+                      [placeholder]="'FILES.SELECT_CATEGORY' | translate" [appendTo]="'body'"></p-select>
         </div>
 
         <div class="flex flex-col gap-2 p-fluid">
             <app-date-picker
-                label="Выберите дату"
+                [label]="'FILES.SELECT_DATE' | translate"
                 formControlName="date"
                 [showTime]="false"
-                errorMessage="Укажите дату">
+                [errorMessage]="'FILES.DATE_REQUIRED' | translate">
             </app-date-picker>
         </div>
 
         <p-fileupload #uploader name="files[]" [multiple]="true" accept=".pdf" mode="advanced" [customUpload]="true" (uploadHandler)="handleFileUpload($event, uploader)"
-                      chooseLabel="Выберите файлы" uploadLabel="Загрузить" cancelLabel="Отмена">
+                      [chooseLabel]="'FILES.CHOOSE_FILES' | translate" [uploadLabel]="'FILES.UPLOAD' | translate" [cancelLabel]="'COMMON.CANCEL' | translate">
             <ng-template pTemplate="empty">
                 <div class="flex items-center justify-center flex-col">
                     <i class="pi pi-cloud-upload border-circle p-5 text-8xl text-400"></i>
-                    <p class="mt-4 mb-0">Перетащите файлы сюда для загрузки.</p>
+                    <p class="mt-4 mb-0">{{ 'FILES.DRAG_DROP' | translate }}</p>
                 </div>
             </ng-template>
         </p-fileupload>
     </form>
 
     <ng-template pTemplate="footer">
-        <p-button label="Отмена" (click)="closeDialog()" styleClass="p-button-text" />
+        <p-button [label]="'COMMON.CANCEL' | translate" (click)="closeDialog()" styleClass="p-button-text" />
     </ng-template>
 </p-dialog>

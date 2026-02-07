@@ -16,6 +16,7 @@ import { Select } from 'primeng/select';
 import { DatePicker } from 'primeng/datepicker';
 import { Textarea } from 'primeng/textarea';
 import { MessageService } from 'primeng/api';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { EmployeeCabinetService } from '@/core/services/employee-cabinet.service';
 import {
     EmployeeProfile,
@@ -53,7 +54,8 @@ import {
         TableModule,
         Select,
         DatePicker,
-        Textarea
+        Textarea,
+        TranslateModule
     ],
     templateUrl: './employee-cabinet.component.html',
     styleUrl: './employee-cabinet.component.scss'
@@ -93,6 +95,7 @@ export class EmployeeCabinetComponent implements OnInit, OnDestroy {
     private fb = inject(FormBuilder);
     private messageService = inject(MessageService);
     private cabinetService = inject(EmployeeCabinetService);
+    private translate = inject(TranslateService);
     private destroy$ = new Subject<void>();
 
     constructor() {
@@ -142,8 +145,8 @@ export class EmployeeCabinetComponent implements OnInit, OnDestroy {
                 this.loading = false;
             },
             error: (err) => {
-                console.error('Ошибка загрузки данных:', err);
-                this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось загрузить данные' });
+                console.error('Error loading data:', err);
+                this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('HRM.EMPLOYEE_CABINET.LOAD_ERROR') });
                 this.loading = false;
             }
         });
@@ -178,12 +181,12 @@ export class EmployeeCabinetComponent implements OnInit, OnDestroy {
             .subscribe({
                 next: (updatedProfile) => {
                     this.profile = updatedProfile;
-                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Профиль обновлен' });
+                    this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('HRM.EMPLOYEE_CABINET.PROFILE_UPDATED') });
                     this.displayEditProfileDialog = false;
                 },
                 error: (err) => {
-                    console.error('Ошибка обновления профиля:', err);
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось обновить профиль' });
+                    console.error('Error updating profile:', err);
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('HRM.EMPLOYEE_CABINET.PROFILE_UPDATE_ERROR') });
                 }
             });
     }
@@ -211,12 +214,12 @@ export class EmployeeCabinetComponent implements OnInit, OnDestroy {
             .subscribe({
                 next: (newRequest) => {
                     this.vacationRequests = [newRequest, ...this.vacationRequests];
-                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Заявка на отпуск отправлена на согласование' });
+                    this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('HRM.EMPLOYEE_CABINET.VACATION_SUBMITTED') });
                     this.displayVacationDialog = false;
                 },
                 error: (err) => {
-                    console.error('Ошибка создания заявки:', err);
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось создать заявку' });
+                    console.error('Error creating request:', err);
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('HRM.EMPLOYEE_CABINET.VACATION_SUBMIT_ERROR') });
                 }
             });
     }
@@ -231,11 +234,11 @@ export class EmployeeCabinetComponent implements OnInit, OnDestroy {
                         this.vacationRequests[index] = updatedRequest;
                         this.vacationRequests = [...this.vacationRequests];
                     }
-                    this.messageService.add({ severity: 'info', summary: 'Отменено', detail: 'Заявка на отпуск отменена' });
+                    this.messageService.add({ severity: 'info', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('HRM.EMPLOYEE_CABINET.VACATION_CANCELLED') });
                 },
                 error: (err) => {
-                    console.error('Ошибка отмены заявки:', err);
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось отменить заявку' });
+                    console.error('Error cancelling request:', err);
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('HRM.EMPLOYEE_CABINET.VACATION_CANCEL_ERROR') });
                 }
             });
     }
@@ -258,8 +261,8 @@ export class EmployeeCabinetComponent implements OnInit, OnDestroy {
                     window.URL.revokeObjectURL(url);
                 },
                 error: (err) => {
-                    console.error('Ошибка скачивания:', err);
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось скачать расчетный лист' });
+                    console.error('Error downloading:', err);
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('HRM.EMPLOYEE_CABINET.PAYSLIP_ERROR') });
                 }
             });
     }
@@ -277,8 +280,8 @@ export class EmployeeCabinetComponent implements OnInit, OnDestroy {
                     window.URL.revokeObjectURL(url);
                 },
                 error: (err) => {
-                    console.error('Ошибка скачивания:', err);
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось скачать документ' });
+                    console.error('Error downloading:', err);
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('HRM.EMPLOYEE_CABINET.DOCUMENT_ERROR') });
                 }
             });
     }
@@ -299,7 +302,7 @@ export class EmployeeCabinetComponent implements OnInit, OnDestroy {
                     notification.read = true;
                     notification.read_at = new Date().toISOString();
                 },
-                error: (err) => console.error('Ошибка:', err)
+                error: (err) => console.error('Error:', err)
             });
     }
 
@@ -313,7 +316,7 @@ export class EmployeeCabinetComponent implements OnInit, OnDestroy {
                         n.read_at = new Date().toISOString();
                     });
                 },
-                error: (err) => console.error('Ошибка:', err)
+                error: (err) => console.error('Error:', err)
             });
     }
 
@@ -331,24 +334,29 @@ export class EmployeeCabinetComponent implements OnInit, OnDestroy {
     }
 
     getMonthName(month: number): string {
-        const months = ['', 'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
-        return months[month] || '';
+        return this.translate.instant(`HRM.EMPLOYEE_CABINET.MONTH_${month}`);
     }
 
     formatDate(dateStr: string): string {
         if (!dateStr) return '';
         const date = new Date(dateStr);
-        return date.toLocaleDateString('ru-RU');
+        const lang = this.translate.currentLang || 'ru';
+        const locale = lang === 'uz-latn' ? 'uz' : lang === 'uz-cyrl' ? 'uz' : lang;
+        return date.toLocaleDateString(locale);
     }
 
     formatDateTime(dateStr: string): string {
         if (!dateStr) return '';
         const date = new Date(dateStr);
-        return date.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+        const lang = this.translate.currentLang || 'ru';
+        const locale = lang === 'uz-latn' ? 'uz' : lang === 'uz-cyrl' ? 'uz' : lang;
+        return date.toLocaleDateString(locale, { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
     }
 
     formatCurrency(value: number): string {
-        return new Intl.NumberFormat('ru-RU').format(value) + ' сум';
+        const lang = this.translate.currentLang || 'ru';
+        const locale = lang === 'uz-latn' ? 'uz' : lang === 'uz-cyrl' ? 'uz' : lang;
+        return new Intl.NumberFormat(locale).format(value) + ' сум';
     }
 
     getVacationTypeLabel(type: string): string {
@@ -391,11 +399,13 @@ export class EmployeeCabinetComponent implements OnInit, OnDestroy {
         const diffHours = Math.floor(diffMs / 3600000);
         const diffDays = Math.floor(diffMs / 86400000);
 
-        if (diffMins < 60) return `${diffMins} мин. назад`;
-        if (diffHours < 24) return `${diffHours} ч. назад`;
-        if (diffDays === 1) return 'Вчера';
-        if (diffDays < 7) return `${diffDays} дн. назад`;
-        return date.toLocaleDateString('ru-RU');
+        if (diffMins < 60) return `${diffMins} ${this.translate.instant('HRM.EMPLOYEE_CABINET.MIN_AGO')}`;
+        if (diffHours < 24) return `${diffHours} ${this.translate.instant('HRM.EMPLOYEE_CABINET.HOURS_AGO')}`;
+        if (diffDays === 1) return this.translate.instant('HRM.EMPLOYEE_CABINET.YESTERDAY');
+        if (diffDays < 7) return `${diffDays} ${this.translate.instant('HRM.EMPLOYEE_CABINET.DAYS_AGO')}`;
+        const lang = this.translate.currentLang || 'ru';
+        const locale = lang === 'uz-latn' ? 'uz' : lang === 'uz-cyrl' ? 'uz' : lang;
+        return date.toLocaleDateString(locale);
     }
 
     ngOnDestroy() {

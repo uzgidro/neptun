@@ -29,24 +29,24 @@
                             <p class="text-lg text-gray-600 dark:text-gray-400 mt-1">{{ profile.position_name }}</p>
                             <p class="text-sm text-gray-500">{{ profile.department_name }}</p>
                         </div>
-                        <button pButton icon="pi pi-pencil" label="Редактировать" class="p-button-outlined p-button-sm" (click)="openEditProfileDialog()"></button>
+                        <button pButton icon="pi pi-pencil" [label]="'HRM.EMPLOYEE_CABINET.EDIT_PROFILE' | translate" class="p-button-outlined p-button-sm" (click)="openEditProfileDialog()"></button>
                     </div>
 
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
                         <div>
-                            <span class="text-xs text-gray-400 block">Табельный номер</span>
+                            <span class="text-xs text-gray-400 block">{{ 'HRM.EMPLOYEE_CABINET.EMPLOYEE_ID' | translate }}</span>
                             <span class="font-medium">{{ profile.employee_id }}</span>
                         </div>
                         <div>
-                            <span class="text-xs text-gray-400 block">Дата принятия</span>
+                            <span class="text-xs text-gray-400 block">{{ 'HRM.EMPLOYEE_CABINET.HIRE_DATE' | translate }}</span>
                             <span class="font-medium">{{ formatDate(profile.hire_date) }}</span>
                         </div>
                         <div>
-                            <span class="text-xs text-gray-400 block">Email</span>
+                            <span class="text-xs text-gray-400 block">{{ 'HRM.EMPLOYEE_CABINET.EMAIL' | translate }}</span>
                             <span class="font-medium">{{ profile.email }}</span>
                         </div>
                         <div>
-                            <span class="text-xs text-gray-400 block">Телефон</span>
+                            <span class="text-xs text-gray-400 block">{{ 'HRM.EMPLOYEE_CABINET.PHONE' | translate }}</span>
                             <span class="font-medium">{{ profile.phone || '—' }}</span>
                         </div>
                     </div>
@@ -63,16 +63,16 @@
                     <div class="card">
                         <div class="flex justify-between items-center mb-4">
                             <h3 class="text-lg font-semibold m-0">
-                                <i class="pi pi-calendar mr-2 text-orange-500"></i>Остаток отпусков
+                                <i class="pi pi-calendar mr-2 text-orange-500"></i>{{ 'HRM.EMPLOYEE_CABINET.LEAVE_BALANCE' | translate }}
                             </h3>
-                            <button pButton label="Подать заявление" icon="pi pi-plus" class="p-button-sm" (click)="openVacationDialog()"></button>
+                            <button pButton [label]="'HRM.EMPLOYEE_CABINET.SUBMIT_REQUEST' | translate" icon="pi pi-plus" class="p-button-sm" (click)="openVacationDialog()"></button>
                         </div>
 
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                             <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4">
-                                <div class="text-sm text-gray-500 mb-1">Основной отпуск</div>
+                                <div class="text-sm text-gray-500 mb-1">{{ 'HRM.EMPLOYEE_CABINET.ANNUAL_LEAVE' | translate }}</div>
                                 <div class="text-2xl font-bold text-blue-600">{{ leaveBalance.annual_leave_remaining }}</div>
-                                <div class="text-xs text-gray-400">из {{ leaveBalance.annual_leave_total }} дней</div>
+                                <div class="text-xs text-gray-400">{{ 'HRM.EMPLOYEE_CABINET.OF_DAYS' | translate:{ total: leaveBalance.annual_leave_total } }}</div>
                                 <p-progressBar
                                     [value]="(leaveBalance.annual_leave_remaining / leaveBalance.annual_leave_total) * 100"
                                     [showValue]="false"
@@ -82,9 +82,9 @@
                             </div>
 
                             <div class="bg-green-50 dark:bg-green-900/20 rounded-lg p-4">
-                                <div class="text-sm text-gray-500 mb-1">Дополнительный</div>
+                                <div class="text-sm text-gray-500 mb-1">{{ 'HRM.EMPLOYEE_CABINET.ADDITIONAL_LEAVE' | translate }}</div>
                                 <div class="text-2xl font-bold text-green-600">{{ leaveBalance.additional_leave_remaining }}</div>
-                                <div class="text-xs text-gray-400">из {{ leaveBalance.additional_leave_total }} дней</div>
+                                <div class="text-xs text-gray-400">{{ 'HRM.EMPLOYEE_CABINET.OF_DAYS' | translate:{ total: leaveBalance.additional_leave_total } }}</div>
                                 <p-progressBar
                                     [value]="(leaveBalance.additional_leave_remaining / leaveBalance.additional_leave_total) * 100"
                                     [showValue]="false"
@@ -94,9 +94,9 @@
                             </div>
 
                             <div class="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-4">
-                                <div class="text-sm text-gray-500 mb-1">Учебный отпуск</div>
+                                <div class="text-sm text-gray-500 mb-1">{{ 'HRM.EMPLOYEE_CABINET.STUDY_LEAVE' | translate }}</div>
                                 <div class="text-2xl font-bold text-purple-600">{{ leaveBalance.study_leave_remaining }}</div>
-                                <div class="text-xs text-gray-400">из {{ leaveBalance.study_leave_total }} дней</div>
+                                <div class="text-xs text-gray-400">{{ 'HRM.EMPLOYEE_CABINET.OF_DAYS' | translate:{ total: leaveBalance.study_leave_total } }}</div>
                                 <p-progressBar
                                     [value]="(leaveBalance.study_leave_remaining / leaveBalance.study_leave_total) * 100"
                                     [showValue]="false"
@@ -106,16 +106,16 @@
                             </div>
 
                             <div class="bg-orange-50 dark:bg-orange-900/20 rounded-lg p-4">
-                                <div class="text-sm text-gray-500 mb-1">Отгулы</div>
+                                <div class="text-sm text-gray-500 mb-1">{{ 'HRM.EMPLOYEE_CABINET.COMP_DAYS' | translate }}</div>
                                 <div class="text-2xl font-bold text-orange-600">{{ leaveBalance.comp_days_available }}</div>
-                                <div class="text-xs text-gray-400">доступно</div>
+                                <div class="text-xs text-gray-400">{{ 'HRM.EMPLOYEE_CABINET.AVAILABLE' | translate }}</div>
                             </div>
                         </div>
 
                         <!-- Vacation Requests -->
                         @if (vacationRequests.length > 0) {
                             <div class="mt-4">
-                                <h4 class="font-medium mb-2">Мои заявки на отпуск</h4>
+                                <h4 class="font-medium mb-2">{{ 'HRM.EMPLOYEE_CABINET.MY_VACATION_REQUESTS' | translate }}</h4>
                                 <div class="space-y-2">
                                     @for (request of vacationRequests; track request.id) {
                                         <div class="flex justify-between items-center p-3 bg-surface-100 dark:bg-surface-700 rounded-lg">
@@ -123,14 +123,14 @@
                                                 <span class="font-medium">{{ getVacationTypeLabel(request.type) }}</span>
                                                 <span class="text-gray-500 ml-2">
                                                     {{ formatDate(request.start_date) }} — {{ formatDate(request.end_date) }}
-                                                    ({{ request.days_count }} дн.)
+                                                    ({{ request.days_count }} {{ 'HRM.EMPLOYEE_CABINET.DAYS_SHORT' | translate }})
                                                 </span>
                                             </div>
                                             <div class="flex items-center gap-2">
                                                 <p-tag [value]="getVacationStatusLabel(request.status)" [severity]="getVacationStatusSeverity(request.status)"></p-tag>
                                                 @if (request.status === 'pending') {
                                                     <button pButton icon="pi pi-times" class="p-button-text p-button-danger p-button-sm"
-                                                            pTooltip="Отменить" (click)="cancelVacationRequest(request)"></button>
+                                                            [pTooltip]="'HRM.EMPLOYEE_CABINET.CANCEL' | translate" (click)="cancelVacationRequest(request)"></button>
                                                 }
                                             </div>
                                         </div>
@@ -146,19 +146,19 @@
                     <div class="card">
                         <div class="flex justify-between items-center mb-4">
                             <h3 class="text-lg font-semibold m-0">
-                                <i class="pi pi-wallet mr-2 text-green-500"></i>Моя зарплата
+                                <i class="pi pi-wallet mr-2 text-green-500"></i>{{ 'HRM.EMPLOYEE_CABINET.MY_SALARY' | translate }}
                             </h3>
-                            <button pButton label="История выплат" icon="pi pi-history" class="p-button-text p-button-sm"
+                            <button pButton [label]="'HRM.EMPLOYEE_CABINET.PAYMENT_HISTORY' | translate" icon="pi pi-history" class="p-button-text p-button-sm"
                                     (click)="displayPaymentHistoryDialog = true"></button>
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div class="bg-gradient-to-br from-green-500 to-green-600 text-white rounded-xl p-5">
-                                <div class="text-sm opacity-80 mb-1">Последняя выплата ({{ getMonthName(salaryInfo.last_payment.period_month) }})</div>
+                                <div class="text-sm opacity-80 mb-1">{{ 'HRM.EMPLOYEE_CABINET.LAST_PAYMENT' | translate }} ({{ getMonthName(salaryInfo.last_payment.period_month) }})</div>
                                 <div class="text-3xl font-bold">{{ formatCurrency(salaryInfo.last_payment.net_salary) }}</div>
                                 <div class="flex items-center gap-2 mt-2">
                                     <p-tag
-                                        [value]="salaryInfo.last_payment.status === 'paid' ? 'Выплачена' : 'Ожидает'"
+                                        [value]="salaryInfo.last_payment.status === 'paid' ? ('HRM.EMPLOYEE_CABINET.PAID' | translate) : ('HRM.EMPLOYEE_CABINET.PENDING' | translate)"
                                         [severity]="salaryInfo.last_payment.status === 'paid' ? 'success' : 'warn'"
                                         [style]="{ 'background-color': 'rgba(255,255,255,0.2)', 'color': 'white' }">
                                     </p-tag>
@@ -170,20 +170,20 @@
 
                             <div class="space-y-3">
                                 <div class="flex justify-between items-center">
-                                    <span class="text-gray-500">Оклад</span>
+                                    <span class="text-gray-500">{{ 'HRM.EMPLOYEE_CABINET.BASE_SALARY' | translate }}</span>
                                     <span class="font-medium">{{ formatCurrency(salaryInfo.current_salary.base_salary) }}</span>
                                 </div>
                                 <div class="flex justify-between items-center">
-                                    <span class="text-gray-500">Надбавки</span>
+                                    <span class="text-gray-500">{{ 'HRM.EMPLOYEE_CABINET.ALLOWANCES' | translate }}</span>
                                     <span class="font-medium text-green-600">+{{ formatCurrency(salaryInfo.current_salary.total_allowances) }}</span>
                                 </div>
                                 <div class="flex justify-between items-center">
-                                    <span class="text-gray-500">Удержания</span>
+                                    <span class="text-gray-500">{{ 'HRM.EMPLOYEE_CABINET.DEDUCTIONS' | translate }}</span>
                                     <span class="font-medium text-red-600">-{{ formatCurrency(salaryInfo.last_payment.total_deductions) }}</span>
                                 </div>
                                 <hr class="border-gray-200 dark:border-gray-700">
                                 <div class="flex justify-between items-center">
-                                    <button pButton label="Скачать расчетный лист" icon="pi pi-download" class="p-button-outlined p-button-sm"
+                                    <button pButton [label]="'HRM.EMPLOYEE_CABINET.DOWNLOAD_PAYSLIP' | translate" icon="pi pi-download" class="p-button-outlined p-button-sm"
                                             (click)="downloadPayslip(salaryInfo.last_payment)"></button>
                                 </div>
                             </div>
@@ -196,15 +196,15 @@
                     <div class="card">
                         <div class="flex justify-between items-center mb-4">
                             <h3 class="text-lg font-semibold m-0">
-                                <i class="pi pi-book mr-2 text-blue-500"></i>Мое обучение
+                                <i class="pi pi-book mr-2 text-blue-500"></i>{{ 'HRM.EMPLOYEE_CABINET.MY_TRAINING' | translate }}
                             </h3>
-                            <a routerLink="/hrm/training" class="text-blue-500 text-sm hover:underline">Каталог курсов</a>
+                            <a routerLink="/hrm/training" class="text-blue-500 text-sm hover:underline">{{ 'HRM.EMPLOYEE_CABINET.COURSE_CATALOG' | translate }}</a>
                         </div>
 
                         <!-- In Progress -->
                         @if (training.in_progress.length > 0) {
                             <div class="mb-4">
-                                <h4 class="text-sm font-medium text-gray-500 mb-2">ТЕКУЩИЕ КУРСЫ</h4>
+                                <h4 class="text-sm font-medium text-gray-500 mb-2">{{ 'HRM.EMPLOYEE_CABINET.CURRENT_COURSES' | translate }}</h4>
                                 @for (course of training.in_progress; track course.id) {
                                     <div class="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg mb-2">
                                         <div class="flex justify-between items-start">
@@ -213,16 +213,16 @@
                                                 <div class="text-sm text-gray-500">{{ course.course_type }}</div>
                                             </div>
                                             @if (course.deadline) {
-                                                <span class="text-sm text-gray-500">до {{ formatDate(course.deadline) }}</span>
+                                                <span class="text-sm text-gray-500">{{ 'HRM.EMPLOYEE_CABINET.UNTIL_DATE' | translate }} {{ formatDate(course.deadline) }}</span>
                                             }
                                         </div>
                                         <div class="mt-3">
                                             <div class="flex justify-between text-sm mb-1">
-                                                <span>Прогресс</span>
+                                                <span>{{ 'HRM.EMPLOYEE_CABINET.PROGRESS' | translate }}</span>
                                                 <span>{{ course.progress_percent }}%</span>
                                             </div>
                                             <p-progressBar [value]="course.progress_percent" [showValue]="false" [style]="{ height: '8px' }"></p-progressBar>
-                                            <div class="text-xs text-gray-500 mt-1">Модулей: {{ course.modules_completed }} из {{ course.modules_total }}</div>
+                                            <div class="text-xs text-gray-500 mt-1">{{ 'HRM.EMPLOYEE_CABINET.MODULES' | translate }}: {{ course.modules_completed }} {{ 'HRM.EMPLOYEE_CABINET.OF' | translate }} {{ course.modules_total }}</div>
                                         </div>
                                     </div>
                                 }
@@ -232,15 +232,15 @@
                         <!-- Assigned -->
                         @if (training.assigned.length > 0) {
                             <div class="mb-4">
-                                <h4 class="text-sm font-medium text-gray-500 mb-2">НАЗНАЧЕННЫЕ</h4>
+                                <h4 class="text-sm font-medium text-gray-500 mb-2">{{ 'HRM.EMPLOYEE_CABINET.ASSIGNED' | translate }}</h4>
                                 @for (course of training.assigned; track course.id) {
                                     <div class="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg mb-2 flex justify-between items-center">
                                         <div>
                                             <div class="font-medium">{{ course.course_name }}</div>
-                                            <div class="text-sm text-gray-500">Начало: {{ formatDate(course.start_date) }}</div>
+                                            <div class="text-sm text-gray-500">{{ 'HRM.EMPLOYEE_CABINET.START' | translate }}: {{ formatDate(course.start_date) }}</div>
                                         </div>
                                         @if (course.is_mandatory) {
-                                            <p-tag value="Обязательный" severity="danger"></p-tag>
+                                            <p-tag [value]="'HRM.EMPLOYEE_CABINET.MANDATORY' | translate" severity="danger"></p-tag>
                                         }
                                     </div>
                                 }
@@ -250,26 +250,26 @@
                         <!-- Completed -->
                         @if (training.completed.length > 0) {
                             <div>
-                                <h4 class="text-sm font-medium text-gray-500 mb-2">ЗАВЕРШЕННЫЕ</h4>
+                                <h4 class="text-sm font-medium text-gray-500 mb-2">{{ 'HRM.EMPLOYEE_CABINET.COMPLETED' | translate }}</h4>
                                 @for (course of training.completed; track course.id) {
                                     <div class="p-3 bg-green-50 dark:bg-green-900/20 rounded-lg mb-2">
                                         <div class="flex justify-between items-start">
                                             <div>
                                                 <div class="font-medium">{{ course.course_name }}</div>
-                                                <div class="text-sm text-gray-500">Завершен: {{ formatDate(course.completed_at) }}</div>
+                                                <div class="text-sm text-gray-500">{{ 'HRM.EMPLOYEE_CABINET.COMPLETED' | translate }}: {{ formatDate(course.completed_at) }}</div>
                                                 @if (course.certificate_number) {
                                                     <div class="text-sm text-green-600 mt-1">
-                                                        <i class="pi pi-verified mr-1"></i>Сертификат: {{ course.certificate_number }}
+                                                        <i class="pi pi-verified mr-1"></i>{{ 'HRM.EMPLOYEE_CABINET.CERTIFICATE' | translate }}: {{ course.certificate_number }}
                                                     </div>
                                                 }
                                             </div>
                                             <div class="flex flex-col items-end gap-1">
                                                 @if (course.score) {
-                                                    <p-tag [value]="course.score + ' баллов'" severity="success"></p-tag>
+                                                    <p-tag [value]="course.score + ' ' + ('HRM.EMPLOYEE_CABINET.POINTS' | translate)" severity="success"></p-tag>
                                                 }
                                                 @if (course.certificate_url) {
                                                     <button pButton icon="pi pi-download" class="p-button-text p-button-sm"
-                                                            pTooltip="Скачать сертификат" (click)="downloadCertificate(course)"></button>
+                                                            [pTooltip]="'HRM.EMPLOYEE_CABINET.DOWNLOAD_CERTIFICATE' | translate" (click)="downloadCertificate(course)"></button>
                                                 }
                                             </div>
                                         </div>
@@ -288,9 +288,9 @@
                     <div class="card">
                         <div class="flex justify-between items-center mb-4">
                             <h3 class="text-lg font-semibold m-0">
-                                <i class="pi pi-chart-bar mr-2 text-purple-500"></i>Мои компетенции
+                                <i class="pi pi-chart-bar mr-2 text-purple-500"></i>{{ 'HRM.EMPLOYEE_CABINET.MY_COMPETENCIES' | translate }}
                             </h3>
-                            <a routerLink="/hrm/competency" class="text-blue-500 text-sm hover:underline">Подробнее</a>
+                            <a routerLink="/hrm/competency" class="text-blue-500 text-sm hover:underline">{{ 'HRM.EMPLOYEE_CABINET.DETAILS' | translate }}</a>
                         </div>
 
                         <div class="space-y-3">
@@ -309,21 +309,21 @@
 
                         @if (competencies.development_plan && competencies.development_plan.length > 0) {
                             <hr class="my-4 border-gray-200 dark:border-gray-700">
-                            <h4 class="text-sm font-medium text-gray-500 mb-2">ЦЕЛИ РАЗВИТИЯ</h4>
+                            <h4 class="text-sm font-medium text-gray-500 mb-2">{{ 'HRM.EMPLOYEE_CABINET.DEVELOPMENT_GOALS' | translate }}</h4>
                             @for (goal of competencies.development_plan; track goal.id) {
                                 <div class="p-2 bg-purple-50 dark:bg-purple-900/20 rounded-lg mb-2">
                                     <div class="flex justify-between items-center">
                                         <span class="text-sm font-medium">{{ goal.competency_name }}</span>
                                         <span class="text-xs text-gray-500">{{ goal.current_level }} → {{ goal.target_level }}</span>
                                     </div>
-                                    <div class="text-xs text-gray-500">до {{ formatDate(goal.target_date) }}</div>
+                                    <div class="text-xs text-gray-500">{{ 'HRM.EMPLOYEE_CABINET.UNTIL_DATE' | translate }} {{ formatDate(goal.target_date) }}</div>
                                 </div>
                             }
                         }
 
                         @if (competencies.next_assessment_date) {
                             <div class="mt-4 p-3 bg-surface-100 dark:bg-surface-700 rounded-lg text-center">
-                                <div class="text-xs text-gray-500">Следующая оценка</div>
+                                <div class="text-xs text-gray-500">{{ 'HRM.EMPLOYEE_CABINET.NEXT_ASSESSMENT' | translate }}</div>
                                 <div class="font-medium">{{ formatDate(competencies.next_assessment_date) }}</div>
                             </div>
                         }
@@ -335,13 +335,13 @@
                     <div class="card">
                         <div class="flex justify-between items-center mb-4">
                             <h3 class="text-lg font-semibold m-0">
-                                <i class="pi pi-bell mr-2 text-yellow-500"></i>Уведомления
+                                <i class="pi pi-bell mr-2 text-yellow-500"></i>{{ 'HRM.EMPLOYEE_CABINET.NOTIFICATIONS' | translate }}
                                 @if (getUnreadNotificationsCount() > 0) {
                                     <p-badge [value]="getUnreadNotificationsCount().toString()" severity="danger" class="ml-2"></p-badge>
                                 }
                             </h3>
                             @if (getUnreadNotificationsCount() > 0) {
-                                <button pButton label="Прочитать все" class="p-button-text p-button-sm" (click)="markAllNotificationsAsRead()"></button>
+                                <button pButton [label]="'HRM.EMPLOYEE_CABINET.READ_ALL' | translate" class="p-button-text p-button-sm" (click)="markAllNotificationsAsRead()"></button>
                             }
                         </div>
 
@@ -373,7 +373,7 @@
                 @if (documents.length > 0) {
                     <div class="card">
                         <h3 class="text-lg font-semibold m-0 mb-4">
-                            <i class="pi pi-folder mr-2 text-cyan-500"></i>Мои документы
+                            <i class="pi pi-folder mr-2 text-cyan-500"></i>{{ 'HRM.EMPLOYEE_CABINET.MY_DOCUMENTS' | translate }}
                         </h3>
 
                         <div class="space-y-2">
@@ -386,7 +386,7 @@
                                     </div>
                                     @if (doc.can_download) {
                                         <button pButton icon="pi pi-download" class="p-button-text p-button-sm p-button-rounded"
-                                                pTooltip="Скачать" (click)="downloadDocument(doc)"></button>
+                                                [pTooltip]="'COMMON.DOWNLOAD' | translate" (click)="downloadDocument(doc)"></button>
                                     }
                                 </div>
                             }
@@ -398,7 +398,7 @@
                 @if (tasks.length > 0) {
                     <div class="card">
                         <h3 class="text-lg font-semibold m-0 mb-4">
-                            <i class="pi pi-list-check mr-2 text-red-500"></i>Мои задачи
+                            <i class="pi pi-list-check mr-2 text-red-500"></i>{{ 'HRM.EMPLOYEE_CABINET.MY_TASKS' | translate }}
                         </h3>
 
                         <div class="space-y-2">
@@ -409,7 +409,7 @@
                                     <div class="flex justify-between items-start">
                                         <div class="font-medium text-sm">{{ task.title }}</div>
                                         @if (task.priority === 'high' || task.priority === 'urgent') {
-                                            <p-tag value="Важно" severity="danger" [style]="{ 'font-size': '0.65rem' }"></p-tag>
+                                            <p-tag [value]="'HRM.EMPLOYEE_CABINET.IMPORTANT' | translate" severity="danger" [style]="{ 'font-size': '0.65rem' }"></p-tag>
                                         }
                                     </div>
                                     @if (task.description) {
@@ -417,7 +417,7 @@
                                     }
                                     @if (task.due_date) {
                                         <div class="text-xs text-gray-400 mt-2">
-                                            <i class="pi pi-clock mr-1"></i>до {{ formatDate(task.due_date) }}
+                                            <i class="pi pi-clock mr-1"></i>{{ 'HRM.EMPLOYEE_CABINET.UNTIL_DATE' | translate }} {{ formatDate(task.due_date) }}
                                         </div>
                                     }
                                 </div>
@@ -433,50 +433,50 @@
 <!-- Vacation Request Dialog -->
 <p-dialog
     [(visible)]="displayVacationDialog"
-    header="Заявление на отпуск"
+    [header]="'HRM.EMPLOYEE_CABINET.VACATION_REQUEST' | translate"
     [modal]="true"
     [style]="{ width: '500px' }"
     [closable]="true">
     <form [formGroup]="vacationForm" class="p-4">
         <div class="space-y-4">
             <div class="field">
-                <label class="font-medium">Тип отпуска *</label>
+                <label class="font-medium">{{ 'HRM.EMPLOYEE_CABINET.VACATION_TYPE' | translate }} *</label>
                 <p-select
                     formControlName="type"
                     [options]="vacationTypes"
                     optionLabel="label"
-                    placeholder="Выберите тип"
+                    [placeholder]="'HRM.EMPLOYEE_CABINET.SELECT_TYPE' | translate"
                     class="w-full">
                 </p-select>
             </div>
 
             <div class="grid grid-cols-2 gap-4">
                 <div class="field">
-                    <label class="font-medium">Дата начала *</label>
-                    <p-datepicker formControlName="start_date" [showIcon]="true" class="w-full"></p-datepicker>
+                    <label class="font-medium">{{ 'HRM.EMPLOYEE_CABINET.START_DATE' | translate }} *</label>
+                    <p-date-picker formControlName="start_date" [showIcon]="true" class="w-full"></p-date-picker>
                 </div>
                 <div class="field">
-                    <label class="font-medium">Дата окончания *</label>
-                    <p-datepicker formControlName="end_date" [showIcon]="true" class="w-full"></p-datepicker>
+                    <label class="font-medium">{{ 'HRM.EMPLOYEE_CABINET.END_DATE' | translate }} *</label>
+                    <p-date-picker formControlName="end_date" [showIcon]="true" class="w-full"></p-date-picker>
                 </div>
             </div>
 
             <div class="field">
-                <label class="font-medium">Причина / комментарий</label>
+                <label class="font-medium">{{ 'HRM.EMPLOYEE_CABINET.REASON_COMMENT' | translate }}</label>
                 <textarea pTextarea formControlName="reason" rows="3" class="w-full"></textarea>
             </div>
         </div>
     </form>
     <ng-template #footer>
-        <button pButton label="Отмена" icon="pi pi-times" class="p-button-text" (click)="displayVacationDialog = false"></button>
-        <button pButton label="Отправить на согласование" icon="pi pi-send" (click)="submitVacationRequest()"></button>
+        <button pButton [label]="'COMMON.CANCEL' | translate" icon="pi pi-times" class="p-button-text" (click)="displayVacationDialog = false"></button>
+        <button pButton [label]="'HRM.EMPLOYEE_CABINET.SUBMIT_FOR_APPROVAL' | translate" icon="pi pi-send" (click)="submitVacationRequest()"></button>
     </ng-template>
 </p-dialog>
 
 <!-- Payment History Dialog -->
 <p-dialog
     [(visible)]="displayPaymentHistoryDialog"
-    header="История выплат"
+    [header]="'HRM.EMPLOYEE_CABINET.PAYMENT_HISTORY' | translate"
     [modal]="true"
     [style]="{ width: '700px' }"
     [closable]="true">
@@ -484,11 +484,11 @@
         <p-table [value]="salaryInfo.payment_history" [rows]="6" [paginator]="true">
             <ng-template #header>
                 <tr>
-                    <th>Период</th>
-                    <th class="text-right">Начислено</th>
-                    <th class="text-right">Удержано</th>
-                    <th class="text-right">К выплате</th>
-                    <th>Статус</th>
+                    <th>{{ 'HRM.EMPLOYEE_CABINET.PERIOD' | translate }}</th>
+                    <th class="text-right">{{ 'HRM.EMPLOYEE_CABINET.ACCRUED' | translate }}</th>
+                    <th class="text-right">{{ 'HRM.EMPLOYEE_CABINET.WITHHELD' | translate }}</th>
+                    <th class="text-right">{{ 'HRM.EMPLOYEE_CABINET.NET_PAY' | translate }}</th>
+                    <th>{{ 'COMMON.STATUS' | translate }}</th>
                     <th></th>
                 </tr>
             </ng-template>
@@ -500,13 +500,13 @@
                     <td class="text-right font-bold">{{ formatCurrency(payment.net_salary) }}</td>
                     <td>
                         <p-tag
-                            [value]="payment.status === 'paid' ? 'Выплачена' : 'Ожидает'"
+                            [value]="payment.status === 'paid' ? ('HRM.EMPLOYEE_CABINET.PAID' | translate) : ('HRM.EMPLOYEE_CABINET.PENDING' | translate)"
                             [severity]="payment.status === 'paid' ? 'success' : 'warn'">
                         </p-tag>
                     </td>
                     <td>
                         <button pButton icon="pi pi-download" class="p-button-text p-button-sm"
-                                pTooltip="Скачать расчетный лист" (click)="downloadPayslip(payment)"></button>
+                                [pTooltip]="'HRM.EMPLOYEE_CABINET.DOWNLOAD_PAYSLIP' | translate" (click)="downloadPayslip(payment)"></button>
                     </td>
                 </tr>
             </ng-template>
@@ -517,33 +517,33 @@
 <!-- Edit Profile Dialog -->
 <p-dialog
     [(visible)]="displayEditProfileDialog"
-    header="Редактирование профиля"
+    [header]="'HRM.EMPLOYEE_CABINET.EDIT_PROFILE_TITLE' | translate"
     [modal]="true"
     [style]="{ width: '500px' }"
     [closable]="true">
     <form [formGroup]="profileForm" class="p-4">
         <div class="space-y-4">
             <div class="field">
-                <label class="font-medium block mb-2">Телефон</label>
+                <label class="font-medium block mb-2">{{ 'HRM.EMPLOYEE_CABINET.PHONE' | translate }}</label>
                 <input pInputText formControlName="phone" class="w-full" placeholder="+998 (__) ___-__-__" />
             </div>
 
             <div class="field">
-                <label class="font-medium block mb-2">Внутренний номер</label>
+                <label class="font-medium block mb-2">{{ 'HRM.EMPLOYEE_CABINET.INTERNAL_PHONE' | translate }}</label>
                 <input pInputText formControlName="internal_phone" class="w-full" placeholder="1234" />
             </div>
 
             <div class="field">
-                <label class="font-medium block mb-2">Email</label>
+                <label class="font-medium block mb-2">{{ 'HRM.EMPLOYEE_CABINET.EMAIL' | translate }}</label>
                 <input pInputText formControlName="email" class="w-full" placeholder="example@company.uz" />
                 @if (profileForm.get('email')?.invalid && profileForm.get('email')?.touched) {
-                    <small class="text-red-500">Введите корректный email</small>
+                    <small class="text-red-500">{{ 'HRM.EMPLOYEE_CABINET.INVALID_EMAIL' | translate }}</small>
                 }
             </div>
         </div>
     </form>
     <ng-template #footer>
-        <button pButton label="Отмена" icon="pi pi-times" class="p-button-text" (click)="displayEditProfileDialog = false"></button>
-        <button pButton label="Сохранить" icon="pi pi-check" (click)="saveProfile()"></button>
+        <button pButton [label]="'COMMON.CANCEL' | translate" icon="pi pi-times" class="p-button-text" (click)="displayEditProfileDialog = false"></button>
+        <button pButton [label]="'COMMON.SAVE' | translate" icon="pi pi-check" (click)="saveProfile()"></button>
     </ng-template>
 </p-dialog>

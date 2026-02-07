@@ -11,6 +11,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { Tooltip } from 'primeng/tooltip';
 import { Tag } from 'primeng/tag';
 import { Checkbox } from 'primeng/checkbox';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { InputTextComponent } from '@/layout/component/dialog/input-text/input-text.component';
 import { SelectComponent } from '@/layout/component/dialog/select/select.component';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
@@ -41,7 +42,8 @@ import { TrainingService } from '@/core/services/training.service';
         Tag,
         Checkbox,
         DialogComponent,
-        TextareaComponent
+        TextareaComponent,
+        TranslateModule
     ],
     templateUrl: './training.component.html',
     styleUrl: './training.component.scss'
@@ -62,6 +64,7 @@ export class TrainingComponent implements OnInit, OnDestroy {
     private trainingService = inject(TrainingService);
     private fb = inject(FormBuilder);
     private messageService = inject(MessageService);
+    private translate = inject(TranslateService);
     private destroy$ = new Subject<void>();
 
     constructor() {
@@ -93,7 +96,7 @@ export class TrainingComponent implements OnInit, OnDestroy {
                     this.trainings = data;
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось загрузить данные' });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('HRM.DASHBOARD.LOAD_ERROR') });
                     console.error(err);
                 },
                 complete: () => (this.loading = false)
@@ -177,12 +180,12 @@ export class TrainingComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
-                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Обучение создано' });
+                    this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('COMMON.SUCCESS') });
                     this.loadTrainings();
                     this.closeDialog();
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось создать обучение' });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('COMMON.ERROR') });
                     console.error(err);
                 }
             });
@@ -211,12 +214,12 @@ export class TrainingComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
-                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Обучение обновлено' });
+                    this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('COMMON.SUCCESS') });
                     this.loadTrainings();
                     this.closeDialog();
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось обновить обучение' });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('COMMON.ERROR') });
                     console.error(err);
                 }
             });
@@ -234,13 +237,13 @@ export class TrainingComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
-                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Обучение удалено' });
+                    this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('COMMON.SUCCESS') });
                     this.loadTrainings();
                     this.displayDeleteDialog = false;
                     this.selectedTraining = null;
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось удалить обучение' });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('COMMON.ERROR') });
                     console.error(err);
                 }
             });

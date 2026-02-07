@@ -1,6 +1,6 @@
 <div class="card mb-0 cursor-pointer" (click)="openDialog()">
     <div class="flex justify-between items-center mb-2">
-        <span class="text-muted-color font-medium">Дебит</span>
+        <span class="text-muted-color font-medium">{{ 'DASHBOARD.DEBIT' | translate }}</span>
         <div class="flex items-center gap-2">
             <button pButton type="button" icon="pi pi-dollar"
                     class="p-button-text p-button-plain p-button-rounded"
@@ -18,12 +18,12 @@
         <span class="text-primary font-medium">
             {{ dc?.debit?.diff && dc?.debit?.diff! > 0 ? '+' : '' }}{{ dc?.debit?.diff ?? 0 | number: '1.0-0' }}%
         </span>
-        <span class="text-muted-color">с начал года</span>
+        <span class="text-muted-color">{{ 'COMMON.SINCE_YEAR_START' | translate }}</span>
     </div>
 </div>
 
 <app-dialog
-    header="Дебит за {{dc?.currentDate | date:'dd.MM.yyyy'}}"
+    [header]="('DASHBOARD.DEBIT_FOR' | translate) + ' ' + (dc?.currentDate | date:'dd.MM.yyyy')"
     [(visible)]="showDialog"
     [width]="'70vw'"
     [showFooter]="false"
@@ -34,10 +34,10 @@
         <ng-template pTemplate="header">
             <tr>
                 <th style="width: 3rem"></th>
-                <th style="width: 40%">Название</th>
-                <th class="text-right" style="width: 20%">Начало года</th>
-                <th class="text-right" style="width: 20%">Текущее значение</th>
-                <th class="text-right" style="width: 20%">Изменение</th>
+                <th style="width: 40%">{{ 'COMMON.NAME' | translate }}</th>
+                <th class="text-right" style="width: 20%">{{ 'COMMON.YEAR_START' | translate }}</th>
+                <th class="text-right" style="width: 20%">{{ 'COMMON.CURRENT_VALUE' | translate }}</th>
+                <th class="text-right" style="width: 20%">{{ 'COMMON.CHANGE' | translate }}</th>
             </tr>
         </ng-template>
         <ng-template pTemplate="groupheader" let-item let-expanded="expanded">
@@ -51,10 +51,10 @@
                 </td>
                 <td>{{ item.name }}</td>
                 <td class="text-right">{{ convertValue(item.debit.yearStartValue) | number: '1.0-1' }}
-                    млн {{ dialogShowInUSD ? '$' : 'UZS' }}
+                    {{ 'COMMON.MILLION' | translate }} {{ dialogShowInUSD ? '$' : 'UZS' }}
                 </td>
                 <td class="text-right font-semibold">{{ convertValue(item.debit.currentValue) | number: '1.0-1' }}
-                    млн {{ dialogShowInUSD ? '$' : 'UZS' }}
+                    {{ 'COMMON.MILLION' | translate }} {{ dialogShowInUSD ? '$' : 'UZS' }}
                 </td>
                 <td class="text-right">
                     <span [class]="item.debit.diff > 0 ? 'text-green-500' : item.debit.diff < 0 ? 'text-red-500' : ''">
@@ -71,10 +71,10 @@
                             <ng-template pTemplate="header">
                                 <tr>
                                     <th style="width: 3rem"></th>
-                                    <th style="width: 40%">Подкатегория</th>
-                                    <th class="text-right" style="width: 20%">Начало года</th>
-                                    <th class="text-right" style="width: 20%">Текущее значение</th>
-                                    <th class="text-right" style="width: 20%">Изменение</th>
+                                    <th style="width: 40%">{{ 'COMMON.SUBCATEGORY' | translate }}</th>
+                                    <th class="text-right" style="width: 20%">{{ 'COMMON.YEAR_START' | translate }}</th>
+                                    <th class="text-right" style="width: 20%">{{ 'COMMON.CURRENT_VALUE' | translate }}</th>
+                                    <th class="text-right" style="width: 20%">{{ 'COMMON.CHANGE' | translate }}</th>
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-subItem>
@@ -82,10 +82,10 @@
                                     <td></td>
                                     <td>{{ subItem.name }}</td>
                                     <td class="text-right">{{ convertValue(subItem.debit.yearStartValue) | number: '1.0-1' }}
-                                        млн {{ dialogShowInUSD ? '$' : 'UZS' }}
+                                        {{ 'COMMON.MILLION' | translate }} {{ dialogShowInUSD ? '$' : 'UZS' }}
                                     </td>
                                     <td class="text-right font-semibold">{{ convertValue(subItem.debit.currentValue) | number: '1.0-1' }}
-                                        млн {{ dialogShowInUSD ? '$' : 'UZS' }}
+                                        {{ 'COMMON.MILLION' | translate }} {{ dialogShowInUSD ? '$' : 'UZS' }}
                                     </td>
                                     <td class="text-right">
                                         <span

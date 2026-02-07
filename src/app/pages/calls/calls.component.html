@@ -1,5 +1,5 @@
 <div class="card">
-    <div class="font-semibold text-xl mb-4">Звонки</div>
+    <div class="font-semibold text-xl mb-4">{{ 'CALLS.TITLE' | translate }}</div>
 
     <p-table
         #dt
@@ -17,7 +17,7 @@
                 <div class="flex flex-wrap gap-2">
                     <p-iconfield>
                         <p-inputicon><i class="pi pi-search"></i></p-inputicon>
-                        <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Поиск" />
+                        <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" [placeholder]="'COMMON.SEARCH' | translate" />
                     </p-iconfield>
 
                     <p-select
@@ -25,7 +25,7 @@
                         [options]="typeOptions"
                         optionLabel="name"
                         optionValue="value"
-                        placeholder="Тип"
+                        [placeholder]="'CALLS.TYPE' | translate"
                         (onChange)="applyFilters()"
                         [style]="{ minWidth: '150px' }">
                     </p-select>
@@ -35,7 +35,7 @@
                         [options]="statusOptions"
                         optionLabel="name"
                         optionValue="value"
-                        placeholder="Статус"
+                        [placeholder]="'CALLS.STATUS' | translate"
                         (onChange)="applyFilters()"
                         [style]="{ minWidth: '150px' }">
                     </p-select>
@@ -43,7 +43,7 @@
 
                 <button pButton (click)="openDialog()">
                     <i class="pi pi-plus" pButtonIcon></i>
-                    <span pButtonLabel>Новый звонок</span>
+                    <span pButtonLabel>{{ 'CALLS.NEW_CALL' | translate }}</span>
                 </button>
             </div>
         </ng-template>
@@ -51,29 +51,29 @@
         <ng-template #header>
             <tr>
                 <th pSortableColumn="date" style="min-width: 7rem">
-                    Дата
+                    {{ 'CALLS.DATE' | translate }}
                     <p-sortIcon field="date" />
                 </th>
                 <th pSortableColumn="time" style="min-width: 5rem">
-                    Время
+                    {{ 'CALLS.TIME' | translate }}
                     <p-sortIcon field="time" />
                 </th>
                 <th pSortableColumn="type" style="min-width: 9rem">
-                    Тип
+                    {{ 'CALLS.TYPE' | translate }}
                     <p-sortIcon field="type" />
                 </th>
-                <th style="min-width: 12rem">Кто звонил</th>
-                <th style="min-width: 10rem">Телефон</th>
-                <th style="min-width: 10rem">Кому</th>
+                <th style="min-width: 12rem">{{ 'CALLS.CALLER' | translate }}</th>
+                <th style="min-width: 10rem">{{ 'CALLS.CALLER_PHONE' | translate }}</th>
+                <th style="min-width: 10rem">{{ 'CALLS.RECEIVER' | translate }}</th>
                 <th pSortableColumn="duration" style="min-width: 7rem">
-                    Длительность
+                    {{ 'CALLS.DURATION' | translate }}
                     <p-sortIcon field="duration" />
                 </th>
                 <th pSortableColumn="status" style="min-width: 8rem">
-                    Статус
+                    {{ 'CALLS.STATUS' | translate }}
                     <p-sortIcon field="status" />
                 </th>
-                <th style="width: 8rem">Действия</th>
+                <th style="width: 8rem">{{ 'COMMON.ACTIONS' | translate }}</th>
             </tr>
         </ng-template>
 
@@ -114,14 +114,14 @@
                                 icon="pi pi-pencil"
                                 (click)="openEditDialog(call)"
                                 class="p-button-rounded p-button-text p-button-warning"
-                                pTooltip="Редактировать"
+                                [pTooltip]="'COMMON.EDIT' | translate"
                                 tooltipPosition="top">
                         </button>
                         <button pButton
                                 icon="pi pi-trash"
                                 (click)="openDeleteDialog(call)"
                                 class="p-button-rounded p-button-text p-button-danger"
-                                pTooltip="Удалить"
+                                [pTooltip]="'COMMON.DELETE' | translate"
                                 tooltipPosition="top">
                         </button>
                     </div>
@@ -133,7 +133,7 @@
             <tr>
                 <td colspan="9" class="text-center py-4">
                     <i class="pi pi-phone text-4xl text-color-secondary mb-2"></i>
-                    <p class="m-0 text-color-secondary">Нет звонков</p>
+                    <p class="m-0 text-color-secondary">{{ 'CALLS.NO_CALLS' | translate }}</p>
                 </td>
             </tr>
         </ng-template>
@@ -141,7 +141,7 @@
         <ng-template #loadingbody>
             <tr>
                 <td colspan="9" class="text-center py-4">
-                    Загрузка...
+                    {{ 'COMMON.LOADING' | translate }}
                 </td>
             </tr>
         </ng-template>
@@ -150,88 +150,88 @@
 
 <app-dialog
     [(visible)]="displayDialog"
-    [header]="isEditMode ? 'Редактировать звонок' : 'Новый звонок'"
+    [header]="isEditMode ? ('CALLS.EDIT_CALL' | translate) : ('CALLS.NEW_CALL' | translate)"
     [form]="callForm"
-    [saveLabel]="isEditMode ? 'Обновить' : 'Сохранить'"
+    [saveLabel]="isEditMode ? ('COMMON.UPDATE' | translate) : ('COMMON.SAVE' | translate)"
     width="45vw"
     (save)="onSubmit()"
     (cancel)="closeDialog()">
     <form class="p-4" [formGroup]="callForm" (ngSubmit)="onSubmit()">
         <app-date-picker
             formControlName="date"
-            label="Дата"
+            [label]="'CALLS.DATE' | translate"
             [submitted]="submitted"
             [showTime]="false"
-            errorMessage="Дата обязательна"
+            [errorMessage]="'CALLS.DATE_REQUIRED' | translate"
             [required]="true">
         </app-date-picker>
 
         <app-input-text
             formControlName="time"
-            label="Время (ЧЧ:ММ)"
+            [label]="'CALLS.TIME_FORMAT' | translate"
             [submitted]="submitted"
-            errorMessage="Время обязательно"
+            [errorMessage]="'CALLS.TIME_REQUIRED' | translate"
             [required]="true">
         </app-input-text>
 
         <app-select
             formControlName="type"
-            label="Тип звонка"
+            [label]="'CALLS.CALL_TYPE' | translate"
             [items]="typeFormOptions"
             [submitted]="submitted"
-            errorMessage="Тип обязателен"
+            [errorMessage]="'CALLS.TYPE_REQUIRED' | translate"
             [required]="true">
         </app-select>
 
         <app-input-text
             formControlName="callerName"
-            label="Кто звонил"
+            [label]="'CALLS.CALLER' | translate"
             [submitted]="submitted"
-            errorMessage="Поле обязательно"
+            [errorMessage]="'CALLS.CALLER_REQUIRED' | translate"
             [required]="true">
         </app-input-text>
 
         <app-input-text
             formControlName="callerPhone"
-            label="Телефон звонившего"
+            [label]="'CALLS.CALLER_PHONE_LABEL' | translate"
             [submitted]="submitted"
-            errorMessage="Телефон обязателен"
+            [errorMessage]="'CALLS.PHONE_REQUIRED' | translate"
             [required]="true">
         </app-input-text>
 
         <app-input-text
             formControlName="receiverName"
-            label="Кому звонили"
+            [label]="'CALLS.RECEIVER_LABEL' | translate"
             [submitted]="submitted"
             [required]="false">
         </app-input-text>
 
         <app-input-text
             formControlName="receiverPhone"
-            label="Телефон получателя"
+            [label]="'CALLS.RECEIVER_PHONE' | translate"
             [submitted]="submitted"
             [required]="false">
         </app-input-text>
 
         <app-input-text
             formControlName="duration"
-            label="Длительность (секунды)"
+            [label]="'CALLS.DURATION_SECONDS' | translate"
             [submitted]="submitted"
             [required]="false">
         </app-input-text>
 
         <app-select
             formControlName="status"
-            label="Статус"
+            [label]="'CALLS.STATUS' | translate"
             [items]="statusFormOptions"
             [submitted]="submitted"
-            errorMessage="Статус обязателен"
+            [errorMessage]="'CALLS.STATUS_REQUIRED' | translate"
             [required]="true">
         </app-select>
 
         <app-textarea
             formControlName="notes"
-            label="Заметки"
+            [label]="'CALLS.NOTES' | translate"
             [submitted]="submitted"
             [required]="false"
             [rows]="2">
@@ -241,6 +241,6 @@
 
 <app-delete-confirmation
     [(visible)]="displayDeleteDialog"
-    [message]="'Вы уверены, что хотите удалить этот звонок?'"
+    [message]="'CALLS.DELETE_CONFIRM' | translate"
     (onConfirm)="confirmDelete()">
 </app-delete-confirmation>

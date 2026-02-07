@@ -10,6 +10,7 @@ import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
 import { Tooltip } from 'primeng/tooltip';
 import { Tag } from 'primeng/tag';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { InputTextComponent } from '@/layout/component/dialog/input-text/input-text.component';
 import { SelectComponent } from '@/layout/component/dialog/select/select.component';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
@@ -43,7 +44,8 @@ import { Contact } from '@/core/interfaces/contact';
         DeleteConfirmationComponent,
         Tooltip,
         Tag,
-        DialogComponent
+        DialogComponent,
+        TranslateModule
     ],
     templateUrl: './personnel-records.component.html',
     styleUrl: './personnel-records.component.scss'
@@ -81,6 +83,7 @@ export class PersonnelRecordsComponent implements OnInit, OnDestroy {
     private contactService = inject(ContactService);
     private fb = inject(FormBuilder);
     private messageService = inject(MessageService);
+    private translate = inject(TranslateService);
     private destroy$ = new Subject<void>();
 
     constructor() {
@@ -111,7 +114,7 @@ export class PersonnelRecordsComponent implements OnInit, OnDestroy {
                     this.records = data;
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось загрузить записи' });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('HRM.PERSONNEL_RECORDS.LOAD_ERROR') });
                     console.error(err);
                 },
                 complete: () => (this.loading = false)
@@ -224,12 +227,12 @@ export class PersonnelRecordsComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
-                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Запись успешно создана' });
+                    this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('HRM.PERSONNEL_RECORDS.CREATE_SUCCESS') });
                     this.loadRecords();
                     this.closeDialog();
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось создать запись' });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('HRM.PERSONNEL_RECORDS.CREATE_ERROR') });
                     console.error(err);
                 }
             });
@@ -254,12 +257,12 @@ export class PersonnelRecordsComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
-                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Запись успешно обновлена' });
+                    this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('HRM.PERSONNEL_RECORDS.UPDATE_SUCCESS') });
                     this.loadRecords();
                     this.closeDialog();
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось обновить запись' });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('HRM.PERSONNEL_RECORDS.UPDATE_ERROR') });
                     console.error(err);
                 }
             });
@@ -277,13 +280,13 @@ export class PersonnelRecordsComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
-                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Запись успешно удалена' });
+                    this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('HRM.PERSONNEL_RECORDS.DELETE_SUCCESS') });
                     this.loadRecords();
                     this.displayDeleteDialog = false;
                     this.selectedRecord = null;
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось удалить запись' });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('HRM.PERSONNEL_RECORDS.DELETE_ERROR') });
                     console.error(err);
                 }
             });

@@ -1,24 +1,22 @@
 <div class="financial-dashboard">
-    <!-- Заголовок -->
     <div class="dashboard-header">
         <div class="header-content">
-            <h1>Финансовый дашборд</h1>
-            <p class="subtitle">Сводка по всем модулям финансового блока</p>
+            <h1>{{ 'FINANCIAL_BLOCK.DASHBOARD.TITLE' | translate }}</h1>
+            <p class="subtitle">{{ 'FINANCIAL_BLOCK.DASHBOARD.SUBTITLE' | translate }}</p>
         </div>
         <div class="last-updated" *ngIf="dashboardData?.lastUpdated">
             <i class="pi pi-clock"></i>
-            <span>Обновлено: {{ dashboardData!.lastUpdated | date:'dd.MM.yyyy HH:mm' }}</span>
+            <span>{{ 'DASHBOARD.LAST_UPDATED' | translate }}: {{ dashboardData!.lastUpdated | date:'dd.MM.yyyy HH:mm' }}</span>
         </div>
     </div>
 
-    <!-- Главные показатели -->
     <div class="summary-cards">
         <div class="summary-card income">
             <div class="card-icon">
                 <i class="pi pi-arrow-down"></i>
             </div>
             <div class="card-content">
-                <span class="label">Общие доходы</span>
+                <span class="label">{{ 'FINANCIAL_BLOCK.DASHBOARD.TOTAL_INCOME' | translate }}</span>
                 <span class="value">{{ formatCurrency(totalIncome) }}</span>
             </div>
         </div>
@@ -28,7 +26,7 @@
                 <i class="pi pi-arrow-up"></i>
             </div>
             <div class="card-content">
-                <span class="label">Общие расходы</span>
+                <span class="label">{{ 'FINANCIAL_BLOCK.DASHBOARD.TOTAL_EXPENSES' | translate }}</span>
                 <span class="value">{{ formatCurrency(totalExpenses) }}</span>
             </div>
         </div>
@@ -38,7 +36,7 @@
                 <i class="pi pi-wallet"></i>
             </div>
             <div class="card-content">
-                <span class="label">Чистый баланс</span>
+                <span class="label">{{ 'FINANCIAL_BLOCK.DASHBOARD.BALANCE' | translate }}</span>
                 <span class="value">{{ formatCurrency(netBalance) }}</span>
             </div>
         </div>
@@ -48,7 +46,7 @@
                 <i class="pi pi-chart-bar"></i>
             </div>
             <div class="card-content">
-                <span class="label">Общий KPI</span>
+                <span class="label">{{ 'FINANCIAL_BLOCK.DASHBOARD.KPI_PERFORMANCE' | translate }}</span>
                 <div class="kpi-progress">
                     <p-progressBar
                         [value]="getKpiProgress()"
@@ -61,10 +59,9 @@
         </div>
     </div>
 
-    <!-- Графики -->
     <div class="charts-section">
         <div class="chart-card">
-            <h3>Доходы vs Расходы</h3>
+            <h3>{{ 'FINANCIAL_BLOCK.DASHBOARD.INCOME_VS_EXPENSES' | translate }}</h3>
             <div class="chart-container">
                 <p-chart
                     type="doughnut"
@@ -76,7 +73,7 @@
         </div>
 
         <div class="chart-card">
-            <h3>Структура расходов</h3>
+            <h3>{{ 'FINANCIAL_BLOCK.DASHBOARD.EXPENSE_STRUCTURE' | translate }}</h3>
             <div class="chart-container">
                 <p-chart
                     type="pie"
@@ -88,7 +85,7 @@
         </div>
 
         <div class="chart-card wide">
-            <h3>Денежный поток по месяцам</h3>
+            <h3>{{ 'FINANCIAL_BLOCK.DASHBOARD.MONTHLY_DYNAMICS' | translate }}</h3>
             <div class="chart-container">
                 <p-chart
                     type="bar"
@@ -100,10 +97,9 @@
         </div>
     </div>
 
-    <!-- Карточки модулей -->
     <div class="modules-section">
-        <h2>Модули финансового блока</h2>
-        <p class="section-subtitle">Нажмите на карточку для перехода к детальному просмотру</p>
+        <h2>{{ 'FINANCIAL_BLOCK.DASHBOARD.MODULES' | translate }}</h2>
+        <p class="section-subtitle">{{ 'FINANCIAL_BLOCK.DASHBOARD.MODULES_HINT' | translate }}</p>
 
         <div class="modules-grid">
             <div
@@ -111,7 +107,7 @@
                 class="module-card"
                 [style.--card-color]="card.color"
                 (click)="navigateToModule(card.route)"
-                pTooltip="Перейти к модулю"
+                [pTooltip]="'FINANCIAL_BLOCK.DASHBOARD.GO_TO_MODULE' | translate"
                 tooltipPosition="top">
 
                 <div class="card-header">
@@ -136,7 +132,7 @@
 
                 <div class="card-footer">
                     <p-button
-                        label="Подробнее"
+                        [label]="'FINANCIAL_BLOCK.DASHBOARD.DETAILS' | translate"
                         icon="pi pi-external-link"
                         [text]="true"
                         size="small"

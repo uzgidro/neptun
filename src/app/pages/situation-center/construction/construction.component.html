@@ -1,14 +1,14 @@
 <div class="card">
-    <h3 class="text-center mb-3">Строительство Каскада Оксув ГЭС</h3>
-    <h5 class="text-center mb-3">РАБАТ ГЭС</h5>
+    <h3 class="text-center mb-3">{{ 'SITUATION_CENTER.CONSTRUCTION.TITLE' | translate }}</h3>
+    <h5 class="text-center mb-3">{{ 'SITUATION_CENTER.CONSTRUCTION.RABAT_GES' | translate }}</h5>
     <form [formGroup]="form" class="mb-4">
         <div class="w-full md:w-1/4">
             <app-date-picker
-                label="Выберите дату"
+                [label]="'SITUATION_CENTER.COMMON.SELECT_DATE' | translate"
                 formControlName="started_at"
                 [showTime]="false"
                 [submitted]="submitted"
-                errorMessage="Укажите дату">
+                [errorMessage]="'SITUATION_CENTER.COMMON.SPECIFY_DATE' | translate">
             </app-date-picker>
         </div>
     </form>
@@ -22,16 +22,16 @@
 
         <ng-template pTemplate="header">
             <tr class="section-row">
-                <th style="width: 280px;">Наименование работ</th>
-                <th>Ед. изм</th>
-                <th>По проекту</th>
-                <th>Факт</th>
-                <th>%</th>
-                <th>Остаток</th>
-                <th>План на сентябрь</th>
-                <th>План</th>
-                <th>Факт</th>
-                <th>%</th>
+                <th style="width: 280px;">{{ 'SITUATION_CENTER.CONSTRUCTION.WORK_NAME' | translate }}</th>
+                <th>{{ 'SITUATION_CENTER.CONSTRUCTION.UNIT' | translate }}</th>
+                <th>{{ 'SITUATION_CENTER.CONSTRUCTION.BY_PROJECT' | translate }}</th>
+                <th>{{ 'SITUATION_CENTER.CONSTRUCTION.FACT' | translate }}</th>
+                <th>{{ 'SITUATION_CENTER.CONSTRUCTION.PERCENT' | translate }}</th>
+                <th>{{ 'SITUATION_CENTER.CONSTRUCTION.REMAINING' | translate }}</th>
+                <th>{{ 'SITUATION_CENTER.CONSTRUCTION.SEPTEMBER_PLAN' | translate }}</th>
+                <th>{{ 'SITUATION_CENTER.CONSTRUCTION.PLAN' | translate }}</th>
+                <th>{{ 'SITUATION_CENTER.CONSTRUCTION.FACT' | translate }}</th>
+                <th>{{ 'SITUATION_CENTER.CONSTRUCTION.PERCENT' | translate }}</th>
 
             </tr>
         </ng-template>
@@ -92,6 +92,6 @@
     </p-table>
 
     <div class="flex justify mt-4">
-        <p-button label="Сохранить в Excel" icon="pi pi-file-excel" styleClass="p-button-outlined p-button-success" (click)="exportToExcel()"></p-button>
+        <p-button [label]="'SITUATION_CENTER.COMMON.SAVE_EXCEL' | translate" icon="pi pi-file-excel" styleClass="p-button-outlined p-button-success" (click)="exportToExcel()"></p-button>
     </div>
 </div>

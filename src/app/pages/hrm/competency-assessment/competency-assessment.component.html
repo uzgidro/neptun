@@ -1,12 +1,12 @@
 <div class="card">
-    <div class="font-semibold text-xl mb-4">Центр оценки компетенций</div>
+    <div class="font-semibold text-xl mb-4">{{ 'HRM.COMPETENCY.TITLE' | translate }}</div>
 
     <!-- Статистика -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
         <p-card>
             <div class="flex items-center justify-between">
                 <div>
-                    <div class="text-500 font-medium mb-1">Сессии</div>
+                    <div class="text-500 font-medium mb-1">{{ 'HRM.COMPETENCY.SESSIONS' | translate }}</div>
                     <div class="text-2xl font-bold">{{ sessionsCount }}</div>
                 </div>
                 <div class="bg-blue-100 p-3 rounded-full">
@@ -17,7 +17,7 @@
         <p-card>
             <div class="flex items-center justify-between">
                 <div>
-                    <div class="text-500 font-medium mb-1">Завершено</div>
+                    <div class="text-500 font-medium mb-1">{{ 'HRM.COMPETENCY.COMPLETED' | translate }}</div>
                     <div class="text-2xl font-bold text-green-600">{{ completedSessionsCount }}</div>
                 </div>
                 <div class="bg-green-100 p-3 rounded-full">
@@ -28,7 +28,7 @@
         <p-card>
             <div class="flex items-center justify-between">
                 <div>
-                    <div class="text-500 font-medium mb-1">Оценки</div>
+                    <div class="text-500 font-medium mb-1">{{ 'HRM.COMPETENCY.ASSESSMENTS' | translate }}</div>
                     <div class="text-2xl font-bold">{{ assessmentsCount }}</div>
                 </div>
                 <div class="bg-purple-100 p-3 rounded-full">
@@ -39,7 +39,7 @@
         <p-card>
             <div class="flex items-center justify-between">
                 <div>
-                    <div class="text-500 font-medium mb-1">Планы развития</div>
+                    <div class="text-500 font-medium mb-1">{{ 'HRM.COMPETENCY.DEVELOPMENT_PLANS' | translate }}</div>
                     <div class="text-2xl font-bold text-orange-600">{{ activePlansCount }}</div>
                 </div>
                 <div class="bg-orange-100 p-3 rounded-full">
@@ -52,16 +52,16 @@
     <!-- Вкладки -->
     <p-tabs [(value)]="activeTabIndex">
         <p-tablist>
-            <p-tab [value]="0">Сессии оценки</p-tab>
-            <p-tab [value]="1">Результаты оценки</p-tab>
-            <p-tab [value]="2">Планы развития</p-tab>
+            <p-tab [value]="0">{{ 'HRM.COMPETENCY.SESSIONS_TAB' | translate }}</p-tab>
+            <p-tab [value]="1">{{ 'HRM.COMPETENCY.RESULTS_TAB' | translate }}</p-tab>
+            <p-tab [value]="2">{{ 'HRM.COMPETENCY.PLANS_TAB' | translate }}</p-tab>
         </p-tablist>
         <p-tabpanels>
         <!-- Вкладка: Сессии оценки -->
         <p-tabpanel [value]="0">
             <div class="flex justify-between items-center mb-4">
-                <span class="text-lg font-semibold">Ассессмент-центры</span>
-                <button pButton (click)="openSessionDialog()" icon="pi pi-plus" label="Новая сессия"></button>
+                <span class="text-lg font-semibold">{{ 'HRM.COMPETENCY.ASSESSMENT_CENTERS' | translate }}</span>
+                <button pButton (click)="openSessionDialog()" icon="pi pi-plus" [label]="'HRM.COMPETENCY.NEW_SESSION' | translate"></button>
             </div>
 
             <p-accordion [multiple]="true">
@@ -84,22 +84,22 @@
                                 <!-- Информация о сессии -->
                                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                                     <div>
-                                        <div class="text-500 font-medium mb-2">Время</div>
+                                        <div class="text-500 font-medium mb-2">{{ 'HRM.COMPETENCY.TIME' | translate }}</div>
                                         <div>{{ session.start_time }} - {{ session.end_time }}</div>
                                     </div>
                                     <div>
-                                        <div class="text-500 font-medium mb-2">Кандидаты</div>
-                                        <div>{{ session.candidates.length }} человек</div>
+                                        <div class="text-500 font-medium mb-2">{{ 'HRM.COMPETENCY.CANDIDATES' | translate }}</div>
+                                        <div>{{ session.candidates.length }} {{ 'HRM.COMPETENCY.PEOPLE' | translate }}</div>
                                     </div>
                                     <div>
-                                        <div class="text-500 font-medium mb-2">Ассессоры</div>
-                                        <div>{{ session.assessors.length }} человек</div>
+                                        <div class="text-500 font-medium mb-2">{{ 'HRM.COMPETENCY.ASSESSORS' | translate }}</div>
+                                        <div>{{ session.assessors.length }} {{ 'HRM.COMPETENCY.PEOPLE' | translate }}</div>
                                     </div>
                                 </div>
 
                                 <!-- Компетенции для оценки -->
                                 <div class="mb-4">
-                                    <div class="text-500 font-medium mb-2">Компетенции для оценки</div>
+                                    <div class="text-500 font-medium mb-2">{{ 'HRM.COMPETENCY.COMPETENCIES_TO_ASSESS' | translate }}</div>
                                     <div class="flex flex-wrap gap-2">
                                         @for (comp of session.competencies_to_assess; track comp.competency_id) {
                                             <p-tag [value]="comp.competency_name + ' (' + comp.weight + '%)'" severity="info"></p-tag>
@@ -109,16 +109,16 @@
 
                                 <!-- Кандидаты -->
                                 <div class="mb-4">
-                                    <div class="text-500 font-medium mb-2">Кандидаты</div>
+                                    <div class="text-500 font-medium mb-2">{{ 'HRM.COMPETENCY.CANDIDATES' | translate }}</div>
                                     <div class="overflow-x-auto">
                                         <table class="w-full text-sm">
                                             <thead>
                                                 <tr class="bg-surface-100 dark:bg-surface-700">
-                                                    <th class="p-2 text-left">Сотрудник</th>
-                                                    <th class="p-2 text-left">Должность</th>
-                                                    <th class="p-2 text-left">Отдел</th>
-                                                    <th class="p-2 text-center">Приглашение</th>
-                                                    <th class="p-2 text-center">Действия</th>
+                                                    <th class="p-2 text-left">{{ 'HRM.COMPETENCY.EMPLOYEE' | translate }}</th>
+                                                    <th class="p-2 text-left">{{ 'HRM.COMPETENCY.POSITION' | translate }}</th>
+                                                    <th class="p-2 text-left">{{ 'HRM.COMPETENCY.DEPARTMENT' | translate }}</th>
+                                                    <th class="p-2 text-center">{{ 'HRM.COMPETENCY.INVITATION' | translate }}</th>
+                                                    <th class="p-2 text-center">{{ 'COMMON.ACTIONS' | translate }}</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -130,20 +130,20 @@
                                                         <td class="p-2 text-center">
                                                             @switch (candidate.invitation_status) {
                                                                 @case ('accepted') {
-                                                                    <p-tag value="Принято" severity="success"></p-tag>
+                                                                    <p-tag [value]="'HRM.COMPETENCY.STATUS_ACCEPTED' | translate" severity="success"></p-tag>
                                                                 }
                                                                 @case ('pending') {
-                                                                    <p-tag value="Ожидает" severity="warn"></p-tag>
+                                                                    <p-tag [value]="'HRM.COMPETENCY.STATUS_PENDING' | translate" severity="warn"></p-tag>
                                                                 }
                                                                 @case ('declined') {
-                                                                    <p-tag value="Отклонено" severity="danger"></p-tag>
+                                                                    <p-tag [value]="'HRM.COMPETENCY.STATUS_DECLINED' | translate" severity="danger"></p-tag>
                                                                 }
                                                             }
                                                         </td>
                                                         <td class="p-2 text-center">
                                                             @if (session.status === 'completed') {
                                                                 <button pButton icon="pi pi-file" class="p-button-rounded p-button-text p-button-sm"
-                                                                        pTooltip="Сформировать оценку" (click)="generateAssessment(session, candidate)"></button>
+                                                                        [pTooltip]="'HRM.COMPETENCY.GENERATE_ASSESSMENT' | translate" (click)="generateAssessment(session, candidate)"></button>
                                                             }
                                                         </td>
                                                     </tr>
@@ -156,9 +156,9 @@
                                 <!-- Блоки оценки -->
                                 <div class="mb-4">
                                     <div class="flex justify-between items-center mb-2">
-                                        <div class="text-500 font-medium">Блоки оценки</div>
+                                        <div class="text-500 font-medium">{{ 'HRM.COMPETENCY.ASSESSMENT_BLOCKS' | translate }}</div>
                                         @if (session.status === 'planning' || session.status === 'scheduled') {
-                                            <button pButton icon="pi pi-plus" label="Добавить блок"
+                                            <button pButton icon="pi pi-plus" [label]="'HRM.COMPETENCY.ADD_BLOCK' | translate"
                                                     class="p-button-sm p-button-outlined" (click)="openBlockDialog(session)"></button>
                                         }
                                     </div>
@@ -172,13 +172,13 @@
                                                     </div>
                                                     @switch (block.status) {
                                                         @case ('completed') {
-                                                            <p-tag value="Завершен" severity="success"></p-tag>
+                                                            <p-tag [value]="'HRM.COMPETENCY.BLOCK_COMPLETED' | translate" severity="success"></p-tag>
                                                         }
                                                         @case ('in_progress') {
-                                                            <p-tag value="В процессе" severity="info"></p-tag>
+                                                            <p-tag [value]="'HRM.COMPETENCY.BLOCK_IN_PROGRESS' | translate" severity="info"></p-tag>
                                                         }
                                                         @case ('pending') {
-                                                            <p-tag value="Ожидает" severity="secondary"></p-tag>
+                                                            <p-tag [value]="'HRM.COMPETENCY.BLOCK_PENDING' | translate" severity="secondary"></p-tag>
                                                         }
                                                     }
                                                 </div>
@@ -195,7 +195,7 @@
                                                                     class="p-button-sm p-button-outlined"
                                                                     (click)="openEvaluationDialog(session, candidate, block)"></button>
                                                         }
-                                                        <button pButton icon="pi pi-check" label="Завершить блок"
+                                                        <button pButton icon="pi pi-check" [label]="'HRM.COMPETENCY.COMPLETE_BLOCK' | translate"
                                                                 class="p-button-sm p-button-success"
                                                                 (click)="completeBlock(session, block)"></button>
                                                     }
@@ -209,23 +209,23 @@
                                 <div class="flex gap-2 mt-4 pt-4 border-t">
                                     @switch (session.status) {
                                         @case ('planning') {
-                                            <button pButton icon="pi pi-send" label="Отправить приглашения"
+                                            <button pButton icon="pi pi-send" [label]="'HRM.COMPETENCY.SEND_INVITATIONS' | translate"
                                                     class="p-button-outlined" (click)="sendInvitations(session)"></button>
-                                            <button pButton icon="pi pi-pencil" label="Редактировать"
+                                            <button pButton icon="pi pi-pencil" [label]="'COMMON.EDIT' | translate"
                                                     class="p-button-outlined p-button-warning" (click)="openEditSessionDialog(session)"></button>
                                         }
                                         @case ('scheduled') {
-                                            <button pButton icon="pi pi-play" label="Начать сессию"
+                                            <button pButton icon="pi pi-play" [label]="'HRM.COMPETENCY.START_SESSION' | translate"
                                                     class="p-button-success" (click)="startSession(session)"></button>
-                                            <button pButton icon="pi pi-pencil" label="Редактировать"
+                                            <button pButton icon="pi pi-pencil" [label]="'COMMON.EDIT' | translate"
                                                     class="p-button-outlined p-button-warning" (click)="openEditSessionDialog(session)"></button>
                                         }
                                         @case ('in_progress') {
-                                            <button pButton icon="pi pi-check" label="Завершить сессию"
+                                            <button pButton icon="pi pi-check" [label]="'HRM.COMPETENCY.COMPLETE_SESSION' | translate"
                                                     class="p-button-success" (click)="completeSession(session)"></button>
                                         }
                                     }
-                                    <button pButton icon="pi pi-trash" label="Удалить"
+                                    <button pButton icon="pi pi-trash" [label]="'COMMON.DELETE' | translate"
                                             class="p-button-outlined p-button-danger" (click)="openDeleteSessionDialog(session)"></button>
                                 </div>
                             </div>
@@ -237,7 +237,7 @@
             @if (sessions.length === 0) {
                 <div class="text-center py-8 text-gray-500">
                     <i class="pi pi-calendar text-4xl mb-2"></i>
-                    <p>Нет запланированных сессий</p>
+                    <p>{{ 'HRM.COMPETENCY.NO_SESSIONS' | translate }}</p>
                 </div>
             }
         </p-tabpanel>
@@ -259,19 +259,19 @@
                     <div class="flex justify-between items-center">
                         <p-iconfield>
                             <p-inputicon><i class="pi pi-search"></i></p-inputicon>
-                            <input pInputText type="text" (input)="onGlobalFilter(dtAssessments, $event)" placeholder="Поиск" />
+                            <input pInputText type="text" (input)="onGlobalFilter(dtAssessments, $event)" [placeholder]="'COMMON.SEARCH' | translate" />
                         </p-iconfield>
                     </div>
                 </ng-template>
                 <ng-template #header>
                     <tr>
-                        <th pSortableColumn="employee_name" style="min-width: 14rem">Сотрудник</th>
-                        <th style="min-width: 10rem">Должность</th>
-                        <th style="min-width: 10rem">Отдел</th>
-                        <th style="min-width: 8rem">Дата</th>
-                        <th style="min-width: 8rem">Общий балл</th>
-                        <th style="min-width: 8rem">Статус</th>
-                        <th style="width: 14rem">Действия</th>
+                        <th pSortableColumn="employee_name" style="min-width: 14rem">{{ 'HRM.COMPETENCY.EMPLOYEE' | translate }}</th>
+                        <th style="min-width: 10rem">{{ 'HRM.COMPETENCY.POSITION' | translate }}</th>
+                        <th style="min-width: 10rem">{{ 'HRM.COMPETENCY.DEPARTMENT' | translate }}</th>
+                        <th style="min-width: 8rem">{{ 'HRM.COMPETENCY.DATE' | translate }}</th>
+                        <th style="min-width: 8rem">{{ 'HRM.COMPETENCY.OVERALL_SCORE' | translate }}</th>
+                        <th style="min-width: 8rem">{{ 'COMMON.STATUS' | translate }}</th>
+                        <th style="width: 14rem">{{ 'COMMON.ACTIONS' | translate }}</th>
                     </tr>
                 </ng-template>
                 <ng-template #body let-assessment>
@@ -297,14 +297,14 @@
                         <td>
                             <div class="flex gap-1">
                                 <button pButton icon="pi pi-eye" class="p-button-rounded p-button-text p-button-info"
-                                        pTooltip="Просмотр отчета" (click)="viewReport(assessment)"></button>
+                                        [pTooltip]="'HRM.COMPETENCY.VIEW_REPORT' | translate" (click)="viewReport(assessment)"></button>
                                 @if (assessment.status === 'completed') {
                                     <button pButton icon="pi pi-check" class="p-button-rounded p-button-text p-button-success"
-                                            pTooltip="Утвердить" (click)="approveAssessment(assessment)"></button>
+                                            [pTooltip]="'COMMON.APPROVE' | translate" (click)="approveAssessment(assessment)"></button>
                                 }
                                 @if (assessment.status === 'approved') {
                                     <button pButton icon="pi pi-chart-line" class="p-button-rounded p-button-text p-button-warning"
-                                            pTooltip="Создать план развития" (click)="openPlanDialog(assessment)"></button>
+                                            [pTooltip]="'HRM.COMPETENCY.CREATE_PLAN' | translate" (click)="openPlanDialog(assessment)"></button>
                                 }
                             </div>
                         </td>
@@ -312,7 +312,7 @@
                 </ng-template>
                 <ng-template #emptymessage>
                     <tr>
-                        <td colspan="7" class="text-center py-4">Нет результатов оценки</td>
+                        <td colspan="7" class="text-center py-4">{{ 'HRM.COMPETENCY.NO_ASSESSMENTS' | translate }}</td>
                     </tr>
                 </ng-template>
             </p-table>
@@ -321,8 +321,8 @@
         <!-- Вкладка: Планы развития -->
         <p-tabpanel [value]="2">
             <div class="flex justify-between items-center mb-4">
-                <span class="text-lg font-semibold">Индивидуальные планы развития</span>
-                <button pButton (click)="openPlanDialog()" icon="pi pi-plus" label="Новый план"></button>
+                <span class="text-lg font-semibold">{{ 'HRM.COMPETENCY.INDIVIDUAL_PLANS' | translate }}</span>
+                <button pButton (click)="openPlanDialog()" icon="pi pi-plus" [label]="'HRM.COMPETENCY.NEW_PLAN' | translate"></button>
             </div>
 
             <p-table
@@ -338,12 +338,12 @@
             >
                 <ng-template #header>
                     <tr>
-                        <th pSortableColumn="employee_name" style="min-width: 14rem">Сотрудник</th>
-                        <th style="min-width: 10rem">Период</th>
-                        <th style="min-width: 10rem">Компетенции</th>
-                        <th style="min-width: 10rem">Прогресс</th>
-                        <th style="min-width: 8rem">Статус</th>
-                        <th style="width: 12rem">Действия</th>
+                        <th pSortableColumn="employee_name" style="min-width: 14rem">{{ 'HRM.COMPETENCY.EMPLOYEE' | translate }}</th>
+                        <th style="min-width: 10rem">{{ 'HRM.COMPETENCY.PERIOD' | translate }}</th>
+                        <th style="min-width: 10rem">{{ 'HRM.COMPETENCY.COMPETENCIES' | translate }}</th>
+                        <th style="min-width: 10rem">{{ 'HRM.COMPETENCY.PROGRESS' | translate }}</th>
+                        <th style="min-width: 8rem">{{ 'COMMON.STATUS' | translate }}</th>
+                        <th style="width: 12rem">{{ 'COMMON.ACTIONS' | translate }}</th>
                     </tr>
                 </ng-template>
                 <ng-template #body let-plan>
@@ -374,14 +374,14 @@
                         <td>
                             <div class="flex gap-1">
                                 <button pButton icon="pi pi-eye" class="p-button-rounded p-button-text p-button-info"
-                                        pTooltip="Детали" (click)="viewPlanDetails(plan)"></button>
+                                        [pTooltip]="'HRM.COMPETENCY.DETAILS' | translate" (click)="viewPlanDetails(plan)"></button>
                                 @if (plan.status === 'draft') {
                                     <button pButton icon="pi pi-play" class="p-button-rounded p-button-text p-button-success"
-                                            pTooltip="Активировать" (click)="activatePlan(plan)"></button>
+                                            [pTooltip]="'HRM.COMPETENCY.ACTIVATE' | translate" (click)="activatePlan(plan)"></button>
                                 }
                                 @if (plan.status === 'active') {
                                     <button pButton icon="pi pi-check" class="p-button-rounded p-button-text p-button-success"
-                                            pTooltip="Завершить" (click)="completePlan(plan)"></button>
+                                            [pTooltip]="'HRM.COMPETENCY.COMPLETE' | translate" (click)="completePlan(plan)"></button>
                                 }
                             </div>
                         </td>
@@ -389,7 +389,7 @@
                 </ng-template>
                 <ng-template #emptymessage>
                     <tr>
-                        <td colspan="6" class="text-center py-4">Нет планов развития</td>
+                        <td colspan="6" class="text-center py-4">{{ 'HRM.COMPETENCY.NO_PLANS' | translate }}</td>
                     </tr>
                 </ng-template>
             </p-table>
@@ -399,106 +399,106 @@
 </div>
 
 <!-- Диалог создания/редактирования сессии -->
-<p-dialog [(visible)]="displaySessionDialog" [header]="isEditMode ? 'Редактировать сессию' : 'Новая сессия оценки'"
+<p-dialog [(visible)]="displaySessionDialog" [header]="isEditMode ? ('HRM.COMPETENCY.EDIT_SESSION' | translate) : ('HRM.COMPETENCY.NEW_SESSION_TITLE' | translate)"
           [modal]="true" [style]="{ width: '700px' }" [closable]="true">
     <form [formGroup]="sessionForm" class="p-4">
         <div class="mb-4">
-            <label class="block font-medium mb-2">Название сессии *</label>
-            <input pInputText formControlName="name" class="w-full" placeholder="Например: Ассессмент-центр Q1 2025" />
+            <label class="block font-medium mb-2">{{ 'HRM.COMPETENCY.SESSION_NAME' | translate }} *</label>
+            <input pInputText formControlName="name" class="w-full" [placeholder]="'HRM.COMPETENCY.SESSION_NAME_PLACEHOLDER' | translate" />
             @if (submitted && sessionForm.get('name')?.errors?.['required']) {
-                <small class="text-red-500">Название обязательно</small>
+                <small class="text-red-500">{{ 'HRM.COMPETENCY.NAME_REQUIRED' | translate }}</small>
             }
         </div>
 
         <div class="mb-4">
-            <label class="block font-medium mb-2">Описание</label>
+            <label class="block font-medium mb-2">{{ 'HRM.COMPETENCY.DESCRIPTION' | translate }}</label>
             <textarea pTextarea formControlName="description" class="w-full" rows="2"
-                      placeholder="Цель и описание сессии"></textarea>
+                      [placeholder]="'HRM.COMPETENCY.SESSION_DESC_PLACEHOLDER' | translate"></textarea>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
             <div>
-                <label class="block font-medium mb-2">Дата *</label>
+                <label class="block font-medium mb-2">{{ 'HRM.COMPETENCY.DATE' | translate }} *</label>
                 <p-datepicker formControlName="session_date" [showIcon]="true" dateFormat="dd.mm.yy" class="w-full"></p-datepicker>
             </div>
             <div>
-                <label class="block font-medium mb-2">Начало *</label>
+                <label class="block font-medium mb-2">{{ 'HRM.COMPETENCY.START_TIME' | translate }} *</label>
                 <input pInputText formControlName="start_time" class="w-full" placeholder="09:00" />
             </div>
             <div>
-                <label class="block font-medium mb-2">Окончание *</label>
+                <label class="block font-medium mb-2">{{ 'HRM.COMPETENCY.END_TIME' | translate }} *</label>
                 <input pInputText formControlName="end_time" class="w-full" placeholder="18:00" />
             </div>
         </div>
 
         <div class="mb-4">
-            <label class="block font-medium mb-2">Место проведения</label>
-            <input pInputText formControlName="location" class="w-full" placeholder="Конференц-зал" />
+            <label class="block font-medium mb-2">{{ 'HRM.COMPETENCY.LOCATION' | translate }}</label>
+            <input pInputText formControlName="location" class="w-full" [placeholder]="'HRM.COMPETENCY.LOCATION_PLACEHOLDER' | translate" />
         </div>
 
         <div class="mb-4">
-            <label class="block font-medium mb-2">Компетенции для оценки *</label>
+            <label class="block font-medium mb-2">{{ 'HRM.COMPETENCY.COMPETENCIES_TO_ASSESS' | translate }} *</label>
             <p-multiselect formControlName="competencies" [options]="standardCompetencies" optionLabel="name"
-                           placeholder="Выберите компетенции" class="w-full" [showClear]="true"></p-multiselect>
+                           [placeholder]="'HRM.COMPETENCY.SELECT_COMPETENCIES' | translate" class="w-full" [showClear]="true"></p-multiselect>
         </div>
 
         <div class="mb-4">
-            <label class="block font-medium mb-2">Кандидаты (сотрудники) *</label>
+            <label class="block font-medium mb-2">{{ 'HRM.COMPETENCY.CANDIDATES_EMPLOYEES' | translate }} *</label>
             <p-multiselect formControlName="candidates" [options]="employees" optionLabel="name"
-                           placeholder="Выберите сотрудников" class="w-full" [showClear]="true"></p-multiselect>
+                           [placeholder]="'HRM.COMPETENCY.SELECT_EMPLOYEES' | translate" class="w-full" [showClear]="true"></p-multiselect>
         </div>
 
         <div class="mb-4">
-            <label class="block font-medium mb-2">Ассессоры (оценщики) *</label>
+            <label class="block font-medium mb-2">{{ 'HRM.COMPETENCY.ASSESSORS_EVALUATORS' | translate }} *</label>
             <p-multiselect formControlName="assessors" [options]="assessors" optionLabel="name"
-                           placeholder="Выберите ассессоров" class="w-full" [showClear]="true"></p-multiselect>
+                           [placeholder]="'HRM.COMPETENCY.SELECT_ASSESSORS' | translate" class="w-full" [showClear]="true"></p-multiselect>
         </div>
     </form>
     <ng-template #footer>
-        <button pButton label="Отмена" class="p-button-text" (click)="displaySessionDialog = false"></button>
-        <button pButton label="Сохранить" (click)="saveSession()"></button>
+        <button pButton [label]="'COMMON.CANCEL' | translate" class="p-button-text" (click)="displaySessionDialog = false"></button>
+        <button pButton [label]="'COMMON.SAVE' | translate" (click)="saveSession()"></button>
     </ng-template>
 </p-dialog>
 
 <!-- Диалог добавления блока оценки -->
-<p-dialog [(visible)]="displayBlockDialog" header="Добавить блок оценки"
+<p-dialog [(visible)]="displayBlockDialog" [header]="'HRM.COMPETENCY.ADD_BLOCK_TITLE' | translate"
           [modal]="true" [style]="{ width: '500px' }" [closable]="true">
     <form [formGroup]="blockForm" class="p-4">
         <div class="mb-4">
-            <label class="block font-medium mb-2">Тип блока *</label>
+            <label class="block font-medium mb-2">{{ 'HRM.COMPETENCY.BLOCK_TYPE' | translate }} *</label>
             <p-select formControlName="block_type" [options]="blockTypes" optionLabel="label"
-                        placeholder="Выберите тип" class="w-full"></p-select>
+                        [placeholder]="'HRM.COMPETENCY.SELECT_TYPE' | translate" class="w-full"></p-select>
         </div>
 
         <div class="mb-4">
-            <label class="block font-medium mb-2">Название *</label>
-            <input pInputText formControlName="name" class="w-full" placeholder="Название блока" />
+            <label class="block font-medium mb-2">{{ 'HRM.COMPETENCY.BLOCK_NAME' | translate }} *</label>
+            <input pInputText formControlName="name" class="w-full" [placeholder]="'HRM.COMPETENCY.BLOCK_NAME_PLACEHOLDER' | translate" />
         </div>
 
         <div class="mb-4">
-            <label class="block font-medium mb-2">Описание</label>
+            <label class="block font-medium mb-2">{{ 'HRM.COMPETENCY.DESCRIPTION' | translate }}</label>
             <textarea pTextarea formControlName="description" class="w-full" rows="2"></textarea>
         </div>
 
         <div class="mb-4">
-            <label class="block font-medium mb-2">Длительность (мин) *</label>
+            <label class="block font-medium mb-2">{{ 'HRM.COMPETENCY.DURATION_MIN' | translate }} *</label>
             <p-inputnumber formControlName="duration_minutes" [min]="15" [max]="480" class="w-full"></p-inputnumber>
         </div>
 
         <div class="mb-4">
-            <label class="block font-medium mb-2">Оцениваемые компетенции *</label>
+            <label class="block font-medium mb-2">{{ 'HRM.COMPETENCY.ASSESSED_COMPETENCIES' | translate }} *</label>
             <p-multiselect formControlName="competencies" [options]="standardCompetencies" optionLabel="name"
-                           placeholder="Выберите компетенции" class="w-full"></p-multiselect>
+                           [placeholder]="'HRM.COMPETENCY.SELECT_COMPETENCIES' | translate" class="w-full"></p-multiselect>
         </div>
     </form>
     <ng-template #footer>
-        <button pButton label="Отмена" class="p-button-text" (click)="displayBlockDialog = false"></button>
-        <button pButton label="Добавить" (click)="saveBlock()"></button>
+        <button pButton [label]="'COMMON.CANCEL' | translate" class="p-button-text" (click)="displayBlockDialog = false"></button>
+        <button pButton [label]="'COMMON.ADD' | translate" (click)="saveBlock()"></button>
     </ng-template>
 </p-dialog>
 
 <!-- Диалог оценки кандидата -->
-<p-dialog [(visible)]="displayEvaluationDialog" header="Оценка кандидата"
+<p-dialog [(visible)]="displayEvaluationDialog" [header]="'HRM.COMPETENCY.CANDIDATE_EVALUATION' | translate"
           [modal]="true" [style]="{ width: '600px' }" [closable]="true">
     @if (evaluatingCandidate && evaluatingBlock && selectedSession) {
         <div class="p-4">
@@ -508,7 +508,7 @@
             </div>
 
             <div class="mb-4">
-                <div class="font-medium mb-3">Оценка компетенций (1-5 баллов)</div>
+                <div class="font-medium mb-3">{{ 'HRM.COMPETENCY.RATE_COMPETENCIES' | translate }}</div>
                 @for (comp of selectedSession.competencies_to_assess; track comp.competency_id) {
                     <div class="mb-4 p-3 border rounded-lg">
                         <div class="flex items-center justify-between mb-2">
@@ -520,28 +520,28 @@
                             <span class="text-lg font-bold">{{ candidateScores[comp.competency_id] }}</span>
                         </div>
                         <input pInputText [(ngModel)]="candidateNotes[comp.competency_id]" class="w-full text-sm"
-                               placeholder="Комментарий к оценке" />
+                               [placeholder]="'HRM.COMPETENCY.RATING_COMMENT' | translate" />
                     </div>
                 }
             </div>
 
             <form [formGroup]="evaluationForm">
                 <div class="mb-4">
-                    <label class="block font-medium mb-2">Общие заметки</label>
+                    <label class="block font-medium mb-2">{{ 'HRM.COMPETENCY.GENERAL_NOTES' | translate }}</label>
                     <textarea pTextarea formControlName="general_notes" class="w-full" rows="3"
-                              placeholder="Общие наблюдения по кандидату"></textarea>
+                              [placeholder]="'HRM.COMPETENCY.GENERAL_NOTES_PLACEHOLDER' | translate"></textarea>
                 </div>
             </form>
         </div>
     }
     <ng-template #footer>
-        <button pButton label="Отмена" class="p-button-text" (click)="displayEvaluationDialog = false"></button>
-        <button pButton label="Сохранить оценку" (click)="saveEvaluation()"></button>
+        <button pButton [label]="'COMMON.CANCEL' | translate" class="p-button-text" (click)="displayEvaluationDialog = false"></button>
+        <button pButton [label]="'HRM.COMPETENCY.SAVE_RATING' | translate" (click)="saveEvaluation()"></button>
     </ng-template>
 </p-dialog>
 
 <!-- Диалог отчета по оценке -->
-<p-dialog [(visible)]="displayReportDialog" header="Отчет по оценке компетенций"
+<p-dialog [(visible)]="displayReportDialog" [header]="'HRM.COMPETENCY.COMPETENCY_REPORT' | translate"
           [modal]="true" [style]="{ width: '800px' }" [closable]="true" [maximizable]="true">
     @if (currentReport) {
         <div class="p-4">
@@ -549,7 +549,7 @@
             <div class="text-center mb-6">
                 <h2 class="text-xl font-bold mb-2">{{ currentReport.employee_name }}</h2>
                 <div class="text-gray-500">{{ currentReport.position_name }} | {{ currentReport.department_name }}</div>
-                <div class="text-sm text-gray-400">Дата оценки: {{ currentReport.assessment_date | date:'dd.MM.yyyy' }}</div>
+                <div class="text-sm text-gray-400">{{ 'HRM.COMPETENCY.ASSESSMENT_DATE' | translate }}: {{ currentReport.assessment_date | date:'dd.MM.yyyy' }}</div>
             </div>
 
             <!-- Общий балл -->
@@ -557,13 +557,13 @@
                 <div class="text-center">
                     <p-knob [(ngModel)]="currentReport.overall_score" [readonly]="true" [min]="0" [max]="5"
                             [size]="150" valueColor="#22c55e" rangeColor="#e5e7eb"></p-knob>
-                    <div class="text-lg font-semibold mt-2">Общий балл: {{ currentReport.overall_score.toFixed(1) }} / 5</div>
+                    <div class="text-lg font-semibold mt-2">{{ 'HRM.COMPETENCY.OVERALL_SCORE' | translate }}: {{ currentReport.overall_score.toFixed(1) }} / 5</div>
                 </div>
             </div>
 
             <!-- Оценки по компетенциям -->
             <div class="mb-6">
-                <h3 class="font-semibold mb-3">Оценки по компетенциям</h3>
+                <h3 class="font-semibold mb-3">{{ 'HRM.COMPETENCY.COMPETENCY_SCORES' | translate }}</h3>
                 <div class="space-y-3">
                     @for (result of currentReport.competency_results; track result.competency_id) {
                         <div class="flex items-center gap-3">
@@ -582,7 +582,7 @@
             <!-- Сильные стороны -->
             @if (currentReport.strengths.length > 0) {
                 <div class="mb-6">
-                    <h3 class="font-semibold mb-3 text-green-600"><i class="pi pi-check-circle mr-2"></i>Сильные стороны</h3>
+                    <h3 class="font-semibold mb-3 text-green-600"><i class="pi pi-check-circle mr-2"></i>{{ 'HRM.COMPETENCY.STRENGTHS' | translate }}</h3>
                     <ul class="list-disc list-inside space-y-1">
                         @for (strength of currentReport.strengths; track strength.competency_id) {
                             <li>{{ strength.competency_name }}</li>
@@ -594,17 +594,17 @@
             <!-- Области развития -->
             @if (currentReport.development_areas.length > 0) {
                 <div class="mb-6">
-                    <h3 class="font-semibold mb-3 text-orange-600"><i class="pi pi-exclamation-triangle mr-2"></i>Области развития</h3>
+                    <h3 class="font-semibold mb-3 text-orange-600"><i class="pi pi-exclamation-triangle mr-2"></i>{{ 'HRM.COMPETENCY.DEVELOPMENT_AREAS' | translate }}</h3>
                     <div class="space-y-2">
                         @for (area of currentReport.development_areas; track area.competency_id) {
                             <div class="p-3 border rounded-lg">
                                 <div class="flex items-center justify-between mb-1">
                                     <span class="font-medium">{{ area.competency_name }}</span>
-                                    <p-tag [value]="area.priority === 'high' ? 'Высокий' : 'Средний'"
+                                    <p-tag [value]="area.priority === 'high' ? ('HRM.COMPETENCY.PRIORITY_HIGH' | translate) : ('HRM.COMPETENCY.PRIORITY_MEDIUM' | translate)"
                                            [severity]="area.priority === 'high' ? 'danger' : 'warn'"></p-tag>
                                 </div>
                                 <div class="text-sm text-gray-500">
-                                    Текущий: {{ area.current_level }} | Целевой: {{ area.target_level }} | Разрыв: {{ area.gap }}
+                                    {{ 'HRM.COMPETENCY.CURRENT' | translate }}: {{ area.current_level }} | {{ 'HRM.COMPETENCY.TARGET' | translate }}: {{ area.target_level }} | {{ 'HRM.COMPETENCY.GAP' | translate }}: {{ area.gap }}
                                 </div>
                             </div>
                         }
@@ -614,51 +614,51 @@
 
             <!-- Рекомендации -->
             <div class="mb-4">
-                <h3 class="font-semibold mb-3"><i class="pi pi-lightbulb mr-2"></i>Карьерные рекомендации</h3>
+                <h3 class="font-semibold mb-3"><i class="pi pi-lightbulb mr-2"></i>{{ 'HRM.COMPETENCY.CAREER_RECOMMENDATIONS' | translate }}</h3>
                 <div class="p-3 bg-blue-50 rounded-lg">{{ currentReport.career_recommendations }}</div>
             </div>
         </div>
     }
     <ng-template #footer>
-        <button pButton label="Закрыть" (click)="displayReportDialog = false"></button>
+        <button pButton [label]="'COMMON.CLOSE' | translate" (click)="displayReportDialog = false"></button>
     </ng-template>
 </p-dialog>
 
 <!-- Диалог создания плана развития -->
-<p-dialog [(visible)]="displayPlanDialog" header="Новый план развития"
+<p-dialog [(visible)]="displayPlanDialog" [header]="'HRM.COMPETENCY.NEW_DEVELOPMENT_PLAN' | translate"
           [modal]="true" [style]="{ width: '600px' }" [closable]="true">
     <form [formGroup]="planForm" class="p-4">
         <div class="mb-4">
-            <label class="block font-medium mb-2">Сотрудник *</label>
+            <label class="block font-medium mb-2">{{ 'HRM.COMPETENCY.EMPLOYEE' | translate }} *</label>
             <p-select formControlName="employee_id" [options]="employees" optionLabel="name"
-                        placeholder="Выберите сотрудника" class="w-full"></p-select>
+                        [placeholder]="'HRM.COMPETENCY.SELECT_EMPLOYEE' | translate" class="w-full"></p-select>
         </div>
 
         <div class="grid grid-cols-2 gap-4 mb-4">
             <div>
-                <label class="block font-medium mb-2">Дата начала *</label>
+                <label class="block font-medium mb-2">{{ 'HRM.COMPETENCY.START_DATE' | translate }} *</label>
                 <p-datepicker formControlName="start_date" [showIcon]="true" dateFormat="dd.mm.yy" class="w-full"></p-datepicker>
             </div>
             <div>
-                <label class="block font-medium mb-2">Дата окончания *</label>
+                <label class="block font-medium mb-2">{{ 'HRM.COMPETENCY.END_DATE' | translate }} *</label>
                 <p-datepicker formControlName="end_date" [showIcon]="true" dateFormat="dd.mm.yy" class="w-full"></p-datepicker>
             </div>
         </div>
 
         <div class="mb-4">
-            <label class="block font-medium mb-2">Примечания</label>
+            <label class="block font-medium mb-2">{{ 'HRM.COMPETENCY.NOTES' | translate }}</label>
             <textarea pTextarea formControlName="notes" class="w-full" rows="3"
-                      placeholder="Цели и особенности плана развития"></textarea>
+                      [placeholder]="'HRM.COMPETENCY.PLAN_NOTES_PLACEHOLDER' | translate"></textarea>
         </div>
     </form>
     <ng-template #footer>
-        <button pButton label="Отмена" class="p-button-text" (click)="displayPlanDialog = false"></button>
-        <button pButton label="Создать" (click)="savePlan()"></button>
+        <button pButton [label]="'COMMON.CANCEL' | translate" class="p-button-text" (click)="displayPlanDialog = false"></button>
+        <button pButton [label]="'COMMON.CREATE' | translate" (click)="savePlan()"></button>
     </ng-template>
 </p-dialog>
 
 <!-- Диалог мониторинга плана развития -->
-<p-dialog [(visible)]="displayMonitoringDialog" header="Мониторинг плана развития"
+<p-dialog [(visible)]="displayMonitoringDialog" [header]="'HRM.COMPETENCY.PLAN_MONITORING' | translate"
           [modal]="true" [style]="{ width: '900px' }" [closable]="true" [maximizable]="true">
     @if (selectedPlan) {
         <div class="p-4">
@@ -671,13 +671,13 @@
                 <div class="text-center">
                     <p-knob [(ngModel)]="selectedPlan.overall_progress" [readonly]="true" [min]="0" [max]="100"
                             [size]="100" valueColor="#3b82f6" rangeColor="#e5e7eb" valueTemplate="{value}%"></p-knob>
-                    <div class="text-sm font-medium">Общий прогресс</div>
+                    <div class="text-sm font-medium">{{ 'HRM.COMPETENCY.OVERALL_PROGRESS' | translate }}</div>
                 </div>
             </div>
 
             <!-- Целевые компетенции -->
             <div class="mb-6">
-                <h3 class="font-semibold mb-3">Целевые компетенции</h3>
+                <h3 class="font-semibold mb-3">{{ 'HRM.COMPETENCY.TARGET_COMPETENCIES' | translate }}</h3>
                 <div class="space-y-3">
                     @for (target of selectedPlan.competency_targets; track target.competency_id) {
                         <div class="p-3 border rounded-lg">
@@ -693,7 +693,7 @@
 
             <!-- Мероприятия -->
             <div class="mb-6">
-                <h3 class="font-semibold mb-3">Мероприятия по развитию</h3>
+                <h3 class="font-semibold mb-3">{{ 'HRM.COMPETENCY.DEVELOPMENT_ACTIVITIES' | translate }}</h3>
                 <p-timeline [value]="selectedPlan.development_activities">
                     <ng-template #content let-activity>
                         <div class="p-3 border rounded-lg mb-2">
@@ -701,13 +701,13 @@
                                 <span class="font-medium">{{ activity.title }}</span>
                                 @switch (activity.status) {
                                     @case ('completed') {
-                                        <p-tag value="Завершено" severity="success"></p-tag>
+                                        <p-tag [value]="'HRM.COMPETENCY.ACTIVITY_COMPLETED' | translate" severity="success"></p-tag>
                                     }
                                     @case ('in_progress') {
-                                        <p-tag value="В процессе" severity="info"></p-tag>
+                                        <p-tag [value]="'HRM.COMPETENCY.ACTIVITY_IN_PROGRESS' | translate" severity="info"></p-tag>
                                     }
                                     @case ('planned') {
-                                        <p-tag value="Запланировано" severity="secondary"></p-tag>
+                                        <p-tag [value]="'HRM.COMPETENCY.ACTIVITY_PLANNED' | translate" severity="secondary"></p-tag>
                                     }
                                 }
                             </div>
@@ -723,7 +723,7 @@
             <!-- Наставники -->
             @if (selectedPlan.mentors.length > 0) {
                 <div class="mb-6">
-                    <h3 class="font-semibold mb-3">Наставники</h3>
+                    <h3 class="font-semibold mb-3">{{ 'HRM.COMPETENCY.MENTORS' | translate }}</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                         @for (mentor of selectedPlan.mentors; track mentor.mentor_id) {
                             <div class="p-3 border rounded-lg flex items-center gap-3">
@@ -744,12 +744,12 @@
             <!-- Промежуточные оценки -->
             @if (selectedPlan.interim_assessments.length > 0) {
                 <div>
-                    <h3 class="font-semibold mb-3">Промежуточные оценки</h3>
+                    <h3 class="font-semibold mb-3">{{ 'HRM.COMPETENCY.INTERIM_ASSESSMENTS' | translate }}</h3>
                     @for (interim of selectedPlan.interim_assessments; track interim.id) {
                         <div class="p-3 border rounded-lg mb-2">
                             <div class="flex items-center justify-between mb-2">
                                 <span class="font-medium">{{ interim.assessment_date | date:'dd.MM.yyyy' }}</span>
-                                <span class="text-sm">Прогресс: {{ interim.overall_progress }}%</span>
+                                <span class="text-sm">{{ 'HRM.COMPETENCY.PROGRESS' | translate }}: {{ interim.overall_progress }}%</span>
                             </div>
                             <div class="text-sm mb-2">{{ interim.feedback }}</div>
                             <div class="flex flex-wrap gap-2">
@@ -764,13 +764,13 @@
         </div>
     }
     <ng-template #footer>
-        <button pButton label="Закрыть" (click)="displayMonitoringDialog = false"></button>
+        <button pButton [label]="'COMMON.CLOSE' | translate" (click)="displayMonitoringDialog = false"></button>
     </ng-template>
 </p-dialog>
 
 <!-- Диалог подтверждения удаления -->
 <app-delete-confirmation
     [(visible)]="displayDeleteDialog"
-    [message]="'Вы уверены, что хотите удалить сессию ' + (selectedSession?.name || '') + '?'"
+    [message]="('HRM.COMPETENCY.DELETE_SESSION_CONFIRM' | translate) + ' ' + (selectedSession?.name || '') + '?'"
     (onConfirm)="confirmDelete()">
 </app-delete-confirmation>

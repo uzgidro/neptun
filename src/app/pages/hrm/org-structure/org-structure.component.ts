@@ -13,6 +13,7 @@ import { Tooltip } from 'primeng/tooltip';
 import { TreeNode } from 'primeng/api';
 import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import {
     OrgUnit,
     OrgEmployee,
@@ -70,7 +71,8 @@ export interface EmployeeForm {
         InputText,
         Textarea,
         Tag,
-        Tooltip
+        Tooltip,
+        TranslateModule
     ],
     templateUrl: './org-structure.component.html',
     styleUrl: './org-structure.component.scss'
@@ -95,9 +97,9 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
     // Options
     orgUnitTypes = ORG_UNIT_TYPES;
     viewModes = [
-        { label: 'Дерево', value: 'tree', icon: 'pi-list' },
-        { label: 'Оргчарт', value: 'chart', icon: 'pi-sitemap' },
-        { label: 'Список', value: 'list', icon: 'pi-th-large' }
+        { labelKey: 'HRM.ORG_STRUCTURE.VIEW_TREE', value: 'tree', icon: 'pi-list' },
+        { labelKey: 'HRM.ORG_STRUCTURE.VIEW_CHART', value: 'chart', icon: 'pi-sitemap' },
+        { labelKey: 'HRM.ORG_STRUCTURE.VIEW_LIST', value: 'list', icon: 'pi-th-large' }
     ];
 
     // State
@@ -129,6 +131,7 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
 
     private messageService = inject(MessageService);
     private orgStructureService = inject(OrgStructureService);
+    private translate = inject(TranslateService);
     private destroy$ = new Subject<void>();
 
     ngOnInit(): void {
@@ -155,7 +158,7 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
                 },
                 error: () => {
                     this.loading = false;
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось загрузить оргструктуру' });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('HRM.ORG_STRUCTURE.LOAD_ERROR') });
                 }
             });
     }
@@ -169,7 +172,7 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
                     this.calculateStats();
                 },
                 error: () => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось загрузить сотрудников' });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('HRM.ORG_STRUCTURE.EMPLOYEES_LOAD_ERROR') });
                 }
             });
     }
@@ -351,7 +354,7 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
             : this.employeeForm.position;
 
         if (!this.employeeForm.name || !position || !this.employeeForm.department_id) {
-            this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Заполните обязательные поля (ФИО, должность, отдел)' });
+            this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('HRM.ORG_STRUCTURE.FILL_REQUIRED') });
             return;
         }
 
@@ -376,7 +379,7 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
                     is_manager: this.employeeForm.is_manager
                 };
             }
-            this.messageService.add({ severity: 'success', summary: 'Сохранено', detail: 'Данные сотрудника обновлены' });
+            this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('HRM.ORG_STRUCTURE.EMPLOYEE_SAVED') });
         } else {
             // Create new employee
             const newEmployee: OrgEmployee = {
@@ -401,7 +404,7 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
                 department.employee_count++;
             }
 
-            this.messageService.add({ severity: 'success', summary: 'Создано', detail: 'Сотрудник добавлен' });
+            this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('HRM.ORG_STRUCTURE.EMPLOYEE_ADDED') });
         }
 
         // Refresh details panel
@@ -428,7 +431,7 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
                 this.detailsEmployees = this.employees.filter(e => e.department_id === this.detailsUnit!.id);
             }
             this.calculateStats();
-            this.messageService.add({ severity: 'success', summary: 'Удалено', detail: 'Сотрудник удалён' });
+            this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('HRM.ORG_STRUCTURE.EMPLOYEE_DELETED') });
         }
     }
 
@@ -476,7 +479,7 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
 
     saveUnit(): void {
         if (!this.unitForm.name || !this.unitForm.code) {
-            this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Заполните обязательные поля' });
+            this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('HRM.ORG_STRUCTURE.FILL_REQUIRED') });
             return;
         }
 
@@ -485,7 +488,7 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
             if (index !== -1) {
                 this.orgUnits[index] = { ...this.orgUnits[index], ...this.unitForm } as OrgUnit;
             }
-            this.messageService.add({ severity: 'success', summary: 'Сохранено', detail: 'Подразделение обновлено' });
+            this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('HRM.ORG_STRUCTURE.DEPARTMENT_UPDATED') });
         } else {
             const newUnit: OrgUnit = {
                 id: Math.max(...this.orgUnits.map(u => u.id)) + 1,
@@ -498,7 +501,7 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
                 created_at: new Date().toISOString()
             };
             this.orgUnits.push(newUnit);
-            this.messageService.add({ severity: 'success', summary: 'Создано', detail: 'Подразделение добавлено' });
+            this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('HRM.ORG_STRUCTURE.DEPARTMENT_ADDED') });
         }
 
         this.buildOrgTree();
