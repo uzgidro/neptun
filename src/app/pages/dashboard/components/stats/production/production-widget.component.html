@@ -19,7 +19,7 @@
             <span class="font-medium" [ngClass]="{
                 'text-green-500': data.change_direction === 'up',
                 'text-red-500': data.change_direction === 'down',
-                'text-muted-color': data.change_direction === 'neutral'
+                'text-muted-color': data.change_direction === 'flat'
             }">
                 {{ data.change_direction === 'up' ? '+' : '' }}{{ data.change_percent | number: '1.0-2' }}%
             </span>
