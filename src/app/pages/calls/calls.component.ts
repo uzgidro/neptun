@@ -19,6 +19,7 @@ import { SelectComponent } from '@/layout/component/dialog/select/select.compone
 import { TextareaComponent } from '@/layout/component/dialog/textarea/textarea.component';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
 import { DeleteConfirmationComponent } from '@/layout/component/dialog/delete-confirmation/delete-confirmation.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-calls',
@@ -42,7 +43,8 @@ import { DeleteConfirmationComponent } from '@/layout/component/dialog/delete-co
         SelectComponent,
         TextareaComponent,
         DatePickerComponent,
-        DeleteConfirmationComponent
+        DeleteConfirmationComponent,
+        TranslateModule
     ],
     templateUrl: './calls.component.html',
     styleUrl: './calls.component.scss'

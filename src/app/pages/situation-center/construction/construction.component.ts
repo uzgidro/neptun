@@ -6,11 +6,12 @@ import { CommonModule } from '@angular/common';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
 import { AuthService } from '@/core/services/auth.service';
 import { ButtonModule } from 'primeng/button';
+import { TranslateModule } from '@ngx-translate/core';
 import * as XLSX from 'xlsx';
 
 @Component({
     selector: 'app-construction',
-    imports: [TableModule, FormsModule, CommonModule, DatePickerComponent, ReactiveFormsModule, ButtonModule],
+    imports: [TableModule, FormsModule, CommonModule, DatePickerComponent, ReactiveFormsModule, ButtonModule, TranslateModule],
     templateUrl: './construction.component.html',
     styleUrl: './construction.component.scss'
 })

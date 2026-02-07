@@ -9,6 +9,7 @@ import { TooltipModule } from 'primeng/tooltip';
 import { DividerModule } from 'primeng/divider';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { Subscription } from 'rxjs';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { FinancialDashboardService } from './services/financial-dashboard.service';
 import { FinancialDashboardData, ModuleCard, MetricItem } from './models/financial-summary.model';
@@ -24,7 +25,8 @@ import { FinancialDashboardData, ModuleCard, MetricItem } from './models/financi
         TagModule,
         TooltipModule,
         DividerModule,
-        ProgressBarModule
+        ProgressBarModule,
+        TranslateModule
     ],
     templateUrl: './financial-dashboard.component.html',
     styleUrl: './financial-dashboard.component.scss'
