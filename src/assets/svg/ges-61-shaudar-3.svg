@@ -688,8 +688,7 @@
             font-size="9" transform="translate(1176.37 69)">Н
             </text>
         </g>
-        <path d="M1145.5 94.5001 1166.55 100.084" stroke="#4472C4" stroke-width="0.666667"
-              stroke-miterlimit="8" stroke-dasharray="2.66667 2" fill="none" fill-rule="evenodd" />
+
         <path d="M861.415 93.286 945.015 93.286 945.015 106.877 861.415 106.877Z" fill="#D9D9D9"
               fill-rule="evenodd" />
         <path d="M861.415 106.877 945.015 106.877 945.015 120.468 861.415 120.468Z" fill="#D9D9D9"

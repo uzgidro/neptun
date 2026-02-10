@@ -1562,15 +1562,7 @@
             Н
             </text>
         </g>
-        <path
-            d="M1136.5 95.5001 1159.21 95.5002"
-            stroke="#4472C4"
-            stroke-width="0.666667"
-            stroke-miterlimit="8"
-            stroke-dasharray="2.66667 2"
-            fill="none"
-            fill-rule="evenodd"
-        />
+
         <path
             d="M178.411 248.343 246 248.343 246 261.143 178.411 261.143Z"
             fill="#D9D9D9"
