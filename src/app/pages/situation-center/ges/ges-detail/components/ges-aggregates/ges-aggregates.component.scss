@@ -1,11 +1,14 @@
 :host {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
 }
 
 .status-cards {
     display: flex;
     gap: 1rem;
     margin-bottom: 1.25rem;
+    flex-shrink: 0;
 }
 
 .status-card {
@@ -92,8 +95,9 @@
 }
 
 .generators-scroll {
-    max-height: 200px;
+    flex: 1;
     overflow-y: auto;
+    min-height: 0;
 }
 
 .generator-section {
