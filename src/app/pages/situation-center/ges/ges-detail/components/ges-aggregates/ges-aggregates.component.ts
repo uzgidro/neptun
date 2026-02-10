@@ -80,15 +80,20 @@ export class GesAggregatesComponent implements OnChanges {
                     status,
                     params
                 };
+            })
+            .sort((a, b) => {
+                const numA = parseInt(a.id.replace(/\D/g, ''), 10) || 0;
+                const numB = parseInt(b.id.replace(/\D/g, ''), 10) || 0;
+                return numA - numB;
             });
     }
 
     getStatusSeverity(status: GeneratorView['status']): 'success' | 'info' | 'warn' | 'danger' | 'secondary' {
         const map: Record<GeneratorView['status'], 'success' | 'info' | 'warn' | 'danger' | 'secondary'> = {
-            active: 'success',
-            pending: 'info',
+            active: 'danger',
+            pending: 'success',
             repair: 'warn',
-            offline: 'danger'
+            offline: 'secondary'
         };
         return map[status];
     }
