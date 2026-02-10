@@ -1759,10 +1759,32 @@
             "OFFLINE": "Ўчирилган"
         },
         "AGGREGATE": {
-            "NAME": "Номи",
-            "POWER": "Қувват",
-            "STATUS": "Ҳолат",
-            "TEMPERATURE": "Ҳарорат"
+            "PARAM_NAME": "Параметр",
+            "PARAM_VALUE": "Қиймат",
+            "PARAM_UNIT": "Ўлч. бир.",
+            "ACTIVE_POWER": "Актив қувват",
+            "REACTIVE_POWER": "Реактив қувват",
+            "VOLTAGE_AB": "Кучланиш AB",
+            "VOLTAGE_BC": "Кучланиш BC",
+            "VOLTAGE_CA": "Кучланиш CA",
+            "CURRENT_A": "Ток фаза A",
+            "CURRENT_B": "Ток фаза B",
+            "CURRENT_C": "Ток фаза C",
+            "FREQUENCY": "Частота",
+            "POWER_FACTOR": "Қувват коэффициенти (cos φ)",
+            "ROTOR_VOLTAGE": "Ротор кучланиши",
+            "ROTOR_CURRENT": "Ротор токи",
+            "GUIDE_VANE_1": "Йўналтирувчи аппарат 1",
+            "GUIDE_VANE_2": "Йўналтирувчи аппарат 2"
+        },
+        "UNIT": {
+            "MW": "МВт",
+            "MVAR": "МВАр",
+            "KV": "кВ",
+            "A": "А",
+            "HZ": "Гц",
+            "V": "В",
+            "PERCENT": "%"
         },
         "MNEMONIC": {
             "STATUS": "Ҳолат",

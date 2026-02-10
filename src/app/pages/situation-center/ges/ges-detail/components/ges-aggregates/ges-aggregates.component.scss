@@ -90,3 +90,29 @@
         color: #d97706;
     }
 }
+
+.generators-scroll {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.generator-section {
+    margin-bottom: 1.5rem;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.generator-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+}
+
+.generator-name {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+}

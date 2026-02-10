@@ -1788,10 +1788,32 @@
             "OFFLINE": "Offline"
         },
         "AGGREGATE": {
-            "NAME": "Name",
-            "POWER": "Power",
-            "STATUS": "Status",
-            "TEMPERATURE": "Temperature"
+            "PARAM_NAME": "Parameter",
+            "PARAM_VALUE": "Value",
+            "PARAM_UNIT": "Unit",
+            "ACTIVE_POWER": "Active Power",
+            "REACTIVE_POWER": "Reactive Power",
+            "VOLTAGE_AB": "Voltage AB",
+            "VOLTAGE_BC": "Voltage BC",
+            "VOLTAGE_CA": "Voltage CA",
+            "CURRENT_A": "Current Phase A",
+            "CURRENT_B": "Current Phase B",
+            "CURRENT_C": "Current Phase C",
+            "FREQUENCY": "Frequency",
+            "POWER_FACTOR": "Power Factor (cos φ)",
+            "ROTOR_VOLTAGE": "Rotor Voltage",
+            "ROTOR_CURRENT": "Rotor Current",
+            "GUIDE_VANE_1": "Guide Vane 1",
+            "GUIDE_VANE_2": "Guide Vane 2"
+        },
+        "UNIT": {
+            "MW": "MW",
+            "MVAR": "MVar",
+            "KV": "kV",
+            "A": "A",
+            "HZ": "Hz",
+            "V": "V",
+            "PERCENT": "%"
         },
         "MNEMONIC": {
             "STATUS": "Status",

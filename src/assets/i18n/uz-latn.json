@@ -1759,10 +1759,32 @@
             "OFFLINE": "O'chirilgan"
         },
         "AGGREGATE": {
-            "NAME": "Nomi",
-            "POWER": "Quvvat",
-            "STATUS": "Holat",
-            "TEMPERATURE": "Harorat"
+            "PARAM_NAME": "Parametr",
+            "PARAM_VALUE": "Qiymat",
+            "PARAM_UNIT": "O'lch. bir.",
+            "ACTIVE_POWER": "Aktiv quvvat",
+            "REACTIVE_POWER": "Reaktiv quvvat",
+            "VOLTAGE_AB": "Kuchlanish AB",
+            "VOLTAGE_BC": "Kuchlanish BC",
+            "VOLTAGE_CA": "Kuchlanish CA",
+            "CURRENT_A": "Tok faza A",
+            "CURRENT_B": "Tok faza B",
+            "CURRENT_C": "Tok faza C",
+            "FREQUENCY": "Chastota",
+            "POWER_FACTOR": "Quvvat koeffitsiyenti (cos φ)",
+            "ROTOR_VOLTAGE": "Rotor kuchlanishi",
+            "ROTOR_CURRENT": "Rotor toki",
+            "GUIDE_VANE_1": "Yo'naltiruvchi apparat 1",
+            "GUIDE_VANE_2": "Yo'naltiruvchi apparat 2"
+        },
+        "UNIT": {
+            "MW": "MW",
+            "MVAR": "MVar",
+            "KV": "kV",
+            "A": "A",
+            "HZ": "Hz",
+            "V": "V",
+            "PERCENT": "%"
         },
         "MNEMONIC": {
             "STATUS": "Holat",
