@@ -177,6 +177,7 @@
     "RESERVOIR_SUMMARY": "Summary",
     "RESERVOIR_SUMMARY_PDF": "Summary PDF",
     "HYDRAULIC_STRUCTURES": "Hydraulic Structures",
+      "SNOW_COVER": "MODSNOW",
     "INCIDENTS": "Incidents",
     "VISITS": "Visits"
   },
@@ -1917,6 +1918,21 @@
             "TOTAL_RECORDS": "Total Records",
             "NO_DATA": "No telemetry data"
         }
+    },
+    "SNOW_COVER": {
+        "TITLE": "Snow Cover (MODSNOW)",
+        "TODAY": "Today",
+        "YESTERDAY": "Yesterday",
+        "YEAR_AGO": "Year Ago",
+        "AVG_COVER": "Average Cover",
+        "ORGANIZATION": "Organization",
+        "COVER": "Cover, %",
+        "DELTA": "Δ vs Year Ago",
+        "ZONES": "Elevation Zones",
+        "ELEVATION": "Elevation, m",
+        "SCA_PCT": "Cover, %",
+        "NO_DATA": "No data",
+        "RESOURCE_DATE": "Image Date"
     },
     "UZGIDRO_NEWS": {
         "TITLE": "UzGidro News",

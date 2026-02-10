@@ -98,6 +98,11 @@ export class MenuComponent implements OnInit {
                                         label: this.t('MENU.HYDRAULIC_STRUCTURES'),
                                         role: ['rais', 'sc'],
                                         routerLink: ['/reservoir-device']
+                                    },
+                                    {
+                                        label: this.t('MENU.SNOW_COVER'),
+                                        role: ['rais', 'sc'],
+                                        routerLink: ['/snow-cover']
                                     }
                                 ]
                             },
