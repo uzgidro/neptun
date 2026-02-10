@@ -1,16 +1,31 @@
 @if (askue) {
-    <div class="flex gap-4 mb-4 text-sm">
-        <div class="flex items-center gap-2">
-            <span class="inline-block w-3 h-3 rounded-full bg-green-500"></span>
-            <span>{{ 'GES_DETAIL.STATUS.ACTIVE' | translate }}: {{ askue.active_agg_count ?? 0 }}</span>
+    <div class="status-cards">
+        <div class="status-card status-active">
+            <div class="status-icon">
+                <i class="pi pi-bolt"></i>
+            </div>
+            <div class="status-info">
+                <span class="status-count">{{ askue.active_agg_count ?? 0 }}</span>
+                <span class="status-label">{{ 'GES_DETAIL.STATUS.ACTIVE' | translate }}</span>
+            </div>
         </div>
-        <div class="flex items-center gap-2">
-            <span class="inline-block w-3 h-3 rounded-full bg-blue-500"></span>
-            <span>{{ 'GES_DETAIL.STATUS.PENDING' | translate }}: {{ askue.pending_agg_count ?? 0 }}</span>
+        <div class="status-card status-reserve">
+            <div class="status-icon">
+                <i class="pi pi-pause-circle"></i>
+            </div>
+            <div class="status-info">
+                <span class="status-count">{{ askue.pending_agg_count ?? 0 }}</span>
+                <span class="status-label">{{ 'GES_DETAIL.STATUS.PENDING' | translate }}</span>
+            </div>
         </div>
-        <div class="flex items-center gap-2">
-            <span class="inline-block w-3 h-3 rounded-full bg-yellow-500"></span>
-            <span>{{ 'GES_DETAIL.STATUS.REPAIR' | translate }}: {{ askue.repair_agg_count ?? 0 }}</span>
+        <div class="status-card status-repair">
+            <div class="status-icon">
+                <i class="pi pi-wrench"></i>
+            </div>
+            <div class="status-info">
+                <span class="status-count">{{ askue.repair_agg_count ?? 0 }}</span>
+                <span class="status-label">{{ 'GES_DETAIL.STATUS.REPAIR' | translate }}</span>
+            </div>
         </div>
     </div>
 }
@@ -20,7 +35,7 @@
         [value]="aggregates"
         [scrollable]="true"
         scrollHeight="300px"
-        styleClass="p-datatable-sm">
+        class="p-datatable-sm">
         <ng-template pTemplate="header">
             <tr>
                 <th pSortableColumn="name">
