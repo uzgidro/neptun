@@ -128,7 +128,7 @@
         }
 
         .chart-body {
-            height: 400px;
+            min-height: 400px;
         }
     }
 
@@ -163,14 +163,6 @@
         font-weight: 600;
     }
 
-    .zones-table-wrap {
-        padding: 1rem 2rem;
-
-        h5 {
-            margin: 0 0 0.75rem 0;
-            color: var(--text-color-secondary);
-        }
-    }
 }
 
 // ===== RESPONSIVE =====

@@ -94,11 +94,12 @@
             <div class="chart-header">
                 <h4>{{ 'SNOW_COVER.COVER' | translate }}</h4>
             </div>
-            <div class="chart-body">
+        <div class="chart-body" [style.height]="chartHeight">
                 <p-chart
                     type="bar"
                     [data]="chartData"
                     [options]="chartOptions"
+                    height="100%"
                 ></p-chart>
             </div>
         </div>
@@ -107,14 +108,11 @@
         <div class="table-section">
             <p-table
                 [value]="data.today.items"
-                [expandedRowKeys]="expandedRows"
-                dataKey="organization_id"
                 [rowHover]="true"
                 [rows]="50"
                 styleClass="p-datatable-sm p-datatable-gridlines">
                 <ng-template #header>
                     <tr>
-                        <th style="width: 3rem"></th>
                         <th>{{ 'SNOW_COVER.ORGANIZATION' | translate }}</th>
                         <th class="text-center">{{ 'SNOW_COVER.TODAY' | translate }}, %</th>
                         <th class="text-center">{{ 'SNOW_COVER.YESTERDAY' | translate }}, %</th>
@@ -123,20 +121,8 @@
                         <th class="text-center">{{ 'SNOW_COVER.RESOURCE_DATE' | translate }}</th>
                     </tr>
                 </ng-template>
-                <ng-template #body let-item let-expanded="expanded">
+                <ng-template #body let-item>
                     <tr>
-                        <td>
-                            @if (item.zones && item.zones.length > 0) {
-                                <p-button
-                                    type="button"
-                                    [pRowToggler]="item"
-                                    [text]="true"
-                                    [rounded]="true"
-                                    [plain]="true"
-                                    [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
-                                </p-button>
-                            }
-                        </td>
                         <td>{{ item.organization_name }}</td>
                         <td class="text-center">
                             @if (item.overall_cover !== null) {
@@ -181,32 +167,9 @@
                         </td>
                     </tr>
                 </ng-template>
-                <ng-template #rowexpansion let-item>
-                    <tr>
-                        <td colspan="7">
-                            <div class="zones-table-wrap">
-                                <h5>{{ 'SNOW_COVER.ZONES' | translate }}</h5>
-                                <p-table [value]="item.zones" styleClass="p-datatable-sm">
-                                    <ng-template #header>
-                                        <tr>
-                                            <th>{{ 'SNOW_COVER.ELEVATION' | translate }}</th>
-                                            <th class="text-center">{{ 'SNOW_COVER.SCA_PCT' | translate }}</th>
-                                        </tr>
-                                    </ng-template>
-                                    <ng-template #body let-zone>
-                                        <tr>
-                                            <td>{{ zone.min_elev }} – {{ zone.max_elev }} м</td>
-                                            <td class="text-center">{{ zone.sca_pct }}%</td>
-                                        </tr>
-                                    </ng-template>
-                                </p-table>
-                            </div>
-                        </td>
-                    </tr>
-                </ng-template>
                 <ng-template #emptymessage>
                     <tr>
-                        <td colspan="7" class="text-center">{{ 'SNOW_COVER.NO_DATA' | translate }}</td>
+                        <td colspan="6" class="text-center">{{ 'SNOW_COVER.NO_DATA' | translate }}</td>
                     </tr>
                 </ng-template>
             </p-table>

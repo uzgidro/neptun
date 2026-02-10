@@ -26,10 +26,9 @@ export class SnowCoverComponent implements OnInit, OnDestroy {
     selectedDate: Date = new Date();
     data: SnowCoverResponse | null = null;
     loading = false;
-    expandedRows: { [key: number]: boolean } = {};
-
     chartData: any = {};
     chartOptions: any = {};
+    chartHeight = '400px';
 
     ngOnInit(): void {
         this.initChartOptions();
@@ -116,6 +115,7 @@ export class SnowCoverComponent implements OnInit, OnDestroy {
     private updateChart(): void {
         if (!this.data) return;
 
+        this.chartHeight = Math.max(400, this.data.today.items.length * 50) + 'px';
         const labels = this.data.today.items.map((i) => i.organization_name);
         const todayData = this.data.today.items.map((i) => i.overall_cover ?? 0);
         const yearAgoData = this.data.today.items.map((i) => {
