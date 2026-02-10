@@ -17,6 +17,7 @@
                 <p-tab [value]="4">{{ 'GES_DETAIL.TABS.INCIDENTS' | translate }}</p-tab>
                 <p-tab [value]="5">{{ 'GES_DETAIL.TABS.VISITS' | translate }}</p-tab>
                 <p-tab [value]="6">{{ 'GES_DETAIL.TABS.TELEMETRY' | translate }}</p-tab>
+                <p-tab [value]="7">{{ 'GES_DETAIL.TABS.MNEMONIC' | translate }}</p-tab>
             </p-tablist>
 
             <p-tabpanels>
@@ -46,6 +47,10 @@
 
                 <p-tabpanel [value]="6">
                     <app-ges-telemetry-section [gesId]="gesId"></app-ges-telemetry-section>
+                </p-tabpanel>
+
+                <p-tabpanel [value]="7">
+                    <app-ges-mnemonic-section [gesId]="gesId"></app-ges-mnemonic-section>
                 </p-tabpanel>
             </p-tabpanels>
         </p-tabs>

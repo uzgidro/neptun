@@ -20,6 +20,7 @@ import { GesDischargesSectionComponent } from './sections/discharges/ges-dischar
 import { GesIncidentsSectionComponent } from './sections/incidents/ges-incidents-section.component';
 import { GesVisitsSectionComponent } from './sections/visits/ges-visits-section.component';
 import { GesTelemetrySectionComponent } from './sections/telemetry/ges-telemetry-section.component';
+import { GesMnemonicSectionComponent } from './sections/mnemonic/ges-mnemonic-section.component';
 
 @Component({
     selector: 'app-ges-detail',
@@ -40,7 +41,8 @@ import { GesTelemetrySectionComponent } from './sections/telemetry/ges-telemetry
         GesDischargesSectionComponent,
         GesIncidentsSectionComponent,
         GesVisitsSectionComponent,
-        GesTelemetrySectionComponent
+        GesTelemetrySectionComponent,
+        GesMnemonicSectionComponent
     ],
     templateUrl: './ges-detail.component.html',
     styleUrl: './ges-detail.component.scss'

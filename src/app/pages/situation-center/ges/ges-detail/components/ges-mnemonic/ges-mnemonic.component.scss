@@ -6,31 +6,15 @@
     min-height: 300px;
 }
 
-.mnemonic-svg {
-    width: 100%;
-    height: 350px;
+.svg-wrapper {
+    overflow: auto;
     background: #fafafa;
     border-radius: 8px;
-}
+    padding: 8px;
 
-.node-group {
-    cursor: pointer;
-    transition: transform 0.2s ease;
-
-    &:hover {
-        .node-circle {
-            filter: brightness(1.1);
-        }
+    ::ng-deep svg {
+        width: 100%;
+        height: auto;
+        display: block;
     }
-
-    &.selected {
-        .node-circle {
-            stroke: #3b82f6;
-            stroke-width: 3;
-        }
-    }
-}
-
-.node-circle {
-    transition: all 0.2s ease;
 }

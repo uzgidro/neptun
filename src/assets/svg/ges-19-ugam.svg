@@ -1,0 +1,1200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg style="z-index: 1"
+     width="100%"
+     viewBox="0 0 1300 600"
+     height="100%"
+     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+     overflow="hidden">
+    <defs>
+        <clipPath id="clip0">
+            <rect x="0" y="0" width="1190625" height="571500" />
+        </clipPath>
+        <image width="156" height="76"
+               xlink:href="data:image/png;base64,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"
+               preserveAspectRatio="none" id="img1"></image>
+        <clipPath id="clip2">
+            <rect x="0" y="0" width="1173079" height="571500" />
+        </clipPath>
+        <clipPath id="clip3">
+            <rect x="0" y="0" width="1190625" height="571500" />
+        </clipPath>
+        <clipPath id="clip4">
+            <rect x="0" y="0" width="1173079" height="571500" />
+        </clipPath>
+        <clipPath id="clip5">
+            <rect x="0" y="0" width="1190625" height="571500" />
+        </clipPath>
+        <clipPath id="clip6">
+            <rect x="0" y="0" width="1173079" height="571500" />
+        </clipPath>
+        <clipPath id="clip7">
+            <rect x="0" y="-2.91038e-11" width="47625" height="114300" />
+        </clipPath>
+        <image width="39" height="91"
+               xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACcAAABbCAMAAADHnWy9AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAzUExURQAAAP8AAP8AAP8AAP8AAP8AAP8AAP8AAP8AAP0AAP0AAP4AAP4AAP4AAP4AAP4AAP8AAMVaHOIAAAAQdFJOUwAQIDBAUGBwgI+fr7/P3+8jGoKKAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAA5klEQVRIS+2XWQ7DIAxETZZmL77/aStIAHtwegK/T/ykJDMgBaLGwpqPmAkG0JgHVDITajyhknHPvYR77iXccy/hnnsJ98wfsXCgxldo4+18iGgxcyzDnXD0Aq24YrITnbhm8A1Eg/ViQA5oxtWO9f7kPhDNVZL7/+Q4lgz7JiRL0Yg2nAnOplH44rQSRXdEI44rs9TotZZDa0QXGplUhMauxdipeFtIPEVo+g1RitB04UT7XtHVIorQ6Fq6SBoyHF2ERtYCRWhaOBuONCWcvghNqaXuzTfu02IWoUmnxS5CEy5xIio/svdq42UQ6OwAAAAASUVORK5CYII="
+               preserveAspectRatio="none" id="img8"></image>
+        <clipPath id="clip9">
+            <rect x="0" y="0" width="47625" height="111125" />
+        </clipPath>
+        <clipPath id="clip10">
+            <rect x="0" y="0" width="47625" height="123825" />
+        </clipPath>
+        <image width="39" height="91"
+               xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACcAAABbCAMAAADHnWy9AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAzUExURQAAACDfECDXGCXaFSTbFCPZFiPaFSLbFCTbFiTbFSPcEyLcFCHaFSLbFCPcEyPaFSPbFdh6Az4AAAAQdFJOUwAQIDBAUGBwgI+fr7/P3+8jGoKKAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAA4klEQVRIS+2XWQ7FMAgDky6ve8P9T/tEV+zQGzCfMFIku5HSlJi2yJZ56LCJyMLDmlGUnsdMe2hSGl4geT89WXmDTJcmMvDK0j+aSMvLl1yMt/H2ZTGayMTrmwE0kY6Fk8aequx+LVoE4oZzFoE44XTsKHUtTxFIFQ5G8jKiZotAoBYoAoFwVt4aTC1cBPLU0n6fqpT75LoI5LotXhHIcVvcIhCt5aMIZE1p5pnLmHjyQZrXCy+cci9N2LmOZ3E/6B9rHxekDig8JbzwlPDCU8ILTwkvPKVhTarX/Qk/xOzfwh9/6mrjSwh/mwAAAABJRU5ErkJggg=="
+               preserveAspectRatio="none" id="img11"></image>
+        <clipPath id="clip12">
+            <rect x="0" y="0" width="47625" height="111125" />
+        </clipPath>
+        <clipPath id="clip13">
+            <rect x="0" y="0" width="76200" height="177800" />
+        </clipPath>
+        <clipPath id="clip14">
+            <rect x="0" y="0" width="76200" height="177800" />
+        </clipPath>
+    </defs>
+    <g>
+        <text
+            fill="#85a9ff"
+            font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+            font-weight="700"
+            font-size="10"
+            transform="translate(10 19)"
+        >
+            Xodimlar
+        </text>
+        <rect x="0" y="0" width="1280" height="720" fill="#FFFFFF" fill-opacity="0" />
+        <path
+            d="M1005.48 392.221 1005 320.51 1008 320.49 1008.48 392.201ZM1002 320.53C1001.98 318.045 1003.98 316.017 1006.47 316 1008.96 315.984 1010.98 317.985 1011 320.47 1011.02 322.955 1009.02 324.983 1006.53 325 1004.04 325.017 1002.02 323.015 1002 320.53Z"
+            fill="#6600CC" />
+        <path d="M308.603 188.138 308.5 125.5" stroke="#663300" stroke-width="3" stroke-miterlimit="8" fill="none"
+              fill-rule="evenodd" />
+        <path
+            d="M1.5-1.60782e-06 1.5001 97.9466-1.49989 97.9466-1.5 1.60782e-06ZM4.5001 97.9465C4.50011 100.432 2.48539 102.447 0.00010981 102.447-2.48517 102.447-4.49989 100.432-4.4999 97.9466-4.4999 95.4613-2.48518 93.4466 0.000100163 93.4466 2.48538 93.4466 4.5001 95.4613 4.5001 97.9465Z"
+            fill="#6600CC" transform="matrix(-1 0 0 1 399.5 222.5)" />
+        <path
+            d="M370.186 392.662 370 320.504 373 320.496 373.186 392.654ZM367 320.512C366.994 318.026 369.003 316.006 371.488 316 373.974 315.994 375.994 318.003 376 320.488 376.006 322.974 373.997 324.994 371.512 325 369.026 325.006 367.006 322.997 367 320.512Z"
+            fill="#6600CC" />
+        <path d="M371.5 447.5 371.5 513.609" stroke="#7F7F7F" stroke-width="3" stroke-miterlimit="8" fill="none"
+              fill-rule="evenodd" />
+        <rect x="0" y="0" width="19" height="19" stroke="#6600CC" stroke-width="3" stroke-miterlimit="8" fill="#FF0000"
+              transform="matrix(1 0 0 -1 361.5 364.5)" />
+        <path
+            d="M0 15C-1.9097e-15 6.71573 6.71573-1.9097e-15 15-3.8194e-15 23.2843-7.6388e-15 30 6.71573 30 15 30 23.2843 23.2843 30 15 30 6.71573 30-9.5485e-15 23.2843 0 15Z"
+            stroke="#6600CC" stroke-width="3" stroke-miterlimit="8" fill="#FF0000" fill-rule="evenodd"
+            transform="matrix(1 0 0 -1 356.5 422.5)" />
+        <path
+            d="M0 15C-1.9097e-15 6.71573 6.71573-1.9097e-15 15-3.8194e-15 23.2843-7.6388e-15 30 6.71573 30 15 30 23.2843 23.2843 30 15 30 6.71573 30-9.5485e-15 23.2843 0 15Z"
+            stroke="#7F7F7F" stroke-width="3" stroke-miterlimit="8" fill="#FF0000" fill-rule="evenodd"
+            transform="matrix(1 0 0 -1 356.5 447.5)" />
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(384.472 358)">В
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(391.639 358)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(395.139 358)">ТСН
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(416.472 358)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(419.972 358)">1
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(425.305 358)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(428.805 358)">10
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(390.433 405)">ТСН
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(411.767 405)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(415.267 405)">1
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(390.433 418)">10,5/0,4
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(390.433 431)">100
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(409.1 431)">кВа
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(390.433 444)">SC14/100
+        </text>
+        <path
+            d="M407 515.5 407 534.969 404 534.969 404 515.5ZM401 515.5C401 513.015 403.015 511 405.5 511 407.985 511 410 513.015 410 515.5 410 517.985 407.985 520 405.5 520 403.015 520 401 517.985 401 515.5ZM405.5 534.969 410 531.969 405.5 540.969 401 531.969Z"
+            fill="#7F7F7F" />
+        <path d="M415.583 514.754 328.5 513.5" stroke="#7F7F7F" stroke-width="3" stroke-miterlimit="8" fill="none"
+              fill-rule="evenodd" />
+        <path
+            d="M373 515.5 373 534.969 370 534.969 370 515.5ZM367 515.5C367 513.015 369.015 511 371.5 511 373.985 511 376 513.015 376 515.5 376 517.985 373.985 520 371.5 520 369.015 520 367 517.985 367 515.5ZM371.5 534.969 376 531.969 371.5 540.969 367 531.969Z"
+            fill="#7F7F7F" />
+        <path
+            d="M342 515.5 342 534.969 339 534.969 339 515.5ZM336 515.5C336 513.015 338.015 511 340.5 511 342.985 511 345 513.015 345 515.5 345 517.985 342.985 520 340.5 520 338.015 520 336 517.985 336 515.5ZM340.5 534.969 345 531.969 340.5 540.969 336 531.969Z"
+            fill="#7F7F7F" />
+        <rect x="0" y="0" width="18" height="19" stroke="#989898" stroke-width="3" stroke-miterlimit="8" fill="#FF0000"
+              transform="matrix(1 0 0 -1 362.5 488.5)" />
+        <path d="M89.5001 319.5 477.934 321.729" stroke="#6600CC" stroke-width="3" stroke-miterlimit="8" fill="none"
+              fill-rule="evenodd" />
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(165.651 400)">Г
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(172.484 400)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(175.984 400)">1
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(146.651 413)">10
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(157.317 413)">,
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(159.984 413)">5
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(167.984 413)">кВ
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(137.651 426)">1,73 МВт
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(126.651 439)">GSV800S10
+        </text>
+        <path
+            d="M209.48 392.221 209 320.51 212 320.49 212.48 392.201ZM206 320.53C205.984 318.045 207.985 316.017 210.47 316 212.955 315.984 214.983 317.985 215 320.47 215.017 322.955 213.015 324.983 210.53 325 208.045 325.017 206.017 323.015 206 320.53Z"
+            fill="#6600CC" />
+        <rect x="0" y="0" width="19" height="19" stroke="#6600CC" stroke-width="3" stroke-miterlimit="8" fill="#FF0000"
+              transform="matrix(1 0 0 -1 201.5 364.5)" />
+        <path
+            d="M0 15C-1.9097e-15 6.71573 6.71573-1.9097e-15 15-3.8194e-15 23.2843-7.6388e-15 30 6.71573 30 15 30 23.2843 23.2843 30 15 30 6.71573 30-9.5485e-15 23.2843 0 15Z"
+            stroke="#6600CC" stroke-width="3" stroke-miterlimit="8" fill="#FF0000" fill-rule="evenodd"
+            transform="matrix(1 0 0 -1 250.5 423.5)" />
+        <path
+            d="M0 15C-1.9097e-15 6.71573 6.71573-1.9097e-15 15-3.8194e-15 23.2843-7.6388e-15 30 6.71573 30 15 30 23.2843 23.2843 30 15 30 6.71573 30-9.5485e-15 23.2843 0 15Z"
+            stroke="#7F7F7F" stroke-width="3" stroke-miterlimit="8" fill="#FF0000" fill-rule="evenodd"
+            transform="matrix(1 0 0 -1 250.5 448.5)" />
+        <path
+            d="M2.76173e-06-1.5 57.0223-1.49989 57.0223 1.5001-2.76173e-06 1.5ZM57.0223-4.4999C59.5075-4.49989 61.5223-2.48517 61.5223 0.000113272 61.5222 2.48539 59.5075 4.50011 57.0222 4.5001 54.537 4.5001 52.5223 2.48538 52.5223 9.67017e-05 52.5223-2.48518 54.537-4.4999 57.0223-4.4999Z"
+            fill="#6600CC" transform="matrix(-1 0 0 1 267.522 376.5)" />
+        <path d="M0 0 0.000104987 16.5971" stroke="#6600CC" stroke-width="3" stroke-miterlimit="8" fill="none"
+              fill-rule="evenodd" transform="matrix(1 0 0 -1 265.5 393.097)" />
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(283.599 404)">ТВГ
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(304.766 404)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(308.266 404)">1
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(283.599 417)">80
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(296.932 417)">кВА
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(283.599 430)">10/0,175кВ
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(283.599 443)">ZLSC
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(311.599 443)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(315.099 443)">80
+        </text>
+        <path
+            d="M757.186 393.662 757 321.504 760 321.496 760.186 393.654ZM754 321.512C753.994 319.026 756.003 317.006 758.488 317 760.974 316.994 762.994 319.003 763 321.488 763.006 323.974 760.997 325.994 758.512 326 756.026 326.006 754.006 323.997 754 321.512Z"
+            fill="#6600CC" />
+        <path d="M758.5 448.5 758.5 514.609" stroke="#7F7F7F" stroke-width="3" stroke-miterlimit="8" fill="none"
+              fill-rule="evenodd" />
+        <rect x="0" y="0" width="19" height="19" stroke="#6600CC" stroke-width="3" stroke-miterlimit="8" fill="#FF0000"
+              transform="matrix(1 0 0 -1 748.5 365.5)" />
+        <path
+            d="M0 15.5C-1.9097e-15 6.93959 6.71573-1.97336e-15 15-3.94671e-15 23.2843-7.89343e-15 30 6.93959 30 15.5 30 24.0604 23.2843 31 15 31 6.71573 31-9.5485e-15 24.0604 0 15.5Z"
+            stroke="#6600CC" stroke-width="3" stroke-miterlimit="8" fill="#FF0000" fill-rule="evenodd"
+            transform="matrix(1 0 0 -1 743.5 424.5)" />
+        <path
+            d="M0 15C-1.9097e-15 6.71573 6.71573-1.9097e-15 15-3.8194e-15 23.2843-7.6388e-15 30 6.71573 30 15 30 23.2843 23.2843 30 15 30 6.71573 30-9.5485e-15 23.2843 0 15Z"
+            stroke="#7F7F7F" stroke-width="3" stroke-miterlimit="8" fill="#FF0000" fill-rule="evenodd"
+            transform="matrix(1 0 0 -1 743.5 448.5)" />
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(771.264 359)">В
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(778.431 359)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(781.931 359)">ТСН
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(803.264 359)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(806.764 359)">1
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(812.098 359)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(815.598 359)">10
+        </text>
+        <path
+            d="M794 516.5 794 535.969 791 535.969 791 516.5ZM788 516.5C788 514.015 790.015 512 792.5 512 794.985 512 797 514.015 797 516.5 797 518.985 794.985 521 792.5 521 790.015 521 788 518.985 788 516.5ZM792.5 535.969 797 532.969 792.5 541.969 788 532.969Z"
+            fill="#7F7F7F" />
+        <path d="M802.583 516.754 715.5 515.5" stroke="#7F7F7F" stroke-width="3" stroke-miterlimit="8" fill="none"
+              fill-rule="evenodd" />
+        <path
+            d="M760 516.5 760 535.969 757 535.969 757 516.5ZM754 516.5C754 514.015 756.015 512 758.5 512 760.985 512 763 514.015 763 516.5 763 518.985 760.985 521 758.5 521 756.015 521 754 518.985 754 516.5ZM758.5 535.969 763 532.969 758.5 541.969 754 532.969Z"
+            fill="#7F7F7F" />
+        <path
+            d="M729 516.5 729 535.969 726 535.969 726 516.5ZM723 516.5C723 514.015 725.015 512 727.5 512 729.985 512 732 514.015 732 516.5 732 518.985 729.985 521 727.5 521 725.015 521 723 518.985 723 516.5ZM727.5 535.969 732 532.969 727.5 541.969 723 532.969Z"
+            fill="#7F7F7F" />
+        <rect x="0" y="0" width="19" height="19" stroke="#989898" stroke-width="3" stroke-miterlimit="8" fill="#FF0000"
+              transform="matrix(1 0 0 -1 748.5 489.5)" />
+        <path d="M542.5 321.5 836.08 321.928" stroke="#6600CC" stroke-width="3" stroke-miterlimit="8" fill="none"
+              fill-rule="evenodd" />
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(552.443 401)">Г
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(559.276 401)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(562.776 401)">1
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(533.443 414)">10
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(544.11 414)">,
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(546.776 414)">5
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(554.776 414)">кВ
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(524.443 427)">1,64 МВт
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(513.443 440)">GSV800S10
+        </text>
+        <path
+            d="M596.481 393.221 596 321.51 599 321.49 599.48 393.201ZM593 321.53C592.984 319.045 594.985 317.017 597.47 317 599.955 316.984 601.983 318.985 602 321.47 602.017 323.955 600.015 325.983 597.53 326 595.045 326.017 593.017 324.015 593 321.53Z"
+            fill="#6600CC" />
+        <rect x="0" y="0" width="18" height="19" stroke="#6600CC" stroke-width="3" stroke-miterlimit="8" fill="#FF0000"
+              transform="matrix(1 0 0 -1 588.5 365.5)" />
+        <path
+            d="M0 15C-1.9097e-15 6.71573 6.71573-1.9097e-15 15-3.8194e-15 23.2843-7.6388e-15 30 6.71573 30 15 30 23.2843 23.2843 30 15 30 6.71573 30-9.5485e-15 23.2843 0 15Z"
+            stroke="#6600CC" stroke-width="3" stroke-miterlimit="8" fill="#FF0000" fill-rule="evenodd"
+            transform="matrix(1 0 0 -1 637.5 424.5)" />
+        <path
+            d="M0 15C-1.9097e-15 6.71573 6.71573-1.9097e-15 15-3.8194e-15 23.2843-7.6388e-15 30 6.71573 30 15 30 23.2843 23.2843 30 15 30 6.71573 30-9.5485e-15 23.2843 0 15Z"
+            stroke="#7F7F7F" stroke-width="3" stroke-miterlimit="8" fill="#FF0000" fill-rule="evenodd"
+            transform="matrix(1 0 0 -1 637.5 449.5)" />
+        <path
+            d="M2.76173e-06-1.5 57.0223-1.49989 57.0223 1.5001-2.76173e-06 1.5ZM57.0223-4.4999C59.5075-4.49989 61.5223-2.48517 61.5223 0.000113272 61.5222 2.48539 59.5075 4.50011 57.0222 4.5001 54.537 4.5001 52.5223 2.48538 52.5223 9.67017e-05 52.5223-2.48518 54.537-4.4999 57.0223-4.4999Z"
+            fill="#6600CC" transform="matrix(-1 0 0 1 654.522 377.5)" />
+        <path d="M0 0 0.000104987 16.5971" stroke="#6600CC" stroke-width="3" stroke-miterlimit="8" fill="none"
+              fill-rule="evenodd" transform="matrix(1 0 0 -1 652.5 394.097)" />
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(670.391 405)">ТВГ
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(691.558 405)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(695.058 405)">1
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(670.391 418)">80
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(683.725 418)">кВА
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(670.391 431)">10/0,175кВ
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(670.391 444)">ZLSC
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(698.391 444)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(701.891 444)">80
+        </text>
+        <path
+            d="M1167.19 392.662 1167 320.504 1170 320.496 1170.19 392.654ZM1164 320.512C1163.99 318.026 1166 316.006 1168.49 316 1170.97 315.994 1172.99 318.003 1173 320.488 1173.01 322.974 1171 324.994 1168.51 325 1166.03 325.006 1164.01 322.997 1164 320.512Z"
+            fill="#6600CC" />
+        <path d="M1168.5 447.5 1168.5 513.609" stroke="#7F7F7F" stroke-width="3" stroke-miterlimit="8" fill="none"
+              fill-rule="evenodd" />
+        <rect x="0" y="0" width="19" height="19" stroke="#6600CC" stroke-width="3" stroke-miterlimit="8" fill="#FF0000"
+              transform="matrix(1 0 0 -1 1158.5 364.5)" />
+        <path
+            d="M0 15C-1.9097e-15 6.71573 6.71573-1.9097e-15 15-3.8194e-15 23.2843-7.6388e-15 30 6.71573 30 15 30 23.2843 23.2843 30 15 30 6.71573 30-9.5485e-15 23.2843 0 15Z"
+            stroke="#6600CC" stroke-width="3" stroke-miterlimit="8" fill="#FF0000" fill-rule="evenodd"
+            transform="matrix(1 0 0 -1 1153.5 422.5)" />
+        <path
+            d="M0 15C-1.97336e-15 6.71573 6.93959-1.9097e-15 15.5-3.8194e-15 24.0604-7.6388e-15 31 6.71573 31 15 31 23.2843 24.0604 30 15.5 30 6.93959 30-9.86678e-15 23.2843 0 15Z"
+            stroke="#7F7F7F" stroke-width="3" stroke-miterlimit="8" fill="#FF0000" fill-rule="evenodd"
+            transform="matrix(1 0 0 -1 1152.5 447.5)" />
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(1181.06 358)">В
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(1188.23 358)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(1191.73 358)">ТСН
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(1213.06 358)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(1216.56 358)">1
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(1221.89 358)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(1225.39 358)">10
+        </text>
+        <path
+            d="M1204 515.5 1204 534.969 1201 534.969 1201 515.5ZM1198 515.5C1198 513.015 1200.01 511 1202.5 511 1204.99 511 1207 513.015 1207 515.5 1207 517.985 1204.99 520 1202.5 520 1200.01 520 1198 517.985 1198 515.5ZM1202.5 534.969 1207 531.969 1202.5 540.969 1198 531.969Z"
+            fill="#7F7F7F" />
+        <path d="M1212.58 514.754 1125.5 513.5" stroke="#7F7F7F" stroke-width="3" stroke-miterlimit="8" fill="none"
+              fill-rule="evenodd" />
+        <path
+            d="M1170 515.5 1170 534.969 1167 534.969 1167 515.5ZM1164 515.5C1164 513.015 1166.01 511 1168.5 511 1170.99 511 1173 513.015 1173 515.5 1173 517.985 1170.99 520 1168.5 520 1166.01 520 1164 517.985 1164 515.5ZM1168.5 534.969 1173 531.969 1168.5 540.969 1164 531.969Z"
+            fill="#7F7F7F" />
+        <path
+            d="M1138 515.5 1138 534.969 1135 534.969 1135 515.5ZM1132 515.5C1132 513.015 1134.01 511 1136.5 511 1138.99 511 1141 513.015 1141 515.5 1141 517.985 1138.99 520 1136.5 520 1134.01 520 1132 517.985 1132 515.5ZM1136.5 534.969 1141 531.969 1136.5 540.969 1132 531.969Z"
+            fill="#7F7F7F" />
+        <rect x="0" y="0" width="19" height="19" stroke="#989898" stroke-width="3" stroke-miterlimit="8" fill="#FF0000"
+              transform="matrix(1 0 0 -1 1158.5 488.5)" />
+        <path d="M952.5 320.5 1255.57 320.617" stroke="#6600CC" stroke-width="3" stroke-miterlimit="8" fill="none"
+              fill-rule="evenodd" />
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(962.238 400)">Г
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(969.071 400)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(972.571 400)">1
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(948.571 413)">6,3
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(964.571 413)">кВ
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(934.238 426)">1,38 МВт
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(923.238 439)">GSV800S10
+        </text>
+        <rect x="0" y="0" width="19" height="19" stroke="#6600CC" stroke-width="3" stroke-miterlimit="8" fill="#FF0000"
+              transform="matrix(1 0 0 -1 997.5 364.5)" />
+        <path
+            d="M0 15C-1.9097e-15 6.71573 6.71573-1.9097e-15 15-3.8194e-15 23.2843-7.6388e-15 30 6.71573 30 15 30 23.2843 23.2843 30 15 30 6.71573 30-9.5485e-15 23.2843 0 15Z"
+            stroke="#6600CC" stroke-width="3" stroke-miterlimit="8" fill="#FF0000" fill-rule="evenodd"
+            transform="matrix(1 0 0 -1 1047.5 423.5)" />
+        <path
+            d="M0 15C-1.9097e-15 6.71573 6.71573-1.9097e-15 15-3.8194e-15 23.2843-7.6388e-15 30 6.71573 30 15 30 23.2843 23.2843 30 15 30 6.71573 30-9.5485e-15 23.2843 0 15Z"
+            stroke="#7F7F7F" stroke-width="3" stroke-miterlimit="8" fill="#FF0000" fill-rule="evenodd"
+            transform="matrix(1 0 0 -1 1047.5 448.5)" />
+        <path
+            d="M2.77778e-06-1.5 56.6929-1.49989 56.6929 1.5001-2.77778e-06 1.5ZM56.6929-4.4999C59.1782-4.49989 61.1929-2.48517 61.1929 0.00011332 61.1929 2.48539 59.1782 4.50011 56.6929 4.5001 54.2076 4.5001 52.1929 2.48538 52.1929 9.66535e-05 52.1929-2.48518 54.2076-4.4999 56.6929-4.4999Z"
+            fill="#6600CC" transform="matrix(-1 0 0 1 1064.19 376.5)" />
+        <path d="M0 0 0.000104987 16.5971" stroke="#6600CC" stroke-width="3" stroke-miterlimit="8" fill="none"
+              fill-rule="evenodd" transform="matrix(1 0 0 -1 1062.5 393.097)" />
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(1080.19 404)">ТВГ
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(1101.35 404)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(1104.85 404)">1
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(1080.19 417)">80
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(1093.52 417)">кВА
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(1080.19 430)">10/0,175кВ
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(1080.19 443)">ZLSC
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(1108.19 443)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(1111.69 443)">80
+        </text>
+        <rect x="0" y="0" width="19" height="19" stroke="#6600CC" stroke-width="3" stroke-miterlimit="8" fill="#FF0000"
+              transform="matrix(1 0 0 -1 390.5 286.5)" />
+        <path
+            d="M564 222.5 564 322.43 561 322.43 561 222.5ZM567 322.429C567 324.915 564.985 326.93 562.5 326.93 560.015 326.93 558 324.915 558 322.43 558 319.944 560.015 317.93 562.5 317.93 564.985 317.93 567 319.944 567 322.429Z"
+            fill="#6600CC" />
+        <rect x="0" y="0" width="19" height="19" stroke="#6600CC" stroke-width="3" stroke-miterlimit="8" fill="#FF0000"
+              transform="matrix(1 0 0 -1 553.5 288.5)" />
+        <path d="M0 0 165.937 0.303097" stroke="#6600CC" stroke-width="3" stroke-miterlimit="8" fill="none"
+              fill-rule="evenodd" transform="matrix(1 0 0 -1 398.5 222.803)" />
+        <path
+            d="M1.5-1.60782e-06 1.5001 97.9466-1.49989 97.9466-1.5 1.60782e-06ZM4.5001 97.9465C4.50011 100.432 2.48539 102.447 0.00010981 102.447-2.48517 102.447-4.49989 100.432-4.4999 97.9466-4.4999 95.4613-2.48518 93.4466 0.000100163 93.4466 2.48538 93.4466 4.5001 95.4613 4.5001 97.9465Z"
+            fill="#6600CC" transform="matrix(-1 0 0 1 797.5 223.5)" />
+        <rect x="0" y="0" width="19" height="19" stroke="#6600CC" stroke-width="3" stroke-miterlimit="8" fill="#FF0000"
+              transform="matrix(1 0 0 -1 788.5 287.5)" />
+        <path
+            d="M977 225.5 977 319.908 974 319.908 974 225.5ZM980 319.908C980 322.394 977.985 324.408 975.5 324.408 973.015 324.408 971 322.394 971 319.908 971 317.423 973.015 315.408 975.5 315.408 977.985 315.408 980 317.423 980 319.908Z"
+            fill="#6600CC" />
+        <rect x="0" y="0" width="19" height="19" stroke="#6600CC" stroke-width="3" stroke-miterlimit="8" fill="#FF0000"
+              transform="matrix(1 0 0 -1 965.5 289.5)" />
+        <path d="M795.5 224.5 976.115 224.5" stroke="#6600CC" stroke-width="3" stroke-miterlimit="8" fill="none"
+              fill-rule="evenodd" />
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(223.876 357)">В
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(231.042 357)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(234.542 357)">Г
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(240.709 357)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(244.209 357)">1
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(383.534 482)">В
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(390.701 482)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(394.201 482)">ТСН
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(415.534 482)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(419.034 482)">1
+        </text>
+        <rect x="0" y="0" width="19" height="19" stroke="#663300" stroke-width="3" stroke-miterlimit="8" fill="#FF0000"
+              transform="matrix(1 0 0 -1 299.5 125.5)" />
+        <path
+            d="M0 15C-1.9097e-15 6.71573 6.71573-1.9097e-15 15-3.8194e-15 23.2843-7.6388e-15 30 6.71573 30 15 30 23.2843 23.2843 30 15 30 6.71573 30-9.5485e-15 23.2843 0 15Z"
+            fill="#FF0000" fill-rule="evenodd" transform="matrix(1 0 0 -1 293.5 242.5)" />
+        <path
+            d="M-1.5076 15-1.17255 11.6764-0.210006 8.57557 1.31255 5.77047 3.32788 3.32788 5.77047 1.31255 8.57557-0.210006 11.6764-1.17255 15-1.5076 18.3236-1.17255 21.4244-0.210006 24.2295 1.31255 26.6721 3.32788 28.6874 5.77047 30.21 8.57557 31.1726 11.6764 31.5076 15 31.1726 18.3236 30.21 21.4244 28.6874 24.2295 26.6721 26.6721 24.2295 28.6874 21.4244 30.21 18.3236 31.1726 15 31.5076 11.6764 31.1726 8.57557 30.21 5.77047 28.6874 3.32788 26.6721 1.31255 24.2295-0.210006 21.4244-1.17255 18.3236ZM1.79718 17.8726 1.73731 17.5783 2.61134 20.394 2.4971 20.1231 3.88009 22.6711 3.71878 22.432 5.55042 24.652 5.34802 24.4496 7.56798 26.2812 7.32892 26.1199 9.87688 27.5029 9.60602 27.3887 12.4217 28.2627 12.1274 28.2028 15.1505 28.5076 14.8495 28.5076 17.8726 28.2028 17.5783 28.2627 20.394 27.3887 20.1231 27.5029 22.6711 26.1199 22.432 26.2812 24.652 24.4496 24.4496 24.652 26.2812 22.432 26.1199 22.6711 27.5029 20.1231 27.3887 20.394 28.2627 17.5783 28.2028 17.8726 28.5076 14.8495 28.5076 15.1505 28.2028 12.1274 28.2627 12.4217 27.3887 9.60602 27.5029 9.87688 26.1199 7.32892 26.2812 7.56798 24.4496 5.34802 24.652 5.55042 22.432 3.71878 22.6711 3.88009 20.1231 2.4971 20.394 2.61134 17.5783 1.73731 17.8726 1.79718 14.8495 1.49244 15.1505 1.49244 12.1274 1.79718 12.4217 1.73731 9.60602 2.61134 9.87688 2.4971 7.32892 3.88009 7.56798 3.71878 5.34802 5.55042 5.55042 5.34802 3.71878 7.56798 3.88009 7.32892 2.4971 9.87688 2.61134 9.60602 1.73731 12.4217 1.79718 12.1274 1.49244 15.1505 1.49244 14.8495Z"
+            fill="#6600CC" transform="matrix(1 0 0 -1 293.5 242.5)" />
+        <path
+            d="M0 15.5C-1.9097e-15 6.93959 6.71573-1.97336e-15 15-3.94671e-15 23.2843-7.89343e-15 30 6.93959 30 15.5 30 24.0604 23.2843 31 15 31 6.71573 31-9.5485e-15 24.0604 0 15.5Z"
+            stroke="#663300" stroke-width="3" stroke-miterlimit="8" fill="#FF0000" fill-rule="evenodd"
+            transform="matrix(1 0 0 -1 293.5 218.5)" />
+        <path
+            d="M310 242.5 310 320.144 307 320.144 307 242.5ZM313 320.144C313 322.629 310.985 324.644 308.5 324.644 306.015 324.644 304 322.629 304 320.144 304 317.658 306.015 315.644 308.5 315.644 310.985 315.644 313 317.658 313 320.144Z"
+            fill="#6600CC" />
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(329.544 197)">Т
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(336.711 197)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(340.211 197)">1
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(329.544 210)">6300
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(353.544 210)">кВА
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(329.544 223)">35/10кВ
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(329.544 236)">ТМ
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(346.711 236)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(350.211 236)">6300
+        </text>
+        <rect x="69" y="135" width="418" height="413" stroke="#172C51" stroke-width="1.66667" stroke-miterlimit="8"
+              stroke-dasharray="6.66667 5" fill="none" />
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="16" transform="translate(415.048 157)">УГАМ
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="16" transform="translate(461.808 157)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="16" transform="translate(467.141 157)">3
+        </text>
+        <rect x="0" y="0" width="19" height="19" stroke="#6600CC" stroke-width="3" stroke-miterlimit="8" fill="#FF0000"
+              transform="matrix(1 0 0 -1 299.5 284.5)" />
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(322.104 277)">В
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(329.27 277)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(332.77 277)">Т
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(339.937 277)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(343.437 277)">1
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(348.77 277)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(352.27 277)">10
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(323.074 117)">В
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(330.241 117)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(333.741 117)">Т
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(340.908 117)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(344.408 117)">1
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(349.741 117)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(353.241 117)">35
+        </text>
+        <path
+            d="M1.5-5.63404e-06 1.50008 21.9516-1.49992 21.9516-1.5 5.63404e-06ZM8.24507e-05 21.9516 4.50007 18.9516 0.000104987 27.9516-4.49993 18.9516Z"
+            fill="#663300" transform="matrix(1 0 0 -1 308.5 106.452)" />
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(290.486 65)">Л
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(298.486 65)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(301.986 65)">Угам
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(327.319 65)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(330.819 65)">3
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(272.319 78)">(ПС
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(291.819 78)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(295.319 78)">Хумсан35/6)
+        </text>
+        <rect x="508" y="134" width="385" height="414" stroke="#172C51" stroke-width="1.66667" stroke-miterlimit="8"
+              stroke-dasharray="6.66667 5" fill="none" />
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="16" transform="translate(823.914 155)">УГАМ
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="16" transform="translate(870.674 155)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="16" transform="translate(876.007 155)">2
+        </text>
+        <rect x="914" y="133" width="349" height="414" stroke="#172C51" stroke-width="1.66667" stroke-miterlimit="8"
+              stroke-dasharray="6.66667 5" fill="none" />
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="16" transform="translate(1195.54 155)">УГАМ
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="16" transform="translate(1242.3 155)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="16" transform="translate(1247.63 155)">1
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="19" transform="translate(546.126 17)">Угам
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="19" transform="translate(593.426 17)">ГЭСлар
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="19" transform="translate(666.259 17)">каскади
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="19" transform="translate(537.712 37)">(Угам
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="19" transform="translate(586.512 37)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="19" transform="translate(592.679 37)">1, Угам
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="19" transform="translate(653.979 37)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="19" transform="translate(660.146 37)">2, Угам
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="19" transform="translate(721.446 37)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="19" transform="translate(727.612 37)">3)
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(779.637 405)">ТСН
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(800.97 405)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(804.47 405)">1
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(779.637 418)">10,5/0,4
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(779.637 431)">100
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(798.303 431)">кВа
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(779.637 444)">SC14/100
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(1186.83 404)">ТСН
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(1208.17 404)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(1211.67 404)">1
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(1186.83 417)">10,5/0,4
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(1186.83 430)">100
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(1205.5 430)">кВа
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(1186.83 443)">SC14/100
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(610.746 360)">В
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(617.913 360)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(621.413 360)">Г
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(627.579 360)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(631.079 360)">1
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(1021.08 356)">В
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(1028.24 356)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(1031.74 356)">Г
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(1037.91 356)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+              font-size="11" transform="translate(1041.41 356)">1
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(414.652 279)">В
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(421.819 279)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(425.319 279)">Л
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(433.319 279)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(436.819 279)">Угам
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(464.819 279)">2
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(470.152 279)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(473.652 279)">3
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(575.694 282)">В
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(582.861 282)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(586.361 282)">Л
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(594.361 282)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(597.861 282)">Угам
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(625.861 282)">2
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(631.195 282)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(634.695 282)">3
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(811.48 282)">В
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(818.647 282)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(822.147 282)">Л
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(830.147 282)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(833.647 282)">Угам
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(861.647 282)">1
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(866.98 282)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(870.48 282)">2
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(993.406 282)">В
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(1000.57 282)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(1004.07 282)">Л
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(1012.07 282)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(1015.57 282)">Угам
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(1043.57 282)">1
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(1048.91 282)">-
+        </text>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(1052.41 282)">2
+        </text>
+        <path
+            d="M185.5 416C185.5 402.469 196.469 391.5 210 391.5 223.531 391.5 234.5 402.469 234.5 416 234.5 429.531 223.531 440.5 210 440.5 196.469 440.5 185.5 429.531 185.5 416Z"
+            stroke="#000000" stroke-width="1.33333" stroke-miterlimit="8" fill="#FF0000" fill-rule="evenodd" />
+        <g>
+            <g>
+                <g>
+                    <path
+                        d="M208.689 409.933 209.622 409.933 210.944 410.167 212.033 410.633 212.889 411.178 213.9 412.189 214.522 413.122 214.989 414.367 215.144 415.067 215.144 416.933 214.833 418.1 214.211 419.344 213.589 420.122 213.044 420.667 211.956 421.367 210.711 421.833 209.933 421.989 208.378 421.989 207.133 421.678 206.278 421.289 205.422 420.744 204.567 419.967 204.022 419.189 203.478 418.1 203.167 416.856 203.089 415.922 203.244 414.678 203.556 413.667 204.178 412.5 205.033 411.567 205.656 411.022 206.978 410.322 208.144 410.011Z" />
+                    <path
+                        d="M209.156 396.089 210.011 396.089 211.489 396.322 212.967 396.789 214.211 397.411 215.144 398.033 215.922 398.733 216.856 399.667 217.711 400.911 218.333 402.156 218.8 403.556 219.033 404.722 219.111 405.344 219.111 406.822 218.878 408.3 218.489 409.622 217.867 410.944 217.089 412.033 216.933 412.033 216.311 410.944 215.378 409.856 214.522 409.078 213.433 408.378 212.267 407.833 210.944 407.444 209.156 407.211Z" />
+                    <path
+                        d="M196.4 411.878 196.789 411.956 198.967 413.2 200.522 414.133 200.6 414.289 200.444 415.922 200.6 417.556 200.989 419.033 201.533 420.2 201.533 420.433 199.356 421.678 197.489 422.767 193.444 425.1 192.122 425.878 191.889 425.878 191.189 424.4 190.8 423.078 190.644 422.144 190.567 420.822 190.722 419.344 190.956 418.256 191.5 416.778 192.044 415.767 192.744 414.756 193.678 413.744 194.533 412.967 195.933 412.111Z" />
+                    <path
+                        d="M216.7 420.433 217.089 420.511 218.956 421.6 225.022 425.1 226.344 425.878 226.189 426.267 225.644 427.044 224.944 427.9 224.4 428.444 223.233 429.3 221.989 430 220.511 430.544 219.344 430.778 218.878 430.856 216.544 430.856 215.378 430.622 214.133 430.233 212.811 429.611 211.878 428.989 211.878 424.322 212.578 424.011 213.9 423.311 214.833 422.611 215.922 421.522Z" />
+                    <path
+                        d="M199.667 401.067 201.378 401.067 202.856 401.3 204.489 401.844 205.811 402.544 206.433 402.933 206.433 407.678 205.033 408.3 203.944 409 203.089 409.7 202.544 410.244 201.611 411.567 201.144 411.411 199.822 410.633 193.756 407.133 192.044 406.122 191.967 405.967 192.511 405.111 193.367 404.1 193.989 403.478 195.156 402.622 196.244 402 197.722 401.456 198.578 401.222Z" />
+                    <path
+                        d="M203.167 422.533 203.478 422.611 204.644 423.467 205.967 424.089 207.211 424.478 208.144 424.633 209.078 424.711 209.156 424.789 209.156 435.833 207.989 435.833 206.433 435.522 205.111 435.056 203.711 434.278 202.7 433.5 201.922 432.8 201.144 431.867 200.367 430.622 199.744 429.222 199.356 427.744 199.2 426.344 199.2 425.489 199.278 424.789 201.222 423.7 202.544 422.922Z" />
+                    <path
+                        d="M226.267 406.044 226.422 406.044 226.967 407.133 227.433 408.533 227.667 409.778 227.744 411.333 227.589 412.733 227.278 414.056 226.656 415.533 226.111 416.467 225.489 417.322 224.633 418.256 223.467 419.189 222.456 419.811 221.756 420.122 219.811 419.033 217.944 417.944 217.711 417.789 217.867 416.389 217.867 415.222 218.567 414.522 219.578 413.2 220.278 412.033 220.978 410.556 221.522 408.844 222.222 408.378 224.167 407.289 226.033 406.2Z" />
+                </g>
+            </g>
+        </g>
+        <path
+            d="M572.5 418C572.5 404.469 583.469 393.5 597 393.5 610.531 393.5 621.5 404.469 621.5 418 621.5 431.531 610.531 442.5 597 442.5 583.469 442.5 572.5 431.531 572.5 418Z"
+            stroke="#000000" stroke-width="1.33333" stroke-miterlimit="8" fill="#FF0000" fill-rule="evenodd" />
+        <g>
+            <g>
+                <g>
+                    <path
+                        d="M595.689 411.933 596.622 411.933 597.944 412.167 599.033 412.633 599.889 413.178 600.9 414.189 601.522 415.122 601.989 416.367 602.144 417.067 602.144 418.933 601.833 420.1 601.211 421.344 600.589 422.122 600.044 422.667 598.956 423.367 597.711 423.833 596.933 423.989 595.378 423.989 594.133 423.678 593.278 423.289 592.422 422.744 591.567 421.967 591.022 421.189 590.478 420.1 590.167 418.856 590.089 417.922 590.244 416.678 590.556 415.667 591.178 414.5 592.033 413.567 592.656 413.022 593.978 412.322 595.144 412.011Z" />
+                    <path
+                        d="M596.156 398.089 597.011 398.089 598.489 398.322 599.967 398.789 601.211 399.411 602.144 400.033 602.922 400.733 603.856 401.667 604.711 402.911 605.333 404.156 605.8 405.556 606.033 406.722 606.111 407.344 606.111 408.822 605.878 410.3 605.489 411.622 604.867 412.944 604.089 414.033 603.933 414.033 603.311 412.944 602.378 411.856 601.522 411.078 600.433 410.378 599.267 409.833 597.944 409.444 596.156 409.211Z" />
+                    <path
+                        d="M583.4 413.878 583.789 413.956 585.967 415.2 587.522 416.133 587.6 416.289 587.444 417.922 587.6 419.556 587.989 421.033 588.533 422.2 588.533 422.433 586.356 423.678 584.489 424.767 580.444 427.1 579.122 427.878 578.889 427.878 578.189 426.4 577.8 425.078 577.644 424.144 577.567 422.822 577.722 421.344 577.956 420.256 578.5 418.778 579.044 417.767 579.744 416.756 580.678 415.744 581.533 414.967 582.933 414.111Z" />
+                    <path
+                        d="M603.7 422.433 604.089 422.511 605.956 423.6 612.022 427.1 613.344 427.878 613.189 428.267 612.644 429.044 611.944 429.9 611.4 430.444 610.233 431.3 608.989 432 607.511 432.544 606.344 432.778 605.878 432.856 603.544 432.856 602.378 432.622 601.133 432.233 599.811 431.611 598.878 430.989 598.878 426.322 599.578 426.011 600.9 425.311 601.833 424.611 602.922 423.522Z" />
+                    <path
+                        d="M586.667 403.067 588.378 403.067 589.856 403.3 591.489 403.844 592.811 404.544 593.433 404.933 593.433 409.678 592.033 410.3 590.944 411 590.089 411.7 589.544 412.244 588.611 413.567 588.144 413.411 586.822 412.633 580.756 409.133 579.044 408.122 578.967 407.967 579.511 407.111 580.367 406.1 580.989 405.478 582.156 404.622 583.244 404 584.722 403.456 585.578 403.222Z" />
+                    <path
+                        d="M590.167 424.533 590.478 424.611 591.644 425.467 592.967 426.089 594.211 426.478 595.144 426.633 596.078 426.711 596.156 426.789 596.156 437.833 594.989 437.833 593.433 437.522 592.111 437.056 590.711 436.278 589.7 435.5 588.922 434.8 588.144 433.867 587.367 432.622 586.744 431.222 586.356 429.744 586.2 428.344 586.2 427.489 586.278 426.789 588.222 425.7 589.544 424.922Z" />
+                    <path
+                        d="M613.267 408.044 613.422 408.044 613.967 409.133 614.433 410.533 614.667 411.778 614.744 413.333 614.589 414.733 614.278 416.056 613.656 417.533 613.111 418.467 612.489 419.322 611.633 420.256 610.467 421.189 609.456 421.811 608.756 422.122 606.811 421.033 604.944 419.944 604.711 419.789 604.867 418.389 604.867 417.222 605.567 416.522 606.578 415.2 607.278 414.033 607.978 412.556 608.522 410.844 609.222 410.378 611.167 409.289 613.033 408.2Z" />
+                </g>
+            </g>
+        </g>
+        <path
+            d="M981.5 417C981.5 403.469 992.469 392.5 1006 392.5 1019.53 392.5 1030.5 403.469 1030.5 417 1030.5 430.531 1019.53 441.5 1006 441.5 992.469 441.5 981.5 430.531 981.5 417Z"
+            stroke="#000000" stroke-width="1.33333" stroke-miterlimit="8" fill="#FF0000" fill-rule="evenodd" />
+        <g>
+            <g>
+                <g>
+                    <path
+                        d="M0 0 0.922222 0 2.2287 0.230556 3.30463 0.691667 4.15 1.22963 5.14907 2.2287 5.76389 3.15093 6.225 4.38056 6.3787 5.07222 6.3787 6.91667 6.0713 8.06944 5.45648 9.29907 4.84167 10.0676 4.3037 10.6056 3.22778 11.2972 1.99815 11.7583 1.22963 11.912-0.307407 11.912-1.53704 11.6046-2.38241 11.2204-3.22778 10.6824-4.07315 9.91389-4.61111 9.14537-5.14907 8.06944-5.45648 6.83981-5.53333 5.91759-5.37963 4.68796-5.07222 3.68889-4.45741 2.53611-3.61204 1.61389-2.99722 1.07593-1.69074 0.384259-0.537963 0.0768519Z"
+                        transform="matrix(1.01205 0 0 1 1005.69 410.506)" />
+                    <path
+                        d="M0 0 0.84537 0 2.30556 0.230556 3.76574 0.691667 4.99537 1.30648 5.91759 1.9213 6.68611 2.61296 7.60833 3.53519 8.4537 4.76481 9.06852 5.99444 9.52963 7.37778 9.76019 8.53056 9.83704 9.14537 9.83704 10.6056 9.60648 12.0657 9.22222 13.3722 8.60741 14.6787 7.83889 15.7546 7.68519 15.7546 7.07037 14.6787 6.14815 13.6028 5.30278 12.8343 4.22685 12.1426 3.07407 11.6046 1.76759 11.2204 0 10.9898Z"
+                        transform="matrix(1.01205 0 0 1 1006.16 396.826)" />
+                    <path
+                        d="M0 0 0.384259 0.0768519 2.53611 1.30648 4.07315 2.2287 4.15 2.38241 3.9963 3.9963 4.15 5.61019 4.53426 7.07037 5.07222 8.22315 5.07222 8.4537 2.92037 9.68333 1.07593 10.7593-2.92037 13.0648-4.22685 13.8333-4.45741 13.8333-5.14907 12.3731-5.53333 11.0667-5.68704 10.1444-5.76389 8.83796-5.61019 7.37778-5.37963 6.30185-4.84167 4.84167-4.3037 3.84259-3.61204 2.84352-2.68981 1.84444-1.84444 1.07593-0.461111 0.230556Z"
+                        transform="matrix(1.01205 0 0 1 993.4 412.427)" />
+                    <path
+                        d="M0 0 0.384259 0.0768519 2.2287 1.15278 8.22315 4.61111 9.52963 5.37963 9.37593 5.76389 8.83796 6.53241 8.1463 7.37778 7.60833 7.91574 6.45556 8.76111 5.22593 9.45278 3.76574 9.99074 2.61296 10.2213 2.15185 10.2981-0.153704 10.2981-1.30648 10.0676-2.53611 9.68333-3.84259 9.06852-4.76481 8.4537-4.76481 3.84259-4.07315 3.53519-2.76667 2.84352-1.84444 2.15185-0.768519 1.07593Z"
+                        transform="matrix(1.01205 0 0 1 1013.7 420.881)" />
+                    <path
+                        d="M0 0 1.69074 0 3.15093 0.230556 4.76481 0.768519 6.0713 1.46019 6.68611 1.84444 6.68611 6.53241 5.30278 7.14722 4.22685 7.83889 3.38148 8.53056 2.84352 9.06852 1.9213 10.375 1.46019 10.2213 0.153704 9.45278-5.84074 5.99444-7.53148 4.99537-7.60833 4.84167-7.07037 3.9963-6.225 2.99722-5.61019 2.38241-4.45741 1.53704-3.38148 0.922222-1.9213 0.384259-1.07593 0.153704Z"
+                        transform="matrix(1.01205 0 0 1 996.667 401.744)" />
+                    <path
+                        d="M0 0 0.307407 0.0768519 1.46019 0.922222 2.76667 1.53704 3.9963 1.9213 4.91852 2.075 5.84074 2.15185 5.91759 2.2287 5.91759 13.1417 4.76481 13.1417 3.22778 12.8343 1.9213 12.3731 0.537963 11.6046-0.461111 10.8361-1.22963 10.1444-1.99815 9.22222-2.76667 7.99259-3.38148 6.60926-3.76574 5.14907-3.91944 3.76574-3.91944 2.92037-3.84259 2.2287-1.9213 1.15278-0.614815 0.384259Z"
+                        transform="matrix(1.01205 0 0 1 1000.17 422.956)" />
+                    <path
+                        d="M0 0 0.153704 0 0.691667 1.07593 1.15278 2.45926 1.38333 3.68889 1.46019 5.22593 1.30648 6.60926 0.999074 7.91574 0.384259 9.37593-0.153704 10.2981-0.768519 11.1435-1.61389 12.0657-2.76667 12.988-3.76574 13.6028-4.45741 13.9102-6.3787 12.8343-8.22315 11.7583-8.4537 11.6046-8.3 10.2213-8.3 9.06852-7.60833 8.37685-6.60926 7.07037-5.91759 5.91759-5.22593 4.45741-4.68796 2.76667-3.9963 2.30556-2.075 1.22963-0.230556 0.153704Z"
+                        transform="matrix(1.01205 0 0 1 1023.27 406.663)" />
+                </g>
+            </g>
+        </g>
+        <path d="M548.925 455.526 642.034 455.526 642.034 468.326 548.925 468.326Z" fill="#D9D9D9"
+              fill-rule="evenodd" />
+        <path d="M548.925 468.326 642.034 468.326 642.034 481.126 548.925 481.126Z" fill="#D9D9D9"
+              fill-rule="evenodd" />
+        <path d="M548.925 481.126 642.034 481.126 642.034 493.926 548.925 493.926Z" fill="#D9D9D9"
+              fill-rule="evenodd" />
+        <path d="M548.925 493.926 642.034 493.926 642.034 506.726 548.925 506.726Z" fill="#D9D9D9"
+              fill-rule="evenodd" />
+        <path d="M548.925 506.726 642.034 506.726 642.034 519.526 548.925 519.526Z" fill="#D9D9D9"
+              fill-rule="evenodd" />
+        <path d="M548.925 519.526 642.034 519.526 642.034 532.326 548.925 532.326Z" fill="#D9D9D9"
+              fill-rule="evenodd" />
+        <path d="M548.259 468.326 642.7 468.326" stroke="#000000" stroke-width="1.33333" stroke-linejoin="round"
+              stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M548.259 481.126 642.7 481.126" stroke="#000000" stroke-width="1.33333" stroke-linejoin="round"
+              stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M548.259 493.926 642.7 493.926" stroke="#000000" stroke-width="1.33333" stroke-linejoin="round"
+              stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M548.259 506.726 642.7 506.726" stroke="#000000" stroke-width="1.33333" stroke-linejoin="round"
+              stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M548.259 519.526 642.7 519.526" stroke="#000000" stroke-width="1.33333" stroke-linejoin="round"
+              stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M548.925 454.859 548.925 532.992" stroke="#000000" stroke-width="1.33333" stroke-linejoin="round"
+              stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M642.034 454.859 642.034 532.992" stroke="#000000" stroke-width="1.33333" stroke-linejoin="round"
+              stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M548.259 455.526 642.7 455.526" stroke="#000000" stroke-width="1.33333" stroke-linejoin="round"
+              stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M548.259 532.326 642.7 532.326" stroke="#000000" stroke-width="1.33333" stroke-linejoin="round"
+              stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <g>
+            <text font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+                  font-size="11" transform="translate(552.705 466)">Р
+            </text>
+        </g>
+        <g>
+            <text font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+                  font-size="11" transform="translate(552.705 478)">Q
+            </text>
+        </g>
+        <text font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400" font-size="11"
+              transform="translate(560.372 478)">вар
+        </text>
+        <g>
+            <text font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+                  font-size="11" transform="translate(552.705 491)">КИУМ
+            </text>
+        </g>
+        <g>
+            <text font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+                  font-size="11" transform="translate(552.705 504)">КПД
+            </text>
+        </g>
+        <g>
+            <text font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+                  font-size="11" transform="translate(552.705 517)">НА
+            </text>
+        </g>
+        <g>
+            <text font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+                  font-size="11" transform="translate(552.705 530)">Q
+            </text>
+        </g>
+        <text font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400" font-size="11"
+              transform="translate(560.372 530)">вода
+        </text>
+        <text font-family="Calibri,Calibri_MSFontService,sans-serif" font-weight="400" font-size="11"
+              transform="translate(580.872 530)">с
+        </text>
+        <path d="M959.799 454.961 1052.91 454.961 1052.91 467.761 959.799 467.761Z" fill="#D9D9D9"
+              fill-rule="evenodd" />
+        <path d="M959.799 467.761 1052.91 467.761 1052.91 480.561 959.799 480.561Z" fill="#D9D9D9"
+              fill-rule="evenodd" />
+        <path d="M959.799 480.561 1052.91 480.561 1052.91 493.361 959.799 493.361Z" fill="#D9D9D9"
+              fill-rule="evenodd" />
+        <path d="M959.799 493.361 1052.91 493.361 1052.91 506.161 959.799 506.161Z" fill="#D9D9D9"
+              fill-rule="evenodd" />
+        <path d="M959.799 506.161 1052.91 506.161 1052.91 518.961 959.799 518.961Z" fill="#D9D9D9"
+              fill-rule="evenodd" />
+        <path d="M959.799 518.961 1052.91 518.961 1052.91 531.761 959.799 531.761Z" fill="#D9D9D9"
+              fill-rule="evenodd" />
+        <path d="M959.132 467.761 1053.57 467.761" stroke="#000000" stroke-width="1.33333" stroke-linejoin="round"
+              stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M959.132 480.561 1053.57 480.561" stroke="#000000" stroke-width="1.33333" stroke-linejoin="round"
+              stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M959.132 493.361 1053.57 493.361" stroke="#000000" stroke-width="1.33333" stroke-linejoin="round"
+              stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M959.132 506.161 1053.57 506.161" stroke="#000000" stroke-width="1.33333" stroke-linejoin="round"
+              stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M959.132 518.961 1053.57 518.961" stroke="#000000" stroke-width="1.33333" stroke-linejoin="round"
+              stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M959.799 454.294 959.799 532.428" stroke="#000000" stroke-width="1.33333" stroke-linejoin="round"
+              stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M1052.91 454.294 1052.91 532.428" stroke="#000000" stroke-width="1.33333" stroke-linejoin="round"
+              stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M959.132 454.961 1053.57 454.961" stroke="#000000" stroke-width="1.33333" stroke-linejoin="round"
+              stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M959.132 531.761 1053.57 531.761" stroke="#000000" stroke-width="1.33333" stroke-linejoin="round"
+              stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <g>
+            <text font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+                  font-size="11" transform="translate(963.578 465)">Р
+            </text>
+        </g>
+        <g>
+            <text font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+                  font-size="11" transform="translate(963.578 478)">Q
+            </text>
+        </g>
+        <text font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400" font-size="11"
+              transform="translate(971.245 478)">вар
+        </text>
+        <g>
+            <text font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+                  font-size="11" transform="translate(963.578 491)">КИУМ
+            </text>
+        </g>
+        <g>
+            <text font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+                  font-size="11" transform="translate(963.578 503)">КПД
+            </text>
+        </g>
+        <g>
+            <text font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+                  font-size="11" transform="translate(963.578 516)">НА
+            </text>
+        </g>
+        <g>
+            <text font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+                  font-size="11" transform="translate(963.578 529)">Q
+            </text>
+        </g>
+        <text font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400" font-size="11"
+              transform="translate(971.245 529)">вода
+        </text>
+        <text font-family="Calibri,Calibri_MSFontService,sans-serif" font-weight="400" font-size="11"
+              transform="translate(991.745 529)">с
+        </text>
+        <path d="M162.588 454.862 255.697 454.862 255.697 467.661 162.588 467.661Z" fill="#D9D9D9"
+              fill-rule="evenodd" />
+        <path d="M162.588 467.661 255.697 467.661 255.697 480.462 162.588 480.462Z" fill="#D9D9D9"
+              fill-rule="evenodd" />
+        <path d="M162.588 480.462 255.697 480.462 255.697 493.262 162.588 493.262Z" fill="#D9D9D9"
+              fill-rule="evenodd" />
+        <path d="M162.588 493.262 255.697 493.262 255.697 506.062 162.588 506.062Z" fill="#D9D9D9"
+              fill-rule="evenodd" />
+        <path d="M162.588 506.062 255.697 506.062 255.697 518.862 162.588 518.862Z" fill="#D9D9D9"
+              fill-rule="evenodd" />
+        <path d="M162.588 518.862 255.697 518.862 255.697 531.661 162.588 531.661Z" fill="#D9D9D9"
+              fill-rule="evenodd" />
+        <path d="M161.922 467.661 256.363 467.661" stroke="#000000" stroke-width="1.33333" stroke-linejoin="round"
+              stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M161.922 480.462 256.363 480.462" stroke="#000000" stroke-width="1.33333" stroke-linejoin="round"
+              stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M161.922 493.262 256.363 493.262" stroke="#000000" stroke-width="1.33333" stroke-linejoin="round"
+              stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M161.922 506.062 256.363 506.062" stroke="#000000" stroke-width="1.33333" stroke-linejoin="round"
+              stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M161.922 518.862 256.363 518.862" stroke="#000000" stroke-width="1.33333" stroke-linejoin="round"
+              stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M162.588 454.195 162.588 532.328" stroke="#000000" stroke-width="1.33333" stroke-linejoin="round"
+              stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M255.697 454.195 255.697 532.328" stroke="#000000" stroke-width="1.33333" stroke-linejoin="round"
+              stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M161.922 454.862 256.363 454.862" stroke="#000000" stroke-width="1.33333" stroke-linejoin="round"
+              stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M161.922 531.661 256.363 531.661" stroke="#000000" stroke-width="1.33333" stroke-linejoin="round"
+              stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <g>
+            <text font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+                  font-size="11" transform="translate(166.368 465)">Р
+            </text>
+        </g>
+        <g>
+            <text font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+                  font-size="11" transform="translate(166.368 478)">Q
+            </text>
+        </g>
+        <text font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400" font-size="11"
+              transform="translate(174.035 478)">вар
+        </text>
+        <g>
+            <text font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+                  font-size="11" transform="translate(166.368 490)">КИУМ
+            </text>
+        </g>
+        <g>
+            <text font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+                  font-size="11" transform="translate(166.368 503)">КПД
+            </text>
+        </g>
+        <g>
+            <text font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+                  font-size="11" transform="translate(166.368 516)">НА
+            </text>
+        </g>
+        <g>
+            <text font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+                  font-size="11" transform="translate(166.368 529)">Q
+            </text>
+        </g>
+        <text font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400" font-size="11"
+              transform="translate(174.035 529)">вода
+        </text>
+        <text font-family="Calibri,Calibri_MSFontService,sans-serif" font-weight="400" font-size="11"
+              transform="translate(194.535 529)">с
+        </text>
+        <path d="M270.704 23.2828 354.303 23.2828 354.303 36.874 270.704 36.874Z" fill="#D9D9D9" fill-rule="evenodd" />
+        <path d="M270.704 36.874 354.303 36.874 354.303 50.4652 270.704 50.4652Z" fill="#D9D9D9" fill-rule="evenodd" />
+        <path d="M270.037 36.874 354.97 36.874" stroke="#000000" stroke-width="1.33333" stroke-linejoin="round"
+              stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M270.704 22.6162 270.704 51.1319" stroke="#000000" stroke-width="1.33333" stroke-linejoin="round"
+              stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M354.303 22.6162 354.303 51.1319" stroke="#000000" stroke-width="1.33333" stroke-linejoin="round"
+              stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M270.037 23.2828 354.97 23.2828" stroke="#000000" stroke-width="1.33333" stroke-linejoin="round"
+              stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M270.037 50.4652 354.97 50.4652" stroke="#000000" stroke-width="1.33333" stroke-linejoin="round"
+              stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <g>
+            <text font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+                  font-size="11" transform="translate(274.483 33)">Р
+            </text>
+        </g>
+        <g>
+            <text font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="400"
+                  font-size="11" transform="translate(274.483 47)">Р
+            </text>
+        </g>
+        <g clip-path="url(#clip7)" transform="matrix(0.000104987 0 0 0.000104987 348 24)">
+            <g clip-path="url(#clip9)" transform="scale(1 1.02857)">
+                <use width="100%" height="100%" xlink:href="#img8" transform="scale(1221.15 1221.15)"></use>
+            </g>
+        </g>
+        <g clip-path="url(#clip10)" transform="matrix(0.000104987 0 0 0.000104987 348 37)">
+            <g clip-path="url(#clip12)" transform="scale(1 1.11429)">
+                <use width="100%" height="100%" xlink:href="#img11" transform="scale(1221.15 1221.15)"></use>
+            </g>
+        </g>
+        <path
+            d="M1187.5 89.0001C1187.5 83.7533 1191.75 79.5001 1197 79.5001 1202.25 79.5001 1206.5 83.7533 1206.5 89.0001 1206.5 94.2468 1202.25 98.5001 1197 98.5001 1191.75 98.5001 1187.5 94.2468 1187.5 89.0001Z"
+            stroke="#000000" stroke-width="1.33333" stroke-miterlimit="8" fill="#FF0000" fill-rule="evenodd" />
+        <path
+            d="M1187.5 110C1187.5 104.753 1191.75 100.5 1197 100.5 1202.25 100.5 1206.5 104.753 1206.5 110 1206.5 115.247 1202.25 119.5 1197 119.5 1191.75 119.5 1187.5 115.247 1187.5 110Z"
+            stroke="#000000" stroke-width="1.33333" stroke-miterlimit="8" fill="#92D050" fill-rule="evenodd" />
+        <text fill="#8A94AD" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(1212.09 91)">в работе
+        </text>
+        <text fill="#8A94AD" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(1212 113)">в резерве
+        </text>
+        <path
+            d="M1187 66.5C1187 61.2533 1191.25 57 1196.5 57 1201.75 57 1206 61.2533 1206 66.5 1206 71.7467 1201.75 76 1196.5 76 1191.25 76 1187 71.7467 1187 66.5Z"
+            stroke="#000000" stroke-width="2" stroke-miterlimit="8" fill="#FFFF00" fill-rule="evenodd" />
+        <text fill="#8A94AD" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(1212 69)">в ремонте
+        </text>
+        <text fill="#8A94AD" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(1212.27 46)">отдача
+        </text>
+        <text fill="#8A94AD" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif" font-weight="700"
+              font-size="11" transform="translate(1212 22)">прием
+        </text>
+        <g transform="matrix(0.000104987 0 0 0.000104987 1192 11)">
+            <g clip-path="url(#clip13)" transform="scale(1 1.07143)">
+                <use width="100%" height="100%" xlink:href="#img8" transform="scale(1953.85 1953.85)"></use>
+            </g>
+        </g>
+        <g transform="matrix(0.000104987 0 0 0.000104987 1192 33)">
+            <g clip-path="url(#clip14)" transform="scale(1 1.07143)">
+                <use width="100%" height="100%" xlink:href="#img11" transform="scale(1953.85 1953.85)"></use>
+            </g>
+        </g>
+    </g>
+</svg>

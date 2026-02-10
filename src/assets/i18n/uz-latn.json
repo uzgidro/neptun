@@ -1743,7 +1743,8 @@
             "DISCHARGES": "Bo'sh tashlamalar",
             "INCIDENTS": "Voqealar",
             "VISITS": "Tashriflar",
-            "TELEMETRY": "Telemetriya"
+            "TELEMETRY": "Telemetriya",
+            "MNEMONIC": "Mnemosxema"
         },
         "KPI": {
             "CURRENT_POWER": "Aktiv quvvat",
@@ -1767,7 +1768,10 @@
             "STATUS": "Holat",
             "POWER": "Quvvat",
             "NO_DATA": "Telemetriya ma'lumotlari yo'q",
-            "PLACEHOLDER": "Ma'lumotlar mavjud bo'lganda mnemosxema ko'rsatiladi"
+            "PLACEHOLDER": "Ma'lumotlar mavjud bo'lganda mnemosxema ko'rsatiladi",
+            "NO_SCHEMA": "Mnemosxema bu stansiya uchun mavjud emas",
+            "NO_SCHEMA_DESC": "Bu GES uchun sxema hali yuklanmagan",
+            "LOAD_ERROR": "Mnemosxemani yuklashda xatolik"
         },
         "INFO": {
             "BASIC_INFO": "Asosiy ma'lumot",
