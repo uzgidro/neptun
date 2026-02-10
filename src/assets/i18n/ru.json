@@ -177,6 +177,7 @@
     "RESERVOIR_SUMMARY": "Сводка",
     "RESERVOIR_SUMMARY_PDF": "Сводка PDF",
     "HYDRAULIC_STRUCTURES": "Гидротехнические сооружения",
+      "SNOW_COVER": "MODSNOW",
     "INCIDENTS": "Инциденты",
     "VISITS": "Визиты"
   },
@@ -1916,6 +1917,21 @@
             "TOTAL_RECORDS": "Всего записей",
             "NO_DATA": "Нет данных телеметрии"
         }
+    },
+    "SNOW_COVER": {
+        "TITLE": "Снежный покров (MODSNOW)",
+        "TODAY": "Сегодня",
+        "YESTERDAY": "Вчера",
+        "YEAR_AGO": "Год назад",
+        "AVG_COVER": "Средний покров",
+        "ORGANIZATION": "Организация",
+        "COVER": "Покров, %",
+        "DELTA": "Δ к году назад",
+        "ZONES": "Зоны высотности",
+        "ELEVATION": "Высота, м",
+        "SCA_PCT": "Покров, %",
+        "NO_DATA": "Нет данных",
+        "RESOURCE_DATE": "Дата снимка"
     },
     "UZGIDRO_NEWS": {
         "TITLE": "Новости UzGidro",

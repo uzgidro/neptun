@@ -44,6 +44,7 @@ import { InvestActiveProjectsComponent } from '@/pages/invest/invest-active-proj
 import { ScDashboardComponent } from '@/pages/situation-center/sc-dashboard/sc-dashboard.component';
 import { GesDetailComponent } from '@/pages/situation-center/ges/ges-detail/ges-detail.component';
 import { UzgidroNewsComponent } from '@/pages/uzgidro-news/uzgidro-news.component';
+import { SnowCoverComponent } from '@/pages/situation-center/reservoirs-info/snow-cover/snow-cover.component';
 
 
 export const appRoutes: Routes = [
@@ -88,6 +89,7 @@ export const appRoutes: Routes = [
             { path: 'visits', component: VisitsComponent, canActivate: [raisGuard] },
             { path: 'incidents', component: IncidentsComponent, canActivate: [raisGuard] },
             { path: 'reservoir-device', component: ReservoirsDeviceComponent, canActivate: [raisGuard] },
+            { path: 'snow-cover', component: SnowCoverComponent, canActivate: [raisGuard] },
             { path: 'chancellery/pending-signatures', component: PendingSignaturesComponent, canActivate: [raisGuard] },
             { path: 'chancellery/orders', component: OrdersComponent, canActivate: [raisGuard] },
             { path: 'chancellery/reports', component: ReportsComponent, canActivate: [raisGuard] },

@@ -1,105 +1,157 @@
-# Plan: GES Mnemonic Schema Viewer Component
+# Plan: MODSNOW Dashboard — Снежный покров
 
 ## Context
 
-The GES detail page has a `GesMnemonicComponent` that currently generates a simple grid of circles from telemetry data. We have 57 real SVG mnemonic diagrams in `src/assets/svg/` (named `ges-{orgId}-{name}.svg`) with ID-based data binding convention (`g509`, `a509`, `c509` etc.). The goal is to rewrite the component to load these real SVGs inline and bind live telemetry data to them, plus add a dedicated "Мнемосхема" tab to the GES detail page.
+Новый API `GET /snow-cover?date=YYYY-MM-DD` возвращает данные снежного покрова (MODSNOW) по организациям за 3 периода: сегодня, вчера, год назад. Каждая организация содержит общий % покрова и зоны высотности с детализацией. Нужно создать новую страницу-дашборд «MODSNOW» в разделе «Водохранилища» меню и красиво отобразить эти данные.
 
-The component is used in **two places**:
+## API Response Structure
 
-1. Dashboard widget (50% width card) — already wired via `<app-ges-mnemonic [gesId]="gesId" [telemetry]="telemetry">`
-2. New tab #7 "Мнемосхема" — needs a wrapper section component with auto-refresh
+```
+GET /snow-cover?date=2025-02-07
+→ { today: { date, items[] }, yesterday: { date, items[] }, year_ago: { date, items[] } }
+→ item: { organization_id, organization_name, cover (%), zones[{ min_elev, max_elev, sca_pct }], resource_date }
+```
 
-## Files to Create/Modify
+## Files to Create
 
-### CREATE (4 files)
+### 1. Interface — `src/app/core/interfaces/snow-cover.ts`
 
-1. **`ges-detail/components/ges-mnemonic/ges-svg-registry.ts`** — Static map of 57 `gesId → filename` entries + `getSvgAssetUrl()` helper
-2. **`ges-detail/sections/mnemonic/ges-mnemonic-section.component.ts`** — Tab wrapper with auto-refresh (follows `GesTelemetrySectionComponent` pattern)
-3. **`ges-detail/sections/mnemonic/ges-mnemonic-section.component.html`** — Toolbar + `<app-ges-mnemonic>`
-4. **`ges-detail/sections/mnemonic/ges-mnemonic-section.component.scss`** — Minimal styles
+```ts
+export interface SnowCoverZone {
+    min_elev: number;
+    max_elev: number;
+    sca_pct: number;
+}
 
-### REWRITE (3 files)
+export interface SnowCoverItem {
+    organization_id: number;
+    organization_name: string;
+    cover: number | null;
+    zones: SnowCoverZone[] | null;
+    resource_date: string | null;
+}
 
-5. **`ges-detail/components/ges-mnemonic/ges-mnemonic.component.ts`** — SVG loading via HttpClient + inline DOM insertion + telemetry binding
-6. **`ges-detail/components/ges-mnemonic/ges-mnemonic.component.html`** — SVG container with loading/error/no-schema states
-7. **`ges-detail/components/ges-mnemonic/ges-mnemonic.component.scss`** — SVG container styles
+export interface SnowCoverPeriod {
+    date: string;
+    items: SnowCoverItem[];
+}
 
-### MODIFY (6 files)
+export interface SnowCoverResponse {
+    today: SnowCoverPeriod;
+    yesterday: SnowCoverPeriod;
+    year_ago: SnowCoverPeriod;
+}
+```
 
-8. **`ges-detail/ges-detail.component.ts`** — Add import for `GesMnemonicSectionComponent`
-9. **`ges-detail/ges-detail.component.html`** — Add tab #7 "Мнемосхема"
-10. **`src/assets/i18n/ru.json`** — Add translation keys
-11. **`src/assets/i18n/en.json`** — Add translation keys
-12. **`src/assets/i18n/uz-cyrl.json`** — Add translation keys
-13. **`src/assets/i18n/uz-latn.json`** — Add translation keys
+### 2. Service — `src/app/core/services/snow-cover.service.ts`
+
+Extends `ApiService`. Endpoint: `BASE_URL + '/snow-cover'`. Метод `getSnowCover(date?: Date)` с опциональным параметром `date`.
+
+### 3. Component — `src/app/pages/situation-center/reservoirs-info/snow-cover/`
+
+- `snow-cover.component.ts` — standalone component, inject `SnowCoverService`
+- `snow-cover.component.html` — layout с карточками и графиками
+- `snow-cover.component.scss` — стили
+
+**Dashboard layout:**
+
+1. **Toolbar** — DatePicker для выбора даты + кнопка обновления + «Последнее обновление»
+2. **Summary cards (3 шт)** — Средний % покрова: сегодня / вчера / год назад (с иконками и цветами)
+3. **Bar chart** — Горизонтальный bar chart: покров по организациям (сегодня vs год назад)
+4. **Table** — PrimeNG p-table: организация, сегодня %, вчера %, год назад %, дельта (сегодня - год назад)
+5. **Expandable rows** — При раскрытии строки показать зоны высотности организации
+
+## Files to Modify
+
+### 4. Routes — `src/app.routes.ts`
+
+Добавить: `{ path: 'snow-cover', component: SnowCoverComponent, canActivate: [raisGuard] }`
+
+### 5. Menu — `src/app/layout/component/menu/menu.component.ts`
+
+В секцию `MENU.RESERVOIR_INFO` → `items[]` добавить 4-й пункт:
+
+```ts
+{
+    label: this.t('MENU.SNOW_COVER'),
+    role: ['rais', 'sc'],
+    routerLink: ['/snow-cover']
+}
+```
+
+### 6. Translations — все 4 i18n файла
+
+**MENU:**
+
+- `MENU.SNOW_COVER`: "MODSNOW" (ru) / "MODSNOW" (en) / "MODSNOW" (uz-cyrl) / "MODSNOW" (uz-latn)
+
+**SNOW_COVER section (новая, верхнего уровня):**
+
+- `SNOW_COVER.TITLE`: "Снежный покров (MODSNOW)"
+- `SNOW_COVER.TODAY`: "Сегодня"
+- `SNOW_COVER.YESTERDAY`: "Вчера"
+- `SNOW_COVER.YEAR_AGO`: "Год назад"
+- `SNOW_COVER.AVG_COVER`: "Средний покров"
+- `SNOW_COVER.ORGANIZATION`: "Организация"
+- `SNOW_COVER.COVER`: "Покров, %"
+- `SNOW_COVER.DELTA`: "Δ к году назад"
+- `SNOW_COVER.ZONES`: "Зоны высотности"
+- `SNOW_COVER.ELEVATION`: "Высота, м"
+- `SNOW_COVER.SCA_PCT`: "Покров, %"
+- `SNOW_COVER.NO_DATA`: "Нет данных"
+- `SNOW_COVER.RESOURCE_DATE`: "Дата снимка"
 
 ## Implementation Steps
 
-### Step 1: Create `ges-svg-registry.ts`
+### Step 1: Create interface `snow-cover.ts`
 
-Static `Map<number, string>` with all 57 entries mapping gesId to SVG filename. Export helper `getSvgAssetUrl(gesId)` returning `/assets/svg/{filename}` or `null`.
+### Step 2: Create service `snow-cover.service.ts`
 
-### Step 2: Rewrite `ges-mnemonic.component.ts`
+- `extends ApiService`
+- `const SNOW_COVER = '/snow-cover'`
+- `getSnowCover(date?: Date): Observable<SnowCoverResponse>`
 
-Keep same `@Input()` contract (`gesId`, `telemetry`) so dashboard usage doesn't break.
+### Step 3: Create component `snow-cover/`
 
-Core logic:
+**TS:**
 
-- `ngOnChanges`: if `gesId` changed → `loadSvg()`, if `telemetry` changed → `bindTelemetryToSvg()`
-- `loadSvg()`: resolve URL via registry → `HttpClient.get(url, { responseType: 'text' })` → `DomSanitizer.bypassSecurityTrustHtml()` → set `svgContent`
-- `bindTelemetryToSvg()`: after DOM update (`setTimeout 0`), for each `TelemetryEnvelope`:
-    - Find `<text id="g{deviceId}">` → set textContent to power value
-    - Find `<text id="a{deviceId}">` → KIUM value
-    - Find `<text id="k{deviceId}">` → KPD value
-    - Find `<text id="n{deviceId}">` → NA value
-    - Find `<text id="w{deviceId}">` → water flow value
-    - Find `<path id="c{deviceId}">` + `c{id}1`, `c{id}2` → set fill green (active) or red (alarm/inactive)
+- `inject(SnowCoverService)`, `inject(TranslateService)`
+- `selectedDate: Date`, `data: SnowCoverResponse | null`, `loading: boolean`
+- `ngOnInit()` → `loadData()` + `interval(300000)` auto-refresh (5 мин)
+- `loadData()` → `service.getSnowCover(date).subscribe(...)`
+- `avgCover(period)` — вычислить среднее значение cover по items
+- `chartData` / `chartOptions` — Chart.js bar chart config
+- `updateChart()` — подготовить данные для графика при получении ответа
 
-State management: `svgLoading`, `svgError`, `hasSvg` flags for template states.
+**HTML layout:**
 
-### Step 3: Rewrite `ges-mnemonic.component.html`
+```
+<div class="snow-cover-page">
+  <!-- Toolbar: DatePicker + Refresh -->
+  <!-- Summary Cards: 3 карточки со средним % -->
+  <!-- Bar Chart: p-chart type="bar" -->
+  <!-- Table: p-table с expandable rows для зон -->
+</div>
+```
 
-Four states:
+**Chart:** Horizontal bar chart — организации по оси Y, % покрова по оси X. Два dataset: «Сегодня» (синий) и «Год назад» (серый).
 
-1. `!hasSvg` → placeholder ("Мнемосхема не доступна")
-2. `svgLoading` → `<p-progressSpinner>`
-3. `svgError` → error message
-4. else → `<div #svgContainer [innerHTML]="svgContent">`
+**Table columns:** Организация | Сегодня % | Вчера % | Год назад % | Δ | Дата снимка
 
-### Step 4: Rewrite `ges-mnemonic.component.scss`
+**Expandable rows:** Таблица зон: Высота (min-max м) | Покров %
 
-`.svg-wrapper` with `overflow: auto`, background, border-radius. Use `::ng-deep svg` to ensure SVG fills container width.
+### Step 4: Add route in `app.routes.ts`
 
-### Step 5: Create `ges-mnemonic-section` component
+### Step 5: Add menu item in `menu.component.ts`
 
-Follows exact pattern of `GesTelemetrySectionComponent`:
-
-- `@Input() gesId`
-- `ngOnInit()` → `loadData()` + `interval(120000)` auto-refresh
-- `loadData()` → `gesService.getTelemetry(gesId)`
-- Toolbar with "last updated" time + refresh button
-- Renders `<app-ges-mnemonic [gesId]="gesId" [telemetry]="telemetry">`
-
-### Step 6: Add tab to `ges-detail`
-
-In `.ts`: add import for `GesMnemonicSectionComponent`
-In `.html`: add `<p-tab [value]="7">` and `<p-tabpanel [value]="7">` with `<app-ges-mnemonic-section [gesId]="gesId">`
-
-### Step 7: Add translations
-
-Add to all 4 i18n files:
-
-- `GES_DETAIL.TABS.MNEMONIC`: "Мнемосхема"
-- `GES_DETAIL.MNEMONIC.NO_SCHEMA`: "Мнемосхема не доступна для данной станции"
-- `GES_DETAIL.MNEMONIC.NO_SCHEMA_DESC`: "Схема для данной ГЭС ещё не загружена"
-- `GES_DETAIL.MNEMONIC.LOAD_ERROR`: "Ошибка загрузки мнемосхемы"
+### Step 6: Add translations to all 4 i18n files
 
 ## Verification
 
-1. Navigate to a GES that has an SVG (e.g. `/ges/62` — Андижон-1)
-    - Dashboard widget should show the real SVG instead of circles
-    - Tab "Мнемосхема" should show the same SVG with toolbar
-    - If telemetry is available, values should appear in SVG text elements
-2. Navigate to a GES without SVG (e.g. a station not in the registry)
-    - Both dashboard widget and tab should show "Мнемосхема не доступна" placeholder
-3. Verify auto-refresh: wait 2 minutes on the mnemonic tab, telemetry should update
+1. Перейти в меню: Водохранилища → MODSNOW
+2. Убедиться что загружаются данные за сегодня
+3. Проверить 3 summary-карточки со средним %
+4. Проверить bar chart с сравнением организаций
+5. Проверить таблицу с раскрытием зон высотности
+6. Сменить дату → данные обновились
+7. `ng build` без ошибок
