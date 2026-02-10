@@ -118,13 +118,19 @@ export interface GesKpiData {
     totalAggregates: number;
 }
 
-// Агрегат ГЭС
-export interface GesAggregate {
+// Параметр гидроагрегата (строка таблицы)
+export interface GeneratorParam {
+    label: string; // i18n ключ названия параметра
+    value: string; // отформатированное значение
+    unit: string; // i18n ключ единицы измерения
+}
+
+// Данные гидроагрегата для отображения
+export interface GeneratorView {
     id: string;
     name: string;
-    power: number;
     status: 'active' | 'pending' | 'repair' | 'offline';
-    temperature?: number;
+    params: GeneratorParam[];
 }
 
 // Данные АСКУЭ

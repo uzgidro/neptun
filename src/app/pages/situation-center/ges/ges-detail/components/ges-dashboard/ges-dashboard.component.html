@@ -57,9 +57,12 @@
     <!-- Main Content: Aggregates and Mnemonic -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <!-- Aggregates List -->
-        <div class="border border-surface-200 rounded-lg p-4">
-            <h3 class="text-lg font-semibold mb-4">{{ 'GES_DETAIL.AGGREGATES_TITLE' | translate }}</h3>
-            <app-ges-aggregates [gesId]="gesId" [telemetry]="telemetry" [askue]="askue"></app-ges-aggregates>
+        <div class="relative min-h-[200px]">
+            <div class="absolute inset-0 border border-surface-200 rounded-lg p-4 flex flex-col overflow-hidden">
+                <h3 class="text-lg font-semibold mb-4 shrink-0">{{ 'GES_DETAIL.AGGREGATES_TITLE' | translate }}</h3>
+                <app-ges-aggregates class="flex-1 min-h-0 flex flex-col" [gesId]="gesId" [telemetry]="telemetry"
+                                    [askue]="askue"></app-ges-aggregates>
+            </div>
         </div>
 
         <!-- Mnemonic Scheme -->

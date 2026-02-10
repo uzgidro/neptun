@@ -599,7 +599,7 @@
         "TOTAL": "Total",
         "TOTAL_POWER": "Total Power",
         "STATUS_WORKING": "Working",
-        "STATUS_IDLE": "Idle",
+          "STATUS_IDLE": "In Reserve",
         "STATUS_REPAIR": "Under Repair"
       },
       "SHUTDOWNS": {
@@ -1772,7 +1772,8 @@
             "DISCHARGES": "Idle Discharges",
             "INCIDENTS": "Incidents",
             "VISITS": "Visits",
-            "TELEMETRY": "Telemetry"
+            "TELEMETRY": "Telemetry",
+            "MNEMONIC": "Mnemonic Scheme"
         },
         "KPI": {
             "CURRENT_POWER": "Active Power",
@@ -1782,21 +1783,46 @@
         },
         "STATUS": {
             "ACTIVE": "Active",
-            "PENDING": "Pending",
+            "PENDING": "In Reserve",
             "REPAIR": "Repair",
             "OFFLINE": "Offline"
         },
         "AGGREGATE": {
-            "NAME": "Name",
-            "POWER": "Power",
-            "STATUS": "Status",
-            "TEMPERATURE": "Temperature"
+            "PARAM_NAME": "Parameter",
+            "PARAM_VALUE": "Value",
+            "PARAM_UNIT": "Unit",
+            "ACTIVE_POWER": "Active Power",
+            "REACTIVE_POWER": "Reactive Power",
+            "VOLTAGE_AB": "Voltage AB",
+            "VOLTAGE_BC": "Voltage BC",
+            "VOLTAGE_CA": "Voltage CA",
+            "CURRENT_A": "Current Phase A",
+            "CURRENT_B": "Current Phase B",
+            "CURRENT_C": "Current Phase C",
+            "FREQUENCY": "Frequency",
+            "POWER_FACTOR": "Power Factor (cos φ)",
+            "ROTOR_VOLTAGE": "Rotor Voltage",
+            "ROTOR_CURRENT": "Rotor Current",
+            "GUIDE_VANE_1": "Guide Vane 1",
+            "GUIDE_VANE_2": "Guide Vane 2"
+        },
+        "UNIT": {
+            "MW": "MW",
+            "MVAR": "MVar",
+            "KV": "kV",
+            "A": "A",
+            "HZ": "Hz",
+            "V": "V",
+            "PERCENT": "%"
         },
         "MNEMONIC": {
             "STATUS": "Status",
             "POWER": "Power",
             "NO_DATA": "No telemetry data",
-            "PLACEHOLDER": "Mnemonic scheme will be displayed when data is available"
+            "PLACEHOLDER": "Mnemonic scheme will be displayed when data is available",
+            "NO_SCHEMA": "Mnemonic scheme is not available for this station",
+            "NO_SCHEMA_DESC": "The schema for this HPP has not been uploaded yet",
+            "LOAD_ERROR": "Error loading mnemonic scheme"
         },
         "INFO": {
             "BASIC_INFO": "Basic Information",

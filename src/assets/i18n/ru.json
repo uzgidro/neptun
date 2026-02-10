@@ -598,7 +598,7 @@
         "TOTAL": "Всего",
         "TOTAL_POWER": "Суммарная мощность",
         "STATUS_WORKING": "В работе",
-        "STATUS_IDLE": "Простаивают",
+          "STATUS_IDLE": "В резерве",
         "STATUS_REPAIR": "В ремонте"
       },
       "SHUTDOWNS": {
@@ -1771,7 +1771,8 @@
             "DISCHARGES": "Холостые водосбросы",
             "INCIDENTS": "Инциденты",
             "VISITS": "Посещения",
-            "TELEMETRY": "Телеметрия"
+            "TELEMETRY": "Телеметрия",
+            "MNEMONIC": "Мнемосхема"
         },
         "KPI": {
             "CURRENT_POWER": "Активная мощность",
@@ -1781,21 +1782,46 @@
         },
         "STATUS": {
             "ACTIVE": "Работает",
-            "PENDING": "В ожидании",
+            "PENDING": "В резерве",
             "REPAIR": "Ремонт",
             "OFFLINE": "Отключен"
         },
         "AGGREGATE": {
-            "NAME": "Название",
-            "POWER": "Мощность",
-            "STATUS": "Статус",
-            "TEMPERATURE": "Температура"
+            "PARAM_NAME": "Параметр",
+            "PARAM_VALUE": "Значение",
+            "PARAM_UNIT": "Ед. изм.",
+            "ACTIVE_POWER": "Активная мощность",
+            "REACTIVE_POWER": "Реактивная мощность",
+            "VOLTAGE_AB": "Напряжение AB",
+            "VOLTAGE_BC": "Напряжение BC",
+            "VOLTAGE_CA": "Напряжение CA",
+            "CURRENT_A": "Ток фазы A",
+            "CURRENT_B": "Ток фазы B",
+            "CURRENT_C": "Ток фазы C",
+            "FREQUENCY": "Частота",
+            "POWER_FACTOR": "Коэффициент мощности (cos φ)",
+            "ROTOR_VOLTAGE": "Напряжение ротора",
+            "ROTOR_CURRENT": "Ток ротора",
+            "GUIDE_VANE_1": "Направляющий аппарат 1",
+            "GUIDE_VANE_2": "Направляющий аппарат 2"
+        },
+        "UNIT": {
+            "MW": "МВт",
+            "MVAR": "МВАр",
+            "KV": "кВ",
+            "A": "А",
+            "HZ": "Гц",
+            "V": "В",
+            "PERCENT": "%"
         },
         "MNEMONIC": {
             "STATUS": "Статус",
             "POWER": "Мощность",
             "NO_DATA": "Нет данных телеметрии",
-            "PLACEHOLDER": "Мнемосхема будет отображена при наличии данных"
+            "PLACEHOLDER": "Мнемосхема будет отображена при наличии данных",
+            "NO_SCHEMA": "Мнемосхема не доступна для данной станции",
+            "NO_SCHEMA_DESC": "Схема для данной ГЭС ещё не загружена",
+            "LOAD_ERROR": "Ошибка загрузки мнемосхемы"
         },
         "INFO": {
             "BASIC_INFO": "Основная информация",

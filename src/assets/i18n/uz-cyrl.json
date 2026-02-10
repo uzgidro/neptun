@@ -595,7 +595,7 @@
         "TOTAL": "Жами",
         "TOTAL_POWER": "Умумий қувват",
         "STATUS_WORKING": "Ишламоқда",
-        "STATUS_IDLE": "Тўхтаган",
+          "STATUS_IDLE": "Заҳирада",
         "STATUS_REPAIR": "Таъмирда"
       },
       "SHUTDOWNS": {
@@ -1743,7 +1743,8 @@
             "DISCHARGES": "Бўш ташламалар",
             "INCIDENTS": "Воқеалар",
             "VISITS": "Ташрифлар",
-            "TELEMETRY": "Телеметрия"
+            "TELEMETRY": "Телеметрия",
+            "MNEMONIC": "Мнемосхема"
         },
         "KPI": {
             "CURRENT_POWER": "Актив қувват",
@@ -1753,21 +1754,46 @@
         },
         "STATUS": {
             "ACTIVE": "Ишлаяпти",
-            "PENDING": "Кутилмоқда",
+            "PENDING": "Заҳирада",
             "REPAIR": "Таъмирда",
             "OFFLINE": "Ўчирилган"
         },
         "AGGREGATE": {
-            "NAME": "Номи",
-            "POWER": "Қувват",
-            "STATUS": "Ҳолат",
-            "TEMPERATURE": "Ҳарорат"
+            "PARAM_NAME": "Параметр",
+            "PARAM_VALUE": "Қиймат",
+            "PARAM_UNIT": "Ўлч. бир.",
+            "ACTIVE_POWER": "Актив қувват",
+            "REACTIVE_POWER": "Реактив қувват",
+            "VOLTAGE_AB": "Кучланиш AB",
+            "VOLTAGE_BC": "Кучланиш BC",
+            "VOLTAGE_CA": "Кучланиш CA",
+            "CURRENT_A": "Ток фаза A",
+            "CURRENT_B": "Ток фаза B",
+            "CURRENT_C": "Ток фаза C",
+            "FREQUENCY": "Частота",
+            "POWER_FACTOR": "Қувват коэффициенти (cos φ)",
+            "ROTOR_VOLTAGE": "Ротор кучланиши",
+            "ROTOR_CURRENT": "Ротор токи",
+            "GUIDE_VANE_1": "Йўналтирувчи аппарат 1",
+            "GUIDE_VANE_2": "Йўналтирувчи аппарат 2"
+        },
+        "UNIT": {
+            "MW": "МВт",
+            "MVAR": "МВАр",
+            "KV": "кВ",
+            "A": "А",
+            "HZ": "Гц",
+            "V": "В",
+            "PERCENT": "%"
         },
         "MNEMONIC": {
             "STATUS": "Ҳолат",
             "POWER": "Қувват",
             "NO_DATA": "Телеметрия маълумотлари йўқ",
-            "PLACEHOLDER": "Маълумотлар мавжуд бўлганда мнемосхема кўрсатилади"
+            "PLACEHOLDER": "Маълумотлар мавжуд бўлганда мнемосхема кўрсатилади",
+            "NO_SCHEMA": "Мнемосхема бу станция учун мавжуд эмас",
+            "NO_SCHEMA_DESC": "Бу ГЭС учун схема ҳали юкланмаган",
+            "LOAD_ERROR": "Мнемосхемани юклашда хатолик"
         },
         "INFO": {
             "BASIC_INFO": "Асосий маълумот",

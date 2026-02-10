@@ -595,7 +595,7 @@
         "TOTAL": "Jami",
         "TOTAL_POWER": "Umumiy quvvat",
         "STATUS_WORKING": "Ishlamoqda",
-        "STATUS_IDLE": "To'xtagan",
+          "STATUS_IDLE": "Zahirada",
         "STATUS_REPAIR": "Ta'mirda"
       },
       "SHUTDOWNS": {
@@ -1743,7 +1743,8 @@
             "DISCHARGES": "Bo'sh tashlamalar",
             "INCIDENTS": "Voqealar",
             "VISITS": "Tashriflar",
-            "TELEMETRY": "Telemetriya"
+            "TELEMETRY": "Telemetriya",
+            "MNEMONIC": "Mnemosxema"
         },
         "KPI": {
             "CURRENT_POWER": "Aktiv quvvat",
@@ -1753,21 +1754,46 @@
         },
         "STATUS": {
             "ACTIVE": "Ishlamoqda",
-            "PENDING": "Kutilmoqda",
+            "PENDING": "Zahirada",
             "REPAIR": "Ta'mirda",
             "OFFLINE": "O'chirilgan"
         },
         "AGGREGATE": {
-            "NAME": "Nomi",
-            "POWER": "Quvvat",
-            "STATUS": "Holat",
-            "TEMPERATURE": "Harorat"
+            "PARAM_NAME": "Parametr",
+            "PARAM_VALUE": "Qiymat",
+            "PARAM_UNIT": "O'lch. bir.",
+            "ACTIVE_POWER": "Aktiv quvvat",
+            "REACTIVE_POWER": "Reaktiv quvvat",
+            "VOLTAGE_AB": "Kuchlanish AB",
+            "VOLTAGE_BC": "Kuchlanish BC",
+            "VOLTAGE_CA": "Kuchlanish CA",
+            "CURRENT_A": "Tok faza A",
+            "CURRENT_B": "Tok faza B",
+            "CURRENT_C": "Tok faza C",
+            "FREQUENCY": "Chastota",
+            "POWER_FACTOR": "Quvvat koeffitsiyenti (cos φ)",
+            "ROTOR_VOLTAGE": "Rotor kuchlanishi",
+            "ROTOR_CURRENT": "Rotor toki",
+            "GUIDE_VANE_1": "Yo'naltiruvchi apparat 1",
+            "GUIDE_VANE_2": "Yo'naltiruvchi apparat 2"
+        },
+        "UNIT": {
+            "MW": "MW",
+            "MVAR": "MVar",
+            "KV": "kV",
+            "A": "A",
+            "HZ": "Hz",
+            "V": "V",
+            "PERCENT": "%"
         },
         "MNEMONIC": {
             "STATUS": "Holat",
             "POWER": "Quvvat",
             "NO_DATA": "Telemetriya ma'lumotlari yo'q",
-            "PLACEHOLDER": "Ma'lumotlar mavjud bo'lganda mnemosxema ko'rsatiladi"
+            "PLACEHOLDER": "Ma'lumotlar mavjud bo'lganda mnemosxema ko'rsatiladi",
+            "NO_SCHEMA": "Mnemosxema bu stansiya uchun mavjud emas",
+            "NO_SCHEMA_DESC": "Bu GES uchun sxema hali yuklanmagan",
+            "LOAD_ERROR": "Mnemosxemani yuklashda xatolik"
         },
         "INFO": {
             "BASIC_INFO": "Asosiy ma'lumot",
