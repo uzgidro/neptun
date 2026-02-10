@@ -30,12 +30,19 @@ export class SnowCoverComponent implements OnInit, OnDestroy {
     chartOptions: any = {};
     chartHeight = '400px';
 
+    zonesChartData: any = {};
+    zonesChartOptions: any = {};
+
     ngOnInit(): void {
         this.initChartOptions();
+        this.initZonesChartOptions();
         interval(300000)
             .pipe(takeUntil(this.destroy$))
             .subscribe(() => this.loadData());
-        this.translate.onLangChange.pipe(takeUntil(this.destroy$)).subscribe(() => this.updateChart());
+        this.translate.onLangChange.pipe(takeUntil(this.destroy$)).subscribe(() => {
+            this.updateChart();
+            this.updateZonesChart();
+        });
     }
 
     onDateChange(date: Date): void {
@@ -52,6 +59,7 @@ export class SnowCoverComponent implements OnInit, OnDestroy {
                 next: (res) => {
                     this.data = res;
                     this.updateChart();
+                    this.updateZonesChart();
                     this.loading = false;
                 },
                 error: () => {
@@ -110,6 +118,91 @@ export class SnowCoverComponent implements OnInit, OnDestroy {
                 }
             }
         };
+    }
+
+    private initZonesChartOptions(): void {
+        this.zonesChartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top'
+                },
+                tooltip: {
+                    callbacks: {
+                        label: (ctx: any) => `${ctx.dataset.label}: ${ctx.parsed.y}%`
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: this.t('SNOW_COVER.ELEVATION')
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    max: 100,
+                    title: {
+                        display: true,
+                        text: '%'
+                    }
+                }
+            }
+        };
+    }
+
+    private updateZonesChart(): void {
+        if (!this.data) return;
+
+        const itemsWithZones = this.data.today.items.filter(i => i.zones && i.zones.length > 0);
+        if (itemsWithZones.length === 0) {
+            this.zonesChartData = {};
+            return;
+        }
+
+        const allRanges = new Set<string>();
+        const rangeKeys: { key: string; min: number; max: number }[] = [];
+
+        for (const item of itemsWithZones) {
+            for (const z of item.zones!) {
+                const key = `${z.min_elev}–${z.max_elev}`;
+                if (!allRanges.has(key)) {
+                    allRanges.add(key);
+                    rangeKeys.push({ key, min: z.min_elev, max: z.max_elev });
+                }
+            }
+        }
+
+        rangeKeys.sort((a, b) => a.min - b.min);
+        const labels = rangeKeys.map(r => r.key);
+
+        const colors = [
+            '#3B82F6', '#EF4444', '#22C55E', '#F59E0B', '#8B5CF6',
+            '#EC4899', '#06B6D4', '#84CC16', '#F97316', '#6366F1',
+            '#14B8A6', '#E11D48', '#0EA5E9', '#A855F7', '#10B981'
+        ];
+
+        const datasets = itemsWithZones.map((item, idx) => {
+            const data = labels.map(label => {
+                const zone = item.zones!.find(z => `${z.min_elev}–${z.max_elev}` === label);
+                return zone?.sca_pct ?? null;
+            });
+            const color = colors[idx % colors.length];
+            return {
+                label: item.organization_name,
+                data,
+                borderColor: color,
+                backgroundColor: color,
+                fill: false,
+                tension: 0.3,
+                pointRadius: 4,
+                spanGaps: true
+            };
+        });
+
+        this.zonesChartData = { labels, datasets };
     }
 
     private updateChart(): void {

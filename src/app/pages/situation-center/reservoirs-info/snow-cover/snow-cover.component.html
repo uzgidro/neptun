@@ -104,6 +104,23 @@
             </div>
         </div>
 
+        <!-- Zones Line Chart -->
+        @if (zonesChartData.labels?.length) {
+            <div class="chart-section">
+                <div class="chart-header">
+                    <h4>{{ 'SNOW_COVER.ZONES' | translate }}</h4>
+                </div>
+                <div class="chart-body" style="height: 450px">
+                    <p-chart
+                        type="line"
+                        [data]="zonesChartData"
+                        [options]="zonesChartOptions"
+                        height="100%"
+                    ></p-chart>
+                </div>
+            </div>
+        }
+
         <!-- Table -->
         <div class="table-section">
             <p-table
