@@ -49,7 +49,7 @@ import { UzgidroNewsComponent } from '@/pages/uzgidro-news/uzgidro-news.componen
 export const appRoutes: Routes = [
     {
         path: '',
-        redirectTo: 'monitoring',
+        redirectTo: 'dashboard',
         pathMatch: 'full'
     },
     {
