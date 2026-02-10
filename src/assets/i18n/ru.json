@@ -598,7 +598,7 @@
         "TOTAL": "Всего",
         "TOTAL_POWER": "Суммарная мощность",
         "STATUS_WORKING": "В работе",
-        "STATUS_IDLE": "Простаивают",
+          "STATUS_IDLE": "В резерве",
         "STATUS_REPAIR": "В ремонте"
       },
       "SHUTDOWNS": {
@@ -1782,7 +1782,7 @@
         },
         "STATUS": {
             "ACTIVE": "Работает",
-            "PENDING": "В ожидании",
+            "PENDING": "В резерве",
             "REPAIR": "Ремонт",
             "OFFLINE": "Отключен"
         },

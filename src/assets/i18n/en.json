@@ -599,7 +599,7 @@
         "TOTAL": "Total",
         "TOTAL_POWER": "Total Power",
         "STATUS_WORKING": "Working",
-        "STATUS_IDLE": "Idle",
+          "STATUS_IDLE": "In Reserve",
         "STATUS_REPAIR": "Under Repair"
       },
       "SHUTDOWNS": {
@@ -1783,7 +1783,7 @@
         },
         "STATUS": {
             "ACTIVE": "Active",
-            "PENDING": "Pending",
+            "PENDING": "In Reserve",
             "REPAIR": "Repair",
             "OFFLINE": "Offline"
         },

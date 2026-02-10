@@ -595,7 +595,7 @@
         "TOTAL": "Jami",
         "TOTAL_POWER": "Umumiy quvvat",
         "STATUS_WORKING": "Ishlamoqda",
-        "STATUS_IDLE": "To'xtagan",
+          "STATUS_IDLE": "Zahirada",
         "STATUS_REPAIR": "Ta'mirda"
       },
       "SHUTDOWNS": {
@@ -1754,7 +1754,7 @@
         },
         "STATUS": {
             "ACTIVE": "Ishlamoqda",
-            "PENDING": "Kutilmoqda",
+            "PENDING": "Zahirada",
             "REPAIR": "Ta'mirda",
             "OFFLINE": "O'chirilgan"
         },
