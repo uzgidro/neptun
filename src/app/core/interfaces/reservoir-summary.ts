@@ -33,8 +33,8 @@ export interface ReservoirSummaryRequest {
     volume: number;
     release: number;
     level: number;
-    modsnow_current: number;
-    modsnow_year_ago: number;
+    modsnow_current?: number;
+    modsnow_year_ago?: number;
     total_income_volume?: number | null;
     total_income_volume_prev_year?: number | null;
 }

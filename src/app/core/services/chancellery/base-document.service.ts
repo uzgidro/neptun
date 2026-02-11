@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Observable, of, delay } from 'rxjs';
 import {
     DocumentResponse,
     DocumentPayload,
@@ -26,11 +26,7 @@ import {
  * Abstract base service for all chancellery document types.
  * Provides common CRUD operations and status management.
  */
-export abstract class BaseDocumentService<
-    T extends DocumentResponse = DocumentResponse,
-    P extends DocumentPayload = DocumentPayload,
-    F extends DocumentFilters = DocumentFilters
-> {
+export abstract class BaseDocumentService<T extends DocumentResponse = DocumentResponse, P extends DocumentPayload = DocumentPayload, F extends DocumentFilters = DocumentFilters> {
     protected http = inject(HttpClient);
 
     protected abstract readonly endpoint: string;
@@ -40,57 +36,47 @@ export abstract class BaseDocumentService<
     }
 
     getAll(filters?: F): Observable<T[]> {
-        let params = new HttpParams();
-
-        if (filters) {
-            Object.entries(filters).forEach(([key, value]) => {
-                if (value !== undefined && value !== null && value !== '') {
-                    params = params.append(key, String(value));
-                }
-            });
-        }
-
-        return this.http.get<T[]>(this.apiUrl, { params });
+        return of([] as T[]).pipe(delay(100));
     }
 
     getById(id: number): Observable<T> {
-        return this.http.get<T>(`${this.apiUrl}/${id}`);
+        return of({ id } as any as T).pipe(delay(100));
     }
 
     create(payload: P | FormData): Observable<CreateDocumentResponse> {
-        return this.http.post<CreateDocumentResponse>(this.apiUrl, payload);
+        return of({ id: Date.now() } as CreateDocumentResponse).pipe(delay(200));
     }
 
     update(id: number, payload: Partial<P> | FormData): Observable<void> {
-        return this.http.put<void>(`${this.apiUrl}/${id}`, payload);
+        return of(undefined as void).pipe(delay(200));
     }
 
     delete(id: number): Observable<void> {
-        return this.http.delete<void>(`${this.apiUrl}/${id}`);
+        return of(undefined as void).pipe(delay(200));
     }
 
     getTypes(): Observable<DocumentType[]> {
-        return this.http.get<DocumentType[]>(`${this.apiUrl}/types`);
+        return of([]).pipe(delay(100));
     }
 
     getHistory(id: number): Observable<StatusHistoryEntry[]> {
-        return this.http.get<StatusHistoryEntry[]>(`${this.apiUrl}/${id}/history`);
+        return of([]).pipe(delay(100));
     }
 
     changeStatus(id: number, request: ChangeStatusRequest): Observable<void> {
-        return this.http.post<void>(`${this.apiUrl}/${id}/status`, request);
+        return of(undefined as void).pipe(delay(200));
     }
 
     signDocument(id: number, request: SignDocumentRequest): Observable<SignatureResponse> {
-        return this.http.post<SignatureResponse>(`${this.apiUrl}/${id}/sign`, request);
+        return of({ success: true } as any).pipe(delay(200));
     }
 
     rejectSignature(id: number, request: RejectSignatureRequest): Observable<SignatureResponse> {
-        return this.http.post<SignatureResponse>(`${this.apiUrl}/${id}/reject`, request);
+        return of({ success: true } as any).pipe(delay(200));
     }
 
     getSignatures(id: number): Observable<Signature[]> {
-        return this.http.get<Signature[]>(`${this.apiUrl}/${id}/signatures`);
+        return of([]).pipe(delay(100));
     }
 
     getStatusSeverity(code: string): StatusSeverity {
@@ -124,7 +110,7 @@ export abstract class BaseDocumentService<
         }
 
         if (files && files.length > 0) {
-            files.forEach(file => formData.append('files', file, file.name));
+            files.forEach((file) => formData.append('files', file, file.name));
         }
 
         return formData;

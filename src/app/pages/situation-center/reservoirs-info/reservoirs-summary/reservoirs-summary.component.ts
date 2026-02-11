@@ -91,9 +91,7 @@ export class ReservoirsSummaryComponent implements OnInit {
                     income: reservoir.income.current,
                     level: reservoir.level.current,
                     volume: reservoir.volume.current,
-                    release: reservoir.release.current,
-                    modsnow_current: reservoir.modsnow.current,
-                    modsnow_year_ago: reservoir.modsnow.year_ago
+                    release: reservoir.release.current
                 };
 
                 if (original && original.incoming_volume !== reservoir.incoming_volume) {
@@ -148,14 +146,6 @@ export class ReservoirsSummaryComponent implements OnInit {
 
     onIncomeChange(reservoir: ReservoirSummaryResponse) {
         reservoir.income.is_edited = true;
-    }
-
-    onModsnowCurrentChange(reservoir: ReservoirSummaryResponse) {
-        reservoir.modsnow.is_edited = true;
-    }
-
-    onModsnowYearAgoChange(reservoir: ReservoirSummaryResponse) {
-        reservoir.modsnow.is_edited = true;
     }
 
     onIncomingVolumeChange(reservoir: ReservoirSummaryResponse) {

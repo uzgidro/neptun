@@ -41,7 +41,6 @@
                     <th colspan="3">Приток, м³/с</th>
                     <th colspan="3">Попуск, м³/с</th>
                     <th colspan="2" rowspan="2">Приток до сегодняшнего дня, млн. м³</th>
-                    <th colspan="2" rowspan="2">MODSNOW, снежный покров %</th>
                 </tr>
                 <tr>
                     <th rowspan="2" class="text-nowrap">{{ selectedDate | date: 'dd MMM' : '' : 'ru' }}</th>
@@ -59,8 +58,6 @@
                     <th>{{ getPreviousYear(2) }}</th>
                     <th>{{ getPreviousYear(1) }}</th>
                     <th>{{ getPreviousYear(2) }}</th>
-                    <th>{{ selectedDate | date: 'yyyy' }}</th>
-                    <th>{{ getPreviousYear(1) }}</th>
                     <th>{{ selectedDate | date: 'yyyy' }}</th>
                     <th>{{ getPreviousYear(1) }}</th>
                 </tr>
@@ -231,108 +228,62 @@
                         <td></td>
                         <td></td>
                     }
-                    @if (reservoir.organization_id !== null && index !== 2) {
-                        @if (authService.isSc()) {
-                            <td [pEditableColumn]="reservoir.modsnow" pEditableColumnField="current"
-                                class="text-nowrap"
-                                [ngClass]="{'bg-yellow-100 dark:bg-yellow-900': reservoir.modsnow.is_edited}">
-                                <p-cellEditor>
-                                    <ng-template pTemplate="input">
-                                        <input pInputText type="number" [(ngModel)]="reservoir.modsnow.current"
-                                               (focus)="onInputFocus($event, reservoir.modsnow, 'current')"
-                                               (ngModelChange)="onModsnowCurrentChange(reservoir)" />
-                                    </ng-template>
-                                    <ng-template pTemplate="output">
-                                        {{ reservoir.modsnow.current | number: '1.0-1' }}
-                                        <i class="pi pi-pen-to-square ml-2 text-gray-400 text-xs"></i>
-                                    </ng-template>
-                                </p-cellEditor>
-                            </td>
-                        } @else {
-                            <td class="text-nowrap">{{ reservoir.modsnow.current | number: '1.0-1' }}</td>
-                        }
-                        @if (authService.isSc()) {
-                            <td [pEditableColumn]="reservoir.modsnow" pEditableColumnField="year_ago"
-                                class="text-nowrap"
-                                [ngClass]="{'bg-yellow-100 dark:bg-yellow-900': reservoir.modsnow.is_edited}">
-                                <p-cellEditor>
-                                    <ng-template pTemplate="input">
-                                        <input pInputText type="number" [(ngModel)]="reservoir.modsnow.year_ago"
-                                               (focus)="onInputFocus($event, reservoir.modsnow, 'year_ago')"
-                                               (ngModelChange)="onModsnowYearAgoChange(reservoir)" />
-                                    </ng-template>
-                                    <ng-template pTemplate="output">
-                                        {{ reservoir.modsnow.year_ago | number: '1.0-1' }}
-                                        <i class="pi pi-pen-to-square ml-2 text-gray-400 text-xs"></i>
-                                    </ng-template>
-                                </p-cellEditor>
-                            </td>
-                        } @else {
-                            <td class="text-nowrap">{{ reservoir.modsnow.year_ago | number: '1.0-1' }}</td>
-                        }
-                    } @else {
-                        <td></td>
-                        <td></td>
-                    }
                 </tr>
                 <tr class="italic ">
                     @if (index === 8) {
-                        <td class="bg-surface-300 dark:bg-surface-800"></td>
+                        <td class="bg-surface-100 dark:bg-surface-800"></td>
                     } @else {
-                        <td class="bg-surface-300 dark:bg-surface-800 text-red-500">{{ reservoir.organization_id != null ? ((reservoir.level.current - reservoir.level.prev) | number: '1.0-2') : '' }}</td>
+                        <td class="bg-surface-100 dark:bg-surface-800 text-red-500">{{ reservoir.organization_id != null ? ((reservoir.level.current - reservoir.level.prev) | number: '1.0-2') : '' }}</td>
                     }
                     @if (index > 6) {
-                        <td class="bg-surface-300 dark:bg-surface-800"></td>
+                        <td class="bg-surface-100 dark:bg-surface-800"></td>
                     } @else {
-                        <td class="bg-surface-300 dark:bg-surface-800 text-red-500">{{ ((reservoir.volume.current - reservoir.volume.prev) | number: '1.0-2') }}</td>
+                        <td class="bg-surface-100 dark:bg-surface-800 text-red-500">{{ ((reservoir.volume.current - reservoir.volume.prev) | number: '1.0-2') }}</td>
                     }
                     @if (index <= 6) {
-                        <td class="bg-surface-300 dark:bg-surface-800"
+                        <td class="bg-surface-100 dark:bg-surface-800"
                             [ngClass]="{'text-red-500': reservoir.organization_id === null}">{{ reservoir.volume.year_ago !== null ? ((reservoir.volume.current - reservoir.volume.year_ago) | number: '1.0-1') : 'N/A' }}
                         </td>
-                        <td class="bg-surface-300 dark:bg-surface-800"
+                        <td class="bg-surface-100 dark:bg-surface-800"
                             [ngClass]="{'text-red-500': reservoir.organization_id === null}">{{ reservoir.volume.two_years_ago !== null ? ((reservoir.volume.current - reservoir.volume.two_years_ago) | number: '1.0-1') : 'N/A' }}
                         </td>
                     } @else {
-                        <td class="bg-surface-300 dark:bg-surface-800"></td>
-                        <td class="bg-surface-300 dark:bg-surface-800"></td>
+                        <td class="bg-surface-100 dark:bg-surface-800"></td>
+                        <td class="bg-surface-100 dark:bg-surface-800"></td>
                     }
-                    <td class="bg-surface-300 dark:bg-surface-800 text-red-500">{{ (reservoir.income.current - reservoir.income.prev) | number: '1.0-2' }}</td>
+                    <td class="bg-surface-100 dark:bg-surface-800 text-red-500">{{ (reservoir.income.current - reservoir.income.prev) | number: '1.0-2' }}</td>
                     @if (index <= 6) {
-                        <td class="bg-surface-300 dark:bg-surface-800"
+                        <td class="bg-surface-100 dark:bg-surface-800"
                             [ngClass]="{'text-red-500': reservoir.organization_id === null}">{{ reservoir.income.year_ago !== null ? ((reservoir.income.current - reservoir.income.year_ago) | number: '1.0-1') : 'N/A' }}
                         </td>
-                        <td class="bg-surface-300 dark:bg-surface-800"
+                        <td class="bg-surface-100 dark:bg-surface-800"
                             [ngClass]="{'text-red-500': reservoir.organization_id === null}">{{ reservoir.income.two_years_ago !== null ? ((reservoir.income.current - reservoir.income.two_years_ago) | number: '1.0-1') : 'N/A' }}
                         </td>
                     } @else {
-                        <td class="bg-surface-300 dark:bg-surface-800"></td>
-                        <td class="bg-surface-300 dark:bg-surface-800"></td>
+                        <td class="bg-surface-100 dark:bg-surface-800"></td>
+                        <td class="bg-surface-100 dark:bg-surface-800"></td>
                     }
-                    <td class="bg-surface-300 dark:bg-surface-800 text-red-500">{{ (reservoir.release.current - reservoir.release.prev) | number: '1.0-1' }}</td>
+                    <td class="bg-surface-100 dark:bg-surface-800 text-red-500">{{ (reservoir.release.current - reservoir.release.prev) | number: '1.0-1' }}</td>
                     @if (index <= 6) {
-                        <td class="bg-surface-300 dark:bg-surface-800"
+                        <td class="bg-surface-100 dark:bg-surface-800"
                             [ngClass]="{'text-red-500': reservoir.organization_id === null}">{{ reservoir.release.year_ago !== null ? ((reservoir.release.current - reservoir.release.year_ago) | number: '1.0-1') : 'N/A' }}
                         </td>
-                        <td class="bg-surface-300 dark:bg-surface-800"
+                        <td class="bg-surface-100 dark:bg-surface-800"
                             [ngClass]="{'text-red-500': reservoir.organization_id === null}">{{ reservoir.release.two_years_ago !== null ? ((reservoir.release.current - reservoir.release.two_years_ago) | number: '1.0-1') : 'N/A' }}
                         </td>
                     } @else {
-                        <td class="bg-surface-300 dark:bg-surface-800"></td>
-                        <td class="bg-surface-300 dark:bg-surface-800"></td>
+                        <td class="bg-surface-100 dark:bg-surface-800"></td>
+                        <td class="bg-surface-100 dark:bg-surface-800"></td>
                     }
                     @if (index <= 6) {
-                        <td class="bg-surface-300 dark:bg-surface-800 text-red-500">{{ (reservoir.incoming_volume - reservoir.incoming_volume_prev_year) | number: '1.0-2' }}</td>
-                        <td class="bg-surface-300 dark:bg-surface-800 text-red-500">{{ ((reservoir.incoming_volume / reservoir.incoming_volume_prev_year) * 100) | number: '1.0-0' }}
+                        <td class="bg-surface-100 dark:bg-surface-800 text-red-500">{{ (reservoir.incoming_volume - reservoir.incoming_volume_prev_year) | number: '1.0-2' }}</td>
+                        <td class="bg-surface-100 dark:bg-surface-800 text-red-500">{{ ((reservoir.incoming_volume / reservoir.incoming_volume_prev_year) * 100) | number: '1.0-0' }}
                             %
                         </td>
                     } @else {
-                        <td class="bg-surface-300 dark:bg-surface-800"></td>
-                        <td class="bg-surface-300 dark:bg-surface-800"></td>
+                        <td class="bg-surface-100 dark:bg-surface-800"></td>
+                        <td class="bg-surface-100 dark:bg-surface-800"></td>
                     }
-                    <td colspan="2"
-                        class="bg-surface-300 dark:bg-surface-800 text-red-500">{{ reservoir.organization_id !== null && index !== 2 ? (reservoir.modsnow.current - reservoir.modsnow.year_ago | number:'1.0-1') : '' }}
-                    </td>
                 </tr>
             </ng-template>
         </p-table>
