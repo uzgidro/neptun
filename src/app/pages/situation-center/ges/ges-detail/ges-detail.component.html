@@ -1,0 +1,60 @@
+@if (loading) {
+    <div class="flex items-center justify-center py-16">
+        <p-progressSpinner></p-progressSpinner>
+    </div>
+} @else if (gesInfo) {
+    <!-- Dashboard Section -->
+    <app-ges-dashboard [gesId]="gesId" [gesInfo]="gesInfo"></app-ges-dashboard>
+
+    <!-- Detail Tabs Section -->
+    <div class="card mt-4">
+        <p-tabs [value]="activeTabIndex" (valueChange)="onTabChange($event)">
+            <p-tablist>
+                <p-tab [value]="0">{{ 'GES_DETAIL.TABS.INFO' | translate }}</p-tab>
+                <p-tab [value]="1">{{ 'GES_DETAIL.TABS.CONTACTS' | translate }}</p-tab>
+                <p-tab [value]="2">{{ 'GES_DETAIL.TABS.SHUTDOWNS' | translate }}</p-tab>
+                <p-tab [value]="3">{{ 'GES_DETAIL.TABS.DISCHARGES' | translate }}</p-tab>
+                <p-tab [value]="4">{{ 'GES_DETAIL.TABS.INCIDENTS' | translate }}</p-tab>
+                <p-tab [value]="5">{{ 'GES_DETAIL.TABS.VISITS' | translate }}</p-tab>
+                <p-tab [value]="6">{{ 'GES_DETAIL.TABS.TELEMETRY' | translate }}</p-tab>
+            </p-tablist>
+
+            <p-tabpanels>
+                <p-tabpanel [value]="0">
+                    <app-ges-info-section [gesId]="gesId" [gesInfo]="gesInfo"></app-ges-info-section>
+                </p-tabpanel>
+
+                <p-tabpanel [value]="1">
+                    <app-ges-contacts-section [gesId]="gesId"></app-ges-contacts-section>
+                </p-tabpanel>
+
+                <p-tabpanel [value]="2">
+                    <app-ges-shutdowns-section [gesId]="gesId" [canEdit]="canEdit"></app-ges-shutdowns-section>
+                </p-tabpanel>
+
+                <p-tabpanel [value]="3">
+                    <app-ges-discharges-section [gesId]="gesId" [canEdit]="canEdit"></app-ges-discharges-section>
+                </p-tabpanel>
+
+                <p-tabpanel [value]="4">
+                    <app-ges-incidents-section [gesId]="gesId" [canEdit]="canEdit"></app-ges-incidents-section>
+                </p-tabpanel>
+
+                <p-tabpanel [value]="5">
+                    <app-ges-visits-section [gesId]="gesId" [canEdit]="canEdit"></app-ges-visits-section>
+                </p-tabpanel>
+
+                <p-tabpanel [value]="6">
+                    <app-ges-telemetry-section [gesId]="gesId"></app-ges-telemetry-section>
+                </p-tabpanel>
+            </p-tabpanels>
+        </p-tabs>
+    </div>
+} @else {
+    <div class="card">
+        <div class="text-center py-8 text-surface-500">
+            <i class="pi pi-exclamation-triangle text-4xl mb-3 block"></i>
+            <div>{{ 'GES_DETAIL.NOT_FOUND' | translate }}</div>
+        </div>
+    </div>
+}

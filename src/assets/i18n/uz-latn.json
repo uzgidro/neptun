@@ -594,7 +594,7 @@
         "TOTAL": "Jami",
         "TOTAL_POWER": "Umumiy quvvat",
         "STATUS_WORKING": "Ishlamoqda",
-        "STATUS_IDLE": "To'xtagan",
+          "STATUS_IDLE": "Zahirada",
         "STATUS_REPAIR": "Ta'mirda"
       },
       "SHUTDOWNS": {
@@ -606,7 +606,10 @@
         "ALL_WORKING": "Barcha stansiyalar ishlamoqda",
         "TYPE_GES": "GES",
         "TYPE_MINI": "mini",
-        "TYPE_MICRO": "mikro"
+          "TYPE_MICRO": "mikro",
+          "DETAIL_TITLE": "O'chirish tafsilotlari",
+          "ONGOING": "Davom etmoqda",
+          "GO_TO_GES": "Stansiyaga o'tish"
       },
       "POWER_GENERATION": {
         "YEAR_START": "Yil boshidan",
@@ -1720,5 +1723,179 @@
     "HINT": "Lex.uz portalida hujjatlarni qidirish uchun matn kiriting",
     "PAGE_REPORT": "Sahifa {currentPage} / {totalPages}",
     "LOADING": "Yuklanmoqda..."
+  },
+    "GES_DETAIL": {
+        "NOT_FOUND": "GES topilmadi",
+        "ERROR_LOADING": "Ma'lumotlarni yuklashda xatolik",
+        "ERROR_SAVE": "Saqlashda xatolik",
+        "ERROR_DELETE": "O'chirishda xatolik",
+        "CREATED": "Yozuv yaratildi",
+        "UPDATED": "Yozuv yangilandi",
+        "DELETED": "Yozuv o'chirildi",
+        "AGGREGATES_TITLE": "Agregatlar",
+        "MNEMONIC_TITLE": "Mnemosxema",
+        "NO_AGGREGATES": "Agregatlar haqida ma'lumot yo'q",
+        "TABS": {
+            "INFO": "Ma'lumot",
+            "CONTACTS": "Kontaktlar",
+            "SHUTDOWNS": "Favqulodda o'chirishlar",
+            "DISCHARGES": "Bo'sh tashlamalar",
+            "INCIDENTS": "Voqealar",
+            "VISITS": "Tashriflar",
+            "TELEMETRY": "Telemetriya",
+            "MNEMONIC": "Mnemosxema"
+        },
+        "KPI": {
+            "CURRENT_POWER": "Aktiv quvvat",
+            "AGGREGATES": "Agregatlar",
+            "SHUTDOWNS": "Favqulodda o'chirishlar",
+            "DISCHARGES": "Bo'sh suv tashlamalari"
+        },
+        "STATUS": {
+            "ACTIVE": "Ishlamoqda",
+            "PENDING": "Zahirada",
+            "REPAIR": "Ta'mirda",
+            "OFFLINE": "O'chirilgan"
+        },
+        "AGGREGATE": {
+            "PARAM_NAME": "Parametr",
+            "PARAM_VALUE": "Qiymat",
+            "PARAM_UNIT": "O'lch. bir.",
+            "ACTIVE_POWER": "Aktiv quvvat",
+            "REACTIVE_POWER": "Reaktiv quvvat",
+            "VOLTAGE_AB": "Kuchlanish AB",
+            "VOLTAGE_BC": "Kuchlanish BC",
+            "VOLTAGE_CA": "Kuchlanish CA",
+            "CURRENT_A": "Tok faza A",
+            "CURRENT_B": "Tok faza B",
+            "CURRENT_C": "Tok faza C",
+            "FREQUENCY": "Chastota",
+            "POWER_FACTOR": "Quvvat koeffitsiyenti (cos φ)",
+            "ROTOR_VOLTAGE": "Rotor kuchlanishi",
+            "ROTOR_CURRENT": "Rotor toki",
+            "GUIDE_VANE_1": "Yo'naltiruvchi apparat 1",
+            "GUIDE_VANE_2": "Yo'naltiruvchi apparat 2"
+        },
+        "UNIT": {
+            "MW": "MW",
+            "MVAR": "MVar",
+            "KV": "kV",
+            "A": "A",
+            "HZ": "Hz",
+            "V": "V",
+            "PERCENT": "%"
+        },
+        "MNEMONIC": {
+            "STATUS": "Holat",
+            "POWER": "Quvvat",
+            "NO_DATA": "Telemetriya ma'lumotlari yo'q",
+            "PLACEHOLDER": "Ma'lumotlar mavjud bo'lganda mnemosxema ko'rsatiladi",
+            "NO_SCHEMA": "Mnemosxema bu stansiya uchun mavjud emas",
+            "NO_SCHEMA_DESC": "Bu GES uchun sxema hali yuklanmagan",
+            "LOAD_ERROR": "Mnemosxemani yuklashda xatolik"
+        },
+        "INFO": {
+            "BASIC_INFO": "Asosiy ma'lumot",
+            "NAME": "Nomi",
+            "PARENT_ORG": "Bosh tashkilot",
+            "TYPES": "Turlari",
+            "DEPARTMENTS": "Bo'limlar",
+            "DEPARTMENT_NAME": "Nomi",
+            "DEPARTMENT_DESC": "Tavsifi",
+            "NO_DEPARTMENTS": "Bo'limlar yo'q",
+            "SUB_ORGANIZATIONS": "Qo'shimcha tashkilotlar"
+        },
+        "CONTACTS": {
+            "NAME": "F.I.O.",
+            "POSITION": "Lavozim",
+            "DEPARTMENT": "Bo'lim",
+            "PHONE": "Telefon",
+            "EMAIL": "Elektron pochta",
+            "ACTIONS": "Amallar",
+            "CALL": "Qo'ng'iroq qilish",
+            "NO_CONTACTS": "Kontaktlar yo'q"
+        },
+        "FILTERS": {
+            "START_DATE": "Boshlanish sanasi",
+            "END_DATE": "Tugash sanasi",
+            "SELECT_DATE": "Sanani tanlang"
+        },
+        "COMMON": {
+            "CREATED_BY": "Yaratdi",
+            "FILES": "Fayllar",
+            "VIEW_FILES": "Fayllarni ko'rish",
+            "ATTACH_FILES": "Fayllarni biriktirish",
+            "ADD_NEW_FILES": "Yangi fayllar qo'shish"
+        },
+        "SHUTDOWNS": {
+            "ADD": "Favqulodda o'chirish qo'shish",
+            "EDIT": "Favqulodda o'chirishni tahrirlash",
+            "START": "Boshlanishi",
+            "END": "Tugashi",
+            "REASON": "Sababi",
+            "POWER_LOSS": "Quvvat yo'qotish",
+            "IDLE_DISCHARGE": "Bo'sh tashlama",
+            "FILES": "Voqea fayllari",
+            "NO_DATA": "Favqulodda o'chirishlar haqida ma'lumot yo'q"
+        },
+        "DISCHARGES": {
+            "ADD": "Bo'sh tashlama qo'shish",
+            "EDIT": "Bo'sh tashlamani tahrirlash",
+            "START": "Boshlanishi",
+            "END": "Tugashi",
+            "FLOW_RATE": "Sarf, m³/s",
+            "TOTAL_VOLUME": "Hajm, mln m³",
+            "REASON": "Sababi",
+            "STATUS": "Holat",
+            "ONGOING": "Davom etmoqda",
+            "APPROVED": "Tasdiqlangan",
+            "COMPLETED": "Tugallangan",
+            "FILES": "Bo'sh tashlama fayllari",
+            "NO_DATA": "Bo'sh tashlamalar haqida ma'lumot yo'q"
+        },
+        "INCIDENTS": {
+            "ADD": "Voqea qo'shish",
+            "EDIT": "Voqeani tahrirlash",
+            "DATE": "Sana",
+            "DESCRIPTION": "Tavsif",
+            "ORGANIZATION": "Tashkilot",
+            "FILES": "Voqea fayllari",
+            "NO_DATA": "Voqealar haqida ma'lumot yo'q"
+        },
+        "VISITS": {
+            "ADD": "Tashrif qo'shish",
+            "EDIT": "Tashrifni tahrirlash",
+            "DATE": "Sana",
+            "DESCRIPTION": "Tavsif",
+            "RESPONSIBLE": "Mas'ul",
+            "ORGANIZATION": "Tashkilot",
+            "FILES": "Tashrif fayllari",
+            "NO_DATA": "Tashriflar haqida ma'lumot yo'q"
+        },
+        "TELEMETRY": {
+            "DEVICE": "Qurilma",
+            "DEVICE_GROUP": "Qurilmalar guruhi",
+            "GROUP": "Guruh",
+            "PARAMETER": "Parametr",
+            "VALUE": "Qiymat",
+            "UNIT": "O'lch. bir.",
+            "QUALITY": "Sifat",
+            "SEVERITY": "Muhimlik",
+            "TIMESTAMP": "Vaqt",
+            "ALL_GROUPS": "Barcha guruhlar",
+            "ALL_DEVICES": "Barcha qurilmalar",
+            "TOTAL_RECORDS": "Jami yozuvlar",
+            "NO_DATA": "Telemetriya ma'lumotlari yo'q"
+        }
+    },
+  "UZGIDRO_NEWS": {
+    "TITLE": "UzGidro Yangiliklari",
+    "TOTAL_NEWS": "Jami yangiliklar",
+    "NEWS_COUNT": "yangilik",
+    "NO_NEWS": "Yangiliklar topilmadi",
+    "VIEWS": "Ko'rishlar",
+    "PUBLISHED": "Nashr etilgan",
+    "LOAD_ERROR": "Yangiliklarni yuklashda xatolik",
+    "PAGE_REPORT": "{first}-{last} ko'rsatilmoqda, jami {totalRecords}"
   }
 }

@@ -1,0 +1,72 @@
+@if (askue) {
+    <div class="status-cards">
+        <div class="status-card status-active">
+            <div class="status-icon">
+                <i class="pi pi-bolt"></i>
+            </div>
+            <div class="status-info">
+                <span class="status-count">{{ askue.active_agg_count ?? 0 }}</span>
+                <span class="status-label">{{ 'GES_DETAIL.STATUS.ACTIVE' | translate }}</span>
+            </div>
+        </div>
+        <div class="status-card status-reserve">
+            <div class="status-icon">
+                <i class="pi pi-pause-circle"></i>
+            </div>
+            <div class="status-info">
+                <span class="status-count">{{ askue.pending_agg_count ?? 0 }}</span>
+                <span class="status-label">{{ 'GES_DETAIL.STATUS.PENDING' | translate }}</span>
+            </div>
+        </div>
+        <div class="status-card status-repair">
+            <div class="status-icon">
+                <i class="pi pi-wrench"></i>
+            </div>
+            <div class="status-info">
+                <span class="status-count">{{ askue.repair_agg_count ?? 0 }}</span>
+                <span class="status-label">{{ 'GES_DETAIL.STATUS.REPAIR' | translate }}</span>
+            </div>
+        </div>
+    </div>
+}
+
+@if (generators.length > 0) {
+    <div class="generators-scroll">
+        @for (gen of generators; track gen.id) {
+            <div class="generator-section">
+                <div class="generator-header">
+                    <h4 class="generator-name">{{ gen.name }}</h4>
+                    <p-tag
+                        [value]="getStatusLabel(gen.status) | translate"
+                        [severity]="getStatusSeverity(gen.status)">
+                    </p-tag>
+                </div>
+                <p-table
+                    [value]="gen.params"
+                    class="p-datatable-sm">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>{{ 'GES_DETAIL.AGGREGATE.PARAM_NAME' | translate }}</th>
+                            <th>{{ 'GES_DETAIL.AGGREGATE.PARAM_VALUE' | translate }}</th>
+                            <th>{{ 'GES_DETAIL.AGGREGATE.PARAM_UNIT' | translate }}</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-param>
+                        <tr>
+                            <td>{{ param.label | translate }}</td>
+                            <td class="font-semibold">{{ param.value }}</td>
+                            <td class="text-surface-500">@if (param.unit) {
+                                {{ param.unit | translate }}
+                            }</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        }
+    </div>
+} @else {
+    <div class="text-center py-8 text-surface-500">
+        <i class="pi pi-cog text-4xl mb-3 block opacity-50"></i>
+        <p>{{ 'GES_DETAIL.NO_AGGREGATES' | translate }}</p>
+    </div>
+}

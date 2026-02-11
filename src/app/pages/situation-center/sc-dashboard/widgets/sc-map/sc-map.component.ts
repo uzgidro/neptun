@@ -1,5 +1,6 @@
 import { Component, inject, OnDestroy } from '@angular/core';
 import { DatePipe, DecimalPipe } from '@angular/common';
+import { Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { UzMapComponent } from '@/pages/situation-center/sc-dashboard/widgets/sc-map/uzbekistan-map/uz-map.component';
 import { DashboardService } from '@/core/services/dashboard.service';
@@ -74,7 +75,7 @@ interface RegionCascade {
 // Region data interface
 interface RegionData {
     cascades: RegionCascade[];
-    discharges: { name: string; value: number }[];
+    discharges: { id: number; name: string; value: number }[];
     shutdowns: ShutdownDto[];
     reservoirs: Reservoir[];
     aggregates: {
@@ -106,6 +107,7 @@ export class ScMapComponent implements OnDestroy {
     private dashboardService = inject(DashboardService);
     private shutdownService = inject(GesShutdownService);
     private translateService = inject(TranslateService);
+    private router = inject(Router);
     private destroy$ = new Subject<void>();
 
     selectedStation: StationMarker | null = null;
@@ -119,20 +121,20 @@ export class ScMapComponent implements OnDestroy {
 
     // Region key mapping
     regionKeyMap: Record<string, string> = {
-        'UZFA': 'SITUATION_CENTER.DASHBOARD.REGIONS.FERGANA',
-        'UZTO': 'SITUATION_CENTER.DASHBOARD.REGIONS.TASHKENT',
-        'UZNG': 'SITUATION_CENTER.DASHBOARD.REGIONS.NAMANGAN',
-        'UZAN': 'SITUATION_CENTER.DASHBOARD.REGIONS.ANDIJAN',
-        'UZSI': 'SITUATION_CENTER.DASHBOARD.REGIONS.SYRDARYA',
-        'UZJI': 'SITUATION_CENTER.DASHBOARD.REGIONS.JIZZAKH',
-        'UZSA': 'SITUATION_CENTER.DASHBOARD.REGIONS.SAMARKAND',
-        'UZQA': 'SITUATION_CENTER.DASHBOARD.REGIONS.KASHKADARYA',
-        'UZSU': 'SITUATION_CENTER.DASHBOARD.REGIONS.SURKHANDARYA',
-        'UZQR': 'SITUATION_CENTER.DASHBOARD.REGIONS.KARAKALPAKSTAN',
-        'UZNW': 'SITUATION_CENTER.DASHBOARD.REGIONS.NAVOI',
-        'UZXO': 'SITUATION_CENTER.DASHBOARD.REGIONS.KHOREZM',
-        'UZBU': 'SITUATION_CENTER.DASHBOARD.REGIONS.BUKHARA',
-        'UZTK': 'SITUATION_CENTER.DASHBOARD.REGIONS.TASHKENT_CITY'
+        UZFA: 'SITUATION_CENTER.DASHBOARD.REGIONS.FERGANA',
+        UZTO: 'SITUATION_CENTER.DASHBOARD.REGIONS.TASHKENT',
+        UZNG: 'SITUATION_CENTER.DASHBOARD.REGIONS.NAMANGAN',
+        UZAN: 'SITUATION_CENTER.DASHBOARD.REGIONS.ANDIJAN',
+        UZSI: 'SITUATION_CENTER.DASHBOARD.REGIONS.SYRDARYA',
+        UZJI: 'SITUATION_CENTER.DASHBOARD.REGIONS.JIZZAKH',
+        UZSA: 'SITUATION_CENTER.DASHBOARD.REGIONS.SAMARKAND',
+        UZQA: 'SITUATION_CENTER.DASHBOARD.REGIONS.KASHKADARYA',
+        UZSU: 'SITUATION_CENTER.DASHBOARD.REGIONS.SURKHANDARYA',
+        UZQR: 'SITUATION_CENTER.DASHBOARD.REGIONS.KARAKALPAKSTAN',
+        UZNW: 'SITUATION_CENTER.DASHBOARD.REGIONS.NAVOI',
+        UZXO: 'SITUATION_CENTER.DASHBOARD.REGIONS.KHOREZM',
+        UZBU: 'SITUATION_CENTER.DASHBOARD.REGIONS.BUKHARA',
+        UZTK: 'SITUATION_CENTER.DASHBOARD.REGIONS.TASHKENT_CITY'
     };
 
     ngOnDestroy(): void {
@@ -222,7 +224,7 @@ export class ScMapComponent implements OnDestroy {
         // Списания продукции (current_discharge > 0)
         const discharges = regionPlants
             .filter(item => (item.current_discharge || 0) > 0)
-            .map(item => ({ name: item.name, value: item.current_discharge || 0 }));
+            .map(item => ({ id: item.id, name: item.name, value: item.current_discharge || 0 }));
 
         // Остановки линий (ended_at === null) - все типы заводов
         const allShutdowns = [...shutdownsDto.ges, ...shutdownsDto.mini, ...shutdownsDto.micro];
@@ -231,7 +233,7 @@ export class ScMapComponent implements OnDestroy {
             .filter(s => s.ended_at === null);
 
         // Водохранилища
-        const filteredReservoirs = reservoirs.filter(r => regionOrgs.reservoirs.includes(r.organization_id));
+        const filteredReservoirs = reservoirs.filter((r) => regionOrgs.reservoirs.includes(r.organization_id));
 
         // Производственные линии (общий итог)
         const aggregates = regionPlants.reduce(
@@ -307,5 +309,10 @@ export class ScMapComponent implements OnDestroy {
 
     get totalPower(): number {
         return this.stations.reduce((sum, s) => sum + s.power, 0);
+    }
+
+    navigateToGes(id: number, event?: Event): void {
+        event?.stopPropagation();
+        this.router.navigate(['/ges', id]);
     }
 }

@@ -1,0 +1,74 @@
+<div class="card">
+    <!-- Header -->
+    <div class="flex flex-row justify-between items-center mb-6">
+        <div>
+            <h1 class="text-2xl font-bold mb-1">{{ gesInfo.name }}</h1>
+            @if (gesInfo.parent_organization) {
+                <p class="text-surface-500">{{ gesInfo.parent_organization }}</p>
+            }
+        </div>
+        <div class="flex items-center gap-2">
+            <span class="text-color-secondary text-sm">
+                {{ 'DASHBOARD.LAST_UPDATED' | translate }}: {{ getTimeAgo() }}
+            </span>
+            <button
+                pButton
+                class="p-button-text p-button-sm p-button-secondary"
+                (click)="refresh()"
+                [disabled]="loading">
+                <i class="pi pi-refresh" [class.pi-spin]="loading"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- KPI Cards Row -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <app-ges-kpi-card
+            [title]="'GES_DETAIL.KPI.CURRENT_POWER' | translate"
+            [value]="kpiData.currentPower"
+            [unit]="'МВт'"
+            icon="pi-bolt"
+            severity="primary">
+        </app-ges-kpi-card>
+
+        <app-ges-kpi-card
+            [title]="'GES_DETAIL.KPI.AGGREGATES' | translate"
+            [value]="kpiData.activeAggregates"
+            [secondaryValue]="kpiData.totalAggregates"
+            icon="pi-cog"
+            severity="success">
+        </app-ges-kpi-card>
+
+        <app-ges-kpi-card
+            [title]="'GES_DETAIL.KPI.SHUTDOWNS' | translate"
+            [value]="kpiData.shutdownsCount"
+            icon="pi-exclamation-triangle"
+            [severity]="kpiData.shutdownsCount > 0 ? 'danger' : 'success'">
+        </app-ges-kpi-card>
+
+        <app-ges-kpi-card
+            [title]="'GES_DETAIL.KPI.DISCHARGES' | translate"
+            [value]="kpiData.dischargesCount"
+            icon="pi-arrows-h"
+            severity="info">
+        </app-ges-kpi-card>
+    </div>
+
+    <!-- Main Content: Aggregates and Mnemonic -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <!-- Aggregates List -->
+        <div class="relative min-h-[200px]">
+            <div class="absolute inset-0 border border-surface-200 rounded-lg p-4 flex flex-col overflow-hidden">
+                <h3 class="text-lg font-semibold mb-4 shrink-0">{{ 'GES_DETAIL.AGGREGATES_TITLE' | translate }}</h3>
+                <app-ges-aggregates class="flex-1 min-h-0 flex flex-col" [gesId]="gesId" [telemetry]="telemetry"
+                                    [askue]="askue"></app-ges-aggregates>
+            </div>
+        </div>
+
+        <!-- Mnemonic Scheme -->
+        <div class="border border-surface-200 rounded-lg p-4">
+            <h3 class="text-lg font-semibold mb-4">{{ 'GES_DETAIL.MNEMONIC_TITLE' | translate }}</h3>
+            <app-ges-mnemonic [gesId]="gesId" [telemetry]="telemetry"></app-ges-mnemonic>
+        </div>
+    </div>
+</div>

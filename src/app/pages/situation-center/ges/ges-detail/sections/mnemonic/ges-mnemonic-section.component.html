@@ -1,0 +1,16 @@
+<div class="flex flex-wrap justify-between items-center gap-4 mb-4">
+    <div class="flex items-center gap-2">
+        <span class="text-color-secondary text-sm">
+            {{ 'DASHBOARD.LAST_UPDATED' | translate }}: {{ getTimeAgo() }}
+        </span>
+        <button
+            pButton
+            class="p-button-text p-button-sm p-button-secondary"
+            (click)="refresh()"
+            [disabled]="loading">
+            <i class="pi pi-refresh" [class.pi-spin]="loading"></i>
+        </button>
+    </div>
+</div>
+
+<app-ges-mnemonic [gesId]="gesId" [telemetry]="telemetry"></app-ges-mnemonic>

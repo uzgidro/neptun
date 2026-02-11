@@ -40,15 +40,16 @@ import { PendingSignaturesComponent } from '@/pages/chancellery/pending-signatur
 import { LegalDocumentsComponent } from '@/pages/legal-documents/legal-documents.component';
 import { LexSearchComponent } from '@/pages/lex-search/lex-search.component';
 import { CallsComponent } from '@/pages/calls/calls.component';
-import { NewsComponent } from '@/pages/media/news/news.component';
 import { InvestActiveProjectsComponent } from '@/pages/invest/invest-active-projects/invest-active-projects.component';
 import { ScDashboardComponent } from '@/pages/situation-center/sc-dashboard/sc-dashboard.component';
+import { GesDetailComponent } from '@/pages/situation-center/ges/ges-detail/ges-detail.component';
+import { UzgidroNewsComponent } from '@/pages/uzgidro-news/uzgidro-news.component';
 
 
 export const appRoutes: Routes = [
     {
         path: '',
-        redirectTo: 'monitoring',
+        redirectTo: 'dashboard',
         pathMatch: 'full'
     },
     {
@@ -95,7 +96,8 @@ export const appRoutes: Routes = [
             { path: 'legal-documents', component: LegalDocumentsComponent, canActivate: [raisGuard] },
             { path: 'lex-search', component: LexSearchComponent, canActivate: [raisGuard] },
             { path: 'calls', component: CallsComponent, canActivate: [raisGuard] },
-            { path: 'media/news', component: NewsComponent, canActivate: [raisGuard] },
+            { path: 'uzgidro-news', component: UzgidroNewsComponent, canActivate: [raisGuard] },
+            { path: 'ges/:id', component: GesDetailComponent, canActivate: [raisGuard] }
         ]
     },
     { path: 'dashboard', component: ScDashboardComponent, canActivate: [authGuard] },

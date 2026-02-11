@@ -1,0 +1,33 @@
+<div class="border border-surface-200 rounded-lg p-4 h-full" [class]="severityClass">
+    <div class="flex items-center justify-between">
+        <div>
+            <p class="text-sm font-medium opacity-80 mb-1">{{ title }}</p>
+            <div class="flex items-baseline gap-1">
+                <span class="text-2xl font-bold">{{ value | number:'1.0-2' }}</span>
+                @if (secondaryValue !== undefined) {
+                    <span class="text-lg opacity-70">/ {{ secondaryValue }}</span>
+                }
+                @if (unit) {
+                    <span class="text-sm opacity-70">{{ unit }}</span>
+                }
+            </div>
+            @if (trend && trendValue !== undefined) {
+                <div class="flex items-center mt-2 text-sm">
+                    @if (trend === 'up') {
+                        <i class="pi pi-arrow-up text-green-500 mr-1"></i>
+                        <span class="text-green-600">+{{ trendValue | number:'1.0-1' }}%</span>
+                    } @else if (trend === 'down') {
+                        <i class="pi pi-arrow-down text-red-500 mr-1"></i>
+                        <span class="text-red-600">-{{ trendValue | number:'1.0-1' }}%</span>
+                    } @else {
+                        <i class="pi pi-minus text-surface-400 mr-1"></i>
+                        <span class="text-surface-500">0%</span>
+                    }
+                </div>
+            }
+        </div>
+        <div class="w-12 h-12 rounded-full flex items-center justify-center" [class]="iconSeverityClass">
+            <i class="pi text-xl" [class]="icon"></i>
+        </div>
+    </div>
+</div>

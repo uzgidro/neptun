@@ -99,7 +99,7 @@
                                 </tr>
                             </ng-template>
                             <ng-template #body let-ges>
-                                <tr>
+                                <tr class="cursor-pointer hover:bg-surface-100" (click)="openGesDetail(ges)">
                                     <td>
                                         <span class="inline-block w-2 h-2 rounded-full"
                                               [ngClass]="ges.ascue_metrics ? 'bg-green-500' : 'bg-red-500'"></span>

@@ -597,7 +597,7 @@
         "TOTAL": "Всего",
         "TOTAL_POWER": "Суммарная производительность",
         "STATUS_WORKING": "В работе",
-        "STATUS_IDLE": "Простаивают",
+          "STATUS_IDLE": "В резерве",
         "STATUS_REPAIR": "В ремонте"
       },
       "SHUTDOWNS": {
@@ -609,7 +609,10 @@
         "ALL_WORKING": "Все линии в работе",
         "TYPE_GES": "завод",
         "TYPE_MINI": "мини",
-        "TYPE_MICRO": "филиал"
+        "TYPE_MICRO": "филиал",
+        "DETAIL_TITLE": "Детали остановки",
+        "ONGOING": "В процессе",
+        "GO_TO_PLANT": "Перейти к заводу"
       },
       "POWER_GENERATION": {
         "YEAR_START": "С начала года",
@@ -1748,5 +1751,179 @@
     "HINT": "Введите текст для поиска документов на портале Lex.uz",
     "PAGE_REPORT": "Страница {currentPage} из {totalPages}",
     "LOADING": "Загрузка..."
+  },
+    "GES_DETAIL": {
+        "NOT_FOUND": "ГЭС не найдена",
+        "ERROR_LOADING": "Ошибка загрузки данных",
+        "ERROR_SAVE": "Ошибка сохранения",
+        "ERROR_DELETE": "Ошибка удаления",
+        "CREATED": "Запись создана",
+        "UPDATED": "Запись обновлена",
+        "DELETED": "Запись удалена",
+        "AGGREGATES_TITLE": "Агрегаты",
+        "MNEMONIC_TITLE": "Мнемосхема",
+        "NO_AGGREGATES": "Нет данных об агрегатах",
+        "TABS": {
+            "INFO": "Информация",
+            "CONTACTS": "Контакты",
+            "SHUTDOWNS": "Аварийные отключения",
+            "DISCHARGES": "Холостые водосбросы",
+            "INCIDENTS": "Инциденты",
+            "VISITS": "Посещения",
+            "TELEMETRY": "Телеметрия",
+            "MNEMONIC": "Мнемосхема"
+        },
+        "KPI": {
+            "CURRENT_POWER": "Активная мощность",
+            "AGGREGATES": "Агрегаты",
+            "SHUTDOWNS": "Аварийные отключения",
+            "DISCHARGES": "Холостые водосбросы"
+        },
+        "STATUS": {
+            "ACTIVE": "Работает",
+            "PENDING": "В резерве",
+            "REPAIR": "Ремонт",
+            "OFFLINE": "Отключен"
+        },
+        "AGGREGATE": {
+            "PARAM_NAME": "Параметр",
+            "PARAM_VALUE": "Значение",
+            "PARAM_UNIT": "Ед. изм.",
+            "ACTIVE_POWER": "Активная мощность",
+            "REACTIVE_POWER": "Реактивная мощность",
+            "VOLTAGE_AB": "Напряжение AB",
+            "VOLTAGE_BC": "Напряжение BC",
+            "VOLTAGE_CA": "Напряжение CA",
+            "CURRENT_A": "Ток фазы A",
+            "CURRENT_B": "Ток фазы B",
+            "CURRENT_C": "Ток фазы C",
+            "FREQUENCY": "Частота",
+            "POWER_FACTOR": "Коэффициент мощности (cos φ)",
+            "ROTOR_VOLTAGE": "Напряжение ротора",
+            "ROTOR_CURRENT": "Ток ротора",
+            "GUIDE_VANE_1": "Направляющий аппарат 1",
+            "GUIDE_VANE_2": "Направляющий аппарат 2"
+        },
+        "UNIT": {
+            "MW": "МВт",
+            "MVAR": "МВАр",
+            "KV": "кВ",
+            "A": "А",
+            "HZ": "Гц",
+            "V": "В",
+            "PERCENT": "%"
+        },
+        "MNEMONIC": {
+            "STATUS": "Статус",
+            "POWER": "Мощность",
+            "NO_DATA": "Нет данных телеметрии",
+            "PLACEHOLDER": "Мнемосхема будет отображена при наличии данных",
+            "NO_SCHEMA": "Мнемосхема не доступна для данной станции",
+            "NO_SCHEMA_DESC": "Схема для данной ГЭС ещё не загружена",
+            "LOAD_ERROR": "Ошибка загрузки мнемосхемы"
+        },
+        "INFO": {
+            "BASIC_INFO": "Основная информация",
+            "NAME": "Название",
+            "PARENT_ORG": "Родительская организация",
+            "TYPES": "Типы",
+            "DEPARTMENTS": "Подразделения",
+            "DEPARTMENT_NAME": "Название",
+            "DEPARTMENT_DESC": "Описание",
+            "NO_DEPARTMENTS": "Нет подразделений",
+            "SUB_ORGANIZATIONS": "Дочерние организации"
+        },
+        "CONTACTS": {
+            "NAME": "ФИО",
+            "POSITION": "Должность",
+            "DEPARTMENT": "Отдел",
+            "PHONE": "Телефон",
+            "EMAIL": "Email",
+            "ACTIONS": "Действия",
+            "CALL": "Позвонить",
+            "NO_CONTACTS": "Нет контактов"
+        },
+        "FILTERS": {
+            "START_DATE": "Дата с",
+            "END_DATE": "Дата по",
+            "SELECT_DATE": "Выберите дату"
+        },
+        "COMMON": {
+            "CREATED_BY": "Создал",
+            "FILES": "Файлы",
+            "VIEW_FILES": "Просмотр файлов",
+            "ATTACH_FILES": "Прикрепить файлы",
+            "ADD_NEW_FILES": "Добавить новые файлы"
+        },
+        "SHUTDOWNS": {
+            "ADD": "Добавить аварийное отключение",
+            "EDIT": "Редактировать аварийное отключение",
+            "START": "Начало",
+            "END": "Окончание",
+            "REASON": "Причина",
+            "POWER_LOSS": "Потери мощности",
+            "IDLE_DISCHARGE": "Холостой сброс",
+            "FILES": "Файлы события",
+            "NO_DATA": "Нет данных об аварийных отключениях"
+        },
+        "DISCHARGES": {
+            "ADD": "Добавить холостой сброс",
+            "EDIT": "Редактировать холостой сброс",
+            "START": "Начало",
+            "END": "Окончание",
+            "FLOW_RATE": "Расход, м³/с",
+            "TOTAL_VOLUME": "Объём, млн. м³",
+            "REASON": "Причина",
+            "STATUS": "Статус",
+            "ONGOING": "Активен",
+            "APPROVED": "Подтверждён",
+            "COMPLETED": "Завершён",
+            "FILES": "Файлы холостого сброса",
+            "NO_DATA": "Нет данных о холостых сбросах"
+        },
+        "INCIDENTS": {
+            "ADD": "Добавить инцидент",
+            "EDIT": "Редактировать инцидент",
+            "DATE": "Дата",
+            "DESCRIPTION": "Описание",
+            "ORGANIZATION": "Организация",
+            "FILES": "Файлы инцидента",
+            "NO_DATA": "Нет данных об инцидентах"
+        },
+        "VISITS": {
+            "ADD": "Добавить посещение",
+            "EDIT": "Редактировать посещение",
+            "DATE": "Дата",
+            "DESCRIPTION": "Описание",
+            "RESPONSIBLE": "Ответственный",
+            "ORGANIZATION": "Организация",
+            "FILES": "Файлы посещения",
+            "NO_DATA": "Нет данных о посещениях"
+        },
+        "TELEMETRY": {
+            "DEVICE": "Устройство",
+            "DEVICE_GROUP": "Группа устройств",
+            "GROUP": "Группа",
+            "PARAMETER": "Параметр",
+            "VALUE": "Значение",
+            "UNIT": "Ед. изм.",
+            "QUALITY": "Качество",
+            "SEVERITY": "Критичность",
+            "TIMESTAMP": "Время",
+            "ALL_GROUPS": "Все группы",
+            "ALL_DEVICES": "Все устройства",
+            "TOTAL_RECORDS": "Всего записей",
+            "NO_DATA": "Нет данных телеметрии"
+        }
+    },
+    "UZGIDRO_NEWS": {
+        "TITLE": "Новости UzGidro",
+        "TOTAL_NEWS": "Всего новостей",
+        "NEWS_COUNT": "новостей",
+        "NO_NEWS": "Новости не найдены",
+        "VIEWS": "Просмотры",
+        "PUBLISHED": "Опубликовано",
+        "LOAD_ERROR": "Не удалось загрузить новости",
+        "PAGE_REPORT": "Показано {first}-{last} из {totalRecords}"
   }
 }

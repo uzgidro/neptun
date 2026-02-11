@@ -1,0 +1,730 @@
+[
+    {
+        "id": 1,
+        "name": "АО \"Узбекгидроэнерго\"",
+        "parent_organization_id": null,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 2,
+        "name": "\"Ўрта Чирчиқ ГЭСлар каскади\" ФЛ",
+        "parent_organization_id": 1,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 3,
+        "name": "\"Чирчиқ ГЭСлар каскади\" ФЛ",
+        "parent_organization_id": 1,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 4,
+        "name": "\"Қодирия ГЭСлар каскади\" ФЛ",
+        "parent_organization_id": 1,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 5,
+        "name": "\"Тошкент ГЭСлар каскади\" ФЛ",
+        "parent_organization_id": 1,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 6,
+        "name": "\"Қуйи Бўзсув ГЭСлар каскади\" ФЛ",
+        "parent_organization_id": 1,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 7,
+        "name": "\"Фарход ГЭС\" ФЛ",
+        "parent_organization_id": 1,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 8,
+        "name": "\"Самарқанд ГЭСлар каскади\" ФЛ",
+        "parent_organization_id": 1,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 9,
+        "name": "\"Андижон ГЭС\" ФЛ",
+        "parent_organization_id": 1,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 10,
+        "name": "\"Шахрихон ГЭСлар каскади\" ФЛ",
+        "parent_organization_id": 1,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 11,
+        "name": "\"Тўполанг ГЭСлар каскади\" ФЛ",
+        "parent_organization_id": 1,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 12,
+        "name": "\"Оҳангарон ГЭС\" ФЛ",
+        "parent_organization_id": 1,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 13,
+        "name": "\"Ҳисорак ГЭС\" ФЛ",
+        "parent_organization_id": 1,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 14,
+        "name": "\"Туямуйин ГЭС\" ФЛ",
+        "parent_organization_id": 1,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 15,
+        "name": "\"Қамчиқ КГЭС\" ФЛ",
+        "parent_organization_id": 1,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 16,
+        "name": "ГЭС-6 Чорбоғ ГЭС",
+        "parent_organization_id": 2,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 17,
+        "name": "ГЭС-27 Ходжикент ГЭС",
+        "parent_organization_id": 2,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 18,
+        "name": "ГЭС-28 Ғазалкент ГЭС",
+        "parent_organization_id": 2,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 19,
+        "name": "Угам КГЭС-1",
+        "parent_organization_id": 2,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 20,
+        "name": "Угам КГЭС-2",
+        "parent_organization_id": 2,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 21,
+        "name": "Угам КГЭС-3",
+        "parent_organization_id": 2,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 22,
+        "name": "Испайсой микроГЭС",
+        "parent_organization_id": 2,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 23,
+        "name": "ГЭС-8 Товоқсой ГЭС",
+        "parent_organization_id": 3,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 24,
+        "name": "ГЭС-7 Чирчиқ ГЭС",
+        "parent_organization_id": 3,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 26,
+        "name": "ГЭС-10 Оққовоқ ГЭС",
+        "parent_organization_id": 3,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 27,
+        "name": "ВЭУ-750 кВт",
+        "parent_organization_id": 3,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 28,
+        "name": "ГЭС-15 Оққовоқ ГЭС-2",
+        "parent_organization_id": 4,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 29,
+        "name": "ГЭС-11 Қибрай ГЭС",
+        "parent_organization_id": 4,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 30,
+        "name": "ГЭС-3 Қодирия ГЭС",
+        "parent_organization_id": 4,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 31,
+        "name": "ГЭС-12 Салар ГЭС",
+        "parent_organization_id": 4,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 32,
+        "name": "ГЭС-1 Бўзсув ГЭС",
+        "parent_organization_id": 5,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 33,
+        "name": "ГЭС-21 Шайхонтохур ГЭС",
+        "parent_organization_id": 5,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 34,
+        "name": "ГЭС-4 Бўрижар ГЭС",
+        "parent_organization_id": 5,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 35,
+        "name": "ГЭС-9 Оқтепа ГЭС",
+        "parent_organization_id": 5,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 36,
+        "name": "ГЭС-14",
+        "parent_organization_id": 6,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 37,
+        "name": "ГЭС-18",
+        "parent_organization_id": 6,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 38,
+        "name": "ГЭС-19",
+        "parent_organization_id": 6,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 39,
+        "name": "ГЭС-23",
+        "parent_organization_id": 6,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 40,
+        "name": "ГЭС-22",
+        "parent_organization_id": 6,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 41,
+        "name": "ГЭС-41 Туябўғиз КГЭС",
+        "parent_organization_id": 6,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 42,
+        "name": "ГЭС-16 Фарход ГЭС",
+        "parent_organization_id": 7,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 43,
+        "name": "Сардоба сув омбори",
+        "parent_organization_id": 7,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 44,
+        "name": "Зомин микроГЭС-1,2",
+        "parent_organization_id": 7,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 45,
+        "name": "Жиззах микроГЭС",
+        "parent_organization_id": 7,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 46,
+        "name": "ГЭС-2Б Хишров ГЭС",
+        "parent_organization_id": 8,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 47,
+        "name": "ГЭС-3Б Иртишар ГЭС",
+        "parent_organization_id": 8,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 48,
+        "name": "Микро ГЭС-1 (3Б)",
+        "parent_organization_id": 8,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 49,
+        "name": "ГЭС-1Б Талигулян-1",
+        "parent_organization_id": 8,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 50,
+        "name": "Микро ГЭС-2,3 (1Б)",
+        "parent_organization_id": 8,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 51,
+        "name": "Пасдарғом микроГЭС-3",
+        "parent_organization_id": 8,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 52,
+        "name": "ГЭС-5Б Талигулян-3",
+        "parent_organization_id": 8,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 53,
+        "name": "Микро ГЭС-3,4 (5Б)",
+        "parent_organization_id": 8,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 54,
+        "name": "Ургут ГЭС",
+        "parent_organization_id": 8,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 55,
+        "name": "МикроГЭС-2",
+        "parent_organization_id": 8,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 56,
+        "name": "МикроГЭС-3",
+        "parent_organization_id": 8,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 57,
+        "name": "МикроГЭС-8",
+        "parent_organization_id": 8,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 58,
+        "name": "МикроГЭС-10",
+        "parent_organization_id": 8,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 59,
+        "name": "Шаудар-2 (ПК-135)",
+        "parent_organization_id": 8,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 60,
+        "name": "Шаудар-1",
+        "parent_organization_id": 8,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 61,
+        "name": "Шаудар-3 (ПК-102)",
+        "parent_organization_id": 8,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 62,
+        "name": "ГЭС-29 Андижон-1",
+        "parent_organization_id": 9,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 63,
+        "name": "ГЭС-36 Андижон-2",
+        "parent_organization_id": 9,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 64,
+        "name": "Кудаш ГЭС",
+        "parent_organization_id": 9,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 65,
+        "name": "Хонобод микроГЭС",
+        "parent_organization_id": 9,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 66,
+        "name": "ГЭС-5А",
+        "parent_organization_id": 10,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 67,
+        "name": "ГЭС-6А",
+        "parent_organization_id": 10,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 68,
+        "name": "ГЭС-ЮФК-1",
+        "parent_organization_id": 10,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 69,
+        "name": "ГЭС-ЮФК-2",
+        "parent_organization_id": 10,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 70,
+        "name": "Заврақ микроГЭС",
+        "parent_organization_id": 10,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 71,
+        "name": "Олтинкўл микроГЭС",
+        "parent_organization_id": 10,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 72,
+        "name": "Водил микроГЭС",
+        "parent_organization_id": 10,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 73,
+        "name": "Шохимардон КГЭС",
+        "parent_organization_id": 10,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 75,
+        "name": "ГЭС-8А",
+        "parent_organization_id": 74,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 76,
+        "name": "ГЭС-9А",
+        "parent_organization_id": 74,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 77,
+        "name": "Чортоқ микроГЭС-1,2",
+        "parent_organization_id": 74,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 78,
+        "name": "Янгиариқ микроГЭС",
+        "parent_organization_id": 74,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 79,
+        "name": "Норин ГЭС-1",
+        "parent_organization_id": 74,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 80,
+        "name": "ГЭС-34 Тўполанг ГЭС",
+        "parent_organization_id": 11,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 81,
+        "name": "ГЭС-43 (Зарчоб ГЭС-1)",
+        "parent_organization_id": 11,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 82,
+        "name": "Зарчоб КГЭС-1а",
+        "parent_organization_id": 11,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 83,
+        "name": "ГЭС-44 (Зарчоб ГЭС-2)",
+        "parent_organization_id": 11,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 84,
+        "name": "Зарчоб КГЭС-2а",
+        "parent_organization_id": 11,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 85,
+        "name": "Зарчоб КГЭС-3",
+        "parent_organization_id": 11,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 86,
+        "name": "Қумқўрғон микроГЭС",
+        "parent_organization_id": 11,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 87,
+        "name": "Исфара-1 микроГЭС",
+        "parent_organization_id": 11,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 88,
+        "name": "ГЭС-35 Оҳангарон ГЭС",
+        "parent_organization_id": 12,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 89,
+        "name": "Оҳангарон микроГЭС",
+        "parent_organization_id": 12,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 90,
+        "name": "Эртошсой ГЭС",
+        "parent_organization_id": 12,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 91,
+        "name": "ГЭС-30",
+        "parent_organization_id": 14,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 92,
+        "name": "Ҳисорак ГЭС (ГЭС-37)",
+        "parent_organization_id": 13,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 93,
+        "name": "Хисорак мини ГЭС",
+        "parent_organization_id": 13,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 94,
+        "name": "Самак микроГЭС",
+        "parent_organization_id": 13,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 95,
+        "name": "ГЭС-42",
+        "parent_organization_id": 15,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 96,
+        "name": "Андижон сув омбори",
+        "parent_organization_id": 1,
+        "created_at": "2025-11-12 11:07:12.814837 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 97,
+        "name": "Охангарон сув омбори",
+        "parent_organization_id": 1,
+        "created_at": "2025-11-12 11:07:12.814837 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 98,
+        "name": "Хисорак сув омбори",
+        "parent_organization_id": 1,
+        "created_at": "2025-11-12 11:07:12.814837 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 99,
+        "name": "Топаланг сув омбори",
+        "parent_organization_id": 1,
+        "created_at": "2025-11-12 11:07:12.814837 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 100,
+        "name": "Чорвок сув омбори",
+        "parent_organization_id": 1,
+        "created_at": "2025-11-12 11:07:12.814837 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 101,
+        "name": "Ситуационный центр",
+        "parent_organization_id": 1,
+        "created_at": "2025-11-17 12:08:45.121079 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 25,
+        "name": "ГЭС-46 Камолот ГЭС",
+        "parent_organization_id": 3,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": "2025-11-20 10:34:35.938973 +00:00"
+    },
+    {
+        "id": 102,
+        "name": "Қодирия ГЭС (ГЭС-3А)",
+        "parent_organization_id": 4,
+        "created_at": "2025-11-20 11:13:27.605012 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 103,
+        "name": "Пском",
+        "parent_organization_id": 1,
+        "created_at": "2025-12-16 12:12:08.895887 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 104,
+        "name": "Чоткол",
+        "parent_organization_id": 1,
+        "created_at": "2025-12-16 12:12:08.895887 +00:00",
+        "updated_at": null
+    },
+    {
+        "id": 74,
+        "name": "\"Норин ГЭСлар каскади\" ФЛ ",
+        "parent_organization_id": 1,
+        "created_at": "2025-11-07 07:47:27.982100 +00:00",
+        "updated_at": "2026-01-05 14:44:39.933356 +00:00"
+    }
+]

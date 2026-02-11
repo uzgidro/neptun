@@ -40,20 +40,6 @@ export class MenuComponent implements OnInit {
                         routerLink: ['/monitoring']
                     },
                     {
-                        label: this.t('MENU.HRM'),
-                        role: ['admin', 'rais'],
-                        items: [
-                            { label: this.t('MENU.ORGANIZATIONS'), role: ['rais'], routerLink: ['/organizations'] },
-                            { label: this.t('MENU.BIRTHDAYS'), role: ['rais'], routerLink: ['/birthdays'] },
-                            { label: this.t('MENU.PERSONNEL_LOSS'), role: ['rais'], routerLink: ['/personnel-loss'] },
-                            { label: this.t('MENU.EMPLOYEES'), role: ['admin'], routerLink: ['/employees'] },
-                            { label: this.t('MENU.POSITIONS'), role: ['admin'], routerLink: ['/positions'] },
-                            { label: this.t('MENU.DEPARTMENTS'), role: ['admin'], routerLink: ['/departments'] },
-                            { label: this.t('MENU.USERS'), role: ['admin'], routerLink: ['/users'] },
-                            { label: this.t('MENU.ROLES'), role: ['admin'], routerLink: ['/roles'] }
-                        ]
-                    },
-                    {
                         label: this.t('MENU.SITUATION_CENTER'),
                         role: ['rais', 'sc'],
                         items: [
@@ -136,6 +122,20 @@ export class MenuComponent implements OnInit {
                         ]
                     },
                     {
+                        label: this.t('MENU.HRM'),
+                        role: ['admin', 'rais'],
+                        items: [
+                            { label: this.t('MENU.ORGANIZATIONS'), role: ['rais'], routerLink: ['/organizations'] },
+                            { label: this.t('MENU.BIRTHDAYS'), role: ['rais'], routerLink: ['/birthdays'] },
+                            { label: this.t('MENU.PERSONNEL_LOSS'), role: ['rais'], routerLink: ['/personnel-loss'] },
+                            { label: this.t('MENU.EMPLOYEES'), role: ['admin'], routerLink: ['/employees'] },
+                            { label: this.t('MENU.POSITIONS'), role: ['admin'], routerLink: ['/positions'] },
+                            { label: this.t('MENU.DEPARTMENTS'), role: ['admin'], routerLink: ['/departments'] },
+                            { label: this.t('MENU.USERS'), role: ['admin'], routerLink: ['/users'] },
+                            { label: this.t('MENU.ROLES'), role: ['admin'], routerLink: ['/roles'] }
+                        ]
+                    },
+                    {
                         label: this.t('MENU.INVESTMENT_BLOCK'),
                         role: ['rais', 'investment'],
                         items: [
@@ -205,7 +205,7 @@ export class MenuComponent implements OnInit {
                         ]
                     },
                     { label: this.t('MENU.CALLS'), role: ['rais'], routerLink: ['/calls'] },
-                    { label: this.t('MENU.PRESS_SERVICE'), routerLink: ['/media/news'] }
+                    { label: this.t('MENU.PRESS_SERVICE'), routerLink: ['/uzgidro-news'] }
                 ]
             }
         ];

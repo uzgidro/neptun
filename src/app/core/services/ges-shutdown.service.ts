@@ -84,4 +84,17 @@ export class GesShutdownService extends ApiService {
     deleteShutdown(id: number): Observable<any> {
         return of({ success: true }).pipe(delay(200));
     }
+
+    markAsViewed(id: number): Observable<void> {
+        return of(undefined as void).pipe(delay(100));
+    }
+
+    private transformToDto(shutdown: any): ShutdownDto {
+        return {
+            ...shutdown,
+            started_at: new Date(shutdown.started_at),
+            created_at: new Date(shutdown.created_at),
+            ended_at: shutdown.ended_at ? new Date(shutdown.ended_at) : null
+        };
+    }
 }

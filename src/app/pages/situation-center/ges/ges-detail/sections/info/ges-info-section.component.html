@@ -1,0 +1,97 @@
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Basic Info -->
+    <div class="info-card">
+        <h3 class="text-lg font-semibold mb-4">{{ 'GES_DETAIL.INFO.BASIC_INFO' | translate }}</h3>
+        <div class="space-y-3">
+            <div class="flex justify-between border-b border-surface-200 pb-2">
+                <span class="text-surface-500">{{ 'GES_DETAIL.INFO.NAME' | translate }}</span>
+                <span class="font-medium">{{ gesInfo.name }}</span>
+            </div>
+            <div class="flex justify-between border-b border-surface-200 pb-2">
+                <span class="text-surface-500">{{ 'GES_DETAIL.INFO.PARENT_ORG' | translate }}</span>
+                <span class="font-medium">{{ gesInfo.parent_organization || '—' }}</span>
+            </div>
+            <div class="flex justify-between border-b border-surface-200 pb-2">
+                <span class="text-surface-500">{{ 'GES_DETAIL.INFO.TYPES' | translate }}</span>
+                <span class="font-medium">
+                    @if (gesInfo.types && gesInfo.types.length > 0) {
+                        {{ gesInfo.types.join(', ') }}
+                    } @else {
+                        —
+                    }
+                </span>
+            </div>
+            <div class="flex justify-between pb-2">
+                <span class="text-surface-500">ID</span>
+                <span class="font-medium">{{ gesInfo.id }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Departments -->
+    <div class="info-card">
+        <h3 class="text-lg font-semibold mb-4">{{ 'GES_DETAIL.INFO.DEPARTMENTS' | translate }}</h3>
+        @if (loading) {
+            <div class="flex items-center justify-center py-8">
+                <i class="pi pi-spin pi-spinner text-2xl text-surface-400"></i>
+            </div>
+        } @else if (departments.length > 0) {
+            <p-table
+                [value]="departments"
+                [scrollable]="true"
+                scrollHeight="300px"
+                styleClass="p-datatable-sm">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>{{ 'GES_DETAIL.INFO.DEPARTMENT_NAME' | translate }}</th>
+                        <th>{{ 'GES_DETAIL.INFO.DEPARTMENT_DESC' | translate }}</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-dept>
+                    <tr>
+                        <td>{{ dept.name }}</td>
+                        <td>{{ dept.description || '—' }}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        } @else {
+            <div class="text-center py-8 text-surface-500">
+                <i class="pi pi-building text-3xl mb-2 block opacity-50"></i>
+                <p>{{ 'GES_DETAIL.INFO.NO_DEPARTMENTS' | translate }}</p>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Sub-organizations -->
+@if (gesInfo.items && gesInfo.items.length > 0) {
+    <div class="mt-6">
+        <h3 class="text-lg font-semibold mb-4">{{ 'GES_DETAIL.INFO.SUB_ORGANIZATIONS' | translate }}</h3>
+        <p-table
+            [value]="gesInfo.items"
+            [scrollable]="true"
+            scrollHeight="400px"
+            styleClass="p-datatable-sm">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="id">
+                        ID
+                        <p-sortIcon field="id"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="name">
+                        {{ 'GES_DETAIL.INFO.NAME' | translate }}
+                        <p-sortIcon field="name"></p-sortIcon>
+                    </th>
+                    <th>{{ 'GES_DETAIL.INFO.TYPES' | translate }}</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-item>
+                <tr>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.types?.join(', ') || '—' }}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+}

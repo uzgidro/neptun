@@ -1,0 +1,1760 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<svg style="z-index: 1"
+     width="100%"
+     viewBox="0 0 1300 600"
+     height="100%" xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink" overflow="hidden">
+    <defs>
+        <filter id="fx0" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse"
+                primitiveUnits="userSpaceOnUse">
+            <feComponentTransfer color-interpolation-filters="sRGB">
+                <feFuncR type="discrete" tableValues="0 0" />
+                <feFuncG type="discrete" tableValues="0 0" />
+                <feFuncB type="discrete" tableValues="0 0" />
+                <feFuncA type="linear" slope="0.631373" intercept="0" />
+            </feComponentTransfer>
+            <feGaussianBlur stdDeviation="2 2" />
+        </filter>
+        <filter id="fx1" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse"
+                primitiveUnits="userSpaceOnUse">
+            <feComponentTransfer color-interpolation-filters="sRGB">
+                <feFuncR type="discrete" tableValues="0 0" />
+                <feFuncG type="discrete" tableValues="0 0" />
+                <feFuncB type="discrete" tableValues="0 0" />
+                <feFuncA type="linear" slope="0.631373" intercept="0" />
+            </feComponentTransfer>
+            <feGaussianBlur stdDeviation="2 2" />
+        </filter>
+        <filter id="fx2" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse"
+                primitiveUnits="userSpaceOnUse">
+            <feComponentTransfer color-interpolation-filters="sRGB">
+                <feFuncR type="discrete" tableValues="0 0" />
+                <feFuncG type="discrete" tableValues="0 0" />
+                <feFuncB type="discrete" tableValues="0 0" />
+                <feFuncA type="linear" slope="0.631373" intercept="0" />
+            </feComponentTransfer>
+            <feGaussianBlur stdDeviation="2 2" />
+        </filter>
+        <filter id="fx3" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse"
+                primitiveUnits="userSpaceOnUse">
+            <feComponentTransfer color-interpolation-filters="sRGB">
+                <feFuncR type="discrete" tableValues="0 0" />
+                <feFuncG type="discrete" tableValues="0 0" />
+                <feFuncB type="discrete" tableValues="0 0" />
+                <feFuncA type="linear" slope="0.631373" intercept="0" />
+            </feComponentTransfer>
+            <feGaussianBlur stdDeviation="2 2" />
+        </filter>
+        <filter id="fx4" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse"
+                primitiveUnits="userSpaceOnUse">
+            <feComponentTransfer color-interpolation-filters="sRGB">
+                <feFuncR type="discrete" tableValues="0 0" />
+                <feFuncG type="discrete" tableValues="0 0" />
+                <feFuncB type="discrete" tableValues="0 0" />
+                <feFuncA type="linear" slope="0.631373" intercept="0" />
+            </feComponentTransfer>
+            <feGaussianBlur stdDeviation="2 2" />
+        </filter>
+        <filter id="fx5" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse"
+                primitiveUnits="userSpaceOnUse">
+            <feComponentTransfer color-interpolation-filters="sRGB">
+                <feFuncR type="discrete" tableValues="0 0" />
+                <feFuncG type="discrete" tableValues="0 0" />
+                <feFuncB type="discrete" tableValues="0 0" />
+                <feFuncA type="linear" slope="0.631373" intercept="0" />
+            </feComponentTransfer>
+            <feGaussianBlur stdDeviation="2 2" />
+        </filter>
+        <filter id="fx6" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse"
+                primitiveUnits="userSpaceOnUse">
+            <feComponentTransfer color-interpolation-filters="sRGB">
+                <feFuncR type="discrete" tableValues="0 0" />
+                <feFuncG type="discrete" tableValues="0 0" />
+                <feFuncB type="discrete" tableValues="0 0" />
+                <feFuncA type="linear" slope="0.631373" intercept="0" />
+            </feComponentTransfer>
+            <feGaussianBlur stdDeviation="2 2" />
+        </filter>
+        <filter id="fx7" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse"
+                primitiveUnits="userSpaceOnUse">
+            <feComponentTransfer color-interpolation-filters="sRGB">
+                <feFuncR type="discrete" tableValues="0 0" />
+                <feFuncG type="discrete" tableValues="0 0" />
+                <feFuncB type="discrete" tableValues="0 0" />
+                <feFuncA type="linear" slope="0.631373" intercept="0" />
+            </feComponentTransfer>
+            <feGaussianBlur stdDeviation="2 2" />
+        </filter>
+        <filter id="fx8" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse"
+                primitiveUnits="userSpaceOnUse">
+            <feComponentTransfer color-interpolation-filters="sRGB">
+                <feFuncR type="discrete" tableValues="0 0" />
+                <feFuncG type="discrete" tableValues="0 0" />
+                <feFuncB type="discrete" tableValues="0 0" />
+                <feFuncA type="linear" slope="0.631373" intercept="0" />
+            </feComponentTransfer>
+            <feGaussianBlur stdDeviation="2 2" />
+        </filter>
+        <filter id="fx9" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse"
+                primitiveUnits="userSpaceOnUse">
+            <feComponentTransfer color-interpolation-filters="sRGB">
+                <feFuncR type="discrete" tableValues="0 0" />
+                <feFuncG type="discrete" tableValues="0 0" />
+                <feFuncB type="discrete" tableValues="0 0" />
+                <feFuncA type="linear" slope="0.631373" intercept="0" />
+            </feComponentTransfer>
+            <feGaussianBlur stdDeviation="2 2" />
+        </filter>
+        <filter id="fx10" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse"
+                primitiveUnits="userSpaceOnUse">
+            <feComponentTransfer color-interpolation-filters="sRGB">
+                <feFuncR type="discrete" tableValues="0 0" />
+                <feFuncG type="discrete" tableValues="0 0" />
+                <feFuncB type="discrete" tableValues="0 0" />
+                <feFuncA type="linear" slope="0.631373" intercept="0" />
+            </feComponentTransfer>
+            <feGaussianBlur stdDeviation="2 2" />
+        </filter>
+        <filter id="fx11" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse"
+                primitiveUnits="userSpaceOnUse">
+            <feComponentTransfer color-interpolation-filters="sRGB">
+                <feFuncR type="discrete" tableValues="0 0" />
+                <feFuncG type="discrete" tableValues="0 0" />
+                <feFuncB type="discrete" tableValues="0 0" />
+                <feFuncA type="linear" slope="0.631373" intercept="0" />
+            </feComponentTransfer>
+            <feGaussianBlur stdDeviation="2 2" />
+        </filter>
+        <filter id="fx12" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse"
+                primitiveUnits="userSpaceOnUse">
+            <feComponentTransfer color-interpolation-filters="sRGB">
+                <feFuncR type="discrete" tableValues="0 0" />
+                <feFuncG type="discrete" tableValues="0 0" />
+                <feFuncB type="discrete" tableValues="0 0" />
+                <feFuncA type="linear" slope="0.631373" intercept="0" />
+            </feComponentTransfer>
+            <feGaussianBlur stdDeviation="2 2" />
+        </filter>
+        <filter id="fx13" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse"
+                primitiveUnits="userSpaceOnUse">
+            <feComponentTransfer color-interpolation-filters="sRGB">
+                <feFuncR type="discrete" tableValues="0 0" />
+                <feFuncG type="discrete" tableValues="0 0" />
+                <feFuncB type="discrete" tableValues="0 0" />
+                <feFuncA type="linear" slope="0.631373" intercept="0" />
+            </feComponentTransfer>
+            <feGaussianBlur stdDeviation="2 2" />
+        </filter>
+        <filter id="fx14" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse"
+                primitiveUnits="userSpaceOnUse">
+            <feComponentTransfer color-interpolation-filters="sRGB">
+                <feFuncR type="discrete" tableValues="0 0" />
+                <feFuncG type="discrete" tableValues="0 0" />
+                <feFuncB type="discrete" tableValues="0 0" />
+                <feFuncA type="linear" slope="0.631373" intercept="0" />
+            </feComponentTransfer>
+            <feGaussianBlur stdDeviation="2 2" />
+        </filter>
+        <filter id="fx15" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse"
+                primitiveUnits="userSpaceOnUse">
+            <feComponentTransfer color-interpolation-filters="sRGB">
+                <feFuncR type="discrete" tableValues="0 0" />
+                <feFuncG type="discrete" tableValues="0 0" />
+                <feFuncB type="discrete" tableValues="0 0" />
+                <feFuncA type="linear" slope="0.631373" intercept="0" />
+            </feComponentTransfer>
+            <feGaussianBlur stdDeviation="2 2" />
+        </filter>
+        <filter id="fx16" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse"
+                primitiveUnits="userSpaceOnUse">
+            <feComponentTransfer color-interpolation-filters="sRGB">
+                <feFuncR type="discrete" tableValues="0 0" />
+                <feFuncG type="discrete" tableValues="0 0" />
+                <feFuncB type="discrete" tableValues="0 0" />
+                <feFuncA type="linear" slope="0.631373" intercept="0" />
+            </feComponentTransfer>
+            <feGaussianBlur stdDeviation="2 2" />
+        </filter>
+        <filter id="fx17" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse"
+                primitiveUnits="userSpaceOnUse">
+            <feComponentTransfer color-interpolation-filters="sRGB">
+                <feFuncR type="discrete" tableValues="0 0" />
+                <feFuncG type="discrete" tableValues="0 0" />
+                <feFuncB type="discrete" tableValues="0 0" />
+                <feFuncA type="linear" slope="0.631373" intercept="0" />
+            </feComponentTransfer>
+            <feGaussianBlur stdDeviation="2 2" />
+        </filter>
+        <filter id="fx18" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse"
+                primitiveUnits="userSpaceOnUse">
+            <feComponentTransfer color-interpolation-filters="sRGB">
+                <feFuncR type="discrete" tableValues="0 0" />
+                <feFuncG type="discrete" tableValues="0 0" />
+                <feFuncB type="discrete" tableValues="0 0" />
+                <feFuncA type="linear" slope="0.631373" intercept="0" />
+            </feComponentTransfer>
+            <feGaussianBlur stdDeviation="2 2" />
+        </filter>
+        <filter id="fx19" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse"
+                primitiveUnits="userSpaceOnUse">
+            <feComponentTransfer color-interpolation-filters="sRGB">
+                <feFuncR type="discrete" tableValues="0 0" />
+                <feFuncG type="discrete" tableValues="0 0" />
+                <feFuncB type="discrete" tableValues="0 0" />
+                <feFuncA type="linear" slope="0.631373" intercept="0" />
+            </feComponentTransfer>
+            <feGaussianBlur stdDeviation="2 2" />
+        </filter>
+        <filter id="fx20" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse"
+                primitiveUnits="userSpaceOnUse">
+            <feComponentTransfer color-interpolation-filters="sRGB">
+                <feFuncR type="discrete" tableValues="0 0" />
+                <feFuncG type="discrete" tableValues="0 0" />
+                <feFuncB type="discrete" tableValues="0 0" />
+                <feFuncA type="linear" slope="0.631373" intercept="0" />
+            </feComponentTransfer>
+            <feGaussianBlur stdDeviation="2 2" />
+        </filter>
+        <filter id="fx21" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse"
+                primitiveUnits="userSpaceOnUse">
+            <feComponentTransfer color-interpolation-filters="sRGB">
+                <feFuncR type="discrete" tableValues="0 0" />
+                <feFuncG type="discrete" tableValues="0 0" />
+                <feFuncB type="discrete" tableValues="0 0" />
+                <feFuncA type="linear" slope="0.631373" intercept="0" />
+            </feComponentTransfer>
+            <feGaussianBlur stdDeviation="2 2" />
+        </filter>
+        <filter id="fx22" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse"
+                primitiveUnits="userSpaceOnUse">
+            <feComponentTransfer color-interpolation-filters="sRGB">
+                <feFuncR type="discrete" tableValues="0 0" />
+                <feFuncG type="discrete" tableValues="0 0" />
+                <feFuncB type="discrete" tableValues="0 0" />
+                <feFuncA type="linear" slope="0.631373" intercept="0" />
+            </feComponentTransfer>
+            <feGaussianBlur stdDeviation="2 2" />
+        </filter>
+        <filter id="fx23" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse"
+                primitiveUnits="userSpaceOnUse">
+            <feComponentTransfer color-interpolation-filters="sRGB">
+                <feFuncR type="discrete" tableValues="0 0" />
+                <feFuncG type="discrete" tableValues="0 0" />
+                <feFuncB type="discrete" tableValues="0 0" />
+                <feFuncA type="linear" slope="0.631373" intercept="0" />
+            </feComponentTransfer>
+            <feGaussianBlur stdDeviation="2 2" />
+        </filter>
+        <filter id="fx24" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse"
+                primitiveUnits="userSpaceOnUse">
+            <feComponentTransfer color-interpolation-filters="sRGB">
+                <feFuncR type="discrete" tableValues="0 0" />
+                <feFuncG type="discrete" tableValues="0 0" />
+                <feFuncB type="discrete" tableValues="0 0" />
+                <feFuncA type="linear" slope="0.631373" intercept="0" />
+            </feComponentTransfer>
+            <feGaussianBlur stdDeviation="2 2" />
+        </filter>
+        <clipPath id="clip25">
+            <rect x="0" y="0" width="1280" height="720" />
+        </clipPath>
+        <clipPath id="clip26">
+            <rect x="-2" y="-2" width="26" height="79" />
+        </clipPath>
+        <clipPath id="clip27">
+            <rect x="0" y="0" width="23" height="75" />
+        </clipPath>
+        <clipPath id="clip28">
+            <path
+                d="M144 351 144 370 162 370 162 351ZM1.90735e-05 1.07288e-05 1280 1.07288e-05 1280 720 1.90735e-05 720Z"
+                fill-rule="evenodd" clip-rule="evenodd" />
+        </clipPath>
+        <clipPath id="clip29">
+            <rect x="-2" y="-2" width="39" height="41" />
+        </clipPath>
+        <clipPath id="clip30">
+            <rect x="0" y="0" width="36" height="37" />
+        </clipPath>
+        <clipPath id="clip31">
+            <path
+                d="M282 119 282 137 301 137 301 119ZM1.90735e-05 1.07288e-05 1280 1.07288e-05 1280 720 1.90735e-05 720Z"
+                fill-rule="evenodd" clip-rule="evenodd" />
+        </clipPath>
+        <clipPath id="clip32">
+            <rect x="-2" y="-2" width="41" height="39" />
+        </clipPath>
+        <clipPath id="clip33">
+            <rect x="0" y="0" width="37" height="36" />
+        </clipPath>
+        <clipPath id="clip34">
+            <path
+                d="M283 187 283 206 302 206 302 187ZM1.90735e-05 1.07288e-05 1280 1.07288e-05 1280 720 1.90735e-05 720Z"
+                fill-rule="evenodd" clip-rule="evenodd" />
+        </clipPath>
+        <clipPath id="clip35">
+            <rect x="-2" y="-2" width="41" height="41" />
+        </clipPath>
+        <clipPath id="clip36">
+            <rect x="0" y="0" width="37" height="37" />
+        </clipPath>
+        <clipPath id="clip37">
+            <path
+                d="M882 119 882 138 901 138 901 119ZM1.90735e-05 1.07288e-05 1280 1.07288e-05 1280 720 1.90735e-05 720Z"
+                fill-rule="evenodd" clip-rule="evenodd" />
+        </clipPath>
+        <clipPath id="clip38">
+            <rect x="-2" y="-2" width="41" height="41" />
+        </clipPath>
+        <clipPath id="clip39">
+            <rect x="0" y="0" width="37" height="37" />
+        </clipPath>
+        <clipPath id="clip40">
+            <path
+                d="M881 187 881 206 899 206 899 187ZM1.90735e-05 1.07288e-05 1280 1.07288e-05 1280 720 1.90735e-05 720Z"
+                fill-rule="evenodd" clip-rule="evenodd" />
+        </clipPath>
+        <clipPath id="clip41">
+            <rect x="-2" y="-2" width="39" height="41" />
+        </clipPath>
+        <clipPath id="clip42">
+            <rect x="0" y="0" width="36" height="37" />
+        </clipPath>
+        <clipPath id="clip43">
+            <rect x="-2" y="-2" width="551" height="22" />
+        </clipPath>
+        <clipPath id="clip44">
+            <rect x="0" y="0" width="549" height="18" />
+        </clipPath>
+        <clipPath id="clip45">
+            <rect x="-2" y="-2" width="423" height="22" />
+        </clipPath>
+        <clipPath id="clip46">
+            <rect x="0" y="0" width="421" height="18" />
+        </clipPath>
+        <clipPath id="clip47">
+            <path
+                d="M134 104 134 123 153 123 153 104ZM1.90735e-05 1.07288e-05 1280 1.07288e-05 1280 720 1.90735e-05 720Z"
+                fill-rule="evenodd" clip-rule="evenodd" />
+        </clipPath>
+        <clipPath id="clip48">
+            <rect x="-2" y="-2" width="41" height="41" />
+        </clipPath>
+        <clipPath id="clip49">
+            <rect x="0" y="0" width="37" height="37" />
+        </clipPath>
+        <clipPath id="clip50">
+            <path
+                d="M1027 103 1027 122 1046 122 1046 103ZM1.90735e-05 1.07288e-05 1280 1.07288e-05 1280 720 1.90735e-05 720Z"
+                fill-rule="evenodd" clip-rule="evenodd" />
+        </clipPath>
+        <clipPath id="clip51">
+            <rect x="-2" y="-2" width="41" height="41" />
+        </clipPath>
+        <clipPath id="clip52">
+            <rect x="0" y="0" width="37" height="37" />
+        </clipPath>
+        <clipPath id="clip53">
+            <path
+                d="M269 351 269 369 287 369 287 351ZM1.90735e-05 1.07288e-05 1280 1.07288e-05 1280 720 1.90735e-05 720Z"
+                fill-rule="evenodd" clip-rule="evenodd" />
+        </clipPath>
+        <clipPath id="clip54">
+            <rect x="-2" y="-2" width="39" height="39" />
+        </clipPath>
+        <clipPath id="clip55">
+            <rect x="0" y="0" width="36" height="36" />
+        </clipPath>
+        <clipPath id="clip56">
+            <rect x="106" y="403" width="94" height="90" />
+        </clipPath>
+        <clipPath id="clip57">
+            <rect x="106" y="416" width="94" height="90" />
+        </clipPath>
+        <clipPath id="clip58">
+            <rect x="106" y="428" width="94" height="91" />
+        </clipPath>
+        <clipPath id="clip59">
+            <rect x="106" y="441" width="94" height="91" />
+        </clipPath>
+        <clipPath id="clip60">
+            <rect x="106" y="454" width="94" height="91" />
+        </clipPath>
+        <clipPath id="clip61">
+            <rect x="106" y="467" width="94" height="90" />
+        </clipPath>
+        <clipPath id="clip62">
+            <path
+                d="M958 351 958 370 976 370 976 351ZM1.90735e-05 1.07288e-05 1280 1.07288e-05 1280 720 1.90735e-05 720Z"
+                fill-rule="evenodd" clip-rule="evenodd" />
+        </clipPath>
+        <clipPath id="clip63">
+            <rect x="-2" y="-2" width="39" height="41" />
+        </clipPath>
+        <clipPath id="clip64">
+            <rect x="0" y="0" width="36" height="37" />
+        </clipPath>
+        <clipPath id="clip65">
+            <path
+                d="M387 351 387 370 405 370 405 351ZM1.90735e-05 1.07288e-05 1280 1.07288e-05 1280 720 1.90735e-05 720Z"
+                fill-rule="evenodd" clip-rule="evenodd" />
+        </clipPath>
+        <clipPath id="clip66">
+            <rect x="-2" y="-2" width="39" height="41" />
+        </clipPath>
+        <clipPath id="clip67">
+            <rect x="0" y="0" width="36" height="37" />
+        </clipPath>
+        <clipPath id="clip68">
+            <path
+                d="M1055 351 1055 370 1073 370 1073 351ZM1.90735e-05 1.07288e-05 1280 1.07288e-05 1280 720 1.90735e-05 720Z"
+                fill-rule="evenodd" clip-rule="evenodd" />
+        </clipPath>
+        <clipPath id="clip69">
+            <rect x="-2" y="-2" width="39" height="41" />
+        </clipPath>
+        <clipPath id="clip70">
+            <rect x="0" y="0" width="36" height="37" />
+        </clipPath>
+        <clipPath id="clip71">
+            <path
+                d="M437 288 437 307 456 307 456 288ZM1.90735e-05 1.07288e-05 1280 1.07288e-05 1280 720 1.90735e-05 720Z"
+                fill-rule="evenodd" clip-rule="evenodd" />
+        </clipPath>
+        <clipPath id="clip72">
+            <rect x="-2" y="-2" width="41" height="41" />
+        </clipPath>
+        <clipPath id="clip73">
+            <rect x="0" y="0" width="37" height="37" />
+        </clipPath>
+        <clipPath id="clip74">
+            <rect x="-2" y="-2" width="26" height="77" />
+        </clipPath>
+        <clipPath id="clip75">
+            <rect x="0" y="0" width="23" height="74" />
+        </clipPath>
+        <clipPath id="clip76">
+            <path
+                d="M826 349 826 368 845 368 845 349ZM1.90735e-05 1.07288e-05 1280 1.07288e-05 1280 720 1.90735e-05 720Z"
+                fill-rule="evenodd" clip-rule="evenodd" />
+        </clipPath>
+        <clipPath id="clip77">
+            <rect x="-2" y="-2" width="41" height="41" />
+        </clipPath>
+        <clipPath id="clip78">
+            <rect x="0" y="0" width="37" height="37" />
+        </clipPath>
+        <clipPath id="clip79">
+            <rect x="789" y="401" width="94" height="90" />
+        </clipPath>
+        <clipPath id="clip80">
+            <rect x="789" y="414" width="94" height="90" />
+        </clipPath>
+        <clipPath id="clip81">
+            <rect x="789" y="426" width="94" height="91" />
+        </clipPath>
+        <clipPath id="clip82">
+            <rect x="789" y="439" width="94" height="91" />
+        </clipPath>
+        <clipPath id="clip83">
+            <rect x="789" y="452" width="94" height="91" />
+        </clipPath>
+        <clipPath id="clip84">
+            <rect x="789" y="465" width="94" height="90" />
+        </clipPath>
+        <clipPath id="clip85">
+            <path
+                d="M827 287 827 306 846 306 846 287ZM1.90735e-05 1.07288e-05 1280 1.07288e-05 1280 720 1.90735e-05 720Z"
+                fill-rule="evenodd" clip-rule="evenodd" />
+        </clipPath>
+        <clipPath id="clip86">
+            <rect x="-2" y="-2" width="41" height="41" />
+        </clipPath>
+        <clipPath id="clip87">
+            <rect x="0" y="0" width="37" height="37" />
+        </clipPath>
+        <clipPath id="clip88">
+            <rect x="-2" y="-2" width="26" height="79" />
+        </clipPath>
+        <clipPath id="clip89">
+            <rect x="0" y="0" width="23" height="75" />
+        </clipPath>
+        <clipPath id="clip90">
+            <path
+                d="M616 419 616 438 635 438 635 419ZM1.90735e-05 1.07288e-05 1280 1.07288e-05 1280 720 1.90735e-05 720Z"
+                fill-rule="evenodd" clip-rule="evenodd" />
+        </clipPath>
+        <clipPath id="clip91">
+            <rect x="-2" y="-2" width="41" height="41" />
+        </clipPath>
+        <clipPath id="clip92">
+            <rect x="0" y="0" width="37" height="37" />
+        </clipPath>
+        <clipPath id="clip93">
+            <rect x="579" y="471" width="94" height="90" />
+        </clipPath>
+        <clipPath id="clip94">
+            <rect x="579" y="484" width="94" height="90" />
+        </clipPath>
+        <clipPath id="clip95">
+            <rect x="579" y="496" width="94" height="91" />
+        </clipPath>
+        <clipPath id="clip96">
+            <rect x="579" y="509" width="94" height="91" />
+        </clipPath>
+        <clipPath id="clip97">
+            <rect x="579" y="522" width="94" height="91" />
+        </clipPath>
+        <clipPath id="clip98">
+            <rect x="579" y="535" width="94" height="90" />
+        </clipPath>
+        <clipPath id="clip99">
+            <rect x="-2" y="-2" width="246" height="22" />
+        </clipPath>
+        <clipPath id="clip100">
+            <rect x="0" y="0" width="245" height="18" />
+        </clipPath>
+        <clipPath id="clip101">
+            <rect x="-2" y="-2" width="26" height="96" />
+        </clipPath>
+        <clipPath id="clip102">
+            <rect x="0" y="0" width="24" height="92" />
+        </clipPath>
+        <clipPath id="clip103">
+            <path
+                d="M523 356 523 375 542 375 542 356ZM1.90735e-05 1.07288e-05 1280 1.07288e-05 1280 720 1.90735e-05 720Z"
+                fill-rule="evenodd" clip-rule="evenodd" />
+        </clipPath>
+        <clipPath id="clip104">
+            <rect x="-2" y="-2" width="41" height="41" />
+        </clipPath>
+        <clipPath id="clip105">
+            <rect x="0" y="0" width="37" height="37" />
+        </clipPath>
+        <clipPath id="clip106">
+            <rect x="-2" y="-2" width="26" height="96" />
+        </clipPath>
+        <clipPath id="clip107">
+            <rect x="0" y="0" width="24" height="92" />
+        </clipPath>
+        <clipPath id="clip108">
+            <path
+                d="M716 356 716 375 734 375 734 356ZM1.90735e-05 1.07288e-05 1280 1.07288e-05 1280 720 1.90735e-05 720Z"
+                fill-rule="evenodd" clip-rule="evenodd" />
+        </clipPath>
+        <clipPath id="clip109">
+            <rect x="-2" y="-2" width="39" height="41" />
+        </clipPath>
+        <clipPath id="clip110">
+            <rect x="0" y="0" width="36" height="37" />
+        </clipPath>
+        <clipPath id="clip111">
+            <rect x="0" y="0" width="1.1811e+06" height="571500" />
+        </clipPath>
+        <image width="156" height="76"
+               xlink:href="data:image/png;base64,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"
+               preserveAspectRatio="none" id="img112"></image>
+        <clipPath id="clip113">
+            <rect x="0" y="0" width="1.17308e+06" height="571500" />
+        </clipPath>
+        <clipPath id="clip114">
+            <rect x="1089" y="-24" width="95" height="90" />
+        </clipPath>
+        <clipPath id="clip115">
+            <rect x="1191" y="43" width="79" height="90" />
+        </clipPath>
+        <clipPath id="clip116">
+            <rect x="1195" y="3" width="75" height="90" />
+        </clipPath>
+        <clipPath id="clip117">
+            <rect x="0" y="0" width="876300" height="876300" />
+        </clipPath>
+        <image width="128" height="128"
+               xlink:href="data:image/png;base64,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"
+               preserveAspectRatio="none" id="img118"></image>
+        <clipPath id="clip119">
+            <rect x="-1" y="0" width="876300" height="876300" />
+        </clipPath>
+        <clipPath id="clip120">
+            <rect x="45" y="62" width="84" height="91" />
+        </clipPath>
+        <clipPath id="clip121">
+            <rect x="45" y="76" width="84" height="90" />
+        </clipPath>
+        <clipPath id="clip122">
+            <rect x="0" y="0" width="57150" height="114300" />
+        </clipPath>
+        <image width="39" height="91"
+               xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACcAAABbCAMAAADHnWy9AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAzUExURQAAAP8AAP8AAP8AAP8AAP8AAP8AAP8AAP8AAP0AAP0AAP4AAP4AAP4AAP4AAP4AAP8AAMVaHOIAAAAQdFJOUwAQIDBAUGBwgI+fr7/P3+8jGoKKAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAA5klEQVRIS+2XWQ7DIAxETZZmL77/aStIAHtwegK/T/ykJDMgBaLGwpqPmAkG0JgHVDITajyhknHPvYR77iXccy/hnnsJ98wfsXCgxldo4+18iGgxcyzDnXD0Aq24YrITnbhm8A1Eg/ViQA5oxtWO9f7kPhDNVZL7/+Q4lgz7JiRL0Yg2nAnOplH44rQSRXdEI44rs9TotZZDa0QXGplUhMauxdipeFtIPEVo+g1RitB04UT7XtHVIorQ6Fq6SBoyHF2ERtYCRWhaOBuONCWcvghNqaXuzTfu02IWoUmnxS5CEy5xIio/svdq42UQ6OwAAAAASUVORK5CYII="
+               preserveAspectRatio="none" id="img123"></image>
+        <clipPath id="clip124">
+            <rect x="0" y="0" width="48985.7" height="114300" />
+        </clipPath>
+        <clipPath id="clip125">
+            <rect x="0" y="0" width="47625" height="123825" />
+        </clipPath>
+        <image width="39" height="91"
+               xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACcAAABbCAMAAADHnWy9AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAzUExURQAAACDfECDXGCXaFSTbFCPZFiPaFSLbFCTbFiTbFSPcEyLcFCHaFSLbFCPcEyPaFSPbFdh6Az4AAAAQdFJOUwAQIDBAUGBwgI+fr7/P3+8jGoKKAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAA4klEQVRIS+2XWQ7FMAgDky6ve8P9T/tEV+zQGzCfMFIku5HSlJi2yJZ56LCJyMLDmlGUnsdMe2hSGl4geT89WXmDTJcmMvDK0j+aSMvLl1yMt/H2ZTGayMTrmwE0kY6Fk8aequx+LVoE4oZzFoE44XTsKHUtTxFIFQ5G8jKiZotAoBYoAoFwVt4aTC1cBPLU0n6fqpT75LoI5LotXhHIcVvcIhCt5aMIZE1p5pnLmHjyQZrXCy+cci9N2LmOZ3E/6B9rHxekDig8JbzwlPDCU8ILTwkvPKVhTarX/Qk/xOzfwh9/6mrjSwh/mwAAAABJRU5ErkJggg=="
+               preserveAspectRatio="none" id="img126"></image>
+        <clipPath id="clip127">
+            <rect x="0" y="0" width="47625" height="111125" />
+        </clipPath>
+        <clipPath id="clip128">
+            <rect x="1051" y="61" width="85" height="91" />
+        </clipPath>
+        <clipPath id="clip129">
+            <rect x="1051" y="75" width="85" height="90" />
+        </clipPath>
+        <clipPath id="clip130">
+            <rect x="0" y="-1.16415e-10" width="47625" height="114300" />
+        </clipPath>
+        <clipPath id="clip131">
+            <rect x="0" y="0" width="47625" height="111125" />
+        </clipPath>
+        <clipPath id="clip132">
+            <rect x="0" y="0" width="47625" height="123825" />
+        </clipPath>
+        <clipPath id="clip133">
+            <rect x="0" y="0" width="47625" height="111125" />
+        </clipPath>
+        <clipPath id="clip134">
+            <rect x="1140" y="268" width="84" height="90" />
+        </clipPath>
+        <clipPath id="clip135">
+            <rect x="1.86265e-09" y="0" width="47625" height="114300" />
+        </clipPath>
+        <clipPath id="clip136">
+            <rect x="0" y="0" width="47625" height="111125" />
+        </clipPath>
+        <clipPath id="clip137">
+            <rect x="149" y="106" width="78" height="91" />
+        </clipPath>
+        <clipPath id="clip138">
+            <rect x="942" y="106" width="78" height="91" />
+        </clipPath>
+        <clipPath id="clip139">
+            <rect x="32" y="299" width="78" height="91" />
+        </clipPath>
+        <clipPath id="clip140">
+            <rect x="676" y="369" width="78" height="90" />
+        </clipPath>
+        <clipPath id="clip141">
+            <rect x="1039" y="275" width="79" height="91" />
+        </clipPath>
+        <clipPath id="clip142">
+            <rect x="111" y="372" width="84" height="84" />
+        </clipPath>
+        <clipPath id="clip143">
+            <rect x="111" y="372" width="84" height="84" />
+        </clipPath>
+        <clipPath id="clip144">
+            <rect x="111" y="372" width="84" height="84" />
+        </clipPath>
+        <clipPath id="clip145">
+            <rect x="584" y="439" width="84" height="84" />
+        </clipPath>
+        <clipPath id="clip146">
+            <rect x="584" y="439" width="84" height="84" />
+        </clipPath>
+        <clipPath id="clip147">
+            <rect x="584" y="439" width="84" height="84" />
+        </clipPath>
+        <clipPath id="clip148">
+            <rect x="794" y="368" width="84" height="84" />
+        </clipPath>
+        <clipPath id="clip149">
+            <rect x="794" y="368" width="84" height="84" />
+        </clipPath>
+        <clipPath id="clip150">
+            <rect x="794" y="368" width="84" height="84" />
+        </clipPath>
+        <clipPath id="clip151">
+            <rect x="236" y="457" width="84" height="90" />
+        </clipPath>
+        <clipPath id="clip152">
+            <rect x="0" y="0" width="47625" height="114300" />
+        </clipPath>
+        <clipPath id="clip153">
+            <rect x="0" y="0" width="47625" height="111125" />
+        </clipPath>
+        <clipPath id="clip154">
+            <rect x="356" y="457" width="84" height="90" />
+        </clipPath>
+        <clipPath id="clip155">
+            <rect x="0" y="0" width="57150" height="114300" />
+        </clipPath>
+        <clipPath id="clip156">
+            <rect x="0" y="0" width="48985.7" height="114300" />
+        </clipPath>
+        <clipPath id="clip157">
+            <rect x="923" y="456" width="85" height="90" />
+        </clipPath>
+        <clipPath id="clip158">
+            <rect x="0" y="0" width="47625" height="114300" />
+        </clipPath>
+        <clipPath id="clip159">
+            <rect x="0" y="0" width="47625" height="111125" />
+        </clipPath>
+        <clipPath id="clip160">
+            <rect x="0" y="0" width="76200" height="190500" />
+        </clipPath>
+        <clipPath id="clip161">
+            <rect x="0" y="0" width="76200" height="177800" />
+        </clipPath>
+        <clipPath id="clip162">
+            <rect x="0" y="0" width="76200" height="190500" />
+        </clipPath>
+        <clipPath id="clip163">
+            <rect x="0" y="0" width="76200" height="177800" />
+        </clipPath>
+    </defs>
+    <g clip-path="url(#clip25)">
+        <path
+            d="M280 333.487 280.466 387.867 277.466 387.893 277 333.513ZM274 333.539C273.979 331.053 275.976 329.022 278.462 329 280.947 328.979 282.979 330.976 283 333.462 283.021 335.947 281.024 337.979 278.539 338 276.053 338.021 274.022 336.024 274 333.539Z"
+            fill="#6600CC" />
+        <g clip-path="url(#clip26)" filter="url(#fx0)" transform="translate(142 324)">
+            <g clip-path="url(#clip27)">
+                <path d="M11.8457 68.0784 11.5001 11.5001" fill="#FF0000" fill-rule="evenodd" />
+                <path
+                    d="M10.3457 68.0876 10.0001 11.5092 13 11.4909 13.3456 68.0693ZM7.00014 11.5275C6.98496 9.04231 8.98733 7.01532 11.4726 7.00014 13.9578 6.98496 15.9848 8.98734 16 11.4726 16.0152 13.9578 14.0128 15.9848 11.5275 16 9.04231 16.0152 7.01532 14.0128 7.00014 11.5275Z"
+                    fill="#6600CC" />
+            </g>
+        </g>
+        <path d="M153.846 390.078 153.5 333.5" fill="#FF0000" fill-rule="evenodd" />
+        <path
+            d="M152.346 390.088 152 333.509 155 333.491 155.346 390.069ZM149 333.528C148.985 331.042 150.987 329.015 153.473 329 155.958 328.985 157.985 330.987 158 333.473 158.015 335.958 156.013 337.985 153.528 338 151.042 338.015 149.015 336.013 149 333.528Z"
+            fill="#6600CC" />
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+              font-weight="700" font-size="19" transform="translate(551.668 39)">Ҳисорак
+            <tspan font-size="19" x="77.1666" y="0">ГЭС</tspan>
+            <tspan font-weight="400" font-size="11" x="459.913" y="21">Л</tspan>
+            <tspan font-weight="400" font-size="11" x="467.08" y="21">-</tspan>
+            <tspan font-weight="400" font-size="11" x="470.58" y="21">ГЭС</tspan>
+            <tspan font-weight="400" font-size="11" x="490.914" y="21">-</tspan>
+            <tspan font-weight="400" font-size="11" x="494.414" y="21">2</tspan>
+            <tspan font-weight="400" font-size="11" x="-506.553" y="288">1</tspan>
+            <tspan font-weight="400" font-size="11" x="-501.22" y="288">-</tspan>
+            <tspan font-weight="400" font-size="11" x="-497.72" y="288">СШ 10 кВ</tspan>
+            <tspan font-weight="400" font-size="11" x="495.591" y="271">2</tspan>
+            <tspan font-weight="400" font-size="11" x="500.925" y="271">-</tspan>
+            <tspan font-weight="400" font-size="11" x="504.425" y="271">СШ 10 кВ</tspan>
+        </text>
+        <path
+            d="M1.5-1.58947e-06 1.5001 93.0775-1.4999 93.0775-1.5 1.58947e-06ZM9.8629e-05 93.0775 4.5001 90.0775 0.000104987 99.0775-4.4999 90.0775Z"
+            fill="#663300" transform="matrix(1 0 0 -1 143.5 163.578)" />
+        <g clip-path="url(#clip28)">
+            <g clip-path="url(#clip29)" filter="url(#fx1)" transform="translate(135 344)">
+                <g clip-path="url(#clip30)">
+                    <rect x="0" y="0" width="18" height="19" stroke="#6600CC" stroke-width="4"
+                          stroke-linejoin="round" stroke-miterlimit="10" fill="#FF0000"
+                          transform="matrix(1 0 0 -1 9 28)" />
+                </g>
+            </g>
+        </g>
+        <rect id="c10" x="0" y="0" width="18" height="19" stroke="#6600CC" stroke-width="3.66667"
+              stroke-linejoin="round" stroke-miterlimit="10" fill="#FFFFFF"
+              transform="matrix(1 0 0 -1 144 370)" />
+        <path d="M232.5 128.5 934.965 129.231" stroke="#663300" stroke-width="3" stroke-miterlimit="8"
+              fill="none" fill-rule="evenodd" />
+        <path d="M0 0 71.4663 0.131759" stroke="#663300" stroke-width="3" stroke-miterlimit="8"
+              fill="none" fill-rule="evenodd"
+              transform="matrix(1.83697e-16 1 1 -1.83697e-16 232.5 127.5)" />
+        <path d="M0 0 703.181 0.265827" stroke="#663300" stroke-width="3" stroke-miterlimit="8"
+              fill="none" fill-rule="evenodd" transform="matrix(1 0 0 -1 231.5 196.766)" />
+        <path d="M0 0 67.7517 0.402835" stroke="#663300" stroke-width="3" stroke-miterlimit="8"
+              fill="none" fill-rule="evenodd"
+              transform="matrix(1.83697e-16 1 1 -1.83697e-16 933.5 129.5)" />
+        <g clip-path="url(#clip31)">
+            <g clip-path="url(#clip32)" filter="url(#fx2)" transform="translate(273 112)">
+                <g clip-path="url(#clip33)">
+                    <rect x="9" y="9" width="19" height="18" stroke="#663300" stroke-width="4"
+                          stroke-linejoin="round" stroke-miterlimit="10" fill="#FF0000" />
+                </g>
+            </g>
+        </g>
+        <rect id="c11111" x="282" y="119" width="19" height="18" stroke="#663300" stroke-width="3.66667"
+              stroke-linejoin="round" stroke-miterlimit="10" fill="#FFFFFF" />
+        <g clip-path="url(#clip34)">
+            <g clip-path="url(#clip35)" filter="url(#fx3)" transform="translate(274 180)">
+                <g clip-path="url(#clip36)">
+                    <rect x="9" y="9" width="19" height="19" stroke="#663300" stroke-width="4"
+                          stroke-linejoin="round" stroke-miterlimit="10" fill="#FF0000" />
+                </g>
+            </g>
+        </g>
+        <rect id="c1112" x="283" y="187" width="19" height="19" stroke="#663300" stroke-width="3.66667"
+              stroke-linejoin="round" stroke-miterlimit="10" fill="#FFFFFF" />
+        <g clip-path="url(#clip37)">
+            <g clip-path="url(#clip38)" filter="url(#fx4)" transform="translate(873 112)">
+                <g clip-path="url(#clip39)">
+                    <rect x="9" y="9" width="19" height="19" stroke="#663300" stroke-width="4"
+                          stroke-linejoin="round" stroke-miterlimit="10" fill="#FF0000" />
+                </g>
+            </g>
+        </g>
+        <rect id="c3333" x="882" y="119" width="19" height="19" stroke="#663300" stroke-width="3.66667"
+              stroke-linejoin="round" stroke-miterlimit="10" fill="#FFFFFF" />
+        <g clip-path="url(#clip40)">
+            <g clip-path="url(#clip41)" filter="url(#fx5)" transform="translate(872 180)">
+                <g clip-path="url(#clip42)">
+                    <rect x="9" y="9" width="18" height="19" stroke="#663300" stroke-width="4"
+                          stroke-linejoin="round" stroke-miterlimit="10" fill="#FF0000" />
+                </g>
+            </g>
+        </g>
+        <rect id="c4444" x="881" y="187" width="18" height="19" stroke="#663300" stroke-width="3.66667"
+              stroke-linejoin="round" stroke-miterlimit="10" fill="#FFFFFF" />
+        <path
+            d="M143.514 161 232.499 161.834 232.471 164.834 143.486 164ZM232.528 158.835C235.013 158.858 237.008 160.891 236.985 163.377 236.962 165.862 234.928 167.857 232.443 167.834 229.958 167.811 227.962 165.777 227.986 163.292 228.009 160.807 230.042 158.811 232.528 158.835Z"
+            fill="#663300" />
+        <path
+            d="M0.0191067-1.49988 104.686-0.166545 104.648 2.83321-0.0191067 1.49988ZM-0.0573202 4.49963C-2.5424 4.46798-4.53129 2.42776-4.49963-0.0573202-4.46798-2.5424-2.42776-4.53129 0.0573202-4.49963 2.5424-4.46798 4.53129-2.42776 4.49963 0.0573202 4.46798 2.5424 2.42776 4.53129-0.0573202 4.49963Z"
+            fill="#663300" transform="matrix(1 0 0 -1 933.5 162.833)" />
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+              font-weight="700" font-size="10" transform="translate(877.615 113)">В-1-2
+            <tspan font-size="11" x="-596.786" y="-3">В-1-1</tspan>
+            <tspan font-size="11" x="-596.093" y="63">В-2-1</tspan>
+            <tspan font-size="11" x="-1.10931" y="67">В-2-2</tspan>
+            <tspan font-size="11" x="-752.995" y="-52">Л-ГЭС-1</tspan>
+        </text>
+        <g clip-path="url(#clip43)" filter="url(#fx6)" transform="translate(25 326)">
+            <g clip-path="url(#clip44)">
+                <path d="M0 0 532.667 1.2" stroke="#6600CC" stroke-width="3" stroke-linejoin="round"
+                      stroke-miterlimit="10" fill="#FF0000" fill-rule="evenodd"
+                      transform="matrix(1 0 0 -1 7.50005 9.70004)" />
+            </g>
+        </g>
+        <path d="M0 0 532.667 1.2" stroke="#6600CC" stroke-width="3" stroke-linejoin="round"
+              stroke-miterlimit="10" fill="#FF0000" fill-rule="evenodd"
+              transform="matrix(1 0 0 -1 32.5001 333.7)" />
+        <g clip-path="url(#clip45)" filter="url(#fx7)" transform="translate(706 326)">
+            <g clip-path="url(#clip46)">
+                <path d="M7.50006 8.50006 412.799 9.89922" stroke="#6600CC" stroke-width="3"
+                      stroke-linejoin="round" stroke-miterlimit="10" fill="#FF0000"
+                      fill-rule="evenodd" />
+            </g>
+        </g>
+        <path d="M713.5 332.5 1118.8 333.899" stroke="#6600CC" stroke-width="3" stroke-linejoin="round"
+              stroke-miterlimit="10" fill="#FF0000" fill-rule="evenodd" />
+        <path d="M278 448 278 475.792" stroke="#4472C4" stroke-width="3.66667" stroke-miterlimit="8"
+              fill="none" fill-rule="evenodd" />
+        <path
+            d="M279.833 443.996 279.903 477.712 276.236 477.72 276.167 444.004ZM278.07 477.716 283.562 474.038 278.085 485.049 272.562 474.061Z"
+            fill="#989898" />
+        <path
+            d="M1181.67 386.8 1181.21 328.844 1183.88 328.823 1184.33 386.779ZM1182.54 328.833 1178.56 331.531 1182.5 323.5 1186.56 331.468Z"
+            fill="#989898" />
+        <path d="M1135.5 552.5 1183.26 552.5" stroke="#2E75B6" stroke-width="2.66667"
+              stroke-miterlimit="8" fill="none" fill-rule="evenodd" />
+        <path d="M0 0 0.316325 147.784" stroke="#989898" stroke-width="2.66667" stroke-miterlimit="8"
+              fill="none" fill-rule="evenodd" transform="matrix(1 0 0 -1 1182.5 553.284)" />
+        <rect id="c1111" x="0" y="0" width="19" height="19" stroke="#989898" stroke-width="2.66667"
+              stroke-miterlimit="8" fill="#FFFFFF" transform="matrix(1 0 0 -1 1173.5 405.5)" />
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+              font-weight="700" font-size="10" transform="translate(1194.88 469)">Солнечный
+            <tspan font-size="11" x="5.16663" y="13">инвертор</tspan>
+            <tspan font-size="11" x="-145.781" y="56">Солночн</tspan>
+            <tspan font-size="11" x="-105.947" y="56">ый</tspan>
+            <tspan font-size="11" x="-134.867" y="69">панель</tspan>
+            <tspan font-size="11" x="-135.947" y="82">200 кВт</tspan>
+            <tspan font-size="11" x="-47.7998" y="-190">СН</tspan>
+            <tspan font-size="11" x="-32.9664" y="-190">-</tspan>
+            0,4 кВ
+            <tspan font-weight="700" font-size="11" x="1.53357" y="-190">ТСН-11</tspan>
+            <tspan font-size="11" x="-35.2131" y="-177">Хисорак ГЭС</tspan>
+            <tspan font-weight="700" font-size="11" x="-1014.45" y="-72">Г-1</tspan>
+            <tspan font-weight="700" font-size="11" x="-1014.45" y="-59">10,5 кВ</tspan>
+            <tspan font-weight="700" font-size="11" x="-1014.45" y="-46">22,5МВт</tspan>
+            <tspan font-weight="700" font-size="11" x="-1014.45" y="-33">СВ-335/121-12</tspan>
+            <tspan font-weight="700" font-size="11" x="-896.244" y="-65">ТСН-2</tspan>
+            <tspan font-weight="700" font-size="11" x="-896.244" y="-52">10/0,4</tspan>
+            <tspan font-weight="700" font-size="11" x="-866.577" y="-52">кВ</tspan>
+            <tspan font-weight="700" font-size="11" x="-896.244" y="-39">630</tspan>
+            <tspan font-weight="700" font-size="11" x="-877.577" y="-39">кВа</tspan>
+            <tspan font-weight="700" font-size="11" x="-896.244" y="-26">КТП</tspan>
+            <tspan font-weight="700" font-size="11" x="-873.077" y="-26">-</tspan>
+            <tspan font-weight="700" font-size="11" x="-869.577" y="-26">630/10/0,4</tspan>
+            <tspan font-weight="700" font-size="11" x="-208.139" y="-65">ТСН</tspan>
+            <tspan font-weight="700" font-size="11" x="-184.972" y="-65">-</tspan>
+            <tspan font-weight="700" font-size="11" x="-181.472" y="-65">12</tspan>
+            <tspan font-weight="700" font-size="11" x="-208.139" y="-52">10/0,4</tspan>
+            <tspan font-weight="700" font-size="11" x="-178.472" y="-52">кВ</tspan>
+            <tspan font-weight="700" font-size="11" x="-208.139" y="-39">630</tspan>
+            <tspan font-weight="700" font-size="11" x="-189.472" y="-39">кВа</tspan>
+            <tspan font-weight="700" font-size="11" x="-208.139" y="-26">КТП</tspan>
+            <tspan font-weight="700" font-size="11" x="-184.972" y="-26">-</tspan>
+            <tspan font-weight="700" font-size="11" x="-181.472" y="-26">630/10/0,4</tspan>
+        </text>
+        <g clip-path="url(#clip47)">
+            <g clip-path="url(#clip48)" filter="url(#fx8)" transform="translate(125 97)">
+                <g clip-path="url(#clip49)">
+                    <rect x="9" y="9" width="19" height="19" stroke="#663300" stroke-width="4"
+                          stroke-linejoin="round" stroke-miterlimit="10" fill="#FF0000" />
+                </g>
+            </g>
+        </g>
+        <rect id="c220" x="134" y="104" width="19" height="19" stroke="#663300" stroke-width="3.66667"
+              stroke-linejoin="round" stroke-miterlimit="10" fill="#FFFFFF" />
+        <path
+            d="M1.5-1.58947e-06 1.5001 93.0775-1.4999 93.0775-1.5 1.58947e-06ZM9.8629e-05 93.0775 4.5001 90.0775 0.000104987 99.0775-4.4999 90.0775Z"
+            fill="#663300" transform="matrix(1 0 0 -1 1036.5 162.578)" />
+        <g clip-path="url(#clip50)">
+            <g clip-path="url(#clip51)" filter="url(#fx9)" transform="translate(1018 96)">
+                <g clip-path="url(#clip52)">
+                    <rect x="9" y="9" width="19" height="19" stroke="#663300" stroke-width="4"
+                          stroke-linejoin="round" stroke-miterlimit="10" fill="#FF0000" />
+                </g>
+            </g>
+        </g>
+        <rect id="c260" x="1027" y="103" width="19" height="19" stroke="#663300" stroke-width="3.66667"
+              stroke-linejoin="round" stroke-miterlimit="10" fill="#FFFFFF" />
+        <g clip-path="url(#clip53)">
+            <g clip-path="url(#clip54)" filter="url(#fx10)" transform="translate(260 344)">
+                <g clip-path="url(#clip55)">
+                    <rect x="0" y="0" width="18" height="18" stroke="#6600CC" stroke-width="4"
+                          stroke-linejoin="round" stroke-miterlimit="10" fill="#FF0000"
+                          transform="matrix(1 0 0 -1 9 27)" />
+                </g>
+            </g>
+        </g>
+        <rect id="c34" x="0" y="0" width="18" height="18" stroke="#6600CC" stroke-width="3.66667"
+              stroke-linejoin="round" stroke-miterlimit="10" fill="#FFFFFF"
+              transform="matrix(1 0 0 -1 269 369)" />
+        <path id="c3402"
+              d="M0 15.5C-1.9097e-15 6.93959 6.71573-1.97336e-15 15-3.94671e-15 23.2843-7.89343e-15 30 6.93959 30 15.5 30 24.0604 23.2843 31 15 31 6.71573 31-9.5485e-15 24.0604 0 15.5Z"
+              stroke="#989898" stroke-width="3" stroke-miterlimit="8" fill="#FFFFFF" fill-rule="evenodd"
+              transform="matrix(1 0 0 -1 263.5 444.5)" />
+        <path id="c3401"
+              d="M0 15C-1.9097e-15 6.71573 6.71573-1.9097e-15 15-3.8194e-15 23.2843-7.6388e-15 30 6.71573 30 15 30 23.2843 23.2843 30 15 30 6.71573 30-9.5485e-15 23.2843 0 15Z"
+              stroke="#6600CC" stroke-width="3" stroke-miterlimit="8" fill="#FFFFFF" fill-rule="evenodd"
+              transform="matrix(1 0 0 -1 263.5 419.5)" />
+        <path d="M106.779 441.787 199.887 441.787 199.887 454.587 106.779 454.587Z" fill="#D9D9D9"
+              fill-rule="evenodd" />
+        <path d="M106.779 454.587 199.887 454.587 199.887 467.387 106.779 467.387Z" fill="#D9D9D9"
+              fill-rule="evenodd" />
+        <path d="M106.779 467.387 199.887 467.387 199.887 480.187 106.779 480.187Z" fill="#D9D9D9"
+              fill-rule="evenodd" />
+        <path d="M106.779 480.187 199.887 480.187 199.887 492.987 106.779 492.987Z" fill="#D9D9D9"
+              fill-rule="evenodd" />
+        <path d="M106.779 492.987 199.887 492.987 199.887 505.787 106.779 505.787Z" fill="#D9D9D9"
+              fill-rule="evenodd" />
+        <path d="M106.779 505.787 199.887 505.787 199.887 518.587 106.779 518.587Z" fill="#D9D9D9"
+              fill-rule="evenodd" />
+        <path d="M106.112 454.587 200.554 454.587" stroke="#000000" stroke-width="1.33333"
+              stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M106.112 467.387 200.554 467.387" stroke="#000000" stroke-width="1.33333"
+              stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M106.112 480.187 200.554 480.187" stroke="#000000" stroke-width="1.33333"
+              stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M106.112 492.987 200.554 492.987" stroke="#000000" stroke-width="1.33333"
+              stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M106.112 505.787 200.554 505.787" stroke="#000000" stroke-width="1.33333"
+              stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M106.779 441.12 106.779 519.253" stroke="#000000" stroke-width="1.33333"
+              stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M199.887 441.12 199.887 519.253" stroke="#000000" stroke-width="1.33333"
+              stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M106.112 441.787 200.554 441.787" stroke="#000000" stroke-width="1.33333"
+              stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M106.112 518.587 200.554 518.587" stroke="#000000" stroke-width="1.33333"
+              stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <g clip-path="url(#clip56)">
+            <text id="g10" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                  font-weight="700" font-size="10" transform="translate(110.558 452)">Р
+            </text>
+        </g>
+        <g clip-path="url(#clip57)">
+            <text id="g12" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                  font-weight="700" font-size="10" transform="translate(110.558 465)">Qвар
+            </text>
+        </g>
+        <g clip-path="url(#clip58)">
+            <text id="a10" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                  font-weight="700" font-size="10" transform="translate(110.558 477)">КИУМ
+            </text>
+        </g>
+        <g clip-path="url(#clip59)">
+            <text id="k10" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                  font-weight="700" font-size="10" transform="translate(110.558 490)">КПД
+            </text>
+        </g>
+        <g clip-path="url(#clip60)">
+            <text id="n10" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                  font-weight="700" font-size="10" transform="translate(110.558 503)">НА
+            </text>
+        </g>
+        <g clip-path="url(#clip61)">
+            <text id="w10" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                  font-weight="700" font-size="10" fill="blue" transform="translate(110.558 516)">Qвода
+            </text>
+        </g>
+        <path
+            d="M969 333.487 969.466 387.867 966.466 387.893 966 333.513ZM963 333.539C962.979 331.053 964.976 329.022 967.462 329 969.947 328.979 971.979 330.976 972 333.462 972.021 335.947 970.024 337.979 967.539 338 965.053 338.021 963.021 336.024 963 333.539Z"
+            fill="#6600CC" />
+        <path d="M967 448 967 475.792" stroke="#4472C4" stroke-width="3.66667" stroke-miterlimit="8"
+              fill="none" fill-rule="evenodd" />
+        <path
+            d="M968.833 443.996 968.903 477.712 965.236 477.72 965.167 444.004ZM967.07 477.716 972.562 474.038 967.085 485.049 961.562 474.061Z"
+            fill="#989898" />
+        <g clip-path="url(#clip62)">
+            <g clip-path="url(#clip63)" filter="url(#fx11)" transform="translate(949 344)">
+                <g clip-path="url(#clip64)">
+                    <rect x="0" y="0" width="18" height="19" stroke="#6600CC" stroke-width="4"
+                          stroke-linejoin="round" stroke-miterlimit="10" fill="#FF0000"
+                          transform="matrix(1 0 0 -1 9 28)" />
+                </g>
+            </g>
+        </g>
+        <rect id="c46" x="0" y="0" width="18" height="19" stroke="#6600CC" stroke-width="3.66667"
+              stroke-linejoin="round" stroke-miterlimit="10" fill="#FFFFFF"
+              transform="matrix(1 0 0 -1 958 370)" />
+        <path id="c4602"
+              d="M0 15C-1.9097e-15 6.71573 6.71573-1.9097e-15 15-3.8194e-15 23.2843-7.6388e-15 30 6.71573 30 15 30 23.2843 23.2843 30 15 30 6.71573 30-9.5485e-15 23.2843 0 15Z"
+              stroke="#989898" stroke-width="3" stroke-miterlimit="8" fill="#FFFFFF" fill-rule="evenodd"
+              transform="matrix(1 0 0 -1 952.5 444.5)" />
+        <path id="c4601"
+              d="M0 15C-1.9097e-15 6.71573 6.71573-1.9097e-15 15-3.8194e-15 23.2843-7.6388e-15 30 6.71573 30 15 30 23.2843 23.2843 30 15 30 6.71573 30-9.5485e-15 23.2843 0 15Z"
+              stroke="#6600CC" stroke-width="3" stroke-miterlimit="8" fill="#FFFFFF" fill-rule="evenodd"
+              transform="matrix(1 0 0 -1 952.5 419.5)" />
+        <path
+            d="M399 334.487 399.466 388.867 396.466 388.893 396 334.513ZM393 334.539C392.979 332.053 394.976 330.022 397.462 330 399.947 329.979 401.979 331.976 402 334.462 402.021 336.947 400.024 338.979 397.539 339 395.053 339.021 393.022 337.024 393 334.539Z"
+            fill="#6600CC" />
+        <path d="M397 448 397 475.792" stroke="#4472C4" stroke-width="3.66667" stroke-miterlimit="8"
+              fill="none" fill-rule="evenodd" />
+        <path
+            d="M398.833 443.996 398.903 477.712 395.236 477.72 395.167 444.004ZM397.07 477.716 402.562 474.038 397.085 485.049 391.562 474.061Z"
+            fill="#989898" />
+        <g clip-path="url(#clip65)">
+            <g clip-path="url(#clip66)" filter="url(#fx12)" transform="translate(378 344)">
+                <g clip-path="url(#clip67)">
+                    <rect x="0" y="0" width="18" height="19" stroke="#6600CC" stroke-width="4"
+                          stroke-linejoin="round" stroke-miterlimit="10" fill="#FF0000"
+                          transform="matrix(1 0 0 -1 9 28)" />
+                </g>
+            </g>
+        </g>
+        <rect id="c58" x="0" y="0" width="18" height="19" stroke="#6600CC" stroke-width="3.66667"
+              stroke-linejoin="round" stroke-miterlimit="10" fill="#FFFFFF"
+              transform="matrix(1 0 0 -1 387 370)" />
+        <path id="c5802"
+              d="M0 15C-1.9097e-15 6.71573 6.71573-1.9097e-15 15-3.8194e-15 23.2843-7.6388e-15 30 6.71573 30 15 30 23.2843 23.2843 30 15 30 6.71573 30-9.5485e-15 23.2843 0 15Z"
+              stroke="#989898" stroke-width="3" stroke-miterlimit="8" fill="#FFFFFF" fill-rule="evenodd"
+              transform="matrix(1 0 0 -1 382.5 444.5)" />
+        <path id="c5801"
+              d="M0 15.5C-1.9097e-15 6.93959 6.71573-1.97336e-15 15-3.94671e-15 23.2843-7.89343e-15 30 6.93959 30 15.5 30 24.0604 23.2843 31 15 31 6.71573 31-9.5485e-15 24.0604 0 15.5Z"
+              stroke="#6600CC" stroke-width="3" stroke-miterlimit="8" fill="#FFFFFF" fill-rule="evenodd"
+              transform="matrix(1 0 0 -1 382.5 420.5)" />
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+              font-weight="700" font-size="11" transform="translate(418.616 401)">ТСН
+            <tspan font-size="11" x="23.1667" y="0">-</tspan>
+            11
+            <tspan font-size="11" x="0" y="13">10/0,4</tspan>
+            <tspan font-size="11" x="29.6667" y="13">кВ</tspan>
+            <tspan font-size="11" x="0" y="26">630</tspan>
+            <tspan font-size="11" x="18.6667" y="26">кВа</tspan>
+            <tspan font-size="11" x="0" y="39">КТП</tspan>
+            <tspan font-size="11" x="23.1667" y="39">-</tspan>
+            630/10/0,4
+            <tspan font-size="11" x="437.787" y="-171">Т</tspan>
+            <tspan font-size="11" x="444.953" y="-171">-</tspan>
+            2
+            <tspan font-size="11" x="437.787" y="-158">110/10,5</tspan>
+            <tspan font-size="11" x="478.12" y="-158">кВ</tspan>
+            <tspan font-size="11" x="437.787" y="-145">32000</tspan>
+            <tspan font-size="11" x="467.12" y="-145">кВа</tspan>
+            <tspan font-size="11" x="437.787" y="-132">ТД</tspan>
+            32000
+        </text>
+        <path
+            d="M838.05 196.503 838 218.202 835 218.195 835.05 196.497ZM832.05 196.49C832.056 194.004 834.075 191.994 836.561 192 839.046 192.006 841.056 194.025 841.05 196.51 841.044 198.996 839.025 201.006 836.54 201 834.055 200.994 832.044 198.975 832.05 196.49Z"
+            fill="#663300" />
+        <path
+            d="M1067 334.5 1067 412.138 1064 412.138 1064 334.5ZM1061 334.5C1061 332.015 1063.01 330 1065.5 330 1067.99 330 1070 332.015 1070 334.5 1070 336.985 1067.99 339 1065.5 339 1063.01 339 1061 336.985 1061 334.5ZM1065.5 412.138 1070 409.138 1065.5 418.138 1061 409.138Z"
+            fill="#6600CC" />
+        <g clip-path="url(#clip68)">
+            <g clip-path="url(#clip69)" filter="url(#fx13)" transform="translate(1046 344)">
+                <g clip-path="url(#clip70)">
+                    <rect x="0" y="0" width="18" height="19" stroke="#6600CC" stroke-width="4"
+                          stroke-linejoin="round" stroke-miterlimit="10" fill="#FF0000"
+                          transform="matrix(1 0 0 -1 9 28)" />
+                </g>
+            </g>
+        </g>
+        <rect id="c123456" x="0" y="0" width="18" height="19" stroke="#6600CC" stroke-width="3.66667"
+              stroke-linejoin="round" stroke-miterlimit="10" fill="#FFFFFF"
+              transform="matrix(1 0 0 -1 1055 370)" />
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+              font-weight="700" font-size="10" transform="translate(295.154 363)">В-ТСН-2
+            <tspan font-size="11" x="117.333" y="2">В-ТСН-11</tspan>
+            <tspan font-size="11" x="689.202" y="2">В-ТСН-12</tspan>
+            <tspan font-size="11" x="781.857" y="3">В-Рез</tspan>
+            <tspan font-size="11" x="167.744" y="-63">В-Т-1</tspan>
+            <tspan font-size="11" x="556.182" y="-64">В-Т-2</tspan>
+            <tspan font-size="11" x="108.438" y="-127">Т-1</tspan>
+            <tspan font-size="11" x="70.7715" y="-114">110/10,5 кВ</tspan>
+            <tspan font-size="11" x="76.4381" y="-101">32000 кВа</tspan>
+            <tspan font-size="11" x="83.2715" y="-88">ТД 32000</tspan>
+
+        </text>
+        <path d="M446.5 204.5 446.5 217.75" stroke="#663300" stroke-width="3" stroke-miterlimit="8"
+              fill="none" fill-rule="evenodd" />
+        <path
+            d="M444.575 189.584C447.849 188.987 450.917 191.601 451.428 195.42 451.939 199.24 449.7 202.82 446.426 203.416 445.789 203.532 445.141 203.528 444.506 203.403"
+            stroke="#663300" stroke-width="3" stroke-miterlimit="8" fill="none" fill-rule="evenodd" />
+        <path
+            d="M444.952 190.518 444 127.523 447 127.477 447.951 190.473ZM441.001 127.568C440.963 125.083 442.947 123.038 445.432 123.001 447.917 122.963 449.962 124.947 450 127.432 450.037 129.917 448.053 131.962 445.568 132 443.083 132.037 441.038 130.053 441.001 127.568Z"
+            fill="#663300" />
+        <path
+            d="M1.5-0.00374494 1.64771 59.1624-1.35228 59.1699-1.5 0.00374494ZM-4.49999 0.0112348C-4.50619-2.47404-2.49651-4.49378-0.0112348-4.49999 2.47404-4.50619 4.49378-2.49651 4.49999-0.0112348 4.50619 2.47404 2.49651 4.49378 0.0112348 4.49999-2.47404 4.50619-4.49378 2.49651-4.49999 0.0112348Z"
+            fill="#6600CC" transform="matrix(1 0 0 -1 446.5 332.666)" />
+        <g clip-path="url(#clip71)">
+            <g clip-path="url(#clip72)" filter="url(#fx14)" transform="translate(428 281)">
+                <g clip-path="url(#clip73)">
+                    <rect x="9" y="9" width="19" height="19" stroke="#6600CC" stroke-width="4"
+                          stroke-linejoin="round" stroke-miterlimit="10" fill="#FF0000" />
+                </g>
+            </g>
+        </g>
+        <rect id="c1" x="437" y="288" width="19" height="19" stroke="#6600CC" stroke-width="3.66667"
+              stroke-linejoin="round" stroke-miterlimit="10" fill="#FFFFFF" />
+        <path id="c2"
+              d="M0 15C-1.9097e-15 6.71573 6.71573-1.9097e-15 15-3.8194e-15 23.2843-7.6388e-15 30 6.71573 30 15 30 23.2843 23.2843 30 15 30 6.71573 30-9.5485e-15 23.2843 0 15Z"
+              stroke="#6600CC" stroke-width="3" stroke-miterlimit="8" fill="#FFFFFF" fill-rule="evenodd"
+              transform="matrix(1 0 0 -1 431.5 273.5)" />
+        <path id="c3"
+              d="M0 15C-1.9097e-15 6.71573 6.71573-1.9097e-15 15-3.8194e-15 23.2843-7.6388e-15 30 6.71573 30 15 30 23.2843 23.2843 30 15 30 6.71573 30-9.5485e-15 23.2843 0 15Z"
+              stroke="#663300" stroke-width="3" stroke-miterlimit="8" fill="#FFFFFF" fill-rule="evenodd"
+              transform="matrix(1 0 0 -1 431.5 248.5)" />
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+              font-weight="700" font-size="10" transform="translate(169.868 362)">В-Г-1
+            <tspan x="693.195" y="31">Г-2</tspan>
+            <tspan x="693.195" y="44">10,5 кВ</tspan>
+            <tspan x="693.195" y="57">22,5МВт</tspan>
+            <tspan x="693.195" y="70">СВ-335/121-12УХЛ4</tspan>
+        </text>
+        <g clip-path="url(#clip74)" filter="url(#fx15)" transform="translate(825 323)">
+            <g clip-path="url(#clip75)">
+                <path d="M0 0 0.000104987 55.2645" fill="#FF0000" fill-rule="evenodd"
+                      transform="matrix(1 0 0 -1 11.5001 66.7645)" />
+                <path
+                    d="M1.5-2.84958e-06 1.5001 55.2645-1.49989 55.2645-1.5 2.84958e-06ZM4.5001 55.2645C4.50011 57.7497 2.48539 59.7645 0.000113536 59.7645-2.48517 59.7645-4.49989 57.7497-4.4999 55.2645-4.4999 52.7792-2.48519 50.7645 9.64381e-05 50.7645 2.48538 50.7645 4.5001 52.7792 4.5001 55.2645Z"
+                    fill="#6600CC" transform="matrix(1 0 0 -1 11.5001 66.7645)" />
+            </g>
+        </g>
+        <path d="M0 0 0.000104987 55.2645" fill="#FF0000" fill-rule="evenodd"
+              transform="matrix(1 0 0 -1 836.5 387.765)" />
+        <path
+            d="M1.5-2.84958e-06 1.5001 55.2645-1.49989 55.2645-1.5 2.84958e-06ZM4.5001 55.2645C4.50011 57.7497 2.48539 59.7645 0.000113536 59.7645-2.48517 59.7645-4.49989 57.7497-4.4999 55.2645-4.4999 52.7792-2.48519 50.7645 9.64381e-05 50.7645 2.48538 50.7645 4.5001 52.7792 4.5001 55.2645Z"
+            fill="#6600CC" transform="matrix(1 0 0 -1 836.5 387.765)" />
+        <g clip-path="url(#clip76)">
+            <g clip-path="url(#clip77)" filter="url(#fx16)" transform="translate(817 342)">
+                <g clip-path="url(#clip78)">
+                    <rect x="0" y="0" width="19" height="19" stroke="#6600CC" stroke-width="4"
+                          stroke-linejoin="round" stroke-miterlimit="10" fill="#FF0000"
+                          transform="matrix(1 0 0 -1 9 28)" />
+                </g>
+            </g>
+        </g>
+        <rect id="c22" x="0" y="0" width="19" height="19" stroke="#6600CC" stroke-width="3.66667"
+              stroke-linejoin="round" stroke-miterlimit="10" fill="#FFFFFF"
+              transform="matrix(1 0 0 -1 826 368)" />
+        <path d="M789.229 439.685 882.338 439.685 882.338 452.485 789.229 452.485Z" fill="#D9D9D9"
+              fill-rule="evenodd" />
+        <path d="M789.229 452.485 882.338 452.485 882.338 465.285 789.229 465.285Z" fill="#D9D9D9"
+              fill-rule="evenodd" />
+        <path d="M789.229 465.285 882.338 465.285 882.338 478.085 789.229 478.085Z" fill="#D9D9D9"
+              fill-rule="evenodd" />
+        <path d="M789.229 478.085 882.338 478.085 882.338 490.885 789.229 490.885Z" fill="#D9D9D9"
+              fill-rule="evenodd" />
+        <path d="M789.229 490.885 882.338 490.885 882.338 503.685 789.229 503.685Z" fill="#D9D9D9"
+              fill-rule="evenodd" />
+        <path d="M789.229 503.685 882.338 503.685 882.338 516.485 789.229 516.485Z" fill="#D9D9D9"
+              fill-rule="evenodd" />
+        <path d="M788.563 452.485 883.004 452.485" stroke="#000000" stroke-width="1.33333"
+              stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M788.563 465.285 883.004 465.285" stroke="#000000" stroke-width="1.33333"
+              stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M788.563 478.085 883.004 478.085" stroke="#000000" stroke-width="1.33333"
+              stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M788.563 490.885 883.004 490.885" stroke="#000000" stroke-width="1.33333"
+              stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M788.563 503.685 883.004 503.685" stroke="#000000" stroke-width="1.33333"
+              stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M789.229 439.018 789.229 517.151" stroke="#000000" stroke-width="1.33333"
+              stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M882.338 439.018 882.338 517.151" stroke="#000000" stroke-width="1.33333"
+              stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M788.563 439.685 883.004 439.685" stroke="#000000" stroke-width="1.33333"
+              stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M788.563 516.485 883.004 516.485" stroke="#000000" stroke-width="1.33333"
+              stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <g clip-path="url(#clip79)">
+            <text id="g22" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                  font-weight="700" font-size="10" transform="translate(793.009 450)">Р
+            </text>
+        </g>
+        <g clip-path="url(#clip80)">
+            <text id="g24" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                  font-weight="700" font-size="10" transform="translate(793.009 462)">Qвар
+            </text>
+        </g>
+        <g clip-path="url(#clip81)">
+            <text id="a22" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                  font-weight="700" font-size="10" transform="translate(793.009 475)">КИУМ
+            </text>
+        </g>
+        <g clip-path="url(#clip82)">
+            <text id="k22" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                  font-weight="700" font-size="10" transform="translate(793.009 488)">КПД
+            </text>
+        </g>
+        <g clip-path="url(#clip83)">
+            <text id="n22" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                  font-weight="700" font-size="10" transform="translate(793.009 501)">НА
+            </text>
+        </g>
+        <g clip-path="url(#clip84)">
+            <text id="w22" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                  font-weight="700" font-size="10" fill="blue" transform="translate(793.009 514)">Qвода
+            </text>
+        </g>
+        <path
+            d="M1.5-0.00374494 1.64771 59.1624-1.35228 59.1699-1.5 0.00374494ZM-4.49999 0.0112348C-4.50619-2.47404-2.49651-4.49378-0.0112348-4.49999 2.47404-4.50619 4.49378-2.49651 4.49999-0.0112348 4.50619 2.47404 2.49651 4.49378 0.0112348 4.49999-2.47404 4.50619-4.49378 2.49651-4.49999 0.0112348Z"
+            fill="#6600CC" transform="matrix(1 0 0 -1 836.5 331.666)" />
+        <g clip-path="url(#clip85)">
+            <g clip-path="url(#clip86)" filter="url(#fx17)" transform="translate(818 280)">
+                <g clip-path="url(#clip87)">
+                    <rect x="9" y="9" width="19" height="19" stroke="#6600CC" stroke-width="4"
+                          stroke-linejoin="round" stroke-miterlimit="10" fill="#FF0000" />
+                </g>
+            </g>
+        </g>
+        <rect id="c4" x="827" y="287" width="19" height="19" stroke="#6600CC" stroke-width="3.66667"
+              stroke-linejoin="round" stroke-miterlimit="10" fill="#FFFFFF" />
+        <path id="c5"
+              d="M0 15C-1.9097e-15 6.71573 6.71573-1.9097e-15 15-3.8194e-15 23.2843-7.6388e-15 30 6.71573 30 15 30 23.2843 23.2843 30 15 30 6.71573 30-9.5485e-15 23.2843 0 15Z"
+              stroke="#6600CC" stroke-width="3" stroke-miterlimit="8" fill="#FFFFFF" fill-rule="evenodd"
+              transform="matrix(1 0 0 -1 821.5 272.5)" />
+        <path id="c6"
+              d="M0 15.5C-1.9097e-15 6.93959 6.71573-1.97336e-15 15-3.94671e-15 23.2843-7.89343e-15 30 6.93959 30 15.5 30 24.0604 23.2843 31 15 31 6.71573 31-9.5485e-15 24.0604 0 15.5Z"
+              stroke="#663300" stroke-width="3" stroke-miterlimit="8" fill="#FFFFFF" fill-rule="evenodd"
+              transform="matrix(1 0 0 -1 821.5 248.5)" />
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+              font-weight="700" font-size="11" transform="translate(850.435 361)">В-Г-2
+        </text>
+        <g clip-path="url(#clip88)" filter="url(#fx18)" transform="translate(614 392)">
+            <g clip-path="url(#clip89)">
+                <path d="M11.8456 68.0784 11.5 11.5001" fill="#FF0000" fill-rule="evenodd" />
+                <path
+                    d="M10.3457 68.0876 10.0001 11.5092 13 11.4909 13.3456 68.0693ZM7.00011 11.5275C6.98493 9.04231 8.9873 7.01532 11.4725 7.00014 13.9578 6.98496 15.9848 8.98734 15.9999 11.4726 16.0151 13.9578 14.0127 15.9848 11.5275 16 9.04228 16.0152 7.01529 14.0128 7.00011 11.5275Z"
+                    fill="#6600CC" />
+            </g>
+        </g>
+        <path d="M625.846 458.078 625.5 401.5" fill="#FF0000" fill-rule="evenodd" />
+        <path
+            d="M624.346 458.088 624 401.509 627 401.491 627.346 458.069ZM621 401.528C620.985 399.042 622.987 397.015 625.473 397 627.958 396.985 629.985 398.987 630 401.473 630.015 403.958 628.013 405.985 625.528 406 623.042 406.015 621.015 404.013 621 401.528Z"
+            fill="#6600CC" />
+        <g clip-path="url(#clip90)">
+            <g clip-path="url(#clip91)" filter="url(#fx19)" transform="translate(607 412)">
+                <g clip-path="url(#clip92)">
+                    <rect x="0" y="0" width="19" height="19" stroke="#6600CC" stroke-width="4"
+                          stroke-linejoin="round" stroke-miterlimit="10" fill="#FF0000"
+                          transform="matrix(1 0 0 -1 9 28)" />
+                </g>
+            </g>
+        </g>
+        <rect id="c500" x="0" y="0" width="19" height="19" stroke="#6600CC" stroke-width="3.66667"
+              stroke-linejoin="round" stroke-miterlimit="10" fill="#FFFFFF"
+              transform="matrix(1 0 0 -1 616 438)" />
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+              font-weight="700" font-size="11" transform="translate(582.767 465)">Г-1
+            <tspan font-size="11" x="-19" y="13">10,5 кВ</tspan>
+            <tspan font-size="11" x="-25.3333" y="26">3,55МВт</tspan>
+            <tspan font-size="11" x="-64.6666" y="39">SFW3500-8/1730</tspan>
+        </text>
+        <path d="M579.118 509.759 672.226 509.759 672.226 522.559 579.118 522.559Z" fill="#D9D9D9"
+              fill-rule="evenodd" />
+        <path d="M579.118 522.559 672.226 522.559 672.226 535.359 579.118 535.359Z" fill="#D9D9D9"
+              fill-rule="evenodd" />
+        <path d="M579.118 535.359 672.226 535.359 672.226 548.159 579.118 548.159Z" fill="#D9D9D9"
+              fill-rule="evenodd" />
+        <path d="M579.118 548.159 672.226 548.159 672.226 560.959 579.118 560.959Z" fill="#D9D9D9"
+              fill-rule="evenodd" />
+        <path d="M579.118 560.959 672.226 560.959 672.226 573.759 579.118 573.759Z" fill="#D9D9D9"
+              fill-rule="evenodd" />
+        <path d="M579.118 573.759 672.226 573.759 672.226 586.559 579.118 586.559Z" fill="#D9D9D9"
+              fill-rule="evenodd" />
+        <path d="M578.451 522.559 672.893 522.559" stroke="#000000" stroke-width="1.33333"
+              stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M578.451 535.359 672.893 535.359" stroke="#000000" stroke-width="1.33333"
+              stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M578.451 548.159 672.893 548.159" stroke="#000000" stroke-width="1.33333"
+              stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M578.451 560.959 672.893 560.959" stroke="#000000" stroke-width="1.33333"
+              stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M578.451 573.759 672.893 573.759" stroke="#000000" stroke-width="1.33333"
+              stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M579.118 509.092 579.118 587.226" stroke="#000000" stroke-width="1.33333"
+              stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M672.226 509.092 672.226 587.226" stroke="#000000" stroke-width="1.33333"
+              stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M578.451 509.759 672.893 509.759" stroke="#000000" stroke-width="1.33333"
+              stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <path d="M578.451 586.559 672.893 586.559" stroke="#000000" stroke-width="1.33333"
+              stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+        <g clip-path="url(#clip93)">
+            <text id="g500" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                  font-weight="700" font-size="10" transform="translate(582.897 520)">Р
+            </text>
+        </g>
+        <g clip-path="url(#clip94)">
+            <text id="g501" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                  font-weight="700" font-size="10" transform="translate(582.897 533)">Qвар
+            </text>
+        </g>
+        <g clip-path="url(#clip95)">
+            <text id="a500" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                  font-weight="700" font-size="10" transform="translate(582.897 545)">КИУМ
+            </text>
+        </g>
+        <g clip-path="url(#clip96)">
+            <text id="k500" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                  font-weight="700" font-size="10" transform="translate(582.897 558)">КПД
+            </text>
+        </g>
+        <g clip-path="url(#clip97)">
+            <text id="n500" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                  font-weight="700" font-size="10" transform="translate(582.897 571)">НА
+            </text>
+        </g>
+        <g clip-path="url(#clip98)">
+            <text id="w500" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                  font-weight="700" font-size="10" transform="translate(582.897 584)">Qвода
+            </text>
+        </g>
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+              font-weight="700" font-size="10" transform="translate(642.208 430)">В-Г-1
+        </text>
+        <g clip-path="url(#clip99)" filter="url(#fx20)" transform="translate(508 394)">
+            <g clip-path="url(#clip100)">
+                <path d="M7.50006 8.50006 236.033 9.43339" stroke="#6600CC" stroke-width="3"
+                      stroke-linejoin="round" stroke-miterlimit="10" fill="#FF0000"
+                      fill-rule="evenodd" />
+            </g>
+        </g>
+        <path d="M515.5 400.5 744.033 401.433" stroke="#6600CC" stroke-width="3" stroke-linejoin="round"
+              stroke-miterlimit="10" fill="#FF0000" fill-rule="evenodd" />
+        <rect x="500.5" y="345.5" width="283" height="249" stroke="#172C51" stroke-width="1.33333"
+              stroke-miterlimit="8" stroke-dasharray="5.33333 4" fill="none" />
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+              font-weight="700" font-size="11" transform="translate(587.164 363)">Ҳисорак МГЭС
+        </text>
+        <g clip-path="url(#clip101)" filter="url(#fx21)" transform="translate(522 322)">
+            <g clip-path="url(#clip102)">
+                <path d="M0 0 69.2207 0.806929" fill="#FF0000" fill-rule="evenodd"
+                      transform="matrix(-1.83697e-16 -1 -1 1.83697e-16 12.307 80.7207)" />
+                <path
+                    d="M0.0174848-1.4999 69.2382-0.692969 69.2032 2.30683-0.0174848 1.4999ZM-0.0524545 4.49969C-2.53757 4.47072-4.52866 2.43266-4.49969-0.0524545-4.47072-2.53757-2.43266-4.52866 0.0524545-4.49969 2.53757-4.47072 4.52866-2.43266 4.49969 0.0524545 4.47072 2.53757 2.43266 4.52866-0.0524545 4.49969ZM69.2731-3.69277C71.7582-3.6638 73.7493-1.62573 73.7204 0.859384 73.6914 3.3445 71.6533 5.33559 69.1682 5.30662 66.6831 5.27765 64.692 3.23959 64.721 0.754475 64.75-1.73064 66.788-3.72174 69.2731-3.69277Z"
+                    fill="#6600CC" transform="matrix(-1.83697e-16 -1 -1 1.83697e-16 12.307 80.7207)" />
+            </g>
+        </g>
+        <path d="M0 0 69.2207 0.806929" fill="#FF0000" fill-rule="evenodd"
+              transform="matrix(-1.83697e-16 -1 -1 1.83697e-16 534.307 400.721)" />
+        <path
+            d="M0.0174848-1.4999 69.2382-0.692969 69.2032 2.30683-0.0174848 1.4999ZM-0.0524545 4.49969C-2.53757 4.47072-4.52866 2.43266-4.49969-0.0524545-4.47072-2.53757-2.43266-4.52866 0.0524545-4.49969 2.53757-4.47072 4.52866-2.43266 4.49969 0.0524545 4.47072 2.53757 2.43266 4.52866-0.0524545 4.49969ZM69.2731-3.69277C71.7582-3.6638 73.7493-1.62573 73.7204 0.859384 73.6914 3.3445 71.6533 5.33559 69.1682 5.30662 66.6831 5.27765 64.692 3.23959 64.721 0.754475 64.75-1.73064 66.788-3.72174 69.2731-3.69277Z"
+            fill="#6600CC" transform="matrix(-1.83697e-16 -1 -1 1.83697e-16 534.307 400.721)" />
+        <g clip-path="url(#clip103)">
+            <g clip-path="url(#clip104)" filter="url(#fx22)" transform="translate(514 349)">
+                <g clip-path="url(#clip105)">
+                    <rect x="0" y="0" width="19" height="19" stroke="#6600CC" stroke-width="4"
+                          stroke-linejoin="round" stroke-miterlimit="10" fill="#FF0000"
+                          transform="matrix(1 0 0 -1 9 28)" />
+                </g>
+            </g>
+        </g>
+        <rect id="c7" x="0" y="0" width="19" height="19" stroke="#6600CC" stroke-width="3.66667"
+              stroke-linejoin="round" stroke-miterlimit="10" fill="#FFFFFF"
+              transform="matrix(1 0 0 -1 523 375)" />
+        <g clip-path="url(#clip106)" filter="url(#fx23)" transform="translate(714 322)">
+            <g clip-path="url(#clip107)">
+                <path d="M0 0 69.2207 0.806929" fill="#FF0000" fill-rule="evenodd"
+                      transform="matrix(-1.83697e-16 -1 -1 1.83697e-16 12.307 80.7207)" />
+                <path
+                    d="M0.0174848-1.4999 69.2382-0.692969 69.2032 2.30683-0.0174848 1.4999ZM-0.0524545 4.49969C-2.53757 4.47072-4.52866 2.43266-4.49969-0.0524545-4.47072-2.53757-2.43266-4.52866 0.0524545-4.49969 2.53757-4.47072 4.52866-2.43266 4.49969 0.0524545 4.47072 2.53757 2.43266 4.52866-0.0524545 4.49969ZM69.2731-3.69277C71.7582-3.6638 73.7493-1.62573 73.7204 0.859384 73.6914 3.3445 71.6533 5.33559 69.1682 5.30662 66.6831 5.27765 64.692 3.23959 64.721 0.754475 64.75-1.73064 66.788-3.72174 69.2731-3.69277Z"
+                    fill="#6600CC" transform="matrix(-1.83697e-16 -1 -1 1.83697e-16 12.307 80.7207)" />
+            </g>
+        </g>
+        <path d="M0 0 69.2207 0.806929" fill="#FF0000" fill-rule="evenodd"
+              transform="matrix(-1.83697e-16 -1 -1 1.83697e-16 726.307 400.721)" />
+        <path
+            d="M0.0174848-1.4999 69.2382-0.692969 69.2032 2.30683-0.0174848 1.4999ZM-0.0524545 4.49969C-2.53757 4.47072-4.52866 2.43266-4.49969-0.0524545-4.47072-2.53757-2.43266-4.52866 0.0524545-4.49969 2.53757-4.47072 4.52866-2.43266 4.49969 0.0524545 4.47072 2.53757 2.43266 4.52866-0.0524545 4.49969ZM69.2731-3.69277C71.7582-3.6638 73.7493-1.62573 73.7204 0.859384 73.6914 3.3445 71.6533 5.33559 69.1682 5.30662 66.6831 5.27765 64.692 3.23959 64.721 0.754475 64.75-1.73064 66.788-3.72174 69.2731-3.69277Z"
+            fill="#6600CC" transform="matrix(-1.83697e-16 -1 -1 1.83697e-16 726.307 400.721)" />
+        <g clip-path="url(#clip108)">
+            <g clip-path="url(#clip109)" filter="url(#fx24)" transform="translate(707 349)">
+                <g clip-path="url(#clip110)">
+                    <rect x="0" y="0" width="18" height="19" stroke="#6600CC" stroke-width="4"
+                          stroke-linejoin="round" stroke-miterlimit="10" fill="#FF0000"
+                          transform="matrix(1 0 0 -1 9 28)" />
+                </g>
+            </g>
+        </g>
+        <rect id="c8" x="0" y="0" width="18" height="19" stroke="#6600CC" stroke-width="3.66667"
+              stroke-linejoin="round" stroke-miterlimit="10" fill="#FFFFFF"
+              transform="matrix(1 0 0 -1 716 375)" />
+        <text fill="#828897" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+              font-weight="700" font-size="11" transform="translate(739.235 369)">В
+            <tspan font-size="11" x="7.16669" y="0">K</tspan>
+            <tspan font-size="11" x="15.5" y="0">-</tspan>
+            Л-2
+            <tspan font-size="11" x="-193.069" y="0">В</tspan>
+            <tspan font-size="11" x="-185.902" y="0">K</tspan>
+            <tspan font-size="11" x="-177.569" y="0">-</tspan>
+            Л-1
+        </text>
+        font-size="10" transform="translate(1199.72 52)">Н
+        </text>
+    </g>
+
+    <g clip-path="url(#clip117)" transform="matrix(0.000104987 0 0 0.000104987 1100 472)">
+        <g clip-path="url(#clip119)">
+            <use width="100%" height="100%" xlink:href="#img118"
+                 transform="matrix(6846.09 0 0 6846.09 -1 0)"></use>
+        </g>
+    </g>
+    <path d="M45.1576 101.126 128.757 101.126 128.757 114.717 45.1576 114.717Z" fill="#D9D9D9"
+          fill-rule="evenodd" />
+    <path d="M45.1576 114.717 128.757 114.717 128.757 128.308 45.1576 128.308Z" fill="#D9D9D9"
+          fill-rule="evenodd" />
+    <path d="M44.4909 114.717 129.424 114.717" stroke="#000000" stroke-width="1.33333"
+          stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+    <path d="M45.1576 100.459 45.1576 128.975" stroke="#000000" stroke-width="1.33333"
+          stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+    <path d="M128.757 100.459 128.757 128.975" stroke="#000000" stroke-width="1.33333"
+          stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+    <path d="M44.4909 101.126 129.424 101.126" stroke="#000000" stroke-width="1.33333"
+          stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+    <path d="M44.4909 128.308 129.424 128.308" stroke="#000000" stroke-width="1.33333"
+          stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+    <g clip-path="url(#clip120)">
+        <text id="b26" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+              font-weight="700" font-size="10" transform="translate(47.8243 111)">Р
+        </text>
+    </g>
+    <g clip-path="url(#clip121)">
+        <text id="b25" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+              font-weight="700" font-size="10" transform="translate(47.8243 125)">Р
+        </text>
+    </g>
+    <g clip-path="url(#clip122)" transform="matrix(0.000104987 0 0 0.000104987 120 102)">
+        <g clip-path="url(#clip124)" transform="matrix(1.16667 0 0 1 -0.125 0)">
+            <use width="100%" height="100%" xlink:href="#img123"
+                 transform="scale(1256.04 1256.04)"></use>
+        </g>
+    </g>
+    <g clip-path="url(#clip125)" transform="matrix(0.000104987 0 0 0.000104987 121 115)">
+        <g clip-path="url(#clip127)" transform="matrix(1 0 0 1.11429 0 -0.125)">
+            <use width="100%" height="100%" xlink:href="#img126"
+                 transform="scale(1221.15 1221.15)"></use>
+        </g>
+    </g>
+    <path d="M1051.42 100.172 1135.02 100.172 1135.02 113.763 1051.42 113.763Z" fill="#D9D9D9"
+          fill-rule="evenodd" />
+    <path d="M1051.42 113.763 1135.02 113.763 1135.02 127.354 1051.42 127.354Z" fill="#D9D9D9"
+          fill-rule="evenodd" />
+    <path d="M1050.76 113.763 1135.69 113.763" stroke="#000000" stroke-width="1.33333"
+          stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+    <path d="M1051.42 99.5054 1051.42 128.021" stroke="#000000" stroke-width="1.33333"
+          stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+    <path d="M1135.02 99.5054 1135.02 128.021" stroke="#000000" stroke-width="1.33333"
+          stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+    <path d="M1050.76 100.172 1135.69 100.172" stroke="#000000" stroke-width="1.33333"
+          stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+    <path d="M1050.76 127.354 1135.69 127.354" stroke="#000000" stroke-width="1.33333"
+          stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+    <g clip-path="url(#clip128)">
+        <text id="b22" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+              font-weight="700" font-size="10" transform="translate(1054.09 110)">Р
+        </text>
+    </g>
+    <g clip-path="url(#clip129)">
+        <text id="b21" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+              font-weight="700" font-size="10" transform="translate(1054.09 124)">Р
+        </text>
+    </g>
+    <g clip-path="url(#clip130)" transform="matrix(0.000104987 0 0 0.000104987 1127 101)">
+        <g clip-path="url(#clip131)" transform="scale(1 1.02857)">
+            <use width="100%" height="100%" xlink:href="#img123"
+                 transform="scale(1221.15 1221.15)"></use>
+        </g>
+    </g>
+    <g clip-path="url(#clip132)" transform="matrix(0.000104987 0 0 0.000104987 1127 114)">
+        <g clip-path="url(#clip133)" transform="scale(1 1.11429)">
+            <use width="100%" height="100%" xlink:href="#img126"
+                 transform="scale(1221.15 1221.15)"></use>
+        </g>
+    </g>
+    <path d="M1140.28 306.64 1223.88 306.64 1223.88 320.231 1140.28 320.231Z" fill="#D9D9D9"
+          fill-rule="evenodd" />
+    <path d="M1140.28 305.973 1140.28 320.898" stroke="#000000" stroke-width="1.33333"
+          stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+    <path d="M1223.88 305.973 1223.88 320.898" stroke="#000000" stroke-width="1.33333"
+          stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+    <path d="M1139.62 306.64 1224.55 306.64" stroke="#000000" stroke-width="1.33333"
+          stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+    <path d="M1139.62 320.231 1224.55 320.231" stroke="#000000" stroke-width="1.33333"
+          stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+    <g clip-path="url(#clip134)">
+        <text id="g70" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+              font-weight="700" font-size="10" transform="translate(1142.95 317)">Р
+        </text>
+    </g>
+    <g clip-path="url(#clip135)" transform="matrix(0.000104987 0 0 0.000104987 1216 307)">
+        <g clip-path="url(#clip136)" transform="matrix(1 0 0 1.02857 -1 0)">
+            <use width="100%" height="100%" xlink:href="#img126"
+                 transform="scale(1221.15 1221.15)"></use>
+        </g>
+    </g>
+    <path d="M149.103 145.036 226.2 145.036 226.2 157.836 149.103 157.836Z" fill="#D9D9D9"
+          fill-rule="evenodd" />
+    <path d="M149.103 144.37 149.103 158.503" stroke="#000000" stroke-width="1.33333"
+          stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+    <path d="M226.2 144.37 226.2 158.503" stroke="#000000" stroke-width="1.33333"
+          stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+    <path d="M148.436 145.036 226.866 145.036" stroke="#000000" stroke-width="1.33333"
+          stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+    <path d="M148.436 157.836 226.866 157.836" stroke="#000000" stroke-width="1.33333"
+          stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+    <g clip-path="url(#clip137)">
+        <text font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+              font-weight="700" font-size="10" transform="translate(152.882 155)">U = 110 кВ
+        </text>
+    </g>
+    <path d="M942.369 144.946 1019.47 144.946 1019.47 157.746 942.369 157.746Z" fill="#D9D9D9"
+          fill-rule="evenodd" />
+    <path d="M942.369 144.28 942.369 158.413" stroke="#000000" stroke-width="1.33333"
+          stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+    <path d="M1019.47 144.28 1019.47 158.413" stroke="#000000" stroke-width="1.33333"
+          stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+    <path d="M941.703 144.946 1020.13 144.946" stroke="#000000" stroke-width="1.33333"
+          stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+    <path d="M941.703 157.746 1020.13 157.746" stroke="#000000" stroke-width="1.33333"
+          stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+    <g clip-path="url(#clip138)">
+        <text font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+              font-weight="700" font-size="10" transform="translate(946.149 155)">U = 110 кВ
+        </text>
+    </g>
+    <path d="M32.566 338.164 109.663 338.164 109.663 350.964 32.566 350.964Z" fill="#D9D9D9"
+          fill-rule="evenodd" />
+    <path d="M32.566 337.497 32.566 351.631" stroke="#000000" stroke-width="1.33333"
+          stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+    <path d="M109.663 337.497 109.663 351.631" stroke="#000000" stroke-width="1.33333"
+          stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+    <path d="M31.8993 338.164 110.33 338.164" stroke="#000000" stroke-width="1.33333"
+          stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+    <path d="M31.8993 350.964 110.33 350.964" stroke="#000000" stroke-width="1.33333"
+          stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+    <g clip-path="url(#clip139)">
+        <text id="g3" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+              font-weight="700" font-size="10" transform="translate(36.3455 348)">U
+        </text>
+    </g>
+    <path d="M676.607 407.417 753.704 407.417 753.704 420.217 676.607 420.217Z" fill="#D9D9D9"
+          fill-rule="evenodd" />
+    <path d="M676.607 406.751 676.607 420.884" stroke="#000000" stroke-width="1.33333"
+          stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+    <path d="M753.704 406.751 753.704 420.884" stroke="#000000" stroke-width="1.33333"
+          stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+    <path d="M675.941 407.417 754.371 407.417" stroke="#000000" stroke-width="1.33333"
+          stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+    <path d="M675.941 420.217 754.371 420.217" stroke="#000000" stroke-width="1.33333"
+          stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+    <g clip-path="url(#clip140)">
+        <text id="g506" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+              font-weight="700" font-size="10" transform="translate(680.387 417)">U
+        </text>
+    </g>
+    <path d="M1039.99 313.995 1117.08 313.995 1117.08 326.795 1039.99 326.795Z" fill="#D9D9D9"
+          fill-rule="evenodd" />
+    <path d="M1039.99 313.328 1039.99 327.461" stroke="#000000" stroke-width="1.33333"
+          stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+    <path d="M1117.08 313.328 1117.08 327.461" stroke="#000000" stroke-width="1.33333"
+          stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+    <path d="M1039.32 313.995 1117.75 313.995" stroke="#000000" stroke-width="1.33333"
+          stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+    <path d="M1039.32 326.795 1117.75 326.795" stroke="#000000" stroke-width="1.33333"
+          stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+    <g clip-path="url(#clip141)">
+        <text id="g15" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+              font-weight="700" font-size="10" transform="translate(1043.77 324)">U
+        </text>
+    </g>
+    <path id="c1001"
+          d="M128.5 415C128.5 401.469 139.469 390.5 153 390.5 166.531 390.5 177.5 401.469 177.5 415 177.5 428.531 166.531 439.5 153 439.5 139.469 439.5 128.5 428.531 128.5 415Z"
+          stroke="#000000" stroke-width="1.33333" stroke-miterlimit="8" fill="#FFFFFF"
+          fill-rule="evenodd" />
+    <g clip-path="url(#clip142)">
+        <g clip-path="url(#clip143)">
+            <g clip-path="url(#clip144)">
+                <path
+                    d="M152.689 407.933 153.622 407.933 154.944 408.167 156.033 408.633 156.889 409.178 157.9 410.189 158.522 411.122 158.989 412.367 159.144 413.067 159.144 414.933 158.833 416.1 158.211 417.344 157.589 418.122 157.044 418.667 155.956 419.367 154.711 419.833 153.933 419.989 152.378 419.989 151.133 419.678 150.278 419.289 149.422 418.744 148.567 417.967 148.022 417.189 147.478 416.1 147.167 414.856 147.089 413.922 147.244 412.678 147.556 411.667 148.178 410.5 149.033 409.567 149.656 409.022 150.978 408.322 152.144 408.011Z" />
+                <path
+                    d="M153.156 394.089 154.011 394.089 155.489 394.322 156.967 394.789 158.211 395.411 159.144 396.033 159.922 396.733 160.856 397.667 161.711 398.911 162.333 400.156 162.8 401.556 163.033 402.722 163.111 403.344 163.111 404.822 162.878 406.3 162.489 407.622 161.867 408.944 161.089 410.033 160.933 410.033 160.311 408.944 159.378 407.856 158.522 407.078 157.433 406.378 156.267 405.833 154.944 405.444 153.156 405.211Z" />
+                <path
+                    d="M140.4 409.878 140.789 409.956 142.967 411.2 144.522 412.133 144.6 412.289 144.444 413.922 144.6 415.556 144.989 417.033 145.533 418.2 145.533 418.433 143.356 419.678 141.489 420.767 137.444 423.1 136.122 423.878 135.889 423.878 135.189 422.4 134.8 421.078 134.644 420.144 134.567 418.822 134.722 417.344 134.956 416.256 135.5 414.778 136.044 413.767 136.744 412.756 137.678 411.744 138.533 410.967 139.933 410.111Z" />
+                <path
+                    d="M160.7 418.433 161.089 418.511 162.956 419.6 169.022 423.1 170.344 423.878 170.189 424.267 169.644 425.044 168.944 425.9 168.4 426.444 167.233 427.3 165.989 428 164.511 428.544 163.344 428.778 162.878 428.856 160.544 428.856 159.378 428.622 158.133 428.233 156.811 427.611 155.878 426.989 155.878 422.322 156.578 422.011 157.9 421.311 158.833 420.611 159.922 419.522Z" />
+                <path
+                    d="M143.667 399.067 145.378 399.067 146.856 399.3 148.489 399.844 149.811 400.544 150.433 400.933 150.433 405.678 149.033 406.3 147.944 407 147.089 407.7 146.544 408.244 145.611 409.567 145.144 409.411 143.822 408.633 137.756 405.133 136.044 404.122 135.967 403.967 136.511 403.111 137.367 402.1 137.989 401.478 139.156 400.622 140.244 400 141.722 399.456 142.578 399.222Z" />
+                <path
+                    d="M147.167 420.533 147.478 420.611 148.644 421.467 149.967 422.089 151.211 422.478 152.144 422.633 153.078 422.711 153.156 422.789 153.156 433.833 151.989 433.833 150.433 433.522 149.111 433.056 147.711 432.278 146.7 431.5 145.922 430.8 145.144 429.867 144.367 428.622 143.744 427.222 143.356 425.744 143.2 424.344 143.2 423.489 143.278 422.789 145.222 421.7 146.544 420.922Z" />
+                <path
+                    d="M170.267 404.044 170.422 404.044 170.967 405.133 171.433 406.533 171.667 407.778 171.744 409.333 171.589 410.733 171.278 412.056 170.656 413.533 170.111 414.467 169.489 415.322 168.633 416.256 167.467 417.189 166.456 417.811 165.756 418.122 163.811 417.033 161.944 415.944 161.711 415.789 161.867 414.389 161.867 413.222 162.567 412.522 163.578 411.2 164.278 410.033 164.978 408.556 165.522 406.844 166.222 406.378 168.167 405.289 170.033 404.2Z" />
+            </g>
+        </g>
+    </g>
+    <path id="c5001"
+          d="M602.5 482C602.5 468.469 613.469 457.5 627 457.5 640.531 457.5 651.5 468.469 651.5 482 651.5 495.531 640.531 506.5 627 506.5 613.469 506.5 602.5 495.531 602.5 482Z"
+          stroke="#000000" stroke-width="1.33333" stroke-miterlimit="8" fill="#FFFFFF"
+          fill-rule="evenodd" />
+    <g clip-path="url(#clip145)">
+        <g clip-path="url(#clip146)">
+            <g clip-path="url(#clip147)">
+                <path
+                    d="M625.689 474.933 626.622 474.933 627.944 475.167 629.033 475.633 629.889 476.178 630.9 477.189 631.522 478.122 631.989 479.367 632.144 480.067 632.144 481.933 631.833 483.1 631.211 484.344 630.589 485.122 630.044 485.667 628.956 486.367 627.711 486.833 626.933 486.989 625.378 486.989 624.133 486.678 623.278 486.289 622.422 485.744 621.567 484.967 621.022 484.189 620.478 483.1 620.167 481.856 620.089 480.922 620.244 479.678 620.556 478.667 621.178 477.5 622.033 476.567 622.656 476.022 623.978 475.322 625.144 475.011Z" />
+                <path
+                    d="M626.156 461.089 627.011 461.089 628.489 461.322 629.967 461.789 631.211 462.411 632.144 463.033 632.922 463.733 633.856 464.667 634.711 465.911 635.333 467.156 635.8 468.556 636.033 469.722 636.111 470.344 636.111 471.822 635.878 473.3 635.489 474.622 634.867 475.944 634.089 477.033 633.933 477.033 633.311 475.944 632.378 474.856 631.522 474.078 630.433 473.378 629.267 472.833 627.944 472.444 626.156 472.211Z" />
+                <path
+                    d="M613.4 476.878 613.789 476.956 615.967 478.2 617.522 479.133 617.6 479.289 617.444 480.922 617.6 482.556 617.989 484.033 618.533 485.2 618.533 485.433 616.356 486.678 614.489 487.767 610.444 490.1 609.122 490.878 608.889 490.878 608.189 489.4 607.8 488.078 607.644 487.144 607.567 485.822 607.722 484.344 607.956 483.256 608.5 481.778 609.044 480.767 609.744 479.756 610.678 478.744 611.533 477.967 612.933 477.111Z" />
+                <path
+                    d="M633.7 485.433 634.089 485.511 635.956 486.6 642.022 490.1 643.344 490.878 643.189 491.267 642.644 492.044 641.944 492.9 641.4 493.444 640.233 494.3 638.989 495 637.511 495.544 636.344 495.778 635.878 495.856 633.544 495.856 632.378 495.622 631.133 495.233 629.811 494.611 628.878 493.989 628.878 489.322 629.578 489.011 630.9 488.311 631.833 487.611 632.922 486.522Z" />
+                <path
+                    d="M616.667 466.067 618.378 466.067 619.856 466.3 621.489 466.844 622.811 467.544 623.433 467.933 623.433 472.678 622.033 473.3 620.944 474 620.089 474.7 619.544 475.244 618.611 476.567 618.144 476.411 616.822 475.633 610.756 472.133 609.044 471.122 608.967 470.967 609.511 470.111 610.367 469.1 610.989 468.478 612.156 467.622 613.244 467 614.722 466.456 615.578 466.222Z" />
+                <path
+                    d="M620.167 487.533 620.478 487.611 621.644 488.467 622.967 489.089 624.211 489.478 625.144 489.633 626.078 489.711 626.156 489.789 626.156 500.833 624.989 500.833 623.433 500.522 622.111 500.056 620.711 499.278 619.7 498.5 618.922 497.8 618.144 496.867 617.367 495.622 616.744 494.222 616.356 492.744 616.2 491.344 616.2 490.489 616.278 489.789 618.222 488.7 619.544 487.922Z" />
+                <path
+                    d="M643.267 471.044 643.422 471.044 643.967 472.133 644.433 473.533 644.667 474.778 644.744 476.333 644.589 477.733 644.278 479.056 643.656 480.533 643.111 481.467 642.489 482.322 641.633 483.256 640.467 484.189 639.456 484.811 638.756 485.122 636.811 484.033 634.944 482.944 634.711 482.789 634.867 481.389 634.867 480.222 635.567 479.522 636.578 478.2 637.278 477.033 637.978 475.556 638.522 473.844 639.222 473.378 641.167 472.289 643.033 471.2Z" />
+            </g>
+        </g>
+    </g>
+    <path id="c2201"
+          d="M812.5 410C812.5 396.469 823.469 385.5 837 385.5 850.531 385.5 861.5 396.469 861.5 410 861.5 423.531 850.531 434.5 837 434.5 823.469 434.5 812.5 423.531 812.5 410Z"
+          stroke="#000000" stroke-width="1.33333" stroke-miterlimit="8" fill="#FFFFFF"
+          fill-rule="evenodd" />
+    <g clip-path="url(#clip148)">
+        <g clip-path="url(#clip149)">
+            <g clip-path="url(#clip150)">
+                <path
+                    d="M835.689 403.933 836.622 403.933 837.944 404.167 839.033 404.633 839.889 405.178 840.9 406.189 841.522 407.122 841.989 408.367 842.144 409.067 842.144 410.933 841.833 412.1 841.211 413.344 840.589 414.122 840.044 414.667 838.956 415.367 837.711 415.833 836.933 415.989 835.378 415.989 834.133 415.678 833.278 415.289 832.422 414.744 831.567 413.967 831.022 413.189 830.478 412.1 830.167 410.856 830.089 409.922 830.244 408.678 830.556 407.667 831.178 406.5 832.033 405.567 832.656 405.022 833.978 404.322 835.144 404.011Z" />
+                <path
+                    d="M836.156 390.089 837.011 390.089 838.489 390.322 839.967 390.789 841.211 391.411 842.144 392.033 842.922 392.733 843.856 393.667 844.711 394.911 845.333 396.156 845.8 397.556 846.033 398.722 846.111 399.344 846.111 400.822 845.878 402.3 845.489 403.622 844.867 404.944 844.089 406.033 843.933 406.033 843.311 404.944 842.378 403.856 841.522 403.078 840.433 402.378 839.267 401.833 837.944 401.444 836.156 401.211Z" />
+                <path
+                    d="M823.4 405.878 823.789 405.956 825.967 407.2 827.522 408.133 827.6 408.289 827.444 409.922 827.6 411.556 827.989 413.033 828.533 414.2 828.533 414.433 826.356 415.678 824.489 416.767 820.444 419.1 819.122 419.878 818.889 419.878 818.189 418.4 817.8 417.078 817.644 416.144 817.567 414.822 817.722 413.344 817.956 412.256 818.5 410.778 819.044 409.767 819.744 408.756 820.678 407.744 821.533 406.967 822.933 406.111Z" />
+                <path
+                    d="M843.7 414.433 844.089 414.511 845.956 415.6 852.022 419.1 853.344 419.878 853.189 420.267 852.644 421.044 851.944 421.9 851.4 422.444 850.233 423.3 848.989 424 847.511 424.544 846.344 424.778 845.878 424.856 843.544 424.856 842.378 424.622 841.133 424.233 839.811 423.611 838.878 422.989 838.878 418.322 839.578 418.011 840.9 417.311 841.833 416.611 842.922 415.522Z" />
+                <path
+                    d="M826.667 395.067 828.378 395.067 829.856 395.3 831.489 395.844 832.811 396.544 833.433 396.933 833.433 401.678 832.033 402.3 830.944 403 830.089 403.7 829.544 404.244 828.611 405.567 828.144 405.411 826.822 404.633 820.756 401.133 819.044 400.122 818.967 399.967 819.511 399.111 820.367 398.1 820.989 397.478 822.156 396.622 823.244 396 824.722 395.456 825.578 395.222Z" />
+                <path
+                    d="M830.167 416.533 830.478 416.611 831.644 417.467 832.967 418.089 834.211 418.478 835.144 418.633 836.078 418.711 836.156 418.789 836.156 429.833 834.989 429.833 833.433 429.522 832.111 429.056 830.711 428.278 829.7 427.5 828.922 426.8 828.144 425.867 827.367 424.622 826.744 423.222 826.356 421.744 826.2 420.344 826.2 419.489 826.278 418.789 828.222 417.7 829.544 416.922Z" />
+                <path
+                    d="M853.267 400.044 853.422 400.044 853.967 401.133 854.433 402.533 854.667 403.778 854.744 405.333 854.589 406.733 854.278 408.056 853.656 409.533 853.111 410.467 852.489 411.322 851.633 412.256 850.467 413.189 849.456 413.811 848.756 414.122 846.811 413.033 844.944 411.944 844.711 411.789 844.867 410.389 844.867 409.222 845.567 408.522 846.578 407.2 847.278 406.033 847.978 404.556 848.522 402.844 849.222 402.378 851.167 401.289 853.033 400.2Z" />
+            </g>
+        </g>
+    </g>
+    <path d="M236.295 495.491 319.894 495.491 319.894 509.082 236.295 509.082Z" fill="#D9D9D9"
+          fill-rule="evenodd" />
+    <path d="M236.295 494.824 236.295 509.748" stroke="#000000" stroke-width="1.33333"
+          stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+    <path d="M319.894 494.824 319.894 509.748" stroke="#000000" stroke-width="1.33333"
+          stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+    <path d="M235.628 495.491 320.561 495.491" stroke="#000000" stroke-width="1.33333"
+          stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+    <path d="M235.628 509.082 320.561 509.082" stroke="#000000" stroke-width="1.33333"
+          stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+    <g clip-path="url(#clip151)">
+        <text id="g34" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+              font-weight="700" font-size="10" transform="translate(238.961 505)">Р
+        </text>
+    </g>
+    <g clip-path="url(#clip152)" transform="matrix(0.000104987 0 0 0.000104987 312 496)">
+        <g clip-path="url(#clip153)" transform="scale(1 1.02857)">
+            <use width="100%" height="100%" xlink:href="#img123"
+                 transform="scale(1221.15 1221.15)"></use>
+        </g>
+    </g>
+    <path d="M356.111 495.491 439.71 495.491 439.71 509.082 356.111 509.082Z" fill="#D9D9D9"
+          fill-rule="evenodd" />
+    <path d="M356.111 494.824 356.111 509.748" stroke="#000000" stroke-width="1.33333"
+          stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+    <path d="M439.71 494.824 439.71 509.748" stroke="#000000" stroke-width="1.33333"
+          stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+    <path d="M355.444 495.491 440.377 495.491" stroke="#000000" stroke-width="1.33333"
+          stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+    <path d="M355.444 509.082 440.377 509.082" stroke="#000000" stroke-width="1.33333"
+          stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+    <g clip-path="url(#clip154)">
+        <text id="g58" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+              font-weight="700" font-size="10" transform="translate(358.778 505)">Р
+        </text>
+    </g>
+    <g clip-path="url(#clip155)" transform="matrix(0.000104987 0 0 0.000104987 431 496)">
+        <g clip-path="url(#clip156)" transform="matrix(1.16667 0 0 1 -0.25 0)">
+            <use width="100%" height="100%" xlink:href="#img123"
+                 transform="scale(1256.04 1256.04)"></use>
+        </g>
+    </g>
+    <path d="M923.797 494.461 1007.4 494.461 1007.4 508.052 923.797 508.052Z" fill="#D9D9D9"
+          fill-rule="evenodd" />
+    <path d="M923.797 493.795 923.797 508.719" stroke="#000000" stroke-width="1.33333"
+          stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+    <path d="M1007.4 493.795 1007.4 508.719" stroke="#000000" stroke-width="1.33333"
+          stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+    <path d="M923.131 494.461 1008.06 494.461" stroke="#000000" stroke-width="1.33333"
+          stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+    <path d="M923.131 508.052 1008.06 508.052" stroke="#000000" stroke-width="1.33333"
+          stroke-linejoin="round" stroke-miterlimit="10" fill="none" fill-rule="evenodd" />
+    <g clip-path="url(#clip157)">
+        <text id="g46" font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+              font-weight="700" font-size="10" transform="translate(926.464 504)">Р
+        </text>
+    </g>
+    <g clip-path="url(#clip158)" transform="matrix(0.000104987 0 0 0.000104987 999 495)">
+        <g clip-path="url(#clip159)" transform="matrix(1 0 0 1.02857 -1 -0.5)">
+            <use width="100%" height="100%" xlink:href="#img123"
+                 transform="scale(1221.15 1221.15)"></use>
+        </g>
+    </g>
+    <path
+        d="M9.50005 496C9.50005 490.753 13.7533 486.5 19.0001 486.5 24.2468 486.5 28.5001 490.753 28.5001 496 28.5001 501.247 24.2468 505.5 19.0001 505.5 13.7533 505.5 9.50005 501.247 9.50005 496Z"
+        stroke="#000000" stroke-width="1.33333" stroke-miterlimit="8" fill="#FF0000"
+        fill-rule="evenodd" />
+    <path
+        d="M9.50005 517C9.50005 511.753 13.7533 507.5 19.0001 507.5 24.2468 507.5 28.5001 511.753 28.5001 517 28.5001 522.247 24.2468 526.5 19.0001 526.5 13.7533 526.5 9.50005 522.247 9.50005 517Z"
+        stroke="#000000" stroke-width="1.33333" stroke-miterlimit="8" fill="#92D050"
+        fill-rule="evenodd" />
+    <text fill="#8A94AD" font-family="Calibri,Calibri_MSFontService,sans-serif" font-weight="700"
+          font-size="11" transform="translate(33.9591 498)">Ишда
+        <tspan font-size="11" x="-0.0827332" y="22">Захирада</tspan>
+    </text>
+    <path
+        d="M9 473.5C9 468.253 13.2533 464 18.5 464 23.7467 464 28 468.253 28 473.5 28 478.747 23.7467 483 18.5 483 13.2533 483 9 478.747 9 473.5Z"
+        stroke="#000000" stroke-width="2" stroke-miterlimit="8" fill="#FFFF00"
+        fill-rule="evenodd" />
+    <text fill="#8A94AD" font-family="Calibri,Calibri_MSFontService,sans-serif" font-weight="700"
+          font-size="11" transform="translate(33.8763 476)">Таъмирда
+        <tspan font-size="11" x="0.264885" y="-24">Aктив узатиш</tspan>
+        <tspan font-size="11" x="0.000106812" y="-47">Aктив қабул</tspan>
+    </text>
+    <g clip-path="url(#clip160)" transform="matrix(0.000104987 0 0 0.000104987 14 418)">
+        <g clip-path="url(#clip161)" transform="scale(1 1.07143)">
+            <use width="100%" height="100%" xlink:href="#img123"
+                 transform="scale(1953.85 1953.85)"></use>
+        </g>
+    </g>
+    <g clip-path="url(#clip162)" transform="matrix(0.000104987 0 0 0.000104987 14 440)">
+        <g clip-path="url(#clip163)" transform="matrix(1 0 0 1.07143 0 -0.25)">
+            <use width="100%" height="100%" xlink:href="#img126"
+                 transform="scale(1953.85 1953.85)"></use>
+        </g>
+    </g>
+    </g>
+</svg>

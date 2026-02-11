@@ -1,0 +1,209 @@
+<!-- Header with filters and add button -->
+<div class="flex flex-wrap justify-between items-center gap-4 mb-4">
+    <div class="flex flex-wrap items-center gap-3">
+        <div class="flex items-center gap-2">
+            <label class="text-sm text-surface-500">{{ 'GES_DETAIL.FILTERS.START_DATE' | translate }}:</label>
+            <p-datepicker
+                [(ngModel)]="startDate"
+                [showIcon]="true"
+                dateFormat="dd.mm.yy"
+                [placeholder]="'GES_DETAIL.FILTERS.SELECT_DATE' | translate"
+                (onSelect)="onDateRangeChange()"
+                (onClear)="onDateRangeChange()"
+                [showClear]="true">
+            </p-datepicker>
+        </div>
+        <div class="flex items-center gap-2">
+            <label class="text-sm text-surface-500">{{ 'GES_DETAIL.FILTERS.END_DATE' | translate }}:</label>
+            <p-datepicker
+                [(ngModel)]="endDate"
+                [showIcon]="true"
+                dateFormat="dd.mm.yy"
+                [placeholder]="'GES_DETAIL.FILTERS.SELECT_DATE' | translate"
+                (onSelect)="onDateRangeChange()"
+                (onClear)="onDateRangeChange()"
+                [showClear]="true">
+            </p-datepicker>
+        </div>
+    </div>
+    @if (canEdit) {
+        <button
+            pButton
+            (click)="openNew()">
+            <span>{{ 'GES_DETAIL.INCIDENTS.ADD' | translate }}</span>
+            <i pButtonIcon class="pi pi-plus ml-2"></i>
+        </button>
+    }
+</div>
+
+<!-- Table -->
+<p-table
+    #dt
+    [value]="data"
+    [loading]="loading"
+    [globalFilterFields]="['description', 'organization', 'created_by.name']"
+    [scrollable]="true"
+    scrollHeight="500px"
+    [sortField]="'incident_date'"
+    [sortOrder]="-1"
+    styleClass="p-datatable-sm p-datatable-gridlines">
+
+    <ng-template pTemplate="caption">
+        <div class="flex justify-end items-center">
+            <p-iconfield iconPosition="left">
+                <p-inputicon>
+                    <i class="pi pi-search"></i>
+                </p-inputicon>
+                <input
+                    pInputText
+                    type="text"
+                    [(ngModel)]="searchValue"
+                    (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                    [placeholder]="'COMMON.SEARCH' | translate"
+                    class="w-full" />
+            </p-iconfield>
+            @if (searchValue) {
+                <button
+                    type="button"
+                    class="ml-2"
+                    pButton
+                    severity="secondary"
+                    [outlined]="true"
+                    (click)="clear(dt)"
+                    [pTooltip]="'COMMON.CLEAR' | translate">
+                    <i pButtonIcon class="pi pi-times"></i>
+                </button>
+            }
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="header">
+        <tr>
+            <th pSortableColumn="incident_date" style="min-width: 150px">
+                {{ 'GES_DETAIL.INCIDENTS.DATE' | translate }}
+                <p-sortIcon field="incident_date"></p-sortIcon>
+            </th>
+            <th pSortableColumn="description" style="min-width: 300px">
+                {{ 'GES_DETAIL.INCIDENTS.DESCRIPTION' | translate }}
+                <p-sortIcon field="description"></p-sortIcon>
+            </th>
+            <th pSortableColumn="organization" style="min-width: 150px">
+                {{ 'GES_DETAIL.INCIDENTS.ORGANIZATION' | translate }}
+                <p-sortIcon field="organization"></p-sortIcon>
+            </th>
+            <th pSortableColumn="created_by.name" style="min-width: 150px">
+                {{ 'GES_DETAIL.COMMON.CREATED_BY' | translate }}
+                <p-sortIcon field="created_by.name"></p-sortIcon>
+            </th>
+            <th style="width: 80px">{{ 'GES_DETAIL.COMMON.FILES' | translate }}</th>
+            @if (canEdit) {
+                <th style="width: 100px">{{ 'COMMON.ACTIONS' | translate }}</th>
+            }
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-item>
+        <tr>
+            <td>{{ item.incident_date | date:'HH:mm dd.MM.yyyy' }}</td>
+            <td>{{ item.description }}</td>
+            <td>{{ item.organization || '—' }}</td>
+            <td>{{ item.created_by?.name || '—' }}</td>
+            <td>
+                @if (item.files && item.files.length > 0) {
+                    <button
+                        pButton
+                        [text]="true"
+                        severity="secondary"
+                        (click)="showFiles(item)"
+                        [pTooltip]="'GES_DETAIL.COMMON.VIEW_FILES' | translate">
+                        <i pButtonIcon class="pi pi-paperclip"></i>
+                        <span class="ml-1">{{ item.files.length }}</span>
+                    </button>
+                } @else {
+                    <span class="text-surface-400">—</span>
+                }
+            </td>
+            @if (canEdit) {
+                <td>
+                    <div class="flex gap-1">
+                        <button
+                            pButton
+                            [text]="true"
+                            [rounded]="true"
+                            severity="info"
+                            (click)="editItem(item)"
+                            [pTooltip]="'COMMON.EDIT' | translate">
+                            <i pButtonIcon class="pi pi-pencil"></i>
+                        </button>
+                        <button
+                            pButton
+                            [text]="true"
+                            [rounded]="true"
+                            severity="danger"
+                            (click)="deleteItem(item.id)"
+                            [pTooltip]="'COMMON.DELETE' | translate">
+                            <i pButtonIcon class="pi pi-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            }
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+        <tr>
+            <td [attr.colspan]="canEdit ? 6 : 5" class="text-center py-8">
+                <div class="text-surface-500">
+                    <i class="pi pi-inbox text-4xl mb-3 block opacity-50"></i>
+                    <div>{{ 'GES_DETAIL.INCIDENTS.NO_DATA' | translate }}</div>
+                </div>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+
+<!-- Add/Edit Dialog -->
+<app-dialog
+    [(visible)]="isFormOpen"
+    [header]="isEditMode ? ('GES_DETAIL.INCIDENTS.EDIT' | translate) : ('GES_DETAIL.INCIDENTS.ADD' | translate)"
+    [form]="form"
+    [submitting]="isLoading"
+    (save)="onSubmit()"
+    (cancel)="closeDialog()">
+    <form class="p-4" [formGroup]="form" (ngSubmit)="onSubmit()">
+        <app-date-picker
+            [label]="'GES_DETAIL.INCIDENTS.DATE' | translate"
+            formControlName="incident_time"
+            [submitted]="submitted"
+            [errorMessage]="'COMMON.FILL_REQUIRED' | translate">
+        </app-date-picker>
+
+        <app-textarea
+            [label]="'GES_DETAIL.INCIDENTS.DESCRIPTION' | translate"
+            formControlName="description"
+            [submitted]="submitted"
+            [errorMessage]="'COMMON.FILL_REQUIRED' | translate">
+        </app-textarea>
+
+        @if (isEditMode && currentItem?.files && (currentItem?.files?.length ?? 0) > 0) {
+            <app-file-list
+                [files]="currentItem?.files || []"
+                (removeFile)="removeExistingFile($event)">
+            </app-file-list>
+        }
+
+        <app-file-upload
+            [label]="isEditMode ? ('GES_DETAIL.COMMON.ADD_NEW_FILES' | translate) : ('GES_DETAIL.COMMON.ATTACH_FILES' | translate)"
+            [files]="selectedFiles"
+            (filesChange)="onFileSelect($event)"
+            (removeFile)="removeFile($event)">
+        </app-file-upload>
+    </form>
+</app-dialog>
+
+<!-- File Viewer Dialog -->
+<app-file-viewer
+    [(visible)]="showFilesDialog"
+    [header]="'GES_DETAIL.INCIDENTS.FILES' | translate"
+    [files]="selectedItemForFiles?.files || []">
+</app-file-viewer>

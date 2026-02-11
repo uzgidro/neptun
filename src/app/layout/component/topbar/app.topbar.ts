@@ -45,7 +45,7 @@ import { TranslateModule } from '@ngx-translate/core';
                 <i class="pi pi-bars"></i>
             </button>
             <a class="layout-topbar-logo" routerLink="/">
-                <img ngSrc="/images/logo-x.png" alt="" width="40" height="22" />
+                <img ngSrc="assets/images/logo-x.png" alt="" width="52" height="22" />
                 <span class="text-nowrap">
                     @if (authService.hasRole('admin')) {
                         {{ 'MENU.TABLET_ADMIN' | translate }}
