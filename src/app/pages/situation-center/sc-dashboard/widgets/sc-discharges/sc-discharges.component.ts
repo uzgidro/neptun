@@ -99,7 +99,7 @@ export class ScDischargesComponent implements OnInit, OnDestroy {
     }
 
     navigateToGes(id: number): void {
-        this.router.navigate(['/ges', id]);
+        this.router.navigate(['/plant', id]);
     }
 
     ngOnDestroy(): void {

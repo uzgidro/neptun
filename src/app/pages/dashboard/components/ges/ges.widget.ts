@@ -93,7 +93,7 @@ class GesWidget implements OnInit, OnDestroy {
     }
 
     openGesDetail(ges: Organization): void {
-        this.router.navigate(['/ges', ges.id]);
+        this.router.navigate(['/plant', ges.id]);
     }
 
     ngOnDestroy(): void {

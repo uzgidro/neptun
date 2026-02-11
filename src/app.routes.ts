@@ -97,7 +97,7 @@ export const appRoutes: Routes = [
             { path: 'lex-search', component: LexSearchComponent, canActivate: [raisGuard] },
             { path: 'calls', component: CallsComponent, canActivate: [raisGuard] },
             { path: 'company-news', component: CompanyNewsComponent, canActivate: [raisGuard] },
-            { path: 'ges/:id', component: GesDetailComponent, canActivate: [raisGuard] }
+            { path: 'plant/:id', component: GesDetailComponent, canActivate: [raisGuard] }
         ]
     },
     { path: 'dashboard', component: ScDashboardComponent, canActivate: [authGuard] },

@@ -176,7 +176,7 @@ export class ScShutdownsComponent implements OnInit, OnDestroy {
     }
 
     navigateToGes(organizationId: number): void {
-        this.router.navigate(['/ges', organizationId]);
+        this.router.navigate(['/plant', organizationId]);
     }
 
     openDetail(shutdown: ShutdownItem): void {
@@ -209,7 +209,7 @@ export class ScShutdownsComponent implements OnInit, OnDestroy {
 
     navigateToGesFromDialog(): void {
         if (this.selectedShutdown) {
-            this.router.navigate(['/ges', this.selectedShutdown.organizationId]);
+            this.router.navigate(['/plant', this.selectedShutdown.organizationId]);
             this.closeDetailDialog();
         }
     }

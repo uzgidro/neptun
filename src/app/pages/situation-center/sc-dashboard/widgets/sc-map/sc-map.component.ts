@@ -186,16 +186,11 @@ export class ScMapComponent implements OnDestroy {
             });
     }
 
-    private filterRegionData(
-        cascades: Organization[],
-        reservoirs: Reservoir[],
-        shutdownsDto: { ges: ShutdownDto[]; mini: ShutdownDto[]; micro: ShutdownDto[] },
-        regionOrgs: RegionOrganizations
-    ): RegionData {
+    private filterRegionData(cascades: Organization[], reservoirs: Reservoir[], shutdownsDto: { ges: ShutdownDto[]; mini: ShutdownDto[]; micro: ShutdownDto[] }, regionOrgs: RegionOrganizations): RegionData {
         // Filter clusters that have plants in the region
         const regionCascades: RegionCascade[] = cascades
-            .map(cascade => {
-                const filteredItems = (cascade.items || []).filter(item => regionOrgs.plants.includes(item.id));
+            .map((cascade) => {
+                const filteredItems = (cascade.items || []).filter((item) => regionOrgs.plants.includes(item.id));
                 if (filteredItems.length === 0) return null;
 
                 const totalPower = filteredItems.reduce((sum, item) => sum + (item.ascue_metrics?.active || 0), 0);
@@ -219,18 +214,14 @@ export class ScMapComponent implements OnDestroy {
             .filter((c): c is RegionCascade => c !== null);
 
         // Flatten clusters to get all plants
-        const regionPlants = regionCascades.flatMap(c => c.items);
+        const regionPlants = regionCascades.flatMap((c) => c.items);
 
         // Списания продукции (current_discharge > 0)
-        const discharges = regionPlants
-            .filter(item => (item.current_discharge || 0) > 0)
-            .map(item => ({ id: item.id, name: item.name, value: item.current_discharge || 0 }));
+        const discharges = regionPlants.filter((item) => (item.current_discharge || 0) > 0).map((item) => ({ id: item.id, name: item.name, value: item.current_discharge || 0 }));
 
         // Остановки линий (ended_at === null) - все типы заводов
         const allShutdowns = [...shutdownsDto.ges, ...shutdownsDto.mini, ...shutdownsDto.micro];
-        const shutdowns = allShutdowns
-            .filter(s => regionOrgs.plants.includes(s.organization_id))
-            .filter(s => s.ended_at === null);
+        const shutdowns = allShutdowns.filter((s) => regionOrgs.plants.includes(s.organization_id)).filter((s) => s.ended_at === null);
 
         // Водохранилища
         const filteredReservoirs = reservoirs.filter((r) => regionOrgs.reservoirs.includes(r.organization_id));
@@ -313,6 +304,6 @@ export class ScMapComponent implements OnDestroy {
 
     navigateToGes(id: number, event?: Event): void {
         event?.stopPropagation();
-        this.router.navigate(['/ges', id]);
+        this.router.navigate(['/plant', id]);
     }
 }

@@ -1,143 +1,221 @@
 import { Injectable } from '@angular/core';
-import { ApiService, BASE_URL } from '@/core/services/api.service';
-import { Observable } from 'rxjs';
-import { HttpParams } from '@angular/common/http';
+import { ApiService } from '@/core/services/api.service';
+import { Observable, of, delay } from 'rxjs';
 import { GesResponse, GesContact, GesShutdown, GesDischarge, GesIncident, GesVisit, TelemetryEnvelope, DateRangeParams, ASCUEMetrics } from '@/core/interfaces/ges';
 import { Department } from '@/core/interfaces/department';
 
-const GES = '/ges';
+const MOCK_GES_INFO: Record<number, GesResponse> = {
+    5: {
+        id: 5,
+        name: 'Молокозавод №1',
+        parent_organization_id: 1,
+        parent_organization: 'Производственный кластер "Центр"',
+        types: ['Молокозавод'],
+        items: []
+    },
+    6: {
+        id: 6,
+        name: 'Молокозавод №2',
+        parent_organization_id: 1,
+        parent_organization: 'Производственный кластер "Центр"',
+        types: ['Молокозавод'],
+        items: []
+    },
+    7: {
+        id: 7,
+        name: 'Молокозавод №3',
+        parent_organization_id: 2,
+        parent_organization: 'Производственный кластер "Восток"',
+        types: ['Молокозавод'],
+        items: []
+    },
+    10: {
+        id: 10,
+        name: 'Мини-цех "Восток"',
+        parent_organization_id: 2,
+        parent_organization: 'Производственный кластер "Восток"',
+        types: ['Мини-цех'],
+        items: []
+    }
+};
+
+function now(): string {
+    return new Date().toISOString();
+}
+
+function hoursAgo(h: number): string {
+    return new Date(Date.now() - h * 3600000).toISOString();
+}
 
 @Injectable({
     providedIn: 'root'
 })
 export class GesService extends ApiService {
-    // GET /ges/{id}
     getGesInfo(id: number): Observable<GesResponse> {
-        return this.http.get<GesResponse>(`${BASE_URL}${GES}/${id}`);
+        const info = MOCK_GES_INFO[id] ?? {
+            id,
+            name: `Молокозавод №${id}`,
+            parent_organization_id: 1,
+            parent_organization: 'Производственный кластер "Центр"',
+            types: ['Молокозавод'],
+            items: []
+        };
+        return of(info).pipe(delay(150));
     }
 
-    // GET /ges/{id}/departments
     getDepartments(id: number): Observable<Department[]> {
-        return this.http.get<Department[]>(`${BASE_URL}${GES}/${id}/departments`);
+        return of([
+            { id: 1, name: 'Производственный отдел', description: 'Основное производство', organization_id: id },
+            { id: 2, name: 'Отдел качества', description: 'Контроль качества продукции', organization_id: id },
+            { id: 3, name: 'Техническая служба', description: 'Обслуживание оборудования', organization_id: id }
+        ] as Department[]).pipe(delay(100));
     }
 
-    // GET /ges/{id}/contacts
     getContacts(id: number): Observable<GesContact[]> {
-        return this.http.get<GesContact[]>(`${BASE_URL}${GES}/${id}/contacts`);
+        return of([
+            { id: 1, name: 'Иванов И.И.', email: 'ivanov@example.com', phone: '+998901234567', ip_phone: '1001', dob: null, organization: null, department: { id: 1, name: 'Производственный отдел', description: '', organization_id: id }, position: { id: 1, description: 'Директор' }, icon: undefined },
+            { id: 2, name: 'Петров П.П.', email: 'petrov@example.com', phone: '+998901234568', ip_phone: '1002', dob: null, organization: null, department: { id: 2, name: 'Отдел качества', description: '', organization_id: id }, position: { id: 2, description: 'Технолог' }, icon: undefined },
+            { id: 3, name: 'Сидоров С.С.', email: 'sidorov@example.com', phone: '+998901234569', ip_phone: '1003', dob: null, organization: null, department: { id: 3, name: 'Техническая служба', description: '', organization_id: id }, position: { id: 3, description: 'Инженер' }, icon: undefined }
+        ] as GesContact[]).pipe(delay(150));
     }
 
-    // GET /ges/{id}/shutdowns?start_date&end_date
     getShutdowns(id: number, dateRange?: DateRangeParams): Observable<GesShutdown[]> {
-        let params = new HttpParams();
-        if (dateRange?.start_date) {
-            params = params.set('start_date', dateRange.start_date);
-        }
-        if (dateRange?.end_date) {
-            params = params.set('end_date', dateRange.end_date);
-        }
-        return this.http.get<GesShutdown[]>(`${BASE_URL}${GES}/${id}/shutdowns`, { params });
+        return of([
+            { id: 1, organization_id: id, organization_name: MOCK_GES_INFO[id]?.name ?? `Молокозавод №${id}`, started_at: hoursAgo(5), ended_at: hoursAgo(2), reason: 'Плановое техобслуживание линии пастеризации', created_by: { id: 1, name: 'Иванов И.И.' }, generation_loss: 1500, idle_discharge_volume: null, files: [] },
+            { id: 2, organization_id: id, organization_name: MOCK_GES_INFO[id]?.name ?? `Молокозавод №${id}`, started_at: hoursAgo(24), ended_at: hoursAgo(20), reason: 'Замена фильтра на линии розлива', created_by: { id: 2, name: 'Петров П.П.' }, generation_loss: 800, idle_discharge_volume: null, files: [] }
+        ] as GesShutdown[]).pipe(delay(150));
     }
 
-    // GET /ges/{id}/discharges?start_date&end_date
     getDischarges(id: number, dateRange?: DateRangeParams): Observable<GesDischarge[]> {
-        let params = new HttpParams();
-        if (dateRange?.start_date) {
-            params = params.set('start_date', dateRange.start_date);
-        }
-        if (dateRange?.end_date) {
-            params = params.set('end_date', dateRange.end_date);
-        }
-        return this.http.get<GesDischarge[]>(`${BASE_URL}${GES}/${id}/discharges`, { params });
+        return of([
+            { id: 1, organization: { id, name: MOCK_GES_INFO[id]?.name ?? `Молокозавод №${id}`, contacts: [] }, created_by: { id: 1, name: 'Иванов И.И.' }, approved_by: null, started_at: hoursAgo(3), ended_at: null, flow_rate: 25, total_volume: 150, reason: 'Истечение срока годности партии №1234', is_ongoing: true, approved: null, files: [] },
+            { id: 2, organization: { id, name: MOCK_GES_INFO[id]?.name ?? `Молокозавод №${id}`, contacts: [] }, created_by: { id: 2, name: 'Петров П.П.' }, approved_by: { id: 10, name: 'Менеджер Алиев А.А.' }, started_at: hoursAgo(8), ended_at: hoursAgo(5), flow_rate: 15, total_volume: 100, reason: 'Брак при производстве', is_ongoing: false, approved: true, files: [] }
+        ] as GesDischarge[]).pipe(delay(150));
     }
 
-    // GET /ges/{id}/incidents?start_date&end_date
     getIncidents(id: number, dateRange?: DateRangeParams): Observable<GesIncident[]> {
-        let params = new HttpParams();
-        if (dateRange?.start_date) {
-            params = params.set('start_date', dateRange.start_date);
-        }
-        if (dateRange?.end_date) {
-            params = params.set('end_date', dateRange.end_date);
-        }
-        return this.http.get<GesIncident[]>(`${BASE_URL}${GES}/${id}/incidents`, { params });
+        return of([
+            { id: 1, incident_date: hoursAgo(6), description: 'Сбой в системе охлаждения', organization_id: id, organization: MOCK_GES_INFO[id]?.name ?? `Молокозавод №${id}`, created_by: { id: 1, name: 'Иванов И.И.' }, files: [] }
+        ] as GesIncident[]).pipe(delay(150));
     }
 
-    // GET /ges/{id}/visits?start_date&end_date
     getVisits(id: number, dateRange?: DateRangeParams): Observable<GesVisit[]> {
-        let params = new HttpParams();
-        if (dateRange?.start_date) {
-            params = params.set('start_date', dateRange.start_date);
-        }
-        if (dateRange?.end_date) {
-            params = params.set('end_date', dateRange.end_date);
-        }
-        return this.http.get<GesVisit[]>(`${BASE_URL}${GES}/${id}/visits`, { params });
+        return of([
+            { id: 1, organization_id: id, organization_name: MOCK_GES_INFO[id]?.name ?? `Молокозавод №${id}`, visit_date: new Date().toISOString().split('T')[0], description: 'Плановая проверка', responsible_name: 'Каримов К.К.', created_by: { id: 1, name: 'Иванов И.И.' }, files: [] }
+        ] as GesVisit[]).pipe(delay(150));
     }
 
-    // GET /ges/{id}/telemetry
     getTelemetry(id: number): Observable<TelemetryEnvelope[]> {
-        return this.http.get<TelemetryEnvelope[]>(`${BASE_URL}${GES}/${id}/telemetry`);
+        const ts = now();
+        return of([
+            {
+                id: '1', station_id: String(id), station_name: MOCK_GES_INFO[id]?.name ?? `Молокозавод №${id}`, timestamp: ts,
+                device_id: '1', device_name: 'Производственная линия 1', device_group: 'generators',
+                values: [
+                    { name: 'active_power_kw', value: 4500, unit: 'kW', quality: 'good', severity: 'normal' },
+                    { name: 'reactive_power_kvar', value: 1200, unit: 'kVAr', quality: 'good', severity: 'normal' },
+                    { name: 'voltage_ab', value: 10.5, unit: 'kV', quality: 'good', severity: 'normal' },
+                    { name: 'voltage_bc', value: 10.4, unit: 'kV', quality: 'good', severity: 'normal' },
+                    { name: 'voltage_ca', value: 10.6, unit: 'kV', quality: 'good', severity: 'normal' },
+                    { name: 'current_a', value: 245, unit: 'A', quality: 'good', severity: 'normal' },
+                    { name: 'current_b', value: 248, unit: 'A', quality: 'good', severity: 'normal' },
+                    { name: 'current_c', value: 242, unit: 'A', quality: 'good', severity: 'normal' },
+                    { name: 'frequency', value: 50.01, unit: 'Hz', quality: 'good', severity: 'normal' },
+                    { name: 'power_factor', value: 0.96, unit: '', quality: 'good', severity: 'normal' }
+                ]
+            },
+            {
+                id: '2', station_id: String(id), station_name: MOCK_GES_INFO[id]?.name ?? `Молокозавод №${id}`, timestamp: ts,
+                device_id: '2', device_name: 'Производственная линия 2', device_group: 'generators',
+                values: [
+                    { name: 'active_power_kw', value: 3800, unit: 'kW', quality: 'good', severity: 'normal' },
+                    { name: 'reactive_power_kvar', value: 1050, unit: 'kVAr', quality: 'good', severity: 'normal' },
+                    { name: 'voltage_ab', value: 10.5, unit: 'kV', quality: 'good', severity: 'normal' },
+                    { name: 'voltage_bc', value: 10.5, unit: 'kV', quality: 'good', severity: 'normal' },
+                    { name: 'voltage_ca', value: 10.4, unit: 'kV', quality: 'good', severity: 'normal' },
+                    { name: 'current_a', value: 210, unit: 'A', quality: 'good', severity: 'normal' },
+                    { name: 'current_b', value: 212, unit: 'A', quality: 'good', severity: 'normal' },
+                    { name: 'current_c', value: 208, unit: 'A', quality: 'good', severity: 'normal' },
+                    { name: 'frequency', value: 50.00, unit: 'Hz', quality: 'good', severity: 'normal' },
+                    { name: 'power_factor', value: 0.95, unit: '', quality: 'good', severity: 'normal' }
+                ]
+            },
+            {
+                id: '3', station_id: String(id), station_name: MOCK_GES_INFO[id]?.name ?? `Молокозавод №${id}`, timestamp: ts,
+                device_id: '3', device_name: 'Производственная линия 3', device_group: 'generators',
+                values: [
+                    { name: 'active_power_kw', value: 0, unit: 'kW', quality: 'good', severity: 'normal' },
+                    { name: 'reactive_power_kvar', value: 0, unit: 'kVAr', quality: 'good', severity: 'normal' },
+                    { name: 'voltage_ab', value: 0, unit: 'kV', quality: 'good', severity: 'normal' },
+                    { name: 'frequency', value: 0, unit: 'Hz', quality: 'good', severity: 'normal' }
+                ]
+            }
+        ] as TelemetryEnvelope[]).pipe(delay(200));
     }
 
-    // GET /ges/{id}/telemetry/{device_id}
     getDeviceTelemetry(id: number, deviceId: string): Observable<TelemetryEnvelope> {
-        return this.http.get<TelemetryEnvelope>(`${BASE_URL}${GES}/${id}/telemetry/${deviceId}`);
+        return this.getTelemetry(id).pipe(delay(100)) as any;
     }
 
-    // GET /ges/{id}/askue
     getAskue(id: number): Observable<ASCUEMetrics> {
-        return this.http.get<ASCUEMetrics>(`${BASE_URL}${GES}/${id}/askue`);
+        return of({
+            active: 8.3,
+            reactive: 2.25,
+            power_import: 0,
+            power_export: 0.5,
+            own_needs: 0.3,
+            flow: 120,
+            active_agg_count: 2,
+            pending_agg_count: 1,
+            repair_agg_count: 0
+        }).pipe(delay(150));
     }
 
-    // CRUD операции для остановок
     addShutdown(gesId: number, formData: FormData): Observable<any> {
-        return this.http.post(`${BASE_URL}${GES}/${gesId}/shutdowns`, formData);
+        return of({ id: Date.now(), success: true }).pipe(delay(300));
     }
 
     editShutdown(gesId: number, shutdownId: number, formData: FormData): Observable<any> {
-        return this.http.patch(`${BASE_URL}${GES}/${gesId}/shutdowns/${shutdownId}`, formData);
+        return of({ id: shutdownId, success: true }).pipe(delay(300));
     }
 
     deleteShutdown(gesId: number, shutdownId: number): Observable<any> {
-        return this.http.delete(`${BASE_URL}${GES}/${gesId}/shutdowns/${shutdownId}`);
+        return of({ success: true }).pipe(delay(200));
     }
 
-    // CRUD операции для списаний
     addDischarge(gesId: number, formData: FormData): Observable<any> {
-        return this.http.post(`${BASE_URL}${GES}/${gesId}/discharges`, formData);
+        return of({ id: Date.now(), success: true }).pipe(delay(300));
     }
 
     editDischarge(gesId: number, dischargeId: number, formData: FormData): Observable<any> {
-        return this.http.patch(`${BASE_URL}${GES}/${gesId}/discharges/${dischargeId}`, formData);
+        return of({ id: dischargeId, success: true }).pipe(delay(300));
     }
 
     deleteDischarge(gesId: number, dischargeId: number): Observable<any> {
-        return this.http.delete(`${BASE_URL}${GES}/${gesId}/discharges/${dischargeId}`);
+        return of({ success: true }).pipe(delay(200));
     }
 
-    // CRUD операции для инцидентов
     addIncident(gesId: number, formData: FormData): Observable<any> {
-        return this.http.post(`${BASE_URL}${GES}/${gesId}/incidents`, formData);
+        return of({ id: Date.now(), success: true }).pipe(delay(300));
     }
 
     editIncident(gesId: number, incidentId: number, formData: FormData): Observable<any> {
-        return this.http.patch(`${BASE_URL}${GES}/${gesId}/incidents/${incidentId}`, formData);
+        return of({ id: incidentId, success: true }).pipe(delay(300));
     }
 
     deleteIncident(gesId: number, incidentId: number): Observable<any> {
-        return this.http.delete(`${BASE_URL}${GES}/${gesId}/incidents/${incidentId}`);
+        return of({ success: true }).pipe(delay(200));
     }
 
-    // CRUD операции для посещений
     addVisit(gesId: number, formData: FormData): Observable<any> {
-        return this.http.post(`${BASE_URL}${GES}/${gesId}/visits`, formData);
+        return of({ id: Date.now(), success: true }).pipe(delay(300));
     }
 
     editVisit(gesId: number, visitId: number, formData: FormData): Observable<any> {
-        return this.http.patch(`${BASE_URL}${GES}/${gesId}/visits/${visitId}`, formData);
+        return of({ id: visitId, success: true }).pipe(delay(300));
     }
 
     deleteVisit(gesId: number, visitId: number): Observable<any> {
-        return this.http.delete(`${BASE_URL}${GES}/${gesId}/visits/${visitId}`);
+        return of({ success: true }).pipe(delay(200));
     }
 }
