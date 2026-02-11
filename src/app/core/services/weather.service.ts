@@ -3,14 +3,11 @@ import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { ApiService } from '@/core/services/api.service';
 
-// Мок-данные погоды
 const MOCK_WEATHER = {
-    temperature: 22,
-    humidity: 65,
-    description: 'Ясно',
-    icon: 'sunny',
-    wind_speed: 3.5,
-    pressure: 1015
+    name: 'Demo City',
+    main: { temp: 22, humidity: 65, pressure: 1015 },
+    weather: [{ description: 'clear sky', icon: '01d' }],
+    wind: { speed: 3.5 }
 };
 
 @Injectable({

@@ -1,0 +1,145 @@
+<p-table
+    #dt
+    [value]="contacts"
+    [loading]="loading"
+    [globalFilterFields]="['name', 'position.description', 'department.name', 'phone', 'email']"
+    [scrollable]="true"
+    scrollHeight="500px"
+    styleClass="p-datatable-sm p-datatable-gridlines">
+
+    <ng-template pTemplate="caption">
+        <div class="flex justify-end items-center">
+            <p-iconfield iconPosition="left">
+                <p-inputicon>
+                    <i class="pi pi-search"></i>
+                </p-inputicon>
+                <input
+                    pInputText
+                    type="text"
+                    [(ngModel)]="searchValue"
+                    (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                    [placeholder]="'COMMON.SEARCH' | translate"
+                    class="w-full" />
+            </p-iconfield>
+            @if (searchValue) {
+                <button
+                    type="button"
+                    class="ml-2"
+                    pButton
+                    severity="secondary"
+                    [outlined]="true"
+                    (click)="clear(dt)"
+                    [pTooltip]="'COMMON.CLEAR' | translate">
+                    <i pButtonIcon class="pi pi-times"></i>
+                </button>
+            }
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="header">
+        <tr>
+            <th pSortableColumn="name" style="min-width: 200px">
+                {{ 'GES_DETAIL.CONTACTS.NAME' | translate }}
+                <p-sortIcon field="name"></p-sortIcon>
+            </th>
+            <th pSortableColumn="position.description" style="min-width: 180px">
+                {{ 'GES_DETAIL.CONTACTS.POSITION' | translate }}
+                <p-sortIcon field="position.description"></p-sortIcon>
+            </th>
+            <th pSortableColumn="department.name" style="min-width: 150px">
+                {{ 'GES_DETAIL.CONTACTS.DEPARTMENT' | translate }}
+                <p-sortIcon field="department.name"></p-sortIcon>
+            </th>
+            <th style="min-width: 140px">{{ 'GES_DETAIL.CONTACTS.PHONE' | translate }}</th>
+            <th style="min-width: 180px">{{ 'GES_DETAIL.CONTACTS.EMAIL' | translate }}</th>
+            <th style="width: 150px">{{ 'GES_DETAIL.CONTACTS.ACTIONS' | translate }}</th>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-contact>
+        <tr>
+            <td>
+                <div class="flex items-center gap-2">
+                    @if (contact.icon?.url) {
+                        <img
+                            [src]="contact.icon.url"
+                            [alt]="contact.name"
+                            class="w-8 h-8 rounded-full object-cover" />
+                    } @else {
+                        <div
+                            class="w-8 h-8 rounded-full bg-primary-100 text-primary-600 flex items-center justify-center">
+                            <span class="text-sm font-semibold">{{ contact.name?.charAt(0) }}</span>
+                        </div>
+                    }
+                    <span class="font-medium">{{ contact.name }}</span>
+                </div>
+            </td>
+            <td>{{ contact.position?.description || '—' }}</td>
+            <td>{{ contact.department?.name || '—' }}</td>
+            <td>
+                @if (contact.phone) {
+                    <a [href]="'tel:' + contact.phone" class="text-primary-600 hover:underline">
+                        {{ contact.phone }}
+                    </a>
+                } @else {
+                    <span class="text-surface-400">—</span>
+                }
+            </td>
+            <td>
+                @if (contact.email) {
+                    <a [href]="'mailto:' + contact.email" class="text-primary-600 hover:underline">
+                        {{ contact.email }}
+                    </a>
+                } @else {
+                    <span class="text-surface-400">—</span>
+                }
+            </td>
+            <td>
+                <div class="flex gap-2">
+                    @if (contact.phone) {
+                        <a
+                            pButton
+                            [outlined]="true"
+                            size="small"
+                            severity="secondary"
+                            [href]="'tel:' + contact.phone"
+                            [pTooltip]="'GES_DETAIL.CONTACTS.CALL' | translate">
+                            <i pButtonIcon class="pi pi-phone"></i>
+                        </a>
+                        <a
+                            pButton
+                            [outlined]="true"
+                            size="small"
+                            severity="secondary"
+                            [href]="'https://t.me/' + contact.phone"
+                            target="_blank"
+                            [pTooltip]="'Telegram'">
+                            <i pButtonIcon class="pi pi-telegram"></i>
+                        </a>
+                        <a
+                            pButton
+                            [outlined]="true"
+                            size="small"
+                            severity="secondary"
+                            [href]="'https://wa.me/' + contact.phone"
+                            target="_blank"
+                            [pTooltip]="'WhatsApp'">
+                            <i pButtonIcon class="pi pi-whatsapp"></i>
+                        </a>
+                    }
+                </div>
+            </td>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+        <tr>
+            <td colspan="6" class="text-center py-8">
+                <div class="text-surface-500">
+                    <i class="pi pi-users text-4xl mb-3 block opacity-50"></i>
+                    <div>{{ 'GES_DETAIL.CONTACTS.NO_CONTACTS' | translate }}</div>
+                </div>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>

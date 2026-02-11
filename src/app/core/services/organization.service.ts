@@ -17,11 +17,11 @@ export class OrganizationService extends ApiService {
         { id: 7, name: 'Молокозавод №3', parent_organization_id: 3, contacts: [{ id: 3, name: 'Сидоров Сергей Сергеевич', phone: '+998901234569' }], types: ['plant'] },
         { id: 8, name: 'Молокозавод №4', parent_organization_id: 3, contacts: [{ id: 4, name: 'Алиев Алишер Алиевич', phone: '+998901234570' }], types: ['plant'] },
         { id: 9, name: 'Молокозавод №5', parent_organization_id: 4, contacts: [{ id: 5, name: 'Каримов Камол Каримович', phone: '+998901234571' }], types: ['plant'] },
-        { id: 10, name: 'Мини-цех "Фергана"', parent_organization_id: 2, contacts: [], types: ['mini'] },
-        { id: 11, name: 'Мини-цех "Самарканд"', parent_organization_id: 3, contacts: [], types: ['mini'] },
-        { id: 12, name: 'Филиал "Бухара"', parent_organization_id: 4, contacts: [], types: ['branch'] },
-        { id: 13, name: 'Филиал "Навои"', parent_organization_id: 4, contacts: [], types: ['branch'] },
-        { id: 14, name: 'Филиал "Хорезм"', parent_organization_id: 4, contacts: [], types: ['branch'] }
+        { id: 10, name: 'Мини-цех "Восток"', parent_organization_id: 2, contacts: [], types: ['mini'] },
+        { id: 11, name: 'Мини-цех "Юг"', parent_organization_id: 3, contacts: [], types: ['mini'] },
+        { id: 12, name: 'Филиал "Запад-1"', parent_organization_id: 4, contacts: [], types: ['branch'] },
+        { id: 13, name: 'Филиал "Центр-2"', parent_organization_id: 4, contacts: [], types: ['branch'] },
+        { id: 14, name: 'Филиал "Запад-2"', parent_organization_id: 4, contacts: [], types: ['branch'] }
     ];
 
     getOrganizationsFlat(): Observable<Organization[]> {

@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
+import { Router } from '@angular/router';
 import { Subscription, interval } from 'rxjs';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { DashboardService } from '@/core/services/dashboard.service';
@@ -21,6 +22,7 @@ interface DischargeItem {
 export class ScDischargesComponent implements OnInit, OnDestroy {
     private dashboardService = inject(DashboardService);
     private translateService = inject(TranslateService);
+    private router = inject(Router);
     private refreshSubscription?: Subscription;
 
     discharges: DischargeItem[] = [];
@@ -51,9 +53,9 @@ export class ScDischargesComponent implements OnInit, OnDestroy {
         const items: DischargeItem[] = [];
 
         // Берём только детей (items), не родителей
-        cascades.forEach(cascade => {
+        cascades.forEach((cascade) => {
             if (cascade.items && cascade.items.length > 0) {
-                cascade.items.forEach(child => {
+                cascade.items.forEach((child) => {
                     if (child.current_discharge && child.current_discharge > 0) {
                         items.push({
                             id: child.id,
@@ -94,6 +96,10 @@ export class ScDischargesComponent implements OnInit, OnDestroy {
         if (value > 200) return 'high';
         if (value > 100) return 'medium';
         return 'low';
+    }
+
+    navigateToGes(id: number): void {
+        this.router.navigate(['/plant', id]);
     }
 
     ngOnDestroy(): void {

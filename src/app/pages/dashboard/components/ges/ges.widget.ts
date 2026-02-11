@@ -1,4 +1,5 @@
 import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Router } from '@angular/router';
 import { ButtonDirective, ButtonIcon } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { DecimalPipe, NgClass } from '@angular/common';
@@ -29,6 +30,7 @@ class GesWidget implements OnInit, OnDestroy {
 
     private dashboardService: DashboardService = inject(DashboardService);
     private translate: TranslateService = inject(TranslateService);
+    private router: Router = inject(Router);
     private refreshSubscription?: Subscription;
 
     @Input() expanded: boolean = false;
@@ -88,6 +90,10 @@ class GesWidget implements OnInit, OnDestroy {
     expandAll() {
         this.expanded = !this.expanded;
         this.expansionChange.emit(this.expanded);
+    }
+
+    openGesDetail(ges: Organization): void {
+        this.router.navigate(['/plant', ges.id]);
     }
 
     ngOnDestroy(): void {

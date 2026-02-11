@@ -100,87 +100,81 @@
 
 // Card 0 - Year (Green)
 .metric-card-0 {
-    background: linear-gradient(135deg, rgba(0, 255, 136, 0.1) 0%, rgba(0, 255, 136, 0.02) 100%);
-    border: 1px solid rgba(0, 255, 136, 0.25);
+    background: rgba(34, 197, 94, 0.06);
+    border: 1px solid rgba(34, 197, 94, 0.2);
 
     &::before {
         background: linear-gradient(90deg, var(--sc-neon-green), transparent);
     }
 
     &:hover {
-        border-color: rgba(0, 255, 136, 0.5);
-        box-shadow: 0 8px 32px rgba(0, 255, 136, 0.15);
+        border-color: rgba(34, 197, 94, 0.35);
+        box-shadow: 0 8px 32px rgba(34, 197, 94, 0.1);
     }
 
     .metric-icon-wrapper {
-        background: rgba(0, 255, 136, 0.15);
+        background: rgba(34, 197, 94, 0.1);
     }
 
     .metric-icon {
         color: var(--sc-neon-green);
-        text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
     }
 
     .metric-number {
         color: var(--sc-neon-green);
-        text-shadow: 0 0 8px rgba(0, 255, 136, 0.4);
     }
 }
 
 // Card 1 - Month (Cyan)
 .metric-card-1 {
-    background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 212, 255, 0.02) 100%);
-    border: 1px solid rgba(0, 212, 255, 0.25);
+    background: rgba(14, 165, 233, 0.06);
+    border: 1px solid rgba(14, 165, 233, 0.2);
 
     &::before {
         background: linear-gradient(90deg, var(--sc-neon-cyan), transparent);
     }
 
     &:hover {
-        border-color: rgba(0, 212, 255, 0.5);
-        box-shadow: 0 8px 32px rgba(0, 212, 255, 0.15);
+        border-color: rgba(14, 165, 233, 0.35);
+        box-shadow: 0 8px 32px rgba(14, 165, 233, 0.1);
     }
 
     .metric-icon-wrapper {
-        background: rgba(0, 212, 255, 0.15);
+        background: rgba(14, 165, 233, 0.1);
     }
 
     .metric-icon {
         color: var(--sc-neon-cyan);
-        text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
     }
 
     .metric-number {
         color: var(--sc-neon-cyan);
-        text-shadow: 0 0 8px rgba(0, 212, 255, 0.4);
     }
 }
 
 // Card 2 - Day (Yellow/Orange)
 .metric-card-2 {
-    background: linear-gradient(135deg, rgba(255, 211, 42, 0.1) 0%, rgba(255, 159, 67, 0.02) 100%);
-    border: 1px solid rgba(255, 211, 42, 0.25);
+    background: rgba(234, 179, 8, 0.06);
+    border: 1px solid rgba(234, 179, 8, 0.2);
 
     &::before {
         background: linear-gradient(90deg, var(--sc-neon-yellow), var(--sc-neon-orange));
     }
 
     &:hover {
-        border-color: rgba(255, 211, 42, 0.5);
-        box-shadow: 0 8px 32px rgba(255, 211, 42, 0.15);
+        border-color: rgba(234, 179, 8, 0.35);
+        box-shadow: 0 8px 32px rgba(234, 179, 8, 0.1);
     }
 
     .metric-icon-wrapper {
-        background: rgba(255, 211, 42, 0.15);
+        background: rgba(234, 179, 8, 0.1);
     }
 
     .metric-icon {
         color: var(--sc-neon-yellow);
-        text-shadow: 0 0 10px rgba(255, 211, 42, 0.5);
     }
 
     .metric-number {
         color: var(--sc-neon-yellow);
-        text-shadow: 0 0 8px rgba(255, 211, 42, 0.4);
     }
 }

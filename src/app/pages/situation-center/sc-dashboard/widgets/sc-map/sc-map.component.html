@@ -47,26 +47,31 @@
                                         <span>{{ cascade.name }}</span>
                                     </div>
                                     <div class="cascade-summary">
-                                        <span class="cascade-power">{{ cascade.totalPower | number:'1.1-1' }} МВт</span>
+                                        <span
+                                            class="cascade-power">{{ cascade.totalPower | number:'1.1-1' }} {{ 'SITUATION_CENTER.DASHBOARD.UNITS.MW' | translate }}</span>
                                     </div>
                                 </div>
                                 <div class="section-content">
                                     @for (ges of cascade.items; track ges.id) {
-                                        <div class="ges-item">
+                                        <div class="ges-item clickable" (click)="navigateToGes(ges.id, $event)">
                                             <div class="ges-header">
                                                 <span class="ges-name">{{ ges.name }}</span>
-                                                <span class="ges-power">{{ ges.ascue_metrics?.active || 0 | number:'1.1-1' }} МВт</span>
+                                                <span
+                                                    class="ges-power">{{ ges.ascue_metrics?.active || 0 | number:'1.1-1' }} {{ 'SITUATION_CENTER.DASHBOARD.UNITS.MW' | translate }}</span>
                                             </div>
                                             <div class="ges-aggregates">
-                                                <span class="agg working" title="Рабочие">
+                                                <span class="agg working"
+                                                      [title]="'SITUATION_CENTER.DASHBOARD.STATION_STATUS.STATUS_WORKING' | translate">
                                                     <i class="pi pi-bolt"></i>
                                                     {{ ges.ascue_metrics?.active_agg_count || 0 }}
                                                 </span>
-                                                <span class="agg reserve" title="В резерве">
+                                                <span class="agg reserve"
+                                                      [title]="'SITUATION_CENTER.DASHBOARD.STATION_STATUS.STATUS_IDLE' | translate">
                                                     <i class="pi pi-pause-circle"></i>
                                                     {{ ges.ascue_metrics?.pending_agg_count || 0 }}
                                                 </span>
-                                                <span class="agg repair" title="На ремонте">
+                                                <span class="agg repair"
+                                                      [title]="'SITUATION_CENTER.DASHBOARD.STATION_STATUS.STATUS_REPAIR' | translate">
                                                     <i class="pi pi-wrench"></i>
                                                     {{ ges.ascue_metrics?.repair_agg_count || 0 }}
                                                 </span>
@@ -93,8 +98,8 @@
                             </div>
                             @if (regionData.discharges.length > 0) {
                                 <div class="section-content">
-                                    @for (item of regionData.discharges; track item.name) {
-                                        <div class="data-row">
+                                    @for (item of regionData.discharges; track item.id) {
+                                        <div class="data-row clickable" (click)="navigateToGes(item.id, $event)">
                                             <span class="data-name">{{ item.name }}</span>
                                             <span class="data-value discharge">{{ item.value }} {{ 'SITUATION_CENTER.DASHBOARD.UNITS.M3_S' | translate }}</span>
                                         </div>
@@ -114,12 +119,15 @@
                             @if (regionData.shutdowns.length > 0) {
                                 <div class="section-content">
                                     @for (shutdown of regionData.shutdowns; track shutdown.id) {
-                                        <div class="shutdown-item">
+                                        <div class="shutdown-item clickable"
+                                             (click)="navigateToGes(shutdown.organization_id, $event)">
                                             <div class="shutdown-name">{{ shutdown.organization_name }}</div>
                                             @if (shutdown.reason) {
                                                 <div class="shutdown-reason">{{ shutdown.reason }}</div>
                                             }
-                                            <div class="shutdown-time">с {{ shutdown.started_at | date:'dd.MM.yyyy HH:mm' }}</div>
+                                            <div
+                                                class="shutdown-time">{{ 'SITUATION_CENTER.COMMON.FROM' | translate }} {{ shutdown.started_at | date:'dd.MM.yyyy HH:mm' }}
+                                            </div>
                                         </div>
                                     }
                                 </div>

@@ -1,31 +1,29 @@
 import { Injectable } from '@angular/core';
-import { ApiService, API_V3 } from '@/core/services/api.service';
-import { Observable } from 'rxjs';
+import { ApiService } from '@/core/services/api.service';
+import { Observable, of, delay } from 'rxjs';
 import { Contact } from '@/core/interfaces/contact';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ContactService extends ApiService {
-    private readonly endpoint = `${API_V3}/contacts`;
-
     getContacts(): Observable<Contact[]> {
-        return this.http.get<Contact[]>(this.endpoint);
+        return of([]).pipe(delay(100));
     }
 
     getContact(id: number): Observable<Contact> {
-        return this.http.get<Contact>(`${this.endpoint}/${id}`);
+        return of({ id, name: 'Контакт' } as Contact).pipe(delay(100));
     }
 
     createContact(formData: FormData): Observable<Contact> {
-        return this.http.post<Contact>(this.endpoint, formData);
+        return of({ id: Date.now(), name: '' } as Contact).pipe(delay(200));
     }
 
     updateContact(id: number, formData: FormData): Observable<Contact> {
-        return this.http.put<Contact>(`${this.endpoint}/${id}`, formData);
+        return of({ id, name: '' } as Contact).pipe(delay(200));
     }
 
     deleteContact(id: number): Observable<void> {
-        return this.http.delete<void>(`${this.endpoint}/${id}`);
+        return of(undefined as void).pipe(delay(200));
     }
 }

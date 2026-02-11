@@ -11,7 +11,7 @@ const MOCK_NEWS: TelegramNewsResponse = {
     messages: [
         {
             id: 1,
-            text: 'Молокозавод "Самарканд" увеличил производство на 15% по итогам квартала',
+            text: 'Молокозавод "Юг" увеличил производство на 15% по итогам квартала',
             date: new Date().toISOString(),
             views: 245,
             forwards: 12,
@@ -24,7 +24,7 @@ const MOCK_NEWS: TelegramNewsResponse = {
         },
         {
             id: 2,
-            text: 'Запуск новой производственной линии в кластере "Фергана"',
+            text: 'Запуск новой производственной линии в кластере "Восток"',
             date: new Date(Date.now() - 86400000).toISOString(),
             views: 189,
             forwards: 8,

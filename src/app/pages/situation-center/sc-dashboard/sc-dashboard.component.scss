@@ -1,40 +1,51 @@
-// Futuristic Situation Center Dashboard Styles
-// Based on "Smart Dairy Plant" reference design
+// Situation Center Dashboard Styles — Light Theme
 
 :host {
-    // Color Palette
-    --sc-bg-primary: #0a1628;
-    --sc-bg-secondary: #0d1b33;
-    --sc-bg-card: rgba(13, 27, 51, 0.8);
-    --sc-bg-card-hover: rgba(13, 27, 51, 0.95);
+    // Color Palette — Light
+    --sc-bg-primary: #f1f5f9;
+    --sc-bg-secondary: #ffffff;
+    --sc-bg-card: #ffffff;
+    --sc-bg-card-hover: #f8fafc;
 
-    // Neon Colors
-    --sc-neon-cyan: #00d4ff;
-    --sc-neon-blue: #00a8cc;
-    --sc-neon-green: #00ff88;
-    --sc-neon-red: #ff4757;
-    --sc-neon-yellow: #ffd32a;
-    --sc-neon-orange: #ff9f43;
-    --sc-neon-purple: #a855f7;
+    // Accent Colors
+    --sc-accent-blue: #3b82f6;
+    --sc-accent-sky: #0ea5e9;
+    --sc-accent-green: #22c55e;
+    --sc-accent-red: #ef4444;
+    --sc-accent-yellow: #f59e0b;
+    --sc-accent-orange: #f97316;
+    --sc-accent-purple: #a855f7;
+
+    // Legacy variable aliases for widgets
+    --sc-neon-cyan: var(--sc-accent-blue);
+    --sc-neon-blue: var(--sc-accent-sky);
+    --sc-neon-green: var(--sc-accent-green);
+    --sc-neon-red: var(--sc-accent-red);
+    --sc-neon-yellow: var(--sc-accent-yellow);
+    --sc-neon-orange: var(--sc-accent-orange);
+    --sc-neon-purple: var(--sc-accent-purple);
 
     // Text Colors
-    --sc-text-primary: #ffffff;
-    --sc-text-secondary: rgba(255, 255, 255, 0.7);
-    --sc-text-muted: rgba(255, 255, 255, 0.5);
+    --sc-text-primary: #0f172a;
+    --sc-text-secondary: #475569;
+    --sc-text-muted: #94a3b8;
 
     // Effects
-    --sc-glow-cyan: 0 0 20px rgba(0, 212, 255, 0.5);
-    --sc-glow-green: 0 0 20px rgba(0, 255, 136, 0.5);
-    --sc-glow-red: 0 0 20px rgba(255, 71, 87, 0.5);
-    --sc-glow-yellow: 0 0 20px rgba(255, 211, 42, 0.5);
+    --sc-glow-cyan: none;
+    --sc-glow-green: none;
+    --sc-glow-red: none;
+    --sc-glow-yellow: none;
 
     // Gradients
-    --sc-border-gradient: linear-gradient(135deg, var(--sc-neon-cyan), var(--sc-neon-blue));
-    --sc-card-gradient: linear-gradient(180deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 168, 204, 0.05) 100%);
+    --sc-border-gradient: linear-gradient(135deg, var(--sc-accent-blue), var(--sc-accent-sky));
+    --sc-card-gradient: none;
+
+    // Borders
+    --sc-border-color: #e2e8f0;
 
     // Sizes
-    --sc-border-radius: 8px;
-    --sc-card-padding: 12px;
+    --sc-border-radius: 12px;
+    --sc-card-padding: 14px;
 
     display: block;
     width: 100%;
@@ -49,11 +60,6 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
-
-    // Background pattern
-    background-image:
-        radial-gradient(ellipse at top, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
-        radial-gradient(ellipse at bottom right, rgba(0, 168, 204, 0.05) 0%, transparent 50%);
 }
 
 // Header Area
@@ -63,13 +69,13 @@
     margin-bottom: 12px;
 }
 
-// Main Grid Layout - Fixed height
+// Main Grid Layout
 .sc-grid {
     display: grid;
     grid-template-columns: 321px 1fr 321px;
     gap: 12px;
     flex: 1;
-    min-height: 0; // Important for flex child overflow
+    min-height: 0;
 
     @media (max-width: 1400px) {
         grid-template-columns: 293px 1fr 293px;
@@ -80,7 +86,7 @@
     }
 }
 
-// Column Layouts - Fill height
+// Column Layouts
 .sc-left-column,
 .sc-right-column {
     display: flex;
@@ -115,7 +121,7 @@
     max-height: 140px;
 }
 
-// Global Card Styles (to be used by widgets)
+// Global Card Styles
 :host ::ng-deep {
     .neon-card {
         background: var(--sc-bg-card);
@@ -123,67 +129,53 @@
         padding: var(--sc-card-padding);
         position: relative;
         overflow: hidden;
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(0, 212, 255, 0.2);
-        transition: all 0.3s ease;
+        border: 1px solid var(--sc-border-color);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+        transition: all 0.2s ease;
         height: 100%;
         display: flex;
         flex-direction: column;
 
-        // Gradient border effect
         &::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            height: 2px;
+            height: 3px;
             background: var(--sc-border-gradient);
-            opacity: 0.8;
+            opacity: 0.7;
         }
 
-        // Inner glow
+        // Remove inner glow
         &::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: var(--sc-card-gradient);
-            pointer-events: none;
-            border-radius: var(--sc-border-radius);
+            display: none;
         }
 
         &:hover {
-            border-color: rgba(0, 212, 255, 0.4);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         }
     }
 
-    // Neon Text Effects
+    // Text classes — no glow effects in light theme
     .neon-text {
-        color: var(--sc-neon-cyan);
-        text-shadow: 0 0 10px rgba(0, 212, 255, 0.8),
-                     0 0 20px rgba(0, 212, 255, 0.5),
-                     0 0 30px rgba(0, 212, 255, 0.3);
+        color: var(--sc-accent-blue);
+        font-weight: 700;
     }
 
     .neon-text-green {
-        color: var(--sc-neon-green);
-        text-shadow: 0 0 10px rgba(0, 255, 136, 0.8),
-                     0 0 20px rgba(0, 255, 136, 0.5);
+        color: var(--sc-accent-green);
+        font-weight: 700;
     }
 
     .neon-text-red {
-        color: var(--sc-neon-red);
-        text-shadow: 0 0 10px rgba(255, 71, 87, 0.8),
-                     0 0 20px rgba(255, 71, 87, 0.5);
+        color: var(--sc-accent-red);
+        font-weight: 700;
     }
 
     .neon-text-yellow {
-        color: var(--sc-neon-yellow);
-        text-shadow: 0 0 10px rgba(255, 211, 42, 0.8),
-                     0 0 20px rgba(255, 211, 42, 0.5);
+        color: var(--sc-accent-yellow);
+        font-weight: 700;
     }
 
     // Counter Digit
@@ -191,7 +183,7 @@
         display: inline-block;
         font-family: 'Courier New', monospace;
         font-weight: bold;
-        background: linear-gradient(180deg, var(--sc-neon-cyan) 0%, var(--sc-neon-blue) 100%);
+        background: linear-gradient(180deg, var(--sc-accent-blue) 0%, var(--sc-accent-sky) 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
@@ -218,29 +210,26 @@
         }
 
         &.status-active {
-            background: var(--sc-neon-red);
-            box-shadow: var(--sc-glow-red);
+            background: var(--sc-accent-red);
 
             &::after {
-                background: var(--sc-neon-red);
+                background: var(--sc-accent-red);
             }
         }
 
         &.status-stopped {
-            background: var(--sc-neon-green);
-            box-shadow: var(--sc-glow-green);
+            background: var(--sc-accent-green);
 
             &::after {
-                background: var(--sc-neon-green);
+                background: var(--sc-accent-green);
             }
         }
 
         &.status-repair {
-            background: var(--sc-neon-yellow);
-            box-shadow: var(--sc-glow-yellow);
+            background: var(--sc-accent-yellow);
 
             &::after {
-                background: var(--sc-neon-yellow);
+                background: var(--sc-accent-yellow);
             }
         }
     }
@@ -256,7 +245,7 @@
         }
     }
 
-    // Widget Title - Compact
+    // Widget Title
     .widget-title {
         font-size: 11px;
         font-weight: 600;
@@ -270,29 +259,28 @@
         flex-shrink: 0;
 
         .title-icon {
-            color: var(--sc-neon-cyan);
+            color: var(--sc-accent-blue);
             font-size: 14px;
         }
     }
 
-    // Scrollbar Styling
+    // Scrollbar
     ::-webkit-scrollbar {
         width: 4px;
         height: 4px;
     }
 
     ::-webkit-scrollbar-track {
-        background: rgba(0, 0, 0, 0.2);
+        background: #f1f5f9;
         border-radius: 2px;
     }
 
     ::-webkit-scrollbar-thumb {
-        background: var(--sc-neon-cyan);
+        background: #cbd5e1;
         border-radius: 2px;
-        opacity: 0.5;
 
         &:hover {
-            opacity: 1;
+            background: #94a3b8;
         }
     }
 

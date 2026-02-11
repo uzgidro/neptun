@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { Button } from 'primeng/button';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -8,6 +8,10 @@ import { ReservoirDeviceService } from '@/core/services/reservoir-device.service
 import { PatchReservoirDeviceSummaryItem, PatchReservoirDeviceSummaryRequest, ReservoirDeviceSummaryResponse } from '@/core/interfaces/reservoir-device';
 import { AuthService } from '@/core/services/auth.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { ScService } from '@/core/services/sc.service';
+import { HttpResponse } from '@angular/common/http';
+import { finalize } from 'rxjs';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-reservoir-device',
@@ -38,9 +42,16 @@ export class ReservoirDeviceComponent implements OnInit {
     'criterion_2'
   ];
 
+  @Input() date: Date | null = null;
+
   authService = inject(AuthService);
   private reservoirDeviceService = inject(ReservoirDeviceService);
+  private scService = inject(ScService);
   private messageService = inject(MessageService);
+
+  // Export
+  isExcelLoading = false;
+  isPdfLoading = false;
 
   ngOnInit(): void {
     this.loadDevices();
@@ -129,5 +140,37 @@ export class ReservoirDeviceComponent implements OnInit {
       },
       complete: () => (this.saving = false)
     });
+  }
+
+  get dateYMD(): string {
+    const date = this.date || new Date();
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+  }
+
+  download(format: 'excel' | 'pdf') {
+    if (format === 'excel') this.isExcelLoading = true;
+    else this.isPdfLoading = true;
+
+    const dateToUse = this.date || new Date();
+
+    this.scService
+      .downloadScReport(dateToUse, format)
+      .pipe(
+        finalize(() => {
+          this.isExcelLoading = false;
+          this.isPdfLoading = false;
+        })
+      )
+      .subscribe({
+        next: (response: HttpResponse<Blob>) => {
+          const extension = format === 'excel' ? 'xlsx' : 'pdf';
+          const filename = `sc_${this.dateYMD}.${extension}`;
+          saveAs(response.body!, filename);
+        },
+        error: (err: any) => {
+          console.error('Ошибка при скачивании:', err);
+          this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось скачать файл' });
+        }
+      });
   }
 }

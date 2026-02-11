@@ -10,7 +10,7 @@ const MOCK_PAST_EVENTS: DateGroup[] = [
         date: new Date().toISOString().split('T')[0],
         events: [
             { type: 'warning', date: new Date().toISOString(), description: 'Остановка линии №2 - плановое обслуживание', organization_id: 1, organization_name: 'Молокозавод №1', entity_type: 'shutdown', entity_id: 1 },
-            { type: 'info', date: new Date().toISOString(), description: 'Визит партнёров - делегация из Самарканда', organization_id: 1, organization_name: 'АО "МолокоПром"', entity_type: 'visit', entity_id: 2 }
+            { type: 'info', date: new Date().toISOString(), description: 'Визит партнёров - делегация из региона Юг', organization_id: 1, organization_name: 'АО "МолокоПром"', entity_type: 'visit', entity_id: 2 }
         ]
     }
 ];
@@ -20,7 +20,7 @@ const MOCK_EVENTS_BY_TYPE: PastEventsByTypeResponse = {
     type: 'shutdown',
     events: [
         { type: 'warning', date: new Date().toISOString(), description: 'Остановка линии №2', organization_id: 1, organization_name: 'Молокозавод №1' },
-        { type: 'danger', date: new Date().toISOString(), description: 'Аварийная остановка линии №3', organization_id: 2, organization_name: 'Филиал "Фергана"' }
+        { type: 'danger', date: new Date().toISOString(), description: 'Аварийная остановка линии №3', organization_id: 2, organization_name: 'Филиал "Восток"' }
     ]
 };
 

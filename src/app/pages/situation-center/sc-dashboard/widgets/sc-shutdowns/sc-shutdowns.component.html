@@ -5,7 +5,7 @@
     </div>
 
     <!-- Summary -->
-    <div class="shutdowns-summary">
+    <div class="shutdowns-summary" [class.blink-alarm]="activeShutdownsCount > 0">
         <div class="summary-item">
             <span class="summary-value color-red">{{ activeShutdownsCount }}</span>
             <span class="summary-label">{{ 'SITUATION_CENTER.DASHBOARD.SHUTDOWNS.SHUTDOWNS_COUNT' | translate }}</span>
@@ -20,34 +20,45 @@
     <!-- Shutdowns List -->
     <div class="shutdowns-list">
         @for (shutdown of shutdowns; track shutdown.id) {
-            <div class="shutdown-item" [class.completed]="!shutdown.isOngoing">
+            <div class="shutdown-item clickable" [class.completed]="!shutdown.isOngoing"
+                 (click)="openDetail(shutdown)">
                 <div class="shutdown-header">
                     <div class="station-info">
                         <div class="station-badges">
-                            <span class="station-type" [class]="getTypeClass(shutdown.stationType)">
-                                {{ getTypeLabel(shutdown.stationType) }}
-                            </span>
+                        <span class="station-type" [class]="getTypeClass(shutdown.stationType)">
+                            {{ getTypeLabel(shutdown.stationType) }}
+                        </span>
                             @if (!shutdown.isOngoing) {
                                 <span class="status-badge completed">
-                                    <i class="pi pi-check"></i>
+                            <i class="pi pi-check"></i>
                                     {{ 'SITUATION_CENTER.DASHBOARD.SHUTDOWNS.COMPLETED' | translate }}
-                                </span>
+                        </span>
                             }
+                            <span class="view-indicator" [class.viewed]="shutdown.viewed">
+                                <i class="pi" [class.pi-eye]="shutdown.viewed"
+                                   [class.pi-eye-slash]="!shutdown.viewed"></i>
+                            </span>
                         </div>
                         <span class="station-name">{{ shutdown.stationName }}</span>
                     </div>
                     <span class="downtime" [class.completed]="!shutdown.isOngoing">
-                        <i class="pi pi-clock"></i>
+                    <i class="pi pi-clock"></i>
                         {{ getDowntime(shutdown) }}
-                    </span>
+                </span>
                 </div>
                 <div class="shutdown-details">
-                    <span class="reason">{{ shutdown.reason || ('SITUATION_CENTER.DASHBOARD.SHUTDOWNS.NO_REASON' | translate) }}</span>
+                <span class="reason">{{
+                        shutdown.reason || ('SITUATION_CENTER.DASHBOARD.SHUTDOWNS.NO_REASON' |
+                            translate)
+                    }}</span>
                     @if (shutdown.lostGeneration) {
                         <span class="lost-generation">
-                            <i class="pi pi-bolt"></i>
-                            -{{ shutdown.lostGeneration | number:'1.1-1' }} {{ 'SITUATION_CENTER.DASHBOARD.UNITS.KWH' | translate }}
-                        </span>
+                    <i class="pi pi-bolt"></i>
+                    -{{ shutdown.lostGeneration | number:'1.1-1' }} {{
+                                'SITUATION_CENTER.DASHBOARD.UNITS.KWH' |
+                                    translate
+                            }}
+                </span>
                     }
                 </div>
             </div>
@@ -70,9 +81,97 @@
 
     <!-- Footer -->
     <div class="widget-footer">
-        <span class="last-updated">{{ 'SITUATION_CENTER.DASHBOARD.COMMON.LAST_UPDATE' | translate }} {{ getTimeAgo() }}</span>
+        <span class="last-updated">{{ 'SITUATION_CENTER.DASHBOARD.COMMON.LAST_UPDATE' | translate }} {{
+                getTimeAgo()
+            }}</span>
         <button class="refresh-btn" (click)="refresh()" [disabled]="loading">
             <i class="pi pi-refresh" [class.pi-spin]="loading"></i>
         </button>
     </div>
 </div>
+
+<!-- Detail Dialog -->
+<p-dialog [(visible)]="showDetailDialog"
+          [header]="'SITUATION_CENTER.DASHBOARD.SHUTDOWNS.DETAIL_TITLE' | translate"
+          [modal]="true"
+          [style]="{ width: '500px' }"
+          styleClass="shutdown-detail-dialog">
+    @if (selectedShutdown) {
+        <div class="shutdown-detail-content">
+            <div class="detail-row">
+                <span class="detail-label">{{ 'SITUATION_CENTER.SHUTDOWN.OBJECT_NAME' | translate }}</span>
+                <span class="detail-value">{{ selectedShutdown.stationName }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">{{ 'SITUATION_CENTER.DASHBOARD.SHUTDOWNS.TYPE_GES' | translate }}</span>
+                <span class="detail-value">
+                    <span class="station-type" [class]="getTypeClass(selectedShutdown.stationType)">
+                        {{ getTypeLabel(selectedShutdown.stationType) }}
+                    </span>
+                    @if (selectedShutdown.isOngoing) {
+                        <span
+                            class="ongoing-badge">{{ 'SITUATION_CENTER.DASHBOARD.SHUTDOWNS.ONGOING' | translate }}</span>
+                    }
+                </span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">{{ 'SITUATION_CENTER.COMMON.REASON' | translate }}</span>
+                <span
+                    class="detail-value">{{ selectedShutdown.reason || ('SITUATION_CENTER.DASHBOARD.SHUTDOWNS.NO_REASON' | translate) }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">{{ 'SITUATION_CENTER.COMMON.START' | translate }}</span>
+                <span class="detail-value">{{ selectedShutdown.startTime | date:'dd.MM.yyyy HH:mm' }}</span>
+            </div>
+            @if (selectedShutdown.endTime) {
+                <div class="detail-row">
+                    <span class="detail-label">{{ 'SITUATION_CENTER.COMMON.END' | translate }}</span>
+                    <span class="detail-value">{{ selectedShutdown.endTime | date:'dd.MM.yyyy HH:mm' }}</span>
+                </div>
+            }
+            @if (selectedShutdown.lostGeneration) {
+                <div class="detail-row">
+                    <span class="detail-label">{{ 'SITUATION_CENTER.SHUTDOWN.POWER_LOSS' | translate }}</span>
+                    <span
+                        class="detail-value">{{ selectedShutdown.lostGeneration | number:'1.1-1' }} {{ 'SITUATION_CENTER.DASHBOARD.UNITS.KWH' | translate }}</span>
+                </div>
+            }
+            @if (selectedShutdown.idleDischargeVolume) {
+                <div class="detail-row">
+                    <span class="detail-label">{{ 'SITUATION_CENTER.SHUTDOWN.IDLE_DISCHARGE' | translate }}</span>
+                    <span class="detail-value">{{ selectedShutdown.idleDischargeVolume | number:'1.1-1' }}</span>
+                </div>
+            }
+            @if (selectedShutdown.createdBy?.name) {
+                <div class="detail-row">
+                    <span class="detail-label">{{ 'SITUATION_CENTER.COMMON.CREATED_BY' | translate }}</span>
+                    <span class="detail-value">{{ selectedShutdown.createdBy!.name }}</span>
+                </div>
+            }
+            @if (selectedShutdown.files?.length) {
+                <div class="detail-row files-row">
+                    <button pButton
+                            [label]="('SITUATION_CENTER.COMMON.FILES' | translate) + ' (' + selectedShutdown.files!.length + ')'"
+                            icon="pi pi-paperclip"
+                            class="p-button-outlined p-button-sm"
+                            (click)="openFilesDialog()">
+                    </button>
+                </div>
+            }
+        </div>
+    }
+
+    <ng-template pTemplate="footer">
+        <button pButton
+                [label]="'SITUATION_CENTER.DASHBOARD.SHUTDOWNS.GO_TO_GES' | translate"
+                icon="pi pi-external-link"
+                class="p-button-primary"
+                (click)="navigateToGesFromDialog()">
+        </button>
+    </ng-template>
+</p-dialog>
+
+<app-file-viewer [(visible)]="showFilesDialog"
+                 [files]="selectedShutdown?.files || []"
+                 [header]="'SITUATION_CENTER.COMMON.FILES' | translate">
+</app-file-viewer>
