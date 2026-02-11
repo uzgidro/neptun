@@ -65,9 +65,9 @@
     align-items: center;
     gap: 8px;
     padding: 6px 8px;
-    background: rgba(255, 255, 255, 0.02);
+    background: #f8fafc;
     border-radius: 6px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--sc-border-color);
 }
 
 .legend-indicator {
@@ -108,7 +108,7 @@
 
 .legend-bar-container {
     height: 4px;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.06);
     border-radius: 2px;
     overflow: hidden;
 }
@@ -117,7 +117,6 @@
     height: 100%;
     border-radius: 2px;
     transition: width 0.5s ease;
-    box-shadow: 0 0 6px currentColor;
 }
 
 // Override PrimeNG chart canvas
@@ -136,9 +135,9 @@
     justify-content: space-between;
     align-items: center;
     padding: 10px 12px;
-    background: rgba(0, 212, 255, 0.08);
+    background: rgba(14, 165, 233, 0.06);
     border-radius: 6px;
-    border: 1px solid rgba(0, 212, 255, 0.15);
+    border: 1px solid rgba(14, 165, 233, 0.12);
     flex-shrink: 0;
 }
 
@@ -161,7 +160,7 @@
     align-items: center;
     justify-content: space-between;
     padding-top: 8px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 1px solid var(--sc-border-color);
     margin-top: auto;
     flex-shrink: 0;
 }
@@ -173,7 +172,7 @@
 
 .refresh-btn {
     background: transparent;
-    border: 1px solid rgba(0, 212, 255, 0.3);
+    border: 1px solid rgba(14, 165, 233, 0.3);
     border-radius: 6px;
     padding: 4px 8px;
     color: var(--sc-neon-cyan);
@@ -181,8 +180,8 @@
     transition: all 0.2s ease;
 
     &:hover:not(:disabled) {
-        background: rgba(0, 212, 255, 0.1);
-        border-color: rgba(0, 212, 255, 0.5);
+        background: rgba(14, 165, 233, 0.08);
+        border-color: rgba(14, 165, 233, 0.4);
     }
 
     &:disabled {

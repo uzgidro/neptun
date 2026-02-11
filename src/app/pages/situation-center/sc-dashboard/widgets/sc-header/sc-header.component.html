@@ -32,7 +32,7 @@
                     [class.muted]="alarmService.muted"
                     [class.has-active]="alarmService.hasActiveShutdowns"
                     (click)="alarmService.toggleMute()"
-                    [title]="alarmService.muted ? 'Включить сирену' : 'Выключить сирену'">
+                    [title]="(alarmService.muted ? 'SITUATION_CENTER.DASHBOARD.HEADER.ENABLE_ALARM' : 'SITUATION_CENTER.DASHBOARD.HEADER.DISABLE_ALARM') | translate">
                 <i class="pi" [class.pi-volume-up]="!alarmService.muted" [class.pi-volume-off]="alarmService.muted"></i>
             </button>
         }

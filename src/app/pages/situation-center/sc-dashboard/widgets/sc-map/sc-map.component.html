@@ -47,7 +47,8 @@
                                         <span>{{ cascade.name }}</span>
                                     </div>
                                     <div class="cascade-summary">
-                                        <span class="cascade-power">{{ cascade.totalPower | number:'1.1-1' }} МВт</span>
+                                        <span
+                                            class="cascade-power">{{ cascade.totalPower | number:'1.1-1' }} {{ 'SITUATION_CENTER.DASHBOARD.UNITS.MW' | translate }}</span>
                                     </div>
                                 </div>
                                 <div class="section-content">
@@ -55,18 +56,22 @@
                                         <div class="ges-item clickable" (click)="navigateToGes(ges.id, $event)">
                                             <div class="ges-header">
                                                 <span class="ges-name">{{ ges.name }}</span>
-                                                <span class="ges-power">{{ ges.ascue_metrics?.active || 0 | number:'1.1-1' }} МВт</span>
+                                                <span
+                                                    class="ges-power">{{ ges.ascue_metrics?.active || 0 | number:'1.1-1' }} {{ 'SITUATION_CENTER.DASHBOARD.UNITS.MW' | translate }}</span>
                                             </div>
                                             <div class="ges-aggregates">
-                                                <span class="agg working" title="Рабочие">
+                                                <span class="agg working"
+                                                      [title]="'SITUATION_CENTER.DASHBOARD.STATION_STATUS.STATUS_WORKING' | translate">
                                                     <i class="pi pi-bolt"></i>
                                                     {{ ges.ascue_metrics?.active_agg_count || 0 }}
                                                 </span>
-                                                <span class="agg reserve" title="В резерве">
+                                                <span class="agg reserve"
+                                                      [title]="'SITUATION_CENTER.DASHBOARD.STATION_STATUS.STATUS_IDLE' | translate">
                                                     <i class="pi pi-pause-circle"></i>
                                                     {{ ges.ascue_metrics?.pending_agg_count || 0 }}
                                                 </span>
-                                                <span class="agg repair" title="На ремонте">
+                                                <span class="agg repair"
+                                                      [title]="'SITUATION_CENTER.DASHBOARD.STATION_STATUS.STATUS_REPAIR' | translate">
                                                     <i class="pi pi-wrench"></i>
                                                     {{ ges.ascue_metrics?.repair_agg_count || 0 }}
                                                 </span>
@@ -120,7 +125,9 @@
                                             @if (shutdown.reason) {
                                                 <div class="shutdown-reason">{{ shutdown.reason }}</div>
                                             }
-                                            <div class="shutdown-time">с {{ shutdown.started_at | date:'dd.MM.yyyy HH:mm' }}</div>
+                                            <div
+                                                class="shutdown-time">{{ 'SITUATION_CENTER.COMMON.FROM' | translate }} {{ shutdown.started_at | date:'dd.MM.yyyy HH:mm' }}
+                                            </div>
                                         </div>
                                     }
                                 </div>

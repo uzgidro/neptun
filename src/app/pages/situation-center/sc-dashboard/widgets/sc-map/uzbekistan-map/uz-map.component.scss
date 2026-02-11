@@ -14,47 +14,35 @@
     pointer-events: all;
 }
 
-// Базовые стили для всех регионов
+// Base styles for all regions
 :host ::ng-deep svg path {
-    fill: rgba(0, 168, 204, 0.15);
-    stroke: #ffffff;
+    fill: rgba(59, 130, 246, 0.08);
+    stroke: #cbd5e1;
     stroke-width: 0.5;
     transition: all 0.3s ease;
-    filter:
-        drop-shadow(0 0 2px rgba(0, 212, 255, 1))
-        drop-shadow(0 0 10px rgba(0, 212, 255, 0.7));
 }
 
-// Кликабельные регионы - яркие
+// Clickable regions
 :host ::ng-deep svg path:not(#UZNW):not(#UZBU):not(#UZQR) {
-    fill: rgba(0, 212, 255, 0.2);
-    stroke: #ffffff;
+    fill: rgba(59, 130, 246, 0.08);
+    stroke: #cbd5e1;
     stroke-width: 1;
     cursor: pointer;
-    filter:
-        drop-shadow(0 0 3px rgba(0, 212, 255, 1))
-        drop-shadow(0 0 12px rgba(0, 212, 255, 0.8));
 
     &:hover {
-        fill: rgba(0, 212, 255, 0.35);
-        stroke: #ffffff;
+        fill: rgba(59, 130, 246, 0.15);
+        stroke: #94a3b8;
         stroke-width: 1.5;
-        filter:
-            drop-shadow(0 0 4px rgba(0, 212, 255, 1))
-            drop-shadow(0 0 18px rgba(0, 212, 255, 0.9));
     }
 }
 
-// Некликабельные регионы - тёмные (без объектов), но с яркой обводкой
+// Non-clickable regions (no objects) — lighter muted fill
 :host ::ng-deep svg path#UZNW,
 :host ::ng-deep svg path#UZBU,
 :host ::ng-deep svg path#UZQR {
-    fill: rgba(15, 20, 30, 0.85);
-    stroke: #ffffff;
+    fill: #f1f5f9;
+    stroke: #cbd5e1;
     stroke-width: 1;
     cursor: default;
     pointer-events: none;
-    filter:
-        drop-shadow(0 0 3px rgba(0, 212, 255, 1))
-        drop-shadow(0 0 12px rgba(0, 212, 255, 0.8));
 }

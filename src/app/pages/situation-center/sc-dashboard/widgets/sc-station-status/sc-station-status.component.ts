@@ -26,9 +26,9 @@ export class ScStationStatusComponent implements OnInit, OnDestroy {
     private refreshSubscription?: Subscription;
 
     statusData: StatusItem[] = [
-        { labelKey: 'SITUATION_CENTER.DASHBOARD.STATION_STATUS.STATUS_WORKING', value: 0, color: '#ff4757', cssClass: 'status-active' },
-        { labelKey: 'SITUATION_CENTER.DASHBOARD.STATION_STATUS.STATUS_IDLE', value: 0, color: '#00ff88', cssClass: 'status-stopped' },
-        { labelKey: 'SITUATION_CENTER.DASHBOARD.STATION_STATUS.STATUS_REPAIR', value: 0, color: '#ffd32a', cssClass: 'status-repair' }
+        { labelKey: 'SITUATION_CENTER.DASHBOARD.STATION_STATUS.STATUS_WORKING', value: 0, color: '#ef4444', cssClass: 'status-active' },
+        { labelKey: 'SITUATION_CENTER.DASHBOARD.STATION_STATUS.STATUS_IDLE', value: 0, color: '#22c55e', cssClass: 'status-stopped' },
+        { labelKey: 'SITUATION_CENTER.DASHBOARD.STATION_STATUS.STATUS_REPAIR', value: 0, color: '#f59e0b', cssClass: 'status-repair' }
     ];
 
     totalUnits = 0;
@@ -83,9 +83,9 @@ export class ScStationStatusComponent implements OnInit, OnDestroy {
         let power = 0;
 
         // Берём только детей (items), не родителей - чтобы избежать двойного подсчёта
-        cascades.forEach(cascade => {
+        cascades.forEach((cascade) => {
             if (cascade.items && cascade.items.length > 0) {
-                cascade.items.forEach(child => {
+                cascade.items.forEach((child) => {
                     if (child.ascue_metrics) {
                         active += child.ascue_metrics.active_agg_count || 0;
                         pending += child.ascue_metrics.pending_agg_count || 0;
@@ -125,11 +125,11 @@ export class ScStationStatusComponent implements OnInit, OnDestroy {
 
     private updateChart(): void {
         this.chartData = {
-            labels: this.statusData.map(s => this.translateService.instant(s.labelKey)),
+            labels: this.statusData.map((s) => this.translateService.instant(s.labelKey)),
             datasets: [
                 {
-                    data: this.statusData.map(s => s.value),
-                    backgroundColor: this.statusData.map(s => s.color),
+                    data: this.statusData.map((s) => s.value),
+                    backgroundColor: this.statusData.map((s) => s.color),
                     borderWidth: 0,
                     hoverOffset: 8
                 }

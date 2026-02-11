@@ -17,49 +17,13 @@ interface RegionOrganizations {
 }
 
 const REGION_ORGANIZATIONS: Record<string, RegionOrganizations> = {
-    'UZAN': {
-        reservoirs: [96],
-        plants: [62, 63, 65, 66, 67, 68, 69, 70, 71]
+    UZTO: {
+        reservoirs: [1],
+        plants: [11, 12]
     },
-    'UZNG': {
-        reservoirs: [],
-        plants: [75, 76, 77, 78, 79, 95]  // Кластер 74: заводы 75-79, Кластер 15: завод 42
-    },
-    'UZFA': {
-        reservoirs: [],
-        plants: [64, 72, 73]
-    },
-    'UZTO': {
-        reservoirs: [97, 100],
-        plants: [16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 28, 29, 30, 31, 36, 37, 38, 39, 40, 41, 88, 89, 90, 102]
-    },
-    'UZTK': {
-        reservoirs: [],
-        plants: [32, 33, 34, 35]
-    },
-    'UZSI': {
-        reservoirs: [43],
-        plants: [42]
-    },
-    'UZJI': {
-        reservoirs: [],
-        plants: [44, 45]
-    },
-    'UZSA': {
-        reservoirs: [],
-        plants: [46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61]
-    },
-    'UZQA': {
-        reservoirs: [98],
-        plants: [92, 93, 94]
-    },
-    'UZSU': {
-        reservoirs: [99],
-        plants: [80, 81, 82, 83, 84, 85, 86, 87]
-    },
-    'UZXO': {
-        reservoirs: [],
-        plants: [91]
+    UZAN: {
+        reservoirs: [2, 3],
+        plants: [21, 22]
     }
 };
 
