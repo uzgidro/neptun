@@ -1,8 +1,8 @@
-# Plan: GES Mnemonic Schema Viewer Component
+# Plan: Dairy Plant Mnemonic Schema Viewer Component
 
 ## Context
 
-The GES detail page has a `GesMnemonicComponent` that currently generates a simple grid of circles from telemetry data. We have 57 real SVG mnemonic diagrams in `src/assets/svg/` (named `ges-{orgId}-{name}.svg`) with ID-based data binding convention (`g509`, `a509`, `c509` etc.). The goal is to rewrite the component to load these real SVGs inline and bind live telemetry data to them, plus add a dedicated "Мнемосхема" tab to the GES detail page.
+The Dairy Plant detail page has a `GesMnemonicComponent` that currently generates a simple grid of circles from telemetry data. We have 57 real SVG mnemonic diagrams in `src/assets/svg/` (named `ges-{orgId}-{name}.svg`) with ID-based data binding convention (`g509`, `a509`, `c509` etc.). The goal is to rewrite the component to load these real SVGs inline and bind live telemetry data to them, plus add a dedicated "Мнемосхема" tab to the Dairy Plant detail page.
 
 The component is used in **two places**:
 
@@ -91,15 +91,15 @@ Add to all 4 i18n files:
 
 - `GES_DETAIL.TABS.MNEMONIC`: "Мнемосхема"
 - `GES_DETAIL.MNEMONIC.NO_SCHEMA`: "Мнемосхема не доступна для данной станции"
-- `GES_DETAIL.MNEMONIC.NO_SCHEMA_DESC`: "Схема для данной ГЭС ещё не загружена"
+- `GES_DETAIL.MNEMONIC.NO_SCHEMA_DESC`: "Схема для данного Молокозавода ещё не загружена"
 - `GES_DETAIL.MNEMONIC.LOAD_ERROR`: "Ошибка загрузки мнемосхемы"
 
 ## Verification
 
-1. Navigate to a GES that has an SVG (e.g. `/ges/62` — Андижон-1)
+1. Navigate to a Dairy Plant that has an SVG (e.g. `/ges/62` — Андижон-1)
     - Dashboard widget should show the real SVG instead of circles
     - Tab "Мнемосхема" should show the same SVG with toolbar
     - If telemetry is available, values should appear in SVG text elements
-2. Navigate to a GES without SVG (e.g. a station not in the registry)
+2. Navigate to a Dairy Plant without SVG (e.g. a station not in the registry)
     - Both dashboard widget and tab should show "Мнемосхема не доступна" placeholder
 3. Verify auto-refresh: wait 2 minutes on the mnemonic tab, telemetry should update

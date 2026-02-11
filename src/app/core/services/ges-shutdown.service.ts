@@ -24,7 +24,8 @@ export class GesShutdownService extends ApiService {
                     created_by: { id: 1, name: 'Оператор Иванов И.И.' },
                     generation_loss: 1500, // литров
                     created_at: new Date(today.getTime() - 3600000 * 5),
-                    idle_discharge_volume: null
+                    idle_discharge_volume: null,
+                    viewed: true
                 },
                 {
                     id: 2,
@@ -36,7 +37,8 @@ export class GesShutdownService extends ApiService {
                     created_by: { id: 2, name: 'Оператор Петров П.П.' },
                     generation_loss: 800,
                     created_at: new Date(today.getTime() - 3600000 * 8),
-                    idle_discharge_volume: null
+                    idle_discharge_volume: null,
+                    viewed: false
                 }
             ],
             // Мини-цеха
@@ -44,14 +46,15 @@ export class GesShutdownService extends ApiService {
                 {
                     id: 3,
                     organization_id: 10,
-                    organization_name: 'Мини-цех "Фергана"',
+                    organization_name: 'Мини-цех "Восток"',
                     started_at: new Date(today.getTime() - 3600000 * 2),
                     ended_at: new Date(today.getTime() - 3600000),
                     reason: 'Профилактика оборудования',
                     created_by: { id: 3, name: 'Техник Сидоров С.С.' },
                     generation_loss: 200,
                     created_at: new Date(today.getTime() - 3600000 * 2),
-                    idle_discharge_volume: null
+                    idle_discharge_volume: null,
+                    viewed: true
                 }
             ],
             // Филиалы
@@ -59,14 +62,15 @@ export class GesShutdownService extends ApiService {
                 {
                     id: 4,
                     organization_id: 12,
-                    organization_name: 'Филиал "Бухара"',
+                    organization_name: 'Филиал "Запад-1"',
                     started_at: new Date(today.getTime() - 3600000 * 4),
                     ended_at: new Date(today.getTime() - 3600000 * 3),
                     reason: 'Калибровка весового оборудования',
                     created_by: { id: 4, name: 'Инженер Каримов К.К.' },
                     generation_loss: 100,
                     created_at: new Date(today.getTime() - 3600000 * 4),
-                    idle_discharge_volume: null
+                    idle_discharge_volume: null,
+                    viewed: true
                 }
             ]
         };

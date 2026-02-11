@@ -1,8 +1,8 @@
-# План: Модуль новостей UzGidro
+# План: Модуль новостей МолокоПром
 
 ## Обзор
 
-Реализовать фронтенд модуль для отображения новостей UzGidro с API `prime.speedwagon.uz/news`.
+Реализовать фронтенд модуль для отображения новостей МолокоПром с API `api.example.com/news`.
 
 ## API (из docs/news.md)
 
@@ -16,10 +16,10 @@ Item: { id, uz, uztext, uzsmall, ru, rutext, rusmall, eng, engtext, engsmall, da
 
 ## Файлы для создания
 
-### 1. Интерфейсы: `src/app/core/interfaces/uzgidro-news.ts`
+### 1. Интерфейсы: `src/app/core/interfaces/company-news.ts`
 
 ```typescript
-export interface UzgidroNewsItem {
+export interface CompanyNewsItem {
     id: number;
     uz: string; ru: string; eng: string;           // заголовки
     uztext: string; rutext: string; engtext: string; // HTML текст
@@ -27,28 +27,28 @@ export interface UzgidroNewsItem {
     date: string; img: string; views: number;
 }
 
-export interface UzgidroNewsMeta {
+export interface CompanyNewsMeta {
     totalCount: number; pageCount: number; currentPage: number; perPage: number;
 }
 
-export interface UzgidroNewsResponse {
-    items: UzgidroNewsItem[];
-    _meta: UzgidroNewsMeta;
+export interface CompanyNewsResponse {
+    items: CompanyNewsItem[];
+    _meta: CompanyNewsMeta;
     _links: { self: { href: string }; next?: { href: string }; last: { href: string } };
 }
 ```
 
-### 2. Сервис: `src/app/core/services/uzgidro-news.service.ts`
+### 2. Сервис: `src/app/core/services/company-news.service.ts`
 
 - Наследует `ApiService`
-- Метод `getNews(page?: number): Observable<UzgidroNewsResponse>`
+- Метод `getNews(page?: number): Observable<CompanyNewsResponse>`
 - Хелпер для маппинга языков: `uz-latn/uz-cyrl → uz`, `en → eng`, `ru → ru`
 
-### 3. Компонент: `src/app/pages/uzgidro-news/`
+### 3. Компонент: `src/app/pages/company-news/`
 
-- `uzgidro-news.component.ts` - standalone, Angular 20 signals
-- `uzgidro-news.component.html` - сетка карточек, диалог деталей
-- `uzgidro-news.component.scss` - стили карточек
+- `company-news.component.ts` - standalone, Angular 20 signals
+- `company-news.component.html` - сетка карточек, диалог деталей
+- `company-news.component.scss` - стили карточек
 
 Функционал:
 
@@ -65,14 +65,14 @@ export interface UzgidroNewsResponse {
 Добавить импорт и маршрут:
 
 ```typescript
-import { UzgidroNewsComponent } from '@/pages/uzgidro-news/uzgidro-news.component';
+import { CompanyNewsComponent } from '@/pages/company-news/company-news.component';
 // ...
-{ path: 'uzgidro-news', component: UzgidroNewsComponent, canActivate: [raisGuard] },
+{ path: 'company-news', component: CompanyNewsComponent, canActivate: [raisGuard] },
 ```
 
 ### 5. Переводы: `src/assets/i18n/*.json`
 
-Добавить ключи `UZGIDRO_NEWS.*` в ru.json, en.json, uz-latn.json, uz-cyrl.json
+Добавить ключи `COMPANY_NEWS.*` в ru.json, en.json, uz-latn.json, uz-cyrl.json
 
 ## Референсы
 
@@ -84,5 +84,5 @@ import { UzgidroNewsComponent } from '@/pages/uzgidro-news/uzgidro-news.componen
 
 1. `ng serve` - запустить приложение
 2. Авторизоваться
-3. Перейти на `/uzgidro-news`
+3. Перейти на `/company-news`
 4. Проверить загрузку новостей, пагинацию, смену языка, открытие диалога

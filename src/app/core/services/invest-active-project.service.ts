@@ -28,8 +28,8 @@ export interface EditInvestActiveProjectRequest {
 
 // Мок-данные активных инвестиционных проектов
 const MOCK_ACTIVE_PROJECTS: InvestActiveProject[] = [
-    { id: 1, category: 'Модернизация', project_name: 'Расширение молокозавода "Самарканд"', foreign_partner: 'Tetra Pak', implementation_period: '2024-2026', capacity_mw: 50, production_mln_kwh: 180, cost_mln_usd: 25, status_text: 'В процессе', created_at: '2024-01-15' },
-    { id: 2, category: 'Строительство', project_name: 'Новый цех в кластере "Фергана"', foreign_partner: 'GEA Group', implementation_period: '2024-2025', capacity_mw: 30, production_mln_kwh: 110, cost_mln_usd: 15, status_text: 'Планируется', created_at: '2024-02-20' },
+    { id: 1, category: 'Модернизация', project_name: 'Расширение молокозавода "Юг"', foreign_partner: 'Tetra Pak', implementation_period: '2024-2026', capacity_mw: 50, production_mln_kwh: 180, cost_mln_usd: 25, status_text: 'В процессе', created_at: '2024-01-15' },
+    { id: 2, category: 'Строительство', project_name: 'Новый цех в кластере "Восток"', foreign_partner: 'GEA Group', implementation_period: '2024-2025', capacity_mw: 30, production_mln_kwh: 110, cost_mln_usd: 15, status_text: 'Планируется', created_at: '2024-02-20' },
     { id: 3, category: 'Закупка', project_name: 'Линия UHT-обработки', foreign_partner: 'SPX Flow', implementation_period: '2024', capacity_mw: 20, production_mln_kwh: 73, cost_mln_usd: 8, status_text: 'Согласование', created_at: '2024-03-10' }
 ];
 

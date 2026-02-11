@@ -43,7 +43,7 @@ import { CallsComponent } from '@/pages/calls/calls.component';
 import { InvestActiveProjectsComponent } from '@/pages/invest/invest-active-projects/invest-active-projects.component';
 import { ScDashboardComponent } from '@/pages/situation-center/sc-dashboard/sc-dashboard.component';
 import { GesDetailComponent } from '@/pages/situation-center/ges/ges-detail/ges-detail.component';
-import { UzgidroNewsComponent } from '@/pages/uzgidro-news/uzgidro-news.component';
+import { CompanyNewsComponent } from '@/pages/company-news/company-news.component';
 
 
 export const appRoutes: Routes = [
@@ -96,7 +96,7 @@ export const appRoutes: Routes = [
             { path: 'legal-documents', component: LegalDocumentsComponent, canActivate: [raisGuard] },
             { path: 'lex-search', component: LexSearchComponent, canActivate: [raisGuard] },
             { path: 'calls', component: CallsComponent, canActivate: [raisGuard] },
-            { path: 'uzgidro-news', component: UzgidroNewsComponent, canActivate: [raisGuard] },
+            { path: 'company-news', component: CompanyNewsComponent, canActivate: [raisGuard] },
             { path: 'ges/:id', component: GesDetailComponent, canActivate: [raisGuard] }
         ]
     },

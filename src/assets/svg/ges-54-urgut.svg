@@ -210,7 +210,7 @@
             transform="translate(1212.11 356)"
         >
             СШ-6-1
-            <tspan font-size="19" x="-568.709" y="-333">Ургут ГЭС</tspan>
+            <tspan font-size="19" x="-568.709" y="-333">Ургут Завод</tspan>
         </text>
         <rect id="c130410"
               x="0"
@@ -283,7 +283,7 @@
             font-size="11"
             transform="translate(284.101 132)"
         >
-            B-Ургут-ГЭС-2
+            B-Ургут-Завод-2
         </text>
         <path
             d="M1239.7 341.5 317.5 341.5"
@@ -568,7 +568,7 @@
             В
             <tspan font-size="11" x="7.16666" y="0">-</tspan>
             Ургутский
-            <tspan font-size="11" x="16.2467" y="13">ГЭС</tspan>
+            <tspan font-size="11" x="16.2467" y="13">Завод</tspan>
             <tspan font-size="11" x="37.9133" y="13">-</tspan>
             2
         </text>

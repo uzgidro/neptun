@@ -76,7 +76,7 @@ export class GesAggregatesComponent implements OnChanges {
 
                 return {
                     id: env.device_id,
-                    name: env.device_name || `Гидроагрегат ${env.device_id}`,
+                    name: env.device_name || `Производственная линия ${env.device_id}`,
                     status,
                     params
                 };

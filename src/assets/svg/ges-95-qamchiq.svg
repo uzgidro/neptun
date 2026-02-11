@@ -969,7 +969,7 @@
             <tspan x="-221.263" y="-30">4000 кВА</tspan>
             <tspan x="-240.43" y="-17">S11-4000/38,5</tspan>
             <tspan x="-211.825" y="-99">В-Т-3-35</tspan>
-            <tspan x="-509.79" y="-200">В-35 Л-ГЭС Камчик-1</tspan>
+            <tspan x="-509.79" y="-200">В-35 Л-Завод Камчик-1</tspan>
         </text>
         <g clip-path="url(#clip1)">
             <g clip-path="url(#clip3)" transform="translate(823 399)">
@@ -1012,7 +1012,7 @@
             transform="translate(151.013 84)"
         >
             В-Л-Эртош-1
-            <tspan x="663.414" y="88">В-35 Л-ГЭС Камчик-2</tspan>
+            <tspan x="663.414" y="88">В-35 Л-Завод Камчик-2</tspan>
             <tspan x="709.802" y="0">В-Л-Эртош-2</tspan>
         </text>
         <path id="c4172"
@@ -1065,7 +1065,7 @@
             <tspan x="-982.131" y="-340">Л-Навгарзан-1</tspan>
             <tspan x="-281.682" y="-348">Л-Навгарзан-2</tspan>
             <tspan font-weight="700" font-size="17" x="-737.888" y="-362">
-                Қамчиқ ГЭС-42 бир чизиқли схемаси
+                Завод-95 Завод-42 бир чизиқли схемаси
             </tspan>
         </text>
         <g clip-path="url(#clip7)">

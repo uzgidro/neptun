@@ -1,5 +1,5 @@
 // News grid
-.uzgidro-news-grid {
+.company-news-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     gap: 1.5rem;
@@ -87,8 +87,8 @@
     }
 }
 
-// UzGidro badge
-.uzgidro-badge {
+// Company badge
+.company-badge {
     position: absolute;
     top: 12px;
     left: 12px;
@@ -188,7 +188,7 @@
 
 // Detail dialog
 ::ng-deep {
-    .uzgidro-news-detail-dialog {
+    .company-news-detail-dialog {
         .p-dialog-content {
             padding: 1.5rem;
         }
@@ -262,7 +262,7 @@
 }
 
 @media (max-width: 640px) {
-    .uzgidro-news-grid {
+    .company-news-grid {
         grid-template-columns: 1fr;
         gap: 1rem;
     }
@@ -271,7 +271,7 @@
         height: 160px;
     }
 
-    .uzgidro-badge {
+    .company-badge {
         padding: 4px 8px;
         font-size: 0.75rem;
 

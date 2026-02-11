@@ -178,7 +178,7 @@
             font-size="11"
             transform="translate(312.138 85)"
         >
-            ГЭС1
+            Завод1
         </text>
         <text
             fill="#828897"
@@ -196,7 +196,7 @@
             font-size="11"
             transform="translate(342.638 85)"
         >
-            ГЭС3
+            Завод3
         </text>
         <text
             fill="#828897"
@@ -466,7 +466,7 @@
             font-size="19"
             transform="translate(646.821 23)"
         >
-            (ГЭС
+            (Завод
         </text>
         <text
             fill="#828897"
@@ -2402,7 +2402,7 @@
             font-size="11"
             transform="translate(810.935 273)"
         >
-            Микро ГЭС
+            Микро Завод
         </text>
         <text
             fill="#828897"

@@ -221,7 +221,7 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
         if (this.isEditMode && this.currentDischargeId) {
             this.dischargeService.editDischarge(this.currentDischargeId, formData).subscribe({
                 next: () => {
-                    this.messageService.add({ severity: 'success', summary: 'Успешно', detail: 'Запись о водосбросе обновлена' });
+                    this.messageService.add({ severity: 'success', summary: 'Успешно', detail: 'Запись о списании обновлена' });
                     this.closeDialog();
                 },
                 error: (err) => {
@@ -236,7 +236,7 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
         } else {
             this.dischargeService.addDischarge(formData).subscribe({
                 next: () => {
-                    this.messageService.add({ severity: 'success', summary: 'Успешно', detail: 'Новая запись о водосбросе добавлена' });
+                    this.messageService.add({ severity: 'success', summary: 'Успешно', detail: 'Новая запись о списании добавлена' });
                     this.closeDialog();
                 },
                 error: (err) => {
@@ -310,14 +310,14 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
     }
 
     deleteDischarge(discharge: IdleDischargeResponse) {
-        if (confirm('Вы уверены, что хотите удалить этот водосброс?')) {
+        if (confirm('Вы уверены, что хотите удалить это списание?')) {
             this.dischargeService.deleteDischarge(discharge.id).subscribe({
                 next: () => {
-                    this.messageService.add({ severity: 'success', summary: 'Водосброс удален' });
+                    this.messageService.add({ severity: 'success', summary: 'Списание удалено' });
                     this.loadDischarges();
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка удаления водосброса', detail: err.message });
+                    this.messageService.add({ severity: 'error', summary: 'Ошибка удаления списания', detail: err.message });
                 }
             });
         }
@@ -367,7 +367,7 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
             .subscribe({
                 next: (response: HttpResponse<Blob>) => {
                     const extension = format === 'excel' ? 'xlsx' : 'pdf';
-                    const filename = `Холостые_сбросы_${this.dateYMD}.${extension}`;
+                    const filename = `Списания_продукции_${this.dateYMD}.${extension}`;
                     saveAs(response.body!, filename);
                 },
                 error: (err: any) => {

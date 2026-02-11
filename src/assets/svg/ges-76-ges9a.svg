@@ -231,7 +231,7 @@
             font-size="19"
             transform="translate(512.191 22)"
         >
-            КФК КГЭСлар какади
+            КФК КЗаводлар какади
         </text>
         <text
             fill="#828897"
@@ -706,7 +706,7 @@
             font-size="19"
             transform="translate(550.468 60)"
         >
-            ГЭС
+            Завод
         </text>
         <text
             fill="#828897"
@@ -724,7 +724,7 @@
             font-size="19"
             transform="translate(594.635 60)"
         >
-            8А, ГЭС
+            8А, Завод
         </text>
         <text
             fill="#828897"
@@ -784,7 +784,7 @@
             font-size="13"
             transform="translate(142.967 128)"
         >
-            ГЭС
+            Завод
         </text>
         <text
             fill="#828897"
@@ -811,7 +811,7 @@
             font-size="13"
             transform="translate(665.567 128)"
         >
-            ГЭС
+            Завод
         </text>
         <text
             fill="#828897"
@@ -874,7 +874,7 @@
             font-size="11"
             transform="translate(1050.86 165)"
         >
-            п/с Кизилровот 110кВ
+            уч. Кизилровот 110кВ
         </text>
         <path
             d="M350.5 209.5 350.769 251.703"

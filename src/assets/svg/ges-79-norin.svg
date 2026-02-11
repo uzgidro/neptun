@@ -2154,7 +2154,7 @@
             font-size="11"
             transform="translate(295.419 212)"
         >
-            Л-МГЭС
+            Л-МЗавод
             <tspan font-size="11" x="43.1667" y="0">-</tspan>
             1
             <tspan font-size="11" x="52" y="0">-</tspan>
@@ -4208,7 +4208,7 @@
             <tspan font-size="11" x="17.8333" y="0">-</tspan>
             2
             <tspan font-size="11" x="2.91705" y="-157">Л</tspan>
-            -МГЭС
+            -МЗавод
             <tspan font-size="11" x="46.0837" y="-157">-</tspan>
             1
             <tspan font-size="11" x="54.9171" y="-157">-</tspan>
@@ -4572,8 +4572,8 @@
                 Норин
                 <tspan font-size="27" x="79.5" y="0">-</tspan>
                 <tspan font-size="27" x="88.3333" y="0">1</tspan>
-                ГЭСлар
-                <tspan font-size="27" x="212.667" y="0">каскади</tspan>
+                Заводлар
+                <tspan font-size="27" x="212.667" y="0">кластери</tspan>
             </text>
             <path
                 d="M109.5 123 111 120.5 112.5 123 111 125.5Z"

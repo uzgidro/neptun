@@ -777,7 +777,7 @@
             font-size="19"
             transform="translate(572.932 25)"
         >
-            ГЭСлар
+            Заводлар
         </text>
         <text
             fill="#828897"
@@ -786,7 +786,7 @@
             font-size="19"
             transform="translate(645.766 25)"
         >
-            каскади
+            кластери
         </text>
         <text
             fill="#828897"
@@ -795,7 +795,7 @@
             font-size="19"
             transform="translate(718.872 25)"
         >
-            (ГЭС
+            (Завод
         </text>
         <text
             fill="#828897"

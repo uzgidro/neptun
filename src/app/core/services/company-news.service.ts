@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService, BASE_URL } from '@/core/services/api.service';
-import { UzgidroNewsResponse } from '@/core/interfaces/uzgidro-news';
+import { CompanyNewsResponse } from '@/core/interfaces/company-news';
 
 const NEWS = '/news';
 
 @Injectable({
     providedIn: 'root'
 })
-export class UzgidroNewsService extends ApiService {
-    getNews(page: number = 1): Observable<UzgidroNewsResponse> {
-        return this.http.get<UzgidroNewsResponse>(`${BASE_URL}${NEWS}`, {
+export class CompanyNewsService extends ApiService {
+    getNews(page: number = 1): Observable<CompanyNewsResponse> {
+        return this.http.get<CompanyNewsResponse>(`${BASE_URL}${NEWS}`, {
             params: { page: page.toString() }
         });
     }

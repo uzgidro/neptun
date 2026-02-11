@@ -89,7 +89,7 @@ export class GesService extends ApiService {
         return this.http.get<ASCUEMetrics>(`${BASE_URL}${GES}/${id}/askue`);
     }
 
-    // CRUD операции для остановов
+    // CRUD операции для остановок
     addShutdown(gesId: number, formData: FormData): Observable<any> {
         return this.http.post(`${BASE_URL}${GES}/${gesId}/shutdowns`, formData);
     }
@@ -102,7 +102,7 @@ export class GesService extends ApiService {
         return this.http.delete(`${BASE_URL}${GES}/${gesId}/shutdowns/${shutdownId}`);
     }
 
-    // CRUD операции для сбросов
+    // CRUD операции для списаний
     addDischarge(gesId: number, formData: FormData): Observable<any> {
         return this.http.post(`${BASE_URL}${GES}/${gesId}/discharges`, formData);
     }

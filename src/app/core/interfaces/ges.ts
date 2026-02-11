@@ -5,7 +5,7 @@ import { UserShortInfo } from '@/core/interfaces/users';
 import { FileResponse } from '@/core/interfaces/files';
 import { ContactIcon } from '@/core/interfaces/contact';
 
-// Основная информация о ГЭС
+// Основная информация о Молокозаводе
 export interface GesResponse {
     id: number;
     name: string;
@@ -15,7 +15,7 @@ export interface GesResponse {
     items?: GesResponse[];
 }
 
-// Контакты ГЭС
+// Контакты Молокозавода
 export interface GesContact {
     id: number;
     name: string;
@@ -29,7 +29,7 @@ export interface GesContact {
     icon?: ContactIcon;
 }
 
-// Остановы ГЭС
+// Остановки завода
 export interface GesShutdown {
     id: number;
     organization_id: number;
@@ -43,7 +43,7 @@ export interface GesShutdown {
     files?: FileResponse[];
 }
 
-// Сбросы ГЭС
+// Списания завода
 export interface GesDischarge {
     id: number;
     organization: Organization | null;
@@ -59,7 +59,7 @@ export interface GesDischarge {
     files?: FileResponse[];
 }
 
-// Инциденты ГЭС
+// Инциденты завода
 export interface GesIncident {
     id: number;
     incident_date: string;
@@ -70,7 +70,7 @@ export interface GesIncident {
     files?: FileResponse[];
 }
 
-// Посещения ГЭС
+// Посещения завода
 export interface GesVisit {
     id: number;
     organization_id: number;
@@ -118,14 +118,14 @@ export interface GesKpiData {
     totalAggregates: number;
 }
 
-// Параметр гидроагрегата (строка таблицы)
+// Параметр производственной линии (строка таблицы)
 export interface GeneratorParam {
     label: string; // i18n ключ названия параметра
     value: string; // отформатированное значение
     unit: string; // i18n ключ единицы измерения
 }
 
-// Данные гидроагрегата для отображения
+// Данные производственной линии для отображения
 export interface GeneratorView {
     id: string;
     name: string;
@@ -135,13 +135,13 @@ export interface GeneratorView {
 
 // Данные АСКУЭ
 export interface ASCUEMetrics {
-    active?: number;            // Активная мощность (МВт)
-    reactive?: number;          // Реактивная мощность (МВАр)
+    active?: number;            // Производительность (т/сут)
+    reactive?: number;          // Запасная мощность
     power_import?: number;      // Импорт мощности
     power_export?: number;      // Экспорт мощности
     own_needs?: number;         // Собственные нужды
-    flow?: number;              // Расход воды (м³/с)
-    active_agg_count?: number;  // Количество работающих агрегатов
-    pending_agg_count?: number; // Количество агрегатов в резерве
-    repair_agg_count?: number;  // Количество агрегатов в ремонте
+    flow?: number;              // Расход сырья (л/ч)
+    active_agg_count?: number;  // Количество работающих линий
+    pending_agg_count?: number; // Количество линий в резерве
+    repair_agg_count?: number;  // Количество линий в ремонте
 }

@@ -39,7 +39,7 @@ Authorization: Bearer <token>
       "engtext": "<html>Full text EN</html>",
       "engsmall": "Summary EN",
       "date": "2026-02-06 11:49:33",
-      "img": "https://uzgidro.uz/uploads/news/image.jpg",
+      "img": "https://example.com/uploads/news/image.jpg",
       "views": 840
     }
   ],
@@ -50,9 +50,9 @@ Authorization: Bearer <token>
     "perPage": 20
   },
   "_links": {
-    "self": { "href": "https://uzgidro.uz/api/news?page=1" },
-    "next": { "href": "https://uzgidro.uz/api/news?page=2" },
-    "last": { "href": "https://uzgidro.uz/api/news?page=480" }
+    "self": { "href": "https://example.com/api/news?page=1" },
+    "next": { "href": "https://example.com/api/news?page=2" },
+    "last": { "href": "https://example.com/api/news?page=480" }
   }
 }
 ```
@@ -103,4 +103,4 @@ GET /news?page=2
 | Code | Description                             |
 |------|-----------------------------------------|
 | 401  | Unauthorized — invalid or missing token |
-| 502  | Bad Gateway — uzgidro.uz is unavailable |
+| 502  | Bad Gateway — example.com is unavailable |

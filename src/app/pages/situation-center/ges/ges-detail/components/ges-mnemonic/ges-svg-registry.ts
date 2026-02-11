@@ -1,5 +1,5 @@
 /**
- * Static registry mapping GES organization IDs to their SVG mnemonic diagram filenames.
+ * Static registry mapping organization IDs to their SVG production scheme diagram filenames.
  */
 const GES_SVG_MAP = new Map<number, string>([
     [16, 'ges-16-chorbog.svg'],

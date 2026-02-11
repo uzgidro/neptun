@@ -255,18 +255,18 @@ export class ScMapComponent implements OnDestroy {
 
     // Mock station markers with positions on the map (production capacity in tons/day)
     stations: StationMarker[] = [
-        { id: 1, name: 'Молокозавод "Самарканд"', type: 'plant', status: 'active', x: 62, y: 22, power: 620, region: 'Самаркандская область' },
-        { id: 2, name: 'Молокозавод "Навои"', type: 'plant', status: 'active', x: 58, y: 25, power: 165, region: 'Навоийская область' },
-        { id: 3, name: 'Молокозавод "Хорезм"', type: 'plant', status: 'repair', x: 55, y: 28, power: 120, region: 'Хорезмская область' },
-        { id: 4, name: 'Филиал "Чирчик"', type: 'plant', status: 'active', x: 52, y: 30, power: 88, region: 'Ташкентская область' },
-        { id: 5, name: 'Филиал "Фергана"', type: 'plant', status: 'active', x: 78, y: 45, power: 126, region: 'Ферганская область' },
-        { id: 6, name: 'Молокозавод "Андижан"', type: 'plant', status: 'stopped', x: 88, y: 38, power: 140, region: 'Андижанская область' },
-        { id: 7, name: 'Мини-цех "Ташкент"', type: 'mini', status: 'active', x: 48, y: 35, power: 52, region: 'Ташкентская область' },
-        { id: 8, name: 'Мини-цех "Угам"', type: 'mini', status: 'active', x: 56, y: 18, power: 12, region: 'Ташкентская область' },
-        { id: 9, name: 'Мини-цех "Пскем"', type: 'mini', status: 'active', x: 50, y: 15, power: 8, region: 'Ташкентская область' },
-        { id: 10, name: 'Филиал "Арнасай"', type: 'branch', status: 'active', x: 45, y: 42, power: 2, region: 'Джизакская область' },
-        { id: 11, name: 'Молокозавод "Кашкадарья"', type: 'plant', status: 'active', x: 72, y: 32, power: 126, region: 'Кашкадарьинская область' },
-        { id: 12, name: 'Мини-цех "Сох"', type: 'mini', status: 'repair', x: 82, y: 42, power: 5, region: 'Ферганская область' }
+        { id: 1, name: 'Молокозавод №1', type: 'plant', status: 'active', x: 62, y: 22, power: 620, region: 'Регион Юг' },
+        { id: 2, name: 'Молокозавод №2', type: 'plant', status: 'active', x: 58, y: 25, power: 165, region: 'Регион Центр' },
+        { id: 3, name: 'Молокозавод №3', type: 'plant', status: 'repair', x: 55, y: 28, power: 120, region: 'Регион Запад' },
+        { id: 4, name: 'Филиал №1', type: 'plant', status: 'active', x: 52, y: 30, power: 88, region: 'Регион Столица' },
+        { id: 5, name: 'Филиал №2', type: 'plant', status: 'active', x: 78, y: 45, power: 126, region: 'Регион Восток' },
+        { id: 6, name: 'Молокозавод №4', type: 'plant', status: 'stopped', x: 88, y: 38, power: 140, region: 'Регион Восток-2' },
+        { id: 7, name: 'Мини-цех №1', type: 'mini', status: 'active', x: 48, y: 35, power: 52, region: 'Регион Столица' },
+        { id: 8, name: 'Мини-цех №2', type: 'mini', status: 'active', x: 56, y: 18, power: 12, region: 'Регион Столица' },
+        { id: 9, name: 'Мини-цех №3', type: 'mini', status: 'active', x: 50, y: 15, power: 8, region: 'Регион Столица' },
+        { id: 10, name: 'Филиал №3', type: 'branch', status: 'active', x: 45, y: 42, power: 2, region: 'Регион Центр-2' },
+        { id: 11, name: 'Молокозавод №5', type: 'plant', status: 'active', x: 72, y: 32, power: 126, region: 'Регион Юг-2' },
+        { id: 12, name: 'Мини-цех №4', type: 'mini', status: 'repair', x: 82, y: 42, power: 5, region: 'Регион Восток' }
     ];
 
     getStationStatusClass(status: string): string {

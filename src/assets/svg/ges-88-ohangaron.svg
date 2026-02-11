@@ -459,10 +459,10 @@
             transform="translate(520.169 25)"
         >
             Охангарон
-            <tspan x="110.553" y="0">ГЭС</tspan>
+            <tspan x="110.553" y="0">Завод</tspan>
             <tspan font-size="11" x="-224.054" y="161">Л</tspan>
             <tspan font-size="11" x="-216.054" y="161">-</tspan>
-            <tspan font-size="11" x="-212.554" y="161">АГЭС</tspan>
+            <tspan font-size="11" x="-212.554" y="161">АЗавод</tspan>
             <tspan font-size="11" x="-183.22" y="161">-</tspan>
             <tspan font-size="11" x="-179.72" y="161">2</tspan>
             <tspan font-size="11" x="-174.387" y="161">-</tspan>
@@ -538,7 +538,7 @@
             <tspan x="-2.05197" y="-291">-</tspan>
             35
             <tspan x="12.1147" y="-291">-</tspan>
-            АГЭС2
+            АЗавод2
             <tspan x="-1.30139" y="-34">ВВ</tspan>
             <tspan x="13.032" y="-34">-</tspan>
             Г
@@ -1425,7 +1425,7 @@
             font-size="11"
             transform="translate(666.578 263)"
         >
-            Охангарон МГЭС
+            Охангарон МЗавод
             <tspan x="-399.788" y="-161">П/ст ТРП</tspan>
             -3
             <tspan x="185.189" y="-158">П/ст ТРП</tspan>
@@ -1531,9 +1531,9 @@
             <tspan x="-213.485" y="-258">-</tspan>
             35
             <tspan x="-199.319" y="-258">-</tspan>
-            АГЭС1
+            АЗавод1
             <tspan x="-223.045" y="-222">Л</tspan>
-            -АГЭС
+            -АЗавод
             <tspan x="-182.212" y="-222">-</tspan>
             1
             <tspan x="-173.378" y="-222">-</tspan>

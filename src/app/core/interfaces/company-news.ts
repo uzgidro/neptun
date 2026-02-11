@@ -1,4 +1,4 @@
-export interface UzgidroNewsItem {
+export interface CompanyNewsItem {
     id: number;
     uz: string;
     ru: string;
@@ -14,21 +14,21 @@ export interface UzgidroNewsItem {
     views: number;
 }
 
-export interface UzgidroNewsMeta {
+export interface CompanyNewsMeta {
     totalCount: number;
     pageCount: number;
     currentPage: number;
     perPage: number;
 }
 
-export interface UzgidroNewsLinks {
+export interface CompanyNewsLinks {
     self: { href: string };
     next?: { href: string };
     last: { href: string };
 }
 
-export interface UzgidroNewsResponse {
-    items: UzgidroNewsItem[];
-    _meta: UzgidroNewsMeta;
-    _links: UzgidroNewsLinks;
+export interface CompanyNewsResponse {
+    items: CompanyNewsItem[];
+    _meta: CompanyNewsMeta;
+    _links: CompanyNewsLinks;
 }

@@ -77,8 +77,8 @@ export class ScHeaderComponent implements OnInit, OnDestroy {
                     this.fetchWeather(position.coords.latitude, position.coords.longitude);
                 },
                 error: () => {
-                    // Fallback: Ташкент
-                    this.fetchWeather(41.2995, 69.2401);
+                    // Fallback: default location
+                    this.fetchWeather(55.7558, 37.6173);
                 }
             });
     }

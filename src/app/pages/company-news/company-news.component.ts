@@ -4,8 +4,8 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { UzgidroNewsService } from '@/core/services/uzgidro-news.service';
-import { UzgidroNewsItem, UzgidroNewsMeta } from '@/core/interfaces/uzgidro-news';
+import { CompanyNewsService } from '@/core/services/company-news.service';
+import { CompanyNewsItem, CompanyNewsMeta } from '@/core/interfaces/company-news';
 import { MessageService, PrimeTemplate } from 'primeng/api';
 import { Tag } from 'primeng/tag';
 import { ButtonDirective, ButtonIcon, ButtonLabel } from 'primeng/button';
@@ -18,14 +18,14 @@ import { Tooltip } from 'primeng/tooltip';
 type LangField = 'uz' | 'ru' | 'eng';
 
 @Component({
-    selector: 'app-uzgidro-news',
+    selector: 'app-company-news',
     standalone: true,
     imports: [CommonModule, TranslateModule, Tag, ButtonDirective, ButtonIcon, ButtonLabel, Dialog, Divider, Paginator, Skeleton, Tooltip, PrimeTemplate],
-    templateUrl: './uzgidro-news.component.html',
-    styleUrl: './uzgidro-news.component.scss'
+    templateUrl: './company-news.component.html',
+    styleUrl: './company-news.component.scss'
 })
-export class UzgidroNewsComponent implements OnInit {
-    private newsService = inject(UzgidroNewsService);
+export class CompanyNewsComponent implements OnInit {
+    private newsService = inject(CompanyNewsService);
     private messageService = inject(MessageService);
     private translateService = inject(TranslateService);
     private sanitizer = inject(DomSanitizer);
@@ -34,12 +34,12 @@ export class UzgidroNewsComponent implements OnInit {
     private destroyRef = inject(DestroyRef);
 
     // Signals
-    newsItems = signal<UzgidroNewsItem[]>([]);
-    meta = signal<UzgidroNewsMeta | null>(null);
+    newsItems = signal<CompanyNewsItem[]>([]);
+    meta = signal<CompanyNewsMeta | null>(null);
     loading = signal(true);
     currentPage = signal(1);
     displayDetailDialog = signal(false);
-    selectedNews = signal<UzgidroNewsItem | null>(null);
+    selectedNews = signal<CompanyNewsItem | null>(null);
     currentLang = signal<string>(this.translateService.currentLang || 'ru');
 
     // Computed
@@ -80,9 +80,9 @@ export class UzgidroNewsComponent implements OnInit {
                 this.messageService.add({
                     severity: 'error',
                     summary: this.translateService.instant('COMMON.ERROR'),
-                    detail: this.translateService.instant('UZGIDRO_NEWS.LOAD_ERROR')
+                    detail: this.translateService.instant('COMPANY_NEWS.LOAD_ERROR')
                 });
-                console.error('Error loading UzGidro news:', error);
+                console.error('Error loading company news:', error);
                 this.loading.set(false);
             }
         });
@@ -109,7 +109,7 @@ export class UzgidroNewsComponent implements OnInit {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    openDetailDialog(news: UzgidroNewsItem): void {
+    openDetailDialog(news: CompanyNewsItem): void {
         this.selectedNews.set(news);
         this.displayDetailDialog.set(true);
     }
@@ -119,18 +119,18 @@ export class UzgidroNewsComponent implements OnInit {
     }
 
     // Getters for localized content
-    getTitle(item: UzgidroNewsItem): string {
+    getTitle(item: CompanyNewsItem): string {
         const field = this.langField();
         return item[field] || item.ru;
     }
 
-    getSummary(item: UzgidroNewsItem): string {
-        const field = `${this.langField()}small` as keyof UzgidroNewsItem;
+    getSummary(item: CompanyNewsItem): string {
+        const field = `${this.langField()}small` as keyof CompanyNewsItem;
         return (item[field] as string) || item.rusmall;
     }
 
-    getFullText(item: UzgidroNewsItem): SafeHtml {
-        const field = `${this.langField()}text` as keyof UzgidroNewsItem;
+    getFullText(item: CompanyNewsItem): SafeHtml {
+        const field = `${this.langField()}text` as keyof CompanyNewsItem;
         const html = (item[field] as string) || item.rutext;
         return this.sanitizer.bypassSecurityTrustHtml(html);
     }
