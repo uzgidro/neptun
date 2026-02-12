@@ -16,7 +16,7 @@
                     [valueColor]="getOverallKpiColor()"
                     rangeColor="#e5e7eb"
                 ></p-knob>
-                <span class="gauge-label">Общий KPI</span>
+                <span class="gauge-label">{{ 'FINANCIAL_BLOCK.KPI.OVERALL_PERFORMANCE' | translate }}</span>
             </div>
         </div>
 
@@ -26,7 +26,7 @@
                     <i class="pi pi-check-circle"></i>
                 </div>
                 <div class="card-info">
-                    <span class="card-label">Выполнено</span>
+                    <span class="card-label">{{ 'FINANCIAL_BLOCK.KPI.ACHIEVED' | translate }}</span>
                     <span class="card-value text-green-500">{{ achievedCount }}</span>
                 </div>
             </div>
@@ -38,7 +38,7 @@
                     <i class="pi pi-exclamation-triangle"></i>
                 </div>
                 <div class="card-info">
-                    <span class="card-label">Внимание</span>
+                    <span class="card-label">{{ 'FINANCIAL_BLOCK.KPI.IN_PROGRESS' | translate }}</span>
                     <span class="card-value text-orange-500">{{ warningCount }}</span>
                 </div>
             </div>
@@ -50,7 +50,7 @@
                     <i class="pi pi-times-circle"></i>
                 </div>
                 <div class="card-info">
-                    <span class="card-label">Критично</span>
+                    <span class="card-label">{{ 'FINANCIAL_BLOCK.KPI.NOT_STARTED' | translate }}</span>
                     <span class="card-value text-red-500">{{ criticalCount }}</span>
                 </div>
             </div>
@@ -62,7 +62,7 @@
         <!-- Line Chart - KPI Trend -->
         <div class="chart-card chart-large">
             <div class="chart-header">
-                <h3>Динамика общего KPI</h3>
+                <h3>{{ 'FINANCIAL_BLOCK.DASHBOARD.MONTHLY_DYNAMICS' | translate }}</h3>
                 <span class="chart-icon"><i class="pi pi-chart-line"></i></span>
             </div>
             <div class="chart-body">
@@ -79,7 +79,7 @@
             <!-- Radar Chart -->
             <div class="chart-card chart-small">
                 <div class="chart-header">
-                    <h3>KPI по категориям</h3>
+                    <h3>{{ 'FINANCIAL_BLOCK.DEBIT_CREDIT.CATEGORY' | translate }}</h3>
                     <span class="chart-icon"><i class="pi pi-chart-pie"></i></span>
                 </div>
                 <div class="chart-body-small">
@@ -94,7 +94,7 @@
             <!-- Status Chart -->
             <div class="chart-card chart-small">
                 <div class="chart-header">
-                    <h3>Распределение статусов</h3>
+                    <h3>{{ 'FINANCIAL_BLOCK.COMMON.STATUS' | translate }}</h3>
                     <span class="chart-icon"><i class="pi pi-percentage"></i></span>
                 </div>
                 <div class="chart-body-small">
@@ -112,7 +112,8 @@
     <div class="bar-chart-section">
         <div class="chart-card">
             <div class="chart-header">
-                <h3>План vs Факт (топ показатели)</h3>
+                <h3>{{ 'FINANCIAL_BLOCK.KPI.TARGET_VALUE' | translate }}
+                    vs {{ 'FINANCIAL_BLOCK.KPI.ACTUAL_VALUE' | translate }}</h3>
                 <span class="chart-icon"><i class="pi pi-chart-bar"></i></span>
             </div>
             <div class="chart-body-bar">
@@ -138,7 +139,7 @@
                     pInputText
                     [(ngModel)]="searchText"
                     (ngModelChange)="applyFilters()"
-                    placeholder="Поиск..."
+                    placeholder="..."
                 />
             </p-inputGroup>
 
@@ -149,7 +150,7 @@
                 (ngModelChange)="applyFilters()"
                 optionLabel="label"
                 optionValue="value"
-                placeholder="Категория"
+                [placeholder]="'FINANCIAL_BLOCK.DEBIT_CREDIT.CATEGORY' | translate"
                 [showClear]="true"
                 class="filter-select"
             ></p-select>
@@ -161,7 +162,7 @@
                 (ngModelChange)="applyFilters()"
                 optionLabel="label"
                 optionValue="value"
-                placeholder="Отдел"
+                [placeholder]="'FINANCIAL_BLOCK.SALARY.DEPARTMENT' | translate"
                 [showClear]="true"
                 class="filter-select"
             ></p-select>
@@ -173,7 +174,7 @@
                 (ngModelChange)="applyFilters()"
                 optionLabel="label"
                 optionValue="value"
-                placeholder="Период"
+                [placeholder]="'FINANCIAL_BLOCK.KPI.PERIOD' | translate"
                 [showClear]="true"
                 class="filter-select"
             ></p-select>
@@ -185,7 +186,7 @@
                 (ngModelChange)="applyFilters()"
                 optionLabel="label"
                 optionValue="value"
-                placeholder="Статус"
+                [placeholder]="'FINANCIAL_BLOCK.COMMON.STATUS' | translate"
                 [showClear]="true"
                 class="filter-select"
             ></p-select>
@@ -196,7 +197,7 @@
                 severity="secondary"
                 [outlined]="true"
                 (onClick)="clearFilters()"
-                pTooltip="Сбросить фильтры"
+                [pTooltip]="'FINANCIAL_BLOCK.COMMON.CLEAR' | translate"
             ></p-button>
         </div>
 
@@ -210,7 +211,7 @@
                 (onClick)="exportToExcel()"
             ></p-button>
             <p-button
-                label="Добавить KPI"
+                [label]="'FINANCIAL_BLOCK.KPI.ADD_KPI' | translate"
                 icon="pi pi-plus"
                 (onClick)="openNewKpi()"
             ></p-button>
@@ -226,30 +227,34 @@
             [rows]="10"
             [rowsPerPageOptions]="[5, 10, 25, 50]"
             [showCurrentPageReport]="true"
-            currentPageReportTemplate="Показано {first} - {last} из {totalRecords} показателей"
+            currentPageReportTemplate="{first} - {last} / {totalRecords}"
             [sortField]="'weight'"
             [sortOrder]="-1"
         >
             <ng-template pTemplate="header">
                 <tr>
                     <th pSortableColumn="name" style="min-width: 250px">
-                        Показатель <p-sortIcon field="name"></p-sortIcon>
+                        {{ 'FINANCIAL_BLOCK.KPI.INDICATOR_NAME' | translate }}
+                        <p-sortIcon field="name"></p-sortIcon>
                     </th>
-                    <th style="width: 120px">Категория</th>
+                    <th style="width: 120px">{{ 'FINANCIAL_BLOCK.DEBIT_CREDIT.CATEGORY' | translate }}</th>
                     <th pSortableColumn="targetValue" style="width: 110px; text-align: right">
-                        Цель <p-sortIcon field="targetValue"></p-sortIcon>
+                        {{ 'FINANCIAL_BLOCK.KPI.TARGET_VALUE' | translate }}
+                        <p-sortIcon field="targetValue"></p-sortIcon>
                     </th>
                     <th pSortableColumn="actualValue" style="width: 110px; text-align: right">
-                        Факт <p-sortIcon field="actualValue"></p-sortIcon>
+                        {{ 'FINANCIAL_BLOCK.KPI.ACTUAL_VALUE' | translate }}
+                        <p-sortIcon field="actualValue"></p-sortIcon>
                     </th>
-                    <th style="width: 180px">Выполнение</th>
-                    <th style="width: 60px; text-align: center">Тренд</th>
+                    <th style="width: 180px">{{ 'FINANCIAL_BLOCK.KPI.PERFORMANCE' | translate }}</th>
+                    <th style="width: 60px; text-align: center">{{ 'FINANCIAL_BLOCK.KPI.TREND' | translate }}</th>
                     <th pSortableColumn="weight" style="width: 70px; text-align: center">
-                        Вес <p-sortIcon field="weight"></p-sortIcon>
+                        {{ 'FINANCIAL_BLOCK.KPI.WEIGHT' | translate }}
+                        <p-sortIcon field="weight"></p-sortIcon>
                     </th>
-                    <th style="width: 110px">Статус</th>
-                    <th style="width: 130px">Ответственный</th>
-                    <th style="width: 100px; text-align: center">Действия</th>
+                    <th style="width: 110px">{{ 'FINANCIAL_BLOCK.COMMON.STATUS' | translate }}</th>
+                    <th style="width: 130px">{{ 'FINANCIAL_BLOCK.KPI.RESPONSIBLE' | translate }}</th>
+                    <th style="width: 100px; text-align: center">{{ 'FINANCIAL_BLOCK.COMMON.ACTIONS' | translate }}</th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-kpi>
@@ -320,7 +325,7 @@
                                 [text]="true"
                                 severity="info"
                                 (onClick)="editKpi(kpi)"
-                                pTooltip="Редактировать"
+                                [pTooltip]="'FINANCIAL_BLOCK.COMMON.EDIT' | translate"
                             ></p-button>
                             <p-button
                                 icon="pi pi-trash"
@@ -328,7 +333,7 @@
                                 [text]="true"
                                 severity="danger"
                                 (onClick)="deleteKpi(kpi)"
-                                pTooltip="Удалить"
+                                [pTooltip]="'FINANCIAL_BLOCK.COMMON.DELETE' | translate"
                             ></p-button>
                         </div>
                     </td>
@@ -339,7 +344,7 @@
                     <td colspan="10" class="text-center p-4">
                         <div class="flex flex-column align-items-center gap-2">
                             <i class="pi pi-inbox text-4xl text-500"></i>
-                            <span class="text-500">Показатели не найдены</span>
+                            <span class="text-500">{{ 'FINANCIAL_BLOCK.COMMON.NO_DATA' | translate }}</span>
                         </div>
                     </td>
                 </tr>
@@ -351,7 +356,7 @@
 <!-- KPI Dialog -->
 <p-dialog
     [(visible)]="kpiDialog"
-    [header]="isEditMode ? 'Редактирование KPI' : 'Новый показатель KPI'"
+    [header]="isEditMode ? ('FINANCIAL_BLOCK.COMMON.EDIT' | translate) : ('FINANCIAL_BLOCK.KPI.ADD_KPI' | translate)"
     [modal]="true"
     [style]="{ width: '650px', maxWidth: '95vw' }"
     [closable]="true"
@@ -361,20 +366,20 @@
     <div class="dialog-form">
         <!-- Name -->
         <div class="form-field">
-            <label for="name">Название показателя <span class="required">*</span></label>
+            <label for="name">{{ 'FINANCIAL_BLOCK.KPI.INDICATOR_NAME' | translate }} <span
+                class="required">*</span></label>
             <input
                 id="name"
                 type="text"
                 pInputText
                 [(ngModel)]="currentKpi.name"
-                placeholder="Введите название KPI"
             />
         </div>
 
         <!-- Category & Department Row -->
         <div class="form-row">
             <div class="form-field">
-                <label for="category">Категория</label>
+                <label for="category">{{ 'FINANCIAL_BLOCK.DEBIT_CREDIT.CATEGORY' | translate }}</label>
                 <p-select
                     id="category"
                     [options]="categories"
@@ -385,7 +390,7 @@
                 ></p-select>
             </div>
             <div class="form-field">
-                <label for="department">Ответственный отдел</label>
+                <label for="department">{{ 'FINANCIAL_BLOCK.SALARY.DEPARTMENT' | translate }}</label>
                 <p-select
                     id="department"
                     [options]="departments"
@@ -400,7 +405,7 @@
         <!-- Period & Date Row -->
         <div class="form-row">
             <div class="form-field">
-                <label for="period">Период</label>
+                <label for="period">{{ 'FINANCIAL_BLOCK.KPI.PERIOD' | translate }}</label>
                 <p-select
                     id="period"
                     [options]="periods"
@@ -411,7 +416,7 @@
                 ></p-select>
             </div>
             <div class="form-field">
-                <label for="periodDate">Дата периода</label>
+                <label for="periodDate">{{ 'FINANCIAL_BLOCK.COMMON.DATE' | translate }}</label>
                 <p-datepicker
                     id="periodDate"
                     [(ngModel)]="currentKpi.periodDate"
@@ -425,7 +430,7 @@
         <!-- Unit & Weight Row -->
         <div class="form-row">
             <div class="form-field">
-                <label for="unit">Единица измерения</label>
+                <label for="unit">{{ 'FINANCIAL_BLOCK.KPI.UNIT' | translate }}</label>
                 <p-select
                     id="unit"
                     [options]="units"
@@ -436,7 +441,7 @@
                 ></p-select>
             </div>
             <div class="form-field">
-                <label for="weight">Вес показателя (%)</label>
+                <label for="weight">{{ 'FINANCIAL_BLOCK.KPI.WEIGHT_PERCENT' | translate }}</label>
                 <p-inputNumber
                     id="weight"
                     [(ngModel)]="currentKpi.weight"
@@ -451,7 +456,7 @@
         <div class="form-row-3">
             <div class="form-field">
                 <label for="targetValue" class="label-target">
-                    <i class="pi pi-flag"></i> Цель
+                    <i class="pi pi-flag"></i> {{ 'FINANCIAL_BLOCK.KPI.TARGET_VALUE' | translate }}
                 </label>
                 <p-inputNumber
                     id="targetValue"
@@ -463,7 +468,7 @@
             </div>
             <div class="form-field">
                 <label for="actualValue" class="label-actual">
-                    <i class="pi pi-check"></i> Факт
+                    <i class="pi pi-check"></i> {{ 'FINANCIAL_BLOCK.KPI.ACTUAL_VALUE' | translate }}
                 </label>
                 <p-inputNumber
                     id="actualValue"
@@ -475,7 +480,7 @@
             </div>
             <div class="form-field">
                 <label for="minThreshold" class="label-threshold">
-                    <i class="pi pi-exclamation-triangle"></i> Мин. порог
+                    <i class="pi pi-exclamation-triangle"></i> {{ 'FINANCIAL_BLOCK.KPI.MIN_THRESHOLD' | translate }}
                 </label>
                 <p-inputNumber
                     id="minThreshold"
@@ -490,7 +495,7 @@
         <!-- Trend & Responsible Row -->
         <div class="form-row">
             <div class="form-field">
-                <label for="trend">Тренд</label>
+                <label for="trend">{{ 'FINANCIAL_BLOCK.KPI.TREND' | translate }}</label>
                 <p-select
                     id="trend"
                     [options]="trends"
@@ -501,26 +506,24 @@
                 ></p-select>
             </div>
             <div class="form-field">
-                <label for="responsiblePerson">Ответственный</label>
+                <label for="responsiblePerson">{{ 'FINANCIAL_BLOCK.KPI.RESPONSIBLE' | translate }}</label>
                 <input
                     id="responsiblePerson"
                     type="text"
                     pInputText
                     [(ngModel)]="currentKpi.responsiblePerson"
-                    placeholder="ФИО ответственного"
                 />
             </div>
         </div>
 
         <!-- Notes -->
         <div class="form-field">
-            <label for="notes">Примечания</label>
+            <label for="notes">{{ 'FINANCIAL_BLOCK.COMMON.COMMENT' | translate }}</label>
             <textarea
                 id="notes"
                 pInputTextarea
                 [(ngModel)]="currentKpi.notes"
                 rows="2"
-                placeholder="Дополнительная информация"
             ></textarea>
         </div>
     </div>
@@ -528,14 +531,14 @@
     <ng-template pTemplate="footer">
         <div class="dialog-footer">
             <p-button
-                label="Отмена"
+                [label]="'FINANCIAL_BLOCK.COMMON.CANCEL' | translate"
                 severity="secondary"
                 [outlined]="true"
                 icon="pi pi-times"
                 (onClick)="kpiDialog = false"
             ></p-button>
             <p-button
-                [label]="isEditMode ? 'Сохранить' : 'Добавить'"
+                [label]="isEditMode ? ('FINANCIAL_BLOCK.COMMON.SAVE' | translate) : ('FINANCIAL_BLOCK.COMMON.ADD' | translate)"
                 [icon]="isEditMode ? 'pi pi-save' : 'pi pi-plus'"
                 (onClick)="saveKpi()"
             ></p-button>

@@ -166,6 +166,18 @@ export class InvestmentComponent implements OnInit {
         }
     }
 
+    onDateRangeClear(): void {
+        this.dateRange = null;
+        this.applyFilter();
+        this.messageService.add({
+            severity: 'info',
+            summary: this.translate.instant('FINANCIAL_BLOCK.COMMON.CLEAR'),
+            detail: this.translate.instant('FINANCIAL_BLOCK.COMMON.ALL'),
+            life: 2000
+        });
+    }
+
+
     get activePhaseCount(): number {
         return this.filteredInvestments.filter(i => i.status === 'Активная фаза').length;
     }

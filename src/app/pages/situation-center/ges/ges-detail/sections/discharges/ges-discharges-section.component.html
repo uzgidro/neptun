@@ -1,0 +1,249 @@
+<!-- Header with filters and add button -->
+<div class="flex flex-wrap justify-between items-center gap-4 mb-4">
+    <div class="flex flex-wrap items-center gap-3">
+        <div class="flex items-center gap-2">
+            <label class="text-sm text-surface-500">{{ 'GES_DETAIL.FILTERS.START_DATE' | translate }}:</label>
+            <p-datepicker
+                [(ngModel)]="startDate"
+                [showIcon]="true"
+                dateFormat="dd.mm.yy"
+                [placeholder]="'GES_DETAIL.FILTERS.SELECT_DATE' | translate"
+                (onSelect)="onDateRangeChange()"
+                (onClear)="onDateRangeChange()"
+                [showClear]="true">
+            </p-datepicker>
+        </div>
+        <div class="flex items-center gap-2">
+            <label class="text-sm text-surface-500">{{ 'GES_DETAIL.FILTERS.END_DATE' | translate }}:</label>
+            <p-datepicker
+                [(ngModel)]="endDate"
+                [showIcon]="true"
+                dateFormat="dd.mm.yy"
+                [placeholder]="'GES_DETAIL.FILTERS.SELECT_DATE' | translate"
+                (onSelect)="onDateRangeChange()"
+                (onClear)="onDateRangeChange()"
+                [showClear]="true">
+            </p-datepicker>
+        </div>
+    </div>
+    @if (canEdit) {
+        <button
+            pButton
+            (click)="openNew()">
+            <span>{{ 'GES_DETAIL.DISCHARGES.ADD' | translate }}</span>
+            <i pButtonIcon class="pi pi-plus ml-2"></i>
+        </button>
+    }
+</div>
+
+<!-- Table -->
+<p-table
+    #dt
+    [value]="data"
+    [loading]="loading"
+    [globalFilterFields]="['organization.name', 'reason', 'created_by.name']"
+    [scrollable]="true"
+    scrollHeight="500px"
+    [sortField]="'started_at'"
+    [sortOrder]="-1"
+    styleClass="p-datatable-sm p-datatable-gridlines">
+
+    <ng-template pTemplate="caption">
+        <div class="flex justify-end items-center">
+            <p-iconfield iconPosition="left">
+                <p-inputicon>
+                    <i class="pi pi-search"></i>
+                </p-inputicon>
+                <input
+                    pInputText
+                    type="text"
+                    [(ngModel)]="searchValue"
+                    (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                    [placeholder]="'COMMON.SEARCH' | translate"
+                    class="w-full" />
+            </p-iconfield>
+            @if (searchValue) {
+                <button
+                    type="button"
+                    class="ml-2"
+                    pButton
+                    severity="secondary"
+                    [outlined]="true"
+                    (click)="clear(dt)"
+                    [pTooltip]="'COMMON.CLEAR' | translate">
+                    <i pButtonIcon class="pi pi-times"></i>
+                </button>
+            }
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="header">
+        <tr>
+            <th pSortableColumn="started_at" style="min-width: 150px">
+                {{ 'GES_DETAIL.DISCHARGES.START' | translate }}
+                <p-sortIcon field="started_at"></p-sortIcon>
+            </th>
+            <th pSortableColumn="ended_at" style="min-width: 150px">
+                {{ 'GES_DETAIL.DISCHARGES.END' | translate }}
+                <p-sortIcon field="ended_at"></p-sortIcon>
+            </th>
+            <th pSortableColumn="flow_rate" style="min-width: 120px">
+                {{ 'GES_DETAIL.DISCHARGES.FLOW_RATE' | translate }}
+                <p-sortIcon field="flow_rate"></p-sortIcon>
+            </th>
+            <th pSortableColumn="total_volume" style="min-width: 140px">
+                {{ 'GES_DETAIL.DISCHARGES.TOTAL_VOLUME' | translate }}
+                <p-sortIcon field="total_volume"></p-sortIcon>
+            </th>
+            <th pSortableColumn="reason" style="min-width: 180px">
+                {{ 'GES_DETAIL.DISCHARGES.REASON' | translate }}
+                <p-sortIcon field="reason"></p-sortIcon>
+            </th>
+            <th style="width: 100px">{{ 'GES_DETAIL.DISCHARGES.STATUS' | translate }}</th>
+            <th pSortableColumn="created_by.name" style="min-width: 150px">
+                {{ 'GES_DETAIL.COMMON.CREATED_BY' | translate }}
+                <p-sortIcon field="created_by.name"></p-sortIcon>
+            </th>
+            <th style="width: 80px">{{ 'GES_DETAIL.COMMON.FILES' | translate }}</th>
+            @if (canEdit) {
+                <th style="width: 100px">{{ 'COMMON.ACTIONS' | translate }}</th>
+            }
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-item>
+        <tr>
+            <td>{{ item.started_at | date:'HH:mm dd.MM.yyyy' }}</td>
+            <td>
+                @if (item.ended_at) {
+                    {{ item.ended_at | date:'HH:mm dd.MM.yyyy' }}
+                } @else {
+                    <span class="text-surface-400">—</span>
+                }
+            </td>
+            <td>{{ item.flow_rate | number:'1.0-2' }}</td>
+            <td>{{ item.total_volume | number:'1.0-2' }}</td>
+            <td>{{ item.reason || '—' }}</td>
+            <td>
+                @if (item.is_ongoing) {
+                    <p-tag value="{{ 'GES_DETAIL.DISCHARGES.ONGOING' | translate }}" severity="warn"></p-tag>
+                } @else if (item.approved) {
+                    <p-tag value="{{ 'GES_DETAIL.DISCHARGES.APPROVED' | translate }}" severity="success"></p-tag>
+                } @else {
+                    <p-tag value="{{ 'GES_DETAIL.DISCHARGES.COMPLETED' | translate }}" severity="info"></p-tag>
+                }
+            </td>
+            <td>{{ item.created_by?.name || '—' }}</td>
+            <td>
+                @if (item.files && item.files.length > 0) {
+                    <button
+                        pButton
+                        [text]="true"
+                        severity="secondary"
+                        (click)="showFiles(item)"
+                        [pTooltip]="'GES_DETAIL.COMMON.VIEW_FILES' | translate">
+                        <i pButtonIcon class="pi pi-paperclip"></i>
+                        <span class="ml-1">{{ item.files.length }}</span>
+                    </button>
+                } @else {
+                    <span class="text-surface-400">—</span>
+                }
+            </td>
+            @if (canEdit) {
+                <td>
+                    <div class="flex gap-1">
+                        <button
+                            pButton
+                            [text]="true"
+                            [rounded]="true"
+                            severity="info"
+                            (click)="editItem(item)"
+                            [pTooltip]="'COMMON.EDIT' | translate">
+                            <i pButtonIcon class="pi pi-pencil"></i>
+                        </button>
+                        <button
+                            pButton
+                            [text]="true"
+                            [rounded]="true"
+                            severity="danger"
+                            (click)="deleteItem(item.id)"
+                            [pTooltip]="'COMMON.DELETE' | translate">
+                            <i pButtonIcon class="pi pi-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            }
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+        <tr>
+            <td [attr.colspan]="canEdit ? 9 : 8" class="text-center py-8">
+                <div class="text-surface-500">
+                    <i class="pi pi-inbox text-4xl mb-3 block opacity-50"></i>
+                    <div>{{ 'GES_DETAIL.DISCHARGES.NO_DATA' | translate }}</div>
+                </div>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+
+<!-- Add/Edit Dialog -->
+<app-dialog
+    [(visible)]="isFormOpen"
+    [header]="isEditMode ? ('GES_DETAIL.DISCHARGES.EDIT' | translate) : ('GES_DETAIL.DISCHARGES.ADD' | translate)"
+    [form]="form"
+    [submitting]="isLoading"
+    (save)="onSubmit()"
+    (cancel)="closeDialog()">
+    <form class="p-4" [formGroup]="form" (ngSubmit)="onSubmit()">
+        <app-date-picker
+            [label]="'GES_DETAIL.DISCHARGES.START' | translate"
+            formControlName="started_at"
+            [submitted]="submitted"
+            [errorMessage]="'COMMON.FILL_REQUIRED' | translate">
+        </app-date-picker>
+
+        <app-date-picker
+            [label]="'GES_DETAIL.DISCHARGES.END' | translate"
+            formControlName="ended_at"
+            [submitted]="submitted"
+            [required]="false">
+        </app-date-picker>
+
+        <app-input-number
+            [label]="'GES_DETAIL.DISCHARGES.FLOW_RATE' | translate"
+            formControlName="flow_rate"
+            [submitted]="submitted"
+            [errorMessage]="'COMMON.FILL_REQUIRED' | translate">
+        </app-input-number>
+
+        <app-textarea
+            [label]="'GES_DETAIL.DISCHARGES.REASON' | translate"
+            formControlName="reason"
+            [submitted]="submitted"
+            [required]="false">
+        </app-textarea>
+
+        @if (isEditMode && currentItem?.files && (currentItem?.files?.length ?? 0) > 0) {
+            <app-file-list
+                [files]="currentItem?.files || []"
+                (removeFile)="removeExistingFile($event)">
+            </app-file-list>
+        }
+
+        <app-file-upload
+            [label]="isEditMode ? ('GES_DETAIL.COMMON.ADD_NEW_FILES' | translate) : ('GES_DETAIL.COMMON.ATTACH_FILES' | translate)"
+            [files]="selectedFiles"
+            (filesChange)="onFileSelect($event)"
+            (removeFile)="removeFile($event)">
+        </app-file-upload>
+    </form>
+</app-dialog>
+
+<!-- File Viewer Dialog -->
+<app-file-viewer
+    [(visible)]="showFilesDialog"
+    [header]="'GES_DETAIL.DISCHARGES.FILES' | translate"
+    [files]="selectedItemForFiles?.files || []">
+</app-file-viewer>

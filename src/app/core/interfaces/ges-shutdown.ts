@@ -22,6 +22,7 @@ export interface ShutdownResponse {
     created_at: string;
     idle_discharge_volume: number | null;
     files?: FileResponse[];
+    viewed: boolean;
 }
 
 export interface GesShutdownResponse {
@@ -42,6 +43,7 @@ export interface ShutdownDto {
     created_at: Date;
     idle_discharge_volume: number | null;
     files?: FileResponse[];
+    viewed: boolean;
 }
 
 export interface GesShutdownDto {

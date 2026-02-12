@@ -29,16 +29,19 @@
     <div class="action-row mb-6">
         <p-button [label]="'FINANCIAL_BLOCK.INVESTMENT.ADD_PROJECT' | translate" icon="pi pi-plus"
                   (click)="openNew()" />
-        <p-date-picker
+
+        <p-datepicker
             [(ngModel)]="dateRange"
-            (onSelect)="onDateRangeChange()"
             selectionMode="range"
             [showIcon]="true"
             [showButtonBar]="true"
             dateFormat="dd.mm.yy"
             [placeholder]="'FINANCIAL_BLOCK.COMMON.SELECT_DATE_RANGE' | translate"
-            class="w-72">
-        </p-date-picker>
+            (onSelect)="onDateRangeChange()"
+            (onClear)="onDateRangeClear()"
+            appendTo="body"
+            styleClass="w-72">
+        </p-datepicker>
     </div>
 
     <!-- TABLE -->

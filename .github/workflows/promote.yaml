@@ -1,0 +1,63 @@
+name: Promote to Prod
+
+on:
+    workflow_dispatch:
+        inputs:
+            project:
+                description: 'Project to promote'
+                required: true
+                type: choice
+                options:
+                    - srmt-front
+                    - milk-pro
+            image_tag:
+                description: 'Image tag to promote (SHA from dev)'
+                required: true
+                type: string
+
+jobs:
+    promote:
+        runs-on: ubuntu-latest
+        environment: production
+
+        env:
+            DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/${{ inputs.project }}
+
+        steps:
+            -   name: Verify image exists
+                run: |
+                    docker manifest inspect ${{ env.DOCKER_IMAGE }}:${{ inputs.image_tag }} || \
+                      (echo "Image not found!" && exit 1)
+
+            -   name: Setup SSH agent
+                uses: webfactory/ssh-agent@v0.9.0
+                with:
+                    ssh-private-key: ${{ secrets.GITOPS_SSH_KEY }}
+
+            -   name: Promote to prod
+                run: |
+                    git config --global user.name "github-actions[bot]"
+                    git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+                    mkdir -p ~/.ssh
+                    ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+                    git clone git@github.com:${{ github.repository_owner }}/GitOps-Repo.git gitops
+                    cd gitops
+
+                    sed -i "s|newTag:.*|newTag: ${{ inputs.image_tag }}|g" apps/${{ inputs.project }}/overlays/prod/kustomization.yaml
+
+                    if [[ -n $(git status --porcelain) ]]; then
+                      git add apps/${{ inputs.project }}/overlays/prod/kustomization.yaml
+                      git commit -m "deploy(prod): ${{ inputs.project }} @ ${{ inputs.image_tag }}"
+                      git push
+                    else
+                      echo "No changes to commit"
+                    fi
+
+            -   name: Tag as stable
+                run: |
+                    echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+                    docker pull ${{ env.DOCKER_IMAGE }}:${{ inputs.image_tag }}
+                    docker tag ${{ env.DOCKER_IMAGE }}:${{ inputs.image_tag }} ${{ env.DOCKER_IMAGE }}:stable
+                    docker push ${{ env.DOCKER_IMAGE }}:stable

@@ -7,6 +7,8 @@ import { TranslateModule } from '@ngx-translate/core';
 import { LocationService } from '@/core/services/location.service';
 import { WeatherService } from '@/core/services/weather.service';
 import { LanguageService } from '@/core/services/language.service';
+import { AlarmService } from '@/core/services/alarm.service';
+import { AuthService } from '@/core/services/auth.service';
 
 interface WeatherData {
     city: string;
@@ -33,6 +35,8 @@ export class ScHeaderComponent implements OnInit, OnDestroy {
     private locationService = inject(LocationService);
     private weatherService = inject(WeatherService);
     private languageService = inject(LanguageService);
+    alarmService = inject(AlarmService);
+    authService = inject(AuthService);
 
     // Language switcher
     languages = [

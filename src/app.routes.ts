@@ -40,6 +40,9 @@ import { CallsComponent } from '@/pages/calls/calls.component';
 import { NewsComponent } from '@/pages/media/news/news.component';
 import { InvestActiveProjectsComponent } from '@/pages/invest/invest-active-projects/invest-active-projects.component';
 import { ScDashboardComponent } from '@/pages/situation-center/sc-dashboard/sc-dashboard.component';
+import { GesDetailComponent } from '@/pages/situation-center/ges/ges-detail/ges-detail.component';
+import { UzgidroNewsComponent } from '@/pages/uzgidro-news/uzgidro-news.component';
+import { SnowCoverComponent } from '@/pages/situation-center/reservoirs-info/snow-cover/snow-cover.component';
 import { PersonnelRecordsComponent } from '@/pages/hrm/personnel-records/personnel-records.component';
 import { VacationManagementComponent } from '@/pages/hrm/vacation-management/vacation-management.component';
 import { SalaryManagementComponent } from '@/pages/hrm/salary-management/salary-management.component';
@@ -67,7 +70,7 @@ export const appRoutes: Routes = [
         component: AppLayout,
         canActivate: [authGuard],
         children: [
-            { path: 'dashboard', component: Dashboard },
+            { path: 'monitoring', component: Dashboard },
             { path: 'users', component: User, canActivate: [adminGuard] },
             { path: 'roles', component: Role, canActivate: [adminGuard] },
             { path: 'categories', component: CategoriesComponent, canActivate: [scGuard] },
@@ -109,6 +112,7 @@ export const appRoutes: Routes = [
             { path: 'visits', component: VisitsComponent, canActivate: [raisGuard] },
             { path: 'incidents', component: IncidentsComponent, canActivate: [raisGuard] },
             { path: 'reservoir-device', component: ReservoirsDeviceComponent, canActivate: [raisGuard] },
+            { path: 'snow-cover', component: SnowCoverComponent, canActivate: [raisGuard] },
             { path: 'chancellery/pending-signatures', component: PendingSignaturesComponent, canActivate: [raisGuard] },
             { path: 'chancellery/orders', component: OrdersComponent, canActivate: [raisGuard] },
             { path: 'chancellery/reports', component: ReportsComponent, canActivate: [raisGuard] },
@@ -118,9 +122,11 @@ export const appRoutes: Routes = [
             { path: 'lex-search', component: LexSearchComponent, canActivate: [raisGuard] },
             { path: 'calls', component: CallsComponent, canActivate: [raisGuard] },
             { path: 'media/news', component: NewsComponent, canActivate: [raisGuard] },
+            { path: 'uzgidro-news', component: UzgidroNewsComponent, canActivate: [raisGuard] },
+            { path: 'ges/:id', component: GesDetailComponent, canActivate: [raisGuard] }
         ]
     },
-    { path: 'monitoring', component: ScDashboardComponent, canActivate: [authGuard] },
+    { path: 'dashboard', component: ScDashboardComponent, canActivate: [authGuard] },
     { path: 'notfound', component: Notfound },
     { path: 'auth', loadChildren: () => import('./app/pages/auth/auth.routes') },
     { path: '**', redirectTo: '/notfound' }

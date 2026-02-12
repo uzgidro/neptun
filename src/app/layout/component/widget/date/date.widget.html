@@ -1,11 +1,9 @@
-<div class="mb-4">
-    <label for="dateSelector" class="block mb-2">Дата:</label>
-    <p-date-picker
-        inputId="dateSelector"
-        [(ngModel)]="selectedDate"
-        dateFormat="dd.mm.yy"
-        [showIcon]="true"
-        (onSelect)="onDateChange()"
-        placeholder="Выберите дату"
-    ></p-date-picker>
-</div>
+<p-date-picker
+    inputId="dateSelector"
+    [(ngModel)]="selectedDate"
+    dateFormat="dd.mm.yy"
+    [showIcon]="true"
+    (onSelect)="onDateChange()"
+    [placeholder]="'SITUATION_CENTER.COMMON.SELECT_DATE' | translate"
+    appendTo="body"
+></p-date-picker>

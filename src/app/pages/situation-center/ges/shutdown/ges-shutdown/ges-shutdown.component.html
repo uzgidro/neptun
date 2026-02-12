@@ -1,8 +1,26 @@
-@if (authService.isSc()) {
-    <div class="mb-6">
+<div class="flex justify-between items-center mb-6">
+    @if (authService.isSc()) {
         <p-button [label]="'SITUATION_CENTER.SHUTDOWN.ADD_EMERGENCY_SHUTDOWN' | translate" icon="pi pi-plus" (click)="openNew()" />
+    } @else {
+        <div></div>
+    }
+    <div class="flex gap-2">
+        <p-button
+            label="Excel"
+            icon="pi pi-file-excel"
+            severity="success"
+            [loading]="isExcelLoading"
+            (onClick)="download('excel')">
+        </p-button>
+        <p-button
+            label="PDF"
+            icon="pi pi-file-pdf"
+            severity="danger"
+            [loading]="isPdfLoading"
+            (onClick)="download('pdf')">
+        </p-button>
     </div>
-}
+</div>
 
 <div class="table-section ges-section">
 <p-table

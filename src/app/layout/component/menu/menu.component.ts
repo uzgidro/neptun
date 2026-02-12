@@ -32,10 +32,6 @@ export class MenuComponent implements OnInit {
             {
                 items: [
                     {
-                        label: this.t('MENU.OPERATIONAL_MONITORING'),
-                        routerLink: ['/monitoring']
-                    },
-                    {
                         label: this.t('MENU.HOME'),
                         routerLink: ['/dashboard']
                     },
@@ -43,20 +39,20 @@ export class MenuComponent implements OnInit {
                         label: this.t('MENU.HRM'),
                         role: ['admin', 'rais'],
                         items: [
-                            { label: 'Главная HRM', icon: 'pi pi-home', role: ['admin'], routerLink: ['/hrm/dashboard'] },
-                            { label: 'Мой кабинет', icon: 'pi pi-user', routerLink: ['/hrm/my-cabinet'] },
-                            { label: 'Учет кадров', role: ['admin'], routerLink: ['/hrm/personnel-records'] },
-                            { label: 'Управление отпусками', role: ['admin'], routerLink: ['/hrm/vacations'] },
-                            { label: 'Управление зарплатой', role: ['admin'], routerLink: ['/hrm/salary'] },
-                            { label: 'Рекрутинг', role: ['admin'], routerLink: ['/hrm/recruiting'] },
-                            { label: 'Обучение и развитие', role: ['admin'], routerLink: ['/hrm/training'] },
-                            { label: 'Оценка компетенций', role: ['admin'], routerLink: ['/hrm/competency'] },
-                            { label: 'Управление эффективностью', role: ['admin'], routerLink: ['/hrm/performance'] },
-                            { label: 'Аналитика и отчеты', role: ['admin'], routerLink: ['/hrm/analytics'] },
-                            { label: 'Табель', icon: 'pi pi-calendar', role: ['admin'], routerLink: ['/hrm/timesheet'] },
-                            { label: 'HR-документы', icon: 'pi pi-file', role: ['admin'], routerLink: ['/hrm/documents'] },
-                            { label: 'Контроль доступа', icon: 'pi pi-lock', role: ['admin'], routerLink: ['/hrm/access-control'] },
-                            { label: 'Оргструктура', icon: 'pi pi-sitemap', role: ['admin'], routerLink: ['/hrm/org-structure'] },
+                            { label: this.t('HRM.MENU.DASHBOARD'), icon: 'pi pi-home', role: ['admin'], routerLink: ['/hrm/dashboard'] },
+                            { label: this.t('HRM.MENU.MY_CABINET'), icon: 'pi pi-user', routerLink: ['/hrm/my-cabinet'] },
+                            { label: this.t('HRM.MENU.PERSONNEL_RECORDS'), role: ['admin'], routerLink: ['/hrm/personnel-records'] },
+                            { label: this.t('HRM.MENU.VACATION_MANAGEMENT'), role: ['admin'], routerLink: ['/hrm/vacations'] },
+                            { label: this.t('HRM.MENU.SALARY_MANAGEMENT'), role: ['admin'], routerLink: ['/hrm/salary'] },
+                            { label: this.t('HRM.MENU.RECRUITING'), role: ['admin'], routerLink: ['/hrm/recruiting'] },
+                            { label: this.t('HRM.MENU.TRAINING'), role: ['admin'], routerLink: ['/hrm/training'] },
+                            { label: this.t('HRM.MENU.COMPETENCY_ASSESSMENT'), role: ['admin'], routerLink: ['/hrm/competency'] },
+                            { label: this.t('HRM.MENU.PERFORMANCE_MANAGEMENT'), role: ['admin'], routerLink: ['/hrm/performance'] },
+                            { label: this.t('HRM.MENU.ANALYTICS'), role: ['admin'], routerLink: ['/hrm/analytics'] },
+                            { label: this.t('HRM.MENU.TIMESHEET'), icon: 'pi pi-calendar', role: ['admin'], routerLink: ['/hrm/timesheet'] },
+                            { label: this.t('HRM.MENU.HR_DOCUMENTS'), icon: 'pi pi-file', role: ['admin'], routerLink: ['/hrm/documents'] },
+                            { label: this.t('HRM.MENU.ACCESS_CONTROL'), icon: 'pi pi-lock', role: ['admin'], routerLink: ['/hrm/access-control'] },
+                            { label: this.t('HRM.MENU.ORG_STRUCTURE'), icon: 'pi pi-sitemap', role: ['admin'], routerLink: ['/hrm/org-structure'] },
                             { label: this.t('MENU.EMPLOYEES'), role: ['admin'], routerLink: ['/employees'] },
                             { label: this.t('MENU.POSITIONS'), role: ['admin'], routerLink: ['/positions'] },
                             { label: this.t('MENU.DEPARTMENTS'), role: ['admin'], routerLink: ['/departments'] },
@@ -123,6 +119,11 @@ export class MenuComponent implements OnInit {
                                         label: this.t('MENU.HYDRAULIC_STRUCTURES'),
                                         role: ['rais', 'sc'],
                                         routerLink: ['/reservoir-device']
+                                    },
+                                    {
+                                        label: this.t('MENU.SNOW_COVER'),
+                                        role: ['rais', 'sc'],
+                                        routerLink: ['/snow-cover']
                                     }
                                 ]
                             },
@@ -218,7 +219,7 @@ export class MenuComponent implements OnInit {
                         ]
                     },
                     { label: this.t('MENU.CALLS'), role: ['rais'], routerLink: ['/calls'] },
-                    { label: this.t('MENU.PRESS_SERVICE'), routerLink: ['/media/news'] }
+                    { label: this.t('MENU.PRESS_SERVICE'), routerLink: ['/uzgidro-news'] }
                 ]
             }
         ];

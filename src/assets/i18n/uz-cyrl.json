@@ -216,7 +216,8 @@
     "RESERVOIR_SUMMARY_PDF": "Хулоса PDF",
     "HYDRAULIC_STRUCTURES": "Гидротехник иншоотлар",
     "INCIDENTS": "Ҳодисалар",
-    "VISITS": "Ташрифлар"
+      "VISITS": "Ташрифлар",
+      "SNOW_COVER": "MODSNOW"
   },
   "TOPBAR": {
     "CALL": "Қўнғироқ",
@@ -1528,6 +1529,22 @@
       "REQUEST_APPROVED": "Ариза тасдиқланди",
       "REQUEST_REJECTED": "Ариза рад этилди",
       "REQUEST_CANCELLED": "Ариза бекор қилинди"
+    },
+      "MENU": {
+          "DASHBOARD": "HRM Бош саҳифа",
+          "MY_CABINET": "Менинг кабинетим",
+          "PERSONNEL_RECORDS": "Кадрлар ҳисоби",
+          "VACATION_MANAGEMENT": "Таътиллар бошқаруви",
+          "SALARY_MANAGEMENT": "Маош бошқаруви",
+          "RECRUITING": "Рекрутинг",
+          "TRAINING": "Ўқитиш ва ривожлантириш",
+          "COMPETENCY_ASSESSMENT": "Компетенция баҳоси",
+          "PERFORMANCE_MANAGEMENT": "Самарадорлик бошқаруви",
+          "ANALYTICS": "Аналитика ва ҳисоботлар",
+          "TIMESHEET": "Табель",
+          "HR_DOCUMENTS": "HR ҳужжатлар",
+          "ACCESS_CONTROL": "Кириш назорати",
+          "ORG_STRUCTURE": "Ташкилий тузилма"
     }
   },
   "VALIDATION": {
@@ -1754,7 +1771,10 @@
         "ALL_WORKING": "Барча станциялар ишламоқда",
         "TYPE_GES": "ГЭС",
         "TYPE_MINI": "мини",
-        "TYPE_MICRO": "микро"
+          "TYPE_MICRO": "микро",
+          "DETAIL_TITLE": "Ўчириш тафсилотлари",
+          "ONGOING": "Давом этмоқда",
+          "GO_TO_GES": "Станцияга ўтиш"
       },
       "POWER_GENERATION": {
         "YEAR_START": "Йил бошидан",
@@ -1771,7 +1791,10 @@
         "EMERGENCY_SHUTDOWNS": "Фавқулодда ўчиришлар",
         "NO_ACTIVE_SHUTDOWNS": "Фаол ўчиришлар йўқ",
         "RESERVOIRS": "Сув омборлари",
-        "NO_RESERVOIRS": "Сув омборлари йўқ"
+          "NO_RESERVOIRS": "Сув омборлари йўқ",
+          "WORKING": "Ишлаяпти",
+          "RESERVE": "Заҳирада",
+          "IN_REPAIR": "Таъмирда"
       },
       "COMMON": {
         "LOADING": "Юкланмоқда...",
@@ -2873,5 +2896,194 @@
     "HINT": "Lex.uz порталида ҳужжатларни қидириш учун матн киритинг",
     "PAGE_REPORT": "Саҳифа {currentPage} / {totalPages}",
     "LOADING": "Юкланмоқда..."
+  },
+    "GES_DETAIL": {
+        "NOT_FOUND": "ГЭС топилмади",
+        "ERROR_LOADING": "Маълумотларни юклашда хатолик",
+        "ERROR_SAVE": "Сақлашда хатолик",
+        "ERROR_DELETE": "Ўчиришда хатолик",
+        "CREATED": "Ёзув яратилди",
+        "UPDATED": "Ёзув янгиланди",
+        "DELETED": "Ёзув ўчирилди",
+        "AGGREGATES_TITLE": "Агрегатлар",
+        "MNEMONIC_TITLE": "Мнемосхема",
+        "NO_AGGREGATES": "Агрегатлар ҳақида маълумот йўқ",
+        "TABS": {
+            "INFO": "Маълумот",
+            "CONTACTS": "Контактлар",
+            "SHUTDOWNS": "Фавқулодда ўчиришлар",
+            "DISCHARGES": "Бўш ташламалар",
+            "INCIDENTS": "Воқеалар",
+            "VISITS": "Ташрифлар",
+            "TELEMETRY": "Телеметрия",
+            "MNEMONIC": "Мнемосхема"
+        },
+        "KPI": {
+            "CURRENT_POWER": "Актив қувват",
+            "AGGREGATES": "Агрегатлар",
+            "SHUTDOWNS": "Фавқулодда ўчиришлар",
+            "DISCHARGES": "Бўш сув ташламалари"
+        },
+        "STATUS": {
+            "ACTIVE": "Ишлаяпти",
+            "PENDING": "Заҳирада",
+            "REPAIR": "Таъмирда",
+            "OFFLINE": "Ўчирилган"
+        },
+        "AGGREGATE": {
+            "PARAM_NAME": "Параметр",
+            "PARAM_VALUE": "Қиймат",
+            "PARAM_UNIT": "Ўлч. бир.",
+            "ACTIVE_POWER": "Актив қувват",
+            "REACTIVE_POWER": "Реактив қувват",
+            "VOLTAGE_AB": "Кучланиш AB",
+            "VOLTAGE_BC": "Кучланиш BC",
+            "VOLTAGE_CA": "Кучланиш CA",
+            "CURRENT_A": "Ток фаза A",
+            "CURRENT_B": "Ток фаза B",
+            "CURRENT_C": "Ток фаза C",
+            "FREQUENCY": "Частота",
+            "POWER_FACTOR": "Қувват коэффициенти (cos φ)",
+            "ROTOR_VOLTAGE": "Ротор кучланиши",
+            "ROTOR_CURRENT": "Ротор токи",
+            "GUIDE_VANE_1": "Йўналтирувчи аппарат 1",
+            "GUIDE_VANE_2": "Йўналтирувчи аппарат 2"
+        },
+        "UNIT": {
+            "MW": "МВт",
+            "MVAR": "МВАр",
+            "KV": "кВ",
+            "A": "А",
+            "HZ": "Гц",
+            "V": "В",
+            "PERCENT": "%"
+        },
+        "MNEMONIC": {
+            "STATUS": "Ҳолат",
+            "POWER": "Қувват",
+            "NO_DATA": "Телеметрия маълумотлари йўқ",
+            "PLACEHOLDER": "Маълумотлар мавжуд бўлганда мнемосхема кўрсатилади",
+            "NO_SCHEMA": "Мнемосхема бу станция учун мавжуд эмас",
+            "NO_SCHEMA_DESC": "Бу ГЭС учун схема ҳали юкланмаган",
+            "LOAD_ERROR": "Мнемосхемани юклашда хатолик"
+        },
+        "INFO": {
+            "BASIC_INFO": "Асосий маълумот",
+            "NAME": "Номи",
+            "PARENT_ORG": "Бош ташкилот",
+            "TYPES": "Турлари",
+            "DEPARTMENTS": "Бўлимлар",
+            "DEPARTMENT_NAME": "Номи",
+            "DEPARTMENT_DESC": "Тавсифи",
+            "NO_DEPARTMENTS": "Бўлимлар йўқ",
+            "SUB_ORGANIZATIONS": "Қўшимча ташкилотлар"
+        },
+        "CONTACTS": {
+            "NAME": "Ф.И.О.",
+            "POSITION": "Лавозим",
+            "DEPARTMENT": "Бўлим",
+            "PHONE": "Телефон",
+            "EMAIL": "Электрон почта",
+            "ACTIONS": "Амаллар",
+            "CALL": "Қўнғироқ қилиш",
+            "NO_CONTACTS": "Контактлар йўқ"
+        },
+        "FILTERS": {
+            "START_DATE": "Бошланиш санаси",
+            "END_DATE": "Тугаш санаси",
+            "SELECT_DATE": "Санани танланг"
+        },
+        "COMMON": {
+            "CREATED_BY": "Яратди",
+            "FILES": "Файллар",
+            "VIEW_FILES": "Файлларни кўриш",
+            "ATTACH_FILES": "Файлларни бириктириш",
+            "ADD_NEW_FILES": "Янги файллар қўшиш"
+        },
+        "SHUTDOWNS": {
+            "ADD": "Фавқулодда ўчириш қўшиш",
+            "EDIT": "Фавқулодда ўчиришни таҳрирлаш",
+            "START": "Бошланиши",
+            "END": "Тугаши",
+            "REASON": "Сабаби",
+            "POWER_LOSS": "Қувват йўқотиш",
+            "IDLE_DISCHARGE": "Бўш ташлама",
+            "FILES": "Воқеа файллари",
+            "NO_DATA": "Фавқулодда ўчиришлар ҳақида маълумот йўқ"
+        },
+        "DISCHARGES": {
+            "ADD": "Бўш ташлама қўшиш",
+            "EDIT": "Бўш ташламани таҳрирлаш",
+            "START": "Бошланиши",
+            "END": "Тугаши",
+            "FLOW_RATE": "Сарф, м³/с",
+            "TOTAL_VOLUME": "Ҳажм, млн м³",
+            "REASON": "Сабаби",
+            "STATUS": "Ҳолат",
+            "ONGOING": "Давом этмоқда",
+            "APPROVED": "Тасдиқланган",
+            "COMPLETED": "Тугалланган",
+            "FILES": "Бўш ташлама файллари",
+            "NO_DATA": "Бўш ташламалар ҳақида маълумот йўқ"
+        },
+        "INCIDENTS": {
+            "ADD": "Воқеа қўшиш",
+            "EDIT": "Воқеани таҳрирлаш",
+            "DATE": "Сана",
+            "DESCRIPTION": "Тавсиф",
+            "ORGANIZATION": "Ташкилот",
+            "FILES": "Воқеа файллари",
+            "NO_DATA": "Воқеалар ҳақида маълумот йўқ"
+        },
+        "VISITS": {
+            "ADD": "Ташриф қўшиш",
+            "EDIT": "Ташрифни таҳрирлаш",
+            "DATE": "Сана",
+            "DESCRIPTION": "Тавсиф",
+            "RESPONSIBLE": "Масъул",
+            "ORGANIZATION": "Ташкилот",
+            "FILES": "Ташриф файллари",
+            "NO_DATA": "Ташрифлар ҳақида маълумот йўқ"
+        },
+        "TELEMETRY": {
+            "DEVICE": "Қурилма",
+            "DEVICE_GROUP": "Қурилмалар гуруҳи",
+            "GROUP": "Гуруҳ",
+            "PARAMETER": "Параметр",
+            "VALUE": "Қиймат",
+            "UNIT": "Ўлч. бир.",
+            "QUALITY": "Сифат",
+            "SEVERITY": "Муҳимлик",
+            "TIMESTAMP": "Вақт",
+            "ALL_GROUPS": "Барча гуруҳлар",
+            "ALL_DEVICES": "Барча қурилмалар",
+            "TOTAL_RECORDS": "Жами ёзувлар",
+            "NO_DATA": "Телеметрия маълумотлари йўқ"
+        }
+    },
+    "SNOW_COVER": {
+        "TITLE": "Қор қоплами (MODSNOW)",
+        "TODAY": "Бугун",
+        "YESTERDAY": "Кеча",
+        "YEAR_AGO": "Бир йил олдин",
+        "AVG_COVER": "Ўртача қоплам",
+        "ORGANIZATION": "Ташкилот",
+        "COVER": "Қоплам, %",
+        "DELTA": "Δ бир йил олдинга",
+        "ZONES": "Баландлик зоналари",
+        "ELEVATION": "Баландлик, м",
+        "SCA_PCT": "Қоплам, %",
+        "NO_DATA": "Маълумот йўқ",
+        "RESOURCE_DATE": "Сурат санаси"
+    },
+    "UZGIDRO_NEWS": {
+        "TITLE": "UzGidro Янгиликлари",
+        "TOTAL_NEWS": "Жами янгиликлар",
+        "NEWS_COUNT": "янгилик",
+        "NO_NEWS": "Янгиликлар топилмади",
+        "VIEWS": "Кўришлар",
+        "PUBLISHED": "Нашр этилган",
+        "LOAD_ERROR": "Янгиликларни юклашда хатолик",
+        "PAGE_REPORT": "{first}-{last} кўрсатилмоқда, жами {totalRecords}"
   }
 }

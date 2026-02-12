@@ -219,7 +219,8 @@
     "RESERVOIR_SUMMARY_PDF": "Summary PDF",
     "HYDRAULIC_STRUCTURES": "Hydraulic Structures",
     "INCIDENTS": "Incidents",
-    "VISITS": "Visits"
+      "VISITS": "Visits",
+      "SNOW_COVER": "MODSNOW"
   },
   "TOPBAR": {
     "CALL": "Call",
@@ -1531,6 +1532,22 @@
       "REQUEST_APPROVED": "Request approved",
       "REQUEST_REJECTED": "Request rejected",
       "REQUEST_CANCELLED": "Request cancelled"
+    },
+      "MENU": {
+          "DASHBOARD": "HRM Dashboard",
+          "MY_CABINET": "My Cabinet",
+          "PERSONNEL_RECORDS": "Personnel Records",
+          "VACATION_MANAGEMENT": "Vacation Management",
+          "SALARY_MANAGEMENT": "Salary Management",
+          "RECRUITING": "Recruiting",
+          "TRAINING": "Training & Development",
+          "COMPETENCY_ASSESSMENT": "Competency Assessment",
+          "PERFORMANCE_MANAGEMENT": "Performance Management",
+          "ANALYTICS": "Analytics & Reports",
+          "TIMESHEET": "Timesheet",
+          "HR_DOCUMENTS": "HR Documents",
+          "ACCESS_CONTROL": "Access Control",
+          "ORG_STRUCTURE": "Org Structure"
     }
   },
   "VALIDATION": {
@@ -1757,7 +1774,10 @@
         "ALL_WORKING": "All stations operational",
         "TYPE_GES": "HPP",
         "TYPE_MINI": "mini",
-        "TYPE_MICRO": "micro"
+          "TYPE_MICRO": "micro",
+          "DETAIL_TITLE": "Shutdown Details",
+          "ONGOING": "Ongoing",
+          "GO_TO_GES": "Go to station"
       },
       "POWER_GENERATION": {
         "YEAR_START": "Year to Date",
@@ -1774,7 +1794,10 @@
         "EMERGENCY_SHUTDOWNS": "Emergency Shutdowns",
         "NO_ACTIVE_SHUTDOWNS": "No active shutdowns",
         "RESERVOIRS": "Reservoirs",
-        "NO_RESERVOIRS": "No reservoirs"
+          "NO_RESERVOIRS": "No reservoirs",
+          "WORKING": "Working",
+          "RESERVE": "In reserve",
+          "IN_REPAIR": "Under repair"
       },
       "COMMON": {
         "LOADING": "Loading...",
@@ -2901,5 +2924,194 @@
     "HINT": "Enter text to search documents on Lex.uz portal",
     "PAGE_REPORT": "Page {currentPage} of {totalPages}",
     "LOADING": "Loading..."
+  },
+    "GES_DETAIL": {
+        "NOT_FOUND": "HPP not found",
+        "ERROR_LOADING": "Error loading data",
+        "ERROR_SAVE": "Error saving",
+        "ERROR_DELETE": "Error deleting",
+        "CREATED": "Record created",
+        "UPDATED": "Record updated",
+        "DELETED": "Record deleted",
+        "AGGREGATES_TITLE": "Aggregates",
+        "MNEMONIC_TITLE": "Mnemonic Scheme",
+        "NO_AGGREGATES": "No aggregate data",
+        "TABS": {
+            "INFO": "Information",
+            "CONTACTS": "Contacts",
+            "SHUTDOWNS": "Emergency Outages",
+            "DISCHARGES": "Idle Discharges",
+            "INCIDENTS": "Incidents",
+            "VISITS": "Visits",
+            "TELEMETRY": "Telemetry",
+            "MNEMONIC": "Mnemonic Scheme"
+        },
+        "KPI": {
+            "CURRENT_POWER": "Active Power",
+            "AGGREGATES": "Aggregates",
+            "SHUTDOWNS": "Emergency Outages",
+            "DISCHARGES": "Idle Discharges"
+        },
+        "STATUS": {
+            "ACTIVE": "Active",
+            "PENDING": "In Reserve",
+            "REPAIR": "Repair",
+            "OFFLINE": "Offline"
+        },
+        "AGGREGATE": {
+            "PARAM_NAME": "Parameter",
+            "PARAM_VALUE": "Value",
+            "PARAM_UNIT": "Unit",
+            "ACTIVE_POWER": "Active Power",
+            "REACTIVE_POWER": "Reactive Power",
+            "VOLTAGE_AB": "Voltage AB",
+            "VOLTAGE_BC": "Voltage BC",
+            "VOLTAGE_CA": "Voltage CA",
+            "CURRENT_A": "Current Phase A",
+            "CURRENT_B": "Current Phase B",
+            "CURRENT_C": "Current Phase C",
+            "FREQUENCY": "Frequency",
+            "POWER_FACTOR": "Power Factor (cos φ)",
+            "ROTOR_VOLTAGE": "Rotor Voltage",
+            "ROTOR_CURRENT": "Rotor Current",
+            "GUIDE_VANE_1": "Guide Vane 1",
+            "GUIDE_VANE_2": "Guide Vane 2"
+        },
+        "UNIT": {
+            "MW": "MW",
+            "MVAR": "MVar",
+            "KV": "kV",
+            "A": "A",
+            "HZ": "Hz",
+            "V": "V",
+            "PERCENT": "%"
+        },
+        "MNEMONIC": {
+            "STATUS": "Status",
+            "POWER": "Power",
+            "NO_DATA": "No telemetry data",
+            "PLACEHOLDER": "Mnemonic scheme will be displayed when data is available",
+            "NO_SCHEMA": "Mnemonic scheme is not available for this station",
+            "NO_SCHEMA_DESC": "The schema for this HPP has not been uploaded yet",
+            "LOAD_ERROR": "Error loading mnemonic scheme"
+        },
+        "INFO": {
+            "BASIC_INFO": "Basic Information",
+            "NAME": "Name",
+            "PARENT_ORG": "Parent Organization",
+            "TYPES": "Types",
+            "DEPARTMENTS": "Departments",
+            "DEPARTMENT_NAME": "Name",
+            "DEPARTMENT_DESC": "Description",
+            "NO_DEPARTMENTS": "No departments",
+            "SUB_ORGANIZATIONS": "Sub-organizations"
+        },
+        "CONTACTS": {
+            "NAME": "Full Name",
+            "POSITION": "Position",
+            "DEPARTMENT": "Department",
+            "PHONE": "Phone",
+            "EMAIL": "Email",
+            "ACTIONS": "Actions",
+            "CALL": "Call",
+            "NO_CONTACTS": "No contacts"
+        },
+        "FILTERS": {
+            "START_DATE": "Start Date",
+            "END_DATE": "End Date",
+            "SELECT_DATE": "Select date"
+        },
+        "COMMON": {
+            "CREATED_BY": "Created by",
+            "FILES": "Files",
+            "VIEW_FILES": "View files",
+            "ATTACH_FILES": "Attach files",
+            "ADD_NEW_FILES": "Add new files"
+        },
+        "SHUTDOWNS": {
+            "ADD": "Add Emergency Outage",
+            "EDIT": "Edit Emergency Outage",
+            "START": "Start",
+            "END": "End",
+            "REASON": "Reason",
+            "POWER_LOSS": "Power Loss",
+            "IDLE_DISCHARGE": "Idle Discharge",
+            "FILES": "Event Files",
+            "NO_DATA": "No emergency outage data"
+        },
+        "DISCHARGES": {
+            "ADD": "Add Idle Discharge",
+            "EDIT": "Edit Idle Discharge",
+            "START": "Start",
+            "END": "End",
+            "FLOW_RATE": "Flow Rate, m³/s",
+            "TOTAL_VOLUME": "Volume, mln m³",
+            "REASON": "Reason",
+            "STATUS": "Status",
+            "ONGOING": "Ongoing",
+            "APPROVED": "Approved",
+            "COMPLETED": "Completed",
+            "FILES": "Idle Discharge Files",
+            "NO_DATA": "No idle discharge data"
+        },
+        "INCIDENTS": {
+            "ADD": "Add Incident",
+            "EDIT": "Edit Incident",
+            "DATE": "Date",
+            "DESCRIPTION": "Description",
+            "ORGANIZATION": "Organization",
+            "FILES": "Incident Files",
+            "NO_DATA": "No incident data"
+        },
+        "VISITS": {
+            "ADD": "Add Visit",
+            "EDIT": "Edit Visit",
+            "DATE": "Date",
+            "DESCRIPTION": "Description",
+            "RESPONSIBLE": "Responsible",
+            "ORGANIZATION": "Organization",
+            "FILES": "Visit Files",
+            "NO_DATA": "No visit data"
+        },
+        "TELEMETRY": {
+            "DEVICE": "Device",
+            "DEVICE_GROUP": "Device Group",
+            "GROUP": "Group",
+            "PARAMETER": "Parameter",
+            "VALUE": "Value",
+            "UNIT": "Unit",
+            "QUALITY": "Quality",
+            "SEVERITY": "Severity",
+            "TIMESTAMP": "Timestamp",
+            "ALL_GROUPS": "All Groups",
+            "ALL_DEVICES": "All Devices",
+            "TOTAL_RECORDS": "Total Records",
+            "NO_DATA": "No telemetry data"
+        }
+    },
+    "SNOW_COVER": {
+        "TITLE": "Snow Cover (MODSNOW)",
+        "TODAY": "Today",
+        "YESTERDAY": "Yesterday",
+        "YEAR_AGO": "Year Ago",
+        "AVG_COVER": "Average Cover",
+        "ORGANIZATION": "Organization",
+        "COVER": "Cover, %",
+        "DELTA": "Δ vs Year Ago",
+        "ZONES": "Elevation Zones",
+        "ELEVATION": "Elevation, m",
+        "SCA_PCT": "Cover, %",
+        "NO_DATA": "No data",
+        "RESOURCE_DATE": "Image Date"
+    },
+    "UZGIDRO_NEWS": {
+        "TITLE": "UzGidro News",
+        "TOTAL_NEWS": "Total news",
+        "NEWS_COUNT": "news",
+        "NO_NEWS": "No news found",
+        "VIEWS": "Views",
+        "PUBLISHED": "Published",
+        "LOAD_ERROR": "Failed to load news",
+        "PAGE_REPORT": "Showing {first}-{last} of {totalRecords}"
   }
 }

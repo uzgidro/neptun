@@ -1,6 +1,6 @@
 <div class="card h-full">
     <div class="mb-4 flex justify-between items-start">
-        <div class="font-semibold text-xl">События</div>
+        <div class="font-semibold text-xl">{{ 'DASHBOARD.EVENTS' | translate }}</div>
         <div class="flex gap-2 items-baseline">
             <app-date-picker
                 [(ngModel)]="selectedDate"
@@ -76,7 +76,7 @@
                 </ul>
             } @empty {
                 <div class="flex items-center justify-center h-full text-muted-color">
-                    Нет событий
+                    {{ 'DASHBOARD.NO_EVENTS' | translate }}
                 </div>
             }
         }

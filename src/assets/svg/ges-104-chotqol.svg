@@ -1,0 +1,2497 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg
+    style="z-index: 1"
+    width="100%"
+    viewBox="0 0 1300 620"
+    height="100%"
+    xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    overflow="hidden"
+>
+    <defs>
+        <clipPath id="clip0">
+            <rect x="0" y="0" width="1280" height="720" />
+        </clipPath>
+        <clipPath id="clip1">
+            <rect x="0" y="0" width="1.19062e+06" height="581025" />
+        </clipPath>
+        <image
+            width="156"
+            height="76"
+            xlink:href="data:image/png;base64,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"
+            preserveAspectRatio="none"
+            id="img2"
+        ></image>
+        <clipPath id="clip3">
+            <rect x="0" y="0" width="1.19062e+06" height="580048" />
+        </clipPath>
+        <clipPath id="clip4">
+            <rect x="1079" y="5" width="96" height="90" />
+        </clipPath>
+        <clipPath id="clip5">
+            <rect x="1182" y="72" width="88" height="90" />
+        </clipPath>
+        <clipPath id="clip6">
+            <rect x="1186" y="31" width="74" height="91" />
+        </clipPath>
+        <clipPath id="clip7">
+            <rect x="0" y="0" width="85725" height="190500" />
+        </clipPath>
+        <image
+            width="39"
+            height="91"
+            xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACcAAABbCAMAAADHnWy9AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAzUExURQAAAP8AAP8AAP8AAP8AAP8AAP8AAP8AAP8AAP0AAP0AAP4AAP4AAP4AAP4AAP4AAP8AAMVaHOIAAAAQdFJOUwAQIDBAUGBwgI+fr7/P3+8jGoKKAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAA5klEQVRIS+2XWQ7DIAxETZZmL77/aStIAHtwegK/T/ykJDMgBaLGwpqPmAkG0JgHVDITajyhknHPvYR77iXccy/hnnsJ98wfsXCgxldo4+18iGgxcyzDnXD0Aq24YrITnbhm8A1Eg/ViQA5oxtWO9f7kPhDNVZL7/+Q4lgz7JiRL0Yg2nAnOplH44rQSRXdEI44rs9TotZZDa0QXGplUhMauxdipeFtIPEVo+g1RitB04UT7XtHVIorQ6Fq6SBoyHF2ERtYCRWhaOBuONCWcvghNqaXuzTfu02IWoUmnxS5CEy5xIio/svdq42UQ6OwAAAAASUVORK5CYII="
+            preserveAspectRatio="none"
+            id="img8"
+        ></image>
+        <clipPath id="clip9">
+            <rect x="0" y="0" width="81642.9" height="190500" />
+        </clipPath>
+        <clipPath id="clip10">
+            <rect x="0" y="0" width="85725" height="190500" />
+        </clipPath>
+        <image
+            width="39"
+            height="91"
+            xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACcAAABbCAMAAADHnWy9AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAzUExURQAAACDfECDXGCXaFSTbFCPZFiPaFSLbFCTbFiTbFSPcEyLcFCHaFSLbFCPcEyPaFSPbFdh6Az4AAAAQdFJOUwAQIDBAUGBwgI+fr7/P3+8jGoKKAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAA4klEQVRIS+2XWQ7FMAgDky6ve8P9T/tEV+zQGzCfMFIku5HSlJi2yJZ56LCJyMLDmlGUnsdMe2hSGl4geT89WXmDTJcmMvDK0j+aSMvLl1yMt/H2ZTGayMTrmwE0kY6Fk8aequx+LVoE4oZzFoE44XTsKHUtTxFIFQ5G8jKiZotAoBYoAoFwVt4aTC1cBPLU0n6fqpT75LoI5LotXhHIcVvcIhCt5aMIZE1p5pnLmHjyQZrXCy+cci9N2LmOZ3E/6B9rHxekDig8JbzwlPDCU8ILTwkvPKVhTarX/Qk/xOzfwh9/6mrjSwh/mwAAAABJRU5ErkJggg=="
+            preserveAspectRatio="none"
+            id="img11"
+        ></image>
+        <clipPath id="clip12">
+            <rect x="0" y="0" width="81642.9" height="190500" />
+        </clipPath>
+        <clipPath id="clip13">
+            <rect x="220" y="364" width="84" height="84" />
+        </clipPath>
+        <clipPath id="clip14">
+            <rect x="220" y="364" width="84" height="84" />
+        </clipPath>
+        <clipPath id="clip15">
+            <rect x="220" y="364" width="84" height="84" />
+        </clipPath>
+        <clipPath id="clip16">
+            <rect x="505" y="363" width="84" height="84" />
+        </clipPath>
+        <clipPath id="clip17">
+            <rect x="505" y="363" width="84" height="84" />
+        </clipPath>
+        <clipPath id="clip18">
+            <rect x="505" y="363" width="84" height="84" />
+        </clipPath>
+        <clipPath id="clip19">
+            <rect x="751" y="364" width="84" height="84" />
+        </clipPath>
+        <clipPath id="clip20">
+            <rect x="751" y="364" width="84" height="84" />
+        </clipPath>
+        <clipPath id="clip21">
+            <rect x="751" y="364" width="84" height="84" />
+        </clipPath>
+        <clipPath id="clip22">
+            <rect x="1022" y="363" width="84" height="83" />
+        </clipPath>
+        <clipPath id="clip23">
+            <rect x="1022" y="363" width="84" height="83" />
+        </clipPath>
+        <clipPath id="clip24">
+            <rect x="1022" y="363" width="84" height="83" />
+        </clipPath>
+        <clipPath id="clip25">
+            <rect x="217" y="398" width="94" height="91" />
+        </clipPath>
+        <clipPath id="clip26">
+            <rect x="217" y="411" width="94" height="90" />
+        </clipPath>
+        <clipPath id="clip27">
+            <rect x="217" y="424" width="94" height="90" />
+        </clipPath>
+        <clipPath id="clip28">
+            <rect x="217" y="436" width="94" height="91" />
+        </clipPath>
+        <clipPath id="clip29">
+            <rect x="217" y="449" width="94" height="91" />
+        </clipPath>
+        <clipPath id="clip30">
+            <rect x="217" y="462" width="94" height="91" />
+        </clipPath>
+        <clipPath id="clip31">
+            <rect x="500" y="397" width="94" height="91" />
+        </clipPath>
+        <clipPath id="clip32">
+            <rect x="500" y="410" width="94" height="90" />
+        </clipPath>
+        <clipPath id="clip33">
+            <rect x="500" y="423" width="94" height="90" />
+        </clipPath>
+        <clipPath id="clip34">
+            <rect x="500" y="435" width="94" height="91" />
+        </clipPath>
+        <clipPath id="clip35">
+            <rect x="500" y="448" width="94" height="91" />
+        </clipPath>
+        <clipPath id="clip36">
+            <rect x="500" y="461" width="94" height="91" />
+        </clipPath>
+        <clipPath id="clip37">
+            <rect x="730" y="396" width="94" height="91" />
+        </clipPath>
+        <clipPath id="clip38">
+            <rect x="730" y="409" width="94" height="90" />
+        </clipPath>
+        <clipPath id="clip39">
+            <rect x="730" y="422" width="94" height="90" />
+        </clipPath>
+        <clipPath id="clip40">
+            <rect x="730" y="434" width="94" height="91" />
+        </clipPath>
+        <clipPath id="clip41">
+            <rect x="730" y="447" width="94" height="91" />
+        </clipPath>
+        <clipPath id="clip42">
+            <rect x="730" y="460" width="94" height="91" />
+        </clipPath>
+        <clipPath id="clip43">
+            <rect x="1021" y="395" width="95" height="91" />
+        </clipPath>
+        <clipPath id="clip44">
+            <rect x="1021" y="408" width="95" height="91" />
+        </clipPath>
+        <clipPath id="clip45">
+            <rect x="1021" y="421" width="95" height="90" />
+        </clipPath>
+        <clipPath id="clip46">
+            <rect x="1021" y="434" width="95" height="90" />
+        </clipPath>
+        <clipPath id="clip47">
+            <rect x="1021" y="446" width="95" height="91" />
+        </clipPath>
+        <clipPath id="clip48">
+            <rect x="1021" y="459" width="95" height="91" />
+        </clipPath>
+    </defs>
+    <g clip-path="url(#clip0)">
+        <rect
+            x="0"
+            y="0"
+            width="1280"
+            height="720"
+            fill="#FFFFFF"
+            fill-opacity="0"
+        />
+        <path
+            d="M0 0 0.000104987 25.0035"
+            stroke="#4472C4"
+            stroke-width="0.666667"
+            stroke-miterlimit="8"
+            fill="none"
+            fill-rule="evenodd"
+            transform="matrix(1 0 0 -1 263.5 364.504)"
+        />
+        <path
+            d="M0 0 0.000104987 11.7354"
+            stroke="#4472C4"
+            stroke-width="0.666667"
+            stroke-miterlimit="8"
+            fill="none"
+            fill-rule="evenodd"
+            transform="matrix(1 0 0 -1 263.5 383.235)"
+        />
+        <text
+            fill="#8A94AD"
+            font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+            font-weight="700"
+            font-size="11"
+            transform="translate(174.767 361)"
+        >
+            Г
+            <tspan font-size="11" x="6.83333" y="0">-</tspan>
+            1
+            <tspan font-size="11" x="0" y="13">СВ487/80</tspan>
+            -24
+            <tspan font-size="11" x="0" y="26">УХЛ4</tspan>
+            <tspan font-size="11" x="0" y="39">Un=10,5</tspan>
+            <tspan font-size="11" x="41" y="39">кВ</tspan>
+            <tspan font-size="11" x="0" y="52">P=22,5</tspan>
+            <tspan font-size="11" x="33.8333" y="52">МВт</tspan>
+            <tspan font-size="11" x="0" y="64">S=25,0MVA</tspan>
+        </text>
+        <path
+            d="M261.5 294.5 262.542 384.259"
+            stroke="#6600CC"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="none"
+            fill-rule="evenodd"
+        />
+        <text
+            fill="#8A94AD"
+            font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+            font-weight="700"
+            font-size="11"
+            transform="translate(460.676 357)"
+        >
+            Г-2
+            <tspan font-size="11" x="0" y="13">СВ487/80-24</tspan>
+            <tspan font-size="11" x="0" y="26">УХЛ4</tspan>
+            <tspan font-size="11" x="0" y="39">Un=10,5 кВ</tspan>
+            <tspan font-size="11" x="0" y="52">P=22,5 МВт</tspan>
+            <tspan font-size="11" x="0" y="64">S=25,0MVA</tspan>
+            <tspan font-size="11" x="247.827" y="9">Г-3</tspan>
+
+            <tspan font-size="11" x="247.827" y="22">СВ487/80-24</tspan>
+
+            <tspan font-size="11" x="247.827" y="35">УХЛ4</tspan>
+            <tspan font-size="11" x="247.827" y="48">Un=10,5 кВ</tspan>
+
+            <tspan font-size="11" x="247.827" y="61">P=22,5 МВт</tspan>
+            <tspan font-size="11" x="247.827" y="73">S=25,0MVA</tspan>
+            <tspan font-size="11" x="653.062" y="22">Г-4</tspan>
+
+            <tspan font-size="11" x="653.062" y="35">СВ487/80-24</tspan>
+
+            <tspan font-size="11" x="653.062" y="48">УХЛ4</tspan>
+            <tspan font-size="11" x="653.062" y="61">Un=10,5 кВ</tspan>
+
+            <tspan font-size="11" x="653.062" y="74">P=22,5 МВт</tspan>
+            <tspan font-size="11" x="655" y="86">S=25,0MVA</tspan>
+            <tspan font-size="9" x="-251.785" y="-68">В</tspan>
+            <tspan font-size="9" x="-245.618" y="-68">-</tspan>
+            <tspan font-size="9" x="-242.452" y="-68">Г</tspan>
+            <tspan font-size="9" x="-236.452" y="-68">-</tspan>
+            <tspan font-size="9" x="-233.285" y="-68">1</tspan>
+            <tspan font-size="11" x="59.6311" y="-244">Т</tspan>
+            <tspan font-size="11" x="66.7978" y="-244">-</tspan>
+            1
+            <tspan font-size="11" x="32.7177" y="-231">ТДЦ</tspan>
+            <tspan font-size="11" x="55.5511" y="-231">-</tspan>
+            63000/110
+            <tspan font-size="11" x="71.7177" y="-218">ВМ У1</tspan>
+            <tspan font-size="11" x="51.0511" y="-205">121</tspan>
+            <tspan font-size="11" x="67.0511" y="-205">/</tspan>
+            10,5
+            <tspan font-size="11" x="91.3844" y="-205">кВ</tspan>
+            <tspan font-size="11" x="54.3844" y="-192">63000</tspan>
+            <tspan font-size="11" x="83.7177" y="-192">кВА</tspan>
+            <tspan font-size="11" x="68.3844" y="-180">10p/10p</tspan>
+            <tspan font-size="11" x="-431.623" y="-14">ТВ</tspan>
+            -Г-1
+        </text>
+        <path
+            d="M1.5-6.40656e-06 1.5001 24.5811-1.49989 24.5811-1.5 6.40656e-06ZM4.5001 24.5811C4.50012 27.0664 2.48541 29.0811 0.000124207 29.0811-2.48516 29.0811-4.49988 27.0664-4.4999 24.5811-4.49991 22.0958-2.4852 20.0811 8.57672e-05 20.0811 2.48537 20.0811 4.50009 22.0958 4.5001 24.5811Z"
+            fill="#6600CC"
+            transform="matrix(1 0 0 -1 715.5 277.081)"
+        />
+        <path
+            d="M546.5 257.5 546.5 382.369"
+            stroke="#6600CC"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="none"
+            fill-rule="evenodd"
+        />
+        <path
+            d="M0 15C-1.9097e-15 6.71573 6.71573-1.9097e-15 15-3.8194e-15 23.2843-7.6388e-15 30 6.71573 30 15 30 23.2843 23.2843 30 15 30 6.71573 30-9.5485e-15 23.2843 0 15Z"
+            stroke="#CCC937"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="#FF0000"
+            fill-rule="evenodd"
+            transform="matrix(1 0 0 -1 626.5 176.5)"
+        />
+        <path
+            d="M0 15C-1.9097e-15 6.71573 6.71573-1.9097e-15 15-3.8194e-15 23.2843-7.6388e-15 30 6.71573 30 15 30 23.2843 23.2843 30 15 30 6.71573 30-9.5485e-15 23.2843 0 15Z"
+            fill="#FF0000"
+            fill-rule="evenodd"
+            transform="matrix(1 0 0 -1 626.5 199.5)"
+        />
+        <path
+            d="M-1.50812 15-1.16401 11.6965-0.20213 8.6048 1.31771 5.77237 3.37371 3.37371 5.77237 1.31771 8.6048-0.20213 11.6965-1.16401 15-1.50812 18.2988-1.16449 21.4611-0.202057 24.2244 1.31775 26.6917 3.37383 28.6883 5.78353 30.2021 8.6048 31.164 11.6965 31.5081 15 31.1645 18.2988 30.2021 21.4611 28.6883 24.2134 26.6918 26.6918 24.2134 28.6883 21.4611 30.2021 18.2988 31.1645 15 31.5081 11.6965 31.164 8.6048 30.2021 5.78353 28.6883 3.37383 26.6917 1.31775 24.2244-0.202057 21.4611-1.16449 18.2988ZM1.80443 17.8446 1.74751 17.5633 2.62251 20.4383 2.50182 20.1521 3.87682 22.6521 3.71483 22.4147 5.58983 24.6647 5.39453 24.47 7.58203 26.2825 7.33423 26.1158 9.89673 27.4908 9.6331 27.3802 12.4456 28.2552 12.1554 28.1956 15.1554 28.5081 14.8446 28.5081 17.8446 28.1956 17.5633 28.2525 20.4383 27.3775 20.1521 27.4982 22.6521 26.1232 22.434 26.2694 24.684 24.4569 24.4569 24.684 26.2694 22.434 26.1232 22.6521 27.4982 20.1521 27.3775 20.4383 28.2525 17.5633 28.1956 17.8446 28.5081 14.8446 28.5081 15.1554 28.1956 12.1554 28.2552 12.4456 27.3802 9.6331 27.4908 9.89673 26.1158 7.33423 26.2825 7.58203 24.47 5.39453 24.6647 5.58983 22.4147 3.71483 22.6521 3.87682 20.1521 2.50182 20.4383 2.62251 17.5633 1.74751 17.8446 1.80443 14.8446 1.49193 15.1554 1.49193 12.1554 1.80443 12.4456 1.74479 9.6331 2.61979 9.89673 2.50924 7.33423 3.88424 7.60119 3.70138 5.41369 5.57638 5.57638 5.41369 3.70138 7.60119 3.88424 7.33423 2.50924 9.89673 2.61979 9.6331 1.74479 12.4456 1.80443 12.1554 1.49193 15.1554 1.49193 14.8446Z"
+            fill="#7030A0"
+            transform="matrix(1 0 0 -1 626.5 199.5)"
+        />
+        <path
+            d="M1065.5 248.5 1066.42 389.042"
+            stroke="#6600CC"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="none"
+            fill-rule="evenodd"
+        />
+        <path
+            d="M1.5-0.00260736 1.75806 148.457-1.24194 148.462-1.5 0.00260736ZM4.75805 148.451C4.76237 150.937 2.75116 152.955 0.26588 152.959-2.2194 152.964-4.23762 150.952-4.24194 148.467-4.24626 145.982-2.23504 143.964 0.250236 143.959 2.73551 143.955 4.75373 145.966 4.75805 148.451Z"
+            fill="#6600CC"
+            transform="matrix(1 0 0 -1 372.5 438.959)"
+        />
+        <text
+            fill="#8A94AD"
+            font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+            font-weight="700"
+            font-size="21"
+            transform="translate(643.817 19)"
+        >
+            Quyi
+            <tspan font-size="21" x="50.5" y="0">Chotqol</tspan>
+            <tspan font-size="21" x="129.333" y="0">GES</tspan>
+        </text>
+        <path
+            d="M0 0 364.175 0.518005"
+            stroke="#6600CC"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="none"
+            fill-rule="evenodd"
+            transform="matrix(-1 0 0 1 566.675 252.5)"
+        />
+        <text
+            fill="#8A94AD"
+            font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+            font-weight="700"
+            font-size="11"
+            transform="translate(850.804 47)"
+        >
+            ВЛ
+            <tspan font-size="11" x="15.1666" y="0">-</tspan>
+            110
+            <tspan font-size="11" x="37.3333" y="0">кВ</tspan>
+            <tspan font-size="11" x="-29.0867" y="13">«</tspan>
+            <tspan font-size="11" x="-23.7534" y="13">Нижнечаткальская</tspan>
+            <tspan font-size="11" x="70.9133" y="13">-</tspan>
+            1
+        </text>
+        <path
+            d="M1.5-5.80612e-06 1.5001 27.1231-1.49989 27.1232-1.5 5.80612e-06ZM-4.5 1.74184e-05C-4.50001-2.48526-2.4853-4.49999-1.74184e-05-4.5 2.48526-4.50001 4.49999-2.4853 4.5-1.74184e-05 4.50001 2.48526 2.4853 4.49999 1.74184e-05 4.5-2.48526 4.50001-4.49999 2.4853-4.5 1.74184e-05Z"
+            fill="#7030A0"
+            transform="matrix(1 0 0 -1 492.5 252.623)"
+        />
+        <rect
+            x="0"
+            y="0"
+            width="18"
+            height="18"
+            stroke="#7030A0"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="#FF0000"
+            transform="matrix(1 0 0 -1 482.5 238.5)"
+        />
+        <path
+            d="M1.5-4.17512e-06 1.5001 37.7187-1.49989 37.7187-1.5 4.17512e-06ZM4.5001 37.7187C4.50011 40.204 2.4854 42.2187 0.000117512 42.2187-2.48516 42.2187-4.49989 40.204-4.4999 37.7188-4.4999 35.2335-2.48519 33.2187 9.24615e-05 33.2187 2.48537 33.2187 4.5001 35.2334 4.5001 37.7187Z"
+            fill="#B5B500"
+            transform="matrix(1 0 0 -1 640.5 146.219)"
+        />
+        <path
+            d="M0 0 0.456273 34.7919"
+            stroke="#7030A0"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="none"
+            fill-rule="evenodd"
+            transform="matrix(1 0 0 -1 491.5 220.292)"
+        />
+        <rect
+            x="0"
+            y="0"
+            width="18"
+            height="20"
+            stroke="#7030A0"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="#FF0000"
+            transform="matrix(1 0 0 -1 311.5 294.5)"
+        />
+        <rect
+            x="0"
+            y="0"
+            width="19"
+            height="19"
+            stroke="#7030A0"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="#FF0000"
+            transform="matrix(1 0 0 -1 252.5 294.5)"
+        />
+        <path
+            d="M0 0 0.183832 20.3606"
+            stroke="#B5B500"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="none"
+            fill-rule="evenodd"
+            transform="matrix(1 0 0 -1 261.5 275.861)"
+        />
+        <text
+            fill="#8A94AD"
+            font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+            font-weight="700"
+            font-size="11"
+            transform="translate(613.626 49)"
+        >
+            ВЛ
+            <tspan font-size="11" x="15.1666" y="0">-</tspan>
+            110
+            <tspan font-size="11" x="37.3333" y="0">кВ</tspan>
+            <tspan font-size="11" x="-29.08" y="13">«</tspan>
+            <tspan font-size="11" x="-23.7467" y="13">Нижнечаткальская</tspan>
+            <tspan font-size="11" x="70.92" y="13">-</tspan>
+            1
+        </text>
+        <path
+            d="M329.5 551.5 504.879 551.5"
+            stroke="#7F7F7F"
+            stroke-width="3"
+            stroke-linejoin="round"
+            stroke-miterlimit="10"
+            fill="none"
+            fill-rule="evenodd"
+        />
+        <path
+            d="M491.5 591.5 542.681 591.5"
+            stroke="#7F7F7F"
+            stroke-width="3"
+            stroke-linejoin="round"
+            stroke-miterlimit="10"
+            fill="none"
+            fill-rule="evenodd"
+        />
+        <path
+            d="M634.5 551.5 860.564 551.5"
+            stroke="#7F7F7F"
+            stroke-width="3"
+            stroke-linejoin="round"
+            stroke-miterlimit="10"
+            fill="none"
+            fill-rule="evenodd"
+        />
+        <path
+            d="M323 255.5 323 272.642 320 272.642 320 255.5ZM317 255.5C317 253.015 319.015 251 321.5 251 323.985 251 326 253.015 326 255.5 326 257.985 323.985 260 321.5 260 319.015 260 317 257.985 317 255.5Z"
+            fill="#7030A0"
+        />
+        <path
+            d="M0 15C-1.9097e-15 6.71573 6.71573-1.9097e-15 15-3.8194e-15 23.2843-7.6388e-15 30 6.71573 30 15 30 23.2843 23.2843 30 15 30 6.71573 30-9.5485e-15 23.2843 0 15Z"
+            stroke="#7F7F7F"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="#FF0000"
+            fill-rule="evenodd"
+            transform="matrix(1 0 0 -1 357.5 489.5)"
+        />
+        <path
+            d="M0 15.5C-1.9097e-15 6.93959 6.71573-1.97336e-15 15-3.94671e-15 23.2843-7.89343e-15 30 6.93959 30 15.5 30 24.0604 23.2843 31 15 31 6.71573 31-9.5485e-15 24.0604 0 15.5Z"
+            fill="#FF0000"
+            fill-rule="evenodd"
+            transform="matrix(1 0 0 -1 357.5 469.5)"
+        />
+        <path
+            d="M-1.50748 15.5-1.1654 12.0792-0.20654 8.92864 1.30316 6.04649 3.35803 3.51214 5.76158 1.45195 8.57794-0.127951 11.6814-1.16242 15-1.50812 18.3137-1.16294 21.4879-0.127881 24.2354 1.45194 26.7075 3.51199 28.7026 6.05756 30.2065 8.92864 31.1654 12.0792 31.5075 15.5 31.1658 18.9164 30.2086 22.1299 28.698 25.0139 26.7074 27.485 24.246 29.6045 21.4749 31.1979 18.2988 32.1645 15 32.5081 11.6965 32.164 8.59124 31.1979 5.75085 29.6045 3.3579 27.4851 1.30789 25.025-0.208625 22.1299-1.16585 18.9164ZM1.80506 18.4757 1.75008 18.1968 2.62508 21.1343 2.51625 20.8665 3.89125 23.4915 3.71483 23.2272 5.58983 25.4772 5.43205 25.3146 7.61955 27.2521 7.35888 27.0668 9.92138 28.5043 9.6331 28.3802 12.4456 29.2552 12.1554 29.1956 15.1554 29.5081 14.8446 29.5081 17.8446 29.1956 17.5633 29.2525 20.4383 28.3775 20.1273 28.5121 22.6273 27.0746 22.3962 27.2383 24.6462 25.3008 24.4569 25.4965 26.2694 23.2465 26.1088 23.4915 27.4838 20.8665 27.3749 21.1343 28.2499 18.1968 28.1949 18.4757 28.5074 15.3507 28.5074 15.6493 28.1949 12.5243 28.2525 12.8117 27.3775 9.93674 27.4838 10.196 26.1088 7.57101 26.2569 7.80032 24.4444 5.48782 24.6647 5.71483 22.4147 3.83983 22.6273 3.98786 20.1273 2.55036 20.41 2.67609 17.535 1.73859 17.8446 1.80443 14.8446 1.49193 15.1554 1.49193 12.1554 1.80443 12.4743 1.73552 9.66184 2.67302 9.92138 2.55821 7.35888 3.99571 7.60119 3.82638 5.41369 5.70138 5.60263 5.5072 3.72763 7.8197 3.89125 7.57101 2.51625 10.196 2.62251 9.93674 1.74751 12.8117 1.80506 12.5243 1.49256 15.6493 1.49256 15.3507Z"
+            fill="#6600CC"
+            transform="matrix(1 0 0 -1 357.5 469.5)"
+        />
+        <path
+            d="M1.5-1.33672e-05 1.5001 11.7811-1.49989 11.7811-1.5 1.33672e-05ZM4.5001 11.7811C4.50013 14.2663 2.48543 16.2811 0.000145088 16.2811-2.48514 16.2811-4.49987 14.2664-4.4999 11.7811-4.49992 9.29586-2.48522 7.28112 6.48853e-05 7.2811 2.48535 7.28108 4.50008 9.29578 4.5001 11.7811Z"
+            fill="#7F7F7F"
+            transform="matrix(1 0 0 -1 491.5 565.281)"
+        />
+        <path
+            d="M372.5 489.5 373.33 551.824"
+            stroke="#7F7F7F"
+            stroke-width="3"
+            stroke-linejoin="round"
+            stroke-miterlimit="10"
+            fill="none"
+            fill-rule="evenodd"
+        />
+        <path
+            d="M490.5 184.5 625.898 184.5"
+            stroke="#7030A0"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="none"
+            fill-rule="evenodd"
+        />
+        <path
+            d="M279.373 310.347 262.469 310 262.531 307 279.435 307.347ZM279.404 308.847 276.497 304.286 285.403 308.97 276.312 313.285ZM262.408 312.999C259.923 312.948 257.95 310.892 258.001 308.408 258.052 305.923 260.108 303.95 262.592 304.001 265.077 304.052 267.05 306.108 266.999 308.592 266.948 311.077 264.892 313.05 262.408 312.999Z"
+            fill="#7030A0"
+        />
+        <path
+            d="M0 0 170.819 0.000104987"
+            stroke="#6600CC"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="none"
+            fill-rule="evenodd"
+            transform="matrix(-1 0 0 1 262.319 333.5)"
+        />
+        <path
+            d="M91.5001 247.5 91.5002 333.013"
+            stroke="#6600CC"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="none"
+            fill-rule="evenodd"
+        />
+        <path
+            d="M708.5 252.5 751.238 252.5"
+            stroke="#6600CC"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="none"
+            fill-rule="evenodd"
+        />
+        <path
+            d="M1.5-6.40656e-06 1.5001 24.5811-1.49989 24.5811-1.5 6.40656e-06ZM4.5001 24.5811C4.50012 27.0664 2.48541 29.0811 0.000124207 29.0811-2.48516 29.0811-4.49988 27.0664-4.4999 24.5811-4.49991 22.0958-2.4852 20.0811 8.57672e-05 20.0811 2.48537 20.0811 4.50009 22.0958 4.5001 24.5811Z"
+            fill="#6600CC"
+            transform="matrix(1 0 0 -1 91.5001 275.081)"
+        />
+        <path
+            d="M263 255.472 263.379 275.43 260.38 275.487 260 255.529ZM257.001 255.586C256.954 253.101 258.93 251.048 261.415 251.001 263.899 250.954 265.952 252.93 265.999 255.415 266.046 257.899 264.07 259.952 261.586 259.999 259.101 260.046 257.048 258.07 257.001 255.586Z"
+            fill="#7030A0"
+        />
+        <path
+            d="M6.00001-1.49997 18.4397-1.49989 18.4397 1.5001 5.99999 1.50003ZM6 3.41612e-05 8.99997 4.50005 0 0 9.00002-4.49995ZM18.4397-4.4999C20.925-4.49988 22.9397-2.48515 22.9397 0.000130608 22.9397 2.48541 20.9249 4.50012 18.4397 4.5001 15.9544 4.50009 13.9397 2.48536 13.9397 7.9366e-05 13.9397-2.4852 15.9544-4.49991 18.4397-4.4999Z"
+            fill="#7030A0"
+            transform="matrix(-1 0 0 1 339.94 307.5)"
+        />
+        <path
+            d="M321.999 296.448 322.825 320.34 319.827 320.444 319.001 296.552ZM325.771 318.737 321.585 327.887 316.777 319.048Z"
+            fill="#7030A0"
+        />
+        <path
+            d="M374 255.5 374 272.642 371 272.642 371 255.5ZM368 255.5C368 253.015 370.015 251 372.5 251 374.985 251 377 253.015 377 255.5 377 257.985 374.985 260 372.5 260 370.015 260 368 257.985 368 255.5Z"
+            fill="#7030A0"
+        />
+        <rect
+            x="0"
+            y="0"
+            width="18"
+            height="18"
+            stroke="#7030A0"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="#FF0000"
+            transform="matrix(1 0 0 -1 363.5 292.5)"
+        />
+        <path
+            d="M6.00001-1.49997 18.4397-1.49989 18.4397 1.5001 5.99999 1.50003ZM6 3.41612e-05 8.99997 4.50005 0 0 9.00002-4.49995ZM18.4397-4.4999C20.925-4.49988 22.9397-2.48515 22.9397 0.000130608 22.9397 2.48541 20.9249 4.50012 18.4397 4.5001 15.9544 4.50009 13.9397 2.48536 13.9397 7.9366e-05 13.9397-2.4852 15.9544-4.49991 18.4397-4.4999Z"
+            fill="#7030A0"
+            transform="matrix(-1 0 0 1 391.94 307.5)"
+        />
+        <path
+            d="M542.5 551.5 542.5 592.108"
+            stroke="#7F7F7F"
+            stroke-width="3"
+            stroke-linejoin="round"
+            stroke-miterlimit="10"
+            fill="none"
+            fill-rule="evenodd"
+        />
+        <path
+            d="M392.539 552.662 373.448 551.999 373.552 549.001 392.643 549.664ZM373.344 554.997C370.86 554.911 368.917 552.828 369.003 550.344 369.089 547.86 371.172 545.917 373.656 546.003 376.14 546.089 378.084 548.172 377.997 550.656 377.911 553.14 375.828 555.084 373.344 554.997Z"
+            fill="#7F7F7F"
+        />
+        <path
+            d="M535.5 551.5 647.417 551.5"
+            stroke="#7F7F7F"
+            stroke-width="3"
+            stroke-linejoin="round"
+            stroke-miterlimit="10"
+            fill="none"
+            fill-rule="evenodd"
+        />
+        <path
+            d="M491.5 575.5 491.758 591.545"
+            stroke="#7F7F7F"
+            stroke-width="3"
+            stroke-linejoin="round"
+            stroke-miterlimit="10"
+            fill="none"
+            fill-rule="evenodd"
+        />
+        <path
+            d="M541.579 591.502 541 553.523 544 553.477 544.579 591.456ZM538.001 553.569C537.963 551.084 539.946 549.039 542.431 549.001 544.916 548.963 546.962 550.946 547 553.431 547.037 555.916 545.054 557.962 542.569 558 540.084 558.037 538.039 556.054 538.001 553.569Z"
+            fill="#7F7F7F"
+        />
+        <path
+            d="M1.5-5.33775e-06 1.5001 29.5031-1.49989 29.5031-1.5 5.33775e-06ZM4.5001 29.5031C4.50011 31.9884 2.4854 34.0031 0.000121 34.0031-2.48516 34.0031-4.49989 31.9884-4.4999 29.5031-4.4999 27.0178-2.48519 25.0031 8.89736e-05 25.0031 2.48537 25.0031 4.5001 27.0178 4.5001 29.5031Z"
+            fill="#7F7F7F"
+            transform="matrix(1 0 0 -1 582.5 581.003)"
+        />
+        <rect
+            x="0"
+            y="0"
+            width="9"
+            height="10"
+            stroke="#989898"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="#FF0000"
+            transform="matrix(1 0 0 -1 579.5 575.5)"
+        />
+        <path
+            d="M1.5-3.97924e-06 1.5001 39.5754-1.49989 39.5754-1.5 3.97924e-06ZM4.5001 39.5754C4.50011 42.0607 2.4854 44.0754 0.000116925 44.0754-2.48516 44.0754-4.49989 42.0607-4.4999 39.5754-4.4999 37.0902-2.48519 35.0754 9.30491e-05 35.0754 2.48537 35.0754 4.5001 37.0901 4.5001 39.5754Z"
+            fill="#7F7F7F"
+            transform="matrix(1 0 0 -1 897.5 595.076)"
+        />
+        <rect
+            x="0"
+            y="0"
+            width="10"
+            height="10"
+            stroke="#989898"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="#FF0000"
+            transform="matrix(1 0 0 -1 892.5 577.5)"
+        />
+        <path
+            d="M433 254.5 433 271.642 430 271.642 430 254.5ZM427 254.5C427 252.015 429.015 250 431.5 250 433.985 250 436 252.015 436 254.5 436 256.985 433.985 259 431.5 259 429.015 259 427 256.985 427 254.5Z"
+            fill="#7030A0"
+        />
+        <rect
+            x="0"
+            y="0"
+            width="17"
+            height="18"
+            stroke="#7030A0"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="#FF0000"
+            transform="matrix(1 0 0 -1 421.5 291.5)"
+        />
+        <path
+            d="M0 0 0.249554 145.298"
+            stroke="#6600CC"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="none"
+            fill-rule="evenodd"
+            transform="matrix(-1 0 0 1 430.75 292.5)"
+        />
+        <path
+            d="M6.00001-1.49997 18.4397-1.49989 18.4397 1.5001 5.99999 1.50003ZM6 3.41612e-05 8.99997 4.50005 0 0 9.00002-4.49995ZM18.4397-4.4999C20.925-4.49988 22.9397-2.48515 22.9397 0.000130608 22.9397 2.48541 20.9249 4.50012 18.4397 4.5001 15.9544 4.50009 13.9397 2.48536 13.9397 7.9366e-05 13.9397-2.4852 15.9544-4.49991 18.4397-4.4999Z"
+            fill="#7030A0"
+            transform="matrix(-1 0 0 1 448.94 306.5)"
+        />
+        <path
+            d="M0 15C-1.9097e-15 6.71573 6.71573-1.9097e-15 15-3.8194e-15 23.2843-7.6388e-15 30 6.71573 30 15 30 23.2843 23.2843 30 15 30 6.71573 30-9.5485e-15 23.2843 0 15Z"
+            fill="#FF0000"
+            fill-rule="evenodd"
+            transform="matrix(1 0 0 -1 413.5 466.5)"
+        />
+        <path
+            d="M-1.50812 15-1.16401 11.6965-0.20213 8.6048 1.31771 5.77237 3.37371 3.37371 5.77237 1.31771 8.6048-0.20213 11.6965-1.16401 15-1.50812 18.2988-1.16449 21.4611-0.202057 24.2244 1.31775 26.6917 3.37383 28.6883 5.78353 30.2021 8.6048 31.164 11.6965 31.5081 15 31.1645 18.2988 30.2021 21.4611 28.6883 24.2134 26.6918 26.6918 24.2134 28.6883 21.4611 30.2021 18.2988 31.1645 15 31.5081 11.6965 31.164 8.6048 30.2021 5.78353 28.6883 3.37383 26.6917 1.31775 24.2244-0.202057 21.4611-1.16449 18.2988ZM1.80443 17.8446 1.74751 17.5633 2.62251 20.4383 2.50182 20.1521 3.87682 22.6521 3.71483 22.4147 5.58983 24.6647 5.39453 24.47 7.58203 26.2825 7.33423 26.1158 9.89673 27.4908 9.6331 27.3802 12.4456 28.2552 12.1554 28.1956 15.1554 28.5081 14.8446 28.5081 17.8446 28.1956 17.5633 28.2525 20.4383 27.3775 20.1521 27.4982 22.6521 26.1232 22.434 26.2694 24.684 24.4569 24.4569 24.684 26.2694 22.434 26.1232 22.6521 27.4982 20.1521 27.3775 20.4383 28.2525 17.5633 28.1956 17.8446 28.5081 14.8446 28.5081 15.1554 28.1956 12.1554 28.2552 12.4456 27.3802 9.6331 27.4908 9.89673 26.1158 7.33423 26.2825 7.58203 24.47 5.39453 24.6647 5.58983 22.4147 3.71483 22.6521 3.87682 20.1521 2.50182 20.4383 2.62251 17.5633 1.74751 17.8446 1.80443 14.8446 1.49193 15.1554 1.49193 12.1554 1.80443 12.4456 1.74479 9.6331 2.61979 9.89673 2.50924 7.33423 3.88424 7.60119 3.70138 5.41369 5.57638 5.57638 5.41369 3.70138 7.60119 3.88424 7.33423 2.50924 9.89673 2.61979 9.6331 1.74479 12.4456 1.80443 12.1554 1.49193 15.1554 1.49193 14.8446Z"
+            fill="#6600CC"
+            transform="matrix(1 0 0 -1 413.5 466.5)"
+        />
+        <path
+            d="M0 15C-1.9097e-15 6.71573 6.71573-1.9097e-15 15-3.8194e-15 23.2843-7.6388e-15 30 6.71573 30 15 30 23.2843 23.2843 30 15 30 6.71573 30-9.5485e-15 23.2843 0 15Z"
+            stroke="#7F7F7F"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="#FF0000"
+            fill-rule="evenodd"
+            transform="matrix(1 0 0 -1 415.5 490.5)"
+        />
+        <path
+            d="M0 0 0.000104987 36.1284"
+            stroke="#7F7F7F"
+            stroke-width="3"
+            stroke-linejoin="round"
+            stroke-miterlimit="10"
+            fill="none"
+            fill-rule="evenodd"
+            transform="matrix(-1 0 0 1 430.5 489.5)"
+        />
+        <path
+            d="M428.5 527.5 882.614 529.105"
+            stroke="#7F7F7F"
+            stroke-width="3"
+            stroke-linejoin="round"
+            stroke-miterlimit="10"
+            fill="none"
+            fill-rule="evenodd"
+        />
+        <path
+            d="M745.5 251.5 746.021 333.036"
+            stroke="#6600CC"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="none"
+            fill-rule="evenodd"
+        />
+        <rect
+            x="0"
+            y="0"
+            width="18"
+            height="19"
+            stroke="#7030A0"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="#FF0000"
+            transform="matrix(1 0 0 -1 537.5 292.5)"
+        />
+        <path
+            d="M561.373 309.347 544.469 309 544.531 306 561.435 306.347ZM561.404 307.847 558.497 303.286 567.403 307.97 558.312 312.285ZM544.408 311.999C541.923 311.948 539.95 309.892 540.001 307.408 540.052 304.923 542.108 302.95 544.592 303.001 547.077 303.052 549.05 305.108 548.999 307.592 548.948 310.077 546.892 312.05 544.408 311.999Z"
+            fill="#7030A0"
+        />
+        <path
+            d="M548 253.472 548.379 273.43 545.38 273.487 545 253.529ZM542.001 253.586C541.954 251.101 543.93 249.048 546.415 249.001 548.899 248.954 550.952 250.93 550.999 253.415 551.046 255.899 549.07 257.952 546.586 257.999 544.101 258.046 542.048 256.07 542.001 253.586Z"
+            fill="#7030A0"
+        />
+        <path
+            d="M6.00001-1.49998 30.3248-1.49989 30.3248 1.5001 6 1.50002ZM6 2.07725e-05 8.99998 4.50003 0 0 9.00002-4.49997ZM30.3248-4.4999C32.8101-4.49989 34.8248-2.48516 34.8248 0.000120566 34.8248 2.4854 32.8101 4.50011 30.3248 4.5001 27.8395 4.5001 25.8248 2.48537 25.8248 8.94075e-05 25.8248-2.48519 27.8396-4.4999 30.3248-4.4999Z"
+            fill="#7030A0"
+            transform="matrix(-1 0 0 1 522.825 209.5)"
+        />
+        <path
+            d="M0 0 55.661 0.000104987"
+            stroke="#7030A0"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="none"
+            fill-rule="evenodd"
+            transform="matrix(-1 0 0 1 642.161 253.5)"
+        />
+        <path
+            d="M544.5 327.5 594.65 327.5"
+            stroke="#7030A0"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="none"
+            fill-rule="evenodd"
+        />
+        <path
+            d="M0 0 0.000104987 73.7146"
+            stroke="#7030A0"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="none"
+            fill-rule="evenodd"
+            transform="matrix(1 0 0 -1 593.5 328.215)"
+        />
+        <path
+            d="M628.678 278.043 628.001 252.54 631 252.46 631.676 277.963ZM625.002 252.619C624.936 250.135 626.896 248.068 629.381 248.002 631.865 247.936 633.932 249.896 633.998 252.381 634.064 254.865 632.104 256.933 629.619 256.998 627.135 257.064 625.068 255.104 625.002 252.619Z"
+            fill="#6600CC"
+        />
+        <path
+            d="M0 12C-1.59142e-15 5.37258 5.59644-1.52776e-15 12.5-3.05552e-15 19.4036-6.11104e-15 25 5.37258 25 12 25 18.6274 19.4036 24 12.5 24 5.59644 24-7.95708e-15 18.6274 0 12Z"
+            stroke="#7F7F7F"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="#FF0000"
+            fill-rule="evenodd"
+            transform="matrix(1 0 0 -1 617.5 316.5)"
+        />
+        <path
+            d="M0 11C-1.59142e-15 4.92487 5.59644-1.40045e-15 12.5-2.80089e-15 19.4036-5.60179e-15 25 4.92487 25 11 25 17.0751 19.4036 22 12.5 22 5.59644 22-7.95708e-15 17.0751 0 11Z"
+            fill="#FF0000"
+            fill-rule="evenodd"
+            transform="matrix(1 0 0 -1 618.5 298.5)"
+        />
+        <path
+            d="M-1.50949 10.9976-1.2202 8.46628-0.360418 6.10189 0.926096 3.9577 2.74336 2.06774 7.03482-0.52076 9.73285-1.23077 12.5-1.50748 15.2672-1.23077 17.96-0.522111 22.3289 2.07187 24.0819 3.97095 25.3604 6.10189 26.2202 8.46628 26.5095 10.9976 26.221 13.594 25.3604 15.9606 24.0819 18.0915 22.3228 19.9972 17.9514 22.5244 15.2672 23.2308 12.5 23.5075 9.73285 23.2308 7.04349 22.523 2.74957 20.0012 0.926096 18.1048-0.360418 15.9606-1.22101 13.594ZM1.74083 13.0844 1.65969 12.7374 2.40969 14.7999 2.28624 14.5408 3.41124 16.4158 3.20625 16.1478 4.76875 17.7728 4.44713 17.5191 8.38463 19.8316 8.00674 19.6744 10.3817 20.2994 10.1493 20.2574 12.6493 20.5074 12.3507 20.5074 14.8507 20.2574 14.6183 20.2994 16.9933 19.6744 16.6242 19.8264 20.6242 17.5139 20.2728 17.7951 21.7728 16.1701 21.5888 16.4158 22.7138 14.5408 22.5903 14.7999 23.3403 12.7374 23.2592 13.0844 23.5092 10.8344 23.5097 11.1703 23.2597 8.98282 23.3403 9.32511 22.5903 7.26261 22.7138 7.52174 21.5888 5.64674 21.7728 5.89242 20.2728 4.26742 20.6092 4.53978 16.6092 2.16478 16.9933 2.32561 14.6183 1.70061 14.8507 1.74256 12.3507 1.49256 12.6493 1.49256 10.1493 1.74256 10.3817 1.70061 8.00674 2.32561 8.39974 2.15944 4.46224 4.53444 4.76875 4.28966 3.20625 5.91466 3.41124 5.64674 2.28624 7.52174 2.40969 7.26261 1.65969 9.32511 1.7403 8.98282 1.4903 11.1703 1.49083 10.8344Z"
+            fill="#6600CC"
+            transform="matrix(1 0 0 -1 618.5 298.5)"
+        />
+        <path
+            d="M0 0 382.874 0.471076"
+            stroke="#BABE12"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="none"
+            fill-rule="evenodd"
+            transform="matrix(1 0 0 -1 570.5 106.971)"
+        />
+        <path
+            d="M1.5-0.00260736 1.75806 148.457-1.24194 148.462-1.5 0.00260736ZM4.75805 148.451C4.76237 150.937 2.75116 152.955 0.26588 152.959-2.2194 152.964-4.23762 150.952-4.24194 148.467-4.24626 145.982-2.23504 143.964 0.250236 143.959 2.73551 143.955 4.75373 145.966 4.75805 148.451Z"
+            fill="#6600CC"
+            transform="matrix(1 0 0 -1 879.5 434.959)"
+        />
+        <path
+            d="M0 0 298.432 0.577953"
+            stroke="#7030A0"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="none"
+            fill-rule="evenodd"
+            transform="matrix(-1 0 0 1 1080.93 254.5)"
+        />
+        <path
+            d="M0 15C-1.9097e-15 6.71573 6.71573-1.9097e-15 15-3.8194e-15 23.2843-7.6388e-15 30 6.71573 30 15 30 23.2843 23.2843 30 15 30 6.71573 30-9.5485e-15 23.2843 0 15Z"
+            stroke="#7F7F7F"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="#FF0000"
+            fill-rule="evenodd"
+            transform="matrix(1 0 0 -1 864.5 485.5)"
+        />
+        <path
+            d="M0 15C-1.9097e-15 6.71573 6.71573-1.9097e-15 15-3.8194e-15 23.2843-7.6388e-15 30 6.71573 30 15 30 23.2843 23.2843 30 15 30 6.71573 30-9.5485e-15 23.2843 0 15Z"
+            fill="#FF0000"
+            fill-rule="evenodd"
+            transform="matrix(1 0 0 -1 864.5 464.5)"
+        />
+        <path
+            d="M-1.50812 15-1.16401 11.6965-0.20213 8.6048 1.31771 5.77237 3.37371 3.37371 5.77237 1.31771 8.6048-0.20213 11.6965-1.16401 15-1.50812 18.2988-1.16449 21.4611-0.202057 24.2244 1.31775 26.6917 3.37383 28.6883 5.78353 30.2021 8.6048 31.164 11.6965 31.5081 15 31.1645 18.2988 30.2021 21.4611 28.6883 24.2134 26.6918 26.6918 24.2134 28.6883 21.4611 30.2021 18.2988 31.1645 15 31.5081 11.6965 31.164 8.6048 30.2021 5.78353 28.6883 3.37383 26.6917 1.31775 24.2244-0.202057 21.4611-1.16449 18.2988ZM1.80443 17.8446 1.74751 17.5633 2.62251 20.4383 2.50182 20.1521 3.87682 22.6521 3.71483 22.4147 5.58983 24.6647 5.39453 24.47 7.58203 26.2825 7.33423 26.1158 9.89673 27.4908 9.6331 27.3802 12.4456 28.2552 12.1554 28.1956 15.1554 28.5081 14.8446 28.5081 17.8446 28.1956 17.5633 28.2525 20.4383 27.3775 20.1521 27.4982 22.6521 26.1232 22.434 26.2694 24.684 24.4569 24.4569 24.684 26.2694 22.434 26.1232 22.6521 27.4982 20.1521 27.3775 20.4383 28.2525 17.5633 28.1956 17.8446 28.5081 14.8446 28.5081 15.1554 28.1956 12.1554 28.2552 12.4456 27.3802 9.6331 27.4908 9.89673 26.1158 7.33423 26.2825 7.58203 24.47 5.39453 24.6647 5.58983 22.4147 3.71483 22.6521 3.87682 20.1521 2.50182 20.4383 2.62251 17.5633 1.74751 17.8446 1.80443 14.8446 1.49193 15.1554 1.49193 12.1554 1.80443 12.4456 1.74479 9.6331 2.61979 9.89673 2.50924 7.33423 3.88424 7.60119 3.70138 5.41369 5.57638 5.57638 5.41369 3.70138 7.60119 3.88424 7.33423 2.50924 9.89673 2.61979 9.6331 1.74479 12.4456 1.80443 12.1554 1.49193 15.1554 1.49193 14.8446Z"
+            fill="#6600CC"
+            transform="matrix(1 0 0 -1 864.5 464.5)"
+        />
+        <path
+            d="M1083.37 308.347 1066.47 308 1066.53 305 1083.44 305.347ZM1083.4 306.847 1080.5 302.286 1089.4 306.97 1080.31 311.285ZM1066.41 310.999C1063.92 310.948 1061.95 308.892 1062 306.408 1062.05 303.923 1064.11 301.95 1066.59 302.001 1069.08 302.052 1071.05 304.108 1071 306.592 1070.95 309.077 1068.89 311.05 1066.41 310.999Z"
+            fill="#7030A0"
+        />
+        <path
+            d="M1067 253.472 1067.38 273.43 1064.38 273.487 1064 253.529ZM1061 253.586C1060.95 251.101 1062.93 249.048 1065.41 249.001 1067.9 248.954 1069.95 250.93 1070 253.415 1070.05 255.899 1068.07 257.952 1065.59 257.999 1063.1 258.046 1061.05 256.07 1061 253.586Z"
+            fill="#7030A0"
+        />
+        <path
+            d="M881 253.475 881.24 267.607 878.241 267.658 878 253.526ZM875.001 253.577C874.958 251.092 876.939 249.043 879.424 249.001 881.908 248.958 883.957 250.939 883.999 253.424 884.042 255.908 882.062 257.957 879.577 257.999 877.092 258.042 875.043 256.061 875.001 253.577Z"
+            fill="#7030A0"
+        />
+        <rect
+            x="0"
+            y="0"
+            width="18"
+            height="19"
+            stroke="#7030A0"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="#FF0000"
+            transform="matrix(1 0 0 -1 870.5 288.5)"
+        />
+        <path
+            d="M6.00001-1.49997 18.4397-1.49989 18.4397 1.5001 5.99999 1.50003ZM6 3.41612e-05 8.99997 4.50005 0 0 9.00002-4.49995ZM18.4397-4.4999C20.925-4.49988 22.9397-2.48515 22.9397 0.000130608 22.9397 2.48541 20.9249 4.50012 18.4397 4.5001 15.9544 4.50009 13.9397 2.48536 13.9397 7.9366e-05 13.9397-2.4852 15.9544-4.49991 18.4397-4.4999Z"
+            fill="#7030A0"
+            transform="matrix(-1 0 0 1 898.94 303.5)"
+        />
+        <path
+            d="M947 253.5 947 269.59 944 269.59 944 253.5ZM941 253.5C941 251.015 943.015 249 945.5 249 947.985 249 950 251.015 950 253.5 950 255.985 947.985 258 945.5 258 943.015 258 941 255.985 941 253.5Z"
+            fill="#7030A0"
+        />
+        <rect
+            x="0"
+            y="0"
+            width="17"
+            height="18"
+            stroke="#7030A0"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="#FF0000"
+            transform="matrix(1 0 0 -1 935.5 289.5)"
+        />
+        <path
+            d="M0 0 0.249554 145.298"
+            stroke="#6600CC"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="none"
+            fill-rule="evenodd"
+            transform="matrix(-1 0 0 1 944.75 290.5)"
+        />
+        <path
+            d="M6.00001-1.49997 18.4397-1.49989 18.4397 1.5001 5.99999 1.50003ZM6 3.41612e-05 8.99997 4.50005 0 0 9.00002-4.49995ZM18.4397-4.4999C20.925-4.49988 22.9397-2.48515 22.9397 0.000130608 22.9397 2.48541 20.9249 4.50012 18.4397 4.5001 15.9544 4.50009 13.9397 2.48536 13.9397 7.9366e-05 13.9397-2.4852 15.9544-4.49991 18.4397-4.4999Z"
+            fill="#7030A0"
+            transform="matrix(-1 0 0 1 962.94 305.5)"
+        />
+        <path
+            d="M0 15C-1.9097e-15 6.71573 6.71573-1.9097e-15 15-3.8194e-15 23.2843-7.6388e-15 30 6.71573 30 15 30 23.2843 23.2843 30 15 30 6.71573 30-9.5485e-15 23.2843 0 15Z"
+            fill="#FF0000"
+            fill-rule="evenodd"
+            transform="matrix(1 0 0 -1 929.5 466.5)"
+        />
+        <path
+            d="M-1.50812 15-1.16401 11.6965-0.20213 8.6048 1.31771 5.77237 3.37371 3.37371 5.77237 1.31771 8.6048-0.20213 11.6965-1.16401 15-1.50812 18.2988-1.16449 21.4611-0.202057 24.2244 1.31775 26.6917 3.37383 28.6883 5.78353 30.2021 8.6048 31.164 11.6965 31.5081 15 31.1645 18.2988 30.2021 21.4611 28.6883 24.2134 26.6918 26.6918 24.2134 28.6883 21.4611 30.2021 18.2988 31.1645 15 31.5081 11.6965 31.164 8.6048 30.2021 5.78353 28.6883 3.37383 26.6917 1.31775 24.2244-0.202057 21.4611-1.16449 18.2988ZM1.80443 17.8446 1.74751 17.5633 2.62251 20.4383 2.50182 20.1521 3.87682 22.6521 3.71483 22.4147 5.58983 24.6647 5.39453 24.47 7.58203 26.2825 7.33423 26.1158 9.89673 27.4908 9.6331 27.3802 12.4456 28.2552 12.1554 28.1956 15.1554 28.5081 14.8446 28.5081 17.8446 28.1956 17.5633 28.2525 20.4383 27.3775 20.1521 27.4982 22.6521 26.1232 22.434 26.2694 24.684 24.4569 24.4569 24.684 26.2694 22.434 26.1232 22.6521 27.4982 20.1521 27.3775 20.4383 28.2525 17.5633 28.1956 17.8446 28.5081 14.8446 28.5081 15.1554 28.1956 12.1554 28.2552 12.4456 27.3802 9.6331 27.4908 9.89673 26.1158 7.33423 26.2825 7.58203 24.47 5.39453 24.6647 5.58983 22.4147 3.71483 22.6521 3.87682 20.1521 2.50182 20.4383 2.62251 17.5633 1.74751 17.8446 1.80443 14.8446 1.49193 15.1554 1.49193 12.1554 1.80443 12.4456 1.74479 9.6331 2.61979 9.89673 2.50924 7.33423 3.88424 7.60119 3.70138 5.41369 5.57638 5.57638 5.41369 3.70138 7.60119 3.88424 7.33423 2.50924 9.89673 2.61979 9.6331 1.74479 12.4456 1.80443 12.1554 1.49193 15.1554 1.49193 14.8446Z"
+            fill="#6600CC"
+            transform="matrix(1 0 0 -1 929.5 466.5)"
+        />
+        <path
+            d="M0 15C-1.9097e-15 6.71573 6.71573-1.9097e-15 15-3.8194e-15 23.2843-7.6388e-15 30 6.71573 30 15 30 23.2843 23.2843 30 15 30 6.71573 30-9.5485e-15 23.2843 0 15Z"
+            stroke="#7F7F7F"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="#FF0000"
+            fill-rule="evenodd"
+            transform="matrix(1 0 0 -1 929.5 487.5)"
+        />
+        <path
+            d="M1.5-6.40656e-06 1.5001 24.5811-1.49989 24.5811-1.5 6.40656e-06ZM4.5001 24.5811C4.50012 27.0664 2.48541 29.0811 0.000124207 29.0811-2.48516 29.0811-4.49988 27.0664-4.4999 24.5811-4.49991 22.0958-2.4852 20.0811 8.57672e-05 20.0811 2.48537 20.0811 4.50009 22.0958 4.5001 24.5811Z"
+            fill="#6600CC"
+            transform="matrix(1 0 0 -1 47.5001 274.081)"
+        />
+        <path
+            d="M0 15.5C-1.9097e-15 6.93959 6.71573-1.97336e-15 15-3.94671e-15 23.2843-7.89343e-15 30 6.93959 30 15.5 30 24.0604 23.2843 31 15 31 6.71573 31-9.5485e-15 24.0604 0 15.5Z"
+            stroke="#7F7F7F"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="#FF0000"
+            fill-rule="evenodd"
+            transform="matrix(1 0 0 -1 32.5001 324.5)"
+        />
+        <path
+            d="M0 15C-1.9097e-15 6.71573 6.71573-1.9097e-15 15-3.8194e-15 23.2843-7.6388e-15 30 6.71573 30 15 30 23.2843 23.2843 30 15 30 6.71573 30-9.5485e-15 23.2843 0 15Z"
+            fill="#FF0000"
+            fill-rule="evenodd"
+            transform="matrix(1 0 0 -1 32.5001 303.5)"
+        />
+        <path
+            d="M-1.50812 15-1.16401 11.6965-0.20213 8.6048 1.31771 5.77237 3.37371 3.37371 5.77237 1.31771 8.6048-0.20213 11.6965-1.16401 15-1.50812 18.2988-1.16449 21.4611-0.202057 24.2244 1.31775 26.6917 3.37383 28.6883 5.78353 30.2021 8.6048 31.164 11.6965 31.5081 15 31.1645 18.2988 30.2021 21.4611 28.6883 24.2134 26.6918 26.6918 24.2134 28.6883 21.4611 30.2021 18.2988 31.1645 15 31.5081 11.6965 31.164 8.6048 30.2021 5.78353 28.6883 3.37383 26.6917 1.31775 24.2244-0.202057 21.4611-1.16449 18.2988ZM1.80443 17.8446 1.74751 17.5633 2.62251 20.4383 2.50182 20.1521 3.87682 22.6521 3.71483 22.4147 5.58983 24.6647 5.39453 24.47 7.58203 26.2825 7.33423 26.1158 9.89673 27.4908 9.6331 27.3802 12.4456 28.2552 12.1554 28.1956 15.1554 28.5081 14.8446 28.5081 17.8446 28.1956 17.5633 28.2525 20.4383 27.3775 20.1521 27.4982 22.6521 26.1232 22.434 26.2694 24.684 24.4569 24.4569 24.684 26.2694 22.434 26.1232 22.6521 27.4982 20.1521 27.3775 20.4383 28.2525 17.5633 28.1956 17.8446 28.5081 14.8446 28.5081 15.1554 28.1956 12.1554 28.2552 12.4456 27.3802 9.6331 27.4908 9.89673 26.1158 7.33423 26.2825 7.58203 24.47 5.39453 24.6647 5.58983 22.4147 3.71483 22.6521 3.87682 20.1521 2.50182 20.4383 2.62251 17.5633 1.74751 17.8446 1.80443 14.8446 1.49193 15.1554 1.49193 12.1554 1.80443 12.4456 1.74479 9.6331 2.61979 9.89673 2.50924 7.33423 3.88424 7.60119 3.70138 5.41369 5.57638 5.57638 5.41369 3.70138 7.60119 3.88424 7.33423 2.50924 9.89673 2.61979 9.6331 1.74479 12.4456 1.80443 12.1554 1.49193 15.1554 1.49193 14.8446Z"
+            fill="#6600CC"
+            transform="matrix(1 0 0 -1 32.5001 303.5)"
+        />
+        <path
+            d="M0 0 124.867 0.355381"
+            stroke="#6600CC"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="none"
+            fill-rule="evenodd"
+            transform="matrix(-1 0 0 1 1190.37 337.5)"
+        />
+        <path
+            d="M1189.5 250.5 1189.5 336.013"
+            stroke="#6600CC"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="none"
+            fill-rule="evenodd"
+        />
+        <path
+            d="M1175.5 248.5 1239.03 248.611"
+            stroke="#6600CC"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="none"
+            fill-rule="evenodd"
+        />
+        <path
+            d="M1033.2 253.19 1033 221.509 1036 221.491 1036.2 253.171ZM1039.2 253.152C1039.21 255.638 1037.21 257.665 1034.73 257.68 1032.24 257.696 1030.21 255.694 1030.2 253.209 1030.18 250.723 1032.18 248.696 1034.67 248.681 1037.16 248.665 1039.18 250.667 1039.2 253.152Z"
+            fill="#7030A0"
+        />
+        <rect
+            x="0"
+            y="0"
+            width="18"
+            height="18"
+            stroke="#7030A0"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="#FF0000"
+            transform="matrix(1 0 0 -1 1024.5 234.5)"
+        />
+        <path
+            d="M0 0 0.456273 34.7919"
+            stroke="#7030A0"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="none"
+            fill-rule="evenodd"
+            transform="matrix(1 0 0 -1 1033.5 216.292)"
+        />
+        <path
+            d="M6.00001-1.49998 30.3248-1.49989 30.3248 1.5001 6 1.50002ZM6 2.07725e-05 8.99998 4.50003 0 0 9.00002-4.49997ZM30.3248-4.4999C32.8101-4.49989 34.8248-2.48516 34.8248 0.000120566 34.8248 2.4854 32.8101 4.50011 30.3248 4.5001 27.8395 4.5001 25.8248 2.48537 25.8248 8.94075e-05 25.8248-2.48519 27.8396-4.4999 30.3248-4.4999Z"
+            fill="#7030A0"
+            transform="matrix(-1 0 0 1 1064.82 205.5)"
+        />
+        <path
+            d="M890.5 183.5 1034.42 183.5"
+            stroke="#7030A0"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="none"
+            fill-rule="evenodd"
+        />
+        <path
+            d="M0 15C-1.97336e-15 6.71573 6.93959-1.9097e-15 15.5-3.8194e-15 24.0604-7.6388e-15 31 6.71573 31 15 31 23.2843 24.0604 30 15.5 30 6.93959 30-9.86678e-15 23.2843 0 15Z"
+            stroke="#CCC937"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="#FF0000"
+            fill-rule="evenodd"
+            transform="matrix(1 0 0 -1 858.5 175.5)"
+        />
+        <path
+            d="M0 15C-1.9097e-15 6.71573 6.71573-1.9097e-15 15-3.8194e-15 23.2843-7.6388e-15 30 6.71573 30 15 30 23.2843 23.2843 30 15 30 6.71573 30-9.5485e-15 23.2843 0 15Z"
+            fill="#FF0000"
+            fill-rule="evenodd"
+            transform="matrix(1 0 0 -1 859.5 198.5)"
+        />
+        <path
+            d="M-1.50812 15-1.16401 11.6965-0.20213 8.6048 1.31771 5.77237 3.37371 3.37371 5.77237 1.31771 8.6048-0.20213 11.6965-1.16401 15-1.50812 18.2988-1.16449 21.4611-0.202057 24.2244 1.31775 26.6917 3.37383 28.6883 5.78353 30.2021 8.6048 31.164 11.6965 31.5081 15 31.1645 18.2988 30.2021 21.4611 28.6883 24.2134 26.6918 26.6918 24.2134 28.6883 21.4611 30.2021 18.2988 31.1645 15 31.5081 11.6965 31.164 8.6048 30.2021 5.78353 28.6883 3.37383 26.6917 1.31775 24.2244-0.202057 21.4611-1.16449 18.2988ZM1.80443 17.8446 1.74751 17.5633 2.62251 20.4383 2.50182 20.1521 3.87682 22.6521 3.71483 22.4147 5.58983 24.6647 5.39453 24.47 7.58203 26.2825 7.33423 26.1158 9.89673 27.4908 9.6331 27.3802 12.4456 28.2552 12.1554 28.1956 15.1554 28.5081 14.8446 28.5081 17.8446 28.1956 17.5633 28.2525 20.4383 27.3775 20.1521 27.4982 22.6521 26.1232 22.434 26.2694 24.684 24.4569 24.4569 24.684 26.2694 22.434 26.1232 22.6521 27.4982 20.1521 27.3775 20.4383 28.2525 17.5633 28.1956 17.8446 28.5081 14.8446 28.5081 15.1554 28.1956 12.1554 28.2552 12.4456 27.3802 9.6331 27.4908 9.89673 26.1158 7.33423 26.2825 7.58203 24.47 5.39453 24.6647 5.58983 22.4147 3.71483 22.6521 3.87682 20.1521 2.50182 20.4383 2.62251 17.5633 1.74751 17.8446 1.80443 14.8446 1.49193 15.1554 1.49193 12.1554 1.80443 12.4456 1.74479 9.6331 2.61979 9.89673 2.50924 7.33423 3.88424 7.60119 3.70138 5.41369 5.57638 5.57638 5.41369 3.70138 7.60119 3.88424 7.33423 2.50924 9.89673 2.61979 9.6331 1.74479 12.4456 1.80443 12.1554 1.49193 15.1554 1.49193 14.8446Z"
+            fill="#7030A0"
+            transform="matrix(1 0 0 -1 859.5 198.5)"
+        />
+        <path
+            d="M1.5-4.17512e-06 1.5001 37.7187-1.49989 37.7187-1.5 4.17512e-06ZM4.5001 37.7187C4.50011 40.204 2.4854 42.2187 0.000117512 42.2187-2.48516 42.2187-4.49989 40.204-4.4999 37.7188-4.4999 35.2335-2.48519 33.2187 9.24615e-05 33.2187 2.48537 33.2187 4.5001 35.2334 4.5001 37.7187Z"
+            fill="#B5B500"
+            transform="matrix(1 0 0 -1 872.5 145.219)"
+        />
+        <path
+            d="M0 0 0.00209974 16.1406"
+            stroke="#7F7F7F"
+            stroke-width="3"
+            stroke-linejoin="round"
+            stroke-miterlimit="10"
+            fill="none"
+            fill-rule="evenodd"
+            transform="matrix(-1 0 0 1 859.502 535.5)"
+        />
+        <path
+            d="M883.085 508.847 858.5 508.5"
+            stroke="#7F7F7F"
+            stroke-width="3"
+            stroke-linejoin="round"
+            stroke-miterlimit="10"
+            fill="none"
+            fill-rule="evenodd"
+        />
+        <path
+            d="M792.5 255.5 792.5 386.727"
+            stroke="#6600CC"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="none"
+            fill-rule="evenodd"
+        />
+        <rect
+            x="0"
+            y="0"
+            width="19"
+            height="19"
+            stroke="#7030A0"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="#FF0000"
+            transform="matrix(1 0 0 -1 782.5 289.5)"
+        />
+        <path
+            d="M809.373 305.347 792.469 305 792.531 302 809.435 302.347ZM809.404 303.847 806.497 299.286 815.403 303.97 806.312 308.285ZM792.408 307.999C789.923 307.948 787.95 305.892 788.001 303.408 788.052 300.923 790.108 298.95 792.592 299.001 795.077 299.052 797.05 301.108 796.999 303.592 796.948 306.077 794.892 308.05 792.408 307.999Z"
+            fill="#7030A0"
+        />
+        <path
+            d="M794 255.5 794 271.187 791 271.187 791 255.5ZM788 255.5C788 253.015 790.015 251 792.5 251 794.985 251 797 253.015 797 255.5 797 257.985 794.985 260 792.5 260 790.015 260 788 257.985 788 255.5Z"
+            fill="#7030A0"
+        />
+        <rect
+            x="0"
+            y="0"
+            width="17"
+            height="18"
+            stroke="#7030A0"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="#FF0000"
+            transform="matrix(1 0 0 -1 1056.5 289.5)"
+        />
+        <path
+            d="M0 0 0.129029 22.9711"
+            stroke="#7F7F7F"
+            stroke-width="3"
+            stroke-linejoin="round"
+            stroke-miterlimit="10"
+            fill="none"
+            fill-rule="evenodd"
+            transform="matrix(-1 0 0 1 880.629 485.5)"
+        />
+        <path
+            d="M860.389 535.232C857.472 535.433 855.005 532.982 854.88 529.757 854.754 526.532 857.018 523.755 859.935 523.554 860.061 523.545 860.187 523.541 860.314 523.543"
+            stroke="#7F7F7F"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="none"
+            fill-rule="evenodd"
+        />
+        <path
+            d="M858.5 506.5 858.902 523.707"
+            stroke="#7F7F7F"
+            stroke-width="3"
+            stroke-linejoin="round"
+            stroke-miterlimit="10"
+            fill="none"
+            fill-rule="evenodd"
+        />
+        <path
+            d="M882.5 527.5 882.5 555.437"
+            stroke="#7F7F7F"
+            stroke-width="3"
+            stroke-linejoin="round"
+            stroke-miterlimit="10"
+            fill="none"
+            fill-rule="evenodd"
+        />
+        <rect
+            x="0"
+            y="0"
+            width="10"
+            height="9"
+            stroke="#989898"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="#FF0000"
+            transform="matrix(1 0 0 -1 876.5 546.5)"
+        />
+        <path
+            d="M0 0 29.733 0.000104987"
+            stroke="#7F7F7F"
+            stroke-width="3"
+            stroke-linejoin="round"
+            stroke-miterlimit="10"
+            fill="none"
+            fill-rule="evenodd"
+            transform="matrix(-1 0 0 1 902.233 555.5)"
+        />
+        <path
+            d="M882.999 546.442 883.337 555.149 880.339 555.265 880.001 546.558ZM886.335 555.033C886.431 557.516 884.496 559.607 882.012 559.704 879.529 559.8 877.438 557.865 877.341 555.382 877.245 552.898 879.18 550.807 881.663 550.71 884.147 550.614 886.238 552.549 886.335 555.033Z"
+            fill="#7F7F7F"
+        />
+        <path
+            d="M897.5 594.5 929.707 594.5"
+            stroke="#7F7F7F"
+            stroke-width="3"
+            stroke-linejoin="round"
+            stroke-miterlimit="10"
+            fill="none"
+            fill-rule="evenodd"
+        />
+        <path
+            d="M929.5 555.5 929.669 595.802"
+            stroke="#7F7F7F"
+            stroke-width="3"
+            stroke-linejoin="round"
+            stroke-miterlimit="10"
+            fill="none"
+            fill-rule="evenodd"
+        />
+        <path
+            d="M1.49887-0.0582873 1.95703 11.7234-1.0407 11.84-1.49887 0.0582873ZM4.95476 11.6069C5.05134 14.0903 3.11643 16.1818 0.633025 16.2783-1.85038 16.3749-3.94186 14.44-4.03844 11.9566-4.13501 9.47319-2.2001 7.3817 0.283301 7.28513 2.76671 7.18856 4.85819 9.12347 4.95476 11.6069Z"
+            fill="#7F7F7F"
+            transform="matrix(1 0 0 -1 929.5 568.282)"
+        />
+        <path
+            d="M0 0 31.6998 0.991286"
+            stroke="#7F7F7F"
+            stroke-width="3"
+            stroke-linejoin="round"
+            stroke-miterlimit="10"
+            fill="none"
+            fill-rule="evenodd"
+            transform="matrix(-1 0 0 1 953.2 555.5)"
+        />
+        <path
+            d="M946 487.5 946 555.174 943 555.174 943 487.5ZM949 555.174C949 557.659 946.985 559.674 944.5 559.674 942.015 559.674 940 557.659 940 555.174 940 552.689 942.015 550.674 944.5 550.674 946.985 550.674 949 552.689 949 555.174Z"
+            fill="#7F7F7F"
+        />
+        <path
+            d="M0 12C-1.59142e-15 5.37258 5.59644-1.52776e-15 12.5-3.05552e-15 19.4036-6.11104e-15 25 5.37258 25 12 25 18.6274 19.4036 24 12.5 24 5.59644 24-7.95708e-15 18.6274 0 12Z"
+            stroke="#7F7F7F"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="#FF0000"
+            fill-rule="evenodd"
+            transform="matrix(1 0 0 -1 703.5 316.5)"
+        />
+        <path
+            d="M0 10.5C-1.59142e-15 4.70101 5.59644-1.33679e-15 12.5-2.67358e-15 19.4036-5.34716e-15 25 4.70101 25 10.5 25 16.299 19.4036 21 12.5 21 5.59644 21-7.95708e-15 16.299 0 10.5Z"
+            fill="#FF0000"
+            fill-rule="evenodd"
+            transform="matrix(1 0 0 -1 703.5 299.5)"
+        />
+        <path
+            d="M-1.51034 10.5-1.21751 8.01086-0.348304 5.76543 0.950063 3.67361 2.77587 1.92084 7.04349-0.585541 9.75097-1.29804 12.5-1.50421 15.249-1.29804 17.9514-0.586873 22.2963 1.92501 24.0581 3.6868 25.3483 5.76543 26.2175 8.01086 26.5103 10.5 26.2175 12.9891 25.3483 15.2346 24.0663 17.3 22.3036 19.1362 17.9427 21.5892 15.249 22.298 12.5 22.5042 9.75097 22.298 7.05227 21.5879 2.76888 19.1402 0.941875 17.3132-0.348304 15.2346-1.21751 12.9891ZM1.73973 12.4497 1.64885 12.0835 2.39885 14.021 2.27446 13.7715 3.39946 15.584 3.18566 15.3143 4.74816 16.8768 4.43171 16.6351 8.36921 18.8851 8.00674 18.7369 10.3817 19.3619 10.1122 19.3167 12.6122 19.5042 12.3878 19.5042 14.8878 19.3167 14.6183 19.3619 16.9933 18.7369 16.6396 18.8801 20.6396 16.6301 20.2929 16.8987 21.7929 15.3362 21.6005 15.584 22.7255 13.7715 22.6011 14.021 23.3511 12.0835 23.2603 12.4497 23.5103 10.3247 23.5103 10.6753 23.2603 8.55026 23.3511 8.91649 22.6011 6.97899 22.7255 7.22854 21.6005 5.41604 21.8143 5.68566 20.3143 4.18566 20.6242 4.4236 16.6242 2.1111 16.9933 2.26311 14.6183 1.63811 14.8878 1.6833 12.3878 1.4958 12.6122 1.4958 10.1122 1.6833 10.3817 1.63811 8.00674 2.26311 8.38463 2.10593 4.44713 4.41843 4.7263 4.20708 3.1638 5.70708 3.39946 5.41604 2.27446 7.22854 2.39885 6.97899 1.64885 8.91649 1.73973 8.55026 1.48973 10.6753 1.48973 10.3247Z"
+            fill="#6600CC"
+            transform="matrix(1 0 0 -1 703.5 299.5)"
+        />
+        <path
+            d="M589.469 255.499C588.364 253.273 589.274 250.573 591.501 249.469 593.727 248.364 596.427 249.274 597.531 251.501 598.636 253.727 597.726 256.427 595.499 257.532 593.273 258.636 590.573 257.726 589.469 255.499Z"
+            fill="#6600CC"
+        />
+        <path
+            d="M744.5 332.5 792.576 332.616"
+            stroke="#7030A0"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="none"
+            fill-rule="evenodd"
+        />
+        <path
+            d="M744.305 256.683 743.034 250.818 745.966 250.182 747.237 256.048ZM740.102 251.453C739.576 249.024 741.118 246.629 743.547 246.102 745.976 245.576 748.371 247.118 748.898 249.547 749.424 251.976 747.882 254.371 745.453 254.898 743.024 255.424 740.629 253.882 740.102 251.453Z"
+            fill="#6600CC"
+        />
+        <path
+            d="M0 10.5C-1.40045e-15 4.70101 4.92487-1.33679e-15 11-2.67358e-15 17.0751-5.34716e-15 22 4.70101 22 10.5 22 16.299 17.0751 21 11 21 4.92487 21-7.00223e-15 16.299 0 10.5Z"
+            stroke="#7F7F7F"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="#FF0000"
+            fill-rule="evenodd"
+            transform="matrix(1 0 0 -1 572.5 603.5)"
+        />
+        <rect
+            x="0"
+            y="0"
+            width="9"
+            height="10"
+            stroke="#989898"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="#FF0000"
+            transform="matrix(1 0 0 -1 487.5 575.5)"
+        />
+        <path
+            d="M642 72.5 642 108.886 639 108.886 639 72.5001ZM640.5 72.5001 636 75.5001 640.5 66.5001 645 75.5ZM645 108.886C645 111.372 642.985 113.386 640.5 113.386 638.015 113.386 636 111.372 636 108.886 636 106.401 638.015 104.386 640.5 104.386 642.985 104.386 645 106.401 645 108.886Z"
+            fill="#CCC937"
+        />
+        <path
+            d="M874 71.5 874 107.886 871 107.886 871 71.5001ZM872.5 71.5001 868 74.5001 872.5 65.5001 877 74.5ZM877 107.886C877 110.372 874.985 112.386 872.5 112.386 870.015 112.386 868 110.372 868 107.886 868 105.401 870.015 103.386 872.5 103.386 874.985 103.386 877 105.401 877 107.886Z"
+            fill="#CCC937"
+        />
+        <path
+            d="M1.5-6.40656e-06 1.5001 24.5811-1.49989 24.5811-1.5 6.40656e-06ZM4.5001 24.5811C4.50012 27.0664 2.48541 29.0811 0.000124207 29.0811-2.48516 29.0811-4.49988 27.0664-4.4999 24.5811-4.49991 22.0958-2.4852 20.0811 8.57672e-05 20.0811 2.48537 20.0811 4.50009 22.0958 4.5001 24.5811Z"
+            fill="#6600CC"
+            transform="matrix(1 0 0 -1 1189.5 273.081)"
+        />
+        <path
+            d="M0 0 70.0562 0.518005"
+            stroke="#6600CC"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="none"
+            fill-rule="evenodd"
+            transform="matrix(-1 0 0 1 103.556 249.5)"
+        />
+        <path
+            d="M1224.68 275.043 1224 249.54 1227 249.46 1227.68 274.963ZM1221 249.619C1220.94 247.135 1222.9 245.068 1225.38 245.002 1227.86 244.936 1229.93 246.896 1230 249.381 1230.06 251.865 1228.1 253.933 1225.62 253.998 1223.14 254.064 1221.07 252.104 1221 249.619Z"
+            fill="#6600CC"
+        />
+        <path
+            d="M0 11.5C-1.59142e-15 5.14872 5.59644-1.4641e-15 12.5-2.92821e-15 19.4036-5.85641e-15 25 5.14872 25 11.5 25 17.8513 19.4036 23 12.5 23 5.59644 23-7.95708e-15 17.8513 0 11.5Z"
+            stroke="#7F7F7F"
+            stroke-width="3"
+            stroke-miterlimit="8"
+            fill="#FF0000"
+            fill-rule="evenodd"
+            transform="matrix(1 0 0 -1 1213.5 312.5)"
+        />
+        <path
+            d="M0 10.5C-1.59142e-15 4.70101 5.59644-1.33679e-15 12.5-2.67358e-15 19.4036-5.34716e-15 25 4.70101 25 10.5 25 16.299 19.4036 21 12.5 21 5.59644 21-7.95708e-15 16.299 0 10.5Z"
+            fill="#FF0000"
+            fill-rule="evenodd"
+            transform="matrix(1 0 0 -1 1213.5 294.5)"
+        />
+        <path
+            d="M-1.51034 10.5-1.21751 8.01086-0.348304 5.76543 0.950063 3.67361 2.77587 1.92084 7.04349-0.585541 9.75097-1.29804 12.5-1.50421 15.249-1.29804 17.9514-0.586873 22.2963 1.92501 24.0581 3.6868 25.3483 5.76543 26.2175 8.01086 26.5103 10.5 26.2175 12.9891 25.3483 15.2346 24.0663 17.3 22.3036 19.1362 17.9427 21.5892 15.249 22.298 12.5 22.5042 9.75097 22.298 7.05227 21.5879 2.76888 19.1402 0.941875 17.3132-0.348304 15.2346-1.21751 12.9891ZM1.73973 12.4497 1.64885 12.0835 2.39885 14.021 2.27446 13.7715 3.39946 15.584 3.18566 15.3143 4.74816 16.8768 4.43171 16.6351 8.36921 18.8851 8.00674 18.7369 10.3817 19.3619 10.1122 19.3167 12.6122 19.5042 12.3878 19.5042 14.8878 19.3167 14.6183 19.3619 16.9933 18.7369 16.6396 18.8801 20.6396 16.6301 20.2929 16.8987 21.7929 15.3362 21.6005 15.584 22.7255 13.7715 22.6011 14.021 23.3511 12.0835 23.2603 12.4497 23.5103 10.3247 23.5103 10.6753 23.2603 8.55026 23.3511 8.91649 22.6011 6.97899 22.7255 7.22854 21.6005 5.41604 21.8143 5.68566 20.3143 4.18566 20.6242 4.4236 16.6242 2.1111 16.9933 2.26311 14.6183 1.63811 14.8878 1.6833 12.3878 1.4958 12.6122 1.4958 10.1122 1.6833 10.3817 1.63811 8.00674 2.26311 8.38463 2.10593 4.44713 4.41843 4.7263 4.20708 3.1638 5.70708 3.39946 5.41604 2.27446 7.22854 2.39885 6.97899 1.64885 8.91649 1.73973 8.55026 1.48973 10.6753 1.48973 10.3247Z"
+            fill="#6600CC"
+            transform="matrix(1 0 0 -1 1213.5 294.5)"
+        />
+        <text
+            fill="#8A94AD"
+            font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+            font-weight="700"
+            font-size="9"
+            transform="translate(502.994 287)"
+        >
+            В
+            <tspan font-size="9" x="6.16666" y="0">-</tspan>
+            <tspan font-size="9" x="9.33334" y="0">Г</tspan>
+            -
+            <tspan font-size="9" x="18.5" y="0">2</tspan>
+            <tspan font-size="9" x="251.336" y="-6">В</tspan>
+            <tspan font-size="9" x="257.502" y="-6">-</tspan>
+            <tspan font-size="9" x="260.669" y="-6">Г</tspan>
+            -
+            <tspan font-size="9" x="269.836" y="-6">3</tspan>
+            <tspan font-size="9" x="580.722" y="-4">В</tspan>
+            <tspan font-size="9" x="586.889" y="-4">-</tspan>
+            <tspan font-size="9" x="590.056" y="-4">Г</tspan>
+            -
+            <tspan font-size="9" x="599.222" y="-4">4</tspan>
+            <tspan font-size="9" x="-170.975" y="0">В</tspan>
+            <tspan font-size="9" x="-164.809" y="0">-</tspan>
+            <tspan font-size="9" x="-161.642" y="0">TN</tspan>
+            <tspan font-size="9" x="-148.809" y="0">-</tspan>
+            <tspan font-size="9" x="-145.642" y="0">1</tspan>
+            <tspan font-size="9" x="-171.558" y="156">TN</tspan>
+            <tspan font-size="9" x="-158.725" y="156">-</tspan>
+            <tspan font-size="9" x="-155.558" y="156">1</tspan>
+            <tspan font-size="9" x="-168.725" y="167">ТСЗ</tspan>
+            <tspan font-size="9" x="-183.058" y="178">630кВА</tspan>
+            <tspan font-size="9" x="-195.391" y="190">10,5/0,4 кВ</tspan>
+            <tspan font-size="9" x="-179.891" y="201">Uk:6%</tspan>
+            <tspan font-size="9" x="-39.9924" y="160">TCH</tspan>
+            <tspan font-size="9" x="-19.8257" y="160">-</tspan>
+            <tspan font-size="9" x="-16.6591" y="160">2</tspan>
+            <tspan font-size="9" x="-32.9924" y="171">Т</tspan>
+            <tspan font-size="9" x="-26.8257" y="171">M</tspan>
+            <tspan font-size="9" x="-17.9924" y="171">Г</tspan>
+            <tspan font-size="9" x="-39.8257" y="182">40 кВа</tspan>
+            <tspan font-size="9" x="-56.4924" y="194">10,5/0,4 кВ</tspan>
+            <tspan font-size="9" x="98.4644" y="302">ДГУ</tspan>
+            <tspan font-size="9" x="100.798" y="313">250 кВа</tspan>
+            <tspan font-size="9" x="-118.69" y="0">В</tspan>
+            <tspan font-size="9" x="-112.523" y="0">-</tspan>
+            <tspan font-size="9" x="-109.357" y="0">T</tspan>
+            <tspan font-size="9" x="-103.19" y="0">С</tspan>
+            <tspan font-size="9" x="-96.5233" y="0">N</tspan>
+            <tspan font-size="9" x="-89.8567" y="0">-</tspan>
+            <tspan font-size="9" x="-86.69" y="0">1</tspan>
+            <tspan font-size="9" x="7.88416" y="-54">В</tspan>
+            <tspan font-size="9" x="14.0508" y="-54">-</tspan>
+            <tspan font-size="9" x="17.2175" y="-54">T</tspan>
+            <tspan font-size="9" x="23.3841" y="-54">-</tspan>
+            <tspan font-size="9" x="26.5508" y="-54">1</tspan>
+            <tspan font-size="11" x="113.573" y="48">ТВ</tspan>
+            <tspan font-size="11" x="127.906" y="48">-</tspan>
+            <tspan font-size="11" x="131.406" y="48">Г</tspan>
+            <tspan font-size="11" x="138.239" y="48">-</tspan>
+            <tspan font-size="11" x="141.739" y="48">2</tspan>
+            <tspan font-size="11" x="190.756" y="49">ТВ</tspan>
+            <tspan font-size="11" x="205.09" y="49">-</tspan>
+            <tspan font-size="11" x="208.59" y="49">Г</tspan>
+            <tspan font-size="11" x="215.423" y="49">-</tspan>
+            <tspan font-size="11" x="218.923" y="49">3</tspan>
+            <tspan font-size="11" x="716.891" y="49">ТВ</tspan>
+            <tspan font-size="11" x="731.224" y="49">-</tspan>
+            <tspan font-size="11" x="734.724" y="49">Г</tspan>
+            <tspan font-size="11" x="741.557" y="49">-</tspan>
+            <tspan font-size="11" x="745.057" y="49">4</tspan>
+            <tspan font-size="11" x="469.638" y="-175">Т</tspan>
+            <tspan font-size="11" x="476.805" y="-175">-</tspan>
+            <tspan font-size="11" x="480.305" y="-175">2</tspan>
+            <tspan font-size="11" x="442.725" y="-162">ТДЦ</tspan>
+            <tspan font-size="11" x="465.558" y="-162">-</tspan>
+            <tspan font-size="11" x="469.058" y="-162">63000/110</tspan>
+            <tspan font-size="11" x="481.725" y="-149">ВМ У1</tspan>
+            <tspan font-size="11" x="461.058" y="-136">121</tspan>
+            <tspan font-size="11" x="477.058" y="-136">/</tspan>
+            <tspan font-size="11" x="480.058" y="-136">10,5</tspan>
+            <tspan font-size="11" x="501.391" y="-136">кВ</tspan>
+            <tspan font-size="11" x="464.391" y="-123">63000</tspan>
+            <tspan font-size="11" x="493.725" y="-123">кВА</tspan>
+            <tspan font-size="11" x="478.391" y="-111">10p/10p</tspan>
+            <tspan font-size="9" x="335.451" y="145">Т</tspan>
+            <tspan font-size="9" x="341.618" y="145">N</tspan>
+            <tspan font-size="9" x="348.285" y="145">-</tspan>
+            <tspan font-size="9" x="351.451" y="145">2</tspan>
+            <tspan font-size="9" x="338.285" y="156">ТСЗ</tspan>
+            <tspan font-size="9" x="323.951" y="167">630кВА</tspan>
+            <tspan font-size="9" x="325.451" y="179">10,5/0,4</tspan>
+            <tspan font-size="9" x="344.618" y="190">кВ</tspan>
+            <tspan font-size="9" x="327.118" y="201">Uk:6%</tspan>
+            <tspan font-size="9" x="459.038" y="161">ТСН</tspan>
+            <tspan font-size="9" x="479.205" y="161">-</tspan>
+            <tspan font-size="9" x="482.371" y="161">2</tspan>
+            <tspan font-size="9" x="459.038" y="172">Т</tspan>
+            <tspan font-size="9" x="465.205" y="172">M</tspan>
+            <tspan font-size="9" x="474.038" y="172">Г</tspan>
+            <tspan font-size="9" x="459.038" y="183">40 кВа</tspan>
+            <tspan font-size="9" x="459.038" y="196">10,5/0,4 к</tspan>
+            <tspan
+                font-family="Calibri,Calibri_MSFontService,sans-serif"
+                font-size="11"
+                x="497.371"
+                y="196"
+            >
+                В
+            </tspan>
+            <tspan font-size="9" x="384.903" y="258">А</tspan>
+            <tspan font-size="9" x="391.57" y="258">-</tspan>
+            <tspan font-size="9" x="394.736" y="258">ТСН</tspan>
+            <tspan font-size="9" x="414.903" y="258">-</tspan>
+            <tspan font-size="9" x="418.07" y="258">2</tspan>
+            <tspan font-size="9" x="422.736" y="258">-</tspan>
+            <tspan font-size="9" x="425.903" y="258">0,4</tspan>
+            <tspan font-size="9" x="332.454" y="288">А</tspan>
+            <tspan font-size="9" x="339.121" y="288">-</tspan>
+            <tspan font-size="9" x="342.288" y="288">ТСН</tspan>
+            <tspan font-size="9" x="362.454" y="288">-</tspan>
+            <tspan font-size="9" x="365.621" y="288">1</tspan>
+            <tspan font-size="9" x="370.288" y="288">-</tspan>
+            <tspan font-size="9" x="373.454" y="288">0,4</tspan>
+            <tspan font-size="9" x="333.54" y="-5">В</tspan>
+            <tspan font-size="9" x="339.707" y="-5">-</tspan>
+            <tspan font-size="9" x="342.874" y="-5">ТН</tspan>
+            -
+            <tspan font-size="9" x="359.54" y="-5">2</tspan>
+            <tspan font-size="9" x="481.209" y="-57">В</tspan>
+            <tspan font-size="9" x="487.376" y="-57">-</tspan>
+            <tspan font-size="9" x="490.542" y="-57">T</tspan>
+            <tspan font-size="9" x="496.709" y="-57">-</tspan>
+            <tspan font-size="9" x="499.876" y="-57">2</tspan>
+        </text>
+        <g
+            clip-path="url(#clip1)"
+            transform="matrix(0.000104987 0 0 0.000104987 1054 61)"
+        >
+            <g clip-path="url(#clip3)" transform="scale(1 1.00168)">
+                <use
+                    width="100%"
+                    height="100%"
+                    xlink:href="#img2"
+                    transform="scale(7632.21 7632.21)"
+                ></use>
+            </g>
+        </g>
+        <path
+            d="M0.20586-0.26217 5.68065 4.03672 5.26893 4.56106-0.20586 0.26217ZM5.47479 4.29889 5.02431 0.55466 9.6695 7.59265 1.73055 4.74937Z"
+            fill="#4472C4"
+            transform="matrix(-1 0 0 1 1076.17 57.5001)"
+        />
+        <path
+            d="M0.166679 5.33334 0.16676 41.3379-0.166574 41.3379-0.166655 5.33334ZM1.19973e-05 5.33333-2.66665 8.00001 0 0 2.66668 7.99999ZM9.29895e-05 41.3378 2.66675 38.6712 0.000104987 46.6712-2.66658 38.6712Z"
+            fill="#4472C4"
+            transform="matrix(1 0 0 -1 1174.5 111.171)"
+        />
+        <path
+            d="M1172.55 124.031 1164.86 115.654 1165.35 115.203 1173.04 123.58ZM1165.11 115.429 1164.95 119.197 1161.5 111.5 1168.87 115.59Z"
+            fill="#4472C4"
+        />
+        <path
+            d="M1181.95 123.889 1172.5 123.5"
+            stroke="#4472C4"
+            stroke-width="0.666667"
+            stroke-miterlimit="8"
+            fill="none"
+            fill-rule="evenodd"
+        />
+        <path
+            d="M1079.84 43.4258 1174.21 43.4258 1174.21 56.2258 1079.84 56.2258Z"
+            fill="#D9D9D9"
+            fill-rule="evenodd"
+        />
+        <path
+            d="M1079.84 42.7592 1079.84 56.8925"
+            stroke="#000000"
+            stroke-width="1.33333"
+            stroke-linejoin="round"
+            stroke-miterlimit="10"
+            fill="none"
+            fill-rule="evenodd"
+        />
+        <path
+            d="M1174.21 42.7592 1174.21 56.8925"
+            stroke="#000000"
+            stroke-width="1.33333"
+            stroke-linejoin="round"
+            stroke-miterlimit="10"
+            fill="none"
+            fill-rule="evenodd"
+        />
+        <path
+            d="M1079.17 43.4258 1174.87 43.4258"
+            stroke="#000000"
+            stroke-width="1.33333"
+            stroke-linejoin="round"
+            stroke-miterlimit="10"
+            fill="none"
+            fill-rule="evenodd"
+        />
+        <path
+            d="M1079.17 56.2258 1174.87 56.2258"
+            stroke="#000000"
+            stroke-width="1.33333"
+            stroke-linejoin="round"
+            stroke-miterlimit="10"
+            fill="none"
+            fill-rule="evenodd"
+        />
+        <g clip-path="url(#clip4)">
+            <text
+                font-family="Arial,Arial_MSFontService,sans-serif"
+                font-weight="400"
+                font-size="11"
+                transform="translate(1083.62 53)"
+            >
+                ▼
+            </text>
+        </g>
+        <text
+            font-family="Calibri,Calibri_MSFontService,sans-serif"
+            font-weight="400"
+            font-size="11"
+            transform="translate(1094.12 53)"
+        >
+            <g clip-path="url(#clip6)">
+                <text
+                    font-family="Calibri,Calibri_MSFontService,sans-serif"
+                    font-weight="400"
+                    font-size="11"
+                    transform="translate(1190.31 80)"
+                >
+                    Н
+                </text>
+            </g>
+
+            <path
+                d="M9.50005 540C9.50005 534.753 13.7533 530.5 19.0001 530.5 24.2468 530.5 28.5001 534.753 28.5001 540 28.5001 545.247 24.2468 549.5 19.0001 549.5 13.7533 549.5 9.50005 545.247 9.50005 540Z"
+                stroke="#000000"
+                stroke-width="1.33333"
+                stroke-miterlimit="8"
+                fill="#FF0000"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M9.50005 561.5C9.50005 556.529 13.7533 552.5 19.0001 552.5 24.2468 552.5 28.5001 556.529 28.5001 561.5 28.5001 566.471 24.2468 570.5 19.0001 570.5 13.7533 570.5 9.50005 566.471 9.50005 561.5Z"
+                stroke="#000000"
+                stroke-width="1.33333"
+                stroke-miterlimit="8"
+                fill="#92D050"
+                fill-rule="evenodd"
+            />
+            <text
+                fill="#8A94AD"
+                font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                font-weight="700"
+                font-size="11"
+                transform="translate(33.6948 542)"
+            >
+                в работе
+                <tspan font-size="11" x="-0.0827293" y="22">в резерве</tspan>
+            </text>
+            <path
+                d="M9 517.5C9 512.253 13.2533 508 18.5 508 23.7467 508 28 512.253 28 517.5 28 522.747 23.7467 527 18.5 527 13.2533 527 9 522.747 9 517.5Z"
+                stroke="#000000"
+                stroke-width="2"
+                stroke-miterlimit="8"
+                fill="#FFFF00"
+                fill-rule="evenodd"
+            />
+            <text
+                fill="#8A94AD"
+                font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                font-weight="700"
+                font-size="11"
+                transform="translate(33.6121 520)"
+            >
+                в ремонте
+                <tspan font-size="11" x="0.264885" y="-23">отдача</tspan>
+                <tspan font-size="11" x="0.000106812" y="-47">прием</tspan>
+            </text>
+            <g
+                clip-path="url(#clip7)"
+                transform="matrix(0.000104987 0 0 0.000104987 13 462)"
+            >
+                <g clip-path="url(#clip9)" transform="matrix(1.05 0 0 1 -0.0078125 0)">
+                    <use
+                        width="100%"
+                        height="100%"
+                        xlink:href="#img8"
+                        transform="scale(2093.41 2093.41)"
+                    ></use>
+                </g>
+            </g>
+            <g
+                clip-path="url(#clip10)"
+                transform="matrix(0.000104987 0 0 0.000104987 13 484)"
+            >
+                <g clip-path="url(#clip12)" transform="matrix(1.05 0 0 1 -0.0078125 0)">
+                    <use
+                        width="100%"
+                        height="100%"
+                        xlink:href="#img11"
+                        transform="scale(2093.41 2093.41)"
+                    ></use>
+                </g>
+            </g>
+            <path
+                d="M238.5 407C238.5 393.469 249.469 382.5 263 382.5 276.531 382.5 287.5 393.469 287.5 407 287.5 420.531 276.531 431.5 263 431.5 249.469 431.5 238.5 420.531 238.5 407Z"
+                stroke="#000000"
+                stroke-width="1.33333"
+                stroke-miterlimit="8"
+                fill="#FF0000"
+                fill-rule="evenodd"
+            />
+            <g clip-path="url(#clip13)">
+                <g clip-path="url(#clip14)">
+                    <g clip-path="url(#clip15)">
+                        <path
+                            d="M261.689 399.933 262.622 399.933 263.944 400.167 265.033 400.633 265.889 401.178 266.9 402.189 267.522 403.122 267.989 404.367 268.144 405.067 268.144 406.933 267.833 408.1 267.211 409.344 266.589 410.122 266.044 410.667 264.956 411.367 263.711 411.833 262.933 411.989 261.378 411.989 260.133 411.678 259.278 411.289 258.422 410.744 257.567 409.967 257.022 409.189 256.478 408.1 256.167 406.856 256.089 405.922 256.244 404.678 256.556 403.667 257.178 402.5 258.033 401.567 258.656 401.022 259.978 400.322 261.144 400.011Z"
+                        />
+                        <path
+                            d="M262.156 386.089 263.011 386.089 264.489 386.322 265.967 386.789 267.211 387.411 268.144 388.033 268.922 388.733 269.856 389.667 270.711 390.911 271.333 392.156 271.8 393.556 272.033 394.722 272.111 395.344 272.111 396.822 271.878 398.3 271.489 399.622 270.867 400.944 270.089 402.033 269.933 402.033 269.311 400.944 268.378 399.856 267.522 399.078 266.433 398.378 265.267 397.833 263.944 397.444 262.156 397.211Z"
+                        />
+                        <path
+                            d="M249.4 401.878 249.789 401.956 251.967 403.2 253.522 404.133 253.6 404.289 253.444 405.922 253.6 407.556 253.989 409.033 254.533 410.2 254.533 410.433 252.356 411.678 250.489 412.767 246.444 415.1 245.122 415.878 244.889 415.878 244.189 414.4 243.8 413.078 243.644 412.144 243.567 410.822 243.722 409.344 243.956 408.256 244.5 406.778 245.044 405.767 245.744 404.756 246.678 403.744 247.533 402.967 248.933 402.111Z"
+                        />
+                        <path
+                            d="M269.7 410.433 270.089 410.511 271.956 411.6 278.022 415.1 279.344 415.878 279.189 416.267 278.644 417.044 277.944 417.9 277.4 418.444 276.233 419.3 274.989 420 273.511 420.544 272.344 420.778 271.878 420.856 269.544 420.856 268.378 420.622 267.133 420.233 265.811 419.611 264.878 418.989 264.878 414.322 265.578 414.011 266.9 413.311 267.833 412.611 268.922 411.522Z"
+                        />
+                        <path
+                            d="M252.667 391.067 254.378 391.067 255.856 391.3 257.489 391.844 258.811 392.544 259.433 392.933 259.433 397.678 258.033 398.3 256.944 399 256.089 399.7 255.544 400.244 254.611 401.567 254.144 401.411 252.822 400.633 246.756 397.133 245.044 396.122 244.967 395.967 245.511 395.111 246.367 394.1 246.989 393.478 248.156 392.622 249.244 392 250.722 391.456 251.578 391.222Z"
+                        />
+                        <path
+                            d="M256.167 412.533 256.478 412.611 257.644 413.467 258.967 414.089 260.211 414.478 261.144 414.633 262.078 414.711 262.156 414.789 262.156 425.833 260.989 425.833 259.433 425.522 258.111 425.056 256.711 424.278 255.7 423.5 254.922 422.8 254.144 421.867 253.367 420.622 252.744 419.222 252.356 417.744 252.2 416.344 252.2 415.489 252.278 414.789 254.222 413.7 255.544 412.922Z"
+                        />
+                        <path
+                            d="M279.267 396.044 279.422 396.044 279.967 397.133 280.433 398.533 280.667 399.778 280.744 401.333 280.589 402.733 280.278 404.056 279.656 405.533 279.111 406.467 278.489 407.322 277.633 408.256 276.467 409.189 275.456 409.811 274.756 410.122 272.811 409.033 270.944 407.944 270.711 407.789 270.867 406.389 270.867 405.222 271.567 404.522 272.578 403.2 273.278 402.033 273.978 400.556 274.522 398.844 275.222 398.378 277.167 397.289 279.033 396.2Z"
+                        />
+                    </g>
+                </g>
+            </g>
+            <path
+                d="M523.5 406C523.5 392.469 534.469 381.5 548 381.5 561.531 381.5 572.5 392.469 572.5 406 572.5 419.531 561.531 430.5 548 430.5 534.469 430.5 523.5 419.531 523.5 406Z"
+                stroke="#000000"
+                stroke-width="1.33333"
+                stroke-miterlimit="8"
+                fill="#FF0000"
+                fill-rule="evenodd"
+            />
+            <g clip-path="url(#clip16)">
+                <g clip-path="url(#clip17)">
+                    <g clip-path="url(#clip18)">
+                        <path
+                            d="M546.689 398.933 547.622 398.933 548.944 399.167 550.033 399.633 550.889 400.178 551.9 401.189 552.522 402.122 552.989 403.367 553.144 404.067 553.144 405.933 552.833 407.1 552.211 408.344 551.589 409.122 551.044 409.667 549.956 410.367 548.711 410.833 547.933 410.989 546.378 410.989 545.133 410.678 544.278 410.289 543.422 409.744 542.567 408.967 542.022 408.189 541.478 407.1 541.167 405.856 541.089 404.922 541.244 403.678 541.556 402.667 542.178 401.5 543.033 400.567 543.656 400.022 544.978 399.322 546.144 399.011Z"
+                        />
+                        <path
+                            d="M547.156 385.089 548.011 385.089 549.489 385.322 550.967 385.789 552.211 386.411 553.144 387.033 553.922 387.733 554.856 388.667 555.711 389.911 556.333 391.156 556.8 392.556 557.033 393.722 557.111 394.344 557.111 395.822 556.878 397.3 556.489 398.622 555.867 399.944 555.089 401.033 554.933 401.033 554.311 399.944 553.378 398.856 552.522 398.078 551.433 397.378 550.267 396.833 548.944 396.444 547.156 396.211Z"
+                        />
+                        <path
+                            d="M534.4 400.878 534.789 400.956 536.967 402.2 538.522 403.133 538.6 403.289 538.444 404.922 538.6 406.556 538.989 408.033 539.533 409.2 539.533 409.433 537.356 410.678 535.489 411.767 531.444 414.1 530.122 414.878 529.889 414.878 529.189 413.4 528.8 412.078 528.644 411.144 528.567 409.822 528.722 408.344 528.956 407.256 529.5 405.778 530.044 404.767 530.744 403.756 531.678 402.744 532.533 401.967 533.933 401.111Z"
+                        />
+                        <path
+                            d="M554.7 409.433 555.089 409.511 556.956 410.6 563.022 414.1 564.344 414.878 564.189 415.267 563.644 416.044 562.944 416.9 562.4 417.444 561.233 418.3 559.989 419 558.511 419.544 557.344 419.778 556.878 419.856 554.544 419.856 553.378 419.622 552.133 419.233 550.811 418.611 549.878 417.989 549.878 413.322 550.578 413.011 551.9 412.311 552.833 411.611 553.922 410.522Z"
+                        />
+                        <path
+                            d="M537.667 390.067 539.378 390.067 540.856 390.3 542.489 390.844 543.811 391.544 544.433 391.933 544.433 396.678 543.033 397.3 541.944 398 541.089 398.7 540.544 399.244 539.611 400.567 539.144 400.411 537.822 399.633 531.756 396.133 530.044 395.122 529.967 394.967 530.511 394.111 531.367 393.1 531.989 392.478 533.156 391.622 534.244 391 535.722 390.456 536.578 390.222Z"
+                        />
+                        <path
+                            d="M541.167 411.533 541.478 411.611 542.644 412.467 543.967 413.089 545.211 413.478 546.144 413.633 547.078 413.711 547.156 413.789 547.156 424.833 545.989 424.833 544.433 424.522 543.111 424.056 541.711 423.278 540.7 422.5 539.922 421.8 539.144 420.867 538.367 419.622 537.744 418.222 537.356 416.744 537.2 415.344 537.2 414.489 537.278 413.789 539.222 412.7 540.544 411.922Z"
+                        />
+                        <path
+                            d="M564.267 395.044 564.422 395.044 564.967 396.133 565.433 397.533 565.667 398.778 565.744 400.333 565.589 401.733 565.278 403.056 564.656 404.533 564.111 405.467 563.489 406.322 562.633 407.256 561.467 408.189 560.456 408.811 559.756 409.122 557.811 408.033 555.944 406.944 555.711 406.789 555.867 405.389 555.867 404.222 556.567 403.522 557.578 402.2 558.278 401.033 558.978 399.556 559.522 397.844 560.222 397.378 562.167 396.289 564.033 395.2Z"
+                        />
+                    </g>
+                </g>
+            </g>
+            <path
+                d="M769.5 406C769.5 392.469 780.469 381.5 794 381.5 807.531 381.5 818.5 392.469 818.5 406 818.5 419.531 807.531 430.5 794 430.5 780.469 430.5 769.5 419.531 769.5 406Z"
+                stroke="#000000"
+                stroke-width="1.33333"
+                stroke-miterlimit="8"
+                fill="#FF0000"
+                fill-rule="evenodd"
+            />
+            <g clip-path="url(#clip19)">
+                <g clip-path="url(#clip20)">
+                    <g clip-path="url(#clip21)">
+                        <path
+                            d="M792.689 399.933 793.622 399.933 794.944 400.167 796.033 400.633 796.889 401.178 797.9 402.189 798.522 403.122 798.989 404.367 799.144 405.067 799.144 406.933 798.833 408.1 798.211 409.344 797.589 410.122 797.044 410.667 795.956 411.367 794.711 411.833 793.933 411.989 792.378 411.989 791.133 411.678 790.278 411.289 789.422 410.744 788.567 409.967 788.022 409.189 787.478 408.1 787.167 406.856 787.089 405.922 787.244 404.678 787.556 403.667 788.178 402.5 789.033 401.567 789.656 401.022 790.978 400.322 792.144 400.011Z"
+                        />
+                        <path
+                            d="M793.156 386.089 794.011 386.089 795.489 386.322 796.967 386.789 798.211 387.411 799.144 388.033 799.922 388.733 800.856 389.667 801.711 390.911 802.333 392.156 802.8 393.556 803.033 394.722 803.111 395.344 803.111 396.822 802.878 398.3 802.489 399.622 801.867 400.944 801.089 402.033 800.933 402.033 800.311 400.944 799.378 399.856 798.522 399.078 797.433 398.378 796.267 397.833 794.944 397.444 793.156 397.211Z"
+                        />
+                        <path
+                            d="M780.4 401.878 780.789 401.956 782.967 403.2 784.522 404.133 784.6 404.289 784.444 405.922 784.6 407.556 784.989 409.033 785.533 410.2 785.533 410.433 783.356 411.678 781.489 412.767 777.444 415.1 776.122 415.878 775.889 415.878 775.189 414.4 774.8 413.078 774.644 412.144 774.567 410.822 774.722 409.344 774.956 408.256 775.5 406.778 776.044 405.767 776.744 404.756 777.678 403.744 778.533 402.967 779.933 402.111Z"
+                        />
+                        <path
+                            d="M800.7 410.433 801.089 410.511 802.956 411.6 809.022 415.1 810.344 415.878 810.189 416.267 809.644 417.044 808.944 417.9 808.4 418.444 807.233 419.3 805.989 420 804.511 420.544 803.344 420.778 802.878 420.856 800.544 420.856 799.378 420.622 798.133 420.233 796.811 419.611 795.878 418.989 795.878 414.322 796.578 414.011 797.9 413.311 798.833 412.611 799.922 411.522Z"
+                        />
+                        <path
+                            d="M783.667 391.067 785.378 391.067 786.856 391.3 788.489 391.844 789.811 392.544 790.433 392.933 790.433 397.678 789.033 398.3 787.944 399 787.089 399.7 786.544 400.244 785.611 401.567 785.144 401.411 783.822 400.633 777.756 397.133 776.044 396.122 775.967 395.967 776.511 395.111 777.367 394.1 777.989 393.478 779.156 392.622 780.244 392 781.722 391.456 782.578 391.222Z"
+                        />
+                        <path
+                            d="M787.167 412.533 787.478 412.611 788.644 413.467 789.967 414.089 791.211 414.478 792.144 414.633 793.078 414.711 793.156 414.789 793.156 425.833 791.989 425.833 790.433 425.522 789.111 425.056 787.711 424.278 786.7 423.5 785.922 422.8 785.144 421.867 784.367 420.622 783.744 419.222 783.356 417.744 783.2 416.344 783.2 415.489 783.278 414.789 785.222 413.7 786.544 412.922Z"
+                        />
+                        <path
+                            d="M810.267 396.044 810.422 396.044 810.967 397.133 811.433 398.533 811.667 399.778 811.744 401.333 811.589 402.733 811.278 404.056 810.656 405.533 810.111 406.467 809.489 407.322 808.633 408.256 807.467 409.189 806.456 409.811 805.756 410.122 803.811 409.033 801.944 407.944 801.711 407.789 801.867 406.389 801.867 405.222 802.567 404.522 803.578 403.2 804.278 402.033 804.978 400.556 805.522 398.844 806.222 398.378 808.167 397.289 810.033 396.2Z"
+                        />
+                    </g>
+                </g>
+            </g>
+            <path
+                d="M1040.5 405C1040.5 391.469 1051.47 380.5 1065 380.5 1078.53 380.5 1089.5 391.469 1089.5 405 1089.5 418.531 1078.53 429.5 1065 429.5 1051.47 429.5 1040.5 418.531 1040.5 405Z"
+                stroke="#000000"
+                stroke-width="1.33333"
+                stroke-miterlimit="8"
+                fill="#FF0000"
+                fill-rule="evenodd"
+            />
+            <g clip-path="url(#clip22)">
+                <g clip-path="url(#clip23)">
+                    <g clip-path="url(#clip24)">
+                        <path
+                            d="M0 0 0.922222 0 2.2287 0.230556 3.30463 0.691667 4.15 1.22963 5.14907 2.2287 5.76389 3.15093 6.225 4.38056 6.3787 5.07222 6.3787 6.91667 6.0713 8.06944 5.45648 9.29907 4.84167 10.0676 4.3037 10.6056 3.22778 11.2972 1.99815 11.7583 1.22963 11.912-0.307407 11.912-1.53704 11.6046-2.38241 11.2204-3.22778 10.6824-4.07315 9.91389-4.61111 9.14537-5.14907 8.06944-5.45648 6.83981-5.53333 5.91759-5.37963 4.68796-5.07222 3.68889-4.45741 2.53611-3.61204 1.61389-2.99722 1.07593-1.69074 0.384259-0.537963 0.0768519Z"
+                            transform="matrix(1.01205 0 0 1 1063.69 398.506)"
+                        />
+                        <path
+                            d="M0 0 0.84537 0 2.30556 0.230556 3.76574 0.691667 4.99537 1.30648 5.91759 1.9213 6.68611 2.61296 7.60833 3.53519 8.4537 4.76481 9.06852 5.99444 9.52963 7.37778 9.76019 8.53056 9.83704 9.14537 9.83704 10.6056 9.60648 12.0657 9.22222 13.3722 8.60741 14.6787 7.83889 15.7546 7.68519 15.7546 7.07037 14.6787 6.14815 13.6028 5.30278 12.8343 4.22685 12.1426 3.07407 11.6046 1.76759 11.2204 0 10.9898Z"
+                            transform="matrix(1.01205 0 0 1 1064.16 384.826)"
+                        />
+                        <path
+                            d="M0 0 0.384259 0.0768519 2.53611 1.30648 4.07315 2.2287 4.15 2.38241 3.9963 3.9963 4.15 5.61019 4.53426 7.07037 5.07222 8.22315 5.07222 8.4537 2.92037 9.68333 1.07593 10.7593-2.92037 13.0648-4.22685 13.8333-4.45741 13.8333-5.14907 12.3731-5.53333 11.0667-5.68704 10.1444-5.76389 8.83796-5.61019 7.37778-5.37963 6.30185-4.84167 4.84167-4.3037 3.84259-3.61204 2.84352-2.68981 1.84444-1.84444 1.07593-0.461111 0.230556Z"
+                            transform="matrix(1.01205 0 0 1 1051.4 400.427)"
+                        />
+                        <path
+                            d="M0 0 0.384259 0.0768519 2.2287 1.15278 8.22315 4.61111 9.52963 5.37963 9.37593 5.76389 8.83796 6.53241 8.1463 7.37778 7.60833 7.91574 6.45556 8.76111 5.22593 9.45278 3.76574 9.99074 2.61296 10.2213 2.15185 10.2981-0.153704 10.2981-1.30648 10.0676-2.53611 9.68333-3.84259 9.06852-4.76481 8.4537-4.76481 3.84259-4.07315 3.53519-2.76667 2.84352-1.84444 2.15185-0.768519 1.07593Z"
+                            transform="matrix(1.01205 0 0 1 1071.7 408.881)"
+                        />
+                        <path
+                            d="M0 0 1.69074 0 3.15093 0.230556 4.76481 0.768519 6.0713 1.46019 6.68611 1.84444 6.68611 6.53241 5.30278 7.14722 4.22685 7.83889 3.38148 8.53056 2.84352 9.06852 1.9213 10.375 1.46019 10.2213 0.153704 9.45278-5.84074 5.99444-7.53148 4.99537-7.60833 4.84167-7.07037 3.9963-6.225 2.99722-5.61019 2.38241-4.45741 1.53704-3.38148 0.922222-1.9213 0.384259-1.07593 0.153704Z"
+                            transform="matrix(1.01205 0 0 1 1054.67 389.744)"
+                        />
+                        <path
+                            d="M0 0 0.307407 0.0768519 1.46019 0.922222 2.76667 1.53704 3.9963 1.9213 4.91852 2.075 5.84074 2.15185 5.91759 2.2287 5.91759 13.1417 4.76481 13.1417 3.22778 12.8343 1.9213 12.3731 0.537963 11.6046-0.461111 10.8361-1.22963 10.1444-1.99815 9.22222-2.76667 7.99259-3.38148 6.60926-3.76574 5.14907-3.91944 3.76574-3.91944 2.92037-3.84259 2.2287-1.9213 1.15278-0.614815 0.384259Z"
+                            transform="matrix(1.01205 0 0 1 1058.17 410.956)"
+                        />
+                        <path
+                            d="M0 0 0.153704 0 0.691667 1.07593 1.15278 2.45926 1.38333 3.68889 1.46019 5.22593 1.30648 6.60926 0.999074 7.91574 0.384259 9.37593-0.153704 10.2981-0.768519 11.1435-1.61389 12.0657-2.76667 12.988-3.76574 13.6028-4.45741 13.9102-6.3787 12.8343-8.22315 11.7583-8.4537 11.6046-8.3 10.2213-8.3 9.06852-7.60833 8.37685-6.60926 7.07037-5.91759 5.91759-5.22593 4.45741-4.68796 2.76667-3.9963 2.30556-2.075 1.22963-0.230556 0.153704Z"
+                            transform="matrix(1.01205 0 0 1 1081.27 394.663)"
+                        />
+                    </g>
+                </g>
+            </g>
+            <path
+                d="M217.681 436.877 310.789 436.877 310.789 449.677 217.681 449.677Z"
+                fill="#D9D9D9"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M217.681 449.677 310.789 449.677 310.789 462.477 217.681 462.477Z"
+                fill="#D9D9D9"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M217.681 462.477 310.789 462.477 310.789 475.277 217.681 475.277Z"
+                fill="#D9D9D9"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M217.681 475.277 310.789 475.277 310.789 488.077 217.681 488.077Z"
+                fill="#D9D9D9"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M217.681 488.077 310.789 488.077 310.789 500.877 217.681 500.877Z"
+                fill="#D9D9D9"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M217.681 500.877 310.789 500.877 310.789 513.677 217.681 513.677Z"
+                fill="#D9D9D9"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M217.014 449.677 311.456 449.677"
+                stroke="#000000"
+                stroke-width="1.33333"
+                stroke-linejoin="round"
+                stroke-miterlimit="10"
+                fill="none"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M217.014 462.477 311.456 462.477"
+                stroke="#000000"
+                stroke-width="1.33333"
+                stroke-linejoin="round"
+                stroke-miterlimit="10"
+                fill="none"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M217.014 475.277 311.456 475.277"
+                stroke="#000000"
+                stroke-width="1.33333"
+                stroke-linejoin="round"
+                stroke-miterlimit="10"
+                fill="none"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M217.014 488.077 311.456 488.077"
+                stroke="#000000"
+                stroke-width="1.33333"
+                stroke-linejoin="round"
+                stroke-miterlimit="10"
+                fill="none"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M217.014 500.877 311.456 500.877"
+                stroke="#000000"
+                stroke-width="1.33333"
+                stroke-linejoin="round"
+                stroke-miterlimit="10"
+                fill="none"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M217.681 436.21 217.681 514.343"
+                stroke="#000000"
+                stroke-width="1.33333"
+                stroke-linejoin="round"
+                stroke-miterlimit="10"
+                fill="none"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M310.789 436.21 310.789 514.343"
+                stroke="#000000"
+                stroke-width="1.33333"
+                stroke-linejoin="round"
+                stroke-miterlimit="10"
+                fill="none"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M217.014 436.877 311.456 436.877"
+                stroke="#000000"
+                stroke-width="1.33333"
+                stroke-linejoin="round"
+                stroke-miterlimit="10"
+                fill="none"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M217.014 513.677 311.456 513.677"
+                stroke="#000000"
+                stroke-width="1.33333"
+                stroke-linejoin="round"
+                stroke-miterlimit="10"
+                fill="none"
+                fill-rule="evenodd"
+            />
+            <g clip-path="url(#clip25)">
+                <text
+                    font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                    font-weight="400"
+                    font-size="11"
+                    transform="translate(221.46 447)"
+                >
+                    Р
+                </text>
+            </g>
+            <g clip-path="url(#clip26)">
+                <text
+                    font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                    font-weight="400"
+                    font-size="11"
+                    transform="translate(221.46 460)"
+                >
+                    Q
+                </text>
+            </g>
+            <text
+                font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                font-weight="400"
+                font-size="11"
+                transform="translate(229.127 460)"
+            >
+                вар
+            </text>
+            <g clip-path="url(#clip27)">
+                <text
+                    font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                    font-weight="400"
+                    font-size="11"
+                    transform="translate(221.46 472)"
+                >
+                    КИУМ
+                </text>
+            </g>
+            <g clip-path="url(#clip28)">
+                <text
+                    font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                    font-weight="400"
+                    font-size="11"
+                    transform="translate(221.46 485)"
+                >
+                    КПД
+                </text>
+            </g>
+            <g clip-path="url(#clip29)">
+                <text
+                    font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                    font-weight="400"
+                    font-size="11"
+                    transform="translate(221.46 498)"
+                >
+                    НА
+                </text>
+            </g>
+            <g clip-path="url(#clip30)">
+                <text
+                    fill="#005EAC"
+                    font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                    font-weight="400"
+                    font-size="11"
+                    transform="translate(221.46 511)"
+                >
+                    Q
+                </text>
+            </g>
+            <text
+                fill="#005EAC"
+                font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                font-weight="400"
+                font-size="11"
+                transform="translate(229.127 511)"
+            >
+                вода
+            </text>
+            <path
+                d="M500.391 435.833 593.499 435.833 593.499 448.633 500.391 448.633Z"
+                fill="#D9D9D9"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M500.391 448.633 593.499 448.633 593.499 461.433 500.391 461.433Z"
+                fill="#D9D9D9"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M500.391 461.433 593.499 461.433 593.499 474.233 500.391 474.233Z"
+                fill="#D9D9D9"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M500.391 474.233 593.499 474.233 593.499 487.033 500.391 487.033Z"
+                fill="#D9D9D9"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M500.391 487.033 593.499 487.033 593.499 499.833 500.391 499.833Z"
+                fill="#D9D9D9"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M500.391 499.833 593.499 499.833 593.499 512.633 500.391 512.633Z"
+                fill="#D9D9D9"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M499.724 448.633 594.165 448.633"
+                stroke="#000000"
+                stroke-width="1.33333"
+                stroke-linejoin="round"
+                stroke-miterlimit="10"
+                fill="none"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M499.724 461.433 594.165 461.433"
+                stroke="#000000"
+                stroke-width="1.33333"
+                stroke-linejoin="round"
+                stroke-miterlimit="10"
+                fill="none"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M499.724 474.233 594.165 474.233"
+                stroke="#000000"
+                stroke-width="1.33333"
+                stroke-linejoin="round"
+                stroke-miterlimit="10"
+                fill="none"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M499.724 487.033 594.165 487.033"
+                stroke="#000000"
+                stroke-width="1.33333"
+                stroke-linejoin="round"
+                stroke-miterlimit="10"
+                fill="none"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M499.724 499.833 594.165 499.833"
+                stroke="#000000"
+                stroke-width="1.33333"
+                stroke-linejoin="round"
+                stroke-miterlimit="10"
+                fill="none"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M500.391 435.166 500.391 513.3"
+                stroke="#000000"
+                stroke-width="1.33333"
+                stroke-linejoin="round"
+                stroke-miterlimit="10"
+                fill="none"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M593.499 435.166 593.499 513.3"
+                stroke="#000000"
+                stroke-width="1.33333"
+                stroke-linejoin="round"
+                stroke-miterlimit="10"
+                fill="none"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M499.724 435.833 594.165 435.833"
+                stroke="#000000"
+                stroke-width="1.33333"
+                stroke-linejoin="round"
+                stroke-miterlimit="10"
+                fill="none"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M499.724 512.633 594.165 512.633"
+                stroke="#000000"
+                stroke-width="1.33333"
+                stroke-linejoin="round"
+                stroke-miterlimit="10"
+                fill="none"
+                fill-rule="evenodd"
+            />
+            <g clip-path="url(#clip31)">
+                <text
+                    font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                    font-weight="400"
+                    font-size="11"
+                    transform="translate(504.17 446)"
+                >
+                    Р
+                </text>
+            </g>
+            <g clip-path="url(#clip32)">
+                <text
+                    font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                    font-weight="400"
+                    font-size="11"
+                    transform="translate(504.17 459)"
+                >
+                    Q
+                </text>
+            </g>
+            <text
+                font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                font-weight="400"
+                font-size="11"
+                transform="translate(511.837 459)"
+            >
+                вар
+            </text>
+            <g clip-path="url(#clip33)">
+                <text
+                    font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                    font-weight="400"
+                    font-size="11"
+                    transform="translate(504.17 471)"
+                >
+                    КИУМ
+                </text>
+            </g>
+            <g clip-path="url(#clip34)">
+                <text
+                    font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                    font-weight="400"
+                    font-size="11"
+                    transform="translate(504.17 484)"
+                >
+                    КПД
+                </text>
+            </g>
+            <g clip-path="url(#clip35)">
+                <text
+                    font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                    font-weight="400"
+                    font-size="11"
+                    transform="translate(504.17 497)"
+                >
+                    НА
+                </text>
+            </g>
+            <g clip-path="url(#clip36)">
+                <text
+                    fill="#005EAC"
+                    font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                    font-weight="400"
+                    font-size="11"
+                    transform="translate(504.17 510)"
+                >
+                    Q
+                </text>
+            </g>
+            <text
+                fill="#005EAC"
+                font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                font-weight="400"
+                font-size="11"
+                transform="translate(511.837 510)"
+            >
+                вода
+            </text>
+            <path
+                d="M730.219 434.829 823.327 434.829 823.327 447.629 730.219 447.629Z"
+                fill="#D9D9D9"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M730.219 447.629 823.327 447.629 823.327 460.43 730.219 460.43Z"
+                fill="#D9D9D9"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M730.219 460.43 823.327 460.43 823.327 473.229 730.219 473.229Z"
+                fill="#D9D9D9"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M730.219 473.229 823.327 473.229 823.327 486.029 730.219 486.029Z"
+                fill="#D9D9D9"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M730.219 486.029 823.327 486.029 823.327 498.829 730.219 498.829Z"
+                fill="#D9D9D9"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M730.219 498.829 823.327 498.829 823.327 511.629 730.219 511.629Z"
+                fill="#D9D9D9"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M729.552 447.629 823.994 447.629"
+                stroke="#000000"
+                stroke-width="1.33333"
+                stroke-linejoin="round"
+                stroke-miterlimit="10"
+                fill="none"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M729.552 460.43 823.994 460.43"
+                stroke="#000000"
+                stroke-width="1.33333"
+                stroke-linejoin="round"
+                stroke-miterlimit="10"
+                fill="none"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M729.552 473.229 823.994 473.229"
+                stroke="#000000"
+                stroke-width="1.33333"
+                stroke-linejoin="round"
+                stroke-miterlimit="10"
+                fill="none"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M729.552 486.029 823.994 486.029"
+                stroke="#000000"
+                stroke-width="1.33333"
+                stroke-linejoin="round"
+                stroke-miterlimit="10"
+                fill="none"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M729.552 498.829 823.994 498.829"
+                stroke="#000000"
+                stroke-width="1.33333"
+                stroke-linejoin="round"
+                stroke-miterlimit="10"
+                fill="none"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M730.219 434.163 730.219 512.296"
+                stroke="#000000"
+                stroke-width="1.33333"
+                stroke-linejoin="round"
+                stroke-miterlimit="10"
+                fill="none"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M823.327 434.163 823.327 512.296"
+                stroke="#000000"
+                stroke-width="1.33333"
+                stroke-linejoin="round"
+                stroke-miterlimit="10"
+                fill="none"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M729.552 434.829 823.994 434.829"
+                stroke="#000000"
+                stroke-width="1.33333"
+                stroke-linejoin="round"
+                stroke-miterlimit="10"
+                fill="none"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M729.552 511.629 823.994 511.629"
+                stroke="#000000"
+                stroke-width="1.33333"
+                stroke-linejoin="round"
+                stroke-miterlimit="10"
+                fill="none"
+                fill-rule="evenodd"
+            />
+            <g clip-path="url(#clip37)">
+                <text
+                    font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                    font-weight="400"
+                    font-size="11"
+                    transform="translate(733.998 445)"
+                >
+                    Р
+                </text>
+            </g>
+            <g clip-path="url(#clip38)">
+                <text
+                    font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                    font-weight="400"
+                    font-size="11"
+                    transform="translate(733.998 458)"
+                >
+                    Q
+                </text>
+            </g>
+            <text
+                font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                font-weight="400"
+                font-size="11"
+                transform="translate(741.665 458)"
+            >
+                вар
+            </text>
+            <g clip-path="url(#clip39)">
+                <text
+                    font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                    font-weight="400"
+                    font-size="11"
+                    transform="translate(733.998 470)"
+                >
+                    КИУМ
+                </text>
+            </g>
+            <g clip-path="url(#clip40)">
+                <text
+                    font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                    font-weight="400"
+                    font-size="11"
+                    transform="translate(733.998 483)"
+                >
+                    КПД
+                </text>
+            </g>
+            <g clip-path="url(#clip41)">
+                <text
+                    font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                    font-weight="400"
+                    font-size="11"
+                    transform="translate(733.998 496)"
+                >
+                    НА
+                </text>
+            </g>
+            <g clip-path="url(#clip42)">
+                <text
+                    fill="#005EAC"
+                    font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                    font-weight="400"
+                    font-size="11"
+                    transform="translate(733.998 509)"
+                >
+                    Q
+                </text>
+            </g>
+            <text
+                fill="#005EAC"
+                font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                font-weight="400"
+                font-size="11"
+                transform="translate(741.665 509)"
+            >
+                вода
+            </text>
+            <path
+                d="M1021.92 434.196 1115.03 434.196 1115.03 446.996 1021.92 446.996Z"
+                fill="#D9D9D9"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M1021.92 446.996 1115.03 446.996 1115.03 459.796 1021.92 459.796Z"
+                fill="#D9D9D9"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M1021.92 459.796 1115.03 459.796 1115.03 472.596 1021.92 472.596Z"
+                fill="#D9D9D9"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M1021.92 472.596 1115.03 472.596 1115.03 485.396 1021.92 485.396Z"
+                fill="#D9D9D9"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M1021.92 485.396 1115.03 485.396 1115.03 498.196 1021.92 498.196Z"
+                fill="#D9D9D9"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M1021.92 498.196 1115.03 498.196 1115.03 510.996 1021.92 510.996Z"
+                fill="#D9D9D9"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M1021.26 446.996 1115.7 446.996"
+                stroke="#000000"
+                stroke-width="1.33333"
+                stroke-linejoin="round"
+                stroke-miterlimit="10"
+                fill="none"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M1021.26 459.796 1115.7 459.796"
+                stroke="#000000"
+                stroke-width="1.33333"
+                stroke-linejoin="round"
+                stroke-miterlimit="10"
+                fill="none"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M1021.26 472.596 1115.7 472.596"
+                stroke="#000000"
+                stroke-width="1.33333"
+                stroke-linejoin="round"
+                stroke-miterlimit="10"
+                fill="none"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M1021.26 485.396 1115.7 485.396"
+                stroke="#000000"
+                stroke-width="1.33333"
+                stroke-linejoin="round"
+                stroke-miterlimit="10"
+                fill="none"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M1021.26 498.196 1115.7 498.196"
+                stroke="#000000"
+                stroke-width="1.33333"
+                stroke-linejoin="round"
+                stroke-miterlimit="10"
+                fill="none"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M1021.92 433.53 1021.92 511.663"
+                stroke="#000000"
+                stroke-width="1.33333"
+                stroke-linejoin="round"
+                stroke-miterlimit="10"
+                fill="none"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M1115.03 433.53 1115.03 511.663"
+                stroke="#000000"
+                stroke-width="1.33333"
+                stroke-linejoin="round"
+                stroke-miterlimit="10"
+                fill="none"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M1021.26 434.196 1115.7 434.196"
+                stroke="#000000"
+                stroke-width="1.33333"
+                stroke-linejoin="round"
+                stroke-miterlimit="10"
+                fill="none"
+                fill-rule="evenodd"
+            />
+            <path
+                d="M1021.26 510.996 1115.7 510.996"
+                stroke="#000000"
+                stroke-width="1.33333"
+                stroke-linejoin="round"
+                stroke-miterlimit="10"
+                fill="none"
+                fill-rule="evenodd"
+            />
+            <g clip-path="url(#clip43)">
+                <text
+                    font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                    font-weight="400"
+                    font-size="11"
+                    transform="translate(1025.7 444)"
+                >
+                    Р
+                </text>
+            </g>
+            <g clip-path="url(#clip44)">
+                <text
+                    font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                    font-weight="400"
+                    font-size="11"
+                    transform="translate(1025.7 457)"
+                >
+                    Q
+                </text>
+            </g>
+            <text
+                font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                font-weight="400"
+                font-size="11"
+                transform="translate(1033.37 457)"
+            >
+                вар
+            </text>
+            <g clip-path="url(#clip45)">
+                <text
+                    font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                    font-weight="400"
+                    font-size="11"
+                    transform="translate(1025.7 470)"
+                >
+                    КИУМ
+                </text>
+            </g>
+            <g clip-path="url(#clip46)">
+                <text
+                    font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                    font-weight="400"
+                    font-size="11"
+                    transform="translate(1025.7 483)"
+                >
+                    КПД
+                </text>
+            </g>
+            <g clip-path="url(#clip47)">
+                <text
+                    font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                    font-weight="400"
+                    font-size="11"
+                    transform="translate(1025.7 495)"
+                >
+                    НА
+                </text>
+            </g>
+            <g clip-path="url(#clip48)">
+                <text
+                    fill="#005EAC"
+                    font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                    font-weight="400"
+                    font-size="11"
+                    transform="translate(1025.7 508)"
+                >
+                    Q
+                </text>
+            </g>
+            <text
+                fill="#005EAC"
+                font-family="Times New Roman,Times New Roman_MSFontService,sans-serif"
+                font-weight="400"
+                font-size="11"
+                transform="translate(1033.37 508)"
+            >
+                вода
+            </text>
+    </g>
+</svg>

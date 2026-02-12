@@ -1,6 +1,6 @@
 <div class="card mb-8! h-full">
     <div class="mb-4 flex justify-between items-start">
-        <div class="font-semibold text-xl">Водохранилища</div>
+        <div class="font-semibold text-xl">{{ 'DASHBOARD.RESERVOIRS' | translate }}</div>
         <div class="flex gap-2 items-baseline">
             <app-date-picker
                 [(ngModel)]="selectedDate"
@@ -19,22 +19,27 @@
         <ng-template #header>
             <tr>
                 <th style="width: 3rem">№</th>
-                <th class="whitespace-nowrap" pSortableColumn="organization_name">Название
+                <th class="whitespace-nowrap" pSortableColumn="organization_name">{{ 'COMMON.NAME' | translate }}
                     <p-sortIcon field="organization_name" />
                 </th>
-                <th class="whitespace-nowrap" pSortableColumn="reservoir_metrics.current.income">Приток, м³/с
+                <th class="whitespace-nowrap"
+                    pSortableColumn="reservoir_metrics.current.income">{{ 'DASHBOARD.INFLOW' | translate }}
                     <p-sortIcon field="reservoir_metrics.current.income" />
                 </th>
-                <th class="whitespace-nowrap" pSortableColumn="reservoir_metrics.current.release">Попуск, м³/с
+                <th class="whitespace-nowrap"
+                    pSortableColumn="reservoir_metrics.current.release">{{ 'DASHBOARD.RELEASE' | translate }}
                     <p-sortIcon field="reservoir_metrics.current.release" />
                 </th>
-                <th class="whitespace-nowrap" pSortableColumn="reservoir_metrics.current.level">Уровень, м
+                <th class="whitespace-nowrap"
+                    pSortableColumn="reservoir_metrics.current.level">{{ 'DASHBOARD.LEVEL' | translate }}
                     <p-sortIcon field="reservoir_metrics.current.level" />
                 </th>
-                <th class="whitespace-nowrap" pSortableColumn="reservoir_metrics.current.volume">Объём, млн. м³
+                <th class="whitespace-nowrap"
+                    pSortableColumn="reservoir_metrics.current.volume">{{ 'DASHBOARD.VOLUME' | translate }}
                     <p-sortIcon field="reservoir_metrics.current.volume" />
                 </th>
-                <th class="whitespace-nowrap" pSortableColumn="current_discharge">Холостой сброс, м³/с
+                <th class="whitespace-nowrap"
+                    pSortableColumn="current_discharge">{{ 'DASHBOARD.DISCHARGE' | translate }}
                     <p-sortIcon field="current_discharge" />
                 </th>
             </tr>

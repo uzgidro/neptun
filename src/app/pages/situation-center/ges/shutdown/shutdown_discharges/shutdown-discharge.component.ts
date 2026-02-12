@@ -24,6 +24,10 @@ import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
 import { TranslateModule } from '@ngx-translate/core';
 import { DateWidget } from '@/layout/component/widget/date/date.widget';
+import { finalize } from 'rxjs';
+import { HttpResponse } from '@angular/common/http';
+import { saveAs } from 'file-saver';
+import { ScService } from '@/core/services/sc.service';
 
 @Component({
     selector: 'app-shutdown-discharge',
@@ -75,6 +79,7 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
     private fb: FormBuilder = inject(FormBuilder);
     private organizationService: OrganizationService = inject(OrganizationService);
     private dischargeService: DischargeService = inject(DischargeService);
+    private scService: ScService = inject(ScService);
     private messageService: MessageService = inject(MessageService);
 
     // File handling
@@ -83,6 +88,15 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
     showFilesDialog: boolean = false;
     selectedDischargeForFiles: IdleDischargeResponse | null = null;
     existingFilesToKeep: number[] = [];
+
+    // Export
+    isExcelLoading = false;
+    isPdfLoading = false;
+
+    get dateYMD(): string {
+        const date = this.selectedDate || new Date();
+        return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+    }
 
     ngOnInit(): void {
         this.selectedDate = this.date || new Date();
@@ -334,5 +348,32 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
         const orgDischarges = this.discharges.filter((d) => d.organization.name === discharge.organization.name);
         const indexInOrg = orgDischarges.findIndex((d) => d.id === discharge.id) + 1;
         return `${orgIndex}.${indexInOrg}`;
+    }
+
+    download(format: 'excel' | 'pdf') {
+        if (format === 'excel') this.isExcelLoading = true;
+        else this.isPdfLoading = true;
+
+        const dateToUse = this.selectedDate || new Date();
+
+        this.scService
+            .downloadScReport(dateToUse, format)
+            .pipe(
+                finalize(() => {
+                    this.isExcelLoading = false;
+                    this.isPdfLoading = false;
+                })
+            )
+            .subscribe({
+                next: (response: HttpResponse<Blob>) => {
+                    const extension = format === 'excel' ? 'xlsx' : 'pdf';
+                    const filename = `Холостые_сбросы_${this.dateYMD}.${extension}`;
+                    saveAs(response.body!, filename);
+                },
+                error: (err: any) => {
+                    console.error('Ошибка при скачивании:', err);
+                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось скачать файл' });
+                }
+            });
     }
 }

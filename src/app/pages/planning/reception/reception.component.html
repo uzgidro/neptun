@@ -8,7 +8,7 @@
         [paginator]="true"
         [rowsPerPageOptions]="[10, 25, 50]"
         [showCurrentPageReport]="true"
-        currentPageReportTemplate="Показано {first} - {last} из {totalRecords} записей"
+        [currentPageReportTemplate]="'PLANNING.COMMON.PAGE_REPORT' | translate"
         [globalFilterFields]="['name', 'visitor', 'description', 'status']"
         [rowHover]="true"
         [showGridlines]="true"
@@ -16,7 +16,7 @@
     >
         <ng-template #caption>
             <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-                <span class="text-xl text-900 font-bold">Приемы</span>
+                <span class="text-xl text-900 font-bold">{{ 'PLANNING.RECEPTION.TITLE' | translate }}</span>
                 <div class="flex gap-2">
                     <p-iconfield iconPosition="left">
                         <p-inputicon class="pi pi-search" />
@@ -24,12 +24,12 @@
                             pInputText
                             type="text"
                             (input)="onGlobalFilter(rt, $event)"
-                            placeholder="Поиск..."
+                            [placeholder]="'PLANNING.COMMON.SEARCH' | translate"
                             class="w-full"
                         />
                     </p-iconfield>
                     <p-button
-                        label="Добавить"
+                        [label]="'PLANNING.COMMON.ADD' | translate"
                         icon="pi pi-plus"
                         (onClick)="openNew()"
                         severity="success"
@@ -41,30 +41,33 @@
         <ng-template #header>
             <tr>
                 <th pSortableColumn="name" style="min-width: 12rem">
-                    Название
+                    {{ 'PLANNING.COMMON.NAME' | translate }}
                     <p-sortIcon field="name" />
                 </th>
                 <th pSortableColumn="date" style="min-width: 10rem">
-                    Дата
+                    {{ 'PLANNING.COMMON.DATE' | translate }}
                     <p-sortIcon field="date" />
                 </th>
                 <th pSortableColumn="visitor" style="min-width: 12rem">
-                    Посетитель
+                    {{ 'PLANNING.RECEPTION.VISITOR' | translate }}
                     <p-sortIcon field="visitor" />
                 </th>
                 <th pSortableColumn="description" style="min-width: 15rem">
-                    Описание
+                    {{ 'PLANNING.COMMON.DESCRIPTION' | translate }}
                 </th>
                 <th pSortableColumn="status" style="min-width: 10rem">
-                    Статус
+                    {{ 'PLANNING.COMMON.STATUS' | translate }}
                     <p-sortIcon field="status" />
                 </th>
-                <th style="min-width: 10rem">Действия</th>
+                <th pSortableColumn="status_change_reason" style="min-width: 15rem">
+                    Комментарий
+                </th>
+                <th style="min-width: 10rem">{{ 'PLANNING.COMMON.ACTIONS' | translate }}</th>
             </tr>
         </ng-template>
 
         <ng-template #body let-reception>
-            <tr>
+            <tr (click)="viewReception(reception)" style="cursor: pointer;">
                 <td>{{ reception.name }}</td>
                 <td>{{ reception.date | date: 'dd.MM.yyyy' }}</td>
                 <td>{{ reception.visitor }}</td>
@@ -75,37 +78,56 @@
                 </td>
                 <td>
                     <p-tag
-                        [value]="getStatusLabel(reception.status)"
-                        [severity]="getStatusSeverity(reception.status)"
+                        [value]="getStatusLabel(reception)"
+                        [severity]="getStatusSeverity(reception)"
                     />
                 </td>
                 <td>
+          <span [pTooltip]="reception.status_change_reason || ''" tooltipPosition="top">
+            {{ reception.status_change_reason ? (reception.status_change_reason.length > 50 ? reception.status_change_reason.substring(0, 50) + '...' : reception.status_change_reason) : '-' }}
+          </span>
+                </td>
+                <td (click)="$event.stopPropagation()">
                     <div class="flex gap-2">
-                        <p-button
-                            icon="pi pi-check"
-                            (onClick)="approveReception(reception)"
-                            severity="success"
-                            [text]="true"
-                            [rounded]="true"
-                            pTooltip="Одобрить"
-                            [disabled]="reception.status === 'true'"
-                        />
-                        <p-button
-                            icon="pi pi-times"
-                            (onClick)="rejectReception(reception)"
-                            severity="danger"
-                            [text]="true"
-                            [rounded]="true"
-                            pTooltip="Отклонить"
-                            [disabled]="reception.status === 'false'"
-                        />
+                        @if (canApproveReject()) {
+                            <p-button
+                                icon="pi pi-check"
+                                (onClick)="approveReception(reception)"
+                                severity="success"
+                                [text]="true"
+                                [rounded]="true"
+                                [pTooltip]="'PLANNING.RECEPTION.APPROVE' | translate"
+                                [disabled]="reception.status === 'true'"
+                            />
+                        }
+                        @if (canApproveReject()) {
+                            <p-button
+                                icon="pi pi-times"
+                                (onClick)="rejectReception(reception)"
+                                severity="danger"
+                                [text]="true"
+                                [rounded]="true"
+                                [pTooltip]="'PLANNING.RECEPTION.REJECT' | translate"
+                                [disabled]="reception.status === 'false'"
+                            />
+                        }
+                        @if (canInform(reception)) {
+                            <p-button
+                                icon="pi pi-info-circle"
+                                (onClick)="informReception(reception)"
+                                severity="info"
+                                [text]="true"
+                                [rounded]="true"
+                                pTooltip="Проинформировал"
+                            />
+                        }
                         <p-button
                             icon="pi pi-pencil"
                             (onClick)="editReception(reception)"
                             severity="info"
                             [text]="true"
                             [rounded]="true"
-                            pTooltip="Редактировать"
+                            [pTooltip]="'PLANNING.COMMON.EDIT' | translate"
                         />
                         <p-button
                             icon="pi pi-trash"
@@ -113,7 +135,7 @@
                             severity="secondary"
                             [text]="true"
                             [rounded]="true"
-                            pTooltip="Удалить"
+                            [pTooltip]="'PLANNING.COMMON.DELETE' | translate"
                         />
                     </div>
                 </td>
@@ -122,13 +144,13 @@
 
         <ng-template #emptymessage>
             <tr>
-                <td colspan="7" class="text-center">Нет данных</td>
+                <td colspan="8" class="text-center">{{ 'PLANNING.COMMON.NO_DATA' | translate }}</td>
             </tr>
         </ng-template>
 
         <ng-template #loadingbody>
             <tr>
-                <td colspan="7" class="text-center">Загрузка...</td>
+                <td colspan="8" class="text-center">{{ 'PLANNING.COMMON.LOADING' | translate }}</td>
             </tr>
         </ng-template>
     </p-table>
@@ -137,7 +159,7 @@
 <!-- Create/Edit Dialog -->
 <app-dialog
     [(visible)]="dialogVisible"
-    [header]="selectedReception ? 'Редактировать прием' : 'Новый прием'"
+    [header]="selectedReception ? ('PLANNING.RECEPTION.EDIT' | translate) : ('PLANNING.RECEPTION.NEW' | translate)"
     [form]="receptionForm"
     (save)="saveReception()"
     (cancel)="hideDialog()"
@@ -145,28 +167,61 @@
     <form class="p-4" [formGroup]="receptionForm" (ngSubmit)="saveReception()">
 
         <app-input-text
-            label="Название"
+            [label]="'PLANNING.COMMON.NAME' | translate"
             formControlName="name"
             [submitted]="submitted"
-            errorMessage="Укажите название"
+            [errorMessage]="'PLANNING.RECEPTION.SPECIFY_NAME' | translate"
         />
 
         <app-date-picker
-            label="Дата"
+            [label]="'PLANNING.COMMON.DATE' | translate"
             formControlName="date"
             [submitted]="submitted"
-            errorMessage="Укажите дату"
+            [errorMessage]="'PLANNING.RECEPTION.SPECIFY_DATE' | translate"
         />
 
         <app-input-text
-            label="Посетитель"
+            [label]="'PLANNING.RECEPTION.VISITOR' | translate"
             formControlName="visitor"
             [submitted]="submitted"
-            errorMessage="Укажите посетителя"
+            [errorMessage]="'PLANNING.RECEPTION.VISITOR_REQUIRED' | translate"
         />
 
+        <div class="field">
+            <label class="block mb-2">Совместно</label>
+            <div formArrayName="togetherFields">
+                @for (_ of togetherFields.controls; track i; let i = $index) {
+                    <div class="flex gap-2 mb-2">
+                        <input
+                            type="text"
+                            pInputText
+                            [formControlName]="i"
+                            placeholder="ФИО"
+                            class="flex-1"
+                        />
+                        @if (togetherFields.length > 1) {
+                            <p-button
+                                icon="pi pi-trash"
+                                (onClick)="removeTogetherField(i)"
+                                severity="danger"
+                                [outlined]="true"
+                            />
+                        }
+                    </div>
+                }
+            </div>
+            <p-button
+                label="Добавить"
+                icon="pi pi-plus"
+                (onClick)="addTogetherField()"
+                severity="secondary"
+                [outlined]="true"
+                class="mt-2"
+            />
+        </div>
+
         <app-textarea
-            label="Описание"
+            [label]="'PLANNING.COMMON.DESCRIPTION' | translate"
             formControlName="description"
             [submitted]="submitted"
             [required]="false"
@@ -174,3 +229,127 @@
 
     </form>
 </app-dialog>
+
+<!-- View Dialog -->
+<p-dialog
+    [(visible)]="viewDialogVisible"
+    header="Информация о приеме"
+    [modal]="true"
+    [style]="{ width: '600px' }"
+    [breakpoints]="{ '960px': '75vw', '640px': '90vw' }"
+>
+    @if (selectedReceptionForView) {
+        <div class="flex flex-col gap-4">
+            <div>
+                <div class="font-semibold text-surface-500 mb-1">Название</div>
+                <div class="text-lg">{{ selectedReceptionForView.name }}</div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <div class="font-semibold text-surface-500 mb-1">Дата</div>
+                    <div class="flex items-center gap-2">
+                        <i class="pi pi-calendar text-surface-500"></i>
+                        <span>{{ selectedReceptionForView.date | date: 'dd.MM.yyyy' }}</span>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="font-semibold text-surface-500 mb-1">Статус</div>
+                    <p-tag
+                        [value]="getStatusLabel(selectedReceptionForView)"
+                        [severity]="getStatusSeverity(selectedReceptionForView)"
+                    />
+                </div>
+            </div>
+
+            <div>
+                <div class="font-semibold text-surface-500 mb-1">Посетитель</div>
+                <div class="flex items-center gap-2">
+                    <i class="pi pi-user text-surface-500"></i>
+                    <span>{{ selectedReceptionForView.visitor }}</span>
+                </div>
+            </div>
+
+            @if (selectedReceptionForView.together) {
+                <div>
+                    <div class="font-semibold text-surface-500 mb-1">Совместно</div>
+                    <div class="flex items-center gap-2">
+                        <i class="pi pi-users text-surface-500"></i>
+                        <span>{{ selectedReceptionForView.together }}</span>
+                    </div>
+                </div>
+            }
+
+            @if (selectedReceptionForView.description) {
+                <div>
+                    <div class="font-semibold text-surface-500 mb-1">Описание</div>
+                    <div class="whitespace-pre-wrap p-3 bg-surface-50 dark:bg-surface-800 rounded-border">
+                        {{ selectedReceptionForView.description }}
+                    </div>
+                </div>
+            }
+
+            @if (selectedReceptionForView.status_change_reason) {
+                <div>
+                    <div class="font-semibold text-surface-500 mb-1">Комментарий</div>
+                    <div class="whitespace-pre-wrap p-3 bg-surface-50 dark:bg-surface-800 rounded-border">
+                        {{ selectedReceptionForView.status_change_reason }}
+                    </div>
+                </div>
+            }
+
+            @if (selectedReceptionForView.informed) {
+                <div>
+                    <div class="font-semibold text-surface-500 mb-1">Проинформирован</div>
+                    <div class="flex items-center gap-2">
+                        <i class="pi pi-check-circle text-green-500"></i>
+                        <span>Да</span>
+                        @if (selectedReceptionForView.informed_by) {
+                            <span class="text-surface-500 text-sm">
+                                ({{ selectedReceptionForView.informed_by.name }})
+                            </span>
+                        }
+                    </div>
+                </div>
+            }
+
+            <div class="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                    <div class="font-semibold text-surface-500 mb-1">Создано</div>
+                    <div class="text-surface-600">
+                        {{ selectedReceptionForView.created_at | date: 'dd.MM.yyyy HH:mm' }}
+                    </div>
+                    @if (selectedReceptionForView.created_by) {
+                        <div class="text-surface-500 text-xs mt-1">
+                            {{ selectedReceptionForView.created_by.name }}
+                        </div>
+                    }
+                </div>
+
+                @if (selectedReceptionForView.updated_at) {
+                    <div>
+                        <div class="font-semibold text-surface-500 mb-1">Обновлено</div>
+                        <div class="text-surface-600">
+                            {{ selectedReceptionForView.updated_at | date: 'dd.MM.yyyy HH:mm' }}
+                        </div>
+                        @if (selectedReceptionForView.updated_by) {
+                            <div class="text-surface-500 text-xs mt-1">
+                                {{ selectedReceptionForView.updated_by.name }}
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    }
+
+    <ng-template pTemplate="footer">
+        <p-button
+            label="Закрыть"
+            icon="pi pi-times"
+            severity="secondary"
+            (onClick)="closeViewDialog()"
+        />
+    </ng-template>
+</p-dialog>

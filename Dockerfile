@@ -1,5 +1,5 @@
-# Stage 1: Build the Angular application
-FROM node:22.18-alpine AS builder
+# Stage 1: Build
+FROM node:22.13.1-alpine AS builder
 
 WORKDIR /app
 COPY package*.json ./
@@ -9,25 +9,17 @@ RUN npm install
 COPY . .
 RUN npm run build
 
-# Stage 2: Serve with nginx and config injection
-FROM nginx:alpine
+# Stage 2: Serve with nginx-unprivileged (runs as non-root)
+FROM nginxinc/nginx-unprivileged:alpine
 
-# Install yq for YAML to JSON conversion
-RUN apk add --no-cache yq
+# Fix vulnerabilities:
+# - OpenSSL (CVE-2025-15467, CVE-2025-69419, CVE-2025-69421)
+# - libexpat (CVE-2026-24515)
+USER root
+RUN apk upgrade --no-cache libcrypto3 libssl3 libexpat
+USER nginx
 
-RUN rm -rf /etc/nginx/conf.d
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY --from=builder /app/dist/sakai-ng/browser /usr/share/nginx/html
 
-# Copy config injection script
-COPY inject-config.sh /usr/local/bin/inject-config.sh
-RUN chmod +x /usr/local/bin/inject-config.sh
-
-# Copy entrypoint script
-COPY docker-entrypoint.sh /docker-entrypoint.sh
-RUN chmod +x /docker-entrypoint.sh
-
-EXPOSE 80
-
-ENTRYPOINT ["/docker-entrypoint.sh"]
-CMD ["nginx", "-g", "daemon off;"]
+EXPOSE 8080

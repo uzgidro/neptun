@@ -1,0 +1,15 @@
+name: Trigger Watchtower
+
+on:
+    workflow_dispatch:
+    workflow_call:
+
+jobs:
+    trigger:
+        runs-on: ubuntu-latest
+
+        steps:
+            -   name: Trigger Watchtower Update
+                run: |
+                    curl -fsS -H "Authorization: Bearer ${{ secrets.WATCHTOWER_SECRET }}" \
+                      https://${{ secrets.WATCHTOWER_HOST }}/v1/update

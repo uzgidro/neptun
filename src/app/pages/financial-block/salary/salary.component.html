@@ -10,7 +10,7 @@
                     <i class="pi pi-wallet"></i>
                 </div>
                 <div class="card-info">
-                    <span class="card-label">Общий ФОТ</span>
+                    <span class="card-label">{{ 'FINANCIAL_BLOCK.SALARY.TOTAL_FOT' | translate }}</span>
                     <span class="card-value text-primary">{{ formatCurrency(totalFOT) }}</span>
                 </div>
             </div>
@@ -22,7 +22,7 @@
                     <i class="pi pi-money-bill"></i>
                 </div>
                 <div class="card-info">
-                    <span class="card-label">К выплате</span>
+                    <span class="card-label">{{ 'FINANCIAL_BLOCK.SALARY.NET_SALARY' | translate }}</span>
                     <span class="card-value text-green-500">{{ formatCurrency(totalNetPay) }}</span>
                 </div>
             </div>
@@ -34,7 +34,7 @@
                     <i class="pi pi-chart-line"></i>
                 </div>
                 <div class="card-info">
-                    <span class="card-label">Средняя ЗП</span>
+                    <span class="card-label">{{ 'FINANCIAL_BLOCK.SALARY.AVERAGE_SALARY' | translate }}</span>
                     <span class="card-value text-blue-500">{{ formatCurrency(averageSalary) }}</span>
                 </div>
             </div>
@@ -46,7 +46,7 @@
                     <i class="pi pi-users"></i>
                 </div>
                 <div class="card-info">
-                    <span class="card-label">Сотрудников</span>
+                    <span class="card-label">{{ 'FINANCIAL_BLOCK.SALARY.TOTAL_EMPLOYEES' | translate }}</span>
                     <span class="card-value text-cyan-500">{{ employeesCount }}</span>
                 </div>
             </div>
@@ -58,7 +58,7 @@
                     <i class="pi pi-clock"></i>
                 </div>
                 <div class="card-info">
-                    <span class="card-label">Ожидает выплаты</span>
+                    <span class="card-label">{{ 'FINANCIAL_BLOCK.SALARY.TOTAL_BONUSES' | translate }}</span>
                     <span class="card-value text-orange-500">{{ formatCurrency(pendingAmount) }}</span>
                 </div>
             </div>
@@ -70,7 +70,7 @@
         <!-- Monthly Dynamics Chart -->
         <div class="chart-card chart-large">
             <div class="chart-header">
-                <h3>ФОТ по месяцам ({{ selectedYear }})</h3>
+                <h3>{{ 'FINANCIAL_BLOCK.DASHBOARD.MONTHLY_DYNAMICS' | translate }} ({{ selectedYear }})</h3>
                 <span class="chart-icon"><i class="pi pi-chart-bar"></i></span>
             </div>
             <div class="chart-body">
@@ -87,7 +87,7 @@
             <!-- Department Chart -->
             <div class="chart-card chart-small">
                 <div class="chart-header">
-                    <h3>По отделам</h3>
+                    <h3>{{ 'FINANCIAL_BLOCK.SALARY.DEPARTMENT' | translate }}</h3>
                     <span class="chart-icon"><i class="pi pi-chart-pie"></i></span>
                 </div>
                 <div class="chart-body-small">
@@ -102,7 +102,7 @@
             <!-- Structure Chart -->
             <div class="chart-card chart-small">
                 <div class="chart-header">
-                    <h3>Структура выплат</h3>
+                    <h3>{{ 'FINANCIAL_BLOCK.DASHBOARD.EXPENSE_STRUCTURE' | translate }}</h3>
                     <span class="chart-icon"><i class="pi pi-percentage"></i></span>
                 </div>
                 <div class="chart-body-small">
@@ -129,7 +129,7 @@
                     pInputText
                     [(ngModel)]="searchText"
                     (ngModelChange)="applyFilters()"
-                    placeholder="Поиск..."
+                    placeholder="..."
                 />
             </p-inputGroup>
 
@@ -140,7 +140,7 @@
                 (ngModelChange)="applyFilters()"
                 optionLabel="label"
                 optionValue="value"
-                placeholder="Месяц"
+                [placeholder]="'FINANCIAL_BLOCK.SALARY.MONTH' | translate"
                 [showClear]="true"
                 class="filter-select"
             ></p-select>
@@ -152,7 +152,7 @@
                 (ngModelChange)="applyFilters()"
                 optionLabel="label"
                 optionValue="value"
-                placeholder="Год"
+                [placeholder]="'FINANCIAL_BLOCK.SALARY.YEAR' | translate"
                 class="filter-select-sm"
             ></p-select>
 
@@ -163,7 +163,7 @@
                 (ngModelChange)="applyFilters()"
                 optionLabel="label"
                 optionValue="value"
-                placeholder="Отдел"
+                [placeholder]="'FINANCIAL_BLOCK.SALARY.DEPARTMENT' | translate"
                 [showClear]="true"
                 class="filter-select"
             ></p-select>
@@ -175,7 +175,7 @@
                 (ngModelChange)="applyFilters()"
                 optionLabel="label"
                 optionValue="value"
-                placeholder="Статус"
+                [placeholder]="'FINANCIAL_BLOCK.COMMON.STATUS' | translate"
                 [showClear]="true"
                 class="filter-select-sm"
             ></p-select>
@@ -186,7 +186,7 @@
                 severity="secondary"
                 [outlined]="true"
                 (onClick)="clearFilters()"
-                pTooltip="Сбросить фильтры"
+                [pTooltip]="'FINANCIAL_BLOCK.COMMON.CLEAR' | translate"
             ></p-button>
         </div>
 
@@ -200,7 +200,7 @@
                 (onClick)="exportToExcel()"
             ></p-button>
             <p-button
-                label="Добавить"
+                [label]="'FINANCIAL_BLOCK.SALARY.ADD_EMPLOYEE' | translate"
                 icon="pi pi-plus"
                 (onClick)="openNewSalary()"
             ></p-button>
@@ -216,34 +216,39 @@
             [rows]="10"
             [rowsPerPageOptions]="[5, 10, 25, 50]"
             [showCurrentPageReport]="true"
-            currentPageReportTemplate="Показано {first} - {last} из {totalRecords} записей"
+            currentPageReportTemplate="{first} - {last} / {totalRecords}"
             [sortField]="'fullName'"
             [sortOrder]="1"
         >
             <ng-template pTemplate="header">
                 <tr>
                     <th pSortableColumn="employeeId" style="width: 100px">
-                        Таб.№ <p-sortIcon field="employeeId"></p-sortIcon>
+                        №
+                        <p-sortIcon field="employeeId"></p-sortIcon>
                     </th>
                     <th pSortableColumn="fullName" style="min-width: 200px">
-                        Сотрудник <p-sortIcon field="fullName"></p-sortIcon>
+                        {{ 'FINANCIAL_BLOCK.SALARY.EMPLOYEE_NAME' | translate }}
+                        <p-sortIcon field="fullName"></p-sortIcon>
                     </th>
-                    <th style="width: 140px">Отдел</th>
+                    <th style="width: 140px">{{ 'FINANCIAL_BLOCK.SALARY.DEPARTMENT' | translate }}</th>
                     <th pSortableColumn="baseSalary" style="width: 120px; text-align: right">
-                        Оклад <p-sortIcon field="baseSalary"></p-sortIcon>
+                        {{ 'FINANCIAL_BLOCK.SALARY.BASE_SALARY' | translate }}
+                        <p-sortIcon field="baseSalary"></p-sortIcon>
                     </th>
-                    <th style="width: 110px; text-align: right">Надбавки</th>
-                    <th style="width: 100px; text-align: right">Премия</th>
-                    <th style="width: 80px; text-align: center">Дни</th>
+                    <th style="width: 110px; text-align: right">{{ 'FINANCIAL_BLOCK.SALARY.ALLOWANCES' | translate }}</th>
+                    <th style="width: 100px; text-align: right">{{ 'FINANCIAL_BLOCK.SALARY.BONUS' | translate }}</th>
+                    <th style="width: 80px; text-align: center">{{ 'FINANCIAL_BLOCK.SALARY.DAYS' | translate }}</th>
                     <th pSortableColumn="totalAccrued" style="width: 130px; text-align: right">
-                        Начислено <p-sortIcon field="totalAccrued"></p-sortIcon>
+                        {{ 'FINANCIAL_BLOCK.COMMON.TOTAL' | translate }}
+                        <p-sortIcon field="totalAccrued"></p-sortIcon>
                     </th>
-                    <th style="width: 110px; text-align: right">Удержано</th>
+                    <th style="width: 110px; text-align: right">{{ 'FINANCIAL_BLOCK.SALARY.DEDUCTIONS' | translate }}</th>
                     <th pSortableColumn="netPay" style="width: 130px; text-align: right">
-                        К выплате <p-sortIcon field="netPay"></p-sortIcon>
+                        {{ 'FINANCIAL_BLOCK.SALARY.NET_SALARY' | translate }}
+                        <p-sortIcon field="netPay"></p-sortIcon>
                     </th>
-                    <th style="width: 110px">Статус</th>
-                    <th style="width: 100px; text-align: center">Действия</th>
+                    <th style="width: 110px">{{ 'FINANCIAL_BLOCK.COMMON.STATUS' | translate }}</th>
+                    <th style="width: 100px; text-align: center">{{ 'FINANCIAL_BLOCK.COMMON.ACTIONS' | translate }}</th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-salary>
@@ -300,7 +305,6 @@
                                 [text]="true"
                                 severity="success"
                                 (onClick)="markAsPaid(salary)"
-                                pTooltip="Отметить как выплачено"
                             ></p-button>
                             <p-button
                                 icon="pi pi-pencil"
@@ -308,7 +312,7 @@
                                 [text]="true"
                                 severity="info"
                                 (onClick)="editSalary(salary)"
-                                pTooltip="Редактировать"
+                                [pTooltip]="'FINANCIAL_BLOCK.COMMON.EDIT' | translate"
                             ></p-button>
                             <p-button
                                 icon="pi pi-trash"
@@ -316,7 +320,7 @@
                                 [text]="true"
                                 severity="danger"
                                 (onClick)="deleteSalary(salary)"
-                                pTooltip="Удалить"
+                                [pTooltip]="'FINANCIAL_BLOCK.COMMON.DELETE' | translate"
                             ></p-button>
                         </div>
                     </td>
@@ -324,7 +328,7 @@
             </ng-template>
             <ng-template pTemplate="footer">
                 <tr class="font-bold">
-                    <td colspan="7" class="text-right">ИТОГО:</td>
+                    <td colspan="7" class="text-right">{{ 'FINANCIAL_BLOCK.COMMON.TOTAL' | translate }}:</td>
                     <td class="text-right text-blue-600">{{ formatCurrency(totalFOT) }}</td>
                     <td class="text-right text-red-500">-{{ formatCurrency(totalDeductions) }}</td>
                     <td class="text-right text-green-600">{{ formatCurrency(totalNetPay) }}</td>
@@ -336,7 +340,7 @@
                     <td colspan="12" class="text-center p-4">
                         <div class="flex flex-column align-items-center gap-2">
                             <i class="pi pi-inbox text-4xl text-500"></i>
-                            <span class="text-500">Записи не найдены</span>
+                            <span class="text-500">{{ 'FINANCIAL_BLOCK.COMMON.NO_DATA' | translate }}</span>
                         </div>
                     </td>
                 </tr>
@@ -348,7 +352,7 @@
 <!-- Salary Dialog -->
 <p-dialog
     [(visible)]="salaryDialog"
-    [header]="isEditMode ? 'Редактирование записи' : 'Новая запись о зарплате'"
+    [header]="isEditMode ? ('FINANCIAL_BLOCK.COMMON.EDIT' | translate) : ('FINANCIAL_BLOCK.SALARY.ADD_EMPLOYEE' | translate)"
     [modal]="true"
     [style]="{ width: '750px', maxWidth: '95vw' }"
     [closable]="true"
@@ -358,10 +362,10 @@
     <div class="dialog-form">
         <!-- Employee Info Section -->
         <div class="form-section">
-            <h4><i class="pi pi-user"></i> Данные сотрудника</h4>
+            <h4><i class="pi pi-user"></i> {{ 'FINANCIAL_BLOCK.SALARY.EMPLOYEE_NAME' | translate }}</h4>
             <div class="form-row">
                 <div class="form-field">
-                    <label for="employeeId">Табельный номер <span class="required">*</span></label>
+                    <label for="employeeId">№ <span class="required">*</span></label>
                     <input
                         id="employeeId"
                         type="text"
@@ -371,19 +375,19 @@
                     />
                 </div>
                 <div class="form-field field-large">
-                    <label for="fullName">ФИО <span class="required">*</span></label>
+                    <label for="fullName">{{ 'FINANCIAL_BLOCK.SALARY.EMPLOYEE_NAME' | translate }} <span
+                        class="required">*</span></label>
                     <input
                         id="fullName"
                         type="text"
                         pInputText
                         [(ngModel)]="currentSalary.fullName"
-                        placeholder="Иванов Иван Иванович"
                     />
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-field">
-                    <label for="department">Отдел</label>
+                    <label for="department">{{ 'FINANCIAL_BLOCK.SALARY.DEPARTMENT' | translate }}</label>
                     <p-select
                         id="department"
                         [options]="departments"
@@ -394,7 +398,7 @@
                     ></p-select>
                 </div>
                 <div class="form-field">
-                    <label for="position">Должность</label>
+                    <label for="position">{{ 'FINANCIAL_BLOCK.SALARY.POSITION' | translate }}</label>
                     <p-select
                         id="position"
                         [options]="positions"
@@ -411,10 +415,10 @@
 
         <!-- Period Section -->
         <div class="form-section">
-            <h4><i class="pi pi-calendar"></i> Период</h4>
+            <h4><i class="pi pi-calendar"></i> {{ 'FINANCIAL_BLOCK.KPI.PERIOD' | translate }}</h4>
             <div class="form-row-3">
                 <div class="form-field">
-                    <label for="periodMonth">Месяц</label>
+                    <label for="periodMonth">{{ 'FINANCIAL_BLOCK.SALARY.MONTH' | translate }}</label>
                     <p-select
                         id="periodMonth"
                         [options]="months"
@@ -425,7 +429,7 @@
                     ></p-select>
                 </div>
                 <div class="form-field">
-                    <label for="periodYear">Год</label>
+                    <label for="periodYear">{{ 'FINANCIAL_BLOCK.SALARY.YEAR' | translate }}</label>
                     <p-select
                         id="periodYear"
                         [options]="years"
@@ -436,7 +440,7 @@
                     ></p-select>
                 </div>
                 <div class="form-field">
-                    <label for="workedDays">Отработано дней</label>
+                    <label for="workedDays">{{ 'FINANCIAL_BLOCK.SALARY.DAYS' | translate }}</label>
                     <div class="flex gap-2 align-items-center">
                         <p-inputNumber
                             id="workedDays"
@@ -445,7 +449,7 @@
                             [max]="31"
                             (ngModelChange)="calculateSalary()"
                         ></p-inputNumber>
-                        <span class="text-500">из</span>
+                        <span class="text-500">/</span>
                         <p-inputNumber
                             [(ngModel)]="currentSalary.totalDays"
                             [min]="1"
@@ -462,10 +466,11 @@
 
         <!-- Accruals Section -->
         <div class="form-section">
-            <h4><i class="pi pi-plus-circle"></i> Начисления</h4>
+            <h4><i class="pi pi-plus-circle"></i> {{ 'FINANCIAL_BLOCK.SALARY.BASE_SALARY' | translate }}</h4>
             <div class="form-row">
                 <div class="form-field">
-                    <label for="baseSalary" class="label-primary">Базовый оклад <span class="required">*</span></label>
+                    <label for="baseSalary" class="label-primary">{{ 'FINANCIAL_BLOCK.SALARY.BASE_SALARY' | translate }}
+                        <span class="required">*</span></label>
                     <p-inputNumber
                         id="baseSalary"
                         [(ngModel)]="currentSalary.baseSalary"
@@ -477,7 +482,7 @@
                     ></p-inputNumber>
                 </div>
                 <div class="form-field">
-                    <label for="premium" class="label-warning">Премия</label>
+                    <label for="premium" class="label-warning">{{ 'FINANCIAL_BLOCK.SALARY.BONUS' | translate }}</label>
                     <p-inputNumber
                         id="premium"
                         [(ngModel)]="currentSalary.premium"
@@ -491,7 +496,7 @@
             </div>
             <div class="form-row-4">
                 <div class="form-field">
-                    <label for="seniorityBonus">За стаж</label>
+                    <label for="seniorityBonus">{{ 'FINANCIAL_BLOCK.SALARY.ALLOWANCES' | translate }}</label>
                     <p-inputNumber
                         id="seniorityBonus"
                         [(ngModel)]="currentSalary.seniorityBonus"
@@ -503,7 +508,7 @@
                     ></p-inputNumber>
                 </div>
                 <div class="form-field">
-                    <label for="qualificationBonus">За квалификацию</label>
+                    <label for="qualificationBonus">{{ 'FINANCIAL_BLOCK.SALARY.OVERTIME' | translate }}</label>
                     <p-inputNumber
                         id="qualificationBonus"
                         [(ngModel)]="currentSalary.qualificationBonus"
@@ -515,7 +520,7 @@
                     ></p-inputNumber>
                 </div>
                 <div class="form-field">
-                    <label for="hazardBonus">За вредность</label>
+                    <label for="hazardBonus">{{ 'FINANCIAL_BLOCK.SALARY.TAX' | translate }}</label>
                     <p-inputNumber
                         id="hazardBonus"
                         [(ngModel)]="currentSalary.hazardBonus"
@@ -527,7 +532,7 @@
                     ></p-inputNumber>
                 </div>
                 <div class="form-field">
-                    <label for="otherBonuses">Прочие</label>
+                    <label for="otherBonuses">{{ 'FINANCIAL_BLOCK.DEBIT_CREDIT.CATEGORY_OTHER' | translate }}</label>
                     <p-inputNumber
                         id="otherBonuses"
                         [(ngModel)]="currentSalary.otherBonuses"
@@ -545,10 +550,11 @@
 
         <!-- Deductions Section -->
         <div class="form-section">
-            <h4><i class="pi pi-minus-circle"></i> Удержания</h4>
+            <h4><i class="pi pi-minus-circle"></i> {{ 'FINANCIAL_BLOCK.SALARY.DEDUCTIONS' | translate }}</h4>
             <div class="form-row-3">
                 <div class="form-field">
-                    <label for="incomeTax" class="label-danger">НДФЛ (12%)</label>
+                    <label for="incomeTax" class="label-danger">{{ 'FINANCIAL_BLOCK.SALARY.TAX' | translate }}
+                        (12%)</label>
                     <p-inputNumber
                         id="incomeTax"
                         [(ngModel)]="currentSalary.incomeTax"
@@ -560,7 +566,8 @@
                     ></p-inputNumber>
                 </div>
                 <div class="form-field">
-                    <label for="pensionFund" class="label-warning">Пенсионный (4%)</label>
+                    <label for="pensionFund" class="label-warning">{{ 'FINANCIAL_BLOCK.SALARY.PENSION' | translate }}
+                        (4%)</label>
                     <p-inputNumber
                         id="pensionFund"
                         [(ngModel)]="currentSalary.pensionFund"
@@ -572,7 +579,7 @@
                     ></p-inputNumber>
                 </div>
                 <div class="form-field">
-                    <label for="otherDeductions">Прочие удержания</label>
+                    <label for="otherDeductions">{{ 'FINANCIAL_BLOCK.SALARY.OTHER_DEDUCTIONS' | translate }}</label>
                     <p-inputNumber
                         id="otherDeductions"
                         [(ngModel)]="currentSalary.otherDeductions"
@@ -592,15 +599,15 @@
         <div class="form-section totals-section">
             <div class="totals-row">
                 <div class="total-item">
-                    <span class="total-label">Начислено:</span>
+                    <span class="total-label">{{ 'FINANCIAL_BLOCK.COMMON.TOTAL' | translate }}:</span>
                     <span class="total-value text-blue-600">{{ formatCurrency(currentSalary.totalAccrued) }}</span>
                 </div>
                 <div class="total-item">
-                    <span class="total-label">Удержано:</span>
+                    <span class="total-label">{{ 'FINANCIAL_BLOCK.SALARY.DEDUCTIONS' | translate }}:</span>
                     <span class="total-value text-red-500">-{{ formatCurrency(currentSalary.totalDeductions) }}</span>
                 </div>
                 <div class="total-item total-netpay">
-                    <span class="total-label">К выплате:</span>
+                    <span class="total-label">{{ 'FINANCIAL_BLOCK.SALARY.NET_SALARY' | translate }}:</span>
                     <span class="total-value text-green-600">{{ formatCurrency(currentSalary.netPay) }}</span>
                 </div>
             </div>
@@ -609,7 +616,7 @@
         <!-- Status & Notes -->
         <div class="form-row">
             <div class="form-field">
-                <label for="status">Статус</label>
+                <label for="status">{{ 'FINANCIAL_BLOCK.COMMON.STATUS' | translate }}</label>
                 <p-select
                     id="status"
                     [options]="statuses"
@@ -620,13 +627,12 @@
                 ></p-select>
             </div>
             <div class="form-field">
-                <label for="notes">Примечания</label>
+                <label for="notes">{{ 'FINANCIAL_BLOCK.COMMON.COMMENT' | translate }}</label>
                 <input
                     id="notes"
                     type="text"
                     pInputText
                     [(ngModel)]="currentSalary.notes"
-                    placeholder="Дополнительная информация"
                 />
             </div>
         </div>
@@ -635,14 +641,14 @@
     <ng-template pTemplate="footer">
         <div class="dialog-footer">
             <p-button
-                label="Отмена"
+                [label]="'FINANCIAL_BLOCK.COMMON.CANCEL' | translate"
                 severity="secondary"
                 [outlined]="true"
                 icon="pi pi-times"
                 (onClick)="salaryDialog = false"
             ></p-button>
             <p-button
-                [label]="isEditMode ? 'Сохранить' : 'Добавить'"
+                [label]="isEditMode ? ('FINANCIAL_BLOCK.COMMON.SAVE' | translate) : ('FINANCIAL_BLOCK.COMMON.ADD' | translate)"
                 [icon]="isEditMode ? 'pi pi-save' : 'pi pi-plus'"
                 (onClick)="saveSalary()"
             ></p-button>
