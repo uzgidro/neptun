@@ -3,6 +3,7 @@ import { ApiService } from '@/core/services/api.service';
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { Department, DepartmentPayload } from '@/core/interfaces/department';
+import { CrudService } from '@/core/interfaces/crud-service.interface';
 
 // Мок-данные отделов
 const MOCK_DEPARTMENTS: Department[] = [
@@ -19,22 +20,32 @@ const MOCK_DEPARTMENTS: Department[] = [
 @Injectable({
     providedIn: 'root'
 })
-export class DepartmentService extends ApiService {
-    getDepartments(): Observable<Department[]> {
+export class DepartmentService extends ApiService implements CrudService<Department, DepartmentPayload> {
+    getAll(): Observable<Department[]> {
         return of(MOCK_DEPARTMENTS).pipe(delay(200));
     }
 
-    createDepartment(payload: DepartmentPayload): Observable<Department> {
+    getById(id: number): Observable<Department> {
+        return of(MOCK_DEPARTMENTS.find(d => d.id === id) || MOCK_DEPARTMENTS[0]).pipe(delay(200));
+    }
+
+    create(payload: DepartmentPayload): Observable<Department> {
         const newDept: Department = { id: Date.now(), ...payload } as Department;
         return of(newDept).pipe(delay(300));
     }
 
-    updateDepartment(id: number, payload: DepartmentPayload): Observable<Department> {
+    update(id: number, payload: DepartmentPayload): Observable<Department> {
         const updated: Department = { id, ...payload } as Department;
         return of(updated).pipe(delay(300));
     }
 
-    deleteDepartment(id: number): Observable<any> {
-        return of({ success: true }).pipe(delay(200));
+    delete(id: number): Observable<void> {
+        return of(undefined as void).pipe(delay(200));
     }
+
+    // Legacy aliases
+    getDepartments = this.getAll.bind(this);
+    createDepartment = this.create.bind(this);
+    updateDepartment = this.update.bind(this);
+    deleteDepartment = this.delete.bind(this);
 }

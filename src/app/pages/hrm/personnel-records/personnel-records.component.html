@@ -1,0 +1,179 @@
+<div class="card">
+    <div class="font-semibold text-xl mb-4">{{ 'HRM.PERSONNEL_RECORDS.TITLE' | translate }}</div>
+    <p-table
+        #dt
+        [value]="records"
+        dataKey="id"
+        [rows]="10"
+        [loading]="loading"
+        [rowHover]="true"
+        [showGridlines]="true"
+        [paginator]="true"
+        [globalFilterFields]="['employee_name', 'tab_number', 'department_name', 'position_name']"
+    >
+        <ng-template #caption>
+            <div class="flex justify-between items-center flex-column sm:flex-row">
+                <p-iconfield>
+                    <p-inputicon>
+                        <i class="pi pi-search"></i>
+                    </p-inputicon>
+                    <input pInputText type="text" (input)="onGlobalFilter(dt, $event)"
+                           [placeholder]="'COMMON.SEARCH' | translate" />
+                </p-iconfield>
+                <button pButton (click)="openDialog()">
+                    <i class="pi pi-plus" pButtonIcon></i>
+                    <span pButtonLabel>{{ 'HRM.PERSONNEL_RECORDS.NEW_RECORD' | translate }}</span>
+                </button>
+            </div>
+        </ng-template>
+        <ng-template #header>
+            <tr>
+                <th style="min-width: 8rem">{{ 'HRM.PERSONNEL_RECORDS.TAB_NUMBER' | translate }}</th>
+                <th pSortableColumn="employee_name" style="min-width: 14rem">{{ 'HRM.COMMON.FULL_NAME' | translate }}
+                </th>
+                <th style="min-width: 10rem">{{ 'HRM.PERSONNEL_RECORDS.HIRE_DATE' | translate }}</th>
+                <th style="min-width: 12rem">{{ 'HRM.COMMON.DEPARTMENT' | translate }}</th>
+                <th style="min-width: 12rem">{{ 'HRM.COMMON.POSITION' | translate }}</th>
+                <th style="min-width: 10rem">{{ 'HRM.PERSONNEL_RECORDS.CONTRACT_TYPE' | translate }}</th>
+                <th style="min-width: 8rem">{{ 'HRM.COMMON.STATUS' | translate }}</th>
+                <th style="width: 10rem">{{ 'HRM.COMMON.ACTIONS' | translate }}</th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-record>
+            <tr>
+                <td>{{ record.tab_number }}</td>
+                <td>{{ record.employee_name }}</td>
+                <td>{{ record.hire_date | date:'dd.MM.yyyy' }}</td>
+                <td>{{ record.department_name || '—' }}</td>
+                <td>{{ record.position_name || '—' }}</td>
+                <td>{{ getContractTypeLabel(record.contract_type) }}</td>
+                <td>
+                    <p-tag [value]="getStatusLabel(record.status)"
+                           [severity]="getStatusSeverity(record.status)"></p-tag>
+                </td>
+                <td>
+                    <div class="flex justify-center gap-2">
+                        <button pButton
+                                icon="pi pi-pencil"
+                                (click)="openEditDialog(record)"
+                                class="p-button-rounded p-button-text p-button-warning"
+                                [pTooltip]="'COMMON.EDIT' | translate"
+                                tooltipPosition="top">
+                        </button>
+                        <button pButton
+                                icon="pi pi-trash"
+                                (click)="openDeleteDialog(record)"
+                                class="p-button-rounded p-button-text p-button-danger"
+                                [pTooltip]="'COMMON.DELETE' | translate"
+                                tooltipPosition="top">
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template #emptymessage>
+            <tr>
+                <td colspan="8">{{ 'COMMON.NOT_FOUND' | translate }}</td>
+            </tr>
+        </ng-template>
+        <ng-template #loadingbody>
+            <tr>
+                <td colspan="8">{{ 'COMMON.LOADING' | translate }}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+@if (displayDialog) {
+    <app-dialog
+        [(visible)]="displayDialog"
+        [header]="isEditMode ? ('COMMON.EDIT' | translate) : ('HRM.PERSONNEL_RECORDS.NEW_RECORD' | translate)"
+        [form]="recordForm"
+        [saveLabel]="isEditMode ? ('COMMON.UPDATE' | translate) : ('COMMON.SAVE' | translate)"
+        (save)="onSubmit()"
+        (cancel)="closeDialog()">
+        <form class="p-4" [formGroup]="recordForm" (ngSubmit)="onSubmit()">
+            <div class="font-semibold text-lg mb-2">{{ 'HRM.PERSONNEL_RECORDS.BASIC_INFO' | translate }}</div>
+
+            <app-select
+                formControlName="employee_id"
+                [label]="'HRM.COMMON.EMPLOYEE' | translate"
+                [items]="employees"
+                [submitted]="submitted"
+                [errorMessage]="'VALIDATION.EMPLOYEE_REQUIRED' | translate"
+                [required]="true">
+            </app-select>
+
+            <app-input-text
+                formControlName="tab_number"
+                [label]="'HRM.PERSONNEL_RECORDS.TAB_NUMBER' | translate"
+                [submitted]="submitted"
+                [errorMessage]="'VALIDATION.TAB_NUMBER_REQUIRED' | translate"
+                [required]="true">
+            </app-input-text>
+
+            <app-date-picker
+                formControlName="hire_date"
+                [label]="'HRM.PERSONNEL_RECORDS.HIRE_DATE' | translate"
+                [submitted]="submitted"
+                [errorMessage]="'VALIDATION.HIRE_DATE_REQUIRED' | translate"
+                [showTime]="false"
+                [required]="true">
+            </app-date-picker>
+
+            <div class="font-semibold text-lg mb-2 mt-4">{{ 'HRM.PERSONNEL_RECORDS.WORKPLACE' | translate }}</div>
+
+            <app-select
+                formControlName="department_id"
+                [label]="'HRM.COMMON.DEPARTMENT' | translate"
+                [items]="departments"
+                [submitted]="submitted"
+                [errorMessage]="'VALIDATION.DEPARTMENT_REQUIRED' | translate"
+                [required]="true">
+            </app-select>
+
+            <app-select
+                formControlName="position_id"
+                [label]="'HRM.COMMON.POSITION' | translate"
+                [items]="positions"
+                [submitted]="submitted"
+                [errorMessage]="'VALIDATION.POSITION_REQUIRED' | translate"
+                [required]="true">
+            </app-select>
+
+            <div class="font-semibold text-lg mb-2 mt-4">{{ 'HRM.PERSONNEL_RECORDS.CONTRACT' | translate }}</div>
+
+            <app-select
+                formControlName="contract_type"
+                [label]="'HRM.PERSONNEL_RECORDS.CONTRACT_TYPE' | translate"
+                [items]="contractTypes"
+                [submitted]="submitted"
+                [errorMessage]="'VALIDATION.CONTRACT_TYPE_REQUIRED' | translate"
+                [required]="true">
+            </app-select>
+
+            <app-date-picker
+                formControlName="contract_end_date"
+                [label]="'HRM.PERSONNEL_RECORDS.CONTRACT_END_DATE' | translate"
+                [submitted]="submitted"
+                [showTime]="false"
+                [required]="false">
+            </app-date-picker>
+
+            <app-select
+                formControlName="status"
+                [label]="'HRM.COMMON.STATUS' | translate"
+                [items]="statuses"
+                [submitted]="submitted"
+                [errorMessage]="'VALIDATION.STATUS_REQUIRED' | translate"
+                [required]="true">
+            </app-select>
+        </form>
+    </app-dialog>
+}
+
+<app-delete-confirmation
+    [(visible)]="displayDeleteDialog"
+    [message]="('HRM.PERSONNEL_RECORDS.DELETE_CONFIRM' | translate) + ' ' + (selectedRecord?.employee_name || '') + '?'"
+    (onConfirm)="confirmDelete()">
+</app-delete-confirmation>

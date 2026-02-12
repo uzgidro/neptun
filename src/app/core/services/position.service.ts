@@ -3,6 +3,7 @@ import { ApiService } from '@/core/services/api.service';
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { Position, PositionPayload } from '@/core/interfaces/position';
+import { CrudService } from '@/core/interfaces/crud-service.interface';
 
 // Мок-данные должностей
 const MOCK_POSITIONS: Position[] = [
@@ -21,22 +22,32 @@ const MOCK_POSITIONS: Position[] = [
 @Injectable({
     providedIn: 'root'
 })
-export class PositionService extends ApiService {
-    getPositions(): Observable<Position[]> {
+export class PositionService extends ApiService implements CrudService<Position, PositionPayload> {
+    getAll(): Observable<Position[]> {
         return of(MOCK_POSITIONS).pipe(delay(200));
     }
 
-    createPosition(payload: PositionPayload): Observable<Position> {
+    getById(id: number): Observable<Position> {
+        return of(MOCK_POSITIONS.find(p => p.id === id) || MOCK_POSITIONS[0]).pipe(delay(200));
+    }
+
+    create(payload: PositionPayload): Observable<Position> {
         const newPos: Position = { id: Date.now(), ...payload } as Position;
         return of(newPos).pipe(delay(300));
     }
 
-    updatePosition(id: number, payload: PositionPayload): Observable<Position> {
+    update(id: number, payload: PositionPayload): Observable<Position> {
         const updated: Position = { id, ...payload } as Position;
         return of(updated).pipe(delay(300));
     }
 
-    deletePosition(id: number): Observable<any> {
-        return of({ success: true }).pipe(delay(200));
+    delete(id: number): Observable<void> {
+        return of(undefined as void).pipe(delay(200));
     }
+
+    // Legacy aliases
+    getPositions = this.getAll.bind(this);
+    createPosition = this.create.bind(this);
+    updatePosition = this.update.bind(this);
+    deletePosition = this.delete.bind(this);
 }

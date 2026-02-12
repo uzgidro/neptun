@@ -31,6 +31,7 @@ import { Tooltip } from 'primeng/tooltip';
 import { SelectButton } from 'primeng/selectbutton';
 import { Select } from 'primeng/select';
 import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-users',
@@ -56,7 +57,8 @@ import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.compone
         Tooltip,
         SelectButton,
         Select,
-        DialogComponent
+        DialogComponent,
+        TranslateModule
     ],
     templateUrl: './user.component.html',
     styleUrl: './user.component.scss'
@@ -75,10 +77,6 @@ export class User implements OnInit, OnDestroy {
     isEditMode: boolean = false;
     selectedUser: Users | null = null;
     userForm: FormGroup;
-    contactModeOptions = [
-        { label: 'Новый контакт', value: 'new' },
-        { label: 'Существующий контакт', value: 'existing' }
-    ];
     contactMode: 'new' | 'existing' = 'new';
     selectedFiles: File[] = [];
 
@@ -91,6 +89,7 @@ export class User implements OnInit, OnDestroy {
 
     private fb = inject(FormBuilder);
     private messageService = inject(MessageService);
+    private translate = inject(TranslateService);
     private destroy$ = new Subject<void>();
 
     constructor() {
@@ -277,12 +276,12 @@ export class User implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
-                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Пользователь успешно создан' });
+                    this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('HRM.USERS.SUCCESS_CREATED') });
                     this.loadUsers();
                     this.closeDialog();
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось создать пользователя' });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('HRM.USERS.ERROR_CREATE') });
                     console.error(err);
                 }
             });
@@ -312,12 +311,12 @@ export class User implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
-                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Пользователь успешно обновлен' });
+                    this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('HRM.USERS.SUCCESS_UPDATED') });
                     this.loadUsers();
                     this.closeDialog();
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось обновить пользователя' });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('HRM.USERS.ERROR_UPDATE') });
                     console.error(err);
                 }
             });
@@ -336,13 +335,13 @@ export class User implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
-                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Пользователь успешно удален' });
+                    this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('HRM.USERS.SUCCESS_DELETED') });
                     this.loadUsers();
                     this.displayDeleteDialog = false;
                     this.selectedUser = null;
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось удалить пользователя' });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('HRM.USERS.ERROR_DELETE') });
                     console.error(err);
                 }
             });
@@ -353,7 +352,7 @@ export class User implements OnInit, OnDestroy {
             next: (data) => {
                 this.users = data;
             },
-            error: (err) => console.log(err),
+            error: () => {},
             complete: () => (this.loading = false)
         });
     }
