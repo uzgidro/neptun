@@ -123,16 +123,26 @@ export class MenuComponent implements OnInit {
                     },
                     {
                         label: this.t('MENU.HRM'),
-                        role: ['admin', 'rais'],
                         items: [
-                            { label: this.t('MENU.ORGANIZATIONS'), role: ['rais'], routerLink: ['/organizations'] },
-                            { label: this.t('MENU.BIRTHDAYS'), role: ['rais'], routerLink: ['/birthdays'] },
-                            { label: this.t('MENU.PERSONNEL_LOSS'), role: ['rais'], routerLink: ['/personnel-loss'] },
-                            { label: this.t('MENU.EMPLOYEES'), role: ['admin'], routerLink: ['/employees'] },
-                            { label: this.t('MENU.POSITIONS'), role: ['admin'], routerLink: ['/positions'] },
-                            { label: this.t('MENU.DEPARTMENTS'), role: ['admin'], routerLink: ['/departments'] },
-                            { label: this.t('MENU.USERS'), role: ['admin'], routerLink: ['/users'] },
-                            { label: this.t('MENU.ROLES'), role: ['admin'], routerLink: ['/roles'] }
+                            { label: this.t('MENU.HRM_DASHBOARD'), routerLink: ['/hrm/dashboard'] },
+                            { label: this.t('MENU.MY_CABINET'), routerLink: ['/hrm/my-cabinet'] },
+                            { label: this.t('MENU.PERSONNEL_RECORDS'), routerLink: ['/hrm/personnel-records'] },
+                            { label: this.t('MENU.EMPLOYEES'), routerLink: ['/employees'] },
+                            { label: this.t('MENU.POSITIONS'), routerLink: ['/positions'] },
+                            { label: this.t('MENU.DEPARTMENTS'), routerLink: ['/departments'] },
+                            { label: this.t('MENU.ORG_STRUCTURE'), routerLink: ['/hrm/org-structure'] },
+                            { label: this.t('MENU.VACATIONS'), routerLink: ['/hrm/vacations'] },
+                            { label: this.t('MENU.SALARY_MANAGEMENT'), routerLink: ['/hrm/salary'] },
+                            { label: this.t('MENU.RECRUITING'), routerLink: ['/hrm/recruiting'] },
+                            { label: this.t('MENU.TRAINING'), routerLink: ['/hrm/training'] },
+                            { label: this.t('MENU.COMPETENCY_ASSESSMENT'), routerLink: ['/hrm/competency'] },
+                            { label: this.t('MENU.PERFORMANCE_MANAGEMENT'), routerLink: ['/hrm/performance'] },
+                            { label: this.t('MENU.ANALYTICS'), routerLink: ['/hrm/analytics'] },
+                            { label: this.t('MENU.TIMESHEET'), routerLink: ['/hrm/timesheet'] },
+                            { label: this.t('MENU.HR_DOCUMENTS'), routerLink: ['/hrm/documents'] },
+                            { label: this.t('MENU.ACCESS_CONTROL'), routerLink: ['/hrm/access-control'] },
+                            { label: this.t('MENU.USERS'), routerLink: ['/users'] },
+                            { label: this.t('MENU.ROLES'), routerLink: ['/roles'] }
                         ]
                     },
                     {

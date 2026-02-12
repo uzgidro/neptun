@@ -1,0 +1,406 @@
+<div class="grid grid-cols-1 lg:grid-cols-4 gap-4 mb-4">
+    <!-- Leave Balance Summary Cards -->
+    <p-card styleClass="shadow-sm">
+        <div class="flex flex-col items-center">
+            <span class="text-sm text-gray-500 mb-1">{{ 'HRM.VACATION.TOTAL_REQUESTS' | translate }}</span>
+            <span class="text-3xl font-bold text-blue-600">{{ vacations.length }}</span>
+        </div>
+    </p-card>
+    <p-card styleClass="shadow-sm">
+        <div class="flex flex-col items-center">
+            <span class="text-sm text-gray-500 mb-1">{{ 'HRM.VACATION.PENDING' | translate }}</span>
+            <span class="text-3xl font-bold text-orange-500">{{ pendingCount }}</span>
+        </div>
+    </p-card>
+    <p-card styleClass="shadow-sm">
+        <div class="flex flex-col items-center">
+            <span class="text-sm text-gray-500 mb-1">{{ 'HRM.VACATION.APPROVED_STATUS' | translate }}</span>
+            <span class="text-3xl font-bold text-green-600">{{ approvedCount }}</span>
+        </div>
+    </p-card>
+    <p-card styleClass="shadow-sm">
+        <div class="flex flex-col items-center">
+            <span class="text-sm text-gray-500 mb-1">{{ 'HRM.VACATION.REJECTED_STATUS' | translate }}</span>
+            <span class="text-3xl font-bold text-red-600">{{ rejectedCount }}</span>
+        </div>
+    </p-card>
+</div>
+
+<div class="card">
+    <div class="font-semibold text-xl mb-4">{{ 'HRM.VACATION.TITLE' | translate }}</div>
+    <p-table
+        #dt
+        [value]="vacations"
+        dataKey="id"
+        [rows]="10"
+        [loading]="loading"
+        [rowHover]="true"
+        [showGridlines]="true"
+        [paginator]="true"
+        [globalFilterFields]="['employee_name', 'vacation_type', 'status', 'department_name']"
+    >
+        <ng-template #caption>
+            <div class="flex justify-between items-center flex-column sm:flex-row">
+                <p-iconfield>
+                    <p-inputicon>
+                        <i class="pi pi-search"></i>
+                    </p-inputicon>
+                    <input pInputText type="text" (input)="onGlobalFilter(dt, $event)"
+                           [placeholder]="'COMMON.SEARCH' | translate" />
+                </p-iconfield>
+                <button pButton (click)="openDialog()">
+                    <i class="pi pi-plus" pButtonIcon></i>
+                    <span pButtonLabel>{{ 'HRM.VACATION.NEW_REQUEST' | translate }}</span>
+                </button>
+            </div>
+        </ng-template>
+        <ng-template #header>
+            <tr>
+                <th pSortableColumn="employee_name" style="min-width: 12rem">{{ 'HRM.VACATION.EMPLOYEE' | translate }}
+                </th>
+                <th style="min-width: 8rem">{{ 'HRM.VACATION.DEPARTMENT' | translate }}</th>
+                <th style="min-width: 8rem">{{ 'HRM.VACATION.TYPE' | translate }}</th>
+                <th style="min-width: 8rem">{{ 'HRM.VACATION.START_DATE' | translate }}</th>
+                <th style="min-width: 8rem">{{ 'HRM.VACATION.END_DATE' | translate }}</th>
+                <th style="min-width: 5rem">{{ 'HRM.VACATION.DAYS' | translate }}</th>
+                <th style="min-width: 5rem">{{ 'HRM.VACATION.BALANCE' | translate }}</th>
+                <th style="min-width: 8rem">{{ 'HRM.VACATION.STATUS' | translate }}</th>
+                <th style="width: 12rem">{{ 'COMMON.ACTIONS' | translate }}</th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-vacation>
+            <tr>
+                <td>{{ vacation.employee_name }}</td>
+                <td>{{ vacation.department_name || '-' }}</td>
+                <td>{{ getTypeLabel(vacation.vacation_type) }}</td>
+                <td>{{ vacation.start_date | date:'dd.MM.yyyy' }}</td>
+                <td>{{ vacation.end_date | date:'dd.MM.yyyy' }}</td>
+                <td class="text-center font-semibold">{{ vacation.days_count }}</td>
+                <td class="text-center">
+                    @if (getEmployeeBalance(vacation.employee_id); as balance) {
+                        <span [class.text-red-600]="balance.remaining_days < 7"
+                              [class.text-orange-500]="balance.remaining_days >= 7 && balance.remaining_days < 14"
+                              [class.text-green-600]="balance.remaining_days >= 14">
+                            {{ balance.remaining_days }}
+                        </span>
+                    } @else {
+                        -
+                    }
+                </td>
+                <td>
+                    <div class="flex flex-col gap-1">
+                        <p-tag [value]="getStatusLabel(vacation.status)"
+                               [severity]="getStatusSeverity(vacation.status)"></p-tag>
+                        @if (vacation.status === 'rejected' && vacation.rejection_reason) {
+                            <span class="text-xs text-red-600" [pTooltip]="vacation.rejection_reason"
+                                  tooltipPosition="top">
+                                <i class="pi pi-info-circle"></i> {{ 'HRM.VACATION.REASON' | translate }}
+                            </span>
+                        }
+                        @if (vacation.status === 'approved' && vacation.approver_name) {
+                            <span class="text-xs text-gray-500">{{ vacation.approver_name }}</span>
+                        }
+                    </div>
+                </td>
+                <td>
+                    <div class="flex justify-center gap-1 flex-wrap">
+                        @if (vacation.status === 'pending') {
+                            <button pButton
+                                    icon="pi pi-check"
+                                    (click)="openApprovalDialog(vacation)"
+                                    class="p-button-rounded p-button-text p-button-success"
+                                    [pTooltip]="'HRM.VACATION.APPROVE' | translate"
+                                    tooltipPosition="top">
+                            </button>
+                            <button pButton
+                                    icon="pi pi-times"
+                                    (click)="openRejectionDialog(vacation)"
+                                    class="p-button-rounded p-button-text p-button-danger"
+                                    [pTooltip]="'HRM.VACATION.REJECT' | translate"
+                                    tooltipPosition="top">
+                            </button>
+                        }
+                        @if (vacation.status === 'draft') {
+                            <button pButton
+                                    icon="pi pi-send"
+                                    (click)="submitForApproval(vacation)"
+                                    class="p-button-rounded p-button-text p-button-info"
+                                    [pTooltip]="'HRM.VACATION.SUBMIT_APPROVAL' | translate"
+                                    tooltipPosition="top">
+                            </button>
+                        }
+                        @if (vacation.status === 'draft' || vacation.status === 'pending') {
+                            <button pButton
+                                    icon="pi pi-pencil"
+                                    (click)="openEditDialog(vacation)"
+                                    class="p-button-rounded p-button-text p-button-warning"
+                                    [pTooltip]="'COMMON.EDIT' | translate"
+                                    tooltipPosition="top">
+                            </button>
+                            <button pButton
+                                    icon="pi pi-ban"
+                                    (click)="cancelVacation(vacation)"
+                                    class="p-button-rounded p-button-text p-button-secondary"
+                                    [pTooltip]="'HRM.VACATION.CANCEL_REQUEST' | translate"
+                                    tooltipPosition="top">
+                            </button>
+                        }
+                        <button pButton
+                                icon="pi pi-trash"
+                                (click)="openDeleteDialog(vacation)"
+                                class="p-button-rounded p-button-text p-button-danger"
+                                [pTooltip]="'COMMON.DELETE' | translate"
+                                tooltipPosition="top">
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template #emptymessage>
+            <tr>
+                <td colspan="9">{{ 'COMMON.NO_RESULTS' | translate }}</td>
+            </tr>
+        </ng-template>
+        <ng-template #loadingbody>
+            <tr>
+                <td colspan="9">{{ 'COMMON.LOADING' | translate }}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<!-- Create/Edit Vacation Dialog -->
+@if (displayDialog) {
+    <app-dialog
+        [(visible)]="displayDialog"
+        [header]="isEditMode ? ('HRM.VACATION.EDIT_REQUEST' | translate) : ('HRM.VACATION.NEW_REQUEST_TITLE' | translate)"
+        [form]="vacationForm"
+        [saveLabel]="isEditMode ? ('COMMON.UPDATE' | translate) : ('HRM.VACATION.SUBMIT_REQUEST' | translate)"
+        (save)="onSubmit()"
+        (cancel)="closeDialog()">
+        <form class="p-4" [formGroup]="vacationForm" (ngSubmit)="onSubmit()">
+            <app-select
+                formControlName="employee_id"
+                [label]="'HRM.VACATION.EMPLOYEE' | translate"
+                [items]="employees"
+                [submitted]="submitted"
+                [errorMessage]="'VALIDATION.EMPLOYEE_REQUIRED' | translate"
+                [required]="true">
+            </app-select>
+
+            <!-- Employee Balance Info -->
+            @if (selectedEmployeeBalance) {
+                <div class="mb-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                    <div
+                        class="text-sm font-semibold text-blue-800 mb-2">{{ 'HRM.VACATION.BALANCE_FOR_YEAR' | translate }} {{ selectedEmployeeBalance.year }}
+                    </div>
+                    <div class="grid grid-cols-4 gap-2 text-center">
+                        <div>
+                            <div class="text-xs text-gray-500">{{ 'HRM.VACATION.TOTAL' | translate }}</div>
+                            <div class="font-bold">{{ selectedEmployeeBalance.total_days }}</div>
+                        </div>
+                        <div>
+                            <div class="text-xs text-gray-500">{{ 'HRM.VACATION.USED' | translate }}</div>
+                            <div class="font-bold text-blue-600">{{ selectedEmployeeBalance.used_days }}</div>
+                        </div>
+                        <div>
+                            <div class="text-xs text-gray-500">{{ 'HRM.VACATION.ON_APPROVAL' | translate }}</div>
+                            <div class="font-bold text-orange-500">{{ selectedEmployeeBalance.pending_days }}</div>
+                        </div>
+                        <div>
+                            <div class="text-xs text-gray-500">{{ 'HRM.VACATION.AVAILABLE' | translate }}</div>
+                            <div class="font-bold" [class.text-green-600]="selectedEmployeeBalance.remaining_days >= 14"
+                                 [class.text-orange-500]="selectedEmployeeBalance.remaining_days < 14 && selectedEmployeeBalance.remaining_days >= 7"
+                                 [class.text-red-600]="selectedEmployeeBalance.remaining_days < 7">
+                                {{ selectedEmployeeBalance.remaining_days }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <app-select
+                formControlName="vacation_type"
+                [label]="'HRM.VACATION.VACATION_TYPE' | translate"
+                [items]="vacationTypes"
+                [submitted]="submitted"
+                [errorMessage]="'HRM.VACATION.VACATION_TYPE_REQUIRED' | translate"
+                [required]="true">
+            </app-select>
+
+            <app-date-picker
+                formControlName="start_date"
+                [label]="'HRM.VACATION.START_DATE' | translate"
+                [submitted]="submitted"
+                [errorMessage]="'VALIDATION.START_DATE_REQUIRED' | translate"
+                [showTime]="false"
+                [required]="true">
+            </app-date-picker>
+
+            <app-date-picker
+                formControlName="end_date"
+                [label]="'HRM.VACATION.END_DATE' | translate"
+                [submitted]="submitted"
+                [errorMessage]="'VALIDATION.END_DATE_REQUIRED' | translate"
+                [showTime]="false"
+                [required]="true">
+            </app-date-picker>
+
+            <!-- Validation Results -->
+            @if (validationResult) {
+                <!-- Errors -->
+                @for (error of validationResult.errors; track error.code) {
+                    <div class="mb-3 p-3 bg-red-50 rounded-lg border border-red-300">
+                        <div class="flex items-center gap-2 text-red-700">
+                            <i class="pi pi-times-circle"></i>
+                            <span class="font-semibold">{{ error.message }}</span>
+                        </div>
+                    </div>
+                }
+
+                <!-- Warnings -->
+                @for (warning of validationResult.warnings; track warning.code) {
+                    <div class="mb-3 p-3 bg-orange-50 rounded-lg border border-orange-300">
+                        <div class="flex items-center gap-2 text-orange-700">
+                            <i class="pi pi-exclamation-triangle"></i>
+                            <span>{{ warning.message }}</span>
+                        </div>
+                    </div>
+                }
+
+                <!-- Success -->
+                @if (validationResult.isValid && validationResult.warnings.length === 0) {
+                    <div class="mb-3 p-3 bg-green-50 rounded-lg border border-green-300">
+                        <div class="flex items-center gap-2 text-green-700">
+                            <i class="pi pi-check-circle"></i>
+                            <span>{{ 'HRM.VACATION.READY_TO_SUBMIT' | translate }}</span>
+                        </div>
+                    </div>
+                }
+            }
+
+            <app-textarea
+                formControlName="reason"
+                [label]="'HRM.VACATION.REASON_COMMENT' | translate"
+                [submitted]="submitted"
+                [required]="false">
+            </app-textarea>
+        </form>
+    </app-dialog>
+}
+
+<!-- Approval Confirmation Dialog -->
+<p-dialog
+    [(visible)]="displayApprovalDialog"
+    [header]="'HRM.VACATION.APPROVAL_CONFIRMATION' | translate"
+    [modal]="true"
+    [style]="{ width: '450px' }">
+    @if (selectedVacation) {
+        <div class="p-4">
+            <div class="mb-4">
+                <p class="text-lg">{{ 'HRM.VACATION.APPROVE_CONFIRM' | translate }}</p>
+            </div>
+            <div class="bg-surface-100 dark:bg-surface-700 p-4 rounded-lg">
+                <div class="grid grid-cols-2 gap-2">
+                    <div class="text-gray-500">{{ 'HRM.VACATION.EMPLOYEE' | translate }}:</div>
+                    <div class="font-semibold">{{ selectedVacation.employee_name }}</div>
+
+                    <div class="text-gray-500">{{ 'HRM.VACATION.TYPE' | translate }}:</div>
+                    <div>{{ getTypeLabel(selectedVacation.vacation_type) }}</div>
+
+                    <div class="text-gray-500">{{ 'HRM.VACATION.PERIOD' | translate }}:</div>
+                    <div>{{ selectedVacation.start_date | date:'dd.MM.yyyy' }}
+                        - {{ selectedVacation.end_date | date:'dd.MM.yyyy' }}
+                    </div>
+
+                    <div class="text-gray-500">{{ 'HRM.VACATION.DAYS' | translate }}:</div>
+                    <div class="font-semibold">{{ selectedVacation.days_count }}</div>
+                </div>
+                @if (selectedVacation.reason) {
+                    <div class="mt-3 pt-3 border-t">
+                        <div class="text-gray-500 text-sm">{{ 'HRM.VACATION.REASON' | translate }}:</div>
+                        <div class="italic">{{ selectedVacation.reason }}</div>
+                    </div>
+                }
+            </div>
+            <div class="mt-4 p-3 bg-green-50 rounded border border-green-200">
+                <div class="flex items-center gap-2 text-green-700">
+                    <i class="pi pi-info-circle"></i>
+                    <span class="text-sm">{{ 'HRM.VACATION.APPROVAL_INFO' | translate }}</span>
+                </div>
+            </div>
+        </div>
+        <div class="flex justify-end gap-2 p-4 border-t">
+            <button pButton [label]="'COMMON.CANCEL' | translate" icon="pi pi-times" class="p-button-text"
+                    (click)="displayApprovalDialog = false"></button>
+            <button pButton [label]="'HRM.VACATION.APPROVE' | translate" icon="pi pi-check" class="p-button-success"
+                    (click)="confirmApproval()"></button>
+        </div>
+    }
+</p-dialog>
+
+<!-- Rejection Dialog with Reason -->
+<p-dialog
+    [(visible)]="displayRejectionDialog"
+    [header]="'HRM.VACATION.REJECTION_TITLE' | translate"
+    [modal]="true"
+    [style]="{ width: '500px' }">
+    @if (selectedVacation) {
+        <div class="p-4">
+            <div class="mb-4">
+                <p class="text-lg">{{ 'HRM.VACATION.REJECTION_PROMPT' | translate }}</p>
+            </div>
+            <div class="bg-surface-100 dark:bg-surface-700 p-4 rounded-lg mb-4">
+                <div class="grid grid-cols-2 gap-2">
+                    <div class="text-gray-500">{{ 'HRM.VACATION.EMPLOYEE' | translate }}:</div>
+                    <div class="font-semibold">{{ selectedVacation.employee_name }}</div>
+
+                    <div class="text-gray-500">{{ 'HRM.VACATION.PERIOD' | translate }}:</div>
+                    <div>{{ selectedVacation.start_date | date:'dd.MM.yyyy' }}
+                        - {{ selectedVacation.end_date | date:'dd.MM.yyyy' }}
+                    </div>
+
+                    <div class="text-gray-500">{{ 'HRM.VACATION.DAYS' | translate }}:</div>
+                    <div class="font-semibold">{{ selectedVacation.days_count }}</div>
+                </div>
+            </div>
+
+            <form [formGroup]="rejectionForm">
+                <div class="mb-4">
+                    <label for="rejection_reason" class="block text-sm font-medium text-gray-700 mb-2">
+                        {{ 'HRM.VACATION.REJECTION_REASON' | translate }} <span class="text-red-500">*</span>
+                    </label>
+                    <textarea
+                        id="rejection_reason"
+                        pInputText
+                        formControlName="rejection_reason"
+                        rows="4"
+                        class="w-full p-3 border rounded-lg"
+                        [placeholder]="'HRM.VACATION.REJECTION_PLACEHOLDER' | translate"></textarea>
+                    @if (rejectionForm.get('rejection_reason')?.invalid && rejectionForm.get('rejection_reason')?.touched) {
+                        <small class="text-red-600">{{ 'HRM.VACATION.REJECTION_REASON_REQUIRED' | translate }}</small>
+                    }
+                </div>
+            </form>
+
+            <div class="p-3 bg-orange-50 rounded border border-orange-200">
+                <div class="flex items-center gap-2 text-orange-700">
+                    <i class="pi pi-info-circle"></i>
+                    <span class="text-sm">{{ 'HRM.VACATION.REJECTION_INFO' | translate }}</span>
+                </div>
+            </div>
+        </div>
+        <div class="flex justify-end gap-2 p-4 border-t">
+            <button pButton [label]="'COMMON.CANCEL' | translate" icon="pi pi-times" class="p-button-text"
+                    (click)="displayRejectionDialog = false"></button>
+            <button pButton [label]="'HRM.VACATION.REJECT' | translate" icon="pi pi-ban" class="p-button-danger"
+                    (click)="confirmRejection()" [disabled]="rejectionForm.invalid"></button>
+        </div>
+    }
+</p-dialog>
+
+<app-delete-confirmation
+    [(visible)]="displayDeleteDialog"
+    [message]="'HRM.VACATION.DELETE_CONFIRM' | translate"
+    (onConfirm)="confirmDelete()">
+</app-delete-confirmation>

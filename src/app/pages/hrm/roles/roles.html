@@ -1,5 +1,5 @@
 <div class="card">
-    <div class="font-semibold text-xl mb-4">Роли</div>
+    <div class="font-semibold text-xl mb-4">{{ 'HRM.ROLES.TITLE' | translate }}</div>
     <p-table
         #rt
         [value]="roles"
@@ -17,11 +17,12 @@
                     <p-inputicon>
                         <i class="pi pi-search"></i>
                     </p-inputicon>
-                    <input pInputText type="text" (input)="onGlobalFilter(rt, $event)" placeholder="Поиск" />
+                    <input pInputText type="text" (input)="onGlobalFilter(rt, $event)"
+                           [placeholder]="'COMMON.SEARCH' | translate" />
                 </p-iconfield>
                 <button pButton (click)="openDialog()">
                     <i class="pi pi-user-plus" pButtonIcon></i>
-                    <span pButtonLabel>Новая роль</span>
+                    <span pButtonLabel>{{ 'HRM.ROLES.NEW_ROLE' | translate }}</span>
                 </button>
             </div>
         </ng-template>
@@ -29,14 +30,14 @@
             <tr>
                 <th style="min-width: 12rem">
                     <div class="flex justify-between items-center">
-                        Имя
+                        {{ 'HRM.ROLES.NAME' | translate }}
                         <p-columnFilter type="text" field="name" display="menu"
-                                        placeholder="Search by name"></p-columnFilter>
+                                        [placeholder]="'COMMON.SEARCH' | translate"></p-columnFilter>
                     </div>
                 </th>
                 <th style="min-width: 12rem">
                     <div class="flex justify-between items-center">
-                        Описание
+                        {{ 'HRM.ROLES.DESCRIPTION' | translate }}
                     </div>
                 </th>
             </tr>
@@ -53,36 +54,36 @@
         </ng-template>
         <ng-template #emptymessage>
             <tr>
-                <td colspan="8">Ничего не найдено</td>
+                <td colspan="8">{{ 'HRM.ROLES.NOTHING_FOUND' | translate }}</td>
             </tr>
         </ng-template>
         <ng-template #loadingbody>
             <tr>
-                <td colspan="8">Идет загрузка. Ожидайте...</td>
+                <td colspan="8">{{ 'HRM.ROLES.LOADING' | translate }}</td>
             </tr>
         </ng-template>
     </p-table>
 </div>
 
-<p-dialog header="Новая роль" [(visible)]="displayDialog" [breakpoints]="{ '960px': '75vw' }"
+<p-dialog [header]="'HRM.ROLES.NEW_ROLE' | translate" [(visible)]="displayDialog" [breakpoints]="{ '960px': '75vw' }"
           [style]="{ width: '30vw' }" [modal]="true" (onHide)="closeDialog()">
     <form [formGroup]="roleForm">
         <div class="flex flex-col gap-4 p-fluid">
             <div class="flex flex-col gap-2">
-                <label for="name">Роль</label>
+                <label for="name">{{ 'HRM.ROLES.ROLE' | translate }}</label>
                 <input pInputText id="name" type="text" formControlName="name" />
                 @if (submitted && roleForm.controls['name'].errors?.['required']) {
-                    <small class="p-error">Имя роли обязательно.</small>
+                    <small class="p-error">{{ 'HRM.ROLES.NAME_REQUIRED' | translate }}</small>
                 }
             </div>
             <div class="flex flex-col gap-2">
-                <label for="description">Описание</label>
+                <label for="description">{{ 'HRM.ROLES.DESCRIPTION' | translate }}</label>
                 <input pInputText id="description" type="text" formControlName="description" />
             </div>
         </div>
     </form>
     <ng-template #footer>
-        <p-button label="Отмена" (click)="closeDialog()" styleClass="p-button-text" />
-        <p-button label="Сохранить" type="submit" (click)="saveRole()" />
+        <p-button [label]="'COMMON.CANCEL' | translate" (click)="closeDialog()" styleClass="p-button-text" />
+        <p-button [label]="'COMMON.SAVE' | translate" type="submit" (click)="saveRole()" />
     </ng-template>
 </p-dialog>

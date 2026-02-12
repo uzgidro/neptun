@@ -1,0 +1,136 @@
+.org-structure-container {
+    padding: 1.5rem;
+}
+
+// Tree styles
+::ng-deep .org-tree {
+    .p-tree-container {
+        padding: 0;
+    }
+
+    .p-treenode-content {
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+        transition: background-color 0.2s;
+
+        &:hover {
+            background: var(--surface-100) !important;
+
+            :host-context(.dark) & {
+                background: var(--surface-700) !important;
+            }
+        }
+
+        &.p-highlight {
+            background: var(--primary-50) !important;
+
+            :host-context(.dark) & {
+                background: rgba(var(--primary-400-rgb), 0.2) !important;
+            }
+        }
+    }
+
+    .p-tree-toggler {
+        margin-right: 0.5rem;
+    }
+}
+
+// Org Chart styles
+.org-chart-wrapper {
+    min-height: 400px;
+    padding: 1rem;
+}
+
+::ng-deep .p-organizationchart {
+    .p-organizationchart-node-content {
+        border: 1px solid var(--surface-200);
+        background: var(--surface-0);
+        border-radius: 0.75rem;
+        transition: all 0.2s;
+
+        :host-context(.dark) & {
+            border-color: var(--surface-700);
+            background: var(--surface-800);
+        }
+
+        &:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+    }
+
+    .p-organizationchart-line-down,
+    .p-organizationchart-line-left,
+    .p-organizationchart-line-right {
+        background: var(--surface-300);
+
+        :host-context(.dark) & {
+            background: var(--surface-600);
+        }
+    }
+
+    .p-organizationchart-line-top {
+        border-top-color: var(--surface-300);
+
+        :host-context(.dark) & {
+            border-top-color: var(--surface-600);
+        }
+    }
+}
+
+.org-chart-node {
+    min-width: 160px;
+}
+
+// Chart node colors
+.chart-node-purple .p-organizationchart-node-content {
+    border-left: 4px solid #8b5cf6 !important;
+}
+
+.chart-node-blue .p-organizationchart-node-content {
+    border-left: 4px solid #3b82f6 !important;
+}
+
+.chart-node-cyan .p-organizationchart-node-content {
+    border-left: 4px solid #06b6d4 !important;
+}
+
+.chart-node-green .p-organizationchart-node-content {
+    border-left: 4px solid #22c55e !important;
+}
+
+.chart-node-orange .p-organizationchart-node-content {
+    border-left: 4px solid #f97316 !important;
+}
+
+.chart-node-yellow .p-organizationchart-node-content {
+    border-left: 4px solid #eab308 !important;
+}
+
+.chart-node-gray .p-organizationchart-node-content {
+    border-left: 4px solid #6b7280 !important;
+}
+
+// Dialog styles
+::ng-deep {
+    .p-dialog {
+        .p-dialog-content {
+            background: var(--surface-overlay) !important;
+            color: var(--text-color) !important;
+        }
+
+        .p-dialog-header {
+            background: var(--surface-overlay) !important;
+            color: var(--text-color) !important;
+        }
+
+        .p-dialog-footer {
+            background: var(--surface-overlay) !important;
+        }
+    }
+}
+
+// Space utility
+.space-y-2 > * + * {
+    margin-top: 0.5rem;
+}
