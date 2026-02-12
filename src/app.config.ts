@@ -26,7 +26,6 @@ export const appConfig: ApplicationConfig = {
         importProvidersFrom(ReactiveFormsModule),
         provideTranslateService({
             defaultLanguage: 'ru',
-            fallbackLang: 'ru',
             loader: provideTranslateHttpLoader({
                 prefix: './assets/i18n/',
                 suffix: '.json'
