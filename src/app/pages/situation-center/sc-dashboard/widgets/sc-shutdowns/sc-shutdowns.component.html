@@ -5,7 +5,7 @@
     </div>
 
     <!-- Summary -->
-    <div class="shutdowns-summary" [class.blink-alarm]="activeShutdownsCount > 0">
+    <div class="shutdowns-summary" [class.blink-alarm]="hasUnviewedActiveShutdowns">
         <div class="summary-item">
             <span class="summary-value color-red">{{ activeShutdownsCount }}</span>
             <span class="summary-label">{{ 'SITUATION_CENTER.DASHBOARD.SHUTDOWNS.SHUTDOWNS_COUNT' | translate }}</span>
