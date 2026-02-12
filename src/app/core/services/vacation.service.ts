@@ -3,8 +3,7 @@ import { ApiService, BASE_URL } from '@/core/services/api.service';
 import { Observable } from 'rxjs';
 import { Vacation, VacationPayload, VacationBalance } from '@/core/interfaces/hrm/vacation';
 
-const VACATIONS = '/vacations';
-const VACATION_BALANCES = '/vacation-balances';
+const VACATIONS = '/hrm/vacations';
 
 @Injectable({
     providedIn: 'root'
@@ -46,10 +45,10 @@ export class VacationService extends ApiService {
 
     // Vacation balances
     getVacationBalances(): Observable<VacationBalance[]> {
-        return this.http.get<VacationBalance[]>(BASE_URL + VACATION_BALANCES);
+        return this.http.get<VacationBalance[]>(BASE_URL + VACATIONS + '/balances');
     }
 
     getVacationBalance(employeeId: number): Observable<VacationBalance> {
-        return this.http.get<VacationBalance>(BASE_URL + VACATION_BALANCES + '/employee/' + employeeId);
+        return this.http.get<VacationBalance>(BASE_URL + VACATIONS + '/balance/' + employeeId);
     }
 }

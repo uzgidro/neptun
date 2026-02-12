@@ -28,7 +28,7 @@ export class VacationService {
     }
 
     update(id: number, payload: Partial<VacationPayload>): Observable<Vacation> {
-        return this.http.put<Vacation>(`${API_URL}/${id}`, payload);
+        return this.http.patch<Vacation>(`${API_URL}/${id}`, payload);
     }
 
     delete(id: number): Observable<void> {

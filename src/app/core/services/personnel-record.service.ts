@@ -3,7 +3,7 @@ import { ApiService, BASE_URL } from '@/core/services/api.service';
 import { Observable } from 'rxjs';
 import { PersonnelRecord, PersonnelRecordPayload } from '@/core/interfaces/hrm/personnel-record';
 
-const PERSONNEL_RECORDS = '/personnel-records';
+const PERSONNEL_RECORDS = '/hrm/personnel-records';
 
 @Injectable({
     providedIn: 'root'

@@ -29,7 +29,7 @@ export class PersonnelRecordService {
     }
 
     update(id: number, payload: Partial<PersonnelRecordPayload>): Observable<PersonnelRecord> {
-        return this.http.put<PersonnelRecord>(`${API_URL}/${id}`, payload);
+        return this.http.patch<PersonnelRecord>(`${API_URL}/${id}`, payload);
     }
 
     delete(id: number): Observable<void> {
