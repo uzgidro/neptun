@@ -12,6 +12,7 @@ const API_URL = BASE_URL + '/hrm/recruiting';
 export class RecruitingService {
     private http = inject(HttpClient);
 
+    // Vacancies
     getVacancies(params?: { status?: string; department_id?: number }): Observable<Vacancy[]> {
         let httpParams = new HttpParams();
         if (params?.status) httpParams = httpParams.set('status', params.status);
@@ -28,7 +29,7 @@ export class RecruitingService {
     }
 
     updateVacancy(id: number, payload: Partial<VacancyPayload>): Observable<Vacancy> {
-        return this.http.put<Vacancy>(`${API_URL}/vacancies/${id}`, payload);
+        return this.http.patch<Vacancy>(`${API_URL}/vacancies/${id}`, payload);
     }
 
     deleteVacancy(id: number): Observable<void> {
@@ -43,6 +44,7 @@ export class RecruitingService {
         return this.http.post<Vacancy>(`${API_URL}/vacancies/${id}/close`, {});
     }
 
+    // Candidates
     getCandidates(params?: { vacancy_id?: number; status?: string }): Observable<Candidate[]> {
         let httpParams = new HttpParams();
         if (params?.vacancy_id) httpParams = httpParams.set('vacancy_id', params.vacancy_id.toString());
@@ -56,7 +58,7 @@ export class RecruitingService {
 
     createCandidate(payload: CandidatePayload, resume?: File): Observable<Candidate> {
         const formData = new FormData();
-        Object.keys(payload).forEach(key => {
+        Object.keys(payload).forEach((key) => {
             const value = (payload as any)[key];
             if (value !== undefined && value !== null) formData.append(key, value);
         });
@@ -65,7 +67,7 @@ export class RecruitingService {
     }
 
     updateCandidate(id: number, payload: Partial<CandidatePayload>): Observable<Candidate> {
-        return this.http.put<Candidate>(`${API_URL}/candidates/${id}`, payload);
+        return this.http.patch<Candidate>(`${API_URL}/candidates/${id}`, payload);
     }
 
     deleteCandidate(id: number): Observable<void> {
@@ -73,17 +75,27 @@ export class RecruitingService {
     }
 
     updateCandidateStatus(id: number, status: string, notes?: string): Observable<Candidate> {
-        return this.http.post<Candidate>(`${API_URL}/candidates/${id}/status`, { status, notes });
+        return this.http.patch<Candidate>(`${API_URL}/candidates/${id}/status`, { status, notes });
     }
 
-    getInterviews(candidateId: number): Observable<Interview[]> {
+    getCandidateInterviews(candidateId: number): Observable<Interview[]> {
         return this.http.get<Interview[]>(`${API_URL}/candidates/${candidateId}/interviews`);
     }
 
-    scheduleInterview(candidateId: number, interview: Partial<Interview>): Observable<Interview> {
-        return this.http.post<Interview>(`${API_URL}/candidates/${candidateId}/interviews`, interview);
+    // Interviews
+    getInterviews(): Observable<Interview[]> {
+        return this.http.get<Interview[]>(`${API_URL}/interviews`);
     }
 
+    createInterview(interview: Partial<Interview>): Observable<Interview> {
+        return this.http.post<Interview>(`${API_URL}/interviews`, interview);
+    }
+
+    updateInterview(id: number, data: Partial<Interview>): Observable<Interview> {
+        return this.http.patch<Interview>(`${API_URL}/interviews/${id}`, data);
+    }
+
+    // Stats
     getRecruitingStats(): Observable<any> {
         return this.http.get<any>(`${API_URL}/stats`);
     }

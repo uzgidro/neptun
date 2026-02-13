@@ -2,7 +2,12 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { BASE_URL } from '@/core/services/api.service';
-import { HRAnalyticsDashboard, TurnoverReport, AttendanceReport, SalaryReport, ReportFilter } from '@/core/interfaces/hrm/analytics';
+import {
+    HRAnalyticsDashboard, AnalyticsFilter, TrendData,
+    HeadcountReport, TurnoverReport, AttendanceReport,
+    SalaryReport, PerformanceReport, TrainingReport,
+    DemographicsReport
+} from '@/core/interfaces/hrm/analytics';
 
 const API_URL = BASE_URL + '/hrm/analytics';
 
@@ -12,113 +17,84 @@ const API_URL = BASE_URL + '/hrm/analytics';
 export class HRAnalyticsService {
     private http = inject(HttpClient);
 
+    private buildParams(filter?: AnalyticsFilter): HttpParams {
+        let params = new HttpParams();
+        if (filter?.start_date) params = params.set('start_date', filter.start_date);
+        if (filter?.end_date) params = params.set('end_date', filter.end_date);
+        if (filter?.department_id) params = params.set('department_id', filter.department_id.toString());
+        if (filter?.position_id) params = params.set('position_id', filter.position_id.toString());
+        if (filter?.report_type) params = params.set('report_type', filter.report_type);
+        return params;
+    }
+
     // Dashboard
-    getDashboard(): Observable<HRAnalyticsDashboard> {
-        return this.http.get<HRAnalyticsDashboard>(`${API_URL}/dashboard`);
+    getDashboard(filter?: AnalyticsFilter): Observable<HRAnalyticsDashboard> {
+        return this.http.get<HRAnalyticsDashboard>(`${API_URL}/dashboard`, { params: this.buildParams(filter) });
     }
 
-    // Headcount Reports
-    getHeadcountReport(params?: { department_id?: number; date?: string }): Observable<any> {
-        let httpParams = new HttpParams();
-        if (params?.department_id) {
-            httpParams = httpParams.set('department_id', params.department_id.toString());
-        }
-        if (params?.date) {
-            httpParams = httpParams.set('date', params.date);
-        }
-        return this.http.get<any>(`${API_URL}/reports/headcount`, { params: httpParams });
+    // Headcount
+    getHeadcountReport(filter?: AnalyticsFilter): Observable<HeadcountReport> {
+        return this.http.get<HeadcountReport>(`${API_URL}/reports/headcount`, { params: this.buildParams(filter) });
     }
 
-    getHeadcountTrend(months: number = 12): Observable<any> {
-        const params = new HttpParams().set('months', months.toString());
-        return this.http.get<any>(`${API_URL}/reports/headcount-trend`, { params });
+    getHeadcountTrend(filter?: AnalyticsFilter): Observable<TrendData> {
+        return this.http.get<TrendData>(`${API_URL}/reports/headcount-trend`, { params: this.buildParams(filter) });
     }
 
-    // Turnover Reports
-    getTurnoverReport(startDate: string, endDate: string, departmentId?: number): Observable<TurnoverReport> {
-        let params = new HttpParams()
-            .set('start_date', startDate)
-            .set('end_date', endDate);
-        if (departmentId) {
-            params = params.set('department_id', departmentId.toString());
-        }
-        return this.http.get<TurnoverReport>(`${API_URL}/reports/turnover`, { params });
+    // Turnover
+    getTurnoverReport(filter?: AnalyticsFilter): Observable<TurnoverReport> {
+        return this.http.get<TurnoverReport>(`${API_URL}/reports/turnover`, { params: this.buildParams(filter) });
     }
 
-    getTurnoverTrend(months: number = 12): Observable<any> {
-        const params = new HttpParams().set('months', months.toString());
-        return this.http.get<any>(`${API_URL}/reports/turnover-trend`, { params });
+    getTurnoverTrend(filter?: AnalyticsFilter): Observable<TrendData> {
+        return this.http.get<TrendData>(`${API_URL}/reports/turnover-trend`, { params: this.buildParams(filter) });
     }
 
-    // Attendance Reports
-    getAttendanceReport(startDate: string, endDate: string, departmentId?: number): Observable<AttendanceReport> {
-        let params = new HttpParams()
-            .set('start_date', startDate)
-            .set('end_date', endDate);
-        if (departmentId) {
-            params = params.set('department_id', departmentId.toString());
-        }
-        return this.http.get<AttendanceReport>(`${API_URL}/reports/attendance`, { params });
+    // Attendance
+    getAttendanceReport(filter?: AnalyticsFilter): Observable<AttendanceReport> {
+        return this.http.get<AttendanceReport>(`${API_URL}/reports/attendance`, { params: this.buildParams(filter) });
     }
 
-    // Salary Reports
-    getSalaryReport(month: number, year: number, departmentId?: number): Observable<SalaryReport> {
-        let params = new HttpParams()
-            .set('month', month.toString())
-            .set('year', year.toString());
-        if (departmentId) {
-            params = params.set('department_id', departmentId.toString());
-        }
-        return this.http.get<SalaryReport>(`${API_URL}/reports/salary`, { params });
+    // Salary
+    getSalaryReport(filter?: AnalyticsFilter): Observable<SalaryReport> {
+        return this.http.get<SalaryReport>(`${API_URL}/reports/salary`, { params: this.buildParams(filter) });
     }
 
-    getSalaryTrend(months: number = 12): Observable<any> {
-        const params = new HttpParams().set('months', months.toString());
-        return this.http.get<any>(`${API_URL}/reports/salary-trend`, { params });
+    getSalaryTrend(filter?: AnalyticsFilter): Observable<TrendData> {
+        return this.http.get<TrendData>(`${API_URL}/reports/salary-trend`, { params: this.buildParams(filter) });
     }
 
-    // Performance Reports
-    getPerformanceReport(year: number, departmentId?: number): Observable<any> {
-        let params = new HttpParams().set('year', year.toString());
-        if (departmentId) {
-            params = params.set('department_id', departmentId.toString());
-        }
-        return this.http.get<any>(`${API_URL}/reports/performance`, { params });
+    // Performance
+    getPerformanceReport(filter?: AnalyticsFilter): Observable<PerformanceReport> {
+        return this.http.get<PerformanceReport>(`${API_URL}/reports/performance`, { params: this.buildParams(filter) });
     }
 
-    // Training Reports
-    getTrainingReport(startDate: string, endDate: string): Observable<any> {
-        const params = new HttpParams()
-            .set('start_date', startDate)
-            .set('end_date', endDate);
-        return this.http.get<any>(`${API_URL}/reports/training`, { params });
-    }
-
-    // Export
-    exportReport(filter: ReportFilter): Observable<Blob> {
-        return this.http.post(`${API_URL}/export`, filter, { responseType: 'blob' });
-    }
-
-    exportToPdf(filter: ReportFilter): Observable<Blob> {
-        return this.http.post(`${API_URL}/export/pdf`, filter, { responseType: 'blob' });
-    }
-
-    exportToExcel(filter: ReportFilter): Observable<Blob> {
-        return this.http.post(`${API_URL}/export/excel`, filter, { responseType: 'blob' });
+    // Training
+    getTrainingReport(filter?: AnalyticsFilter): Observable<TrainingReport> {
+        return this.http.get<TrainingReport>(`${API_URL}/reports/training`, { params: this.buildParams(filter) });
     }
 
     // Demographics
-    getDemographicsReport(): Observable<any> {
-        return this.http.get<any>(`${API_URL}/reports/demographics`);
+    getDemographicsReport(filter?: AnalyticsFilter): Observable<DemographicsReport> {
+        return this.http.get<DemographicsReport>(`${API_URL}/reports/demographics`, { params: this.buildParams(filter) });
     }
 
     // Diversity
-    getDiversityReport(): Observable<any> {
-        return this.http.get<any>(`${API_URL}/reports/diversity`);
+    getDiversityReport(filter?: AnalyticsFilter): Observable<any> {
+        return this.http.get<any>(`${API_URL}/reports/diversity`, { params: this.buildParams(filter) });
     }
 
-    // Custom Reports
-    generateCustomReport(config: any): Observable<any> {
-        return this.http.post<any>(`${API_URL}/reports/custom`, config);
+    // Custom
+    getCustomReport(filter: AnalyticsFilter): Observable<any> {
+        return this.http.get<any>(`${API_URL}/reports/custom`, { params: this.buildParams(filter) });
+    }
+
+    // Export
+    exportReport(filter: AnalyticsFilter): Observable<any> {
+        return this.http.get<any>(`${API_URL}/export`, { params: this.buildParams(filter) });
+    }
+
+    exportToExcel(filter: AnalyticsFilter): Observable<Blob> {
+        return this.http.get(`${API_URL}/export/excel`, { params: this.buildParams(filter), responseType: 'blob' });
     }
 }

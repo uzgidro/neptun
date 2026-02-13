@@ -2,16 +2,22 @@ import { Injectable } from '@angular/core';
 import { ApiService, BASE_URL } from '@/core/services/api.service';
 import { Observable } from 'rxjs';
 import { HRDocument, DocumentRequest } from '@/core/interfaces/hrm/hr-documents';
+import { HttpParams } from '@angular/common/http';
 
-const HR_DOCUMENTS = '/hr-documents';
+const HR_DOCUMENTS = '/hrm/hr-documents';
 
 @Injectable({
     providedIn: 'root'
 })
 export class HRDocumentsService extends ApiService {
     // Documents
-    getDocuments(): Observable<HRDocument[]> {
-        return this.http.get<HRDocument[]>(BASE_URL + HR_DOCUMENTS);
+    getDocuments(params?: { status?: string; type?: string; category?: string; search?: string }): Observable<HRDocument[]> {
+        let httpParams = new HttpParams();
+        if (params?.status) httpParams = httpParams.set('status', params.status);
+        if (params?.type) httpParams = httpParams.set('type', params.type);
+        if (params?.category) httpParams = httpParams.set('category', params.category);
+        if (params?.search) httpParams = httpParams.set('search', params.search);
+        return this.http.get<HRDocument[]>(BASE_URL + HR_DOCUMENTS, { params: httpParams });
     }
 
     getDocument(id: number): Observable<HRDocument> {

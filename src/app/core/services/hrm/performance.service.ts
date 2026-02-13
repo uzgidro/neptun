@@ -2,7 +2,11 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { BASE_URL } from '@/core/services/api.service';
-import { PerformanceReview, PerformanceReviewPayload, PerformanceGoal, GoalPayload, KPI, PerformanceRating } from '@/core/interfaces/hrm/performance';
+import {
+    PerformanceReview, PerformanceReviewPayload, SelfReviewPayload, ManagerReviewPayload,
+    PerformanceGoal, GoalPayload, PerformanceDashboard,
+    KPI, PerformanceRating
+} from '@/core/interfaces/hrm/performance';
 
 const API_URL = BASE_URL + '/hrm/performance';
 
@@ -12,18 +16,13 @@ const API_URL = BASE_URL + '/hrm/performance';
 export class PerformanceService {
     private http = inject(HttpClient);
 
-    // Performance Reviews
-    getReviews(params?: { employee_id?: number; status?: string; year?: number }): Observable<PerformanceReview[]> {
+    // Reviews
+    getReviews(params?: { status?: string; type?: string; employee_id?: number; search?: string }): Observable<PerformanceReview[]> {
         let httpParams = new HttpParams();
-        if (params?.employee_id) {
-            httpParams = httpParams.set('employee_id', params.employee_id.toString());
-        }
-        if (params?.status) {
-            httpParams = httpParams.set('status', params.status);
-        }
-        if (params?.year) {
-            httpParams = httpParams.set('year', params.year.toString());
-        }
+        if (params?.status) httpParams = httpParams.set('status', params.status);
+        if (params?.type) httpParams = httpParams.set('type', params.type);
+        if (params?.employee_id) httpParams = httpParams.set('employee_id', params.employee_id.toString());
+        if (params?.search) httpParams = httpParams.set('search', params.search);
         return this.http.get<PerformanceReview[]>(`${API_URL}/reviews`, { params: httpParams });
     }
 
@@ -36,19 +35,15 @@ export class PerformanceService {
     }
 
     updateReview(id: number, payload: Partial<PerformanceReviewPayload>): Observable<PerformanceReview> {
-        return this.http.put<PerformanceReview>(`${API_URL}/reviews/${id}`, payload);
+        return this.http.patch<PerformanceReview>(`${API_URL}/reviews/${id}`, payload);
     }
 
-    deleteReview(id: number): Observable<void> {
-        return this.http.delete<void>(`${API_URL}/reviews/${id}`);
+    submitSelfReview(id: number, payload: SelfReviewPayload): Observable<PerformanceReview> {
+        return this.http.post<PerformanceReview>(`${API_URL}/reviews/${id}/self-review`, payload);
     }
 
-    submitSelfReview(id: number, comments: string): Observable<PerformanceReview> {
-        return this.http.post<PerformanceReview>(`${API_URL}/reviews/${id}/self-review`, { comments });
-    }
-
-    submitManagerReview(id: number, rating: number, comments: string): Observable<PerformanceReview> {
-        return this.http.post<PerformanceReview>(`${API_URL}/reviews/${id}/manager-review`, { rating, comments });
+    submitManagerReview(id: number, payload: ManagerReviewPayload): Observable<PerformanceReview> {
+        return this.http.post<PerformanceReview>(`${API_URL}/reviews/${id}/manager-review`, payload);
     }
 
     completeReview(id: number): Observable<PerformanceReview> {
@@ -56,19 +51,12 @@ export class PerformanceService {
     }
 
     // Goals
-    getGoals(params?: { employee_id?: number; status?: string }): Observable<PerformanceGoal[]> {
+    getGoals(params?: { status?: string; employee_id?: number; review_id?: number }): Observable<PerformanceGoal[]> {
         let httpParams = new HttpParams();
-        if (params?.employee_id) {
-            httpParams = httpParams.set('employee_id', params.employee_id.toString());
-        }
-        if (params?.status) {
-            httpParams = httpParams.set('status', params.status);
-        }
+        if (params?.status) httpParams = httpParams.set('status', params.status);
+        if (params?.employee_id) httpParams = httpParams.set('employee_id', params.employee_id.toString());
+        if (params?.review_id) httpParams = httpParams.set('review_id', params.review_id.toString());
         return this.http.get<PerformanceGoal[]>(`${API_URL}/goals`, { params: httpParams });
-    }
-
-    getGoalById(id: number): Observable<PerformanceGoal> {
-        return this.http.get<PerformanceGoal>(`${API_URL}/goals/${id}`);
     }
 
     createGoal(payload: GoalPayload): Observable<PerformanceGoal> {
@@ -76,63 +64,31 @@ export class PerformanceService {
     }
 
     updateGoal(id: number, payload: Partial<GoalPayload>): Observable<PerformanceGoal> {
-        return this.http.put<PerformanceGoal>(`${API_URL}/goals/${id}`, payload);
+        return this.http.patch<PerformanceGoal>(`${API_URL}/goals/${id}`, payload);
+    }
+
+    updateGoalProgress(id: number, currentValue: number): Observable<PerformanceGoal> {
+        return this.http.patch<PerformanceGoal>(`${API_URL}/goals/${id}/progress`, { current_value: currentValue });
     }
 
     deleteGoal(id: number): Observable<void> {
         return this.http.delete<void>(`${API_URL}/goals/${id}`);
     }
 
-    updateGoalProgress(id: number, actualValue: string, progressPercent: number): Observable<PerformanceGoal> {
-        return this.http.post<PerformanceGoal>(`${API_URL}/goals/${id}/progress`, { actual_value: actualValue, progress_percent: progressPercent });
+    // Analytics
+    getKPIs(): Observable<KPI[]> {
+        return this.http.get<KPI[]>(`${API_URL}/kpis`);
     }
 
-    // KPIs
-    getKPIs(params?: { employee_id?: number; month?: number; year?: number }): Observable<KPI[]> {
-        let httpParams = new HttpParams();
-        if (params?.employee_id) {
-            httpParams = httpParams.set('employee_id', params.employee_id.toString());
-        }
-        if (params?.month) {
-            httpParams = httpParams.set('month', params.month.toString());
-        }
-        if (params?.year) {
-            httpParams = httpParams.set('year', params.year.toString());
-        }
-        return this.http.get<KPI[]>(`${API_URL}/kpis`, { params: httpParams });
+    getRatings(): Observable<PerformanceRating[]> {
+        return this.http.get<PerformanceRating[]>(`${API_URL}/ratings`);
     }
 
-    createKPI(kpi: Partial<KPI>): Observable<KPI> {
-        return this.http.post<KPI>(`${API_URL}/kpis`, kpi);
+    getEmployeeRating(employeeId: number): Observable<PerformanceRating> {
+        return this.http.get<PerformanceRating>(`${API_URL}/ratings/employee/${employeeId}`);
     }
 
-    updateKPI(id: number, kpi: Partial<KPI>): Observable<KPI> {
-        return this.http.put<KPI>(`${API_URL}/kpis/${id}`, kpi);
-    }
-
-    deleteKPI(id: number): Observable<void> {
-        return this.http.delete<void>(`${API_URL}/kpis/${id}`);
-    }
-
-    // Ratings
-    getRatings(year?: number): Observable<PerformanceRating[]> {
-        let params = new HttpParams();
-        if (year) {
-            params = params.set('year', year.toString());
-        }
-        return this.http.get<PerformanceRating[]>(`${API_URL}/ratings`, { params });
-    }
-
-    getEmployeeRating(employeeId: number, year?: number): Observable<PerformanceRating> {
-        let params = new HttpParams();
-        if (year) {
-            params = params.set('year', year.toString());
-        }
-        return this.http.get<PerformanceRating>(`${API_URL}/ratings/employee/${employeeId}`, { params });
-    }
-
-    // Dashboard
-    getPerformanceDashboard(): Observable<any> {
-        return this.http.get<any>(`${API_URL}/dashboard`);
+    getDashboard(): Observable<PerformanceDashboard> {
+        return this.http.get<PerformanceDashboard>(`${API_URL}/dashboard`);
     }
 }

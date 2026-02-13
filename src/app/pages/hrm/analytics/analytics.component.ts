@@ -7,18 +7,12 @@ import { Card } from 'primeng/card';
 import { MessageService } from 'primeng/api';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { HRAnalyticsDashboard, REPORT_TYPES } from '@/core/interfaces/hrm/analytics';
-import { AnalyticsService } from '@/core/services/analytics.service';
+import { HRAnalyticsService } from '@/core/services/hrm/analytics.service';
 
 @Component({
     selector: 'app-analytics',
     standalone: true,
-    imports: [
-        CommonModule,
-        FormsModule,
-        ChartModule,
-        Card,
-        TranslateModule
-    ],
+    imports: [CommonModule, FormsModule, ChartModule, Card, TranslateModule],
     templateUrl: './analytics.component.html',
     styleUrl: './analytics.component.scss'
 })
@@ -44,7 +38,7 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
         maintainAspectRatio: false
     };
 
-    private analyticsService = inject(AnalyticsService);
+    private analyticsService = inject(HRAnalyticsService);
     private messageService = inject(MessageService);
     private translate = inject(TranslateService);
     private destroy$ = new Subject<void>();
@@ -56,7 +50,8 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
     loadDashboard(): void {
         this.loading = true;
 
-        this.analyticsService.getDashboard()
+        this.analyticsService
+            .getDashboard()
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (data) => {
@@ -75,13 +70,15 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
         if (!this.dashboard) return;
 
         // Department chart
-        if (this.dashboard.headcount_by_department.length) {
+        if (this.dashboard.department_headcount.length) {
             this.departmentChartData = {
-                labels: this.dashboard.headcount_by_department.map(d => d.department_name),
-                datasets: [{
-                    data: this.dashboard.headcount_by_department.map(d => d.headcount),
-                    backgroundColor: ['#42A5F5', '#66BB6A', '#FFA726', '#26C6DA', '#7E57C2', '#EC407A', '#78909C', '#5C6BC0']
-                }]
+                labels: this.dashboard.department_headcount.map((d) => d.department_name),
+                datasets: [
+                    {
+                        data: this.dashboard.department_headcount.map((d) => d.headcount),
+                        backgroundColor: ['#42A5F5', '#66BB6A', '#FFA726', '#26C6DA', '#7E57C2', '#EC407A', '#78909C', '#5C6BC0']
+                    }
+                ]
             };
         }
 
@@ -89,34 +86,40 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
         if (this.dashboard.gender_distribution) {
             this.genderChartData = {
                 labels: ['Мужчины', 'Женщины'],
-                datasets: [{
-                    data: [this.dashboard.gender_distribution.male, this.dashboard.gender_distribution.female],
-                    backgroundColor: ['#42A5F5', '#EC407A']
-                }]
+                datasets: [
+                    {
+                        data: [this.dashboard.gender_distribution.male, this.dashboard.gender_distribution.female],
+                        backgroundColor: ['#42A5F5', '#EC407A']
+                    }
+                ]
             };
         }
 
         // Age chart
         if (this.dashboard.age_distribution.length) {
             this.ageChartData = {
-                labels: this.dashboard.age_distribution.map(a => a.age_group),
-                datasets: [{
-                    label: 'Количество',
-                    data: this.dashboard.age_distribution.map(a => a.count),
-                    backgroundColor: '#66BB6A'
-                }]
+                labels: this.dashboard.age_distribution.map((a) => a.label),
+                datasets: [
+                    {
+                        label: 'Количество',
+                        data: this.dashboard.age_distribution.map((a) => a.count),
+                        backgroundColor: '#66BB6A'
+                    }
+                ]
             };
         }
 
         // Tenure chart
         if (this.dashboard.tenure_distribution.length) {
             this.tenureChartData = {
-                labels: this.dashboard.tenure_distribution.map(t => t.tenure_group),
-                datasets: [{
-                    label: 'Количество',
-                    data: this.dashboard.tenure_distribution.map(t => t.count),
-                    backgroundColor: '#7E57C2'
-                }]
+                labels: this.dashboard.tenure_distribution.map((t) => t.label),
+                datasets: [
+                    {
+                        label: 'Количество',
+                        data: this.dashboard.tenure_distribution.map((t) => t.count),
+                        backgroundColor: '#7E57C2'
+                    }
+                ]
             };
         }
     }

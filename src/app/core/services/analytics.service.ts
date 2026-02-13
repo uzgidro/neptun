@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiService, BASE_URL } from '@/core/services/api.service';
 import { Observable } from 'rxjs';
-import { HRAnalyticsDashboard, TurnoverReport, AttendanceReport, SalaryReport, ReportFilter } from '@/core/interfaces/hrm/analytics';
+import { HRAnalyticsDashboard, TurnoverReport, AttendanceReport, SalaryReport, AnalyticsFilter } from '@/core/interfaces/hrm/analytics';
 
 const ANALYTICS = '/hrm/analytics';
 
@@ -13,15 +13,15 @@ export class AnalyticsService extends ApiService {
         return this.http.get<HRAnalyticsDashboard>(BASE_URL + ANALYTICS + '/dashboard');
     }
 
-    getTurnoverReport(filter?: Partial<ReportFilter>): Observable<TurnoverReport> {
+    getTurnoverReport(filter?: AnalyticsFilter): Observable<TurnoverReport> {
         return this.http.post<TurnoverReport>(BASE_URL + ANALYTICS + '/turnover', filter || {});
     }
 
-    getAttendanceReport(filter?: Partial<ReportFilter>): Observable<AttendanceReport> {
+    getAttendanceReport(filter?: AnalyticsFilter): Observable<AttendanceReport> {
         return this.http.post<AttendanceReport>(BASE_URL + ANALYTICS + '/attendance', filter || {});
     }
 
-    getSalaryReport(filter?: Partial<ReportFilter>): Observable<SalaryReport> {
+    getSalaryReport(filter?: AnalyticsFilter): Observable<SalaryReport> {
         return this.http.post<SalaryReport>(BASE_URL + ANALYTICS + '/salary', filter || {});
     }
 

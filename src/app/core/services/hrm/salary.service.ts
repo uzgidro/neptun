@@ -29,7 +29,7 @@ export class HrmSalaryService {
     }
 
     update(id: number, payload: Partial<SalaryPayload>): Observable<Salary> {
-        return this.http.put<Salary>(`${API_URL}/${id}`, payload);
+        return this.http.patch<Salary>(`${API_URL}/${id}`, payload);
     }
 
     delete(id: number): Observable<void> {

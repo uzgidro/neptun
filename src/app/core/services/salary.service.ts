@@ -3,7 +3,7 @@ import { ApiService, BASE_URL } from '@/core/services/api.service';
 import { Observable } from 'rxjs';
 import { EmployeeSalaryStructure, EmployeeBonus, EmployeeDeduction, BatchCalculationResult } from '@/core/interfaces/hrm/salary';
 
-const SALARY = '/salary';
+const SALARY = '/hrm/salaries';
 
 @Injectable({
     providedIn: 'root'

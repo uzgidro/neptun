@@ -12,8 +12,9 @@
                 <div class="flex flex-col items-center">
                     <span class="text-lg text-gray-500 mb-2">{{ 'HRM.ANALYTICS.TOTAL_EMPLOYEES' | translate }}</span>
                     <span class="text-4xl font-bold text-blue-600">{{ formatNumber(dashboard.total_employees) }}</span>
-                    <span class="text-sm text-green-600 mt-1">
-                        <i class="pi pi-users"></i> {{ 'HRM.ANALYTICS.ACTIVE' | translate }}: {{ formatNumber(dashboard.active_employees) }}
+                    <span class="text-sm text-gray-500 mt-1">
+                        <i class="pi pi-calendar"></i> {{ 'HRM.ANALYTICS.AVG_AGE' | translate }}
+                        : {{ dashboard.avg_age.toFixed(1) }}
                     </span>
                 </div>
             </p-card>
@@ -21,9 +22,10 @@
             <p-card styleClass="shadow-sm">
                 <div class="flex flex-col items-center">
                     <span class="text-lg text-gray-500 mb-2">{{ 'HRM.ANALYTICS.HIRED_THIS_MONTH' | translate }}</span>
-                    <span class="text-4xl font-bold text-green-600">{{ formatNumber(dashboard.new_hires_this_month) }}</span>
+                    <span class="text-4xl font-bold text-green-600">{{ formatNumber(dashboard.new_hires_month) }}</span>
                     <span class="text-sm text-red-600 mt-1">
-                        <i class="pi pi-user-minus"></i> {{ 'HRM.ANALYTICS.TERMINATED' | translate }}: {{ formatNumber(dashboard.terminations_this_month) }}
+                        <i class="pi pi-user-minus"></i> {{ 'HRM.ANALYTICS.TERMINATED' | translate }}
+                        : {{ formatNumber(dashboard.terminations_month) }}
                     </span>
                 </div>
             </p-card>
@@ -41,7 +43,7 @@
             <p-card styleClass="shadow-sm">
                 <div class="flex flex-col items-center">
                     <span class="text-lg text-gray-500 mb-2">{{ 'HRM.ANALYTICS.AVERAGE_TENURE' | translate }}</span>
-                    <span class="text-4xl font-bold text-purple-600">{{ dashboard.average_tenure.toFixed(1) }}</span>
+                    <span class="text-4xl font-bold text-purple-600">{{ dashboard.avg_tenure_years.toFixed(1) }}</span>
                     <span class="text-sm text-gray-500 mt-1">{{ 'HRM.ANALYTICS.YEARS' | translate }}</span>
                 </div>
             </p-card>
@@ -83,7 +85,7 @@
         </div>
 
         <!-- Quick Stats Table -->
-        @if (dashboard.headcount_by_department.length) {
+        @if (dashboard.department_headcount.length) {
             <div class="mt-6">
                 <p-card [header]="'HRM.ANALYTICS.HEADCOUNT_BY_DEPARTMENT' | translate" styleClass="shadow-sm">
                     <div class="overflow-x-auto">
@@ -96,11 +98,11 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @for (dept of dashboard.headcount_by_department; track dept.department_id) {
+                                @for (dept of dashboard.department_headcount; track dept.department_id) {
                                     <tr class="border-b hover:bg-surface-100 dark:hover:bg-surface-700 transition-colors">
                                         <td class="p-3">{{ dept.department_name }}</td>
                                         <td class="text-right p-3 font-semibold">{{ dept.headcount }}</td>
-                                        <td class="text-right p-3">{{ formatPercent(dept.percentage) }}</td>
+                                        <td class="text-right p-3">{{ formatPercent(dept.headcount / dashboard.total_employees * 100) }}</td>
                                     </tr>
                                 }
                             </tbody>

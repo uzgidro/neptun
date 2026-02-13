@@ -4,8 +4,8 @@ import { Observable } from 'rxjs';
 import { EmployeeTimesheet, TimesheetEntry, Holiday, TimesheetFilter, TimesheetCorrection } from '@/core/interfaces/hrm/timesheet';
 import { HttpParams } from '@angular/common/http';
 
-const TIMESHEET = '/timesheets';
-const HOLIDAYS = '/holidays';
+const TIMESHEET = '/hrm/timesheet';
+const HOLIDAYS = '/hrm/holidays';
 
 @Injectable({
     providedIn: 'root'
@@ -29,7 +29,7 @@ export class TimesheetService extends ApiService {
 
     // Update timesheet entry
     updateTimesheetEntry(entryId: number, data: Partial<TimesheetEntry>): Observable<TimesheetEntry> {
-        return this.http.patch<TimesheetEntry>(BASE_URL + TIMESHEET + '/entries/' + entryId, data);
+        return this.http.patch<TimesheetEntry>(BASE_URL + TIMESHEET + '/' + entryId, data);
     }
 
     // Holidays
@@ -50,6 +50,10 @@ export class TimesheetService extends ApiService {
     }
 
     // Corrections
+    getCorrections(): Observable<TimesheetCorrection[]> {
+        return this.http.get<TimesheetCorrection[]>(BASE_URL + TIMESHEET + '/corrections');
+    }
+
     requestCorrection(data: Omit<TimesheetCorrection, 'id' | 'status' | 'requested_at'>): Observable<TimesheetCorrection> {
         return this.http.post<TimesheetCorrection>(BASE_URL + TIMESHEET + '/corrections', data);
     }

@@ -3,7 +3,7 @@ import { ApiService, BASE_URL } from '@/core/services/api.service';
 import { Observable } from 'rxjs';
 import { OrgUnit, OrgEmployee } from '@/core/interfaces/hrm/org-structure';
 
-const ORG_STRUCTURE = '/org-structure';
+const ORG_STRUCTURE = '/hrm/org-structure';
 
 @Injectable({
     providedIn: 'root'
@@ -33,6 +33,10 @@ export class OrgStructureService extends ApiService {
     // Employees in org structure
     getOrgEmployees(): Observable<OrgEmployee[]> {
         return this.http.get<OrgEmployee[]>(BASE_URL + ORG_STRUCTURE + '/employees');
+    }
+
+    getUnitEmployees(unitId: number): Observable<OrgEmployee[]> {
+        return this.http.get<OrgEmployee[]>(BASE_URL + ORG_STRUCTURE + '/units/' + unitId + '/employees');
     }
 
     assignEmployee(unitId: number, employeeId: number): Observable<any> {

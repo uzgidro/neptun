@@ -42,9 +42,10 @@
                 <td>{{ goal.employee_name }}</td>
                 <td>{{ goal.title }}</td>
                 <td>{{ goal.metric }}</td>
-                <td>{{ goal.target_value }} / {{ goal.actual_value || '—' }}</td>
+                <td>{{ goal.target_value }} / {{ goal.current_value || '—' }}</td>
                 <td>
-                    <p-progressbar [value]="goal.progress_percent" [showValue]="true" [style]="{ height: '1.5rem' }"></p-progressbar>
+                    <p-progressbar [value]="goal.progress" [showValue]="true"
+                                   [style]="{ height: '1.5rem' }"></p-progressbar>
                 </td>
                 <td>{{ goal.due_date | date:'dd.MM.yyyy' }}</td>
                 <td>

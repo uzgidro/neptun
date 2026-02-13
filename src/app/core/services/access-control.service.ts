@@ -2,16 +2,21 @@ import { Injectable } from '@angular/core';
 import { ApiService, BASE_URL } from '@/core/services/api.service';
 import { Observable } from 'rxjs';
 import { AccessCard, AccessZone, AccessLog, AccessRequest } from '@/core/interfaces/hrm/access-control';
+import { HttpParams } from '@angular/common/http';
 
-const ACCESS_CONTROL = '/access-control';
+const ACCESS_CONTROL = '/hrm/access-control';
 
 @Injectable({
     providedIn: 'root'
 })
 export class AccessControlService extends ApiService {
     // Access Cards
-    getCards(): Observable<AccessCard[]> {
-        return this.http.get<AccessCard[]>(BASE_URL + ACCESS_CONTROL + '/cards');
+    getCards(params?: { employee_id?: number; status?: string; search?: string }): Observable<AccessCard[]> {
+        let httpParams = new HttpParams();
+        if (params?.employee_id) httpParams = httpParams.set('employee_id', params.employee_id.toString());
+        if (params?.status) httpParams = httpParams.set('status', params.status);
+        if (params?.search) httpParams = httpParams.set('search', params.search);
+        return this.http.get<AccessCard[]>(BASE_URL + ACCESS_CONTROL + '/cards', { params: httpParams });
     }
 
     getCard(id: number): Observable<AccessCard> {
@@ -48,8 +53,15 @@ export class AccessControlService extends ApiService {
     }
 
     // Access Logs
-    getLogs(): Observable<AccessLog[]> {
-        return this.http.get<AccessLog[]>(BASE_URL + ACCESS_CONTROL + '/logs');
+    getLogs(params?: { employee_id?: number; zone_id?: number; direction?: string; status?: string; date_from?: string; date_to?: string }): Observable<AccessLog[]> {
+        let httpParams = new HttpParams();
+        if (params?.employee_id) httpParams = httpParams.set('employee_id', params.employee_id.toString());
+        if (params?.zone_id) httpParams = httpParams.set('zone_id', params.zone_id.toString());
+        if (params?.direction) httpParams = httpParams.set('direction', params.direction);
+        if (params?.status) httpParams = httpParams.set('status', params.status);
+        if (params?.date_from) httpParams = httpParams.set('date_from', params.date_from);
+        if (params?.date_to) httpParams = httpParams.set('date_to', params.date_to);
+        return this.http.get<AccessLog[]>(BASE_URL + ACCESS_CONTROL + '/logs', { params: httpParams });
     }
 
     // Access Requests
