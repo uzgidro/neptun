@@ -84,8 +84,8 @@
                 <tr>
                     <td>{{ investment.project_name }}</td>
                     <td>
-                        <span [class]="investment.status === 'Активная фаза' ? 'text-green-500' : 'text-orange-500'">
-                            {{ investment.status === 'Активная фаза'
+                        <span [class]="isActivePhase(investment.status) ? 'text-green-500' : 'text-orange-500'">
+                            {{ isActivePhase(investment.status)
                                 ? ('FINANCIAL_BLOCK.INVESTMENT.ACTIVE_PHASE' | translate)
                                 : ('FINANCIAL_BLOCK.INVESTMENT.IN_DEVELOPMENT' | translate) }}
                         </span>

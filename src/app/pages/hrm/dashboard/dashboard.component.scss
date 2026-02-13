@@ -1,0 +1,94 @@
+.dashboard-container {
+    .widget-card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+    }
+
+    .task-item {
+        text-decoration: none;
+
+        &:hover .task-icon {
+            transform: scale(1.1);
+        }
+
+        .task-icon {
+            transition: transform 0.2s ease;
+        }
+    }
+
+    .quick-action {
+        text-decoration: none;
+        transition: all 0.2s ease;
+
+        &:hover {
+            transform: translateY(-3px);
+        }
+    }
+
+    .event-item {
+        transition: background-color 0.2s ease;
+
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.02);
+        }
+    }
+}
+
+// Color variables for dynamic colors
+:root {
+    --blue-100: #dbeafe;
+    --blue-500: #3b82f6;
+    --blue-600: #2563eb;
+
+    --green-100: #dcfce7;
+    --green-500: #22c55e;
+    --green-600: #16a34a;
+
+    --orange-100: #ffedd5;
+    --orange-500: #f97316;
+    --orange-600: #ea580c;
+
+    --purple-100: #f3e8ff;
+    --purple-500: #a855f7;
+    --purple-600: #9333ea;
+
+    --cyan-100: #cffafe;
+    --cyan-500: #06b6d4;
+    --cyan-600: #0891b2;
+
+    --pink-100: #fce7f3;
+    --pink-500: #ec4899;
+    --pink-600: #db2777;
+
+    --red-100: #fee2e2;
+    --red-500: #ef4444;
+    --red-600: #dc2626;
+
+    --yellow-100: #fef9c3;
+    --yellow-500: #eab308;
+    --yellow-600: #ca8a04;
+
+    --gray-100: #f3f4f6;
+    --gray-500: #6b7280;
+    --gray-600: #4b5563;
+}
+
+::ng-deep {
+    .p-dialog {
+        .p-dialog-content {
+            background: var(--surface-overlay) !important;
+            color: var(--text-color) !important;
+        }
+        .p-dialog-header {
+            background: var(--surface-overlay) !important;
+            color: var(--text-color) !important;
+        }
+        .p-dialog-footer {
+            background: var(--surface-overlay) !important;
+        }
+    }
+}

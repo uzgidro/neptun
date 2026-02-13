@@ -51,10 +51,10 @@
                 </td>
                 <td>{{ item.name }}</td>
                 <td class="text-right">{{ convertValue(item.debit.yearStartValue) | number: '1.0-1' }}
-                    млн {{ dialogShowInUSD ? '$' : 'UZS' }}
+                    {{ 'COMMON.MILLION' | translate }} {{ dialogShowInUSD ? '$' : 'UZS' }}
                 </td>
                 <td class="text-right font-semibold">{{ convertValue(item.debit.currentValue) | number: '1.0-1' }}
-                    млн {{ dialogShowInUSD ? '$' : 'UZS' }}
+                    {{ 'COMMON.MILLION' | translate }} {{ dialogShowInUSD ? '$' : 'UZS' }}
                 </td>
                 <td class="text-right">
                     <span [class]="item.debit.diff > 0 ? 'text-green-500' : item.debit.diff < 0 ? 'text-red-500' : ''">
@@ -82,10 +82,10 @@
                                     <td></td>
                                     <td>{{ subItem.name }}</td>
                                     <td class="text-right">{{ convertValue(subItem.debit.yearStartValue) | number: '1.0-1' }}
-                                        млн {{ dialogShowInUSD ? '$' : 'UZS' }}
+                                        {{ 'COMMON.MILLION' | translate }} {{ dialogShowInUSD ? '$' : 'UZS' }}
                                     </td>
                                     <td class="text-right font-semibold">{{ convertValue(subItem.debit.currentValue) | number: '1.0-1' }}
-                                        млн {{ dialogShowInUSD ? '$' : 'UZS' }}
+                                        {{ 'COMMON.MILLION' | translate }} {{ dialogShowInUSD ? '$' : 'UZS' }}
                                     </td>
                                     <td class="text-right">
                                         <span

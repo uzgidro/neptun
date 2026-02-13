@@ -59,10 +59,7 @@ export class GesDashboardComponent implements OnInit, OnDestroy {
                 this.askue = data;
                 this.kpiData.currentPower = data.active ?? 0;
                 this.kpiData.activeAggregates = data.active_agg_count ?? 0;
-                this.kpiData.totalAggregates =
-                    (data.active_agg_count ?? 0) +
-                    (data.pending_agg_count ?? 0) +
-                    (data.repair_agg_count ?? 0);
+                this.kpiData.totalAggregates = (data.active_agg_count ?? 0) + (data.pending_agg_count ?? 0) + (data.repair_agg_count ?? 0);
                 this.lastUpdated = new Date();
             },
             error: () => {

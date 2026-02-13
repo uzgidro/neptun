@@ -135,13 +135,13 @@ export interface GeneratorView {
 
 // Данные АСКУЭ
 export interface ASCUEMetrics {
-    active?: number;            // Активная мощность (МВт)
-    reactive?: number;          // Реактивная мощность (МВАр)
-    power_import?: number;      // Импорт мощности
-    power_export?: number;      // Экспорт мощности
-    own_needs?: number;         // Собственные нужды
-    flow?: number;              // Расход воды (м³/с)
-    active_agg_count?: number;  // Количество работающих агрегатов
+    active?: number; // Активная мощность (МВт)
+    reactive?: number; // Реактивная мощность (МВАр)
+    power_import?: number; // Импорт мощности
+    power_export?: number; // Экспорт мощности
+    own_needs?: number; // Собственные нужды
+    flow?: number; // Расход воды (м³/с)
+    active_agg_count?: number; // Количество работающих агрегатов
     pending_agg_count?: number; // Количество агрегатов в резерве
-    repair_agg_count?: number;  // Количество агрегатов в ремонте
+    repair_agg_count?: number; // Количество агрегатов в ремонте
 }

@@ -14,10 +14,11 @@ import { FileUpload } from 'primeng/fileupload';
 import { LatestFiles } from '@/core/interfaces/latest-files';
 import { Categories } from '@/core/interfaces/categories';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-files',
-    imports: [Button, ButtonDirective, ButtonIcon, ButtonLabel, Dialog, FormsModule, IconField, InputIcon, InputText, ReactiveFormsModule, Select, TableModule, FileUpload, DatePickerComponent],
+    imports: [Button, ButtonDirective, ButtonIcon, ButtonLabel, Dialog, FormsModule, IconField, InputIcon, InputText, ReactiveFormsModule, Select, TableModule, FileUpload, DatePickerComponent, TranslateModule],
     templateUrl: './files.component.html',
     styleUrl: './files.component.scss'
 })
@@ -114,9 +115,7 @@ export class FilesComponent implements OnInit, OnDestroy {
             next: (data) => {
                 this.files = data;
             },
-            error: (err) => {
-                console.log(err);
-            },
+            error: () => {},
             complete: () => {
                 this.loading = false;
             }
@@ -128,9 +127,7 @@ export class FilesComponent implements OnInit, OnDestroy {
             next: (data) => {
                 this.categories = data;
             },
-            error: (err) => {
-                console.log(err);
-            }
+            error: () => {}
         });
     }
 

@@ -11,10 +11,11 @@ import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
 import { Categories } from '@/core/interfaces/categories';
 import { Select } from 'primeng/select';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-categories',
-    imports: [Button, ButtonDirective, ButtonIcon, ButtonLabel, Dialog, IconField, InputIcon, InputText, ReactiveFormsModule, TableModule, Select],
+    imports: [Button, ButtonDirective, ButtonIcon, ButtonLabel, Dialog, IconField, InputIcon, InputText, ReactiveFormsModule, TableModule, Select, TranslateModule],
     templateUrl: './categories.component.html',
     styleUrl: './categories.component.scss'
 })
@@ -92,9 +93,7 @@ export class CategoriesComponent implements OnInit, OnDestroy {
             next: (data) => {
                 this.categories = data;
             },
-            error: (err) => {
-                console.log(err);
-            },
+            error: () => {},
             complete: () => {
                 this.loading = false;
             }

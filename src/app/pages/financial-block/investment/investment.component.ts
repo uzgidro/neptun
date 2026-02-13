@@ -155,6 +155,14 @@ export class InvestmentComponent implements OnInit {
                 detail: `${startFormatted} - ${endFormatted}`,
                 life: 2000
             });
+        } else if (!this.dateRange || this.dateRange.length === 0) {
+            this.applyFilter();
+            this.messageService.add({
+                severity: 'info',
+                summary: this.translate.instant('FINANCIAL_BLOCK.COMMON.CLEAR'),
+                detail: this.translate.instant('FINANCIAL_BLOCK.COMMON.ALL'),
+                life: 2000
+            });
         }
     }
 
@@ -168,6 +176,7 @@ export class InvestmentComponent implements OnInit {
             life: 2000
         });
     }
+
 
     get activePhaseCount(): number {
         return this.filteredInvestments.filter(i => i.status === 'Активная фаза').length;
@@ -319,5 +328,9 @@ export class InvestmentComponent implements OnInit {
     showFiles(investment: InvestmentData) {
         this.selectedInvestmentForFiles = investment;
         this.showFilesDialog = true;
+    }
+
+    isActivePhase(status: Status): boolean {
+        return status === 'Активная фаза';
     }
 }

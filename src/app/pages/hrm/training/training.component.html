@@ -1,0 +1,141 @@
+<div class="card">
+    <div class="font-semibold text-xl mb-4">{{ 'HRM.TRAINING.TITLE' | translate }}</div>
+    <p-table
+        #dt
+        [value]="trainings"
+        dataKey="id"
+        [rows]="10"
+        [loading]="loading"
+        [rowHover]="true"
+        [showGridlines]="true"
+        [paginator]="true"
+        [globalFilterFields]="['title', 'provider', 'training_type']"
+    >
+        <ng-template #caption>
+            <div class="flex justify-between items-center flex-column sm:flex-row">
+                <p-iconfield>
+                    <p-inputicon>
+                        <i class="pi pi-search"></i>
+                    </p-inputicon>
+                    <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" [placeholder]="'COMMON.SEARCH' | translate" />
+                </p-iconfield>
+                <button pButton (click)="openDialog()">
+                    <i class="pi pi-plus" pButtonIcon></i>
+                    <span pButtonLabel>{{ 'HRM.TRAINING.NEW_TRAINING' | translate }}</span>
+                </button>
+            </div>
+        </ng-template>
+        <ng-template #header>
+            <tr>
+                <th pSortableColumn="title" style="min-width: 14rem">{{ 'HRM.TRAINING.NAME' | translate }}</th>
+                <th style="min-width: 10rem">{{ 'HRM.TRAINING.TYPE' | translate }}</th>
+                <th style="min-width: 10rem">{{ 'HRM.TRAINING.PROVIDER' | translate }}</th>
+                <th style="min-width: 10rem">{{ 'HRM.TRAINING.DATES' | translate }}</th>
+                <th style="min-width: 6rem">{{ 'HRM.TRAINING.HOURS' | translate }}</th>
+                <th style="min-width: 8rem">{{ 'HRM.TRAINING.PARTICIPANTS' | translate }}</th>
+                <th style="min-width: 8rem">{{ 'HRM.COMMON.STATUS' | translate }}</th>
+                <th style="width: 10rem">{{ 'HRM.COMMON.ACTIONS' | translate }}</th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-training>
+            <tr>
+                <td>
+                    {{ training.title }}
+                    @if (training.is_online) {
+                        <i class="pi pi-globe ml-2 text-blue-500" [pTooltip]="'HRM.TRAINING.ONLINE' | translate" tooltipPosition="top"></i>
+                    }
+                    @if (training.certificate_provided) {
+                        <i class="pi pi-verified ml-1 text-green-500" [pTooltip]="'HRM.TRAINING.WITH_CERTIFICATE' | translate" tooltipPosition="top"></i>
+                    }
+                </td>
+                <td>{{ getTypeLabel(training.training_type) }}</td>
+                <td>{{ training.provider || '—' }}</td>
+                <td>{{ training.start_date | date:'dd.MM' }} - {{ training.end_date | date:'dd.MM.yyyy' }}</td>
+                <td>{{ training.duration_hours }}</td>
+                <td>{{ training.current_participants || 0 }} / {{ training.max_participants || '∞' }}</td>
+                <td>
+                    <p-tag [value]="getStatusLabel(training.status)" [severity]="getStatusSeverity(training.status)"></p-tag>
+                </td>
+                <td>
+                    <div class="flex justify-center gap-2">
+                        <button pButton
+                                icon="pi pi-pencil"
+                                (click)="openEditDialog(training)"
+                                class="p-button-rounded p-button-text p-button-warning"
+                                [pTooltip]="'COMMON.EDIT' | translate"
+                                tooltipPosition="top">
+                        </button>
+                        <button pButton
+                                icon="pi pi-trash"
+                                (click)="openDeleteDialog(training)"
+                                class="p-button-rounded p-button-text p-button-danger"
+                                [pTooltip]="'COMMON.DELETE' | translate"
+                                tooltipPosition="top">
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template #emptymessage>
+            <tr>
+                <td colspan="8">{{ 'COMMON.NOT_FOUND' | translate }}</td>
+            </tr>
+        </ng-template>
+        <ng-template #loadingbody>
+            <tr>
+                <td colspan="8">{{ 'COMMON.LOADING' | translate }}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+@if (displayDialog) {
+    <app-dialog
+        [(visible)]="displayDialog"
+        [header]="isEditMode ? ('COMMON.EDIT' | translate) : ('HRM.TRAINING.NEW_TRAINING' | translate)"
+        [form]="trainingForm"
+        [saveLabel]="isEditMode ? ('COMMON.UPDATE' | translate) : ('COMMON.CREATE' | translate)"
+        (save)="onSubmit()"
+        (cancel)="closeDialog()">
+        <form class="p-4" [formGroup]="trainingForm" (ngSubmit)="onSubmit()">
+            <app-input-text formControlName="title" [label]="'HRM.TRAINING.NAME' | translate" [submitted]="submitted" [errorMessage]="'VALIDATION.NAME_REQUIRED' | translate" [required]="true"></app-input-text>
+
+            <app-select formControlName="training_type" [label]="'HRM.TRAINING.TYPE' | translate" [items]="trainingTypes" [submitted]="submitted" [errorMessage]="'VALIDATION.TYPE_REQUIRED' | translate" [required]="true"></app-select>
+
+            <app-textarea formControlName="description" [label]="'HRM.COMMON.DESCRIPTION' | translate" [submitted]="submitted" [errorMessage]="'VALIDATION.DESCRIPTION_REQUIRED' | translate" [required]="true"></app-textarea>
+
+            <app-input-text formControlName="provider" [label]="'HRM.TRAINING.PROVIDER' | translate" [submitted]="submitted" [required]="false"></app-input-text>
+
+            <div class="grid grid-cols-2 gap-4">
+                <app-date-picker formControlName="start_date" [label]="'HRM.COMMON.START_DATE' | translate" [submitted]="submitted" [errorMessage]="'VALIDATION.START_DATE_REQUIRED' | translate" [showTime]="false" [required]="true"></app-date-picker>
+                <app-date-picker formControlName="end_date" [label]="'HRM.COMMON.END_DATE' | translate" [submitted]="submitted" [errorMessage]="'VALIDATION.END_DATE_REQUIRED' | translate" [showTime]="false" [required]="true"></app-date-picker>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <app-input-text formControlName="duration_hours" [label]="'HRM.TRAINING.DURATION_HOURS' | translate" type="number" [submitted]="submitted" [errorMessage]="'VALIDATION.HOURS_REQUIRED' | translate" [required]="true"></app-input-text>
+                <app-input-text formControlName="max_participants" [label]="'HRM.TRAINING.MAX_PARTICIPANTS' | translate" type="number" [submitted]="submitted" [required]="false"></app-input-text>
+            </div>
+
+            <app-input-text formControlName="location" [label]="'HRM.TRAINING.LOCATION' | translate" [submitted]="submitted" [required]="false"></app-input-text>
+
+            <app-input-text formControlName="cost" [label]="'HRM.TRAINING.COST' | translate" type="number" [submitted]="submitted" [required]="false"></app-input-text>
+
+            <div class="flex gap-6 mt-4">
+                <div class="flex items-center gap-2">
+                    <p-checkbox formControlName="is_online" [binary]="true" inputId="is_online"></p-checkbox>
+                    <label for="is_online">{{ 'HRM.TRAINING.ONLINE_FORMAT' | translate }}</label>
+                </div>
+                <div class="flex items-center gap-2">
+                    <p-checkbox formControlName="certificate_provided" [binary]="true" inputId="certificate"></p-checkbox>
+                    <label for="certificate">{{ 'HRM.TRAINING.WITH_CERTIFICATE' | translate }}</label>
+                </div>
+            </div>
+        </form>
+    </app-dialog>
+}
+
+<app-delete-confirmation
+    [(visible)]="displayDeleteDialog"
+    [message]="('HRM.TRAINING.DELETE_CONFIRM' | translate) + ' ' + (selectedTraining?.title || '') + '?'"
+    (onConfirm)="confirmDelete()">
+</app-delete-confirmation>

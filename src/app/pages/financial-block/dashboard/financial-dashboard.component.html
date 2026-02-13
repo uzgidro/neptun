@@ -1,17 +1,15 @@
 <div class="financial-dashboard">
-    <!-- Заголовок -->
     <div class="dashboard-header">
         <div class="header-content">
             <h1>{{ 'FINANCIAL_BLOCK.DASHBOARD.TITLE' | translate }}</h1>
-            <p class="subtitle">{{ 'FINANCIAL_BLOCK.DASHBOARD.MODULES' | translate }}</p>
+            <p class="subtitle">{{ 'FINANCIAL_BLOCK.DASHBOARD.SUBTITLE' | translate }}</p>
         </div>
         <div class="last-updated" *ngIf="dashboardData?.lastUpdated">
             <i class="pi pi-clock"></i>
-            <span>{{ dashboardData!.lastUpdated | date:'dd.MM.yyyy HH:mm' }}</span>
+            <span>{{ 'DASHBOARD.LAST_UPDATED' | translate }}: {{ dashboardData!.lastUpdated | date:'dd.MM.yyyy HH:mm' }}</span>
         </div>
     </div>
 
-    <!-- Главные показатели -->
     <div class="summary-cards">
         <div class="summary-card income">
             <div class="card-icon">
@@ -61,10 +59,9 @@
         </div>
     </div>
 
-    <!-- Графики -->
     <div class="charts-section">
         <div class="chart-card">
-            <h3>{{ 'FINANCIAL_BLOCK.DASHBOARD.TOTAL_INCOME' | translate }} vs {{ 'FINANCIAL_BLOCK.DASHBOARD.TOTAL_EXPENSES' | translate }}</h3>
+            <h3>{{ 'FINANCIAL_BLOCK.DASHBOARD.INCOME_VS_EXPENSES' | translate }}</h3>
             <div class="chart-container">
                 <p-chart
                     type="doughnut"
@@ -100,10 +97,9 @@
         </div>
     </div>
 
-    <!-- Карточки модулей -->
     <div class="modules-section">
         <h2>{{ 'FINANCIAL_BLOCK.DASHBOARD.MODULES' | translate }}</h2>
-        <p class="section-subtitle"></p>
+        <p class="section-subtitle">{{ 'FINANCIAL_BLOCK.DASHBOARD.MODULES_HINT' | translate }}</p>
 
         <div class="modules-grid">
             <div
@@ -111,6 +107,7 @@
                 class="module-card"
                 [style.--card-color]="card.color"
                 (click)="navigateToModule(card.route)"
+                [pTooltip]="'FINANCIAL_BLOCK.DASHBOARD.GO_TO_MODULE' | translate"
                 tooltipPosition="top">
 
                 <div class="card-header">
@@ -135,6 +132,7 @@
 
                 <div class="card-footer">
                     <p-button
+                        [label]="'FINANCIAL_BLOCK.DASHBOARD.DETAILS' | translate"
                         icon="pi pi-external-link"
                         [text]="true"
                         size="small"

@@ -51,10 +51,10 @@
                 </td>
                 <td>{{ item.name }}</td>
                 <td class="text-right">{{ convertValue(item.credit.yearStartValue) | number: '1.0-1' }}
-                    млн {{ dialogShowInUSD ? '$' : 'UZS' }}
+                    {{ 'COMMON.MILLION' | translate }} {{ dialogShowInUSD ? '$' : 'UZS' }}
                 </td>
                 <td class="text-right font-semibold">{{ convertValue(item.credit.currentValue) | number: '1.0-1' }}
-                    млн {{ dialogShowInUSD ? '$' : 'UZS' }}
+                    {{ 'COMMON.MILLION' | translate }} {{ dialogShowInUSD ? '$' : 'UZS' }}
                 </td>
                 <td class="text-right">
                     <span
@@ -83,10 +83,10 @@
                                     <td></td>
                                     <td>{{ subItem.name }}</td>
                                     <td class="text-right">{{ convertValue(subItem.credit.yearStartValue) | number: '1.0-1' }}
-                                        млн {{ dialogShowInUSD ? '$' : 'UZS' }}
+                                        {{ 'COMMON.MILLION' | translate }} {{ dialogShowInUSD ? '$' : 'UZS' }}
                                     </td>
                                     <td class="text-right font-semibold">{{ convertValue(subItem.credit.currentValue) | number: '1.0-1' }}
-                                        млн {{ dialogShowInUSD ? '$' : 'UZS' }}
+                                        {{ 'COMMON.MILLION' | translate }} {{ dialogShowInUSD ? '$' : 'UZS' }}
                                     </td>
                                     <td class="text-right">
                                         <span

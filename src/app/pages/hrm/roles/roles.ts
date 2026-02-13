@@ -10,10 +10,11 @@ import { Dialog } from 'primeng/dialog';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-roles',
-    imports: [TableModule, ButtonDirective, ButtonIcon, ButtonLabel, IconField, InputIcon, InputText, Button, Dialog, ReactiveFormsModule],
+    imports: [TableModule, ButtonDirective, ButtonIcon, ButtonLabel, IconField, InputIcon, InputText, Button, Dialog, ReactiveFormsModule, TranslateModule],
     templateUrl: './roles.html',
     styleUrl: './roles.scss'
 })
@@ -27,6 +28,7 @@ export class Role implements OnInit, OnDestroy {
     private apiService = inject(ApiService);
     private fb = inject(FormBuilder);
     private messageService = inject(MessageService);
+    private translate = inject(TranslateService);
     private destroy$ = new Subject<void>();
 
     constructor() {
@@ -69,12 +71,12 @@ export class Role implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
-                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Роль успешно создана' });
+                    this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('HRM.ROLES.SUCCESS_CREATED') });
                     this.loadRoles();
                     this.closeDialog();
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось создать роль' });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('HRM.ROLES.ERROR_CREATE') });
                     console.error(err);
                 }
             });
@@ -85,9 +87,7 @@ export class Role implements OnInit, OnDestroy {
             next: (data) => {
                 this.roles = data;
             },
-            error: (err) => {
-                console.log(err);
-            },
+            error: () => {},
             complete: () => {
                 this.loading = false;
             }

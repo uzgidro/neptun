@@ -144,12 +144,7 @@ export class DocumentViewerComponent implements OnInit, AfterViewInit, OnDestroy
             .then(() => {
                 return this.viewSDKService.previewFileFromURL(url, fileName);
             })
-            .then(() => {
-                console.log('PDF rendered successfully:', fileName);
-            })
-            .catch((error) => {
-                console.error('Error rendering PDF:', error);
-            });
+            .catch(() => {});
     }
 
     private renderPDF(url: string, fileName: string) {
@@ -159,12 +154,7 @@ export class DocumentViewerComponent implements OnInit, AfterViewInit, OnDestroy
 
         this.viewSDKService
             .previewFileFromURL(url, fileName)
-            .then(() => {
-                console.log('PDF rendered successfully:', fileName);
-            })
-            .catch((error) => {
-                console.error('Error rendering PDF:', error);
-            });
+            .catch(() => {});
     }
 
     onTabChange(index: number | string | undefined) {

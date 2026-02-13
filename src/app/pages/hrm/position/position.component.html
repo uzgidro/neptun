@@ -1,5 +1,5 @@
 <div class="card">
-    <div class="font-semibold text-xl mb-4">Должности</div>
+    <div class="font-semibold text-xl mb-4">{{ 'HRM.POSITIONS.TITLE' | translate }}</div>
     <p-table
         #pt
         [value]="positions"
@@ -17,19 +17,19 @@
                     <p-inputicon>
                         <i class="pi pi-search"></i>
                     </p-inputicon>
-                    <input pInputText type="text" (input)="onGlobalFilter(pt, $event)" placeholder="Поиск" />
+                    <input pInputText type="text" (input)="onGlobalFilter(pt, $event)" [placeholder]="'COMMON.SEARCH' | translate" />
                 </p-iconfield>
                 <button pButton (click)="openDialog()">
                     <i class="pi pi-plus" pButtonIcon></i>
-                    <span pButtonLabel>Новая должность</span>
+                    <span pButtonLabel>{{ 'HRM.POSITIONS.NEW_POSITION' | translate }}</span>
                 </button>
             </div>
         </ng-template>
         <ng-template #header>
             <tr>
-                <th style="min-width: 12rem">Название</th>
-                <th style="min-width: 15rem">Описание</th>
-                <th style="width: 10rem">Действия</th>
+                <th style="min-width: 12rem">{{ 'HRM.POSITIONS.NAME' | translate }}</th>
+                <th style="min-width: 15rem">{{ 'HRM.POSITIONS.DESCRIPTION' | translate }}</th>
+                <th style="width: 10rem">{{ 'COMMON.ACTIONS' | translate }}</th>
             </tr>
         </ng-template>
         <ng-template #body let-position>
@@ -46,14 +46,14 @@
                                 icon="pi pi-pencil"
                                 (click)="openEditDialog(position)"
                                 class="p-button-rounded p-button-text p-button-warning"
-                                pTooltip="Редактировать"
+                                [pTooltip]="'COMMON.EDIT' | translate"
                                 tooltipPosition="top">
                         </button>
                         <button pButton
                                 icon="pi pi-trash"
                                 (click)="openDeleteDialog(position)"
                                 class="p-button-rounded p-button-text p-button-danger"
-                                pTooltip="Удалить"
+                                [pTooltip]="'COMMON.DELETE' | translate"
                                 tooltipPosition="top">
                         </button>
                     </div>
@@ -62,12 +62,12 @@
         </ng-template>
         <ng-template #emptymessage>
             <tr>
-                <td colspan="3">Ничего не найдено</td>
+                <td colspan="3">{{ 'HRM.POSITIONS.NOTHING_FOUND' | translate }}</td>
             </tr>
         </ng-template>
         <ng-template #loadingbody>
             <tr>
-                <td colspan="3">Идет загрузка. Ожидайте...</td>
+                <td colspan="3">{{ 'HRM.POSITIONS.LOADING' | translate }}</td>
             </tr>
         </ng-template>
     </p-table>
@@ -75,23 +75,23 @@
 
 <app-dialog
     [(visible)]="displayDialog"
-    [header]="isEditMode ? 'Редактировать должность' : 'Новая должность'"
+    [header]="isEditMode ? ('HRM.POSITIONS.EDIT_POSITION' | translate) : ('HRM.POSITIONS.NEW_POSITION' | translate)"
     [form]="positionForm"
-    [saveLabel]="isEditMode ? 'Обновить' : 'Сохранить'"
+    [saveLabel]="isEditMode ? ('COMMON.UPDATE' | translate) : ('COMMON.SAVE' | translate)"
     (save)="onSubmit()"
     (cancel)="closeDialog()">
     <form class="p-4" [formGroup]="positionForm" (ngSubmit)="onSubmit()">
         <app-input-text
             formControlName="name"
-            label="Название"
+            [label]="'HRM.POSITIONS.NAME' | translate"
             [submitted]="submitted"
-            errorMessage="Название обязательно"
+            [errorMessage]="'HRM.POSITIONS.NAME_REQUIRED' | translate"
             [required]="true">
         </app-input-text>
 
         <app-input-text
             formControlName="description"
-            label="Описание"
+            [label]="'HRM.POSITIONS.DESCRIPTION' | translate"
             [submitted]="submitted"
             [required]="false">
         </app-input-text>
@@ -100,6 +100,6 @@
 
 <app-delete-confirmation
     [(visible)]="displayDeleteDialog"
-    [message]="'Вы уверены, что хотите удалить должность ' + (selectedPosition?.name || '') + '?'"
+    [message]="('HRM.POSITIONS.DELETE_CONFIRM' | translate) + ' ' + (selectedPosition?.name || '') + '?'"
     (onConfirm)="confirmDelete()">
 </app-delete-confirmation>

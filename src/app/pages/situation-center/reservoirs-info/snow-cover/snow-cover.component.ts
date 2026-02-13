@@ -156,7 +156,7 @@ export class SnowCoverComponent implements OnInit, OnDestroy {
     private updateZonesChart(): void {
         if (!this.data) return;
 
-        const itemsWithZones = this.data.today.items.filter(i => i.zones && i.zones.length > 0);
+        const itemsWithZones = this.data.today.items.filter((i) => i.zones && i.zones.length > 0);
         if (itemsWithZones.length === 0) {
             this.zonesChartData = {};
             return;
@@ -176,17 +176,13 @@ export class SnowCoverComponent implements OnInit, OnDestroy {
         }
 
         rangeKeys.sort((a, b) => a.min - b.min);
-        const labels = rangeKeys.map(r => r.key);
+        const labels = rangeKeys.map((r) => r.key);
 
-        const colors = [
-            '#3B82F6', '#EF4444', '#22C55E', '#F59E0B', '#8B5CF6',
-            '#EC4899', '#06B6D4', '#84CC16', '#F97316', '#6366F1',
-            '#14B8A6', '#E11D48', '#0EA5E9', '#A855F7', '#10B981'
-        ];
+        const colors = ['#3B82F6', '#EF4444', '#22C55E', '#F59E0B', '#8B5CF6', '#EC4899', '#06B6D4', '#84CC16', '#F97316', '#6366F1', '#14B8A6', '#E11D48', '#0EA5E9', '#A855F7', '#10B981'];
 
         const datasets = itemsWithZones.map((item, idx) => {
-            const data = labels.map(label => {
-                const zone = item.zones!.find(z => `${z.min_elev}–${z.max_elev}` === label);
+            const data = labels.map((label) => {
+                const zone = item.zones!.find((z) => `${z.min_elev}–${z.max_elev}` === label);
                 return zone?.sca_pct ?? null;
             });
             const color = colors[idx % colors.length];

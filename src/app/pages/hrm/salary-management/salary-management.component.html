@@ -1,0 +1,478 @@
+<!-- Period Selection & Summary -->
+<div class="grid grid-cols-1 lg:grid-cols-6 gap-4 mb-4">
+    <!-- Period Selection -->
+    <p-card styleClass="shadow-sm lg:col-span-2">
+        <div class="flex items-center gap-4">
+            <div>
+                <label class="block text-sm text-gray-500 mb-1">{{ 'HRM.SALARY.MONTH' | translate }}</label>
+                <select class="p-2 border rounded" [(ngModel)]="selectedMonth" (change)="onPeriodChange()">
+                    @for (month of months; track month.id) {
+                        <option [value]="month.id">{{ month.name }}</option>
+                    }
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm text-gray-500 mb-1">{{ 'HRM.SALARY.YEAR' | translate }}</label>
+                <select class="p-2 border rounded" [(ngModel)]="selectedYear" (change)="onPeriodChange()">
+                    @for (year of years; track year.id) {
+                        <option [value]="year.id">{{ year.name }}</option>
+                    }
+                </select>
+            </div>
+            <div class="ml-auto">
+                <button pButton (click)="calculateAllSalaries()" [disabled]="calculating" class="p-button-primary">
+                    <i class="pi pi-calculator mr-2"></i>
+                    {{ 'HRM.SALARY.CALCULATE' | translate }}
+                </button>
+            </div>
+        </div>
+    </p-card>
+
+    <!-- Summary Cards -->
+    <p-card styleClass="shadow-sm">
+        <div class="flex flex-col items-center">
+            <span class="text-xs text-gray-500">{{ 'HRM.SALARY.ACCRUED' | translate }}</span>
+            <span class="text-lg font-bold text-blue-600">{{ formatCurrency(totalGross) }}</span>
+        </div>
+    </p-card>
+    <p-card styleClass="shadow-sm">
+        <div class="flex flex-col items-center">
+            <span class="text-xs text-gray-500">{{ 'HRM.SALARY.TAXES' | translate }}</span>
+            <span class="text-lg font-bold text-red-600">{{ formatCurrency(totalTaxes) }}</span>
+        </div>
+    </p-card>
+    <p-card styleClass="shadow-sm">
+        <div class="flex flex-col items-center">
+            <span class="text-xs text-gray-500">{{ 'HRM.SALARY.NET_SALARY' | translate }}</span>
+            <span class="text-lg font-bold text-green-600">{{ formatCurrency(totalNet) }}</span>
+        </div>
+    </p-card>
+    <p-card styleClass="shadow-sm">
+        <div class="flex flex-col items-center">
+            <span class="text-xs text-gray-500">{{ 'HRM.SALARY.EMPLOYEES' | translate }}</span>
+            <span class="text-lg font-bold">{{ salaries.length }}</span>
+        </div>
+    </p-card>
+</div>
+
+<!-- Status Summary -->
+@if (salaries.length > 0) {
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+        <div class="bg-surface-100 dark:bg-surface-700 rounded-lg p-3 text-center">
+            <span class="text-2xl font-bold">{{ calculatedCount }}</span>
+            <span class="text-sm text-gray-600 block">{{ 'HRM.SALARY.CALCULATED' | translate }}</span>
+        </div>
+        <div class="bg-orange-100 rounded-lg p-3 text-center">
+            <span class="text-2xl font-bold text-orange-600">{{ pendingApprovalCount }}</span>
+            <span class="text-sm text-gray-600 block">{{ 'HRM.SALARY.PENDING_APPROVAL' | translate }}</span>
+        </div>
+        <div class="bg-blue-100 rounded-lg p-3 text-center">
+            <span class="text-2xl font-bold text-blue-600">{{ approvedCount }}</span>
+            <span class="text-sm text-gray-600 block">{{ 'HRM.SALARY.APPROVED' | translate }}</span>
+        </div>
+        <div class="bg-green-100 rounded-lg p-3 text-center">
+            <span class="text-2xl font-bold text-green-600">{{ paidCount }}</span>
+            <span class="text-sm text-gray-600 block">{{ 'HRM.SALARY.PAID' | translate }}</span>
+        </div>
+    </div>
+}
+
+<!-- Main Table -->
+<div class="card">
+    <div class="flex justify-between items-center mb-4">
+        <div class="font-semibold text-xl">{{ 'HRM.SALARY.TITLE' | translate }} - {{ getMonthLabel(selectedMonth) }} {{ selectedYear }}</div>
+        <div class="flex gap-2">
+            @if (calculatedCount > 0) {
+                <button pButton (click)="submitAllForApproval()" class="p-button-outlined p-button-info">
+                    <i class="pi pi-send mr-2"></i>
+                    {{ 'HRM.SALARY.SUBMIT_ALL_APPROVAL' | translate }}
+                </button>
+            }
+            @if (pendingApprovalCount > 0) {
+                <button pButton (click)="approveAll()" class="p-button-outlined p-button-success">
+                    <i class="pi pi-check-circle mr-2"></i>
+                    {{ 'HRM.SALARY.APPROVE_ALL' | translate }}
+                </button>
+            }
+            @if (approvedCount > 0) {
+                <button pButton (click)="markAllAsPaid()" class="p-button-outlined p-button-primary">
+                    <i class="pi pi-money-bill mr-2"></i>
+                    {{ 'HRM.SALARY.MARK_PAID' | translate }}
+                </button>
+            }
+        </div>
+    </div>
+
+    <p-table
+        #dt
+        [value]="salaries"
+        dataKey="id"
+        [rows]="10"
+        [loading]="loading"
+        [rowHover]="true"
+        [showGridlines]="true"
+        [paginator]="true"
+        [globalFilterFields]="['employee_name', 'department_name', 'position_name']"
+    >
+        <ng-template #caption>
+            <div class="flex justify-between items-center flex-column sm:flex-row">
+                <p-iconfield>
+                    <p-inputicon>
+                        <i class="pi pi-search"></i>
+                    </p-inputicon>
+                    <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" [placeholder]="'COMMON.SEARCH' | translate" />
+                </p-iconfield>
+                <div class="flex gap-2">
+                    <button pButton (click)="generatePayrollReport()" class="p-button-outlined p-button-secondary" [pTooltip]="'HRM.SALARY.PAYROLL_REPORT' | translate">
+                        <i class="pi pi-file-excel"></i>
+                    </button>
+                    <button pButton (click)="generateTaxReport()" class="p-button-outlined p-button-secondary" [pTooltip]="'HRM.SALARY.TAX_REPORT' | translate">
+                        <i class="pi pi-file-pdf"></i>
+                    </button>
+                    <button pButton (click)="generateSocialFundReport()" class="p-button-outlined p-button-secondary" [pTooltip]="'HRM.SALARY.SOCIAL_FUND_REPORT' | translate">
+                        <i class="pi pi-file"></i>
+                    </button>
+                </div>
+            </div>
+        </ng-template>
+        <ng-template #header>
+            <tr>
+                <th style="min-width: 12rem">{{ 'HRM.SALARY.EMPLOYEE' | translate }}</th>
+                <th style="min-width: 8rem">{{ 'HRM.SALARY.DEPARTMENT' | translate }}</th>
+                <th style="min-width: 8rem" class="text-right">{{ 'HRM.SALARY.BASE_SALARY' | translate }}</th>
+                <th style="min-width: 6rem" class="text-right">{{ 'HRM.SALARY.ALLOWANCES' | translate }}</th>
+                <th style="min-width: 6rem" class="text-right">{{ 'HRM.SALARY.BONUSES' | translate }}</th>
+                <th style="min-width: 8rem" class="text-right">{{ 'HRM.SALARY.ACCRUED' | translate }}</th>
+                <th style="min-width: 6rem" class="text-right">{{ 'HRM.SALARY.TAXES' | translate }}</th>
+                <th style="min-width: 8rem" class="text-right">{{ 'HRM.SALARY.NET_SALARY' | translate }}</th>
+                <th style="min-width: 6rem">{{ 'COMMON.STATUS' | translate }}</th>
+                <th style="width: 10rem">{{ 'COMMON.ACTIONS' | translate }}</th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-salary>
+            <tr>
+                <td>
+                    <div>
+                        <div class="font-semibold">{{ salary.employee_name }}</div>
+                        <div class="text-xs text-gray-500">{{ salary.position_name }}</div>
+                    </div>
+                </td>
+                <td>{{ salary.department_name }}</td>
+                <td class="text-right">{{ formatCurrency(salary.base_salary) }}</td>
+                <td class="text-right text-blue-600">{{ formatCurrency(salary.rank_allowance + salary.education_allowance + salary.seniority_allowance) }}</td>
+                <td class="text-right text-green-600">{{ formatCurrency(salary.bonuses) }}</td>
+                <td class="text-right font-semibold">{{ formatCurrency(salary.gross_salary) }}</td>
+                <td class="text-right text-red-600">{{ formatCurrency(salary.total_deductions) }}</td>
+                <td class="text-right font-bold text-green-700">{{ formatCurrency(salary.net_salary) }}</td>
+                <td>
+                    <p-tag [value]="getStatusLabel(salary.status)" [severity]="getStatusSeverity(salary.status)"></p-tag>
+                </td>
+                <td>
+                    <div class="flex justify-center gap-1">
+                        <button pButton
+                                icon="pi pi-eye"
+                                (click)="openDetailDialog(salary)"
+                                class="p-button-rounded p-button-text p-button-info"
+                                [pTooltip]="'HRM.SALARY.DETAILS' | translate"
+                                tooltipPosition="top">
+                        </button>
+                        @if (salary.status === 'calculated') {
+                            <button pButton
+                                    icon="pi pi-send"
+                                    (click)="submitForApproval(salary)"
+                                    class="p-button-rounded p-button-text p-button-primary"
+                                    [pTooltip]="'HRM.SALARY.SUBMIT_APPROVAL' | translate"
+                                    tooltipPosition="top">
+                            </button>
+                        }
+                        @if (salary.status === 'pending_approval') {
+                            <button pButton
+                                    icon="pi pi-check"
+                                    (click)="openApprovalDialog(salary)"
+                                    class="p-button-rounded p-button-text p-button-success"
+                                    [pTooltip]="'COMMON.APPROVE' | translate"
+                                    tooltipPosition="top">
+                            </button>
+                            <button pButton
+                                    icon="pi pi-times"
+                                    (click)="openRejectionDialog(salary)"
+                                    class="p-button-rounded p-button-text p-button-danger"
+                                    [pTooltip]="'COMMON.REJECT' | translate"
+                                    tooltipPosition="top">
+                            </button>
+                        }
+                        @if (salary.status === 'approved') {
+                            <button pButton
+                                    icon="pi pi-money-bill"
+                                    (click)="markAsPaid(salary)"
+                                    class="p-button-rounded p-button-text p-button-success"
+                                    [pTooltip]="'HRM.SALARY.MARK_PAID' | translate"
+                                    tooltipPosition="top">
+                            </button>
+                        }
+                        <button pButton
+                                icon="pi pi-file-pdf"
+                                (click)="generatePayslip(salary)"
+                                class="p-button-rounded p-button-text p-button-secondary"
+                                [pTooltip]="'HRM.SALARY.PAYSLIP' | translate"
+                                tooltipPosition="top">
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template #emptymessage>
+            <tr>
+                <td colspan="10" class="text-center py-8">
+                    <div class="flex flex-col items-center gap-2">
+                        <i class="pi pi-calculator text-4xl text-gray-400"></i>
+                        <span class="text-gray-500">{{ 'HRM.SALARY.CLICK_CALCULATE' | translate }}</span>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template #loadingbody>
+            <tr>
+                <td colspan="10">{{ 'COMMON.LOADING' | translate }}...</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<!-- Batch Calculation Dialog -->
+<p-dialog [(visible)]="displayBatchDialog" [header]="'HRM.SALARY.SALARY_CALCULATION' | translate" [modal]="true" [style]="{ width: '500px' }" [closable]="!calculating">
+    <div class="p-4">
+        @if (calculating) {
+            <div class="text-center mb-4">
+                <i class="pi pi-spin pi-cog text-4xl text-blue-500 mb-3"></i>
+                <p class="text-lg font-semibold">{{ 'HRM.SALARY.CALCULATING' | translate }}</p>
+                <p class="text-gray-500">{{ getMonthLabel(selectedMonth) }} {{ selectedYear }}</p>
+            </div>
+            <p-progressBar [value]="calculationProgress" [showValue]="true"></p-progressBar>
+        } @else if (lastBatchResult) {
+            <div class="text-center mb-4">
+                <i class="pi pi-check-circle text-4xl text-green-500 mb-3"></i>
+                <p class="text-lg font-semibold">{{ 'HRM.SALARY.CALCULATION_COMPLETE' | translate }}</p>
+            </div>
+            <div class="bg-surface-100 dark:bg-surface-700 rounded-lg p-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-green-600">{{ lastBatchResult.successful }}</div>
+                        <div class="text-sm text-gray-500">{{ 'HRM.SALARY.SUCCESSFUL' | translate }}</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-red-600">{{ lastBatchResult.failed }}</div>
+                        <div class="text-sm text-gray-500">{{ 'HRM.SALARY.ERRORS' | translate }}</div>
+                    </div>
+                </div>
+                <hr class="my-4">
+                <div class="space-y-2">
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">{{ 'HRM.SALARY.TOTAL_ACCRUED' | translate }}:</span>
+                        <span class="font-semibold">{{ formatCurrency(lastBatchResult.total_gross) }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">{{ 'HRM.SALARY.TOTAL_TAXES' | translate }}:</span>
+                        <span class="font-semibold text-red-600">{{ formatCurrency(lastBatchResult.total_taxes) }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">{{ 'HRM.SALARY.TOTAL_NET' | translate }}:</span>
+                        <span class="font-bold text-green-600">{{ formatCurrency(lastBatchResult.total_net) }}</span>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="flex justify-end p-4 border-t">
+        <button pButton [label]="'COMMON.CLOSE' | translate" (click)="displayBatchDialog = false" [disabled]="calculating"></button>
+    </div>
+</p-dialog>
+
+<!-- Salary Detail Dialog -->
+<p-dialog [(visible)]="displayDetailDialog" [header]="'HRM.SALARY.SALARY_DETAILS' | translate" [modal]="true" [style]="{ width: '700px' }">
+    @if (selectedSalary) {
+        <div class="p-4">
+            <!-- Employee Info -->
+            <div class="bg-blue-50 rounded-lg p-4 mb-4">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h3 class="font-bold text-lg">{{ selectedSalary.employee_name }}</h3>
+                        <p class="text-gray-600">{{ selectedSalary.position_name }} - {{ selectedSalary.department_name }}</p>
+                    </div>
+                    <p-tag [value]="getStatusLabel(selectedSalary.status)" [severity]="getStatusSeverity(selectedSalary.status)"></p-tag>
+                </div>
+                <p class="text-sm text-gray-500 mt-2">{{ 'HRM.SALARY.PERIOD' | translate }}: {{ getMonthLabel(selectedSalary.period_month) }} {{ selectedSalary.period_year }}</p>
+            </div>
+
+            <!-- Work Time -->
+            <div class="mb-4">
+                <h4 class="font-semibold mb-2 text-gray-700">{{ 'HRM.SALARY.WORKED_TIME' | translate }}</h4>
+                <div class="grid grid-cols-3 gap-4 bg-surface-100 dark:bg-surface-700 rounded-lg p-3">
+                    <div class="text-center">
+                        <div class="text-lg font-bold">{{ selectedSalary.worked_days }} / {{ selectedSalary.working_days }}</div>
+                        <div class="text-xs text-gray-500">{{ 'HRM.SALARY.WORK_DAYS' | translate }}</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-lg font-bold text-blue-600">{{ selectedSalary.overtime_hours }}</div>
+                        <div class="text-xs text-gray-500">{{ 'HRM.SALARY.OVERTIME_HOURS' | translate }}</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-lg font-bold text-red-600">{{ selectedSalary.absent_days }}</div>
+                        <div class="text-xs text-gray-500">{{ 'HRM.SALARY.ABSENT_DAYS' | translate }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Accruals -->
+            <div class="mb-4">
+                <h4 class="font-semibold mb-2 text-gray-700">{{ 'HRM.SALARY.ACCRUALS' | translate }}</h4>
+                <div class="space-y-2">
+                    <div class="flex justify-between py-1 border-b">
+                        <span>{{ 'HRM.SALARY.BASE_SALARY' | translate }}</span>
+                        <span class="font-semibold">{{ formatCurrency(selectedSalary.base_salary) }}</span>
+                    </div>
+                    <div class="flex justify-between py-1 border-b">
+                        <span>{{ 'HRM.SALARY.RANK_ALLOWANCE' | translate }}</span>
+                        <span class="text-blue-600">{{ formatCurrency(selectedSalary.rank_allowance) }}</span>
+                    </div>
+                    <div class="flex justify-between py-1 border-b">
+                        <span>{{ 'HRM.SALARY.EDUCATION_ALLOWANCE' | translate }}</span>
+                        <span class="text-blue-600">{{ formatCurrency(selectedSalary.education_allowance) }}</span>
+                    </div>
+                    <div class="flex justify-between py-1 border-b">
+                        <span>{{ 'HRM.SALARY.SENIORITY_ALLOWANCE' | translate }}</span>
+                        <span class="text-blue-600">{{ formatCurrency(selectedSalary.seniority_allowance) }}</span>
+                    </div>
+                    @if (selectedSalary.bonuses > 0) {
+                        <div class="flex justify-between py-1 border-b">
+                            <span>{{ 'HRM.SALARY.BONUSES' | translate }}</span>
+                            <span class="text-green-600">{{ formatCurrency(selectedSalary.bonuses) }}</span>
+                        </div>
+                    }
+                    @if (selectedSalary.overtime_pay > 0) {
+                        <div class="flex justify-between py-1 border-b">
+                            <span>{{ 'HRM.SALARY.OVERTIME_PAY' | translate }}</span>
+                            <span class="text-green-600">{{ formatCurrency(selectedSalary.overtime_pay) }}</span>
+                        </div>
+                    }
+                    @if (selectedSalary.absence_deduction > 0) {
+                        <div class="flex justify-between py-1 border-b">
+                            <span>{{ 'HRM.SALARY.ABSENCE_DEDUCTION' | translate }}</span>
+                            <span class="text-red-600">-{{ formatCurrency(selectedSalary.absence_deduction) }}</span>
+                        </div>
+                    }
+                    <div class="flex justify-between py-2 bg-blue-50 px-2 rounded font-bold">
+                        <span>{{ 'HRM.SALARY.TOTAL_ACCRUED' | translate }}</span>
+                        <span>{{ formatCurrency(selectedSalary.gross_salary) }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Deductions -->
+            <div class="mb-4">
+                <h4 class="font-semibold mb-2 text-gray-700">{{ 'HRM.SALARY.DEDUCTIONS' | translate }}</h4>
+                <div class="space-y-2">
+                    <div class="flex justify-between py-1 border-b">
+                        <span>{{ 'HRM.SALARY.INCOME_TAX' | translate }} (10%)</span>
+                        <span class="text-red-600">{{ formatCurrency(selectedSalary.income_tax) }}</span>
+                    </div>
+                    <div class="flex justify-between py-1 border-b">
+                        <span>{{ 'HRM.SALARY.SOCIAL_FUND' | translate }} (0.5%)</span>
+                        <span class="text-red-600">{{ formatCurrency(selectedSalary.social_fund) }}</span>
+                    </div>
+                    <div class="flex justify-between py-1 border-b">
+                        <span>{{ 'HRM.SALARY.PENSION_FUND' | translate }} (3%)</span>
+                        <span class="text-red-600">{{ formatCurrency(selectedSalary.pension_fund) }}</span>
+                    </div>
+                    <div class="flex justify-between py-1 border-b">
+                        <span>{{ 'HRM.SALARY.HEALTH_INSURANCE' | translate }} (2%)</span>
+                        <span class="text-red-600">{{ formatCurrency(selectedSalary.health_insurance) }}</span>
+                    </div>
+                    <div class="flex justify-between py-1 border-b">
+                        <span>{{ 'HRM.SALARY.TRADE_UNION' | translate }} (1%)</span>
+                        <span class="text-red-600">{{ formatCurrency(selectedSalary.trade_union) }}</span>
+                    </div>
+                    @if (selectedSalary.other_deductions > 0) {
+                        <div class="flex justify-between py-1 border-b">
+                            <span>{{ 'HRM.SALARY.OTHER_DEDUCTIONS' | translate }}</span>
+                            <span class="text-red-600">{{ formatCurrency(selectedSalary.other_deductions) }}</span>
+                        </div>
+                    }
+                    <div class="flex justify-between py-2 bg-red-50 px-2 rounded font-bold">
+                        <span>{{ 'HRM.SALARY.TOTAL_DEDUCTED' | translate }}</span>
+                        <span class="text-red-600">{{ formatCurrency(selectedSalary.total_deductions) }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Net Salary -->
+            <div class="bg-green-100 rounded-lg p-4 text-center">
+                <div class="text-sm text-gray-600">{{ 'HRM.SALARY.NET_SALARY' | translate }}</div>
+                <div class="text-3xl font-bold text-green-700">{{ formatCurrency(selectedSalary.net_salary) }}</div>
+            </div>
+        </div>
+        <div class="flex justify-end gap-2 p-4 border-t">
+            <button pButton [label]="'HRM.SALARY.PAYSLIP' | translate" icon="pi pi-file-pdf" class="p-button-outlined" (click)="generatePayslip(selectedSalary)"></button>
+            <button pButton [label]="'COMMON.CLOSE' | translate" (click)="displayDetailDialog = false"></button>
+        </div>
+    }
+</p-dialog>
+
+<!-- Approval Dialog -->
+<p-dialog [(visible)]="displayApprovalDialog" [header]="'HRM.SALARY.SALARY_APPROVAL' | translate" [modal]="true" [style]="{ width: '450px' }">
+    @if (selectedSalary) {
+        <div class="p-4">
+            <p class="mb-4">{{ 'HRM.SALARY.APPROVE_CONFIRM' | translate }}</p>
+            <div class="bg-surface-100 dark:bg-surface-700 p-4 rounded-lg">
+                <div class="font-semibold">{{ selectedSalary.employee_name }}</div>
+                <div class="text-gray-600">{{ selectedSalary.position_name }}</div>
+                <div class="mt-2 text-lg font-bold text-green-600">{{ formatCurrency(selectedSalary.net_salary) }}</div>
+            </div>
+            <div class="mt-4 p-3 bg-blue-50 rounded border border-blue-200">
+                <div class="flex items-center gap-2 text-blue-700 text-sm">
+                    <i class="pi pi-info-circle"></i>
+                    <span>{{ 'HRM.SALARY.APPROVE_INFO' | translate }}</span>
+                </div>
+            </div>
+        </div>
+        <div class="flex justify-end gap-2 p-4 border-t">
+            <button pButton [label]="'COMMON.CANCEL' | translate" class="p-button-text" (click)="displayApprovalDialog = false"></button>
+            <button pButton [label]="'COMMON.APPROVE' | translate" icon="pi pi-check" class="p-button-success" (click)="confirmApproval()"></button>
+        </div>
+    }
+</p-dialog>
+
+<!-- Rejection Dialog -->
+<p-dialog [(visible)]="displayRejectionDialog" [header]="'HRM.SALARY.SALARY_REJECTION' | translate" [modal]="true" [style]="{ width: '500px' }">
+    @if (selectedSalary) {
+        <div class="p-4">
+            <p class="mb-4">{{ 'HRM.SALARY.REJECTION_REASON_PROMPT' | translate }}</p>
+            <div class="bg-surface-100 dark:bg-surface-700 p-4 rounded-lg mb-4">
+                <div class="font-semibold">{{ selectedSalary.employee_name }}</div>
+                <div class="text-gray-600">{{ formatCurrency(selectedSalary.net_salary) }}</div>
+            </div>
+            <form [formGroup]="rejectionForm">
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">{{ 'HRM.SALARY.REJECTION_REASON' | translate }} *</label>
+                    <textarea
+                        pInputText
+                        formControlName="rejection_reason"
+                        rows="3"
+                        class="w-full p-3 border rounded-lg"
+                        [placeholder]="'HRM.SALARY.SPECIFY_REASON' | translate"></textarea>
+                </div>
+            </form>
+        </div>
+        <div class="flex justify-end gap-2 p-4 border-t">
+            <button pButton [label]="'COMMON.CANCEL' | translate" class="p-button-text" (click)="displayRejectionDialog = false"></button>
+            <button pButton [label]="'COMMON.REJECT' | translate" icon="pi pi-times" class="p-button-danger" (click)="confirmRejection()" [disabled]="rejectionForm.invalid"></button>
+        </div>
+    }
+</p-dialog>
+
+<!-- Delete Confirmation -->
+<app-delete-confirmation
+    [(visible)]="displayDeleteDialog"
+    [message]="'HRM.SALARY.DELETE_CONFIRM' | translate"
+    (onConfirm)="confirmDelete()">
+</app-delete-confirmation>

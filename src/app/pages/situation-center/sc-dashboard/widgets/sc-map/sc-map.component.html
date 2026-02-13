@@ -58,15 +58,17 @@
                                                 <span class="ges-power">{{ ges.ascue_metrics?.active || 0 | number:'1.1-1' }} МВт</span>
                                             </div>
                                             <div class="ges-aggregates">
-                                                <span class="agg working" title="Рабочие">
+                                                <span class="agg working" [title]="'SITUATION_CENTER.DASHBOARD.MAP.WORKING' | translate">
                                                     <i class="pi pi-bolt"></i>
                                                     {{ ges.ascue_metrics?.active_agg_count || 0 }}
                                                 </span>
-                                                <span class="agg reserve" title="В резерве">
+                                                <span class="agg reserve"
+                                                      [title]="'SITUATION_CENTER.DASHBOARD.MAP.RESERVE' | translate">
                                                     <i class="pi pi-pause-circle"></i>
                                                     {{ ges.ascue_metrics?.pending_agg_count || 0 }}
                                                 </span>
-                                                <span class="agg repair" title="На ремонте">
+                                                <span class="agg repair"
+                                                      [title]="'SITUATION_CENTER.DASHBOARD.MAP.IN_REPAIR' | translate">
                                                     <i class="pi pi-wrench"></i>
                                                     {{ ges.ascue_metrics?.repair_agg_count || 0 }}
                                                 </span>

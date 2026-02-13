@@ -404,8 +404,6 @@ export class EventsComponent implements OnInit, OnDestroy {
 
         const formData = this.buildFormData();
 
-        console.log(formData);
-
         this.eventService
             .updateEvent(this.selectedEvent.id, formData)
             .pipe(takeUntil(this.destroy$))

@@ -9,10 +9,10 @@ import { TooltipModule } from 'primeng/tooltip';
 import { DividerModule } from 'primeng/divider';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { Subscription } from 'rxjs';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { FinancialDashboardService } from './services/financial-dashboard.service';
 import { FinancialDashboardData, ModuleCard, MetricItem } from './models/financial-summary.model';
-import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-financial-dashboard',
