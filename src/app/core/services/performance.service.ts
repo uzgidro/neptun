@@ -3,8 +3,8 @@ import { ApiService, BASE_URL } from '@/core/services/api.service';
 import { Observable } from 'rxjs';
 import { PerformanceGoal, GoalPayload, PerformanceReview, PerformanceReviewPayload } from '@/core/interfaces/hrm/performance';
 
-const GOALS = '/performance-goals';
-const REVIEWS = '/performance-reviews';
+const GOALS = '/hrm/performance/goals';
+const REVIEWS = '/hrm/performance/reviews';
 
 @Injectable({
     providedIn: 'root'

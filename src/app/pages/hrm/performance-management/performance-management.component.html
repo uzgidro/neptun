@@ -29,7 +29,6 @@
             <tr>
                 <th pSortableColumn="employee_name" style="min-width: 12rem">{{ 'HRM.COMMON.EMPLOYEE' | translate }}</th>
                 <th pSortableColumn="title" style="min-width: 14rem">{{ 'HRM.PERFORMANCE.GOAL' | translate }}</th>
-                <th style="min-width: 8rem">{{ 'HRM.PERFORMANCE.METRIC' | translate }}</th>
                 <th style="min-width: 8rem">{{ 'HRM.PERFORMANCE.TARGET_ACTUAL' | translate }}</th>
                 <th style="min-width: 10rem">{{ 'HRM.PERFORMANCE.PROGRESS' | translate }}</th>
                 <th style="min-width: 8rem">{{ 'HRM.PERFORMANCE.DUE_DATE' | translate }}</th>
@@ -41,7 +40,6 @@
             <tr>
                 <td>{{ goal.employee_name }}</td>
                 <td>{{ goal.title }}</td>
-                <td>{{ goal.metric }}</td>
                 <td>{{ goal.target_value }} / {{ goal.current_value || '—' }}</td>
                 <td>
                     <p-progressbar [value]="goal.progress" [showValue]="true"
@@ -97,19 +95,16 @@
 
             <app-input-text formControlName="title" [label]="'HRM.PERFORMANCE.GOAL_NAME' | translate" [submitted]="submitted" [errorMessage]="'VALIDATION.NAME_REQUIRED' | translate" [required]="true"></app-input-text>
 
-            <app-textarea formControlName="description" [label]="'HRM.COMMON.DESCRIPTION' | translate" [submitted]="submitted" [errorMessage]="'VALIDATION.DESCRIPTION_REQUIRED' | translate" [required]="true"></app-textarea>
-
             <div class="grid grid-cols-2 gap-4">
-                <app-input-text formControlName="metric" [label]="'HRM.PERFORMANCE.METRIC' | translate" [submitted]="submitted" [errorMessage]="'VALIDATION.METRIC_REQUIRED' | translate" [required]="true"></app-input-text>
-                <app-input-text formControlName="target_value" [label]="'HRM.PERFORMANCE.TARGET_VALUE' | translate" [submitted]="submitted" [errorMessage]="'VALIDATION.TARGET_VALUE_REQUIRED' | translate" [required]="true"></app-input-text>
+                <app-input-text formControlName="target_value" [label]="'HRM.PERFORMANCE.TARGET_VALUE' | translate"
+                                type="number" [submitted]="submitted"></app-input-text>
+                <app-input-text formControlName="weight" [label]="'HRM.PERFORMANCE.WEIGHT' | translate" type="number"
+                                [submitted]="submitted" [errorMessage]="'VALIDATION.WEIGHT_REQUIRED' | translate"
+                                [required]="true"></app-input-text>
             </div>
 
-            <app-input-text formControlName="weight" [label]="'HRM.PERFORMANCE.WEIGHT' | translate" type="number" [submitted]="submitted" [errorMessage]="'VALIDATION.WEIGHT_REQUIRED' | translate" [required]="true"></app-input-text>
-
-            <div class="grid grid-cols-2 gap-4">
-                <app-date-picker formControlName="start_date" [label]="'HRM.COMMON.START_DATE' | translate" [submitted]="submitted" [errorMessage]="'VALIDATION.START_DATE_REQUIRED' | translate" [showTime]="false" [required]="true"></app-date-picker>
-                <app-date-picker formControlName="due_date" [label]="'HRM.PERFORMANCE.DUE_DATE' | translate" [submitted]="submitted" [errorMessage]="'VALIDATION.DUE_DATE_REQUIRED' | translate" [showTime]="false" [required]="true"></app-date-picker>
-            </div>
+            <app-date-picker formControlName="due_date" [label]="'HRM.PERFORMANCE.DUE_DATE' | translate"
+                             [submitted]="submitted" [showTime]="false"></app-date-picker>
         </form>
     </app-dialog>
 }
