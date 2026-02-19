@@ -62,7 +62,8 @@
       "NOV": "Noyabr",
       "DEC": "Dekabr"
     },
-    "NO_RESULTS": "Hech narsa topilmadi"
+      "NO_RESULTS": "Hech narsa topilmadi",
+      "DOWNLOAD_EXCEL": "Excelni yuklab olish"
   },
   "CATEGORIES": {
     "TITLE": "Rollar",
@@ -202,6 +203,7 @@
     "UGE_PROTOCOLS": "O'zbekgidroenergo bayonnomaalari",
     "RESERVOIR_SUMMARY": "Xulosa",
     "RESERVOIR_SUMMARY_PDF": "Xulosa PDF",
+      "RESERVOIR_SUMMARY_HOURLY": "Tezkor ma'lumot",
     "HYDRAULIC_STRUCTURES": "Gidrotexnik inshootlar",
     "INCIDENTS": "Hodisalar",
       "VISITS": "Tashriflar",
@@ -1744,6 +1746,9 @@
       "PREVIOUS_YEARS": "Oldingi yillar",
       "INFLOW_TO_DATE": "Bugungi kunga oqib kirish, mln. m³",
       "MODSNOW": "MODSNOW, qor qoplami %"
+    },
+      "RESERVOIR_SUMMARY_HOURLY": {
+          "TITLE": "Suv omborlari bo'yicha tezkor ma'lumot"
     },
       "DASHBOARD": {
           "HEADER": {

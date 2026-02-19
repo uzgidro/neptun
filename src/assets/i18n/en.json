@@ -65,7 +65,8 @@
       "NOV": "November",
       "DEC": "December"
     },
-    "NO_RESULTS": "Nothing found"
+      "NO_RESULTS": "Nothing found",
+      "DOWNLOAD_EXCEL": "Download Excel"
   },
   "CATEGORIES": {
     "TITLE": "Roles",
@@ -217,6 +218,7 @@
     "OTHER_DOCS": "Other Documents",
     "RESERVOIR_SUMMARY": "Summary",
     "RESERVOIR_SUMMARY_PDF": "Summary PDF",
+      "RESERVOIR_SUMMARY_HOURLY": "Operative Summary",
     "HYDRAULIC_STRUCTURES": "Hydraulic Structures",
     "INCIDENTS": "Incidents",
       "VISITS": "Visits",
@@ -1736,6 +1738,9 @@
       "PREVIOUS_YEARS": "Previous Years",
       "INFLOW_TO_DATE": "Inflow to Date, mln m³",
       "MODSNOW": "MODSNOW, snow cover %"
+    },
+      "RESERVOIR_SUMMARY_HOURLY": {
+          "TITLE": "Operative Reservoir Summary"
     },
     "DASHBOARD": {
       "HEADER": {

@@ -5,6 +5,7 @@ import { ReservoirSummaryRequest, ReservoirSummaryResponse } from '@/core/interf
 import { HttpParams, HttpResponse } from '@angular/common/http';
 
 const RESERVOIR_SUMMARY = '/reservoir-summary';
+const RESERVOIR_SUMMARY_HOURLY = '/reservoir-summary-hourly';
 const EXPORT = '/export'
 
 const EXCEL = 'excel'
@@ -30,6 +31,21 @@ export class ReservoirSummaryService extends ApiService {
                 date: this.dateToYMD(date),
                 format: format
             },
+            responseType: 'blob',
+            observe: 'response'
+        });
+    }
+
+    downloadHourlySummaryPdf(): Observable<HttpResponse<Blob>> {
+        return this.http.get(BASE_URL + RESERVOIR_SUMMARY_HOURLY + EXPORT, {
+            params: { format: PDF },
+            responseType: 'blob',
+            observe: 'response'
+        });
+    }
+
+    downloadHourlySummaryExcel(): Observable<HttpResponse<Blob>> {
+        return this.http.get(BASE_URL + RESERVOIR_SUMMARY_HOURLY + EXPORT, {
             responseType: 'blob',
             observe: 'response'
         });

@@ -1,0 +1,10 @@
+<div class="card">
+    <h3 class="text-center mb-3">{{ 'SITUATION_CENTER.RESERVOIR_SUMMARY_HOURLY.TITLE' | translate }}</h3>
+    <div class="flex justify-content-end mb-3">
+        <p-button label="{{ 'COMMON.DOWNLOAD_EXCEL' | translate }}" icon="pi pi-file-excel"
+                  (onClick)="downloadExcel()" [loading]="isExcelLoading" severity="success" />
+    </div>
+    <div class="pdf-container">
+        <app-pdf-viewer [blob]="pdfBlob" [fileName]="fileName" viewerId="reservoir-hourly-pdf-viewer" />
+    </div>
+</div>

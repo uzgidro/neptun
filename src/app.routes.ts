@@ -18,6 +18,7 @@ import { ConstructionComponent } from '@/pages/situation-center/construction/con
 import { ReceptionComponent } from '@/pages/planning/reception/reception.component';
 import { ReservoirsSummaryComponent } from '@/pages/situation-center/reservoirs-info/reservoirs-summary/reservoirs-summary.component';
 import { ReservoirSummaryPdfComponent } from '@/pages/situation-center/reservoirs-info/reservoir-summaty-pdf/reservoir-summary-pdf.component';
+import { ReservoirSummaryHourlyComponent } from '@/pages/situation-center/reservoirs-info/reservoir-summary-hourly/reservoir-summary-hourly.component';
 import { DischargesComponent } from '@/pages/situation-center/ges/discharges/discharges.component';
 import { VisitsComponent } from '@/pages/situation-center/other/visits/visits.component';
 import { IncidentsComponent } from '@/pages/situation-center/other/incidents/incidents.component';
@@ -109,6 +110,7 @@ export const appRoutes: Routes = [
             { path: 'kpi', component: KpiComponent, canActivate: [raisGuard] },
             { path: 'salary', component: SalaryComponent, canActivate: [raisGuard] },
             { path: 'reservoir-summary/pdf', component: ReservoirSummaryPdfComponent, canActivate: [raisGuard] },
+            { path: 'reservoir-summary-hourly', component: ReservoirSummaryHourlyComponent, canActivate: [raisGuard] },
             { path: 'visits', component: VisitsComponent, canActivate: [raisGuard] },
             { path: 'incidents', component: IncidentsComponent, canActivate: [raisGuard] },
             { path: 'reservoir-device', component: ReservoirsDeviceComponent, canActivate: [raisGuard] },

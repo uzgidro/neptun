@@ -62,7 +62,8 @@
       "NOV": "Ноябр",
       "DEC": "Декабр"
     },
-    "NO_RESULTS": "Ҳеч нарса топилмади"
+      "NO_RESULTS": "Ҳеч нарса топилмади",
+      "DOWNLOAD_EXCEL": "Экселни юклаб олиш"
   },
   "CATEGORIES": {
     "TITLE": "Роллар",
@@ -214,6 +215,7 @@
     "OTHER_DOCS": "Бошқа ҳужжатлар",
     "RESERVOIR_SUMMARY": "Хулоса",
     "RESERVOIR_SUMMARY_PDF": "Хулоса PDF",
+      "RESERVOIR_SUMMARY_HOURLY": "Тезкор маълумот",
     "HYDRAULIC_STRUCTURES": "Гидротехник иншоотлар",
     "INCIDENTS": "Ҳодисалар",
       "VISITS": "Ташрифлар",
@@ -1733,6 +1735,9 @@
       "PREVIOUS_YEARS": "Олдинги йиллар",
       "INFLOW_TO_DATE": "Бугунги кунга оқиб кириш, млн. м³",
       "MODSNOW": "MODSNOW, қор қоплами %"
+    },
+      "RESERVOIR_SUMMARY_HOURLY": {
+          "TITLE": "Сув омборлари бўйича тезкор маълумот"
     },
     "DASHBOARD": {
       "HEADER": {
