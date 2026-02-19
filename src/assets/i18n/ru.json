@@ -65,7 +65,8 @@
       "NOV": "Ноябрь",
       "DEC": "Декабрь"
     },
-    "NO_RESULTS": "Ничего не найдено"
+      "NO_RESULTS": "Ничего не найдено",
+      "DOWNLOAD_EXCEL": "Скачать Excel"
   },
   "CATEGORIES": {
     "TITLE": "Роли",
@@ -217,6 +218,7 @@
     "OTHER_DOCS": "Иные документы",
     "RESERVOIR_SUMMARY": "Сводка",
     "RESERVOIR_SUMMARY_PDF": "Сводка PDF",
+      "RESERVOIR_SUMMARY_HOURLY": "Оперативная сводка",
     "HYDRAULIC_STRUCTURES": "Гидротехнические сооружения",
     "INCIDENTS": "Инциденты",
       "VISITS": "Визиты",
@@ -1736,6 +1738,9 @@
       "PREVIOUS_YEARS": "Прошлые года",
       "INFLOW_TO_DATE": "Приток до сегодняшнего дня, млн. м³",
       "MODSNOW": "MODSNOW, снежный покров %"
+    },
+      "RESERVOIR_SUMMARY_HOURLY": {
+          "TITLE": "Оперативная сводка по водохранилищам"
     },
     "DASHBOARD": {
       "HEADER": {

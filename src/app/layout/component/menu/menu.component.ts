@@ -95,6 +95,11 @@ export class MenuComponent implements OnInit {
                                         routerLink: ['/reservoir-summary/pdf']
                                     },
                                     {
+                                        label: this.t('MENU.RESERVOIR_SUMMARY_HOURLY'),
+                                        role: ['rais', 'sc'],
+                                        routerLink: ['/reservoir-summary-hourly']
+                                    },
+                                    {
                                         label: this.t('MENU.HYDRAULIC_STRUCTURES'),
                                         role: ['rais', 'sc'],
                                         routerLink: ['/reservoir-device']
