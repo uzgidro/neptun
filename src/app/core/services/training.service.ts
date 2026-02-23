@@ -4,8 +4,12 @@ import { Observable } from 'rxjs';
 import { Training, TrainingPayload } from '@/core/interfaces/hrm/training';
 import { CrudService } from '@/core/interfaces/crud-service.interface';
 
-const TRAININGS = '/trainings';
+const TRAININGS = '/hrm/training/trainings';
 
+/**
+ * @deprecated Use `TrainingService` from `@/core/services/hrm/training.service` instead.
+ * This service is kept for backward compatibility with existing components.
+ */
 @Injectable({
     providedIn: 'root'
 })

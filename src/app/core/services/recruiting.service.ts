@@ -3,8 +3,12 @@ import { ApiService, BASE_URL } from '@/core/services/api.service';
 import { Observable } from 'rxjs';
 import { Vacancy, Candidate, Interview, JobOffer, Onboarding } from '@/core/interfaces/hrm/recruiting';
 
-const RECRUITING = '/recruiting';
+const RECRUITING = '/hrm/recruiting';
 
+/**
+ * @deprecated Use `HrmRecruitingService` from `@/core/services/hrm/recruiting.service` instead.
+ * This service is kept for backward compatibility with existing components.
+ */
 @Injectable({
     providedIn: 'root'
 })
