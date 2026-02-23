@@ -404,104 +404,104 @@ export type LanguageLevel = 'basic' | 'intermediate' | 'advanced' | 'fluent' | '
 
 // Константы
 export const EMPLOYMENT_TYPES: { value: EmploymentType; label: string }[] = [
-    { value: 'full_time', label: 'Полная занятость' },
-    { value: 'part_time', label: 'Частичная занятость' },
-    { value: 'contract', label: 'Контракт' },
-    { value: 'internship', label: 'Стажировка' },
-    { value: 'remote', label: 'Удалённая работа' }
+    { value: 'full_time', label: 'HRM.RECRUITING.EMPLOYMENT_TYPE.FULL_TIME' },
+    { value: 'part_time', label: 'HRM.RECRUITING.EMPLOYMENT_TYPE.PART_TIME' },
+    { value: 'contract', label: 'HRM.RECRUITING.EMPLOYMENT_TYPE.CONTRACT' },
+    { value: 'internship', label: 'HRM.RECRUITING.EMPLOYMENT_TYPE.INTERNSHIP' },
+    { value: 'remote', label: 'HRM.RECRUITING.EMPLOYMENT_TYPE.REMOTE' }
 ];
 
 export const VACANCY_STATUSES: { value: VacancyStatus; label: string }[] = [
-    { value: 'draft', label: 'Черновик' },
-    { value: 'pending_approval', label: 'На согласовании' },
-    { value: 'approved', label: 'Согласована' },
-    { value: 'open', label: 'Открыта' },
-    { value: 'on_hold', label: 'Приостановлена' },
-    { value: 'closed', label: 'Закрыта' },
-    { value: 'cancelled', label: 'Отменена' }
+    { value: 'draft', label: 'HRM.RECRUITING.VACANCY_STATUS.DRAFT' },
+    { value: 'pending_approval', label: 'HRM.RECRUITING.VACANCY_STATUS.PENDING_APPROVAL' },
+    { value: 'approved', label: 'HRM.RECRUITING.VACANCY_STATUS.APPROVED' },
+    { value: 'open', label: 'HRM.RECRUITING.VACANCY_STATUS.OPEN' },
+    { value: 'on_hold', label: 'HRM.RECRUITING.VACANCY_STATUS.ON_HOLD' },
+    { value: 'closed', label: 'HRM.RECRUITING.VACANCY_STATUS.CLOSED' },
+    { value: 'cancelled', label: 'HRM.RECRUITING.VACANCY_STATUS.CANCELLED' }
 ];
 
 export const VACANCY_PRIORITIES: { value: VacancyPriority; label: string }[] = [
-    { value: 'low', label: 'Низкий' },
-    { value: 'normal', label: 'Обычный' },
-    { value: 'high', label: 'Высокий' },
-    { value: 'urgent', label: 'Срочный' }
+    { value: 'low', label: 'HRM.RECRUITING.PRIORITY.LOW' },
+    { value: 'normal', label: 'HRM.RECRUITING.PRIORITY.NORMAL' },
+    { value: 'high', label: 'HRM.RECRUITING.PRIORITY.HIGH' },
+    { value: 'urgent', label: 'HRM.RECRUITING.PRIORITY.URGENT' }
 ];
 
 export const CANDIDATE_STATUSES: { value: CandidateStatus; label: string }[] = [
-    { value: 'new', label: 'Новый' },
-    { value: 'screening', label: 'Первичный отбор' },
-    { value: 'phone_interview', label: 'Телефонное интервью' },
-    { value: 'interview', label: 'Собеседование' },
-    { value: 'technical_test', label: 'Техническое задание' },
-    { value: 'reference_check', label: 'Проверка рекомендаций' },
-    { value: 'background_check', label: 'Проверка документов' },
-    { value: 'offer', label: 'Оффер' },
-    { value: 'offer_accepted', label: 'Оффер принят' },
-    { value: 'hired', label: 'Принят на работу' },
-    { value: 'rejected', label: 'Отклонён' },
-    { value: 'withdrawn', label: 'Отказ кандидата' }
+    { value: 'new', label: 'HRM.RECRUITING.CANDIDATE_STATUS.NEW' },
+    { value: 'screening', label: 'HRM.RECRUITING.CANDIDATE_STATUS.SCREENING' },
+    { value: 'phone_interview', label: 'HRM.RECRUITING.CANDIDATE_STATUS.PHONE_INTERVIEW' },
+    { value: 'interview', label: 'HRM.RECRUITING.CANDIDATE_STATUS.INTERVIEW' },
+    { value: 'technical_test', label: 'HRM.RECRUITING.CANDIDATE_STATUS.TECHNICAL_TEST' },
+    { value: 'reference_check', label: 'HRM.RECRUITING.CANDIDATE_STATUS.REFERENCE_CHECK' },
+    { value: 'background_check', label: 'HRM.RECRUITING.CANDIDATE_STATUS.BACKGROUND_CHECK' },
+    { value: 'offer', label: 'HRM.RECRUITING.CANDIDATE_STATUS.OFFER' },
+    { value: 'offer_accepted', label: 'HRM.RECRUITING.CANDIDATE_STATUS.OFFER_ACCEPTED' },
+    { value: 'hired', label: 'HRM.RECRUITING.CANDIDATE_STATUS.HIRED' },
+    { value: 'rejected', label: 'HRM.RECRUITING.CANDIDATE_STATUS.REJECTED' },
+    { value: 'withdrawn', label: 'HRM.RECRUITING.CANDIDATE_STATUS.WITHDRAWN' }
 ];
 
 export const RECRUITING_STAGES: { value: RecruitingStage; label: string; order: number }[] = [
-    { value: 'application', label: 'Заявка', order: 1 },
-    { value: 'screening', label: 'Отбор', order: 2 },
-    { value: 'interview', label: 'Собеседование', order: 3 },
-    { value: 'assessment', label: 'Оценка', order: 4 },
-    { value: 'verification', label: 'Проверка', order: 5 },
-    { value: 'offer', label: 'Оффер', order: 6 },
-    { value: 'hired', label: 'Найм', order: 7 },
-    { value: 'closed', label: 'Закрыто', order: 8 }
+    { value: 'application', label: 'HRM.RECRUITING.STAGE.APPLICATION', order: 1 },
+    { value: 'screening', label: 'HRM.RECRUITING.STAGE.SCREENING', order: 2 },
+    { value: 'interview', label: 'HRM.RECRUITING.STAGE.INTERVIEW', order: 3 },
+    { value: 'assessment', label: 'HRM.RECRUITING.STAGE.ASSESSMENT', order: 4 },
+    { value: 'verification', label: 'HRM.RECRUITING.STAGE.VERIFICATION', order: 5 },
+    { value: 'offer', label: 'HRM.RECRUITING.STAGE.OFFER', order: 6 },
+    { value: 'hired', label: 'HRM.RECRUITING.STAGE.HIRED', order: 7 },
+    { value: 'closed', label: 'HRM.RECRUITING.STAGE.CLOSED', order: 8 }
 ];
 
 export const INTERVIEW_TYPES: { value: InterviewType; label: string }[] = [
-    { value: 'phone', label: 'Телефонное' },
-    { value: 'video', label: 'Видеозвонок' },
-    { value: 'in_person', label: 'Очное' },
-    { value: 'technical', label: 'Техническое' },
-    { value: 'hr', label: 'HR интервью' },
-    { value: 'panel', label: 'Панельное' },
-    { value: 'final', label: 'Финальное' }
+    { value: 'phone', label: 'HRM.RECRUITING.INTERVIEW_TYPE.PHONE' },
+    { value: 'video', label: 'HRM.RECRUITING.INTERVIEW_TYPE.VIDEO' },
+    { value: 'in_person', label: 'HRM.RECRUITING.INTERVIEW_TYPE.IN_PERSON' },
+    { value: 'technical', label: 'HRM.RECRUITING.INTERVIEW_TYPE.TECHNICAL' },
+    { value: 'hr', label: 'HRM.RECRUITING.INTERVIEW_TYPE.HR' },
+    { value: 'panel', label: 'HRM.RECRUITING.INTERVIEW_TYPE.PANEL' },
+    { value: 'final', label: 'HRM.RECRUITING.INTERVIEW_TYPE.FINAL' }
 ];
 
 export const INTERVIEW_RECOMMENDATIONS: { value: InterviewRecommendation; label: string; color: string }[] = [
-    { value: 'strong_yes', label: 'Однозначно да', color: 'success' },
-    { value: 'yes', label: 'Да', color: 'info' },
-    { value: 'maybe', label: 'Возможно', color: 'warn' },
-    { value: 'no', label: 'Нет', color: 'danger' },
-    { value: 'strong_no', label: 'Однозначно нет', color: 'danger' }
+    { value: 'strong_yes', label: 'HRM.RECRUITING.RECOMMENDATION.STRONG_YES', color: 'success' },
+    { value: 'yes', label: 'HRM.RECRUITING.RECOMMENDATION.YES', color: 'info' },
+    { value: 'maybe', label: 'HRM.RECRUITING.RECOMMENDATION.MAYBE', color: 'warn' },
+    { value: 'no', label: 'HRM.RECRUITING.RECOMMENDATION.NO', color: 'danger' },
+    { value: 'strong_no', label: 'HRM.RECRUITING.RECOMMENDATION.STRONG_NO', color: 'danger' }
 ];
 
 export const OFFER_STATUSES: { value: OfferStatus; label: string }[] = [
-    { value: 'draft', label: 'Черновик' },
-    { value: 'pending_approval', label: 'На согласовании' },
-    { value: 'approved', label: 'Согласован' },
-    { value: 'sent', label: 'Отправлен' },
-    { value: 'accepted', label: 'Принят' },
-    { value: 'declined', label: 'Отклонён' },
-    { value: 'negotiating', label: 'Переговоры' },
-    { value: 'expired', label: 'Истёк' },
-    { value: 'withdrawn', label: 'Отозван' }
+    { value: 'draft', label: 'HRM.RECRUITING.OFFER_STATUS.DRAFT' },
+    { value: 'pending_approval', label: 'HRM.RECRUITING.OFFER_STATUS.PENDING_APPROVAL' },
+    { value: 'approved', label: 'HRM.RECRUITING.OFFER_STATUS.APPROVED' },
+    { value: 'sent', label: 'HRM.RECRUITING.OFFER_STATUS.SENT' },
+    { value: 'accepted', label: 'HRM.RECRUITING.OFFER_STATUS.ACCEPTED' },
+    { value: 'declined', label: 'HRM.RECRUITING.OFFER_STATUS.DECLINED' },
+    { value: 'negotiating', label: 'HRM.RECRUITING.OFFER_STATUS.NEGOTIATING' },
+    { value: 'expired', label: 'HRM.RECRUITING.OFFER_STATUS.EXPIRED' },
+    { value: 'withdrawn', label: 'HRM.RECRUITING.OFFER_STATUS.WITHDRAWN' }
 ];
 
 export const ONBOARDING_CATEGORIES: { value: OnboardingCategory; label: string; icon: string }[] = [
-    { value: 'documents', label: 'Документы', icon: 'pi pi-file' },
-    { value: 'it_setup', label: 'IT настройка', icon: 'pi pi-desktop' },
-    { value: 'training', label: 'Обучение', icon: 'pi pi-book' },
-    { value: 'introduction', label: 'Знакомство', icon: 'pi pi-users' },
-    { value: 'compliance', label: 'Комплаенс', icon: 'pi pi-shield' },
-    { value: 'department', label: 'Отдел', icon: 'pi pi-building' }
+    { value: 'documents', label: 'HRM.RECRUITING.ONBOARDING.CAT_DOCUMENTS', icon: 'pi pi-file' },
+    { value: 'it_setup', label: 'HRM.RECRUITING.ONBOARDING.CAT_IT_SETUP', icon: 'pi pi-desktop' },
+    { value: 'training', label: 'HRM.RECRUITING.ONBOARDING.CAT_TRAINING', icon: 'pi pi-book' },
+    { value: 'introduction', label: 'HRM.RECRUITING.ONBOARDING.CAT_INTRODUCTION', icon: 'pi pi-users' },
+    { value: 'compliance', label: 'HRM.RECRUITING.ONBOARDING.CAT_COMPLIANCE', icon: 'pi pi-shield' },
+    { value: 'department', label: 'HRM.RECRUITING.ONBOARDING.CAT_DEPARTMENT', icon: 'pi pi-building' }
 ];
 
 export const CANDIDATE_SOURCES: { value: CandidateSource; label: string }[] = [
-    { value: 'website', label: 'Сайт компании' },
-    { value: 'job_portal', label: 'Портал вакансий' },
-    { value: 'gov_portal', label: 'Портал госслужбы' },
-    { value: 'referral', label: 'Рекомендация сотрудника' },
-    { value: 'agency', label: 'Кадровое агентство' },
-    { value: 'social_media', label: 'Социальные сети' },
-    { value: 'direct', label: 'Прямое обращение' },
-    { value: 'other', label: 'Другое' }
+    { value: 'website', label: 'HRM.RECRUITING.SOURCE.WEBSITE' },
+    { value: 'job_portal', label: 'HRM.RECRUITING.SOURCE.JOB_PORTAL' },
+    { value: 'gov_portal', label: 'HRM.RECRUITING.SOURCE.GOV_PORTAL' },
+    { value: 'referral', label: 'HRM.RECRUITING.SOURCE.REFERRAL' },
+    { value: 'agency', label: 'HRM.RECRUITING.SOURCE.AGENCY' },
+    { value: 'social_media', label: 'HRM.RECRUITING.SOURCE.SOCIAL_MEDIA' },
+    { value: 'direct', label: 'HRM.RECRUITING.SOURCE.DIRECT' },
+    { value: 'other', label: 'HRM.RECRUITING.SOURCE.OTHER' }
 ];
 
 // Payloads

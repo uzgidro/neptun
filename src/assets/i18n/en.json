@@ -1192,6 +1192,115 @@
         "INTERVIEW_SCHEDULE_ERROR": "Failed to schedule interview",
         "OFFER_SEND_ERROR": "Failed to send offer",
       "NOT_ASSIGNED": "Not assigned",
+        "EMPLOYMENT_TYPE": {
+            "FULL_TIME": "Full-time",
+            "PART_TIME": "Part-time",
+            "CONTRACT": "Contract",
+            "INTERNSHIP": "Internship",
+            "REMOTE": "Remote"
+        },
+        "VACANCY_STATUS": {
+            "DRAFT": "Draft",
+            "PENDING_APPROVAL": "Pending approval",
+            "APPROVED": "Approved",
+            "OPEN": "Open",
+            "ON_HOLD": "On hold",
+            "CLOSED": "Closed",
+            "CANCELLED": "Cancelled"
+        },
+        "PRIORITY": {
+            "LOW": "Low",
+            "NORMAL": "Normal",
+            "HIGH": "High",
+            "URGENT": "Urgent"
+        },
+        "CANDIDATE_STATUS": {
+            "NEW": "New",
+            "SCREENING": "Screening",
+            "PHONE_INTERVIEW": "Phone interview",
+            "INTERVIEW": "Interview",
+            "TECHNICAL_TEST": "Technical test",
+            "REFERENCE_CHECK": "Reference check",
+            "BACKGROUND_CHECK": "Background check",
+            "OFFER": "Offer",
+            "OFFER_ACCEPTED": "Offer accepted",
+            "HIRED": "Hired",
+            "REJECTED": "Rejected",
+            "WITHDRAWN": "Withdrawn"
+        },
+        "STAGE": {
+            "APPLICATION": "Application",
+            "SCREENING": "Screening",
+            "INTERVIEW": "Interview",
+            "ASSESSMENT": "Assessment",
+            "VERIFICATION": "Verification",
+            "OFFER": "Offer",
+            "HIRED": "Hired",
+            "CLOSED": "Closed"
+        },
+        "INTERVIEW_TYPE": {
+            "PHONE": "Phone",
+            "VIDEO": "Video call",
+            "IN_PERSON": "In-person",
+            "TECHNICAL": "Technical",
+            "HR": "HR interview",
+            "PANEL": "Panel",
+            "FINAL": "Final"
+        },
+        "RECOMMENDATION": {
+            "STRONG_YES": "Definitely yes",
+            "YES": "Yes",
+            "MAYBE": "Maybe",
+            "NO": "No",
+            "STRONG_NO": "Definitely no"
+        },
+        "OFFER_STATUS": {
+            "DRAFT": "Draft",
+            "PENDING_APPROVAL": "Pending approval",
+            "APPROVED": "Approved",
+            "SENT": "Sent",
+            "ACCEPTED": "Accepted",
+            "DECLINED": "Declined",
+            "NEGOTIATING": "Negotiating",
+            "EXPIRED": "Expired",
+            "WITHDRAWN": "Withdrawn"
+        },
+        "SOURCE": {
+            "WEBSITE": "Company website",
+            "JOB_PORTAL": "Job portal",
+            "GOV_PORTAL": "Government portal",
+            "REFERRAL": "Employee referral",
+            "AGENCY": "Recruitment agency",
+            "SOCIAL_MEDIA": "Social media",
+            "DIRECT": "Direct application",
+            "OTHER": "Other"
+        },
+        "TOOLTIP": {
+            "PASS_SCREENING": "Pass screening",
+            "SCHEDULE_INTERVIEW": "Schedule interview",
+            "CHECK_REFERENCES": "Check references",
+            "SEND_OFFER": "Send offer",
+            "OFFER_ACCEPTED": "Offer accepted",
+            "HIRE_EMPLOYEE": "Hire employee",
+            "REJECT": "Reject"
+        },
+        "MOCK": {
+            "TASK_PROCESS_DOCUMENTS": "Process documents",
+            "TASK_CREATE_EMAIL": "Create email account",
+            "TASK_SETUP_ACCESS": "Set up system access",
+            "TASK_INTRO_TRAINING": "Introductory training",
+            "TASK_MEET_TEAM": "Meet the team",
+            "TASK_COMPANY_POLICIES": "Review company policies",
+            "DOC_PASSPORT": "Passport",
+            "DOC_INN": "TIN",
+            "DOC_SNILS": "SNILS",
+            "DOC_WORK_BOOK": "Employment record book",
+            "DOC_PHOTO": "Photo 3x4",
+            "DOC_DIPLOMA": "Diploma",
+            "POSITIVE_FEEDBACK": "Positive feedback",
+            "APPROVER_NAME": "Sokolov Andrey",
+            "MENTOR_NAME": "Volkova Olga Nikolaevna"
+        },
       "ONBOARDING": {
         "STATUS_IN_PROGRESS": "In progress",
         "STATUS_COMPLETED": "Completed",
@@ -1206,6 +1315,7 @@
         "CAT_TRAINING": "Training",
         "CAT_INTRODUCTION": "Introduction",
         "CAT_COMPLIANCE": "Policies",
+          "CAT_DEPARTMENT": "Department",
         "MARK_COMPLETED": "Mark as completed",
         "PENDING_DOCUMENTS": "Pending documents",
         "SUBMITTED_DOCUMENTS": "Submitted documents"

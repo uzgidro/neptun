@@ -231,11 +231,12 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
     }
 
     private calculateStats(): void {
+        const totalEmployees = this.orgUnits.reduce((sum, u) => sum + (u.employee_count || 0), 0);
         this.stats = {
             total_departments: this.orgUnits.length,
-            total_employees: this.orgUnits.reduce((sum, u) => sum + u.employee_count, 0),
+            total_employees: totalEmployees,
             total_managers: this.employees.filter(e => e.is_manager).length,
-            avg_team_size: Math.round(this.orgUnits.reduce((sum, u) => sum + u.employee_count, 0) / this.orgUnits.length),
+            avg_team_size: this.orgUnits.length > 0 ? Math.round(totalEmployees / this.orgUnits.length) : 0,
             max_depth: this.calculateMaxDepth(),
             vacancies: this.orgUnits.filter(u => !u.head_id && u.type !== 'company').length
         };

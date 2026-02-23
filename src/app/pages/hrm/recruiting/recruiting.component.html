@@ -212,14 +212,7 @@
                             </td>
                             <td>{{ candidate.vacancy_title || '—' }}</td>
                             <td>
-                                @switch (candidate.source) {
-                                    @case ('gov_portal') { <span>Госпортал</span> }
-                                    @case ('job_portal') { <span>Job-сайт</span> }
-                                    @case ('referral') { <span>Рекомендация</span> }
-                                    @case ('social_media') { <span>Соцсети</span> }
-                                    @case ('direct') { <span>Напрямую</span> }
-                                    @default { <span>{{ candidate.source }}</span> }
-                                }
+                                <span>{{ getSourceLabel(candidate.source) }}</span>
                             </td>
                             <td>
                                 <p-progressBar
@@ -262,7 +255,7 @@
                                                 icon="pi pi-check"
                                                 (click)="screenCandidate(candidate, true)"
                                                 class="p-button-rounded p-button-text p-button-success"
-                                                pTooltip="Пройти скрининг"
+                                                [pTooltip]="'HRM.RECRUITING.TOOLTIP.PASS_SCREENING' | translate"
                                                 tooltipPosition="top">
                                         </button>
                                     }
@@ -271,7 +264,7 @@
                                                 icon="pi pi-calendar"
                                                 (click)="openInterviewDialog(candidate)"
                                                 class="p-button-rounded p-button-text p-button-info"
-                                                pTooltip="Назначить собеседование"
+                                                [pTooltip]="'HRM.RECRUITING.TOOLTIP.SCHEDULE_INTERVIEW' | translate"
                                                 tooltipPosition="top">
                                         </button>
                                     }
@@ -280,7 +273,7 @@
                                                 icon="pi pi-verified"
                                                 (click)="openReferenceDialog(candidate)"
                                                 class="p-button-rounded p-button-text p-button-warning"
-                                                pTooltip="Проверка рекомендаций"
+                                                [pTooltip]="'HRM.RECRUITING.TOOLTIP.CHECK_REFERENCES' | translate"
                                                 tooltipPosition="top">
                                         </button>
                                     }
@@ -289,7 +282,7 @@
                                                 icon="pi pi-file-edit"
                                                 (click)="openOfferDialog(candidate)"
                                                 class="p-button-rounded p-button-text p-button-success"
-                                                pTooltip="Отправить оффер"
+                                                [pTooltip]="'HRM.RECRUITING.TOOLTIP.SEND_OFFER' | translate"
                                                 tooltipPosition="top">
                                         </button>
                                     }
@@ -298,7 +291,7 @@
                                                 icon="pi pi-thumbs-up"
                                                 (click)="acceptOffer(candidate)"
                                                 class="p-button-rounded p-button-text p-button-success"
-                                                pTooltip="Оффер принят"
+                                                [pTooltip]="'HRM.RECRUITING.TOOLTIP.OFFER_ACCEPTED' | translate"
                                                 tooltipPosition="top">
                                         </button>
                                     }
@@ -307,7 +300,7 @@
                                                 icon="pi pi-user-plus"
                                                 (click)="hireCandidate(candidate)"
                                                 class="p-button-rounded p-button-text p-button-success"
-                                                pTooltip="Оформить на работу"
+                                                [pTooltip]="'HRM.RECRUITING.TOOLTIP.HIRE_EMPLOYEE' | translate"
                                                 tooltipPosition="top">
                                         </button>
                                     }
@@ -316,7 +309,7 @@
                                                 icon="pi pi-times"
                                                 (click)="openRejectDialog(candidate)"
                                                 class="p-button-rounded p-button-text p-button-danger"
-                                                pTooltip="Отклонить"
+                                                [pTooltip]="'HRM.RECRUITING.TOOLTIP.REJECT' | translate"
                                                 tooltipPosition="top">
                                         </button>
                                     }
@@ -548,7 +541,7 @@
                 <p-select
                     id="vacancy"
                     formControlName="vacancy_id"
-                    [options]="getVacanciesForSelect()"
+                    [options]="vacanciesForSelect"
                     optionLabel="name"
                     [placeholder]="'HRM.RECRUITING.CANDIDATE.SELECT_VACANCY' | translate"
                     class="w-full">

@@ -1192,6 +1192,115 @@
         "INTERVIEW_SCHEDULE_ERROR": "Не удалось запланировать собеседование",
         "OFFER_SEND_ERROR": "Не удалось отправить оффер",
       "NOT_ASSIGNED": "Не назначен",
+        "EMPLOYMENT_TYPE": {
+            "FULL_TIME": "Полная занятость",
+            "PART_TIME": "Частичная занятость",
+            "CONTRACT": "Контракт",
+            "INTERNSHIP": "Стажировка",
+            "REMOTE": "Удалённая работа"
+        },
+        "VACANCY_STATUS": {
+            "DRAFT": "Черновик",
+            "PENDING_APPROVAL": "На согласовании",
+            "APPROVED": "Согласована",
+            "OPEN": "Открыта",
+            "ON_HOLD": "Приостановлена",
+            "CLOSED": "Закрыта",
+            "CANCELLED": "Отменена"
+        },
+        "PRIORITY": {
+            "LOW": "Низкий",
+            "NORMAL": "Обычный",
+            "HIGH": "Высокий",
+            "URGENT": "Срочный"
+        },
+        "CANDIDATE_STATUS": {
+            "NEW": "Новый",
+            "SCREENING": "Первичный отбор",
+            "PHONE_INTERVIEW": "Телефонное интервью",
+            "INTERVIEW": "Собеседование",
+            "TECHNICAL_TEST": "Техническое задание",
+            "REFERENCE_CHECK": "Проверка рекомендаций",
+            "BACKGROUND_CHECK": "Проверка документов",
+            "OFFER": "Оффер",
+            "OFFER_ACCEPTED": "Оффер принят",
+            "HIRED": "Принят на работу",
+            "REJECTED": "Отклонён",
+            "WITHDRAWN": "Отказ кандидата"
+        },
+        "STAGE": {
+            "APPLICATION": "Заявка",
+            "SCREENING": "Отбор",
+            "INTERVIEW": "Собеседование",
+            "ASSESSMENT": "Оценка",
+            "VERIFICATION": "Проверка",
+            "OFFER": "Оффер",
+            "HIRED": "Найм",
+            "CLOSED": "Закрыто"
+        },
+        "INTERVIEW_TYPE": {
+            "PHONE": "Телефонное",
+            "VIDEO": "Видеозвонок",
+            "IN_PERSON": "Очное",
+            "TECHNICAL": "Техническое",
+            "HR": "HR интервью",
+            "PANEL": "Панельное",
+            "FINAL": "Финальное"
+        },
+        "RECOMMENDATION": {
+            "STRONG_YES": "Однозначно да",
+            "YES": "Да",
+            "MAYBE": "Возможно",
+            "NO": "Нет",
+            "STRONG_NO": "Однозначно нет"
+        },
+        "OFFER_STATUS": {
+            "DRAFT": "Черновик",
+            "PENDING_APPROVAL": "На согласовании",
+            "APPROVED": "Согласован",
+            "SENT": "Отправлен",
+            "ACCEPTED": "Принят",
+            "DECLINED": "Отклонён",
+            "NEGOTIATING": "Переговоры",
+            "EXPIRED": "Истёк",
+            "WITHDRAWN": "Отозван"
+        },
+        "SOURCE": {
+            "WEBSITE": "Сайт компании",
+            "JOB_PORTAL": "Портал вакансий",
+            "GOV_PORTAL": "Портал госслужбы",
+            "REFERRAL": "Рекомендация сотрудника",
+            "AGENCY": "Кадровое агентство",
+            "SOCIAL_MEDIA": "Социальные сети",
+            "DIRECT": "Прямое обращение",
+            "OTHER": "Другое"
+        },
+        "TOOLTIP": {
+            "PASS_SCREENING": "Пройти скрининг",
+            "SCHEDULE_INTERVIEW": "Назначить собеседование",
+            "CHECK_REFERENCES": "Проверка рекомендаций",
+            "SEND_OFFER": "Отправить оффер",
+            "OFFER_ACCEPTED": "Оффер принят",
+            "HIRE_EMPLOYEE": "Оформить на работу",
+            "REJECT": "Отклонить"
+        },
+        "MOCK": {
+            "TASK_PROCESS_DOCUMENTS": "Оформление документов",
+            "TASK_CREATE_EMAIL": "Создание учетной записи email",
+            "TASK_SETUP_ACCESS": "Настройка доступа к системам",
+            "TASK_INTRO_TRAINING": "Вводное обучение",
+            "TASK_MEET_TEAM": "Знакомство с командой",
+            "TASK_COMPANY_POLICIES": "Ознакомление с политиками компании",
+            "DOC_PASSPORT": "Паспорт",
+            "DOC_INN": "ИНН",
+            "DOC_SNILS": "СНИЛС",
+            "DOC_WORK_BOOK": "Трудовая книжка",
+            "DOC_PHOTO": "Фото 3x4",
+            "DOC_DIPLOMA": "Диплом",
+            "POSITIVE_FEEDBACK": "Положительный отзыв",
+            "APPROVER_NAME": "Соколов Андрей",
+            "MENTOR_NAME": "Волкова Ольга Николаевна"
+        },
       "ONBOARDING": {
         "STATUS_IN_PROGRESS": "В процессе",
         "STATUS_COMPLETED": "Завершен",
@@ -1206,6 +1315,7 @@
         "CAT_TRAINING": "Обучение",
         "CAT_INTRODUCTION": "Знакомство",
         "CAT_COMPLIANCE": "Политики",
+          "CAT_DEPARTMENT": "Отдел",
         "MARK_COMPLETED": "Отметить выполненным",
         "PENDING_DOCUMENTS": "Ожидаемые документы",
         "SUBMITTED_DOCUMENTS": "Предоставленные документы"

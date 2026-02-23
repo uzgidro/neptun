@@ -1189,6 +1189,115 @@
         "INTERVIEW_SCHEDULE_ERROR": "Суҳбат режалаштириб бўлмади",
         "OFFER_SEND_ERROR": "Таклиф юбориб бўлмади",
       "NOT_ASSIGNED": "Тайинланмаган",
+        "EMPLOYMENT_TYPE": {
+            "FULL_TIME": "Тўлиқ бандлик",
+            "PART_TIME": "Қисман бандлик",
+            "CONTRACT": "Шартнома",
+            "INTERNSHIP": "Стажировка",
+            "REMOTE": "Масофавий иш"
+        },
+        "VACANCY_STATUS": {
+            "DRAFT": "Қоралама",
+            "PENDING_APPROVAL": "Келишувда",
+            "APPROVED": "Келишилган",
+            "OPEN": "Очиқ",
+            "ON_HOLD": "Тўхтатилган",
+            "CLOSED": "Ёпилган",
+            "CANCELLED": "Бекор қилинган"
+        },
+        "PRIORITY": {
+            "LOW": "Паст",
+            "NORMAL": "Оддий",
+            "HIGH": "Юқори",
+            "URGENT": "Шошилинч"
+        },
+        "CANDIDATE_STATUS": {
+            "NEW": "Янги",
+            "SCREENING": "Дастлабки танлов",
+            "PHONE_INTERVIEW": "Телефон суҳбати",
+            "INTERVIEW": "Суҳбат",
+            "TECHNICAL_TEST": "Техник топшириқ",
+            "REFERENCE_CHECK": "Тавсияномa текшируви",
+            "BACKGROUND_CHECK": "Ҳужжат текшируви",
+            "OFFER": "Таклиф",
+            "OFFER_ACCEPTED": "Таклиф қабул қилинди",
+            "HIRED": "Ишга қабул қилинди",
+            "REJECTED": "Рад этилди",
+            "WITHDRAWN": "Номзод рад этди"
+        },
+        "STAGE": {
+            "APPLICATION": "Ариза",
+            "SCREENING": "Танлов",
+            "INTERVIEW": "Суҳбат",
+            "ASSESSMENT": "Баҳолаш",
+            "VERIFICATION": "Текшириш",
+            "OFFER": "Таклиф",
+            "HIRED": "Ишга қабул",
+            "CLOSED": "Ёпилган"
+        },
+        "INTERVIEW_TYPE": {
+            "PHONE": "Телефон",
+            "VIDEO": "Видео қўнғироқ",
+            "IN_PERSON": "Юзма-юз",
+            "TECHNICAL": "Техник",
+            "HR": "HR суҳбат",
+            "PANEL": "Панел",
+            "FINAL": "Якуний"
+        },
+        "RECOMMENDATION": {
+            "STRONG_YES": "Албатта ҳа",
+            "YES": "Ҳа",
+            "MAYBE": "Балки",
+            "NO": "Йўқ",
+            "STRONG_NO": "Албатта йўқ"
+        },
+        "OFFER_STATUS": {
+            "DRAFT": "Қоралама",
+            "PENDING_APPROVAL": "Келишувда",
+            "APPROVED": "Келишилган",
+            "SENT": "Юборилган",
+            "ACCEPTED": "Қабул қилинди",
+            "DECLINED": "Рад этилди",
+            "NEGOTIATING": "Музокаралар",
+            "EXPIRED": "Муддати ўтди",
+            "WITHDRAWN": "Қайтариб олинди"
+        },
+        "SOURCE": {
+            "WEBSITE": "Компания сайти",
+            "JOB_PORTAL": "Вакансиялар портали",
+            "GOV_PORTAL": "Давлат хизмати портали",
+            "REFERRAL": "Ходим тавсияси",
+            "AGENCY": "Кадрлар агентлиги",
+            "SOCIAL_MEDIA": "Ижтимоий тармоқлар",
+            "DIRECT": "Тўғридан-тўғри мурожаат",
+            "OTHER": "Бошқа"
+        },
+        "TOOLTIP": {
+            "PASS_SCREENING": "Скринингдан ўтказиш",
+            "SCHEDULE_INTERVIEW": "Суҳбат тайинлаш",
+            "CHECK_REFERENCES": "Тавсияномаларни текшириш",
+            "SEND_OFFER": "Таклиф юбориш",
+            "OFFER_ACCEPTED": "Таклиф қабул қилинди",
+            "HIRE_EMPLOYEE": "Ишга расмийлаштириш",
+            "REJECT": "Рад этиш"
+        },
+        "MOCK": {
+            "TASK_PROCESS_DOCUMENTS": "Ҳужжатларни расмийлаштириш",
+            "TASK_CREATE_EMAIL": "Email яратиш",
+            "TASK_SETUP_ACCESS": "Тизимларга кириш сўзлаш",
+            "TASK_INTRO_TRAINING": "Кириш ўқитиш",
+            "TASK_MEET_TEAM": "Жамоа билан танишиш",
+            "TASK_COMPANY_POLICIES": "Компания сиёсатлари билан танишиш",
+            "DOC_PASSPORT": "Паспорт",
+            "DOC_INN": "ИНН",
+            "DOC_SNILS": "СНИЛС",
+            "DOC_WORK_BOOK": "Меҳнат дафтарчаси",
+            "DOC_PHOTO": "Сурат 3x4",
+            "DOC_DIPLOMA": "Диплом",
+            "POSITIVE_FEEDBACK": "Ижобий фикр-мулоҳаза",
+            "APPROVER_NAME": "Соколов Андрей",
+            "MENTOR_NAME": "Волкова Олга Николаевна"
+        },
       "ONBOARDING": {
         "STATUS_IN_PROGRESS": "Жараёнда",
         "STATUS_COMPLETED": "Якунланган",
@@ -1203,6 +1312,7 @@
         "CAT_TRAINING": "Ўқитиш",
         "CAT_INTRODUCTION": "Танишиш",
         "CAT_COMPLIANCE": "Сиёсатлар",
+          "CAT_DEPARTMENT": "Бўлим",
         "MARK_COMPLETED": "Бажарилган деб белгилаш",
         "PENDING_DOCUMENTS": "Кутилаётган ҳужжатлар",
         "SUBMITTED_DOCUMENTS": "Тақдим этилган ҳужжатлар"

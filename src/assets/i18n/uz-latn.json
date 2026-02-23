@@ -1200,6 +1200,115 @@
         "INTERVIEW_SCHEDULE_ERROR": "Suhbat rejalashtirb bo'lmadi",
         "OFFER_SEND_ERROR": "Taklif yuborib bo'lmadi",
       "NOT_ASSIGNED": "Tayinlanmagan",
+        "EMPLOYMENT_TYPE": {
+            "FULL_TIME": "To'liq bandlik",
+            "PART_TIME": "Qisman bandlik",
+            "CONTRACT": "Shartnoma",
+            "INTERNSHIP": "Stajirovka",
+            "REMOTE": "Masofaviy ish"
+        },
+        "VACANCY_STATUS": {
+            "DRAFT": "Qoralama",
+            "PENDING_APPROVAL": "Kelishuvda",
+            "APPROVED": "Kelishilgan",
+            "OPEN": "Ochiq",
+            "ON_HOLD": "To'xtatilgan",
+            "CLOSED": "Yopilgan",
+            "CANCELLED": "Bekor qilingan"
+        },
+        "PRIORITY": {
+            "LOW": "Past",
+            "NORMAL": "Oddiy",
+            "HIGH": "Yuqori",
+            "URGENT": "Shoshilinch"
+        },
+        "CANDIDATE_STATUS": {
+            "NEW": "Yangi",
+            "SCREENING": "Dastlabki tanlov",
+            "PHONE_INTERVIEW": "Telefon suhbati",
+            "INTERVIEW": "Suhbat",
+            "TECHNICAL_TEST": "Texnik topshiriq",
+            "REFERENCE_CHECK": "Tavsiyanoma tekshiruvi",
+            "BACKGROUND_CHECK": "Hujjat tekshiruvi",
+            "OFFER": "Taklif",
+            "OFFER_ACCEPTED": "Taklif qabul qilindi",
+            "HIRED": "Ishga qabul qilindi",
+            "REJECTED": "Rad etildi",
+            "WITHDRAWN": "Nomzod rad etdi"
+        },
+        "STAGE": {
+            "APPLICATION": "Ariza",
+            "SCREENING": "Tanlov",
+            "INTERVIEW": "Suhbat",
+            "ASSESSMENT": "Baholash",
+            "VERIFICATION": "Tekshirish",
+            "OFFER": "Taklif",
+            "HIRED": "Ishga qabul",
+            "CLOSED": "Yopilgan"
+        },
+        "INTERVIEW_TYPE": {
+            "PHONE": "Telefon",
+            "VIDEO": "Video qo'ng'iroq",
+            "IN_PERSON": "Yuzma-yuz",
+            "TECHNICAL": "Texnik",
+            "HR": "HR suhbat",
+            "PANEL": "Panel",
+            "FINAL": "Yakuniy"
+        },
+        "RECOMMENDATION": {
+            "STRONG_YES": "Albatta ha",
+            "YES": "Ha",
+            "MAYBE": "Balki",
+            "NO": "Yo'q",
+            "STRONG_NO": "Albatta yo'q"
+        },
+        "OFFER_STATUS": {
+            "DRAFT": "Qoralama",
+            "PENDING_APPROVAL": "Kelishuvda",
+            "APPROVED": "Kelishilgan",
+            "SENT": "Yuborilgan",
+            "ACCEPTED": "Qabul qilindi",
+            "DECLINED": "Rad etildi",
+            "NEGOTIATING": "Muzokaralar",
+            "EXPIRED": "Muddati o'tdi",
+            "WITHDRAWN": "Qaytarib olindi"
+        },
+        "SOURCE": {
+            "WEBSITE": "Kompaniya sayti",
+            "JOB_PORTAL": "Vakansiyalar portali",
+            "GOV_PORTAL": "Davlat xizmati portali",
+            "REFERRAL": "Xodim tavsiyasi",
+            "AGENCY": "Kadrlar agentligi",
+            "SOCIAL_MEDIA": "Ijtimoiy tarmoqlar",
+            "DIRECT": "To'g'ridan-to'g'ri murojaat",
+            "OTHER": "Boshqa"
+        },
+        "TOOLTIP": {
+            "PASS_SCREENING": "Skriningdan o'tkazish",
+            "SCHEDULE_INTERVIEW": "Suhbat tayinlash",
+            "CHECK_REFERENCES": "Tavsiyanomalarni tekshirish",
+            "SEND_OFFER": "Taklif yuborish",
+            "OFFER_ACCEPTED": "Taklif qabul qilindi",
+            "HIRE_EMPLOYEE": "Ishga rasmiylashtirish",
+            "REJECT": "Rad etish"
+        },
+        "MOCK": {
+            "TASK_PROCESS_DOCUMENTS": "Hujjatlarni rasmiylashtirish",
+            "TASK_CREATE_EMAIL": "Email yaratish",
+            "TASK_SETUP_ACCESS": "Tizimlarga kirish sozlash",
+            "TASK_INTRO_TRAINING": "Kirish o'qitish",
+            "TASK_MEET_TEAM": "Jamoa bilan tanishish",
+            "TASK_COMPANY_POLICIES": "Kompaniya siyosatlari bilan tanishish",
+            "DOC_PASSPORT": "Pasport",
+            "DOC_INN": "INN",
+            "DOC_SNILS": "SNILS",
+            "DOC_WORK_BOOK": "Mehnat daftarchasi",
+            "DOC_PHOTO": "Surat 3x4",
+            "DOC_DIPLOMA": "Diplom",
+            "POSITIVE_FEEDBACK": "Ijobiy fikr-mulohaza",
+            "APPROVER_NAME": "Sokolov Andrey",
+            "MENTOR_NAME": "Volkova Olga Nikolaevna"
+        },
       "ONBOARDING": {
         "STATUS_IN_PROGRESS": "Jarayonda",
         "STATUS_COMPLETED": "Yakunlangan",
@@ -1214,6 +1323,7 @@
         "CAT_TRAINING": "O'qitish",
         "CAT_INTRODUCTION": "Tanishish",
         "CAT_COMPLIANCE": "Siyosatlar",
+          "CAT_DEPARTMENT": "Bo'lim",
         "MARK_COMPLETED": "Bajarilgan deb belgilash",
         "PENDING_DOCUMENTS": "Kutilayotgan hujjatlar",
         "SUBMITTED_DOCUMENTS": "Taqdim etilgan hujjatlar"

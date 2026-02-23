@@ -36,8 +36,6 @@ import {
     VACANCY_PRIORITIES,
     INTERVIEW_TYPES,
     INTERVIEW_RECOMMENDATIONS,
-    OFFER_STATUSES,
-    ONBOARDING_CATEGORIES,
     CANDIDATE_SOURCES,
     RECRUITING_STAGES,
     VacancyStatus,
@@ -68,8 +66,7 @@ import {
         Select,
         DatePicker,
         InputNumber,
-        TranslateModule,
-
+        TranslateModule
     ],
     templateUrl: './recruiting.component.html',
     styleUrl: './recruiting.component.scss'
@@ -94,8 +91,6 @@ export class RecruitingComponent implements OnInit, OnDestroy {
     displayReferenceDialog: boolean = false;
     displayRejectDialog: boolean = false;
     displayOnboardingDialog: boolean = false;
-    displayDeleteDialog: boolean = false;
-    displayApprovalDialog: boolean = false;
 
     // Выбранные объекты
     selectedVacancy: Vacancy | null = null;
@@ -127,8 +122,6 @@ export class RecruitingComponent implements OnInit, OnDestroy {
     vacancyPriorities = VACANCY_PRIORITIES;
     interviewTypes = INTERVIEW_TYPES;
     interviewRecommendations = INTERVIEW_RECOMMENDATIONS;
-    offerStatuses = OFFER_STATUSES;
-    onboardingCategories = ONBOARDING_CATEGORIES;
     candidateSources = CANDIDATE_SOURCES;
     recruitingStages = RECRUITING_STAGES;
 
@@ -170,7 +163,7 @@ export class RecruitingComponent implements OnInit, OnDestroy {
 
         this.interviewForm = this.fb.group({
             interview_type: [null, Validators.required],
-            interviewer_id: [null, Validators.required],
+            interviewer_id: [null],
             scheduled_at: [null, Validators.required],
             duration_minutes: [60, [Validators.required, Validators.min(15)]],
             location: [''],
@@ -207,7 +200,20 @@ export class RecruitingComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.translateOptionLabels();
+        this.translate.onLangChange.pipe(takeUntil(this.destroy$)).subscribe(() => this.translateOptionLabels());
         this.loadData();
+    }
+
+    private translateOptionLabels(): void {
+        this.employmentTypes = EMPLOYMENT_TYPES.map((t) => ({ ...t, label: this.translate.instant(t.label) }));
+        this.vacancyStatuses = VACANCY_STATUSES.map((t) => ({ ...t, label: this.translate.instant(t.label) }));
+        this.vacancyPriorities = VACANCY_PRIORITIES.map((t) => ({ ...t, label: this.translate.instant(t.label) }));
+        this.candidateStatuses = CANDIDATE_STATUSES.map((t) => ({ ...t, label: this.translate.instant(t.label) }));
+        this.recruitingStages = RECRUITING_STAGES.map((t) => ({ ...t, label: this.translate.instant(t.label) }));
+        this.interviewTypes = INTERVIEW_TYPES.map((t) => ({ ...t, label: this.translate.instant(t.label) }));
+        this.interviewRecommendations = INTERVIEW_RECOMMENDATIONS.map((t) => ({ ...t, label: this.translate.instant(t.label) }));
+        this.candidateSources = CANDIDATE_SOURCES.map((t) => ({ ...t, label: this.translate.instant(t.label) }));
     }
 
     private loadData(): void {
@@ -343,7 +349,7 @@ export class RecruitingComponent implements OnInit, OnDestroy {
                 ...this.vacancies[index],
                 status: 'approved',
                 approved_by: 3,
-                approved_by_name: 'Соколов Андрей',
+                approved_by_name: this.translate.instant('HRM.RECRUITING.MOCK.APPROVER_NAME'),
                 approved_date: new Date().toISOString().split('T')[0],
                 finance_approved: true
             };
@@ -615,7 +621,7 @@ export class RecruitingComponent implements OnInit, OnDestroy {
                 this.candidates[candidateIndex].reference_checks![refIndex] = {
                     ...this.candidates[candidateIndex].reference_checks![refIndex],
                     status: 'completed',
-                    feedback: 'Положительный отзыв',
+                    feedback: this.translate.instant('HRM.RECRUITING.MOCK.POSITIVE_FEEDBACK'),
                     rating: 4,
                     would_rehire: true,
                     completed_at: new Date().toISOString()
@@ -723,15 +729,22 @@ export class RecruitingComponent implements OnInit, OnDestroy {
                 start_date: candidate.offer?.start_date || new Date().toISOString().split('T')[0],
                 status: 'not_started',
                 tasks: [
-                    { id: 1, title: 'Оформление документов', category: 'documents', status: 'pending', due_date: candidate.offer?.start_date },
-                    { id: 2, title: 'Создание учетной записи email', category: 'it_setup', status: 'pending' },
-                    { id: 3, title: 'Настройка доступа к системам', category: 'it_setup', status: 'pending' },
-                    { id: 4, title: 'Вводное обучение', category: 'training', status: 'pending' },
-                    { id: 5, title: 'Знакомство с командой', category: 'introduction', status: 'pending' },
-                    { id: 6, title: 'Ознакомление с политиками компании', category: 'compliance', status: 'pending' }
+                    { id: 1, title: this.translate.instant('HRM.RECRUITING.MOCK.TASK_PROCESS_DOCUMENTS'), category: 'documents', status: 'pending', due_date: candidate.offer?.start_date },
+                    { id: 2, title: this.translate.instant('HRM.RECRUITING.MOCK.TASK_CREATE_EMAIL'), category: 'it_setup', status: 'pending' },
+                    { id: 3, title: this.translate.instant('HRM.RECRUITING.MOCK.TASK_SETUP_ACCESS'), category: 'it_setup', status: 'pending' },
+                    { id: 4, title: this.translate.instant('HRM.RECRUITING.MOCK.TASK_INTRO_TRAINING'), category: 'training', status: 'pending' },
+                    { id: 5, title: this.translate.instant('HRM.RECRUITING.MOCK.TASK_MEET_TEAM'), category: 'introduction', status: 'pending' },
+                    { id: 6, title: this.translate.instant('HRM.RECRUITING.MOCK.TASK_COMPANY_POLICIES'), category: 'compliance', status: 'pending' }
                 ],
                 documents_submitted: [],
-                documents_pending: ['Паспорт', 'ИНН', 'СНИЛС', 'Трудовая книжка', 'Фото 3x4', 'Диплом'],
+                documents_pending: [
+                    this.translate.instant('HRM.RECRUITING.MOCK.DOC_PASSPORT'),
+                    this.translate.instant('HRM.RECRUITING.MOCK.DOC_INN'),
+                    this.translate.instant('HRM.RECRUITING.MOCK.DOC_SNILS'),
+                    this.translate.instant('HRM.RECRUITING.MOCK.DOC_WORK_BOOK'),
+                    this.translate.instant('HRM.RECRUITING.MOCK.DOC_PHOTO'),
+                    this.translate.instant('HRM.RECRUITING.MOCK.DOC_DIPLOMA')
+                ],
                 overall_progress: 0
             };
 
@@ -760,7 +773,7 @@ export class RecruitingComponent implements OnInit, OnDestroy {
             this.onboardings[index] = {
                 ...this.onboardings[index],
                 mentor_id: 7,
-                mentor_name: 'Волкова Ольга Николаевна',
+                mentor_name: this.translate.instant('HRM.RECRUITING.MOCK.MENTOR_NAME'),
                 status: 'in_progress'
             };
             this.onboardings = [...this.onboardings];
@@ -905,8 +918,20 @@ export class RecruitingComponent implements OnInit, OnDestroy {
         return found ? found.label : status;
     }
 
-    getVacanciesForSelect() {
-        return this.vacancies.filter((v) => v.status === 'open').map((v) => ({ id: v.id, name: v.title }));
+    getSourceLabel(source: string): string {
+        const found = this.candidateSources.find((s) => s.value === source);
+        return found ? found.label : source;
+    }
+
+    private _cachedVacanciesForSelect: { id: number; name: string }[] = [];
+    private _lastVacanciesRef: Vacancy[] | null = null;
+
+    get vacanciesForSelect(): { id: number; name: string }[] {
+        if (this._lastVacanciesRef !== this.vacancies) {
+            this._lastVacanciesRef = this.vacancies;
+            this._cachedVacanciesForSelect = this.vacancies.filter((v) => v.status === 'open').map((v) => ({ id: v.id, name: v.title }));
+        }
+        return this._cachedVacanciesForSelect;
     }
 
     getStageProgress(stage: RecruitingStage): number {
