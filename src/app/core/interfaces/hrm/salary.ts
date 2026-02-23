@@ -161,6 +161,12 @@ export type BonusType = 'performance' | 'holiday' | 'quarterly' | 'annual' | 'on
 export type DeductionType = 'loan' | 'alimony' | 'fine' | 'advance' | 'other';
 export type ReportType = 'payroll_register' | 'tax_report' | 'social_fund_report' | 'payslip';
 
+// Type aliases used by HrmSalaryService
+export type SalaryPayload = SalaryCalculationInput;
+export type SalaryStructure = EmployeeSalaryStructure;
+export type SalaryDeduction = EmployeeDeduction;
+export type SalaryBonus = EmployeeBonus;
+
 export const SALARY_STATUSES: { value: SalaryStatus; label: string }[] = [
     { value: 'draft', label: 'Черновик' },
     { value: 'calculated', label: 'Рассчитан' },

@@ -311,18 +311,6 @@
                 <p class="text-sm text-surface-500 m-0">{{ 'HRM.ORG_STRUCTURE.HIRE_DATE_LABEL' | translate }}</p>
                 <p class="font-medium text-surface-900 dark:text-surface-0 m-0">{{ formatDate(selectedEmployee.hire_date) }}</p>
             </div>
-            @if (selectedEmployee.manager_name) {
-                <div>
-                    <p class="text-sm text-surface-500 m-0">{{ 'HRM.ORG_STRUCTURE.SUPERVISOR' | translate }}</p>
-                    <p class="font-medium text-surface-900 dark:text-surface-0 m-0">{{ selectedEmployee.manager_name }}</p>
-                </div>
-            }
-            @if (selectedEmployee.is_manager) {
-                <div>
-                    <p class="text-sm text-surface-500 m-0">{{ 'HRM.ORG_STRUCTURE.SUBORDINATES' | translate }}</p>
-                    <p class="font-medium text-surface-900 dark:text-surface-0 m-0">{{ selectedEmployee.subordinates_count }}</p>
-                </div>
-            }
             @if (selectedEmployee.email) {
                 <div>
                     <p class="text-sm text-surface-500 m-0">Email</p>
@@ -407,15 +395,6 @@
                 optionLabel="name" optionValue="id" [placeholder]="'HRM.ORG_STRUCTURE.SELECT_DEPARTMENT' | translate"
                 [filter]="true" [filterPlaceholder]="'HRM.ORG_STRUCTURE.SEARCH' | translate" class="w-full"
                 appendTo="body" [scrollHeight]="'300px'"></p-select>
-        </div>
-
-        <!-- Manager -->
-        <div class="flex flex-col gap-2">
-            <label class="font-semibold text-surface-700 dark:text-surface-300">{{ 'HRM.ORG_STRUCTURE.SUPERVISOR' | translate }}</label>
-            <p-select [options]="getManagersForDepartment()" [(ngModel)]="employeeForm.manager_id"
-                optionLabel="name" optionValue="id" [placeholder]="'HRM.ORG_STRUCTURE.SELECT_MANAGER' | translate"
-                [showClear]="true" [filter]="true" [filterPlaceholder]="'HRM.ORG_STRUCTURE.SEARCH' | translate" class="w-full"
-                appendTo="body" [scrollHeight]="'250px'"></p-select>
         </div>
 
         <div class="grid grid-cols-2 gap-5">

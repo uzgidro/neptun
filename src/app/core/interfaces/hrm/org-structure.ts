@@ -31,11 +31,8 @@ export interface OrgEmployee {
     phone?: string;
     photo?: string;
     photo_url?: string;
-    manager_id?: number;
-    manager_name?: string;
     hire_date: string;
     is_manager: boolean;
-    subordinates_count: number;
     direct_reports?: OrgEmployee[];
 }
 

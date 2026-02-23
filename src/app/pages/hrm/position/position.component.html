@@ -19,17 +19,21 @@
                     </p-inputicon>
                     <input pInputText type="text" (input)="onGlobalFilter(pt, $event)" [placeholder]="'COMMON.SEARCH' | translate" />
                 </p-iconfield>
-                <button pButton (click)="openDialog()">
-                    <i class="pi pi-plus" pButtonIcon></i>
-                    <span pButtonLabel>{{ 'HRM.POSITIONS.NEW_POSITION' | translate }}</span>
-                </button>
+                @if (canEdit) {
+                    <button pButton (click)="openDialog()">
+                        <i class="pi pi-plus" pButtonIcon></i>
+                        <span pButtonLabel>{{ 'HRM.POSITIONS.NEW_POSITION' | translate }}</span>
+                    </button>
+                }
             </div>
         </ng-template>
         <ng-template #header>
             <tr>
                 <th style="min-width: 12rem">{{ 'HRM.POSITIONS.NAME' | translate }}</th>
                 <th style="min-width: 15rem">{{ 'HRM.POSITIONS.DESCRIPTION' | translate }}</th>
-                <th style="width: 10rem">{{ 'COMMON.ACTIONS' | translate }}</th>
+                @if (canEdit) {
+                    <th style="width: 10rem">{{ 'COMMON.ACTIONS' | translate }}</th>
+                }
             </tr>
         </ng-template>
         <ng-template #body let-position>
@@ -40,34 +44,36 @@
                 <td>
                     {{ position.description || '—' }}
                 </td>
-                <td>
-                    <div class="flex justify-center gap-2">
-                        <button pButton
-                                icon="pi pi-pencil"
-                                (click)="openEditDialog(position)"
-                                class="p-button-rounded p-button-text p-button-warning"
-                                [pTooltip]="'COMMON.EDIT' | translate"
-                                tooltipPosition="top">
-                        </button>
-                        <button pButton
-                                icon="pi pi-trash"
-                                (click)="openDeleteDialog(position)"
-                                class="p-button-rounded p-button-text p-button-danger"
-                                [pTooltip]="'COMMON.DELETE' | translate"
-                                tooltipPosition="top">
-                        </button>
-                    </div>
-                </td>
+                @if (canEdit) {
+                    <td>
+                        <div class="flex justify-center gap-2">
+                            <button pButton
+                                    icon="pi pi-pencil"
+                                    (click)="openEditDialog(position)"
+                                    class="p-button-rounded p-button-text p-button-warning"
+                                    [pTooltip]="'COMMON.EDIT' | translate"
+                                    tooltipPosition="top">
+                            </button>
+                            <button pButton
+                                    icon="pi pi-trash"
+                                    (click)="openDeleteDialog(position)"
+                                    class="p-button-rounded p-button-text p-button-danger"
+                                    [pTooltip]="'COMMON.DELETE' | translate"
+                                    tooltipPosition="top">
+                            </button>
+                        </div>
+                    </td>
+                }
             </tr>
         </ng-template>
         <ng-template #emptymessage>
             <tr>
-                <td colspan="3">{{ 'HRM.POSITIONS.NOTHING_FOUND' | translate }}</td>
+                <td [attr.colspan]="canEdit ? 3 : 2">{{ 'HRM.POSITIONS.NOTHING_FOUND' | translate }}</td>
             </tr>
         </ng-template>
         <ng-template #loadingbody>
             <tr>
-                <td colspan="3">{{ 'HRM.POSITIONS.LOADING' | translate }}</td>
+                <td [attr.colspan]="canEdit ? 3 : 2">{{ 'HRM.POSITIONS.LOADING' | translate }}</td>
             </tr>
         </ng-template>
     </p-table>

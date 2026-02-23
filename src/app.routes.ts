@@ -3,7 +3,7 @@ import { AppLayout } from '@/layout/component/app.layout';
 import { Dashboard } from '@/pages/dashboard/dashboard';
 import { Notfound } from '@/pages/notfound/notfound';
 
-import { adminGuard, authGuard, raisGuard, scGuard } from '@/core/guards/auth.guard';
+import { adminGuard, authGuard, hrmGuard, positionsGuard, raisGuard, scGuard } from '@/core/guards/auth.guard';
 import { User } from '@/pages/hrm/users/user.component';
 import { Role } from '@/pages/hrm/roles/roles';
 import { CategoriesComponent } from '@/pages/categories/categories.component';
@@ -76,23 +76,23 @@ export const appRoutes: Routes = [
             { path: 'roles', component: Role, canActivate: [adminGuard] },
             { path: 'categories', component: CategoriesComponent, canActivate: [scGuard] },
             { path: 'files', component: FilesComponent, canActivate: [scGuard] },
-            { path: 'positions', component: PositionComponent, canActivate: [adminGuard] },
+            { path: 'positions', component: PositionComponent, canActivate: [positionsGuard] },
             { path: 'departments', component: DepartmentComponent, canActivate: [adminGuard] },
             { path: 'employees', component: EmployeeComponent, canActivate: [adminGuard] },
-            { path: 'hrm/dashboard', component: HRMDashboardComponent, canActivate: [adminGuard] },
+            { path: 'hrm/dashboard', component: HRMDashboardComponent, canActivate: [hrmGuard] },
             { path: 'hrm/my-cabinet', component: EmployeeCabinetComponent, canActivate: [authGuard] },
-            { path: 'hrm/personnel-records', component: PersonnelRecordsComponent, canActivate: [adminGuard] },
-            { path: 'hrm/vacations', component: VacationManagementComponent, canActivate: [adminGuard] },
-            { path: 'hrm/salary', component: SalaryManagementComponent, canActivate: [adminGuard] },
-            { path: 'hrm/recruiting', component: RecruitingComponent, canActivate: [adminGuard] },
-            { path: 'hrm/training', component: TrainingComponent, canActivate: [adminGuard] },
-            { path: 'hrm/competency', component: CompetencyAssessmentComponent, canActivate: [adminGuard] },
-            { path: 'hrm/performance', component: PerformanceManagementComponent, canActivate: [adminGuard] },
-            { path: 'hrm/analytics', component: AnalyticsComponent, canActivate: [adminGuard] },
-            { path: 'hrm/timesheet', component: TimesheetComponent, canActivate: [adminGuard] },
-            { path: 'hrm/documents', component: HRDocumentsComponent, canActivate: [adminGuard] },
-            { path: 'hrm/access-control', component: AccessControlComponent, canActivate: [adminGuard] },
-            { path: 'hrm/org-structure', component: OrgStructureComponent, canActivate: [adminGuard] },
+            { path: 'hrm/personnel-records', component: PersonnelRecordsComponent, canActivate: [hrmGuard] },
+            { path: 'hrm/vacations', component: VacationManagementComponent, canActivate: [hrmGuard] },
+            { path: 'hrm/salary', component: SalaryManagementComponent, canActivate: [hrmGuard] },
+            { path: 'hrm/recruiting', component: RecruitingComponent, canActivate: [hrmGuard] },
+            { path: 'hrm/training', component: TrainingComponent, canActivate: [hrmGuard] },
+            { path: 'hrm/competency', component: CompetencyAssessmentComponent, canActivate: [hrmGuard] },
+            { path: 'hrm/performance', component: PerformanceManagementComponent, canActivate: [hrmGuard] },
+            { path: 'hrm/analytics', component: AnalyticsComponent, canActivate: [hrmGuard] },
+            { path: 'hrm/timesheet', component: TimesheetComponent, canActivate: [hrmGuard] },
+            { path: 'hrm/documents', component: HRDocumentsComponent, canActivate: [hrmGuard] },
+            { path: 'hrm/access-control', component: AccessControlComponent, canActivate: [hrmGuard] },
+            { path: 'hrm/org-structure', component: OrgStructureComponent, canActivate: [hrmGuard] },
             { path: 'viewer', component: DocumentViewerComponent, canActivate: [raisGuard] },
             { path: 'discharges', component: DischargesComponent, canActivate: [raisGuard] },
             { path: 'shutdowns', component: ShutdownComponent, canActivate: [raisGuard] },

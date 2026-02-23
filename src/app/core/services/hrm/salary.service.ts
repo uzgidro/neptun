@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { BASE_URL } from '@/core/services/api.service';
-import { Salary, SalaryPayload, SalaryStructure, SalaryDeduction, SalaryBonus } from '@/core/interfaces/hrm/salary';
+import { Salary, SalaryPayload, SalaryStructure, SalaryDeduction, SalaryBonus, EmployeeSalaryStructure, EmployeeBonus, EmployeeDeduction } from '@/core/interfaces/hrm/salary';
 
 const API_URL = BASE_URL + '/hrm/salaries';
 
@@ -79,5 +79,18 @@ export class HrmSalaryService {
     exportToExcel(month: number, year: number): Observable<Blob> {
         const params = new HttpParams().set('month', month.toString()).set('year', year.toString());
         return this.http.get(`${API_URL}/export`, { params, responseType: 'blob' });
+    }
+
+    // Global endpoints (all employees) — hrm_admin / hrm_manager
+    getAllStructures(): Observable<EmployeeSalaryStructure[]> {
+        return this.http.get<EmployeeSalaryStructure[]>(`${API_URL}/structures`);
+    }
+
+    getAllBonuses(): Observable<EmployeeBonus[]> {
+        return this.http.get<EmployeeBonus[]>(`${API_URL}/bonuses`);
+    }
+
+    getAllDeductions(): Observable<EmployeeDeduction[]> {
+        return this.http.get<EmployeeDeduction[]>(`${API_URL}/deductions`);
     }
 }

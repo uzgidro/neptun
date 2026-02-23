@@ -49,7 +49,6 @@ export interface EmployeeForm {
     position: string;
     position_custom?: string;
     department_id: number | null;
-    manager_id?: number | null;
     hire_date: string;
     photo_url?: string;
     email?: string;
@@ -297,7 +296,6 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
             position: '',
             position_custom: '',
             department_id: null,
-            manager_id: null,
             hire_date: new Date().toISOString().split('T')[0],
             photo_url: '',
             email: '',
@@ -329,7 +327,6 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
             position: isCustomPosition ? '' : employee.position,
             position_custom: isCustomPosition ? employee.position : '',
             department_id: employee.department_id,
-            manager_id: employee.manager_id || null,
             hire_date: employee.hire_date,
             photo_url: employee.photo_url || '',
             email: employee.email || '',
@@ -370,8 +367,6 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
                     position: position!,
                     department_id: this.employeeForm.department_id,
                     department_name: department?.name || '',
-                    manager_id: this.employeeForm.manager_id || undefined,
-                    manager_name: this.getManagerName(this.employeeForm.manager_id),
                     hire_date: this.employeeForm.hire_date,
                     photo_url: this.employeeForm.photo_url,
                     email: this.employeeForm.email,
@@ -388,14 +383,11 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
                 position: position!,
                 department_id: this.employeeForm.department_id,
                 department_name: department?.name || '',
-                manager_id: this.employeeForm.manager_id || undefined,
-                manager_name: this.getManagerName(this.employeeForm.manager_id),
                 hire_date: this.employeeForm.hire_date,
                 photo_url: this.employeeForm.photo_url,
                 email: this.employeeForm.email,
                 phone: this.employeeForm.phone,
-                is_manager: this.employeeForm.is_manager,
-                subordinates_count: 0
+                is_manager: this.employeeForm.is_manager
             };
             this.employees.push(newEmployee);
 
@@ -433,16 +425,6 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
             this.calculateStats();
             this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('HRM.ORG_STRUCTURE.EMPLOYEE_DELETED') });
         }
-    }
-
-    private getManagerName(managerId: number | null | undefined): string | undefined {
-        if (!managerId) return undefined;
-        const manager = this.employees.find(e => e.id === managerId);
-        return manager?.name;
-    }
-
-    getManagersForDepartment(): OrgEmployee[] {
-        return this.employees.filter(e => e.is_manager);
     }
 
     onPhotoUpload(event: any): void {

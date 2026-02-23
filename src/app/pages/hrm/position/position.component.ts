@@ -13,6 +13,7 @@ import { Tooltip } from 'primeng/tooltip';
 import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
 import { BaseCrudComponent } from '@/core/components/base-crud.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { AuthService } from '@/core/services/auth.service';
 
 @Component({
     selector: 'app-position',
@@ -21,6 +22,9 @@ import { TranslateModule } from '@ngx-translate/core';
     styleUrl: './position.component.scss'
 })
 export class PositionComponent extends BaseCrudComponent<Position, PositionPayload> implements OnInit {
+    private authService = inject(AuthService);
+    canEdit = this.authService.isAdmin();
+
     constructor() {
         super(inject(PositionService), {
             createSuccess: 'HRM.POSITIONS.SUCCESS_CREATED',
