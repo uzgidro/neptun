@@ -78,17 +78,18 @@ export class GesDashboardComponent implements OnInit, OnDestroy {
             }
         });
 
-        // Load shutdowns count
+        // Load shutdowns count (filter current month client-side)
+        const monthStart = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
         this.gesService.getShutdowns(this.gesId).subscribe({
             next: (data) => {
-                this.kpiData.shutdownsCount = data.length;
+                this.kpiData.shutdownsCount = data.filter((s) => new Date(s.started_at) >= monthStart).length;
             }
         });
 
-        // Load discharges count
+        // Load discharges count (filter current month client-side)
         this.gesService.getDischarges(this.gesId).subscribe({
             next: (data) => {
-                this.kpiData.dischargesCount = data.length;
+                this.kpiData.dischargesCount = data.filter((d) => new Date(d.started_at) >= monthStart).length;
             }
         });
     }
