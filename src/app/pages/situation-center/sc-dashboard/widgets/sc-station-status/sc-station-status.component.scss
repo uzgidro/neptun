@@ -6,175 +6,143 @@
 .sc-station-status {
     display: flex;
     flex-direction: column;
-    gap: 10px;
     height: 100%;
     overflow: hidden;
-}
 
-// Chart Container
-.chart-container {
-    display: flex;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-.chart-wrapper {
-    position: relative;
-    width: 120px;
-    height: 120px;
-}
-
-// Center Counter
-.chart-center {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.center-value {
-    font-size: 24px;
-    font-weight: 700;
-    line-height: 1;
-}
-
-.center-label {
-    font-size: 9px;
-    color: var(--sc-text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-top: 2px;
-}
-
-// Status Legend
-.status-legend {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    flex: 1;
-    overflow: auto;
-}
-
-.legend-item {
-    display: grid;
-    grid-template-columns: auto 1fr 50px;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 8px;
-    background: #f8fafc;
-    border-radius: 6px;
-    border: 1px solid var(--sc-border-color);
-}
-
-.legend-indicator {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 16px;
-}
-
-.legend-info {
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
-}
-
-.legend-label {
-    font-size: 11px;
-    color: var(--sc-text-primary);
-    font-weight: 500;
-}
-
-.legend-stats {
-    display: flex;
-    align-items: center;
-    gap: 3px;
-}
-
-.legend-value {
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--sc-text-primary);
-}
-
-.legend-percent {
-    font-size: 9px;
-    color: var(--sc-text-muted);
-}
-
-.legend-bar-container {
-    height: 4px;
-    background: rgba(0, 0, 0, 0.06);
-    border-radius: 2px;
-    overflow: hidden;
-}
-
-.legend-bar {
-    height: 100%;
-    border-radius: 2px;
-    transition: width 0.5s ease;
-}
-
-// Override PrimeNG chart canvas
-:host ::ng-deep {
-    .p-chart {
-        canvas {
-            max-width: 100%;
-            max-height: 100%;
-        }
+    &.tile-mode {
+        padding: 12px;
     }
 }
 
-// Total Power
-.total-power {
+// Header: title + refresh on same line
+.tile-header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 10px 12px;
-    background: rgba(14, 165, 233, 0.06);
-    border-radius: 6px;
-    border: 1px solid rgba(14, 165, 233, 0.12);
+    justify-content: space-between;
     flex-shrink: 0;
+    margin-bottom: 8px;
+
+    .widget-title {
+        margin-bottom: 0;
+    }
 }
 
-.power-label {
-    font-size: 11px;
+// Loading state
+.tile-loading {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--sc-text-muted);
+
+    i {
+        font-size: 20px;
+    }
+}
+
+// Big numbers row
+.status-numbers {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    flex-shrink: 0;
+    padding: 4px 0 8px;
+}
+
+.status-metric {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    flex: 1;
+}
+
+.metric-value {
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+
+    &.status-active {
+        color: var(--sc-neon-red);
+    }
+
+    &.status-stopped {
+        color: var(--sc-neon-green);
+    }
+
+    &.status-repair {
+        color: var(--sc-neon-yellow);
+    }
+}
+
+.metric-label {
+    font-size: 9px;
     color: var(--sc-text-muted);
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.3px;
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 80px;
 }
 
-.power-value {
-    font-size: 16px;
+// Stacked bar
+.stacked-bar {
+    display: flex;
+    height: 6px;
+    border-radius: 3px;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: rgba(0, 0, 0, 0.06);
+    margin-bottom: 8px;
+}
+
+.bar-segment {
+    min-width: 4px;
+    transition: flex 0.5s ease;
+
+    &:first-child {
+        border-radius: 3px 0 0 3px;
+    }
+
+    &:last-child {
+        border-radius: 0 3px 3px 0;
+    }
+
+    &:only-child {
+        border-radius: 3px;
+    }
+}
+
+// Footer: power + time inline
+.tile-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+    margin-top: auto;
+}
+
+.power-inline {
+    font-size: 14px;
     font-weight: 700;
     color: var(--sc-neon-green);
+    font-variant-numeric: tabular-nums;
 }
 
-// Footer
-.widget-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-top: 8px;
-    border-top: 1px solid var(--sc-border-color);
-    margin-top: auto;
-    flex-shrink: 0;
-}
-
-.last-updated {
-    font-size: 10px;
+.time-ago {
+    font-size: 9px;
     color: var(--sc-text-muted);
 }
 
+// Refresh button
 .refresh-btn {
     background: transparent;
     border: 1px solid rgba(14, 165, 233, 0.3);
-    border-radius: 6px;
-    padding: 4px 8px;
+    border-radius: 4px;
+    padding: 2px 6px;
     color: var(--sc-neon-cyan);
     cursor: pointer;
     transition: all 0.2s ease;
@@ -190,6 +158,16 @@
     }
 
     i {
-        font-size: 12px;
+        font-size: 11px;
+    }
+}
+
+// Override PrimeNG chart canvas (kept for safety, chart removed from template)
+:host ::ng-deep {
+    .p-chart {
+        canvas {
+            max-width: 100%;
+            max-height: 100%;
+        }
     }
 }

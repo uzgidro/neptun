@@ -2,33 +2,19 @@
     <!-- Header -->
     <sc-header class="sc-header-area"></sc-header>
 
-    <!-- Main Grid Layout -->
-    <div class="sc-grid">
-        <!-- Left Column -->
-        <div class="sc-left-column">
-            <!-- Monitoring Data -->
-            <sc-monitoring class="sc-widget"></sc-monitoring>
+    <!-- Top Tiles Row: KPIs + Station Status + Shutdowns -->
+    <div class="sc-tiles-row">
+        <sc-power-generation class="sc-widget tile-power"></sc-power-generation>
+        <sc-station-status class="sc-widget tile-station"></sc-station-status>
+        <sc-shutdowns class="sc-widget tile-shutdowns"></sc-shutdowns>
+    </div>
 
-            <!-- Station Status -->
-            <sc-station-status class="sc-widget"></sc-station-status>
-        </div>
-
-        <!-- Center Column - Map -->
-        <div class="sc-center-column">
-            <!-- Power Generation -->
-            <sc-power-generation class="sc-widget sc-power-widget"></sc-power-generation>
-
-            <!-- Interactive Map -->
-            <sc-map class="sc-widget sc-map-widget"></sc-map>
-        </div>
-
-        <!-- Right Column -->
-        <div class="sc-right-column">
-            <!-- Discharges -->
-            <sc-discharges class="sc-widget"></sc-discharges>
-
-            <!-- Shutdowns -->
-            <sc-shutdowns class="sc-widget"></sc-shutdowns>
+    <!-- Main Content: Map + Side Panel -->
+    <div class="sc-main-row">
+        <sc-map class="sc-widget tile-map"></sc-map>
+        <div class="sc-side-stack">
+            <sc-discharges class="sc-widget tile-discharges"></sc-discharges>
+            <sc-monitoring class="sc-widget tile-monitoring"></sc-monitoring>
         </div>
     </div>
 </div>
