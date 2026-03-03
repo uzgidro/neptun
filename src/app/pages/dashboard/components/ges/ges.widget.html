@@ -10,7 +10,7 @@
     </div>
 
     <p-table [value]="cascades" dataKey="name" [loading]="loading"
-             [expandedRowKeys]="expandedRows">
+             [scrollable]="true" [expandedRowKeys]="expandedRows">
         <ng-template #header>
             <tr>
                 <th style="width: 3rem">№</th>
@@ -50,7 +50,7 @@
                 <tr style="background-color: rgba(0, 0, 0, 0.02);">
                     <td colspan="2"></td>
                     <td [attr.colspan]="5" style="border-left: 3px solid var(--dash-border-color, #e2e8f0);">
-                        <div class="flex gap-8">
+                        <div class="flex flex-wrap gap-4">
                             @for (contact of cascade.contacts; track contact.id) {
                                 <div class="py-2">
                                     <p class="font-bold mb-1">{{ contact.position?.description }}</p>

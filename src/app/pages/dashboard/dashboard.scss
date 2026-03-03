@@ -58,7 +58,7 @@
     grid-template-columns: 1fr 1fr;
     gap: 12px;
 
-    @media (max-width: 1200px) {
+    @media (max-width: 900px) {
         grid-template-columns: 1fr;
     }
 }
@@ -426,6 +426,159 @@
 
         &:hover {
             background: #94a3b8;
+        }
+    }
+}
+
+// ═══════════════════════════════════
+// Responsive
+// ═══════════════════════════════════
+
+// Tablet
+@media (max-width: 1200px) {
+    .dash-layout {
+        padding: 12px;
+        gap: 10px;
+    }
+
+    :host ::ng-deep {
+        .tile-number {
+            font-size: 24px;
+        }
+
+        .section-title {
+            font-size: 13px;
+        }
+
+        // Tables — ensure horizontal scroll
+        .dash-tile {
+            overflow: auto;
+
+            .p-datatable {
+                .p-datatable-thead > tr > th,
+                .p-datatable-tbody > tr > td {
+                    padding: 8px 10px;
+                }
+            }
+        }
+    }
+}
+
+// Mobile
+@media (max-width: 768px) {
+    .dash-layout {
+        padding: 8px;
+        gap: 8px;
+    }
+
+    .dash-stats-row {
+        gap: 8px;
+    }
+
+    .dash-bottom-row {
+        gap: 8px;
+    }
+
+    :host ::ng-deep {
+        .dash-tile {
+            padding: 14px;
+            overflow: auto;
+        }
+
+        .tile-header {
+            margin-bottom: 8px;
+        }
+
+        .tile-label {
+            font-size: 11px;
+            letter-spacing: 0.5px;
+        }
+
+        .tile-number {
+            font-size: 22px;
+        }
+
+        .tile-sub {
+            font-size: 12px;
+            flex-wrap: wrap;
+        }
+
+        .tile-sub-label {
+            font-size: 11px;
+        }
+
+        .section-title {
+            font-size: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        // Tables — compact on mobile
+        .dash-tile .p-datatable {
+            .p-datatable-thead > tr > th {
+                font-size: 10px;
+                padding: 6px 8px;
+            }
+
+            .p-datatable-tbody > tr > td {
+                font-size: 12px;
+                padding: 6px 8px;
+            }
+        }
+
+        .agg-display {
+            font-size: 11px;
+        }
+
+        .diff-value {
+            font-size: 10px;
+        }
+
+        .event-icon {
+            width: 30px;
+            height: 30px;
+
+            i { font-size: 14px; }
+        }
+
+        .event-time {
+            font-size: 12px;
+        }
+
+        .event-org {
+            font-size: 11px;
+        }
+
+        .event-desc {
+            font-size: 11px;
+        }
+
+        .event-date-header {
+            font-size: 11px;
+        }
+
+        .dash-currency-btn,
+        .dash-refresh-btn {
+            padding: 3px 6px;
+
+            i { font-size: 12px; }
+        }
+    }
+}
+
+// Small mobile
+@media (max-width: 480px) {
+    :host ::ng-deep {
+        .dash-tile {
+            padding: 12px;
+        }
+
+        .tile-number {
+            font-size: 20px;
+        }
+
+        .tile-sub {
+            font-size: 11px;
+            gap: 4px;
         }
     }
 }

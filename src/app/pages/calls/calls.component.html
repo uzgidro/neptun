@@ -25,7 +25,7 @@
                         [options]="typeOptions"
                         optionLabel="name"
                         optionValue="value"
-                        [placeholder]="'CALLS.TYPE' | translate"
+                        [placeholder]="'CALLS.TYPE_LABEL' | translate"
                         (onChange)="applyFilters()"
                         [style]="{ minWidth: '150px' }">
                     </p-select>
@@ -35,16 +35,13 @@
                         [options]="statusOptions"
                         optionLabel="name"
                         optionValue="value"
-                        [placeholder]="'CALLS.STATUS' | translate"
+                        [placeholder]="'CALLS.STATUS_LABEL' | translate"
                         (onChange)="applyFilters()"
                         [style]="{ minWidth: '150px' }">
                     </p-select>
                 </div>
 
-                <button pButton (click)="openDialog()">
-                    <i class="pi pi-plus" pButtonIcon></i>
-                    <span pButtonLabel>{{ 'CALLS.NEW_CALL' | translate }}</span>
-                </button>
+                <button pButton [label]="'CALLS.NEW' | translate" icon="pi pi-plus" (click)="openDialog()"></button>
             </div>
         </ng-template>
 
@@ -59,18 +56,18 @@
                     <p-sortIcon field="time" />
                 </th>
                 <th pSortableColumn="type" style="min-width: 9rem">
-                    {{ 'CALLS.TYPE' | translate }}
+                    {{ 'CALLS.TYPE_LABEL' | translate }}
                     <p-sortIcon field="type" />
                 </th>
-                <th style="min-width: 12rem">{{ 'CALLS.CALLER' | translate }}</th>
+                <th style="min-width: 12rem">{{ 'CALLS.CALLER_NAME' | translate }}</th>
                 <th style="min-width: 10rem">{{ 'CALLS.CALLER_PHONE' | translate }}</th>
-                <th style="min-width: 10rem">{{ 'CALLS.RECEIVER' | translate }}</th>
+                <th style="min-width: 10rem">{{ 'CALLS.RECEIVER_NAME' | translate }}</th>
                 <th pSortableColumn="duration" style="min-width: 7rem">
                     {{ 'CALLS.DURATION' | translate }}
                     <p-sortIcon field="duration" />
                 </th>
                 <th pSortableColumn="status" style="min-width: 8rem">
-                    {{ 'CALLS.STATUS' | translate }}
+                    {{ 'CALLS.STATUS_LABEL' | translate }}
                     <p-sortIcon field="status" />
                 </th>
                 <th style="width: 8rem">{{ 'COMMON.ACTIONS' | translate }}</th>
@@ -133,7 +130,7 @@
             <tr>
                 <td colspan="9" class="text-center py-4">
                     <i class="pi pi-phone text-4xl text-color-secondary mb-2"></i>
-                    <p class="m-0 text-color-secondary">{{ 'CALLS.NO_CALLS' | translate }}</p>
+                    <p class="m-0 text-color-secondary">{{ 'CALLS.NO_DATA' | translate }}</p>
                 </td>
             </tr>
         </ng-template>
@@ -150,7 +147,7 @@
 
 <app-dialog
     [(visible)]="displayDialog"
-    [header]="isEditMode ? ('CALLS.EDIT_CALL' | translate) : ('CALLS.NEW_CALL' | translate)"
+    [header]="isEditMode ? ('CALLS.EDIT' | translate) : ('CALLS.NEW' | translate)"
     [form]="callForm"
     [saveLabel]="isEditMode ? ('COMMON.UPDATE' | translate) : ('COMMON.SAVE' | translate)"
     width="45vw"
@@ -185,15 +182,15 @@
 
         <app-input-text
             formControlName="callerName"
-            [label]="'CALLS.CALLER' | translate"
+            [label]="'CALLS.CALLER_NAME' | translate"
             [submitted]="submitted"
-            [errorMessage]="'CALLS.CALLER_REQUIRED' | translate"
+            [errorMessage]="'CALLS.FIELD_REQUIRED' | translate"
             [required]="true">
         </app-input-text>
 
         <app-input-text
             formControlName="callerPhone"
-            [label]="'CALLS.CALLER_PHONE_LABEL' | translate"
+            [label]="'CALLS.CALLER_PHONE' | translate"
             [submitted]="submitted"
             [errorMessage]="'CALLS.PHONE_REQUIRED' | translate"
             [required]="true">
@@ -201,7 +198,7 @@
 
         <app-input-text
             formControlName="receiverName"
-            [label]="'CALLS.RECEIVER_LABEL' | translate"
+            [label]="'CALLS.RECEIVER_NAME' | translate"
             [submitted]="submitted"
             [required]="false">
         </app-input-text>

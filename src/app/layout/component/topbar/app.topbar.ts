@@ -47,21 +47,7 @@ import { TranslateModule } from '@ngx-translate/core';
             <a class="layout-topbar-logo" routerLink="/">
                 <img ngSrc="assets/images/logo-x.png" alt="" width="52" height="22" />
                 <span class="text-nowrap">
-                    @if (authService.hasRole('admin')) {
-                        {{ 'MENU.TABLET_ADMIN' | translate }}
-                    } @else if (authService.hasRole('first deputy')) {
-                        {{ 'MENU.TABLET_FIRST_DEPUTY' | translate }}
-                    } @else if (authService.hasRole('rais')) {
-                        {{ 'MENU.TABLET_CHAIRMAN' | translate }}
-                    } @else if (authService.hasRole('assistant')) {
-                        {{ 'MENU.TABLET_ASSISTANT' | translate }}
-                    } @else if (authService.hasRole('investment')) {
-                        {{ 'MENU.TABLET_INVESTMENT' | translate }}
-                    } @else if (authService.hasRole('sc')) {
-                        {{ 'MENU.TABLET_DUTY' | translate }}
-                    } @else {
-                        {{ 'MENU.TABLET' | translate }}
-                    }
+                    {{ 'MENU.TABLET_CHAIRMAN' | translate }}
                 </span>
             </a>
         </div>
