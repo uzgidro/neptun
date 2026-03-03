@@ -15,7 +15,7 @@ export class CallService {
             date: '2024-12-26',
             time: '09:30',
             type: 'incoming',
-            callerName: 'Министерство энергетики',
+            callerName: 'Министерство сельского хозяйства',
             callerPhone: '+998 71 123 45 67',
             receiverName: 'Приёмная',
             duration: 320,

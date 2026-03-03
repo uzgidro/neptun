@@ -19,7 +19,7 @@ export interface ProductionStatsResponse {
     providedIn: 'root'
 })
 export class DashboardService extends ApiService {
-    // Mock data for storage tanks (бывшие водохранилища -> резервуары хранения)
+    // Mock data for storage tanks
     getReservoirs(date?: Date): Observable<ReservoirResponse> {
         const mockData: ReservoirResponse = [
             {
@@ -56,7 +56,7 @@ export class DashboardService extends ApiService {
         return of(mockData).pipe(delay(200));
     }
 
-    // Mock data for dairy plant clusters (бывшие каскады -> производственные кластеры)
+    // Mock data for dairy plant clusters
     getOrganizationsCascades(): Observable<Organization[]> {
         const mockData: Organization[] = [
             {

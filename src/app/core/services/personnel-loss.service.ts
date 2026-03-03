@@ -19,7 +19,7 @@ export class PersonnelLossService {
             hireDate: '1989-03-10',
             reason: 'Выход на пенсию по возрасту',
             yearsOfService: 35,
-            achievements: 'Заслуженный энергетик Республики. Награжден орденом "За заслуги".',
+            achievements: 'Заслуженный работник пищевой промышленности Республики. Награжден орденом "За заслуги".',
             notes: null
         },
         {
@@ -109,7 +109,7 @@ export class PersonnelLossService {
             hireDate: '1982-09-01',
             reason: 'Выход на заслуженный отдых',
             yearsOfService: 42,
-            achievements: 'Почетный работник энергетики. Орден "Дружбы народов".',
+            achievements: 'Почетный работник пищевой промышленности. Орден "Дружбы народов".',
             notes: null
         }
     ];

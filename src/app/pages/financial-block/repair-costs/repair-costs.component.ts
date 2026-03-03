@@ -162,13 +162,13 @@ export class RepairCostsComponent implements OnInit {
 
     loadRepairs() {
         this.repairs = [
-            { id: 1, date: new Date(2024, 11, 1), objectName: 'Турбина №1', repairType: 'planned', category: 'mechanical', plannedCost: 5000000, actualCost: 4800000, status: 'completed', contractor: 'ТехСервис', description: 'Плановое ТО турбины' },
-            { id: 2, date: new Date(2024, 11, 5), objectName: 'Трансформатор Т-2', repairType: 'emergency', category: 'electrical', plannedCost: 2500000, actualCost: 3200000, status: 'completed', contractor: 'ЭлектроМонтаж', description: 'Замена обмотки' },
+            { id: 1, date: new Date(2024, 11, 1), objectName: 'Линия розлива №1', repairType: 'planned', category: 'mechanical', plannedCost: 5000000, actualCost: 4800000, status: 'completed', contractor: 'ТехСервис', description: 'Плановое ТО линии' },
+            { id: 2, date: new Date(2024, 11, 5), objectName: 'Холодильная камера №2', repairType: 'emergency', category: 'electrical', plannedCost: 2500000, actualCost: 3200000, status: 'completed', contractor: 'ХолодСервис', description: 'Замена компрессора' },
             { id: 3, date: new Date(2024, 11, 10), objectName: 'Насосная станция', repairType: 'unplanned', category: 'plumbing', plannedCost: 800000, actualCost: 750000, status: 'completed', contractor: 'ТехСервис', description: 'Ремонт насосов' },
-            { id: 4, date: new Date(2024, 11, 15), objectName: 'Генератор Г-3', repairType: 'planned', category: 'mechanical', plannedCost: 3500000, actualCost: null, status: 'in_progress', contractor: 'ТехСервис', description: 'Капитальный ремонт' },
+            { id: 4, date: new Date(2024, 11, 15), objectName: 'Пастеризатор П-3', repairType: 'planned', category: 'mechanical', plannedCost: 3500000, actualCost: null, status: 'in_progress', contractor: 'ТехСервис', description: 'Капитальный ремонт' },
             { id: 5, date: new Date(2024, 11, 18), objectName: 'Серверная комната', repairType: 'planned', category: 'hvac', plannedCost: 1200000, actualCost: null, status: 'scheduled', contractor: 'КлиматКонтроль', description: 'Замена кондиционеров' },
             { id: 6, date: new Date(2024, 11, 20), objectName: 'Административное здание', repairType: 'planned', category: 'construction', plannedCost: 4500000, actualCost: null, status: 'scheduled', contractor: 'СтройМастер', description: 'Ремонт кровли' },
-            { id: 7, date: new Date(2024, 10, 25), objectName: 'ЛЭП-110кВ', repairType: 'emergency', category: 'electrical', plannedCost: 1800000, actualCost: 2100000, status: 'completed', contractor: 'ЭлектроМонтаж', description: 'Замена опоры' },
+            { id: 7, date: new Date(2024, 10, 25), objectName: 'Транспортёр ленточный', repairType: 'emergency', category: 'electrical', plannedCost: 1800000, actualCost: 2100000, status: 'completed', contractor: 'ТехСервис', description: 'Замена привода' },
             { id: 8, date: new Date(2024, 10, 15), objectName: 'Котельная', repairType: 'planned', category: 'mechanical', plannedCost: 2200000, actualCost: 2150000, status: 'completed', contractor: 'ТеплоСервис', description: 'Замена горелок' }
         ];
     }
