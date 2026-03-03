@@ -27,15 +27,13 @@
     </div>
 
     <div class="header-right">
-        @if (authService.hasRole('rais')) {
-            <button class="alarm-mute-btn"
-                    [class.muted]="alarmService.muted"
-                    [class.has-active]="alarmService.hasActiveShutdowns"
-                    (click)="alarmService.toggleMute()"
-                    [title]="(alarmService.muted ? 'SITUATION_CENTER.DASHBOARD.HEADER.ENABLE_ALARM' : 'SITUATION_CENTER.DASHBOARD.HEADER.DISABLE_ALARM') | translate">
-                <i class="pi" [class.pi-volume-up]="!alarmService.muted" [class.pi-volume-off]="alarmService.muted"></i>
-            </button>
-        }
+        <button class="alarm-mute-btn"
+                [class.muted]="alarmService.muted"
+                [class.has-active]="alarmService.hasActiveShutdowns"
+                (click)="alarmService.toggleMute()"
+                [title]="(alarmService.muted ? 'SITUATION_CENTER.DASHBOARD.HEADER.ENABLE_ALARM' : 'SITUATION_CENTER.DASHBOARD.HEADER.DISABLE_ALARM') | translate">
+            <i class="pi" [class.pi-volume-up]="!alarmService.muted" [class.pi-volume-off]="alarmService.muted"></i>
+        </button>
         <div class="language-switcher">
             @for (lang of languages; track lang.code) {
                 <button
