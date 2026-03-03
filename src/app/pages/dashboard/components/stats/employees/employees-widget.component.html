@@ -1,17 +1,15 @@
-<div class="card mb-0 cursor-pointer" (click)="openDialog()">
-    <div class="flex justify-between items-center mb-2">
-        <span class="text-muted-color font-medium">{{ 'DASHBOARD.HRM' | translate }}</span>
-        <div class="flex items-center justify-center bg-blue-100 dark:bg-blue-400/10 rounded-border"
-             style="width: 2.5rem; height: 2.5rem">
-            <i class="pi pi-users text-blue-500 text-xl!"></i>
-        </div>
+<div class="dash-tile accent-blue cursor-pointer" (click)="openDialog()">
+    <div class="tile-header">
+        <span class="tile-label label-blue">
+            <i class="pi pi-users"></i>
+            {{ 'DASHBOARD.HRM' | translate }}
+        </span>
     </div>
-    <div class="text-surface-900 dark:text-surface-0 font-medium text-xl mb-1">
-        {{ totalEmployees | number: '1.0-0' }} {{ 'DASHBOARD.EMPLOYEES' | translate }}
-    </div>
-    <div class="flex gap-1.5">
-        <span class="text-primary font-medium">28</span>
-        <span class="text-muted-color"> {{ 'DASHBOARD.VACANT_POSITIONS' | translate }}</span>
+    <span class="tile-number">{{ totalEmployees | number: '1.0-0' }}</span>
+    <div class="tile-sub">
+        <span class="tile-sub-label">{{ 'DASHBOARD.EMPLOYEES' | translate }}</span>
+        <span class="tile-diff diff-up">28</span>
+        <span class="tile-sub-label">{{ 'DASHBOARD.VACANT_POSITIONS' | translate }}</span>
     </div>
 </div>
 

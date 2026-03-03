@@ -2,7 +2,7 @@ import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output } fro
 import { Router } from '@angular/router';
 import { ButtonDirective, ButtonIcon } from 'primeng/button';
 import { TableModule } from 'primeng/table';
-import { DecimalPipe, NgClass } from '@angular/common';
+import { DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { interval, Subscription } from 'rxjs';
 import { Organization } from '@/core/interfaces/organizations';
@@ -15,7 +15,7 @@ interface expandedRows {
 
 @Component({
     selector: 'app-ges-widget',
-    imports: [ButtonDirective, TableModule, FormsModule, ButtonIcon, NgClass, DecimalPipe, TranslateModule],
+    imports: [ButtonDirective, TableModule, FormsModule, ButtonIcon, DecimalPipe, TranslateModule],
     templateUrl: './ges.widget.html',
     styleUrl: './ges.widget.scss'
 })

@@ -9,41 +9,22 @@ import GesWidget from '@/pages/dashboard/components/ges/ges.widget';
     selector: 'app-dashboard',
     standalone: true,
     imports: [StatsWidget, WaterResourcesWidget, NotificationsWidget, GesWidget],
+    styleUrl: './dashboard.scss',
     template: `
-        <div class="grid grid-cols-12 gap-8">
-            <app-stats-widget class="contents col-span-12 order-first" />
+        <div class="dash-layout">
+            <div class="dash-stats-row">
+                <app-stats-widget class="contents" />
+            </div>
 
-            <app-ges-widget class="col-span-12 h-full" />
+            <div class="dash-ges-row">
+                <app-ges-widget />
+            </div>
 
-            <app-water-resources-widget class="col-span-12 h-full" />
-
-            <!--<app-incoming-events-widget [class]="getWidgetClass('events') + ' h-full'" [expanded]="expandedWidgetId === 'events'" (expansionChange)="onExpansionChange('events', $event)" />-->
-
-            <app-notifications-widget class="col-span-12 h-full" />
+            <div class="dash-bottom-row">
+                <app-water-resources-widget />
+                <app-notifications-widget />
+            </div>
         </div>
     `
 })
-export class Dashboard {
-    // expandedWidgetId: string | null = null;
-
-    // onExpansionChange(widgetId: string, expanded: boolean) {
-    //     this.expandedWidgetId = expanded ? widgetId : null;
-    // }
-
-    // getWidgetClass(widgetId: string): string {
-    //     // 1. СЦЕНАРИЙ: Никто не раскрыт - все виджеты занимают полную ширину
-    //     if (!this.expandedWidgetId) {
-    //         return 'col-span-12';
-    //     }
-
-    //     // 2. СЦЕНАРИЙ: Этот виджет - тот самый, который раскрыт
-    //     if (this.expandedWidgetId === widgetId) {
-    //         // Он занимает всю ширину и встает первым (order-1)
-    //         return 'col-span-12 order-1';
-    //     }
-
-    //     // 3. СЦЕНАРИЙ: Раскрыт КТО-ТО ДРУГОЙ, а этот виджет должен "потесниться"
-    //     // Занимает половину экрана (col-span-6) и встает после главного (order-2)
-    //     return 'col-span-12 xl:col-span-6 order-2';
-    // }
-}
+export class Dashboard {}
