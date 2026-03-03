@@ -63,7 +63,7 @@ export class SplashScreenComponent implements OnInit, OnDestroy {
                 this.dailyPower = data.current.value;
                 this.monthlyPower = data.month_total;
                 this.yearlyPower = data.year_total;
-                // Показываем дневную выработку в МВт (конвертируем из млн кВт/ч)
+                // Показываем дневное производство в т/сут
                 this.targetPower = Math.round(data.current.value * 1000);
                 this.dataLoaded = true;
                 this.animatePowerCounter();
