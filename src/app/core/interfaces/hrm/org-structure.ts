@@ -31,11 +31,8 @@ export interface OrgEmployee {
     phone?: string;
     photo?: string;
     photo_url?: string;
-    manager_id?: number;
-    manager_name?: string;
     hire_date: string;
     is_manager: boolean;
-    subordinates_count: number;
     direct_reports?: OrgEmployee[];
 }
 
@@ -84,13 +81,13 @@ export interface DepartmentDetails {
 
 // Types
 export type OrgUnitType =
-    | 'company' // Компания
-    | 'branch' // Филиал
-    | 'division' // Дивизион
-    | 'department' // Департамент
-    | 'section' // Отдел
-    | 'group' // Группа
-    | 'team'; // Команда
+    | 'company'        // Компания
+    | 'branch'         // Филиал
+    | 'division'       // Дивизион
+    | 'department'     // Департамент
+    | 'section'        // Отдел
+    | 'group'          // Группа
+    | 'team';          // Команда
 
 // Constants
 export const ORG_UNIT_TYPES: { value: OrgUnitType; label: string; icon: string; color: string }[] = [
@@ -113,5 +110,5 @@ export const ORG_COLORS: string[] = [
     '#6b7280', // gray
     '#ec4899', // pink
     '#14b8a6', // teal
-    '#f43f5e' // rose
+    '#f43f5e'  // rose
 ];

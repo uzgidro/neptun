@@ -148,6 +148,14 @@ export class ReservoirsSummaryComponent implements OnInit {
         reservoir.income.is_edited = true;
     }
 
+    onModsnowCurrentChange(reservoir: ReservoirSummaryResponse) {
+        reservoir.modsnow.is_edited = true;
+    }
+
+    onModsnowYearAgoChange(reservoir: ReservoirSummaryResponse) {
+        reservoir.modsnow.is_edited = true;
+    }
+
     onIncomingVolumeChange(reservoir: ReservoirSummaryResponse) {
         reservoir.incoming_volume_is_calculated = false;
         reservoir.incoming_volume_is_reset = false;

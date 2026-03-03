@@ -80,9 +80,7 @@
 <!-- Main Table -->
 <div class="card">
     <div class="flex justify-between items-center mb-4">
-        <div class="font-semibold text-xl">{{ 'HRM.SALARY.TITLE' | translate }}
-            - {{ getMonthLabel(selectedMonth) }} {{ selectedYear }}
-        </div>
+        <div class="font-semibold text-xl">{{ 'HRM.SALARY.TITLE' | translate }} - {{ getMonthLabel(selectedMonth) }} {{ selectedYear }}</div>
         <div class="flex gap-2">
             @if (calculatedCount > 0) {
                 <button pButton (click)="submitAllForApproval()" class="p-button-outlined p-button-info">
@@ -122,20 +120,16 @@
                     <p-inputicon>
                         <i class="pi pi-search"></i>
                     </p-inputicon>
-                    <input pInputText type="text" (input)="onGlobalFilter(dt, $event)"
-                           [placeholder]="'COMMON.SEARCH' | translate" />
+                    <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" [placeholder]="'COMMON.SEARCH' | translate" />
                 </p-iconfield>
                 <div class="flex gap-2">
-                    <button pButton (click)="generatePayrollReport()" class="p-button-outlined p-button-secondary"
-                            [pTooltip]="'HRM.SALARY.PAYROLL_REPORT' | translate">
+                    <button pButton (click)="generatePayrollReport()" class="p-button-outlined p-button-secondary" [pTooltip]="'HRM.SALARY.PAYROLL_REPORT' | translate">
                         <i class="pi pi-file-excel"></i>
                     </button>
-                    <button pButton (click)="generateTaxReport()" class="p-button-outlined p-button-secondary"
-                            [pTooltip]="'HRM.SALARY.TAX_REPORT' | translate">
+                    <button pButton (click)="generateTaxReport()" class="p-button-outlined p-button-secondary" [pTooltip]="'HRM.SALARY.TAX_REPORT' | translate">
                         <i class="pi pi-file-pdf"></i>
                     </button>
-                    <button pButton (click)="generateSocialFundReport()" class="p-button-outlined p-button-secondary"
-                            [pTooltip]="'HRM.SALARY.SOCIAL_FUND_REPORT' | translate">
+                    <button pButton (click)="generateSocialFundReport()" class="p-button-outlined p-button-secondary" [pTooltip]="'HRM.SALARY.SOCIAL_FUND_REPORT' | translate">
                         <i class="pi pi-file"></i>
                     </button>
                 </div>
@@ -171,8 +165,7 @@
                 <td class="text-right text-red-600">{{ formatCurrency(salary.total_deductions) }}</td>
                 <td class="text-right font-bold text-green-700">{{ formatCurrency(salary.net_salary) }}</td>
                 <td>
-                    <p-tag [value]="getStatusLabel(salary.status)"
-                           [severity]="getStatusSeverity(salary.status)"></p-tag>
+                    <p-tag [value]="getStatusLabel(salary.status)" [severity]="getStatusSeverity(salary.status)"></p-tag>
                 </td>
                 <td>
                     <div class="flex justify-center gap-1">
@@ -247,8 +240,7 @@
 </div>
 
 <!-- Batch Calculation Dialog -->
-<p-dialog [(visible)]="displayBatchDialog" [header]="'HRM.SALARY.SALARY_CALCULATION' | translate" [modal]="true"
-          [style]="{ width: '500px' }" [closable]="!calculating">
+<p-dialog [(visible)]="displayBatchDialog" [header]="'HRM.SALARY.SALARY_CALCULATION' | translate" [modal]="true" [style]="{ width: '500px' }" [closable]="!calculating">
     <div class="p-4">
         @if (calculating) {
             <div class="text-center mb-4">
@@ -281,8 +273,7 @@
                     </div>
                     <div class="flex justify-between">
                         <span class="text-gray-600">{{ 'HRM.SALARY.TOTAL_TAXES' | translate }}:</span>
-                        <span
-                            class="font-semibold text-red-600">{{ formatCurrency(lastBatchResult.total_taxes) }}</span>
+                        <span class="font-semibold text-red-600">{{ formatCurrency(lastBatchResult.total_taxes) }}</span>
                     </div>
                     <div class="flex justify-between">
                         <span class="text-gray-600">{{ 'HRM.SALARY.TOTAL_NET' | translate }}:</span>
@@ -293,14 +284,12 @@
         }
     </div>
     <div class="flex justify-end p-4 border-t">
-        <button pButton [label]="'COMMON.CLOSE' | translate" (click)="displayBatchDialog = false"
-                [disabled]="calculating"></button>
+        <button pButton [label]="'COMMON.CLOSE' | translate" (click)="displayBatchDialog = false" [disabled]="calculating"></button>
     </div>
 </p-dialog>
 
 <!-- Salary Detail Dialog -->
-<p-dialog [(visible)]="displayDetailDialog" [header]="'HRM.SALARY.SALARY_DETAILS' | translate" [modal]="true"
-          [style]="{ width: '700px' }">
+<p-dialog [(visible)]="displayDetailDialog" [header]="'HRM.SALARY.SALARY_DETAILS' | translate" [modal]="true" [style]="{ width: '700px' }">
     @if (selectedSalary) {
         <div class="p-4">
             <!-- Employee Info -->
@@ -308,14 +297,11 @@
                 <div class="flex justify-between items-start">
                     <div>
                         <h3 class="font-bold text-lg">{{ selectedSalary.employee_name }}</h3>
-                        <p class="text-gray-600">{{ selectedSalary.position_name }}
-                            - {{ selectedSalary.department_name }}</p>
+                        <p class="text-gray-600">{{ selectedSalary.position_name }} - {{ selectedSalary.department_name }}</p>
                     </div>
-                    <p-tag [value]="getStatusLabel(selectedSalary.status)"
-                           [severity]="getStatusSeverity(selectedSalary.status)"></p-tag>
+                    <p-tag [value]="getStatusLabel(selectedSalary.status)" [severity]="getStatusSeverity(selectedSalary.status)"></p-tag>
                 </div>
-                <p class="text-sm text-gray-500 mt-2">{{ 'HRM.SALARY.PERIOD' | translate }}
-                    : {{ getMonthLabel(selectedSalary.period_month) }} {{ selectedSalary.period_year }}</p>
+                <p class="text-sm text-gray-500 mt-2">{{ 'HRM.SALARY.PERIOD' | translate }}: {{ getMonthLabel(selectedSalary.period_month) }} {{ selectedSalary.period_year }}</p>
             </div>
 
             <!-- Work Time -->
@@ -323,9 +309,7 @@
                 <h4 class="font-semibold mb-2 text-gray-700">{{ 'HRM.SALARY.WORKED_TIME' | translate }}</h4>
                 <div class="grid grid-cols-3 gap-4 bg-surface-100 dark:bg-surface-700 rounded-lg p-3">
                     <div class="text-center">
-                        <div class="text-lg font-bold">{{ selectedSalary.worked_days }}
-                            / {{ selectedSalary.working_days }}
-                        </div>
+                        <div class="text-lg font-bold">{{ selectedSalary.worked_days }} / {{ selectedSalary.working_days }}</div>
                         <div class="text-xs text-gray-500">{{ 'HRM.SALARY.WORK_DAYS' | translate }}</div>
                     </div>
                     <div class="text-center">
@@ -428,16 +412,14 @@
             </div>
         </div>
         <div class="flex justify-end gap-2 p-4 border-t">
-            <button pButton [label]="'HRM.SALARY.PAYSLIP' | translate" icon="pi pi-file-pdf" class="p-button-outlined"
-                    (click)="generatePayslip(selectedSalary)"></button>
+            <button pButton [label]="'HRM.SALARY.PAYSLIP' | translate" icon="pi pi-file-pdf" class="p-button-outlined" (click)="generatePayslip(selectedSalary)"></button>
             <button pButton [label]="'COMMON.CLOSE' | translate" (click)="displayDetailDialog = false"></button>
         </div>
     }
 </p-dialog>
 
 <!-- Approval Dialog -->
-<p-dialog [(visible)]="displayApprovalDialog" [header]="'HRM.SALARY.SALARY_APPROVAL' | translate" [modal]="true"
-          [style]="{ width: '450px' }">
+<p-dialog [(visible)]="displayApprovalDialog" [header]="'HRM.SALARY.SALARY_APPROVAL' | translate" [modal]="true" [style]="{ width: '450px' }">
     @if (selectedSalary) {
         <div class="p-4">
             <p class="mb-4">{{ 'HRM.SALARY.APPROVE_CONFIRM' | translate }}</p>
@@ -454,17 +436,14 @@
             </div>
         </div>
         <div class="flex justify-end gap-2 p-4 border-t">
-            <button pButton [label]="'COMMON.CANCEL' | translate" class="p-button-text"
-                    (click)="displayApprovalDialog = false"></button>
-            <button pButton [label]="'COMMON.APPROVE' | translate" icon="pi pi-check" class="p-button-success"
-                    (click)="confirmApproval()"></button>
+            <button pButton [label]="'COMMON.CANCEL' | translate" class="p-button-text" (click)="displayApprovalDialog = false"></button>
+            <button pButton [label]="'COMMON.APPROVE' | translate" icon="pi pi-check" class="p-button-success" (click)="confirmApproval()"></button>
         </div>
     }
 </p-dialog>
 
 <!-- Rejection Dialog -->
-<p-dialog [(visible)]="displayRejectionDialog" [header]="'HRM.SALARY.SALARY_REJECTION' | translate" [modal]="true"
-          [style]="{ width: '500px' }">
+<p-dialog [(visible)]="displayRejectionDialog" [header]="'HRM.SALARY.SALARY_REJECTION' | translate" [modal]="true" [style]="{ width: '500px' }">
     @if (selectedSalary) {
         <div class="p-4">
             <p class="mb-4">{{ 'HRM.SALARY.REJECTION_REASON_PROMPT' | translate }}</p>
@@ -474,9 +453,7 @@
             </div>
             <form [formGroup]="rejectionForm">
                 <div class="mb-4">
-                    <label
-                        class="block text-sm font-medium text-gray-700 mb-2">{{ 'HRM.SALARY.REJECTION_REASON' | translate }}
-                        *</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">{{ 'HRM.SALARY.REJECTION_REASON' | translate }} *</label>
                     <textarea
                         pInputText
                         formControlName="rejection_reason"
@@ -487,10 +464,8 @@
             </form>
         </div>
         <div class="flex justify-end gap-2 p-4 border-t">
-            <button pButton [label]="'COMMON.CANCEL' | translate" class="p-button-text"
-                    (click)="displayRejectionDialog = false"></button>
-            <button pButton [label]="'COMMON.REJECT' | translate" icon="pi pi-times" class="p-button-danger"
-                    (click)="confirmRejection()" [disabled]="rejectionForm.invalid"></button>
+            <button pButton [label]="'COMMON.CANCEL' | translate" class="p-button-text" (click)="displayRejectionDialog = false"></button>
+            <button pButton [label]="'COMMON.REJECT' | translate" icon="pi pi-times" class="p-button-danger" (click)="confirmRejection()" [disabled]="rejectionForm.invalid"></button>
         </div>
     }
 </p-dialog>

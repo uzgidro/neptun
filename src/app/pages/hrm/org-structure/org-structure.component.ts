@@ -10,10 +10,18 @@ import { InputText } from 'primeng/inputtext';
 import { Textarea } from 'primeng/textarea';
 import { Tag } from 'primeng/tag';
 import { Tooltip } from 'primeng/tooltip';
-import { MessageService, TreeNode } from 'primeng/api';
+import { TreeNode } from 'primeng/api';
+import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { ORG_COLORS, ORG_UNIT_TYPES, OrgEmployee, OrgStats, OrgUnit, OrgUnitType } from '@/core/interfaces/hrm/org-structure';
+import {
+    OrgUnit,
+    OrgEmployee,
+    OrgStats,
+    OrgUnitType,
+    ORG_UNIT_TYPES,
+    ORG_COLORS
+} from '@/core/interfaces/hrm/org-structure';
 import { OrgStructureService } from '@/core/services/org-structure.service';
 
 // Predefined position titles
@@ -41,7 +49,6 @@ export interface EmployeeForm {
     position: string;
     position_custom?: string;
     department_id: number | null;
-    manager_id?: number | null;
     hire_date: string;
     photo_url?: string;
     email?: string;
@@ -52,7 +59,20 @@ export interface EmployeeForm {
 @Component({
     selector: 'app-org-structure',
     standalone: true,
-    imports: [CommonModule, FormsModule, ButtonDirective, Select, TreeModule, OrganizationChartModule, Dialog, InputText, Textarea, Tag, Tooltip, TranslateModule],
+    imports: [
+        CommonModule,
+        FormsModule,
+        ButtonDirective,
+        Select,
+        TreeModule,
+        OrganizationChartModule,
+        Dialog,
+        InputText,
+        Textarea,
+        Tag,
+        Tooltip,
+        TranslateModule
+    ],
     templateUrl: './org-structure.component.html',
     styleUrl: './org-structure.component.scss'
 })
@@ -99,7 +119,7 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
     // Employee CRUD Dialog
     displayEmployeeCrudDialog: boolean = false;
     isEditEmployeeMode: boolean = false;
-    positionTitles = POSITION_TITLES.map((p) => ({ label: p, value: p }));
+    positionTitles = POSITION_TITLES.map(p => ({ label: p, value: p }));
     useCustomPosition: boolean = false;
     employeeForm: EmployeeForm = this.getEmptyEmployeeForm();
 
@@ -125,8 +145,7 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
 
     private loadOrgUnits(): void {
         this.loading = true;
-        this.orgStructureService
-            .getOrgUnits()
+        this.orgStructureService.getOrgUnits()
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (units) => {
@@ -144,8 +163,7 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
     }
 
     private loadEmployees(): void {
-        this.orgStructureService
-            .getOrgEmployees()
+        this.orgStructureService.getOrgEmployees()
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (employees) => {
@@ -162,7 +180,7 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
         const unitMap = new Map<number, TreeNode>();
 
         // Create nodes
-        this.orgUnits.forEach((unit) => {
+        this.orgUnits.forEach(unit => {
             const typeInfo = this.getUnitTypeInfo(unit.type);
             unitMap.set(unit.id, {
                 key: String(unit.id),
@@ -177,7 +195,7 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
 
         // Build hierarchy
         this.orgTree = [];
-        this.orgUnits.forEach((unit) => {
+        this.orgUnits.forEach(unit => {
             const node = unitMap.get(unit.id)!;
             if (unit.parent_id === null) {
                 this.orgTree.push(node);
@@ -192,7 +210,9 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
 
     private buildOrgChart(): void {
         const buildChartNode = (unit: OrgUnit): TreeNode => {
-            const children = this.orgUnits.filter((u) => u.parent_id === unit.id).map((u) => buildChartNode(u));
+            const children = this.orgUnits
+                .filter(u => u.parent_id === unit.id)
+                .map(u => buildChartNode(u));
 
             return {
                 label: unit.name,
@@ -204,28 +224,29 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
             };
         };
 
-        const rootUnit = this.orgUnits.find((u) => u.parent_id === null);
+        const rootUnit = this.orgUnits.find(u => u.parent_id === null);
         if (rootUnit) {
             this.orgChartData = [buildChartNode(rootUnit)];
         }
     }
 
     private calculateStats(): void {
+        const totalEmployees = this.orgUnits.reduce((sum, u) => sum + (u.employee_count || 0), 0);
         this.stats = {
             total_departments: this.orgUnits.length,
-            total_employees: this.orgUnits.reduce((sum, u) => sum + u.employee_count, 0),
-            total_managers: this.employees.filter((e) => e.is_manager).length,
-            avg_team_size: Math.round(this.orgUnits.reduce((sum, u) => sum + u.employee_count, 0) / this.orgUnits.length),
+            total_employees: totalEmployees,
+            total_managers: this.employees.filter(e => e.is_manager).length,
+            avg_team_size: this.orgUnits.length > 0 ? Math.round(totalEmployees / this.orgUnits.length) : 0,
             max_depth: this.calculateMaxDepth(),
-            vacancies: this.orgUnits.filter((u) => !u.head_id && u.type !== 'company').length
+            vacancies: this.orgUnits.filter(u => !u.head_id && u.type !== 'company').length
         };
     }
 
     private calculateMaxDepth(): number {
         const getDepth = (unitId: number | null, depth: number): number => {
-            const children = this.orgUnits.filter((u) => u.parent_id === unitId);
+            const children = this.orgUnits.filter(u => u.parent_id === unitId);
             if (children.length === 0) return depth;
-            return Math.max(...children.map((c) => getDepth(c.id, depth + 1)));
+            return Math.max(...children.map(c => getDepth(c.id, depth + 1)));
         };
         return getDepth(null, 0);
     }
@@ -255,7 +276,7 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
     // Details
     showUnitDetails(unit: OrgUnit): void {
         this.detailsUnit = unit;
-        this.detailsEmployees = this.employees.filter((e) => e.department_id === unit.id);
+        this.detailsEmployees = this.employees.filter(e => e.department_id === unit.id);
         this.showDetails = true;
     }
 
@@ -276,7 +297,6 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
             position: '',
             position_custom: '',
             department_id: null,
-            manager_id: null,
             hire_date: new Date().toISOString().split('T')[0],
             photo_url: '',
             email: '',
@@ -308,7 +328,6 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
             position: isCustomPosition ? '' : employee.position,
             position_custom: isCustomPosition ? employee.position : '',
             department_id: employee.department_id,
-            manager_id: employee.manager_id || null,
             hire_date: employee.hire_date,
             photo_url: employee.photo_url || '',
             email: employee.email || '',
@@ -328,18 +347,20 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
     }
 
     saveEmployee(): void {
-        const position = this.useCustomPosition ? this.employeeForm.position_custom : this.employeeForm.position;
+        const position = this.useCustomPosition
+            ? this.employeeForm.position_custom
+            : this.employeeForm.position;
 
         if (!this.employeeForm.name || !position || !this.employeeForm.department_id) {
             this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('HRM.ORG_STRUCTURE.FILL_REQUIRED') });
             return;
         }
 
-        const department = this.orgUnits.find((u) => u.id === this.employeeForm.department_id);
+        const department = this.orgUnits.find(u => u.id === this.employeeForm.department_id);
 
         if (this.isEditEmployeeMode && this.employeeForm.id) {
             // Update existing employee
-            const index = this.employees.findIndex((e) => e.id === this.employeeForm.id);
+            const index = this.employees.findIndex(e => e.id === this.employeeForm.id);
             if (index !== -1) {
                 this.employees[index] = {
                     ...this.employees[index],
@@ -347,8 +368,6 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
                     position: position!,
                     department_id: this.employeeForm.department_id,
                     department_name: department?.name || '',
-                    manager_id: this.employeeForm.manager_id || undefined,
-                    manager_name: this.getManagerName(this.employeeForm.manager_id),
                     hire_date: this.employeeForm.hire_date,
                     photo_url: this.employeeForm.photo_url,
                     email: this.employeeForm.email,
@@ -360,19 +379,16 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
         } else {
             // Create new employee
             const newEmployee: OrgEmployee = {
-                id: Math.max(...this.employees.map((e) => e.id), 0) + 1,
+                id: Math.max(...this.employees.map(e => e.id), 0) + 1,
                 name: this.employeeForm.name,
                 position: position!,
                 department_id: this.employeeForm.department_id,
                 department_name: department?.name || '',
-                manager_id: this.employeeForm.manager_id || undefined,
-                manager_name: this.getManagerName(this.employeeForm.manager_id),
                 hire_date: this.employeeForm.hire_date,
                 photo_url: this.employeeForm.photo_url,
                 email: this.employeeForm.email,
                 phone: this.employeeForm.phone,
-                is_manager: this.employeeForm.is_manager,
-                subordinates_count: 0
+                is_manager: this.employeeForm.is_manager
             };
             this.employees.push(newEmployee);
 
@@ -386,40 +402,30 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
 
         // Refresh details panel
         if (this.detailsUnit) {
-            this.detailsEmployees = this.employees.filter((e) => e.department_id === this.detailsUnit!.id);
+            this.detailsEmployees = this.employees.filter(e => e.department_id === this.detailsUnit!.id);
         }
         this.calculateStats();
         this.displayEmployeeCrudDialog = false;
     }
 
     deleteEmployee(employee: OrgEmployee): void {
-        const index = this.employees.findIndex((e) => e.id === employee.id);
+        const index = this.employees.findIndex(e => e.id === employee.id);
         if (index !== -1) {
             this.employees.splice(index, 1);
 
             // Update department employee count
-            const department = this.orgUnits.find((u) => u.id === employee.department_id);
+            const department = this.orgUnits.find(u => u.id === employee.department_id);
             if (department && department.employee_count > 0) {
                 department.employee_count--;
             }
 
             // Refresh details panel
             if (this.detailsUnit) {
-                this.detailsEmployees = this.employees.filter((e) => e.department_id === this.detailsUnit!.id);
+                this.detailsEmployees = this.employees.filter(e => e.department_id === this.detailsUnit!.id);
             }
             this.calculateStats();
             this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('HRM.ORG_STRUCTURE.EMPLOYEE_DELETED') });
         }
-    }
-
-    private getManagerName(managerId: number | null | undefined): string | undefined {
-        if (!managerId) return undefined;
-        const manager = this.employees.find((e) => e.id === managerId);
-        return manager?.name;
-    }
-
-    getManagersForDepartment(): OrgEmployee[] {
-        return this.employees.filter((e) => e.is_manager);
     }
 
     onPhotoUpload(event: any): void {
@@ -461,14 +467,14 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
         }
 
         if (this.isEditMode && this.selectedUnit) {
-            const index = this.orgUnits.findIndex((u) => u.id === this.selectedUnit!.id);
+            const index = this.orgUnits.findIndex(u => u.id === this.selectedUnit!.id);
             if (index !== -1) {
                 this.orgUnits[index] = { ...this.orgUnits[index], ...this.unitForm } as OrgUnit;
             }
             this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('HRM.ORG_STRUCTURE.DEPARTMENT_UPDATED') });
         } else {
             const newUnit: OrgUnit = {
-                id: Math.max(...this.orgUnits.map((u) => u.id)) + 1,
+                id: Math.max(...this.orgUnits.map(u => u.id)) + 1,
                 name: this.unitForm.name!,
                 code: this.unitForm.code!,
                 type: this.unitForm.type as OrgUnitType,
@@ -502,15 +508,15 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
 
     // Helpers
     getUnitTypeInfo(type: OrgUnitType): { label: string; icon: string; color: string } {
-        return this.orgUnitTypes.find((t) => t.value === type) || { label: type, icon: 'pi-folder', color: 'gray' };
+        return this.orgUnitTypes.find(t => t.value === type) || { label: type, icon: 'pi-folder', color: 'gray' };
     }
 
     getParentUnit(unit: OrgUnit): OrgUnit | undefined {
-        return this.orgUnits.find((u) => u.id === unit.parent_id);
+        return this.orgUnits.find(u => u.id === unit.parent_id);
     }
 
     getChildUnits(unit: OrgUnit): OrgUnit[] {
-        return this.orgUnits.filter((u) => u.parent_id === unit.id);
+        return this.orgUnits.filter(u => u.parent_id === unit.id);
     }
 
     formatDate(dateStr: string): string {
@@ -518,12 +524,7 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
     }
 
     getInitials(name: string): string {
-        return name
-            .split(' ')
-            .map((n) => n[0])
-            .join('')
-            .substring(0, 2)
-            .toUpperCase();
+        return name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
     }
 
     getAvatarColor(id: number): string {

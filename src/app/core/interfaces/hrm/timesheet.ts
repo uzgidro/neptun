@@ -124,17 +124,17 @@ export interface TimesheetCorrection {
 
 // Types
 export type AttendanceStatus =
-    | 'present' // Присутствует
-    | 'absent' // Отсутствует (без причины)
-    | 'vacation' // Отпуск
-    | 'sick_leave' // Больничный
-    | 'business_trip' // Командировка
-    | 'remote' // Удалённая работа
-    | 'day_off' // Выходной
-    | 'holiday' // Праздник
-    | 'unpaid_leave' // Отпуск без сохранения з/п
-    | 'late' // Опоздание
-    | 'left_early'; // Ранний уход
+    | 'present'        // Присутствует
+    | 'absent'         // Отсутствует (без причины)
+    | 'vacation'       // Отпуск
+    | 'sick_leave'     // Больничный
+    | 'business_trip'  // Командировка
+    | 'remote'         // Удалённая работа
+    | 'day_off'        // Выходной
+    | 'holiday'        // Праздник
+    | 'unpaid_leave'   // Отпуск без сохранения з/п
+    | 'late'           // Опоздание
+    | 'left_early';    // Ранний уход
 
 export type CorrectionStatus = 'pending' | 'approved' | 'rejected';
 

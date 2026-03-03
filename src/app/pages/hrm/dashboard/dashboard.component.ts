@@ -12,14 +12,32 @@ import { Tooltip } from 'primeng/tooltip';
 import { ProgressBar } from 'primeng/progressbar';
 import { Ripple } from 'primeng/ripple';
 import { MessageService } from 'primeng/api';
-import { HRMDashboard, DashboardNotification, QuickAction, QUICK_ACTIONS } from '@/core/interfaces/hrm/dashboard';
+import {
+    HRMDashboard,
+    DashboardNotification,
+    QuickAction,
+    QUICK_ACTIONS
+} from '@/core/interfaces/hrm/dashboard';
 import { HRMDashboardService } from '@/core/services/hrm-dashboard.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-hrm-dashboard',
     standalone: true,
-    imports: [CommonModule, RouterModule, FormsModule, Card, ButtonDirective, Tag, Avatar, Badge, Tooltip, ProgressBar, Ripple, TranslateModule],
+    imports: [
+        CommonModule,
+        RouterModule,
+        FormsModule,
+        Card,
+        ButtonDirective,
+        Tag,
+        Avatar,
+        Badge,
+        Tooltip,
+        ProgressBar,
+        Ripple,
+        TranslateModule
+    ],
     templateUrl: './dashboard.component.html',
     styleUrl: './dashboard.component.scss'
 })
@@ -46,8 +64,7 @@ export class HRMDashboardComponent implements OnInit, OnDestroy {
     private loadDashboardData(): void {
         this.loading = true;
 
-        this.hrmDashboardService
-            .getDashboard()
+        this.hrmDashboardService.getDashboard()
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (data) => {
@@ -70,57 +87,39 @@ export class HRMDashboardComponent implements OnInit, OnDestroy {
 
     getTaskPrioritySeverity(priority: string): 'success' | 'info' | 'warn' | 'danger' | 'secondary' {
         switch (priority) {
-            case 'urgent':
-                return 'danger';
-            case 'high':
-                return 'warn';
-            case 'medium':
-                return 'info';
-            case 'low':
-                return 'secondary';
-            default:
-                return 'info';
+            case 'urgent': return 'danger';
+            case 'high': return 'warn';
+            case 'medium': return 'info';
+            case 'low': return 'secondary';
+            default: return 'info';
         }
     }
 
     getTaskPriorityLabel(priority: string): string {
         switch (priority) {
-            case 'urgent':
-                return this.translate.instant('HRM.DASHBOARD.PRIORITY_URGENT');
-            case 'high':
-                return this.translate.instant('HRM.DASHBOARD.PRIORITY_HIGH');
-            case 'medium':
-                return this.translate.instant('HRM.DASHBOARD.PRIORITY_MEDIUM');
-            case 'low':
-                return this.translate.instant('HRM.DASHBOARD.PRIORITY_LOW');
-            default:
-                return priority;
+            case 'urgent': return this.translate.instant('HRM.DASHBOARD.PRIORITY_URGENT');
+            case 'high': return this.translate.instant('HRM.DASHBOARD.PRIORITY_HIGH');
+            case 'medium': return this.translate.instant('HRM.DASHBOARD.PRIORITY_MEDIUM');
+            case 'low': return this.translate.instant('HRM.DASHBOARD.PRIORITY_LOW');
+            default: return priority;
         }
     }
 
     getProbationStatusSeverity(status: string): 'success' | 'warn' | 'danger' {
         switch (status) {
-            case 'on_track':
-                return 'success';
-            case 'at_risk':
-                return 'warn';
-            case 'extended':
-                return 'danger';
-            default:
-                return 'success';
+            case 'on_track': return 'success';
+            case 'at_risk': return 'warn';
+            case 'extended': return 'danger';
+            default: return 'success';
         }
     }
 
     getProbationStatusLabel(status: string): string {
         switch (status) {
-            case 'on_track':
-                return this.translate.instant('HRM.DASHBOARD.PROBATION_ON_TRACK');
-            case 'at_risk':
-                return this.translate.instant('HRM.DASHBOARD.PROBATION_AT_RISK');
-            case 'extended':
-                return this.translate.instant('HRM.DASHBOARD.PROBATION_EXTENDED');
-            default:
-                return status;
+            case 'on_track': return this.translate.instant('HRM.DASHBOARD.PROBATION_ON_TRACK');
+            case 'at_risk': return this.translate.instant('HRM.DASHBOARD.PROBATION_AT_RISK');
+            case 'extended': return this.translate.instant('HRM.DASHBOARD.PROBATION_EXTENDED');
+            default: return status;
         }
     }
 
@@ -160,12 +159,11 @@ export class HRMDashboardComponent implements OnInit, OnDestroy {
     }
 
     getUnreadNotificationsCount(): number {
-        return this.dashboard?.notifications.filter((n) => !n.read).length || 0;
+        return this.dashboard?.notifications.filter(n => !n.read).length || 0;
     }
 
     markNotificationAsRead(notification: DashboardNotification): void {
-        this.hrmDashboardService
-            .markNotificationAsRead(notification.id)
+        this.hrmDashboardService.markNotificationAsRead(notification.id)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
@@ -181,11 +179,7 @@ export class HRMDashboardComponent implements OnInit, OnDestroy {
 
     getInitials(name: string): string {
         if (!name) return '';
-        return name
-            .split(' ')
-            .map((n) => n[0])
-            .join('')
-            .substring(0, 2);
+        return name.split(' ').map(n => n[0]).join('').substring(0, 2);
     }
 
     ngOnDestroy() {

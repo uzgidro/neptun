@@ -142,6 +142,10 @@ export class ScShutdownsComponent implements OnInit, OnDestroy {
         return this.shutdowns.filter((s) => s.isOngoing).length;
     }
 
+    get hasUnviewedActiveShutdowns(): boolean {
+        return this.shutdowns.some((s) => s.isOngoing && !s.viewed);
+    }
+
     get totalShutdownsCount(): number {
         return this.shutdowns.length;
     }

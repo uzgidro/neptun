@@ -71,7 +71,7 @@ export class GesAggregatesComponent implements OnChanges {
                     { label: 'GES_DETAIL.AGGREGATE.ROTOR_VOLTAGE', value: fmt(val('rotor_voltage'), '1.1-1'), unit: 'GES_DETAIL.UNIT.V' },
                     { label: 'GES_DETAIL.AGGREGATE.ROTOR_CURRENT', value: fmt(val('rotor_current'), '1.1-1'), unit: 'GES_DETAIL.UNIT.A' },
                     { label: 'GES_DETAIL.AGGREGATE.GUIDE_VANE_1', value: fmt(val('guide_vane_1'), '1.1-1'), unit: 'GES_DETAIL.UNIT.PERCENT' },
-                    { label: 'GES_DETAIL.AGGREGATE.GUIDE_VANE_2', value: fmt(val('guide_vane_2'), '1.1-1'), unit: 'GES_DETAIL.UNIT.PERCENT' },
+                    { label: 'GES_DETAIL.AGGREGATE.GUIDE_VANE_2', value: fmt(val('guide_vane_2'), '1.1-1'), unit: 'GES_DETAIL.UNIT.PERCENT' }
                 ];
 
                 return {

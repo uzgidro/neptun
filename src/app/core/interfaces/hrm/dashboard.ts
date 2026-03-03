@@ -120,13 +120,40 @@ export interface QuickAction {
 }
 
 // Types
-export type TaskType = 'vacation_approval' | 'salary_approval' | 'vacancy_approval' | 'candidate_review' | 'assessment_review' | 'training_assignment' | 'document_review' | 'probation_review' | 'other';
+export type TaskType =
+    | 'vacation_approval'
+    | 'salary_approval'
+    | 'vacancy_approval'
+    | 'candidate_review'
+    | 'assessment_review'
+    | 'training_assignment'
+    | 'document_review'
+    | 'probation_review'
+    | 'other';
 
 export type TaskPriority = 'low' | 'medium' | 'high' | 'urgent';
 
-export type EventType = 'training' | 'meeting' | 'assessment' | 'interview' | 'deadline' | 'holiday' | 'birthday' | 'anniversary' | 'other';
+export type EventType =
+    | 'training'
+    | 'meeting'
+    | 'assessment'
+    | 'interview'
+    | 'deadline'
+    | 'holiday'
+    | 'birthday'
+    | 'anniversary'
+    | 'other';
 
-export type NotificationType = 'approval_request' | 'approval_result' | 'deadline_reminder' | 'system_alert' | 'new_employee' | 'employee_leave' | 'training_reminder' | 'assessment_result' | 'other';
+export type NotificationType =
+    | 'approval_request'
+    | 'approval_result'
+    | 'deadline_reminder'
+    | 'system_alert'
+    | 'new_employee'
+    | 'employee_leave'
+    | 'training_reminder'
+    | 'assessment_result'
+    | 'other';
 
 export type ActivityType =
     | 'employee_hired'

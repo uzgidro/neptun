@@ -47,7 +47,25 @@ interface Employee {
 @Component({
     selector: 'app-access-control',
     standalone: true,
-    imports: [CommonModule, FormsModule, ButtonDirective, Select, TableModule, Tag, Tooltip, Dialog, InputText, Textarea, TabsModule, ConfirmDialog, InputGroup, InputGroupAddon, ProgressBar, Checkbox, TranslateModule],
+    imports: [
+        CommonModule,
+        FormsModule,
+        ButtonDirective,
+        Select,
+        TableModule,
+        Tag,
+        Tooltip,
+        Dialog,
+        InputText,
+        Textarea,
+        TabsModule,
+        ConfirmDialog,
+        InputGroup,
+        InputGroupAddon,
+        ProgressBar,
+        Checkbox,
+        TranslateModule
+    ],
     providers: [ConfirmationService],
     templateUrl: './access-control.component.html',
     styleUrl: './access-control.component.scss'
@@ -135,36 +153,34 @@ export class AccessControlComponent implements OnInit, OnDestroy {
             logs: this.accessControlService.getLogs(),
             requests: this.accessControlService.getRequests(),
             employees: this.contactService.getContacts()
-        })
-            .pipe(takeUntil(this.destroy$))
-            .subscribe({
-                next: (data) => {
-                    this.cards = data.cards;
-                    this.zones = data.zones;
-                    this.logs = data.logs;
-                    this.requests = data.requests;
-                    this.employees = data.employees.map((e) => ({
-                        id: e.id,
-                        name: e.name,
-                        department: e.department?.name || '',
-                        position: e.position?.name || ''
-                    }));
-                    this.zoneOccupancy = this.zones.map((z) => ({
-                        zone_id: z.id,
-                        zone_name: z.name,
-                        current: z.current_occupancy || 0,
-                        max: z.max_occupancy || 100,
-                        percentage: Math.round(((z.current_occupancy || 0) / (z.max_occupancy || 100)) * 100)
-                    }));
-                    this.calculateStats();
-                    this.loading = false;
-                },
-                error: (err) => {
-                    console.error('Error loading data:', err);
-                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('HRM.ACCESS_CONTROL.LOAD_ERROR') });
-                    this.loading = false;
-                }
-            });
+        }).pipe(takeUntil(this.destroy$)).subscribe({
+            next: (data) => {
+                this.cards = data.cards;
+                this.zones = data.zones;
+                this.logs = data.logs;
+                this.requests = data.requests;
+                this.employees = data.employees.map(e => ({
+                    id: e.id,
+                    name: e.name,
+                    department: e.department?.name || '',
+                    position: e.position?.name || ''
+                }));
+                this.zoneOccupancy = this.zones.map(z => ({
+                    zone_id: z.id,
+                    zone_name: z.name,
+                    current: z.current_occupancy || 0,
+                    max: z.max_occupancy || 100,
+                    percentage: Math.round(((z.current_occupancy || 0) / (z.max_occupancy || 100)) * 100)
+                }));
+                this.calculateStats();
+                this.loading = false;
+            },
+            error: (err) => {
+                console.error('Error loading data:', err);
+                this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('HRM.ACCESS_CONTROL.LOAD_ERROR') });
+                this.loading = false;
+            }
+        });
     }
 
     private startAutoRefresh(): void {
@@ -181,8 +197,7 @@ export class AccessControlComponent implements OnInit, OnDestroy {
     }
 
     loadLogs(): void {
-        this.accessControlService
-            .getLogs()
+        this.accessControlService.getLogs()
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (data) => {
@@ -196,35 +211,39 @@ export class AccessControlComponent implements OnInit, OnDestroy {
     private calculateStats(): void {
         this.stats = {
             total_cards: this.cards.length,
-            active_cards: this.cards.filter((c) => c.status === 'active').length,
-            blocked_cards: this.cards.filter((c) => c.status === 'blocked').length,
-            expired_cards: this.cards.filter((c) => c.status === 'expired').length,
+            active_cards: this.cards.filter(c => c.status === 'active').length,
+            blocked_cards: this.cards.filter(c => c.status === 'blocked').length,
+            expired_cards: this.cards.filter(c => c.status === 'expired').length,
             total_zones: this.zones.length,
-            entries_today: this.logs.filter((l) => l.direction === 'entry' && l.status === 'granted').length,
-            exits_today: this.logs.filter((l) => l.direction === 'exit' && l.status === 'granted').length,
+            entries_today: this.logs.filter(l => l.direction === 'entry' && l.status === 'granted').length,
+            exits_today: this.logs.filter(l => l.direction === 'exit' && l.status === 'granted').length,
             current_on_site: this.zones.reduce((sum, z) => sum + (z.current_occupancy || 0), 0),
-            denied_today: this.logs.filter((l) => l.status === 'denied').length,
-            pending_requests: this.requests.filter((r) => r.status === 'pending').length
+            denied_today: this.logs.filter(l => l.status === 'denied').length,
+            pending_requests: this.requests.filter(r => r.status === 'pending').length
         };
     }
 
     // Filtering
     get filteredCards(): AccessCard[] {
-        return this.cards.filter((card) => {
+        return this.cards.filter(card => {
             if (this.searchQuery) {
                 const query = this.searchQuery.toLowerCase();
-                const matches = card.employee_name.toLowerCase().includes(query) || card.card_number.toLowerCase().includes(query) || card.employee_code.toLowerCase().includes(query);
+                const matches = card.employee_name.toLowerCase().includes(query) ||
+                    card.card_number.toLowerCase().includes(query) ||
+                    card.employee_code.toLowerCase().includes(query);
                 if (!matches) return false;
             }
             if (this.selectedCardStatus && card.status !== this.selectedCardStatus) return false;
             return !(this.selectedZone && !card.access_zones.includes(this.selectedZone));
+
         });
     }
 
     get filteredLogs(): AccessLog[] {
-        return this.logs.filter((log) => {
+        return this.logs.filter(log => {
             if (this.selectedLogStatus && log.status !== this.selectedLogStatus) return false;
             return !(this.selectedZone && log.zone_id !== this.selectedZone);
+
         });
     }
 
@@ -261,10 +280,10 @@ export class AccessControlComponent implements OnInit, OnDestroy {
             return;
         }
 
-        const employee = this.employees.find((e) => e.id === this.cardForm.employee_id);
+        const employee = this.employees.find(e => e.id === this.cardForm.employee_id);
 
         if (this.isEditMode && this.selectedCard) {
-            const index = this.cards.findIndex((c) => c.id === this.selectedCard!.id);
+            const index = this.cards.findIndex(c => c.id === this.selectedCard!.id);
             if (index !== -1) {
                 this.cards[index] = {
                     ...this.cards[index],
@@ -275,7 +294,7 @@ export class AccessControlComponent implements OnInit, OnDestroy {
             this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('HRM.ACCESS_CONTROL.CARD_UPDATED') });
         } else {
             const newCard: AccessCard = {
-                id: Math.max(...this.cards.map((c) => c.id)) + 1,
+                id: Math.max(...this.cards.map(c => c.id)) + 1,
                 card_number: this.generateCardNumber(),
                 employee_id: this.cardForm.employee_id!,
                 employee_name: employee?.name || '',
@@ -351,9 +370,9 @@ export class AccessControlComponent implements OnInit, OnDestroy {
         this.selectedRequest.processed_by_name = this.translate.instant('HRM.ACCESS_CONTROL.ADMINISTRATOR');
 
         // Add zones to employee's card
-        const card = this.cards.find((c) => c.employee_id === this.selectedRequest!.employee_id);
+        const card = this.cards.find(c => c.employee_id === this.selectedRequest!.employee_id);
         if (card) {
-            this.selectedRequest.requested_zones.forEach((zoneId) => {
+            this.selectedRequest.requested_zones.forEach(zoneId => {
                 if (!card.access_zones.includes(zoneId)) {
                     card.access_zones.push(zoneId);
                 }
@@ -380,46 +399,46 @@ export class AccessControlComponent implements OnInit, OnDestroy {
 
     // Helpers
     getCardStatusLabel(status: CardStatus): string {
-        return this.cardStatuses.find((s) => s.value === status)?.label || status;
+        return this.cardStatuses.find(s => s.value === status)?.label || status;
     }
 
     getCardStatusSeverity(status: CardStatus): 'success' | 'info' | 'warn' | 'danger' | 'secondary' {
-        const found = this.cardStatuses.find((s) => s.value === status);
+        const found = this.cardStatuses.find(s => s.value === status);
         return (found?.severity as any) || 'secondary';
     }
 
     getSecurityLevelLabel(level: SecurityLevel): string {
-        return this.securityLevels.find((l) => l.value === level)?.label || level;
+        return this.securityLevels.find(l => l.value === level)?.label || level;
     }
 
     getSecurityLevelColor(level: SecurityLevel): string {
-        return this.securityLevels.find((l) => l.value === level)?.color || 'gray';
+        return this.securityLevels.find(l => l.value === level)?.color || 'gray';
     }
 
     getAccessStatusLabel(status: AccessEventStatus): string {
-        return this.accessEventStatuses.find((s) => s.value === status)?.label || status;
+        return this.accessEventStatuses.find(s => s.value === status)?.label || status;
     }
 
     getAccessStatusSeverity(status: AccessEventStatus): 'success' | 'info' | 'warn' | 'danger' | 'secondary' {
-        const found = this.accessEventStatuses.find((s) => s.value === status);
+        const found = this.accessEventStatuses.find(s => s.value === status);
         return (found?.severity as any) || 'secondary';
     }
 
     getRequestStatusLabel(status: RequestStatus): string {
-        return this.requestStatuses.find((s) => s.value === status)?.label || status;
+        return this.requestStatuses.find(s => s.value === status)?.label || status;
     }
 
     getRequestStatusSeverity(status: RequestStatus): 'success' | 'info' | 'warn' | 'danger' | 'secondary' {
-        const found = this.requestStatuses.find((s) => s.value === status);
+        const found = this.requestStatuses.find(s => s.value === status);
         return (found?.severity as any) || 'secondary';
     }
 
     getZoneName(zoneId: number): string {
-        return this.zones.find((z) => z.id === zoneId)?.name || '';
+        return this.zones.find(z => z.id === zoneId)?.name || '';
     }
 
     getZoneNames(zoneIds: number[]): string {
-        return zoneIds.map((id) => this.getZoneName(id)).join(', ');
+        return zoneIds.map(id => this.getZoneName(id)).join(', ');
     }
 
     formatDateTime(dateStr: string): string {

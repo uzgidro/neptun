@@ -6,8 +6,7 @@
             <p class="text-surface-600 dark:text-surface-400 mt-1">{{ getMonthName(selectedMonth) }} {{ selectedYear }}</p>
         </div>
         <div class="flex gap-2">
-            <button pButton [label]="'HRM.TIMESHEET.EXPORT_EXCEL' | translate" icon="pi pi-file-excel"
-                    class="p-button-success" (click)="exportToExcel()"></button>
+            <button pButton [label]="'HRM.TIMESHEET.EXPORT_EXCEL' | translate" icon="pi pi-file-excel" class="p-button-success" (click)="exportToExcel()"></button>
         </div>
     </div>
 
@@ -15,8 +14,7 @@
     <p-card styleClass="mb-4">
         <div class="flex flex-wrap gap-4 items-end">
             <div class="flex flex-col gap-2">
-                <label
-                    class="font-medium text-surface-700 dark:text-surface-300">{{ 'HRM.TIMESHEET.MONTH' | translate }}</label>
+                <label class="font-medium text-surface-700 dark:text-surface-300">{{ 'HRM.TIMESHEET.MONTH' | translate }}</label>
                 <p-select
                     [options]="months"
                     [(ngModel)]="selectedMonth"
@@ -28,8 +26,7 @@
                 </p-select>
             </div>
             <div class="flex flex-col gap-2">
-                <label
-                    class="font-medium text-surface-700 dark:text-surface-300">{{ 'HRM.TIMESHEET.YEAR' | translate }}</label>
+                <label class="font-medium text-surface-700 dark:text-surface-300">{{ 'HRM.TIMESHEET.YEAR' | translate }}</label>
                 <p-select
                     [options]="years"
                     [(ngModel)]="selectedYear"
@@ -39,8 +36,7 @@
                 </p-select>
             </div>
             <div class="flex flex-col gap-2">
-                <label
-                    class="font-medium text-surface-700 dark:text-surface-300">{{ 'HRM.TIMESHEET.DEPARTMENT' | translate }}</label>
+                <label class="font-medium text-surface-700 dark:text-surface-300">{{ 'HRM.TIMESHEET.DEPARTMENT' | translate }}</label>
                 <p-select
                     [options]="departments"
                     [(ngModel)]="selectedDepartment"
@@ -64,8 +60,7 @@
                 </div>
                 <div>
                     <p class="text-surface-500 dark:text-surface-400 text-sm m-0">{{ 'HRM.TIMESHEET.ATTENDANCE' | translate }}</p>
-                    <p class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">{{ getAttendanceRate() }}
-                        %</p>
+                    <p class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">{{ getAttendanceRate() }}%</p>
                 </div>
             </div>
         </div>
@@ -124,23 +119,23 @@
         <div class="timesheet-table-wrapper">
             <table class="timesheet-table">
                 <thead>
-                <tr>
-                    <th class="employee-header">
-                        <div class="font-medium">{{ 'HRM.TIMESHEET.EMPLOYEE' | translate }}</div>
-                    </th>
-                    @for (day of calendarDays; track day.date) {
-                        <th
-                            class="day-header"
-                            [class.weekend]="day.isWeekend"
-                            [class.holiday]="day.isHoliday"
-                            [pTooltip]="day.holidayName || ''"
-                            tooltipPosition="top">
-                            <div class="day-number">{{ day.dayOfMonth }}</div>
-                            <div class="day-name">{{ getDayOfWeekShort(day.dayOfWeek) }}</div>
+                    <tr>
+                        <th class="employee-header">
+                            <div class="font-medium">{{ 'HRM.TIMESHEET.EMPLOYEE' | translate }}</div>
                         </th>
-                    }
-                    <th class="summary-header">{{ 'HRM.TIMESHEET.TOTAL' | translate }}</th>
-                </tr>
+                        @for (day of calendarDays; track day.date) {
+                            <th
+                                class="day-header"
+                                [class.weekend]="day.isWeekend"
+                                [class.holiday]="day.isHoliday"
+                                [pTooltip]="day.holidayName || ''"
+                                tooltipPosition="top">
+                                <div class="day-number">{{ day.dayOfMonth }}</div>
+                                <div class="day-name">{{ getDayOfWeekShort(day.dayOfWeek) }}</div>
+                            </th>
+                        }
+                        <th class="summary-header">{{ 'HRM.TIMESHEET.TOTAL' | translate }}</th>
+                    </tr>
                 </thead>
                 <tbody>
                     @if (loading) {
@@ -193,8 +188,7 @@
                                     <div class="summary-info">
                                         <span class="summary-hours">{{ employee.summary.total_worked_hours }}ч</span>
                                         @if (employee.summary.total_overtime_hours > 0) {
-                                            <span
-                                                class="summary-overtime">+{{ employee.summary.total_overtime_hours }}</span>
+                                            <span class="summary-overtime">+{{ employee.summary.total_overtime_hours }}</span>
                                         }
                                     </div>
                                 </td>
@@ -235,8 +229,7 @@
         </div>
 
         <div class="flex flex-col gap-2">
-            <label
-                class="font-medium text-surface-700 dark:text-surface-300">{{ 'HRM.TIMESHEET.STATUS' | translate }}</label>
+            <label class="font-medium text-surface-700 dark:text-surface-300">{{ 'HRM.TIMESHEET.STATUS' | translate }}</label>
             <p-select
                 [options]="attendanceStatuses"
                 [(ngModel)]="editForm.status"
@@ -249,27 +242,23 @@
 
         <div class="grid grid-cols-2 gap-4">
             <div class="flex flex-col gap-2">
-                <label
-                    class="font-medium text-surface-700 dark:text-surface-300">{{ 'HRM.TIMESHEET.CHECK_IN' | translate }}</label>
+                <label class="font-medium text-surface-700 dark:text-surface-300">{{ 'HRM.TIMESHEET.CHECK_IN' | translate }}</label>
                 <input pInputText type="time" [(ngModel)]="editForm.check_in" class="w-full" />
             </div>
             <div class="flex flex-col gap-2">
-                <label
-                    class="font-medium text-surface-700 dark:text-surface-300">{{ 'HRM.TIMESHEET.CHECK_OUT' | translate }}</label>
+                <label class="font-medium text-surface-700 dark:text-surface-300">{{ 'HRM.TIMESHEET.CHECK_OUT' | translate }}</label>
                 <input pInputText type="time" [(ngModel)]="editForm.check_out" class="w-full" />
             </div>
         </div>
 
         <div class="flex flex-col gap-2">
-            <label
-                class="font-medium text-surface-700 dark:text-surface-300">{{ 'HRM.TIMESHEET.NOTES' | translate }}</label>
+            <label class="font-medium text-surface-700 dark:text-surface-300">{{ 'HRM.TIMESHEET.NOTES' | translate }}</label>
             <textarea pTextarea [(ngModel)]="editForm.notes" rows="3" class="w-full"></textarea>
         </div>
     </div>
 
     <ng-template pTemplate="footer">
-        <button pButton [label]="'COMMON.CANCEL' | translate" class="p-button-text"
-                (click)="displayEditDialog = false"></button>
+        <button pButton [label]="'COMMON.CANCEL' | translate" class="p-button-text" (click)="displayEditDialog = false"></button>
         <button pButton [label]="'COMMON.SAVE' | translate" icon="pi pi-check" (click)="saveEdit()"></button>
     </ng-template>
 </p-dialog>

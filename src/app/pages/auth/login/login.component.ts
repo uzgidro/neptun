@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
@@ -10,7 +10,7 @@ import { AppFloatingConfigurator } from '@/layout/component/app.floatingconfigur
 import { AuthService } from '@/core/services/auth.service';
 import { finalize } from 'rxjs';
 import { NgOptimizedImage } from '@angular/common';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-login',
@@ -18,7 +18,7 @@ import { TranslateModule } from '@ngx-translate/core';
     imports: [ButtonModule, CheckboxModule, InputTextModule, PasswordModule, FormsModule, RouterModule, RippleModule, AppFloatingConfigurator, NgOptimizedImage, TranslateModule],
     templateUrl: 'login.component.html'
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
     username: string = '';
 
     password: string = '';
@@ -31,6 +31,12 @@ export class LoginComponent {
 
     private authService: AuthService = inject(AuthService);
     private router: Router = inject(Router);
+    private translate: TranslateService = inject(TranslateService);
+
+    ngOnInit(): void {
+        const savedLang = localStorage.getItem('lang') || 'ru';
+        this.translate.use(savedLang);
+    }
 
     signIn() {
         this.loading = true;

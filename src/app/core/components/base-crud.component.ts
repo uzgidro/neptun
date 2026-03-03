@@ -143,8 +143,7 @@ export abstract class BaseCrudComponent<T extends BaseEntity, TPayload = Partial
     confirmDelete(): void {
         if (!this.selectedItem) return;
 
-        this.service
-            .delete(this.selectedItem.id)
+        this.service.delete(this.selectedItem.id)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
@@ -172,8 +171,7 @@ export abstract class BaseCrudComponent<T extends BaseEntity, TPayload = Partial
      * Load all items from service
      */
     loadItems(): void {
-        this.service
-            .getAll()
+        this.service.getAll()
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (data) => {
@@ -192,8 +190,7 @@ export abstract class BaseCrudComponent<T extends BaseEntity, TPayload = Partial
     protected createItem(): void {
         const payload = this.buildPayload();
 
-        this.service
-            .create(payload)
+        this.service.create(payload)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
@@ -224,8 +221,7 @@ export abstract class BaseCrudComponent<T extends BaseEntity, TPayload = Partial
 
         const payload = this.buildPayload();
 
-        this.service
-            .update(this.selectedItem.id, payload)
+        this.service.update(this.selectedItem.id, payload)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {

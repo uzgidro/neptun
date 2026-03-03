@@ -18,7 +18,17 @@ import { TextareaComponent } from '@/layout/component/dialog/textarea/textarea.c
 import { Card } from 'primeng/card';
 import { Dialog } from 'primeng/dialog';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { Vacation, VacationBalance, VacationPayload, VacationValidationResult, VacationValidationError, VacationValidationWarning, VACATION_TYPES, VACATION_STATUSES, BALANCE_REQUIRED_TYPES } from '@/core/interfaces/hrm/vacation';
+import {
+    Vacation,
+    VacationBalance,
+    VacationPayload,
+    VacationValidationResult,
+    VacationValidationError,
+    VacationValidationWarning,
+    VACATION_TYPES,
+    VACATION_STATUSES,
+    BALANCE_REQUIRED_TYPES
+} from '@/core/interfaces/hrm/vacation';
 import { VacationService } from '@/core/services/vacation.service';
 import { ContactService } from '@/core/services/contact.service';
 import { Contact } from '@/core/interfaces/contact';
@@ -83,8 +93,8 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
     // Department vacation limits (max concurrent vacations) - can be loaded from API
     departmentLimits: { [key: number]: number } = {};
 
-    vacationTypes = VACATION_TYPES.map((t) => ({ id: t.value, name: t.label }));
-    vacationStatuses = VACATION_STATUSES.map((s) => ({ id: s.value, name: s.label }));
+    vacationTypes = VACATION_TYPES.map(t => ({ id: t.value, name: t.label }));
+    vacationStatuses = VACATION_STATUSES.map(s => ({ id: s.value, name: s.label }));
 
     private vacationService = inject(VacationService);
     private contactService = inject(ContactService);
@@ -106,7 +116,7 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
         });
 
         // Subscribe to employee changes to update balance display
-        this.vacationForm.get('employee_id')?.valueChanges.subscribe((employee) => {
+        this.vacationForm.get('employee_id')?.valueChanges.subscribe(employee => {
             if (employee) {
                 this.updateSelectedEmployeeBalance(employee.id);
             } else {
@@ -127,8 +137,7 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
     }
 
     private loadVacations(): void {
-        this.vacationService
-            .getVacations()
+        this.vacationService.getVacations()
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (data) => {
@@ -143,8 +152,7 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
     }
 
     private loadVacationBalances(): void {
-        this.vacationService
-            .getVacationBalances()
+        this.vacationService.getVacationBalances()
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (data) => {
@@ -155,12 +163,11 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
     }
 
     private loadEmployees(): void {
-        this.contactService
-            .getContacts()
+        this.contactService.getContacts()
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (data: Contact[]) => {
-                    this.employees = data.map((c) => ({
+                    this.employees = data.map(c => ({
                         id: c.id,
                         name: c.name,
                         department_id: c.department?.id || 0,
@@ -172,7 +179,7 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
     }
 
     private updateSelectedEmployeeBalance(employeeId: number): void {
-        this.selectedEmployeeBalance = this.leaveBalances.find((b) => b.employee_id === employeeId) || null;
+        this.selectedEmployeeBalance = this.leaveBalances.find(b => b.employee_id === employeeId) || null;
     }
 
     private validateVacationRequest(): void {
@@ -190,7 +197,7 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
         const endDate = new Date(formValue.end_date);
         const daysRequested = this.calculateDays(startDate, endDate);
         const employeeId = formValue.employee_id.id;
-        const employee = this.employees.find((e) => e.id === employeeId);
+        const employee = this.employees.find(e => e.id === employeeId);
         const vacationType = formValue.vacation_type.id;
 
         // 1. Validate dates
@@ -203,7 +210,7 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
 
         // 2. Check leave balance for types that require it
         if (BALANCE_REQUIRED_TYPES.includes(vacationType)) {
-            const balance = this.leaveBalances.find((b) => b.employee_id === employeeId);
+            const balance = this.leaveBalances.find(b => b.employee_id === employeeId);
             if (balance) {
                 const availableDays = balance.remaining_days;
                 if (daysRequested > availableDays) {
@@ -217,8 +224,11 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
         }
 
         // 3. Check for personal overlapping vacations (same employee)
-        const personalOverlap = this.vacations.find(
-            (v) => v.employee_id === employeeId && v.id !== this.selectedVacation?.id && ['pending', 'approved'].includes(v.status) && this.datesOverlap(startDate, endDate, new Date(v.start_date), new Date(v.end_date))
+        const personalOverlap = this.vacations.find(v =>
+            v.employee_id === employeeId &&
+            v.id !== this.selectedVacation?.id &&
+            ['pending', 'approved'].includes(v.status) &&
+            this.datesOverlap(startDate, endDate, new Date(v.start_date), new Date(v.end_date))
         );
 
         if (personalOverlap) {
@@ -230,13 +240,12 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
 
         // 4. Check department vacation limit
         if (employee) {
-            const departmentVacations = this.vacations.filter(
-                (v) =>
-                    v.department_id === employee.department_id &&
-                    v.employee_id !== employeeId &&
-                    v.id !== this.selectedVacation?.id &&
-                    ['pending', 'approved'].includes(v.status) &&
-                    this.datesOverlap(startDate, endDate, new Date(v.start_date), new Date(v.end_date))
+            const departmentVacations = this.vacations.filter(v =>
+                v.department_id === employee.department_id &&
+                v.employee_id !== employeeId &&
+                v.id !== this.selectedVacation?.id &&
+                ['pending', 'approved'].includes(v.status) &&
+                this.datesOverlap(startDate, endDate, new Date(v.start_date), new Date(v.end_date))
             );
 
             const maxConcurrent = this.departmentLimits[employee.department_id] || 2;
@@ -250,7 +259,7 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
 
             // Warning about department overlaps
             if (departmentVacations.length > 0) {
-                const overlappingNames = departmentVacations.map((v) => v.employee_name);
+                const overlappingNames = departmentVacations.map(v => v.employee_name);
                 warnings.push({
                     code: 'DEPARTMENT_OVERLAP',
                     message: `В этот период в отпуске будут: ${overlappingNames.join(', ')}`,
@@ -318,8 +327,8 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
         this.submitted = false;
         this.vacationForm.reset();
 
-        const selectedEmployee = this.employees.find((e) => e.id === vacation.employee_id);
-        const selectedType = this.vacationTypes.find((t) => t.id === vacation.vacation_type);
+        const selectedEmployee = this.employees.find(e => e.id === vacation.employee_id);
+        const selectedType = this.vacationTypes.find(t => t.id === vacation.vacation_type);
 
         this.vacationForm.patchValue({
             employee_id: selectedEmployee ? { id: selectedEmployee.id, name: selectedEmployee.name } : null,
@@ -370,7 +379,7 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
 
         // Validate before submitting
         if (BALANCE_REQUIRED_TYPES.includes(vacation.vacation_type)) {
-            const balance = this.leaveBalances.find((b) => b.employee_id === vacation.employee_id);
+            const balance = this.leaveBalances.find(b => b.employee_id === vacation.employee_id);
             if (balance && vacation.days_count > balance.remaining_days) {
                 this.messageService.add({
                     severity: 'error',
@@ -382,8 +391,7 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
         }
 
         // Update vacation status via API
-        this.vacationService
-            .updateVacation(vacation.id, { ...vacation } as VacationPayload)
+        this.vacationService.updateVacation(vacation.id, { ...vacation } as VacationPayload)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
@@ -415,8 +423,7 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
             reason: formValue.reason
         };
 
-        this.vacationService
-            .createVacation(payload)
+        this.vacationService.createVacation(payload)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
@@ -451,8 +458,7 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
             reason: formValue.reason
         };
 
-        this.vacationService
-            .updateVacation(this.selectedVacation.id, payload)
+        this.vacationService.updateVacation(this.selectedVacation.id, payload)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
@@ -480,8 +486,7 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
 
         const vacation = this.selectedVacation;
 
-        this.vacationService
-            .approveVacation(vacation.id)
+        this.vacationService.approveVacation(vacation.id)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
@@ -516,8 +521,7 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
         const vacation = this.selectedVacation;
         const rejectionReason = this.rejectionForm.value.rejection_reason;
 
-        this.vacationService
-            .rejectVacation(vacation.id, rejectionReason)
+        this.vacationService.rejectVacation(vacation.id, rejectionReason)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
@@ -549,8 +553,7 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
             return;
         }
 
-        this.vacationService
-            .cancelVacation(vacation.id)
+        this.vacationService.cancelVacation(vacation.id)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
@@ -577,8 +580,7 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
     confirmDelete(): void {
         if (!this.selectedVacation) return;
 
-        this.vacationService
-            .deleteVacation(this.selectedVacation.id)
+        this.vacationService.deleteVacation(this.selectedVacation.id)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
@@ -597,45 +599,39 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
 
     getStatusSeverity(status: string): 'success' | 'info' | 'warn' | 'danger' | 'secondary' | 'contrast' {
         switch (status) {
-            case 'approved':
-                return 'success';
-            case 'pending':
-                return 'warn';
-            case 'rejected':
-                return 'danger';
-            case 'cancelled':
-                return 'secondary';
-            case 'draft':
-                return 'info';
-            default:
-                return 'info';
+            case 'approved': return 'success';
+            case 'pending': return 'warn';
+            case 'rejected': return 'danger';
+            case 'cancelled': return 'secondary';
+            case 'draft': return 'info';
+            default: return 'info';
         }
     }
 
     getStatusLabel(status: string): string {
-        const found = this.vacationStatuses.find((s) => s.id === status);
+        const found = this.vacationStatuses.find(s => s.id === status);
         return found ? found.name : status;
     }
 
     getTypeLabel(type: string): string {
-        const found = this.vacationTypes.find((t) => t.id === type);
+        const found = this.vacationTypes.find(t => t.id === type);
         return found ? found.name : type;
     }
 
     getEmployeeBalance(employeeId: number): VacationBalance | undefined {
-        return this.leaveBalances.find((b) => b.employee_id === employeeId);
+        return this.leaveBalances.find(b => b.employee_id === employeeId);
     }
 
     get pendingCount(): number {
-        return this.vacations.filter((v) => v.status === 'pending').length;
+        return this.vacations.filter(v => v.status === 'pending').length;
     }
 
     get approvedCount(): number {
-        return this.vacations.filter((v) => v.status === 'approved').length;
+        return this.vacations.filter(v => v.status === 'approved').length;
     }
 
     get rejectedCount(): number {
-        return this.vacations.filter((v) => v.status === 'rejected').length;
+        return this.vacations.filter(v => v.status === 'rejected').length;
     }
 
     private dateToYMD(date: Date): string {

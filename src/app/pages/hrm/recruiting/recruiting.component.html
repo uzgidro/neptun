@@ -5,18 +5,15 @@
     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
         <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 text-center">
             <div class="text-3xl font-bold text-blue-600">{{ openVacanciesCount }}</div>
-            <div class="text-sm text-gray-600 dark:text-gray-400">{{ 'HRM.RECRUITING.OPEN_VACANCIES' | translate }}
-            </div>
+            <div class="text-sm text-gray-600 dark:text-gray-400">{{ 'HRM.RECRUITING.OPEN_VACANCIES' | translate }}</div>
         </div>
         <div class="bg-yellow-50 dark:bg-yellow-900/20 rounded-lg p-4 text-center">
             <div class="text-3xl font-bold text-yellow-600">{{ pendingApprovalCount }}</div>
-            <div class="text-sm text-gray-600 dark:text-gray-400">{{ 'HRM.RECRUITING.PENDING_APPROVAL' | translate }}
-            </div>
+            <div class="text-sm text-gray-600 dark:text-gray-400">{{ 'HRM.RECRUITING.PENDING_APPROVAL' | translate }}</div>
         </div>
         <div class="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-4 text-center">
             <div class="text-3xl font-bold text-purple-600">{{ newCandidatesCount }}</div>
-            <div class="text-sm text-gray-600 dark:text-gray-400">{{ 'HRM.RECRUITING.NEW_APPLICATIONS' | translate }}
-            </div>
+            <div class="text-sm text-gray-600 dark:text-gray-400">{{ 'HRM.RECRUITING.NEW_APPLICATIONS' | translate }}</div>
         </div>
         <div class="bg-cyan-50 dark:bg-cyan-900/20 rounded-lg p-4 text-center">
             <div class="text-3xl font-bold text-cyan-600">{{ interviewingCount }}</div>
@@ -59,8 +56,7 @@
                                 <p-inputicon>
                                     <i class="pi pi-search"></i>
                                 </p-inputicon>
-                                <input pInputText type="text" (input)="onGlobalFilter(dtVacancies, $event)"
-                                       [placeholder]="'HRM.RECRUITING.SEARCH' | translate" />
+                                <input pInputText type="text" (input)="onGlobalFilter(dtVacancies, $event)" [placeholder]="'HRM.RECRUITING.SEARCH' | translate" />
                             </p-iconfield>
                             <button pButton (click)="openVacancyDialog()">
                                 <i class="pi pi-plus"></i>
@@ -70,9 +66,7 @@
                     </ng-template>
                     <ng-template #header>
                         <tr>
-                            <th pSortableColumn="title"
-                                style="min-width: 14rem">{{ 'HRM.RECRUITING.TITLE_COLUMN' | translate }}
-                            </th>
+                            <th pSortableColumn="title" style="min-width: 14rem">{{ 'HRM.RECRUITING.TITLE_COLUMN' | translate }}</th>
                             <th style="min-width: 10rem">{{ 'HRM.RECRUITING.DEPARTMENT' | translate }}</th>
                             <th style="min-width: 10rem">{{ 'HRM.RECRUITING.POSITION' | translate }}</th>
                             <th style="min-width: 10rem">{{ 'HRM.RECRUITING.SALARY' | translate }}</th>
@@ -87,9 +81,7 @@
                             <td>
                                 <div class="font-medium">{{ vacancy.title }}</div>
                                 @if (vacancy.requested_by_name) {
-                                    <div class="text-xs text-gray-500">{{ 'HRM.RECRUITING.APPLICANT' | translate }}
-                                        : {{ vacancy.requested_by_name }}
-                                    </div>
+                                    <div class="text-xs text-gray-500">{{ 'HRM.RECRUITING.APPLICANT' | translate }}: {{ vacancy.requested_by_name }}</div>
                                 }
                             </td>
                             <td>{{ vacancy.department_name || '—' }}</td>
@@ -112,8 +104,7 @@
                                 }
                             </td>
                             <td>
-                                <p-tag [value]="getStatusLabel(vacancy.status, 'vacancy')"
-                                       [severity]="getVacancyStatusSeverity(vacancy.status)"></p-tag>
+                                <p-tag [value]="getStatusLabel(vacancy.status, 'vacancy')" [severity]="getVacancyStatusSeverity(vacancy.status)"></p-tag>
                             </td>
                             <td>
                                 <div class="flex justify-center gap-1">
@@ -193,8 +184,7 @@
                                 <p-inputicon>
                                     <i class="pi pi-search"></i>
                                 </p-inputicon>
-                                <input pInputText type="text" (input)="onGlobalFilter(dtCandidates, $event)"
-                                       [placeholder]="'HRM.RECRUITING.SEARCH' | translate" />
+                                <input pInputText type="text" (input)="onGlobalFilter(dtCandidates, $event)" [placeholder]="'HRM.RECRUITING.SEARCH' | translate" />
                             </p-iconfield>
                             <button pButton (click)="openCandidateDialog()">
                                 <i class="pi pi-user-plus"></i>
@@ -204,9 +194,7 @@
                     </ng-template>
                     <ng-template #header>
                         <tr>
-                            <th pSortableColumn="full_name"
-                                style="min-width: 14rem">{{ 'HRM.RECRUITING.FULL_NAME' | translate }}
-                            </th>
+                            <th pSortableColumn="full_name" style="min-width: 14rem">{{ 'HRM.RECRUITING.FULL_NAME' | translate }}</th>
                             <th style="min-width: 12rem">{{ 'HRM.RECRUITING.VACANCY' | translate }}</th>
                             <th style="min-width: 8rem">{{ 'HRM.RECRUITING.SOURCE' | translate }}</th>
                             <th style="min-width: 6rem">{{ 'HRM.RECRUITING.STAGE' | translate }}</th>
@@ -224,26 +212,7 @@
                             </td>
                             <td>{{ candidate.vacancy_title || '—' }}</td>
                             <td>
-                                @switch (candidate.source) {
-                                    @case ('gov_portal') {
-                                        <span>Госпортал</span>
-                                    }
-                                    @case ('job_portal') {
-                                        <span>Job-сайт</span>
-                                    }
-                                    @case ('referral') {
-                                        <span>Рекомендация</span>
-                                    }
-                                    @case ('social_media') {
-                                        <span>Соцсети</span>
-                                    }
-                                    @case ('direct') {
-                                        <span>Напрямую</span>
-                                    }
-                                    @default {
-                                        <span>{{ candidate.source }}</span>
-                                    }
-                                }
+                                <span>{{ getSourceLabel(candidate.source) }}</span>
                             </td>
                             <td>
                                 <p-progressBar
@@ -260,8 +229,7 @@
                                 </div>
                             </td>
                             <td>
-                                <p-tag [value]="getStatusLabel(candidate.status, 'candidate')"
-                                       [severity]="getCandidateStatusSeverity(candidate.status)"></p-tag>
+                                <p-tag [value]="getStatusLabel(candidate.status, 'candidate')" [severity]="getCandidateStatusSeverity(candidate.status)"></p-tag>
                             </td>
                             <td>
                                 @if (candidate.rating) {
@@ -287,7 +255,7 @@
                                                 icon="pi pi-check"
                                                 (click)="screenCandidate(candidate, true)"
                                                 class="p-button-rounded p-button-text p-button-success"
-                                                pTooltip="Пройти скрининг"
+                                                [pTooltip]="'HRM.RECRUITING.TOOLTIP.PASS_SCREENING' | translate"
                                                 tooltipPosition="top">
                                         </button>
                                     }
@@ -296,7 +264,7 @@
                                                 icon="pi pi-calendar"
                                                 (click)="openInterviewDialog(candidate)"
                                                 class="p-button-rounded p-button-text p-button-info"
-                                                pTooltip="Назначить собеседование"
+                                                [pTooltip]="'HRM.RECRUITING.TOOLTIP.SCHEDULE_INTERVIEW' | translate"
                                                 tooltipPosition="top">
                                         </button>
                                     }
@@ -305,7 +273,7 @@
                                                 icon="pi pi-verified"
                                                 (click)="openReferenceDialog(candidate)"
                                                 class="p-button-rounded p-button-text p-button-warning"
-                                                pTooltip="Проверка рекомендаций"
+                                                [pTooltip]="'HRM.RECRUITING.TOOLTIP.CHECK_REFERENCES' | translate"
                                                 tooltipPosition="top">
                                         </button>
                                     }
@@ -314,7 +282,7 @@
                                                 icon="pi pi-file-edit"
                                                 (click)="openOfferDialog(candidate)"
                                                 class="p-button-rounded p-button-text p-button-success"
-                                                pTooltip="Отправить оффер"
+                                                [pTooltip]="'HRM.RECRUITING.TOOLTIP.SEND_OFFER' | translate"
                                                 tooltipPosition="top">
                                         </button>
                                     }
@@ -323,7 +291,7 @@
                                                 icon="pi pi-thumbs-up"
                                                 (click)="acceptOffer(candidate)"
                                                 class="p-button-rounded p-button-text p-button-success"
-                                                pTooltip="Оффер принят"
+                                                [pTooltip]="'HRM.RECRUITING.TOOLTIP.OFFER_ACCEPTED' | translate"
                                                 tooltipPosition="top">
                                         </button>
                                     }
@@ -332,7 +300,7 @@
                                                 icon="pi pi-user-plus"
                                                 (click)="hireCandidate(candidate)"
                                                 class="p-button-rounded p-button-text p-button-success"
-                                                pTooltip="Оформить на работу"
+                                                [pTooltip]="'HRM.RECRUITING.TOOLTIP.HIRE_EMPLOYEE' | translate"
                                                 tooltipPosition="top">
                                         </button>
                                     }
@@ -341,7 +309,7 @@
                                                 icon="pi pi-times"
                                                 (click)="openRejectDialog(candidate)"
                                                 class="p-button-rounded p-button-text p-button-danger"
-                                                pTooltip="Отклонить"
+                                                [pTooltip]="'HRM.RECRUITING.TOOLTIP.REJECT' | translate"
                                                 tooltipPosition="top">
                                         </button>
                                     }
@@ -376,8 +344,7 @@
                                 <p-inputicon>
                                     <i class="pi pi-search"></i>
                                 </p-inputicon>
-                                <input pInputText type="text" (input)="onGlobalFilter(dtOnboardings, $event)"
-                                       [placeholder]="'HRM.RECRUITING.SEARCH' | translate" />
+                                <input pInputText type="text" (input)="onGlobalFilter(dtOnboardings, $event)" [placeholder]="'HRM.RECRUITING.SEARCH' | translate" />
                             </p-iconfield>
                         </div>
                     </ng-template>
@@ -409,9 +376,8 @@
                                 <p-progressBar [value]="onboarding.overall_progress" [showValue]="true"></p-progressBar>
                             </td>
                             <td>
-                                <p-tag
-                                    [value]="onboarding.status === 'in_progress' ? ('HRM.RECRUITING.ONBOARDING.STATUS_IN_PROGRESS' | translate) : onboarding.status === 'completed' ? ('HRM.RECRUITING.ONBOARDING.STATUS_COMPLETED' | translate) : ('HRM.RECRUITING.ONBOARDING.STATUS_NOT_STARTED' | translate)"
-                                    [severity]="getOnboardingStatusSeverity(onboarding.status)"></p-tag>
+                                <p-tag [value]="onboarding.status === 'in_progress' ? ('HRM.RECRUITING.ONBOARDING.STATUS_IN_PROGRESS' | translate) : onboarding.status === 'completed' ? ('HRM.RECRUITING.ONBOARDING.STATUS_COMPLETED' | translate) : ('HRM.RECRUITING.ONBOARDING.STATUS_NOT_STARTED' | translate)"
+                                       [severity]="getOnboardingStatusSeverity(onboarding.status)"></p-tag>
                             </td>
                             <td>
                                 <div class="flex justify-center gap-1">
@@ -465,8 +431,7 @@
 
             <div class="grid grid-cols-2 gap-4">
                 <div class="field">
-                    <label for="department" class="font-medium">{{ 'HRM.RECRUITING.VACANCY.DEPARTMENT' | translate }}
-                        *</label>
+                    <label for="department" class="font-medium">{{ 'HRM.RECRUITING.VACANCY.DEPARTMENT' | translate }} *</label>
                     <p-select
                         id="department"
                         formControlName="department_id"
@@ -477,8 +442,7 @@
                     </p-select>
                 </div>
                 <div class="field">
-                    <label for="position" class="font-medium">{{ 'HRM.RECRUITING.VACANCY.POSITION' | translate }}
-                        *</label>
+                    <label for="position" class="font-medium">{{ 'HRM.RECRUITING.VACANCY.POSITION' | translate }} *</label>
                     <p-select
                         id="position"
                         formControlName="position_id"
@@ -492,8 +456,7 @@
 
             <div class="grid grid-cols-2 gap-4">
                 <div class="field">
-                    <label for="employment_type"
-                           class="font-medium">{{ 'HRM.RECRUITING.VACANCY.EMPLOYMENT_TYPE' | translate }} *</label>
+                    <label for="employment_type" class="font-medium">{{ 'HRM.RECRUITING.VACANCY.EMPLOYMENT_TYPE' | translate }} *</label>
                     <p-select
                         id="employment_type"
                         formControlName="employment_type"
@@ -504,8 +467,7 @@
                     </p-select>
                 </div>
                 <div class="field">
-                    <label for="priority"
-                           class="font-medium">{{ 'HRM.RECRUITING.VACANCY.PRIORITY' | translate }}</label>
+                    <label for="priority" class="font-medium">{{ 'HRM.RECRUITING.VACANCY.PRIORITY' | translate }}</label>
                     <p-select
                         id="priority"
                         formControlName="priority"
@@ -519,60 +481,49 @@
 
             <div class="grid grid-cols-3 gap-4">
                 <div class="field">
-                    <label for="salary_from"
-                           class="font-medium">{{ 'HRM.RECRUITING.VACANCY.SALARY_FROM' | translate }}</label>
+                    <label for="salary_from" class="font-medium">{{ 'HRM.RECRUITING.VACANCY.SALARY_FROM' | translate }}</label>
                     <p-inputNumber id="salary_from" formControlName="salary_from" class="w-full"></p-inputNumber>
                 </div>
                 <div class="field">
-                    <label for="salary_to"
-                           class="font-medium">{{ 'HRM.RECRUITING.VACANCY.SALARY_TO' | translate }}</label>
+                    <label for="salary_to" class="font-medium">{{ 'HRM.RECRUITING.VACANCY.SALARY_TO' | translate }}</label>
                     <p-inputNumber id="salary_to" formControlName="salary_to" class="w-full"></p-inputNumber>
                 </div>
                 <div class="field">
-                    <label for="experience"
-                           class="font-medium">{{ 'HRM.RECRUITING.VACANCY.EXPERIENCE_YEARS' | translate }}</label>
+                    <label for="experience" class="font-medium">{{ 'HRM.RECRUITING.VACANCY.EXPERIENCE_YEARS' | translate }}</label>
                     <p-inputNumber id="experience" formControlName="experience_years" class="w-full"></p-inputNumber>
                 </div>
             </div>
 
             <div class="field">
                 <label for="deadline" class="font-medium">{{ 'HRM.RECRUITING.VACANCY.DEADLINE' | translate }}</label>
-                <p-date-picker id="deadline" formControlName="deadline" [showIcon]="true"
-                               class="w-full"></p-date-picker>
+                <p-date-picker id="deadline" formControlName="deadline" [showIcon]="true" class="w-full"></p-date-picker>
             </div>
 
             <div class="field">
-                <label for="description" class="font-medium">{{ 'HRM.RECRUITING.VACANCY.DESCRIPTION' | translate }}
-                    *</label>
+                <label for="description" class="font-medium">{{ 'HRM.RECRUITING.VACANCY.DESCRIPTION' | translate }} *</label>
                 <textarea pTextarea id="description" formControlName="description" rows="3" class="w-full"></textarea>
             </div>
 
             <div class="field">
-                <label for="requirements" class="font-medium">{{ 'HRM.RECRUITING.VACANCY.REQUIREMENTS' | translate }}
-                    *</label>
+                <label for="requirements" class="font-medium">{{ 'HRM.RECRUITING.VACANCY.REQUIREMENTS' | translate }} *</label>
                 <textarea pTextarea id="requirements" formControlName="requirements" rows="3" class="w-full"></textarea>
             </div>
 
             <div class="field">
-                <label for="responsibilities"
-                       class="font-medium">{{ 'HRM.RECRUITING.VACANCY.RESPONSIBILITIES' | translate }}</label>
-                <textarea pTextarea id="responsibilities" formControlName="responsibilities" rows="3"
-                          class="w-full"></textarea>
+                <label for="responsibilities" class="font-medium">{{ 'HRM.RECRUITING.VACANCY.RESPONSIBILITIES' | translate }}</label>
+                <textarea pTextarea id="responsibilities" formControlName="responsibilities" rows="3" class="w-full"></textarea>
             </div>
 
             <div class="field">
-                <label for="justification"
-                       class="font-medium">{{ 'HRM.RECRUITING.VACANCY.JUSTIFICATION' | translate }}</label>
+                <label for="justification" class="font-medium">{{ 'HRM.RECRUITING.VACANCY.JUSTIFICATION' | translate }}</label>
                 <textarea pTextarea id="justification" formControlName="request_justification" rows="2" class="w-full"
                           [placeholder]="'HRM.RECRUITING.VACANCY.JUSTIFICATION_PLACEHOLDER' | translate"></textarea>
             </div>
         </div>
     </form>
     <ng-template #footer>
-        <button pButton [label]="'COMMON.CANCEL' | translate" icon="pi pi-times" class="p-button-text"
-                (click)="displayVacancyDialog = false"></button>
-        <button pButton [label]="isEditMode ? ('COMMON.UPDATE' | translate) : ('COMMON.CREATE' | translate)"
-                icon="pi pi-check" (click)="saveVacancy()"></button>
+        <button pButton [label]="'COMMON.CANCEL' | translate" icon="pi pi-times" class="p-button-text" (click)="displayVacancyDialog = false"></button>
+        <button pButton [label]="isEditMode ? ('COMMON.UPDATE' | translate) : ('COMMON.CREATE' | translate)" icon="pi pi-check" (click)="saveVacancy()"></button>
     </ng-template>
 </p-dialog>
 
@@ -590,7 +541,7 @@
                 <p-select
                     id="vacancy"
                     formControlName="vacancy_id"
-                    [options]="getVacanciesForSelect()"
+                    [options]="vacanciesForSelect"
                     optionLabel="name"
                     [placeholder]="'HRM.RECRUITING.CANDIDATE.SELECT_VACANCY' | translate"
                     class="w-full">
@@ -598,8 +549,7 @@
             </div>
 
             <div class="field">
-                <label for="full_name" class="font-medium">{{ 'HRM.RECRUITING.CANDIDATE.FULL_NAME' | translate }}
-                    *</label>
+                <label for="full_name" class="font-medium">{{ 'HRM.RECRUITING.CANDIDATE.FULL_NAME' | translate }} *</label>
                 <input pInputText id="full_name" formControlName="full_name" class="w-full" />
             </div>
 
@@ -626,29 +576,23 @@
             </div>
 
             <div class="field">
-                <label for="salary_expectation"
-                       class="font-medium">{{ 'HRM.RECRUITING.CANDIDATE.SALARY_EXPECTATION' | translate }}</label>
-                <p-inputNumber id="salary_expectation" formControlName="salary_expectation"
-                               class="w-full"></p-inputNumber>
+                <label for="salary_expectation" class="font-medium">{{ 'HRM.RECRUITING.CANDIDATE.SALARY_EXPECTATION' | translate }}</label>
+                <p-inputNumber id="salary_expectation" formControlName="salary_expectation" class="w-full"></p-inputNumber>
             </div>
 
             <div class="field">
-                <label for="available_from"
-                       class="font-medium">{{ 'HRM.RECRUITING.CANDIDATE.AVAILABLE_FROM' | translate }}</label>
-                <p-date-picker id="available_from" formControlName="available_from" [showIcon]="true"
-                               class="w-full"></p-date-picker>
+                <label for="available_from" class="font-medium">{{ 'HRM.RECRUITING.CANDIDATE.AVAILABLE_FROM' | translate }}</label>
+                <p-date-picker id="available_from" formControlName="available_from" [showIcon]="true" class="w-full"></p-date-picker>
             </div>
 
             <div class="field">
-                <label for="cover_letter"
-                       class="font-medium">{{ 'HRM.RECRUITING.CANDIDATE.COVER_LETTER' | translate }}</label>
+                <label for="cover_letter" class="font-medium">{{ 'HRM.RECRUITING.CANDIDATE.COVER_LETTER' | translate }}</label>
                 <textarea pTextarea id="cover_letter" formControlName="cover_letter" rows="3" class="w-full"></textarea>
             </div>
         </div>
     </form>
     <ng-template #footer>
-        <button pButton [label]="'COMMON.CANCEL' | translate" icon="pi pi-times" class="p-button-text"
-                (click)="displayCandidateDialog = false"></button>
+        <button pButton [label]="'COMMON.CANCEL' | translate" icon="pi pi-times" class="p-button-text" (click)="displayCandidateDialog = false"></button>
         <button pButton [label]="'COMMON.ADD' | translate" icon="pi pi-check" (click)="saveCandidate()"></button>
     </ng-template>
 </p-dialog>
@@ -670,10 +614,7 @@
                         <div><i class="pi pi-envelope mr-2"></i>{{ selectedCandidate.email }}</div>
                         <div><i class="pi pi-phone mr-2"></i>{{ selectedCandidate.phone }}</div>
                         @if (selectedCandidate.salary_expectation) {
-                            <div><i
-                                class="pi pi-dollar mr-2"></i>{{ 'HRM.RECRUITING.CANDIDATE.EXPECTATIONS' | translate }}
-                                : {{ selectedCandidate.salary_expectation | number:'1.0-0' }}
-                            </div>
+                            <div><i class="pi pi-dollar mr-2"></i>{{ 'HRM.RECRUITING.CANDIDATE.EXPECTATIONS' | translate }}: {{ selectedCandidate.salary_expectation | number:'1.0-0' }}</div>
                         }
                     </div>
                 </div>
@@ -684,9 +625,7 @@
                             <p-tag [value]="getStatusLabel(selectedCandidate.status, 'candidate')"
                                    [severity]="getCandidateStatusSeverity(selectedCandidate.status)"></p-tag>
                         </div>
-                        <div>{{ 'HRM.RECRUITING.CANDIDATE.VACANCY' | translate }}
-                            : {{ selectedCandidate.vacancy_title }}
-                        </div>
+                        <div>{{ 'HRM.RECRUITING.CANDIDATE.VACANCY' | translate }}: {{ selectedCandidate.vacancy_title }}</div>
                         @if (selectedCandidate.rating) {
                             <div class="flex items-center gap-1">
                                 <span>{{ 'HRM.RECRUITING.CANDIDATE.RATING' | translate }}:</span>
@@ -714,41 +653,22 @@
                                     <div>
                                         <div class="font-medium">
                                             @switch (interview.interview_type) {
-                                                @case ('phone') {
-                                                    {{ 'HRM.RECRUITING.INTERVIEW.TYPE_PHONE' | translate }}
-                                                }
-                                                @case ('hr') {
-                                                    {{ 'HRM.RECRUITING.INTERVIEW.TYPE_HR' | translate }}
-                                                }
-                                                @case ('technical') {
-                                                    {{ 'HRM.RECRUITING.INTERVIEW.TYPE_TECHNICAL' | translate }}
-                                                }
-                                                @case ('panel') {
-                                                    {{ 'HRM.RECRUITING.INTERVIEW.TYPE_PANEL' | translate }}
-                                                }
-                                                @case ('video') {
-                                                    {{ 'HRM.RECRUITING.INTERVIEW.TYPE_VIDEO' | translate }}
-                                                }
-                                                @case ('in_person') {
-                                                    {{ 'HRM.RECRUITING.INTERVIEW.TYPE_IN_PERSON' | translate }}
-                                                }
-                                                @case ('final') {
-                                                    {{ 'HRM.RECRUITING.INTERVIEW.TYPE_FINAL' | translate }}
-                                                }
-                                                @default {
-                                                    {{ interview.interview_type }}
-                                                }
+                                                @case ('phone') { {{ 'HRM.RECRUITING.INTERVIEW.TYPE_PHONE' | translate }} }
+                                                @case ('hr') { {{ 'HRM.RECRUITING.INTERVIEW.TYPE_HR' | translate }} }
+                                                @case ('technical') { {{ 'HRM.RECRUITING.INTERVIEW.TYPE_TECHNICAL' | translate }} }
+                                                @case ('panel') { {{ 'HRM.RECRUITING.INTERVIEW.TYPE_PANEL' | translate }} }
+                                                @case ('video') { {{ 'HRM.RECRUITING.INTERVIEW.TYPE_VIDEO' | translate }} }
+                                                @case ('in_person') { {{ 'HRM.RECRUITING.INTERVIEW.TYPE_IN_PERSON' | translate }} }
+                                                @case ('final') { {{ 'HRM.RECRUITING.INTERVIEW.TYPE_FINAL' | translate }} }
+                                                @default { {{ interview.interview_type }} }
                                             }
                                         </div>
                                         <div class="text-sm text-gray-500">{{ interview.interviewer_name }}</div>
-                                        <div
-                                            class="text-sm text-gray-500">{{ interview.scheduled_at | date:'dd.MM.yyyy HH:mm' }}
-                                        </div>
+                                        <div class="text-sm text-gray-500">{{ interview.scheduled_at | date:'dd.MM.yyyy HH:mm' }}</div>
                                     </div>
                                     <div class="flex items-center gap-2">
                                         @if (interview.status === 'completed') {
-                                            <p-tag [value]="'HRM.RECRUITING.INTERVIEW.STATUS_COMPLETED' | translate"
-                                                   severity="success"></p-tag>
+                                            <p-tag [value]="'HRM.RECRUITING.INTERVIEW.STATUS_COMPLETED' | translate" severity="success"></p-tag>
                                             @if (interview.overall_rating) {
                                                 <span class="flex items-center gap-1">
                                                     <i class="pi pi-star-fill text-yellow-500"></i>
@@ -756,8 +676,7 @@
                                                 </span>
                                             }
                                         } @else if (interview.status === 'scheduled') {
-                                            <p-tag [value]="'HRM.RECRUITING.INTERVIEW.STATUS_SCHEDULED' | translate"
-                                                   severity="info"></p-tag>
+                                            <p-tag [value]="'HRM.RECRUITING.INTERVIEW.STATUS_SCHEDULED' | translate" severity="info"></p-tag>
                                             <button pButton
                                                     icon="pi pi-pencil"
                                                     class="p-button-rounded p-button-text p-button-sm"
@@ -790,17 +709,13 @@
                                 <div class="flex justify-between">
                                     <div>
                                         <div class="font-medium">{{ ref.referee_name }}</div>
-                                        <div class="text-sm text-gray-500">{{ ref.referee_position }}
-                                            , {{ ref.referee_company }}
-                                        </div>
+                                        <div class="text-sm text-gray-500">{{ ref.referee_position }}, {{ ref.referee_company }}</div>
                                     </div>
                                     <div>
                                         @if (ref.status === 'completed') {
-                                            <p-tag [value]="'HRM.RECRUITING.REFERENCE.VERIFIED' | translate"
-                                                   severity="success"></p-tag>
+                                            <p-tag [value]="'HRM.RECRUITING.REFERENCE.VERIFIED' | translate" severity="success"></p-tag>
                                         } @else {
-                                            <p-tag [value]="'HRM.RECRUITING.REFERENCE.PENDING' | translate"
-                                                   severity="warn"></p-tag>
+                                            <p-tag [value]="'HRM.RECRUITING.REFERENCE.PENDING' | translate" severity="warn"></p-tag>
                                             <button pButton
                                                     icon="pi pi-check"
                                                     class="p-button-rounded p-button-text p-button-sm ml-2"
@@ -826,31 +741,21 @@
                     <div class="border rounded-lg p-4 bg-green-50 dark:bg-green-900/20">
                         <div class="grid grid-cols-2 gap-4">
                             <div>
-                                <div
-                                    class="text-sm text-gray-500">{{ 'HRM.RECRUITING.OFFER.OFFERED_SALARY' | translate }}
-                                </div>
-                                <div class="font-medium">{{ selectedCandidate.offer.offered_salary | number:'1.0-0' }}
-                                </div>
+                                <div class="text-sm text-gray-500">{{ 'HRM.RECRUITING.OFFER.OFFERED_SALARY' | translate }}</div>
+                                <div class="font-medium">{{ selectedCandidate.offer.offered_salary | number:'1.0-0' }}</div>
                             </div>
                             <div>
-                                <div class="text-sm text-gray-500">{{ 'HRM.RECRUITING.OFFER.START_DATE' | translate }}
-                                </div>
-                                <div class="font-medium">{{ selectedCandidate.offer.start_date | date:'dd.MM.yyyy' }}
-                                </div>
+                                <div class="text-sm text-gray-500">{{ 'HRM.RECRUITING.OFFER.START_DATE' | translate }}</div>
+                                <div class="font-medium">{{ selectedCandidate.offer.start_date | date:'dd.MM.yyyy' }}</div>
                             </div>
                             <div>
-                                <div
-                                    class="text-sm text-gray-500">{{ 'HRM.RECRUITING.OFFER.PROBATION_PERIOD' | translate }}
-                                </div>
-                                <div
-                                    class="font-medium">{{ selectedCandidate.offer.probation_period_months }} {{ 'HRM.RECRUITING.OFFER.MONTHS' | translate }}
-                                </div>
+                                <div class="text-sm text-gray-500">{{ 'HRM.RECRUITING.OFFER.PROBATION_PERIOD' | translate }}</div>
+                                <div class="font-medium">{{ selectedCandidate.offer.probation_period_months }} {{ 'HRM.RECRUITING.OFFER.MONTHS' | translate }}</div>
                             </div>
                             <div>
                                 <div class="text-sm text-gray-500">{{ 'COMMON.STATUS' | translate }}</div>
-                                <p-tag
-                                    [value]="selectedCandidate.offer.status === 'sent' ? ('HRM.RECRUITING.OFFER.STATUS_SENT' | translate) : selectedCandidate.offer.status === 'accepted' ? ('HRM.RECRUITING.OFFER.STATUS_ACCEPTED' | translate) : ('HRM.RECRUITING.OFFER.STATUS_REJECTED' | translate)"
-                                    [severity]="selectedCandidate.offer.status === 'accepted' ? 'success' : selectedCandidate.offer.status === 'sent' ? 'info' : 'danger'"></p-tag>
+                                <p-tag [value]="selectedCandidate.offer.status === 'sent' ? ('HRM.RECRUITING.OFFER.STATUS_SENT' | translate) : selectedCandidate.offer.status === 'accepted' ? ('HRM.RECRUITING.OFFER.STATUS_ACCEPTED' | translate) : ('HRM.RECRUITING.OFFER.STATUS_REJECTED' | translate)"
+                                       [severity]="selectedCandidate.offer.status === 'accepted' ? 'success' : selectedCandidate.offer.status === 'sent' ? 'info' : 'danger'"></p-tag>
                             </div>
                         </div>
                     </div>
@@ -859,8 +764,7 @@
         </div>
     }
     <ng-template #footer>
-        <button pButton [label]="'COMMON.CLOSE' | translate" icon="pi pi-times" class="p-button-text"
-                (click)="displayCandidateDetailDialog = false"></button>
+        <button pButton [label]="'COMMON.CLOSE' | translate" icon="pi pi-times" class="p-button-text" (click)="displayCandidateDetailDialog = false"></button>
     </ng-template>
 </p-dialog>
 
@@ -874,8 +778,7 @@
     <form [formGroup]="interviewForm" class="p-4">
         <div class="grid grid-cols-1 gap-4">
             <div class="field">
-                <label for="interview_type" class="font-medium">{{ 'HRM.RECRUITING.INTERVIEW.TYPE' | translate }}
-                    *</label>
+                <label for="interview_type" class="font-medium">{{ 'HRM.RECRUITING.INTERVIEW.TYPE' | translate }} *</label>
                 <p-select
                     id="interview_type"
                     formControlName="interview_type"
@@ -887,8 +790,7 @@
             </div>
 
             <div class="field">
-                <label for="interviewer" class="font-medium">{{ 'HRM.RECRUITING.INTERVIEW.INTERVIEWER' | translate }}
-                    *</label>
+                <label for="interviewer" class="font-medium">{{ 'HRM.RECRUITING.INTERVIEW.INTERVIEWER' | translate }} *</label>
                 <p-select
                     id="interviewer"
                     formControlName="interviewer_id"
@@ -900,8 +802,7 @@
             </div>
 
             <div class="field">
-                <label for="scheduled_at" class="font-medium">{{ 'HRM.RECRUITING.INTERVIEW.DATE_TIME' | translate }}
-                    *</label>
+                <label for="scheduled_at" class="font-medium">{{ 'HRM.RECRUITING.INTERVIEW.DATE_TIME' | translate }} *</label>
                 <p-date-picker
                     id="scheduled_at"
                     formControlName="scheduled_at"
@@ -912,29 +813,24 @@
             </div>
 
             <div class="field">
-                <label for="duration"
-                       class="font-medium">{{ 'HRM.RECRUITING.INTERVIEW.DURATION_MIN' | translate }}</label>
+                <label for="duration" class="font-medium">{{ 'HRM.RECRUITING.INTERVIEW.DURATION_MIN' | translate }}</label>
                 <p-inputNumber id="duration" formControlName="duration_minutes" class="w-full"></p-inputNumber>
             </div>
 
             <div class="field">
                 <label for="location" class="font-medium">{{ 'HRM.RECRUITING.INTERVIEW.LOCATION' | translate }}</label>
-                <input pInputText id="location" formControlName="location" class="w-full"
-                       [placeholder]="'HRM.RECRUITING.INTERVIEW.LOCATION_PLACEHOLDER' | translate" />
+                <input pInputText id="location" formControlName="location" class="w-full" [placeholder]="'HRM.RECRUITING.INTERVIEW.LOCATION_PLACEHOLDER' | translate" />
             </div>
 
             <div class="field">
-                <label for="meeting_link"
-                       class="font-medium">{{ 'HRM.RECRUITING.INTERVIEW.MEETING_LINK' | translate }}</label>
+                <label for="meeting_link" class="font-medium">{{ 'HRM.RECRUITING.INTERVIEW.MEETING_LINK' | translate }}</label>
                 <input pInputText id="meeting_link" formControlName="meeting_link" class="w-full" />
             </div>
         </div>
     </form>
     <ng-template #footer>
-        <button pButton [label]="'COMMON.CANCEL' | translate" icon="pi pi-times" class="p-button-text"
-                (click)="displayInterviewDialog = false"></button>
-        <button pButton [label]="'HRM.RECRUITING.INTERVIEW.SCHEDULE' | translate" icon="pi pi-calendar"
-                (click)="scheduleInterview()"></button>
+        <button pButton [label]="'COMMON.CANCEL' | translate" icon="pi pi-times" class="p-button-text" (click)="displayInterviewDialog = false"></button>
+        <button pButton [label]="'HRM.RECRUITING.INTERVIEW.SCHEDULE' | translate" icon="pi pi-calendar" (click)="scheduleInterview()"></button>
     </ng-template>
 </p-dialog>
 
@@ -955,8 +851,7 @@
             </div>
 
             <div class="field">
-                <label for="recommendation"
-                       class="font-medium">{{ 'HRM.RECRUITING.INTERVIEW.RECOMMENDATION' | translate }} *</label>
+                <label for="recommendation" class="font-medium">{{ 'HRM.RECRUITING.INTERVIEW.RECOMMENDATION' | translate }} *</label>
                 <p-select
                     id="recommendation"
                     formControlName="recommendation"
@@ -968,17 +863,13 @@
             </div>
 
             <div class="field">
-                <label for="strengths"
-                       class="font-medium">{{ 'HRM.RECRUITING.INTERVIEW.STRENGTHS' | translate }}</label>
-                <input pInputText id="strengths" formControlName="strengths" class="w-full"
-                       [placeholder]="'HRM.RECRUITING.INTERVIEW.COMMA_SEPARATED' | translate" />
+                <label for="strengths" class="font-medium">{{ 'HRM.RECRUITING.INTERVIEW.STRENGTHS' | translate }}</label>
+                <input pInputText id="strengths" formControlName="strengths" class="w-full" [placeholder]="'HRM.RECRUITING.INTERVIEW.COMMA_SEPARATED' | translate" />
             </div>
 
             <div class="field">
-                <label for="weaknesses"
-                       class="font-medium">{{ 'HRM.RECRUITING.INTERVIEW.WEAKNESSES' | translate }}</label>
-                <input pInputText id="weaknesses" formControlName="weaknesses" class="w-full"
-                       [placeholder]="'HRM.RECRUITING.INTERVIEW.COMMA_SEPARATED' | translate" />
+                <label for="weaknesses" class="font-medium">{{ 'HRM.RECRUITING.INTERVIEW.WEAKNESSES' | translate }}</label>
+                <input pInputText id="weaknesses" formControlName="weaknesses" class="w-full" [placeholder]="'HRM.RECRUITING.INTERVIEW.COMMA_SEPARATED' | translate" />
             </div>
 
             <div class="field">
@@ -988,8 +879,7 @@
         </div>
     </form>
     <ng-template #footer>
-        <button pButton [label]="'COMMON.CANCEL' | translate" icon="pi pi-times" class="p-button-text"
-                (click)="displayInterviewFeedbackDialog = false"></button>
+        <button pButton [label]="'COMMON.CANCEL' | translate" icon="pi pi-times" class="p-button-text" (click)="displayInterviewFeedbackDialog = false"></button>
         <button pButton [label]="'COMMON.SAVE' | translate" icon="pi pi-check" (click)="saveFeedback()"></button>
     </ng-template>
 </p-dialog>
@@ -1004,41 +894,34 @@
     <form [formGroup]="offerForm" class="p-4">
         <div class="grid grid-cols-1 gap-4">
             <div class="field">
-                <label for="offered_salary" class="font-medium">{{ 'HRM.RECRUITING.OFFER.OFFERED_SALARY' | translate }}
-                    *</label>
+                <label for="offered_salary" class="font-medium">{{ 'HRM.RECRUITING.OFFER.OFFERED_SALARY' | translate }} *</label>
                 <p-inputNumber id="offered_salary" formControlName="offered_salary" class="w-full"></p-inputNumber>
             </div>
 
             <div class="field">
-                <label for="start_date" class="font-medium">{{ 'HRM.RECRUITING.OFFER.START_DATE' | translate }}*</label>
-                <p-date-picker id="start_date" formControlName="start_date" [showIcon]="true"
-                               class="w-full"></p-date-picker>
+                <label for="start_date" class="font-medium">{{ 'HRM.RECRUITING.OFFER.START_DATE' | translate }} *</label>
+                <p-date-picker id="start_date" formControlName="start_date" [showIcon]="true" class="w-full"></p-date-picker>
             </div>
 
             <div class="field">
-                <label for="probation" class="font-medium">{{ 'HRM.RECRUITING.OFFER.PROBATION_MONTHS' | translate }}
-                    *</label>
+                <label for="probation" class="font-medium">{{ 'HRM.RECRUITING.OFFER.PROBATION_MONTHS' | translate }} *</label>
                 <p-inputNumber id="probation" formControlName="probation_period_months" class="w-full"></p-inputNumber>
             </div>
 
             <div class="field">
                 <label for="benefits" class="font-medium">{{ 'HRM.RECRUITING.OFFER.BENEFITS' | translate }}</label>
-                <input pInputText id="benefits" formControlName="benefits" class="w-full"
-                       [placeholder]="'HRM.RECRUITING.OFFER.BENEFITS_PLACEHOLDER' | translate" />
+                <input pInputText id="benefits" formControlName="benefits" class="w-full" [placeholder]="'HRM.RECRUITING.OFFER.BENEFITS_PLACEHOLDER' | translate" />
             </div>
 
             <div class="field">
-                <label for="other_terms"
-                       class="font-medium">{{ 'HRM.RECRUITING.OFFER.OTHER_TERMS' | translate }}</label>
+                <label for="other_terms" class="font-medium">{{ 'HRM.RECRUITING.OFFER.OTHER_TERMS' | translate }}</label>
                 <textarea pTextarea id="other_terms" formControlName="other_terms" rows="3" class="w-full"></textarea>
             </div>
         </div>
     </form>
     <ng-template #footer>
-        <button pButton [label]="'COMMON.CANCEL' | translate" icon="pi pi-times" class="p-button-text"
-                (click)="displayOfferDialog = false"></button>
-        <button pButton [label]="'HRM.RECRUITING.OFFER.SEND_OFFER_BTN' | translate" icon="pi pi-send"
-                (click)="sendOffer()"></button>
+        <button pButton [label]="'COMMON.CANCEL' | translate" icon="pi pi-times" class="p-button-text" (click)="displayOfferDialog = false"></button>
+        <button pButton [label]="'HRM.RECRUITING.OFFER.SEND_OFFER_BTN' | translate" icon="pi pi-send" (click)="sendOffer()"></button>
     </ng-template>
 </p-dialog>
 
@@ -1052,20 +935,17 @@
     <form [formGroup]="referenceForm" class="p-4">
         <div class="grid grid-cols-1 gap-4">
             <div class="field">
-                <label for="referee_name" class="font-medium">{{ 'HRM.RECRUITING.REFERENCE.REFEREE_NAME' | translate }}
-                    *</label>
+                <label for="referee_name" class="font-medium">{{ 'HRM.RECRUITING.REFERENCE.REFEREE_NAME' | translate }} *</label>
                 <input pInputText id="referee_name" formControlName="referee_name" class="w-full" />
             </div>
 
             <div class="field">
-                <label for="referee_position"
-                       class="font-medium">{{ 'HRM.RECRUITING.REFERENCE.REFEREE_POSITION' | translate }} *</label>
+                <label for="referee_position" class="font-medium">{{ 'HRM.RECRUITING.REFERENCE.REFEREE_POSITION' | translate }} *</label>
                 <input pInputText id="referee_position" formControlName="referee_position" class="w-full" />
             </div>
 
             <div class="field">
-                <label for="referee_company"
-                       class="font-medium">{{ 'HRM.RECRUITING.REFERENCE.REFEREE_COMPANY' | translate }} *</label>
+                <label for="referee_company" class="font-medium">{{ 'HRM.RECRUITING.REFERENCE.REFEREE_COMPANY' | translate }} *</label>
                 <input pInputText id="referee_company" formControlName="referee_company" class="w-full" />
             </div>
 
@@ -1075,16 +955,13 @@
             </div>
 
             <div class="field">
-                <label for="relationship" class="font-medium">{{ 'HRM.RECRUITING.REFERENCE.RELATIONSHIP' | translate }}
-                    *</label>
-                <input pInputText id="relationship" formControlName="relationship" class="w-full"
-                       [placeholder]="'HRM.RECRUITING.REFERENCE.RELATIONSHIP_PLACEHOLDER' | translate" />
+                <label for="relationship" class="font-medium">{{ 'HRM.RECRUITING.REFERENCE.RELATIONSHIP' | translate }} *</label>
+                <input pInputText id="relationship" formControlName="relationship" class="w-full" [placeholder]="'HRM.RECRUITING.REFERENCE.RELATIONSHIP_PLACEHOLDER' | translate" />
             </div>
         </div>
     </form>
     <ng-template #footer>
-        <button pButton [label]="'COMMON.CANCEL' | translate" icon="pi pi-times" class="p-button-text"
-                (click)="displayReferenceDialog = false"></button>
+        <button pButton [label]="'COMMON.CANCEL' | translate" icon="pi pi-times" class="p-button-text" (click)="displayReferenceDialog = false"></button>
         <button pButton [label]="'COMMON.ADD' | translate" icon="pi pi-check" (click)="addReference()"></button>
     </ng-template>
 </p-dialog>
@@ -1098,8 +975,7 @@
     [closable]="true">
     <form [formGroup]="rejectForm" class="p-4">
         <div class="mb-4">
-            <p>{{ 'HRM.RECRUITING.REJECT.CONFIRM_MESSAGE' | translate }}
-                <strong>{{ selectedCandidate?.full_name }}</strong>?</p>
+            <p>{{ 'HRM.RECRUITING.REJECT.CONFIRM_MESSAGE' | translate }} <strong>{{ selectedCandidate?.full_name }}</strong>?</p>
             <p class="text-sm text-gray-500 mt-2">{{ 'HRM.RECRUITING.REJECT.NOTIFICATION_INFO' | translate }}</p>
         </div>
         <div class="field">
@@ -1109,10 +985,8 @@
         </div>
     </form>
     <ng-template #footer>
-        <button pButton [label]="'COMMON.CANCEL' | translate" icon="pi pi-times" class="p-button-text"
-                (click)="displayRejectDialog = false"></button>
-        <button pButton [label]="'HRM.RECRUITING.REJECT.REJECT' | translate" icon="pi pi-times" class="p-button-danger"
-                (click)="rejectCandidate()"></button>
+        <button pButton [label]="'COMMON.CANCEL' | translate" icon="pi pi-times" class="p-button-text" (click)="displayRejectDialog = false"></button>
+        <button pButton [label]="'HRM.RECRUITING.REJECT.REJECT' | translate" icon="pi pi-times" class="p-button-danger" (click)="rejectCandidate()"></button>
     </ng-template>
 </p-dialog>
 
@@ -1145,29 +1019,15 @@
                                 <i class="pi pi-circle text-gray-400 text-xl"></i>
                             }
                             <div>
-                                <div
-                                    [class]="task.status === 'completed' ? 'line-through text-gray-400' : ''">{{ task.title }}
-                                </div>
+                                <div [class]="task.status === 'completed' ? 'line-through text-gray-400' : ''">{{ task.title }}</div>
                                 <div class="text-xs text-gray-500">
                                     @switch (task.category) {
-                                        @case ('documents') {
-                                            {{ 'HRM.RECRUITING.ONBOARDING.CAT_DOCUMENTS' | translate }}
-                                        }
-                                        @case ('it_setup') {
-                                            {{ 'HRM.RECRUITING.ONBOARDING.CAT_IT_SETUP' | translate }}
-                                        }
-                                        @case ('training') {
-                                            {{ 'HRM.RECRUITING.ONBOARDING.CAT_TRAINING' | translate }}
-                                        }
-                                        @case ('introduction') {
-                                            {{ 'HRM.RECRUITING.ONBOARDING.CAT_INTRODUCTION' | translate }}
-                                        }
-                                        @case ('compliance') {
-                                            {{ 'HRM.RECRUITING.ONBOARDING.CAT_COMPLIANCE' | translate }}
-                                        }
-                                        @default {
-                                            {{ task.category }}
-                                        }
+                                        @case ('documents') { {{ 'HRM.RECRUITING.ONBOARDING.CAT_DOCUMENTS' | translate }} }
+                                        @case ('it_setup') { {{ 'HRM.RECRUITING.ONBOARDING.CAT_IT_SETUP' | translate }} }
+                                        @case ('training') { {{ 'HRM.RECRUITING.ONBOARDING.CAT_TRAINING' | translate }} }
+                                        @case ('introduction') { {{ 'HRM.RECRUITING.ONBOARDING.CAT_INTRODUCTION' | translate }} }
+                                        @case ('compliance') { {{ 'HRM.RECRUITING.ONBOARDING.CAT_COMPLIANCE' | translate }} }
+                                        @default { {{ task.category }} }
                                     }
                                 </div>
                             </div>
@@ -1208,7 +1068,6 @@
         </div>
     }
     <ng-template #footer>
-        <button pButton [label]="'COMMON.CLOSE' | translate" icon="pi pi-times" class="p-button-text"
-                (click)="displayOnboardingDialog = false"></button>
+        <button pButton [label]="'COMMON.CLOSE' | translate" icon="pi pi-times" class="p-button-text" (click)="displayOnboardingDialog = false"></button>
     </ng-template>
 </p-dialog>

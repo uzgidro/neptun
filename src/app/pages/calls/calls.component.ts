@@ -19,7 +19,7 @@ import { SelectComponent } from '@/layout/component/dialog/select/select.compone
 import { TextareaComponent } from '@/layout/component/dialog/textarea/textarea.component';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
 import { DeleteConfirmationComponent } from '@/layout/component/dialog/delete-confirmation/delete-confirmation.component';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-calls',
@@ -64,48 +64,38 @@ export class CallsComponent implements OnInit, OnDestroy {
     selectedType: CallType | null = null;
     selectedStatus: CallStatus | null = null;
 
-    typeOptions: { name: string; value: string | null }[] = [];
-    typeFormOptions: { name: string; value: string }[] = [];
-    statusOptions: { name: string; value: string | null }[] = [];
-    statusFormOptions: { name: string; value: string }[] = [];
+    typeOptions = [
+        { name: 'Все типы', value: null },
+        { name: 'Входящий', value: 'incoming' },
+        { name: 'Исходящий', value: 'outgoing' },
+        { name: 'Пропущенный', value: 'missed' }
+    ];
+
+    typeFormOptions = [
+        { name: 'Входящий', value: 'incoming' },
+        { name: 'Исходящий', value: 'outgoing' },
+        { name: 'Пропущенный', value: 'missed' }
+    ];
+
+    statusOptions = [
+        { name: 'Все статусы', value: null },
+        { name: 'Завершён', value: 'completed' },
+        { name: 'Нет ответа', value: 'no_answer' },
+        { name: 'Занято', value: 'busy' },
+        { name: 'Отменён', value: 'cancelled' }
+    ];
+
+    statusFormOptions = [
+        { name: 'Завершён', value: 'completed' },
+        { name: 'Нет ответа', value: 'no_answer' },
+        { name: 'Занято', value: 'busy' },
+        { name: 'Отменён', value: 'cancelled' }
+    ];
 
     private callService = inject(CallService);
     private messageService = inject(MessageService);
     private fb = inject(FormBuilder);
-    private translate = inject(TranslateService);
     private destroy$ = new Subject<void>();
-
-    private initOptions(): void {
-        const t = this.translate;
-
-        this.typeOptions = [
-            { name: t.instant('CALLS.ALL_TYPES'), value: null },
-            { name: t.instant('CALLS.TYPE.INCOMING'), value: 'incoming' },
-            { name: t.instant('CALLS.TYPE.OUTGOING'), value: 'outgoing' },
-            { name: t.instant('CALLS.TYPE.MISSED'), value: 'missed' }
-        ];
-
-        this.typeFormOptions = [
-            { name: t.instant('CALLS.TYPE.INCOMING'), value: 'incoming' },
-            { name: t.instant('CALLS.TYPE.OUTGOING'), value: 'outgoing' },
-            { name: t.instant('CALLS.TYPE.MISSED'), value: 'missed' }
-        ];
-
-        this.statusOptions = [
-            { name: t.instant('CALLS.ALL_STATUSES'), value: null },
-            { name: t.instant('CALLS.STATUS.COMPLETED'), value: 'completed' },
-            { name: t.instant('CALLS.STATUS.NO_ANSWER'), value: 'no_answer' },
-            { name: t.instant('CALLS.STATUS.BUSY'), value: 'busy' },
-            { name: t.instant('CALLS.STATUS.CANCELLED'), value: 'cancelled' }
-        ];
-
-        this.statusFormOptions = [
-            { name: t.instant('CALLS.STATUS.COMPLETED'), value: 'completed' },
-            { name: t.instant('CALLS.STATUS.NO_ANSWER'), value: 'no_answer' },
-            { name: t.instant('CALLS.STATUS.BUSY'), value: 'busy' },
-            { name: t.instant('CALLS.STATUS.CANCELLED'), value: 'cancelled' }
-        ];
-    }
 
     constructor() {
         this.callForm = this.fb.group({
@@ -123,12 +113,7 @@ export class CallsComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.initOptions();
         this.loadCalls();
-
-        this.translate.onLangChange.pipe(takeUntil(this.destroy$)).subscribe(() => {
-            this.initOptions();
-        });
     }
 
     private loadCalls() {
@@ -230,20 +215,12 @@ export class CallsComponent implements OnInit, OnDestroy {
                 .pipe(takeUntil(this.destroy$))
                 .subscribe({
                     next: () => {
-                        this.messageService.add({
-                            severity: 'success',
-                            summary: this.translate.instant('CALLS.SUCCESS'),
-                            detail: this.translate.instant('CALLS.UPDATED')
-                        });
+                        this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Звонок обновлён' });
                         this.loadCalls();
                         this.closeDialog();
                     },
                     error: () => {
-                        this.messageService.add({
-                            severity: 'error',
-                            summary: this.translate.instant('CALLS.ERROR'),
-                            detail: this.translate.instant('CALLS.UPDATE_ERROR')
-                        });
+                        this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось обновить звонок' });
                     }
                 });
         } else {
@@ -252,20 +229,12 @@ export class CallsComponent implements OnInit, OnDestroy {
                 .pipe(takeUntil(this.destroy$))
                 .subscribe({
                     next: () => {
-                        this.messageService.add({
-                            severity: 'success',
-                            summary: this.translate.instant('CALLS.SUCCESS'),
-                            detail: this.translate.instant('CALLS.CREATED')
-                        });
+                        this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Звонок добавлен' });
                         this.loadCalls();
                         this.closeDialog();
                     },
                     error: () => {
-                        this.messageService.add({
-                            severity: 'error',
-                            summary: this.translate.instant('CALLS.ERROR'),
-                            detail: this.translate.instant('CALLS.CREATE_ERROR')
-                        });
+                        this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось добавить звонок' });
                     }
                 });
         }
@@ -284,27 +253,15 @@ export class CallsComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
-                    this.messageService.add({
-                        severity: 'success',
-                        summary: this.translate.instant('CALLS.SUCCESS'),
-                        detail: this.translate.instant('CALLS.DELETED')
-                    });
+                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Звонок удалён' });
                     this.loadCalls();
                     this.displayDeleteDialog = false;
                     this.selectedCall = null;
                 },
                 error: () => {
-                    this.messageService.add({
-                        severity: 'error',
-                        summary: this.translate.instant('CALLS.ERROR'),
-                        detail: this.translate.instant('CALLS.DELETE_ERROR')
-                    });
+                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось удалить звонок' });
                 }
             });
-    }
-
-    get deleteConfirmMessage(): string {
-        return this.translate.instant('CALLS.DELETE_CONFIRM');
     }
 
     getTypeLabel(type: CallType): string {

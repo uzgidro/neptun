@@ -2,7 +2,7 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { forkJoin, Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil, forkJoin } from 'rxjs';
 import { ButtonDirective } from 'primeng/button';
 import { Tag } from 'primeng/tag';
 import { Avatar } from 'primeng/avatar';
@@ -19,26 +19,44 @@ import { MessageService } from 'primeng/api';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { EmployeeCabinetService } from '@/core/services/employee-cabinet.service';
 import {
-    DOCUMENT_TYPES,
     EmployeeProfile,
     LeaveBalance,
-    MyCompetencies,
-    MyDocument,
-    MyNotification,
-    MySalaryInfo,
-    MyTask,
-    MyTraining,
     MyVacationRequest,
+    MySalaryInfo,
     SalaryPayment,
-    VACATION_STATUSES,
+    MyTraining,
+    MyCompetencies,
+    MyNotification,
+    MyTask,
+    MyDocument,
     VACATION_TYPES,
+    VACATION_STATUSES,
+    DOCUMENT_TYPES,
     VacationStatus
 } from '@/core/interfaces/hrm/employee-cabinet';
 
 @Component({
     selector: 'app-employee-cabinet',
     standalone: true,
-    imports: [CommonModule, RouterModule, FormsModule, ReactiveFormsModule, ButtonDirective, Tag, Avatar, Badge, Tooltip, ProgressBar, Dialog, TabsModule, TableModule, Select, DatePicker, Textarea, TranslateModule],
+    imports: [
+        CommonModule,
+        RouterModule,
+        FormsModule,
+        ReactiveFormsModule,
+        ButtonDirective,
+        Tag,
+        Avatar,
+        Badge,
+        Tooltip,
+        ProgressBar,
+        Dialog,
+        TabsModule,
+        TableModule,
+        Select,
+        DatePicker,
+        Textarea,
+        TranslateModule
+    ],
     templateUrl: './employee-cabinet.component.html',
     styleUrl: './employee-cabinet.component.scss'
 })
@@ -113,27 +131,25 @@ export class EmployeeCabinetComponent implements OnInit, OnDestroy {
             tasks: this.cabinetService.getMyTasks(),
             documents: this.cabinetService.getMyDocuments(),
             vacations: this.cabinetService.getMyVacations()
-        })
-            .pipe(takeUntil(this.destroy$))
-            .subscribe({
-                next: (data) => {
-                    this.profile = data.profile;
-                    this.leaveBalance = data.leaveBalance;
-                    this.salaryInfo = data.salaryInfo;
-                    this.training = data.training;
-                    this.competencies = data.competencies;
-                    this.notifications = data.notifications;
-                    this.tasks = data.tasks;
-                    this.documents = data.documents;
-                    this.vacationRequests = data.vacations;
-                    this.loading = false;
-                },
-                error: (err) => {
-                    console.error('Error loading data:', err);
-                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('HRM.EMPLOYEE_CABINET.LOAD_ERROR') });
-                    this.loading = false;
-                }
-            });
+        }).pipe(takeUntil(this.destroy$)).subscribe({
+            next: (data) => {
+                this.profile = data.profile;
+                this.leaveBalance = data.leaveBalance;
+                this.salaryInfo = data.salaryInfo;
+                this.training = data.training;
+                this.competencies = data.competencies;
+                this.notifications = data.notifications;
+                this.tasks = data.tasks;
+                this.documents = data.documents;
+                this.vacationRequests = data.vacations;
+                this.loading = false;
+            },
+            error: (err) => {
+                console.error('Error loading data:', err);
+                this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('HRM.EMPLOYEE_CABINET.LOAD_ERROR') });
+                this.loading = false;
+            }
+        });
     }
 
     // Actions
@@ -160,8 +176,7 @@ export class EmployeeCabinetComponent implements OnInit, OnDestroy {
             email: formValue.email
         };
 
-        this.cabinetService
-            .updateMyProfile(payload)
+        this.cabinetService.updateMyProfile(payload)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (updatedProfile) => {
@@ -194,8 +209,7 @@ export class EmployeeCabinetComponent implements OnInit, OnDestroy {
             reason: formValue.reason
         };
 
-        this.cabinetService
-            .createVacationRequest(payload)
+        this.cabinetService.createVacationRequest(payload)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (newRequest) => {
@@ -211,12 +225,11 @@ export class EmployeeCabinetComponent implements OnInit, OnDestroy {
     }
 
     cancelVacationRequest(request: MyVacationRequest): void {
-        this.cabinetService
-            .cancelVacationRequest(request.id)
+        this.cabinetService.cancelVacationRequest(request.id)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (updatedRequest) => {
-                    const index = this.vacationRequests.findIndex((r) => r.id === request.id);
+                    const index = this.vacationRequests.findIndex(r => r.id === request.id);
                     if (index !== -1) {
                         this.vacationRequests[index] = updatedRequest;
                         this.vacationRequests = [...this.vacationRequests];
@@ -236,8 +249,7 @@ export class EmployeeCabinetComponent implements OnInit, OnDestroy {
     }
 
     downloadPayslip(payment: SalaryPayment): void {
-        this.cabinetService
-            .downloadPayslip(payment.id)
+        this.cabinetService.downloadPayslip(payment.id)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (blob) => {
@@ -256,8 +268,7 @@ export class EmployeeCabinetComponent implements OnInit, OnDestroy {
     }
 
     downloadDocument(doc: MyDocument): void {
-        this.cabinetService
-            .downloadDocument(doc.id)
+        this.cabinetService.downloadDocument(doc.id)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (blob) => {
@@ -284,8 +295,7 @@ export class EmployeeCabinetComponent implements OnInit, OnDestroy {
     markNotificationAsRead(notification: MyNotification): void {
         if (notification.read) return;
 
-        this.cabinetService
-            .markNotificationAsRead(notification.id)
+        this.cabinetService.markNotificationAsRead(notification.id)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (updated) => {
@@ -297,12 +307,11 @@ export class EmployeeCabinetComponent implements OnInit, OnDestroy {
     }
 
     markAllNotificationsAsRead(): void {
-        this.cabinetService
-            .markAllNotificationsAsRead()
+        this.cabinetService.markAllNotificationsAsRead()
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
-                    this.notifications.forEach((n) => {
+                    this.notifications.forEach(n => {
                         n.read = true;
                         n.read_at = new Date().toISOString();
                     });
@@ -314,11 +323,7 @@ export class EmployeeCabinetComponent implements OnInit, OnDestroy {
     // Helpers
     getInitials(name: string): string {
         if (!name) return '';
-        return name
-            .split(' ')
-            .map((n) => n[0])
-            .join('')
-            .substring(0, 2);
+        return name.split(' ').map(n => n[0]).join('').substring(0, 2);
     }
 
     calculateDays(start: Date | string, end: Date | string): number {
@@ -355,27 +360,27 @@ export class EmployeeCabinetComponent implements OnInit, OnDestroy {
     }
 
     getVacationTypeLabel(type: string): string {
-        const found = this.vacationTypes.find((t) => t.value === type);
+        const found = this.vacationTypes.find(t => t.value === type);
         return found ? found.label : type;
     }
 
     getVacationStatusSeverity(status: VacationStatus): 'success' | 'info' | 'warn' | 'danger' | 'secondary' {
-        const found = this.vacationStatuses.find((s) => s.value === status);
+        const found = this.vacationStatuses.find(s => s.value === status);
         return (found?.severity as any) || 'info';
     }
 
     getVacationStatusLabel(status: VacationStatus): string {
-        const found = this.vacationStatuses.find((s) => s.value === status);
+        const found = this.vacationStatuses.find(s => s.value === status);
         return found ? found.label : status;
     }
 
     getDocumentIcon(type: string): string {
-        const found = this.documentTypes.find((d) => d.value === type);
+        const found = this.documentTypes.find(d => d.value === type);
         return found ? found.icon : 'pi-file';
     }
 
     getUnreadNotificationsCount(): number {
-        return this.notifications.filter((n) => !n.read).length;
+        return this.notifications.filter(n => !n.read).length;
     }
 
     getCompetencyStars(level: number): string[] {

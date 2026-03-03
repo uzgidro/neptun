@@ -23,30 +23,30 @@ import { Textarea } from 'primeng/textarea';
 import { AccordionModule } from 'primeng/accordion';
 import { Timeline } from 'primeng/timeline';
 import { KnobModule } from 'primeng/knob';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { DeleteConfirmationComponent } from '@/layout/component/dialog/delete-confirmation/delete-confirmation.component';
 import {
-    ACTIVITY_TYPES,
-    ActivityType,
-    ASSESSMENT_STATUSES,
-    ASSESSMENT_TYPES,
-    AssessmentBlock,
-    AssessmentReport,
     AssessmentSession,
-    AssessmentStatus,
-    BLOCK_TYPES,
-    BlockResult,
-    BlockType,
-    COMPETENCY_CATEGORIES,
+    AssessmentBlock,
     CompetencyAssessment,
-    CompetencyBlockScore,
+    AssessmentReport,
     DevelopmentPlan,
-    PLAN_STATUSES,
-    PlanStatus,
-    SESSION_STATUSES,
     SessionCandidate,
+    BlockResult,
+    CompetencyBlockScore,
+    STANDARD_COMPETENCIES,
+    ASSESSMENT_TYPES,
+    ASSESSMENT_STATUSES,
+    SESSION_STATUSES,
+    BLOCK_TYPES,
+    ACTIVITY_TYPES,
+    PLAN_STATUSES,
+    COMPETENCY_CATEGORIES,
     SessionStatus,
-    STANDARD_COMPETENCIES
+    BlockType,
+    PlanStatus,
+    ActivityType,
+    AssessmentStatus
 } from '@/core/interfaces/hrm/competency';
 
 @Component({
@@ -217,9 +217,15 @@ export class CompetencyAssessmentComponent implements OnInit, OnDestroy {
         this.selectedSession = session;
         this.submitted = false;
 
-        const selectedCompetencies = this.standardCompetencies.filter((c) => session.competencies_to_assess.some((sc) => sc.competency_id === c.id));
-        const selectedCandidates = this.employees.filter((e) => session.candidates.some((c) => c.employee_id === e.id));
-        const selectedAssessors = this.assessors.filter((a) => session.assessors.some((sa) => sa.assessor_id === a.id));
+        const selectedCompetencies = this.standardCompetencies.filter(c =>
+            session.competencies_to_assess.some(sc => sc.competency_id === c.id)
+        );
+        const selectedCandidates = this.employees.filter(e =>
+            session.candidates.some(c => c.employee_id === e.id)
+        );
+        const selectedAssessors = this.assessors.filter(a =>
+            session.assessors.some(sa => sa.assessor_id === a.id)
+        );
 
         this.sessionForm.patchValue({
             name: session.name,
@@ -241,10 +247,12 @@ export class CompetencyAssessmentComponent implements OnInit, OnDestroy {
         if (this.sessionForm.invalid) return;
 
         const formValue = this.sessionForm.value;
-        const sessionDate = formValue.session_date instanceof Date ? formValue.session_date.toISOString().split('T')[0] : formValue.session_date;
+        const sessionDate = formValue.session_date instanceof Date
+            ? formValue.session_date.toISOString().split('T')[0]
+            : formValue.session_date;
 
         if (this.isEditMode && this.selectedSession) {
-            const index = this.sessions.findIndex((s) => s.id === this.selectedSession!.id);
+            const index = this.sessions.findIndex(s => s.id === this.selectedSession!.id);
             if (index !== -1) {
                 this.sessions[index] = {
                     ...this.sessions[index],
@@ -320,9 +328,9 @@ export class CompetencyAssessmentComponent implements OnInit, OnDestroy {
     }
 
     sendInvitations(session: AssessmentSession): void {
-        const index = this.sessions.findIndex((s) => s.id === session.id);
+        const index = this.sessions.findIndex(s => s.id === session.id);
         if (index !== -1) {
-            this.sessions[index].candidates = this.sessions[index].candidates.map((c) => ({
+            this.sessions[index].candidates = this.sessions[index].candidates.map(c => ({
                 ...c,
                 invitation_status: 'pending' as const,
                 invitation_sent_at: new Date().toISOString()
@@ -333,7 +341,7 @@ export class CompetencyAssessmentComponent implements OnInit, OnDestroy {
     }
 
     startSession(session: AssessmentSession): void {
-        const index = this.sessions.findIndex((s) => s.id === session.id);
+        const index = this.sessions.findIndex(s => s.id === session.id);
         if (index !== -1) {
             this.sessions[index].status = 'in_progress';
             this.sessions = [...this.sessions];
@@ -342,7 +350,7 @@ export class CompetencyAssessmentComponent implements OnInit, OnDestroy {
     }
 
     completeSession(session: AssessmentSession): void {
-        const index = this.sessions.findIndex((s) => s.id === session.id);
+        const index = this.sessions.findIndex(s => s.id === session.id);
         if (index !== -1) {
             this.sessions[index].status = 'completed';
             this.sessions = [...this.sessions];
@@ -368,7 +376,7 @@ export class CompetencyAssessmentComponent implements OnInit, OnDestroy {
         if (this.blockForm.invalid || !this.selectedSession) return;
 
         const formValue = this.blockForm.value;
-        const sessionIndex = this.sessions.findIndex((s) => s.id === this.selectedSession!.id);
+        const sessionIndex = this.sessions.findIndex(s => s.id === this.selectedSession!.id);
 
         if (sessionIndex !== -1) {
             const newBlock: AssessmentBlock = {
@@ -383,7 +391,10 @@ export class CompetencyAssessmentComponent implements OnInit, OnDestroy {
                 competencies: formValue.competencies.map((c: any) => c.id)
             };
 
-            this.sessions[sessionIndex].assessment_blocks = [...this.sessions[sessionIndex].assessment_blocks, newBlock];
+            this.sessions[sessionIndex].assessment_blocks = [
+                ...this.sessions[sessionIndex].assessment_blocks,
+                newBlock
+            ];
             this.sessions = [...this.sessions];
             this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Блок добавлен' });
         }
@@ -392,9 +403,9 @@ export class CompetencyAssessmentComponent implements OnInit, OnDestroy {
     }
 
     completeBlock(session: AssessmentSession, block: AssessmentBlock): void {
-        const sessionIndex = this.sessions.findIndex((s) => s.id === session.id);
+        const sessionIndex = this.sessions.findIndex(s => s.id === session.id);
         if (sessionIndex !== -1) {
-            const blockIndex = this.sessions[sessionIndex].assessment_blocks.findIndex((b) => b.id === block.id);
+            const blockIndex = this.sessions[sessionIndex].assessment_blocks.findIndex(b => b.id === block.id);
             if (blockIndex !== -1) {
                 this.sessions[sessionIndex].assessment_blocks[blockIndex].status = 'completed';
                 this.sessions = [...this.sessions];
@@ -415,7 +426,7 @@ export class CompetencyAssessmentComponent implements OnInit, OnDestroy {
         // Инициализация оценок
         this.candidateScores = {};
         this.candidateNotes = {};
-        session.competencies_to_assess.forEach((c) => {
+        session.competencies_to_assess.forEach(c => {
             this.candidateScores[c.competency_id] = 3;
             this.candidateNotes[c.competency_id] = '';
         });
@@ -426,7 +437,7 @@ export class CompetencyAssessmentComponent implements OnInit, OnDestroy {
     saveEvaluation(): void {
         if (!this.selectedSession || !this.evaluatingCandidate || !this.evaluatingBlock) return;
 
-        const scores: CompetencyBlockScore[] = this.selectedSession.competencies_to_assess.map((c) => ({
+        const scores: CompetencyBlockScore[] = this.selectedSession.competencies_to_assess.map(c => ({
             competency_id: c.competency_id,
             competency_name: c.competency_name,
             score: this.candidateScores[c.competency_id] || 3,
@@ -444,9 +455,9 @@ export class CompetencyAssessmentComponent implements OnInit, OnDestroy {
         };
 
         // Добавляем результат в блок
-        const sessionIndex = this.sessions.findIndex((s) => s.id === this.selectedSession!.id);
+        const sessionIndex = this.sessions.findIndex(s => s.id === this.selectedSession!.id);
         if (sessionIndex !== -1) {
-            const blockIndex = this.sessions[sessionIndex].assessment_blocks.findIndex((b) => b.id === this.evaluatingBlock!.id);
+            const blockIndex = this.sessions[sessionIndex].assessment_blocks.findIndex(b => b.id === this.evaluatingBlock!.id);
             if (blockIndex !== -1) {
                 if (!this.sessions[sessionIndex].assessment_blocks[blockIndex].results) {
                     this.sessions[sessionIndex].assessment_blocks[blockIndex].results = [];
@@ -468,11 +479,11 @@ export class CompetencyAssessmentComponent implements OnInit, OnDestroy {
         // Собираем все оценки кандидата из всех блоков
         const allScores: { [competencyId: number]: number[] } = {};
 
-        session.assessment_blocks.forEach((block) => {
+        session.assessment_blocks.forEach(block => {
             if (block.results) {
-                const candidateResult = block.results.find((r) => r.employee_id === candidate.employee_id);
+                const candidateResult = block.results.find(r => r.employee_id === candidate.employee_id);
                 if (candidateResult) {
-                    candidateResult.scores.forEach((score) => {
+                    candidateResult.scores.forEach(score => {
                         if (!allScores[score.competency_id]) {
                             allScores[score.competency_id] = [];
                         }
@@ -501,9 +512,13 @@ export class CompetencyAssessmentComponent implements OnInit, OnDestroy {
         const overallScore = competencyScores.reduce((sum, cs) => sum + cs.actual_level, 0) / competencyScores.length;
 
         // Определяем сильные стороны и области развития
-        const strengths = competencyScores.filter((cs) => cs.actual_level >= 4).map((cs) => cs.competency_name!);
+        const strengths = competencyScores
+            .filter(cs => cs.actual_level >= 4)
+            .map(cs => cs.competency_name!);
 
-        const developmentAreas = competencyScores.filter((cs) => cs.actual_level < 4).map((cs) => cs.competency_name!);
+        const developmentAreas = competencyScores
+            .filter(cs => cs.actual_level < 4)
+            .map(cs => cs.competency_name!);
 
         const newAssessment: CompetencyAssessment = {
             id: this.nextId++,
@@ -542,7 +557,7 @@ export class CompetencyAssessmentComponent implements OnInit, OnDestroy {
             assessment_date: assessment.assessment_date,
             report_generated_at: new Date().toISOString(),
             overall_score: assessment.overall_score || 0,
-            competency_results: assessment.competency_scores.map((cs) => ({
+            competency_results: assessment.competency_scores.map(cs => ({
                 competency_id: cs.competency_id,
                 competency_name: cs.competency_name || '',
                 category: cs.category || 'core',
@@ -558,14 +573,14 @@ export class CompetencyAssessmentComponent implements OnInit, OnDestroy {
                 description: 'Высокий уровень развития компетенции'
             })),
             development_areas: (assessment.development_areas || []).map((d, i) => {
-                const cs = assessment.competency_scores.find((c) => c.competency_name === d);
+                const cs = assessment.competency_scores.find(c => c.competency_name === d);
                 return {
                     competency_id: i,
                     competency_name: d,
                     current_level: cs?.actual_level || 3,
                     target_level: 4,
-                    gap: cs ? 4 - cs.actual_level : 1,
-                    priority: cs && cs.actual_level < 3 ? ('high' as const) : ('medium' as const),
+                    gap: cs ? (4 - cs.actual_level) : 1,
+                    priority: (cs && cs.actual_level < 3) ? 'high' as const : 'medium' as const,
                     recommended_actions: ['Тренинг', 'Практика', 'Менторинг']
                 };
             }),
@@ -577,7 +592,7 @@ export class CompetencyAssessmentComponent implements OnInit, OnDestroy {
     }
 
     approveAssessment(assessment: CompetencyAssessment): void {
-        const index = this.assessments.findIndex((a) => a.id === assessment.id);
+        const index = this.assessments.findIndex(a => a.id === assessment.id);
         if (index !== -1) {
             this.assessments[index].status = 'approved';
             this.assessments = [...this.assessments];
@@ -595,10 +610,10 @@ export class CompetencyAssessmentComponent implements OnInit, OnDestroy {
         this.submitted = false;
 
         if (assessment) {
-            const employee = this.employees.find((e) => e.id === assessment.employee_id);
+            const employee = this.employees.find(e => e.id === assessment.employee_id);
             const targets = assessment.competency_scores
-                .filter((cs) => cs.gap < 0)
-                .map((cs) => ({
+                .filter(cs => cs.gap < 0)
+                .map(cs => ({
                     competency_id: cs.competency_id,
                     competency_name: cs.competency_name,
                     category: cs.category,
@@ -631,8 +646,12 @@ export class CompetencyAssessmentComponent implements OnInit, OnDestroy {
             employee_id: formValue.employee_id.id,
             employee_name: formValue.employee_id.name,
             created_date: new Date().toISOString().split('T')[0],
-            start_date: formValue.start_date instanceof Date ? formValue.start_date.toISOString().split('T')[0] : formValue.start_date,
-            end_date: formValue.end_date instanceof Date ? formValue.end_date.toISOString().split('T')[0] : formValue.end_date,
+            start_date: formValue.start_date instanceof Date
+                ? formValue.start_date.toISOString().split('T')[0]
+                : formValue.start_date,
+            end_date: formValue.end_date instanceof Date
+                ? formValue.end_date.toISOString().split('T')[0]
+                : formValue.end_date,
             status: 'draft',
             competency_targets: formValue.competency_targets || [],
             development_activities: [],
@@ -655,7 +674,7 @@ export class CompetencyAssessmentComponent implements OnInit, OnDestroy {
     }
 
     activatePlan(plan: DevelopmentPlan): void {
-        const index = this.developmentPlans.findIndex((p) => p.id === plan.id);
+        const index = this.developmentPlans.findIndex(p => p.id === plan.id);
         if (index !== -1) {
             this.developmentPlans[index].status = 'active';
             this.developmentPlans = [...this.developmentPlans];
@@ -664,7 +683,7 @@ export class CompetencyAssessmentComponent implements OnInit, OnDestroy {
     }
 
     completePlan(plan: DevelopmentPlan): void {
-        const index = this.developmentPlans.findIndex((p) => p.id === plan.id);
+        const index = this.developmentPlans.findIndex(p => p.id === plan.id);
         if (index !== -1) {
             this.developmentPlans[index].status = 'completed';
             this.developmentPlans[index].overall_progress = 100;
@@ -684,7 +703,7 @@ export class CompetencyAssessmentComponent implements OnInit, OnDestroy {
 
     confirmDelete(): void {
         if (this.selectedSession) {
-            this.sessions = this.sessions.filter((s) => s.id !== this.selectedSession!.id);
+            this.sessions = this.sessions.filter(s => s.id !== this.selectedSession!.id);
             this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Сессия удалена' });
         }
         this.displayDeleteDialog = false;
@@ -701,87 +720,69 @@ export class CompetencyAssessmentComponent implements OnInit, OnDestroy {
 
     getSessionStatusSeverity(status: SessionStatus): 'success' | 'info' | 'warn' | 'danger' | 'secondary' {
         switch (status) {
-            case 'completed':
-                return 'success';
-            case 'in_progress':
-                return 'info';
-            case 'scheduled':
-                return 'warn';
-            case 'planning':
-                return 'secondary';
-            case 'cancelled':
-                return 'danger';
-            default:
-                return 'info';
+            case 'completed': return 'success';
+            case 'in_progress': return 'info';
+            case 'scheduled': return 'warn';
+            case 'planning': return 'secondary';
+            case 'cancelled': return 'danger';
+            default: return 'info';
         }
     }
 
     getStatusSeverity(status: AssessmentStatus): 'success' | 'info' | 'warn' | 'danger' | 'secondary' {
         switch (status) {
-            case 'approved':
-                return 'success';
-            case 'completed':
-                return 'info';
-            case 'reviewed':
-                return 'info';
-            case 'in_progress':
-                return 'warn';
-            case 'draft':
-                return 'secondary';
-            default:
-                return 'info';
+            case 'approved': return 'success';
+            case 'completed': return 'info';
+            case 'reviewed': return 'info';
+            case 'in_progress': return 'warn';
+            case 'draft': return 'secondary';
+            default: return 'info';
         }
     }
 
     getPlanStatusSeverity(status: PlanStatus): 'success' | 'info' | 'warn' | 'danger' | 'secondary' {
         switch (status) {
-            case 'completed':
-                return 'success';
-            case 'active':
-                return 'info';
-            case 'on_hold':
-                return 'warn';
-            case 'draft':
-                return 'secondary';
-            case 'cancelled':
-                return 'danger';
-            default:
-                return 'info';
+            case 'completed': return 'success';
+            case 'active': return 'info';
+            case 'on_hold': return 'warn';
+            case 'draft': return 'secondary';
+            case 'cancelled': return 'danger';
+            default: return 'info';
         }
     }
 
     getBlockTypeLabel(type: BlockType): string {
-        const found = this.blockTypes.find((t) => t.value === type);
+        const found = this.blockTypes.find(t => t.value === type);
         return found ? found.label : type;
     }
 
     getBlockTypeIcon(type: BlockType): string {
-        const found = this.blockTypes.find((t) => t.value === type);
+        const found = this.blockTypes.find(t => t.value === type);
         return found ? found.icon : 'pi pi-file';
     }
 
     getStatusLabel(status: string): string {
-        const found = this.assessmentStatuses.find((s) => s.value === status);
+        const found = this.assessmentStatuses.find(s => s.value === status);
         return found ? found.label : status;
     }
 
     getSessionStatusLabel(status: SessionStatus): string {
-        const found = this.sessionStatuses.find((s) => s.value === status);
+        const found = this.sessionStatuses.find(s => s.value === status);
         return found ? found.label : status;
     }
 
     getPlanStatusLabel(status: PlanStatus): string {
-        const found = this.planStatuses.find((s) => s.value === status);
+        const found = this.planStatuses.find(s => s.value === status);
         return found ? found.label : status;
     }
 
     getActivityTypeLabel(type: ActivityType): string {
-        const found = this.activityTypes.find((t) => t.value === type);
+        const found = this.activityTypes.find(t => t.value === type);
         return found ? found.label : type;
     }
 
     getCategoryLabel(category: string): string {
-        const found = this.competencyCategories.find((c) => c.value === category);
+        const found = this.competencyCategories.find(c => c.value === category);
         return found ? found.label : category;
     }
 
@@ -798,7 +799,7 @@ export class CompetencyAssessmentComponent implements OnInit, OnDestroy {
     }
 
     get completedSessionsCount(): number {
-        return this.sessions.filter((s) => s.status === 'completed').length;
+        return this.sessions.filter(s => s.status === 'completed').length;
     }
 
     get assessmentsCount(): number {
@@ -806,7 +807,7 @@ export class CompetencyAssessmentComponent implements OnInit, OnDestroy {
     }
 
     get activePlansCount(): number {
-        return this.developmentPlans.filter((p) => p.status === 'active').length;
+        return this.developmentPlans.filter(p => p.status === 'active').length;
     }
 
     ngOnDestroy() {

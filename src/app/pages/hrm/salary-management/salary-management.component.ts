@@ -16,12 +16,36 @@ import { ProgressBar } from 'primeng/progressbar';
 import { TranslateModule } from '@ngx-translate/core';
 import { DeleteConfirmationComponent } from '@/layout/component/dialog/delete-confirmation/delete-confirmation.component';
 import { SalaryService } from '@/core/services/salary.service';
-import { Salary, EmployeeSalaryStructure, EmployeeBonus, EmployeeDeduction, BatchCalculationResult, SALARY_STATUSES, SalaryStatus } from '@/core/interfaces/hrm/salary';
+import {
+    Salary,
+    EmployeeSalaryStructure,
+    EmployeeBonus,
+    EmployeeDeduction,
+    BatchCalculationResult,
+    SALARY_STATUSES,
+    SalaryStatus
+} from '@/core/interfaces/hrm/salary';
 
 @Component({
     selector: 'app-salary-management',
     standalone: true,
-    imports: [CommonModule, TableModule, ButtonDirective, IconField, InputIcon, InputText, ReactiveFormsModule, FormsModule, DeleteConfirmationComponent, Tooltip, Tag, Card, Dialog, ProgressBar, TranslateModule],
+    imports: [
+        CommonModule,
+        TableModule,
+        ButtonDirective,
+        IconField,
+        InputIcon,
+        InputText,
+        ReactiveFormsModule,
+        FormsModule,
+        DeleteConfirmationComponent,
+        Tooltip,
+        Tag,
+        Card,
+        Dialog,
+        ProgressBar,
+        TranslateModule
+    ],
     templateUrl: './salary-management.component.html',
     styleUrl: './salary-management.component.scss'
 })
@@ -54,22 +78,14 @@ export class SalaryManagementComponent implements OnInit, OnDestroy {
     employeeDeductions: EmployeeDeduction[] = [];
 
     months = [
-        { id: 1, name: 'Январь' },
-        { id: 2, name: 'Февраль' },
-        { id: 3, name: 'Март' },
-        { id: 4, name: 'Апрель' },
-        { id: 5, name: 'Май' },
-        { id: 6, name: 'Июнь' },
-        { id: 7, name: 'Июль' },
-        { id: 8, name: 'Август' },
-        { id: 9, name: 'Сентябрь' },
-        { id: 10, name: 'Октябрь' },
-        { id: 11, name: 'Ноябрь' },
-        { id: 12, name: 'Декабрь' }
+        { id: 1, name: 'Январь' }, { id: 2, name: 'Февраль' }, { id: 3, name: 'Март' },
+        { id: 4, name: 'Апрель' }, { id: 5, name: 'Май' }, { id: 6, name: 'Июнь' },
+        { id: 7, name: 'Июль' }, { id: 8, name: 'Август' }, { id: 9, name: 'Сентябрь' },
+        { id: 10, name: 'Октябрь' }, { id: 11, name: 'Ноябрь' }, { id: 12, name: 'Декабрь' }
     ];
     years = Array.from({ length: 5 }, (_, i) => ({ id: new Date().getFullYear() - i, name: (new Date().getFullYear() - i).toString() }));
 
-    salaryStatuses = SALARY_STATUSES.map((s) => ({ id: s.value, name: s.label }));
+    salaryStatuses = SALARY_STATUSES.map(s => ({ id: s.value, name: s.label }));
 
     // Last batch calculation result
     lastBatchResult: BatchCalculationResult | null = null;
@@ -96,21 +112,19 @@ export class SalaryManagementComponent implements OnInit, OnDestroy {
             structures: this.salaryService.getSalaryStructures(),
             bonuses: this.salaryService.getBonuses(),
             deductions: this.salaryService.getDeductions()
-        })
-            .pipe(takeUntil(this.destroy$))
-            .subscribe({
-                next: (data) => {
-                    this.employeeSalaryStructures = data.structures;
-                    this.employeeBonuses = data.bonuses;
-                    this.employeeDeductions = data.deductions;
-                    this.loading = false;
-                },
-                error: (err) => {
-                    console.error('Ошибка загрузки данных:', err);
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось загрузить данные' });
-                    this.loading = false;
-                }
-            });
+        }).pipe(takeUntil(this.destroy$)).subscribe({
+            next: (data) => {
+                this.employeeSalaryStructures = data.structures;
+                this.employeeBonuses = data.bonuses;
+                this.employeeDeductions = data.deductions;
+                this.loading = false;
+            },
+            error: (err) => {
+                console.error('Ошибка загрузки данных:', err);
+                this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось загрузить данные' });
+                this.loading = false;
+            }
+        });
     }
 
     // ==================== SALARY CALCULATION ====================
@@ -121,15 +135,16 @@ export class SalaryManagementComponent implements OnInit, OnDestroy {
         this.calculationProgress = 0;
         this.lastBatchResult = null;
 
-        this.salaryService
-            .calculateSalary(this.selectedMonth, this.selectedYear)
+        this.salaryService.calculateSalary(this.selectedMonth, this.selectedYear)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (result) => {
                     this.calculating = false;
                     this.calculationProgress = 100;
                     this.lastBatchResult = result;
-                    this.salaries = result.results.filter((r) => r.success && r.salary).map((r) => r.salary!);
+                    this.salaries = result.results
+                        .filter(r => r.success && r.salary)
+                        .map(r => r.salary!);
 
                     this.messageService.add({
                         severity: 'success',
@@ -152,7 +167,7 @@ export class SalaryManagementComponent implements OnInit, OnDestroy {
     // ==================== APPROVAL WORKFLOW ====================
 
     submitForApproval(salary: Salary): void {
-        const index = this.salaries.findIndex((s) => s.id === salary.id);
+        const index = this.salaries.findIndex(s => s.id === salary.id);
         if (index !== -1) {
             this.salaries[index] = {
                 ...this.salaries[index],
@@ -169,7 +184,7 @@ export class SalaryManagementComponent implements OnInit, OnDestroy {
 
     submitAllForApproval(): void {
         let count = 0;
-        this.salaries = this.salaries.map((s) => {
+        this.salaries = this.salaries.map(s => {
             if (s.status === 'calculated') {
                 count++;
                 return { ...s, status: 'pending_approval' as SalaryStatus };
@@ -191,7 +206,7 @@ export class SalaryManagementComponent implements OnInit, OnDestroy {
     confirmApproval(): void {
         if (!this.selectedSalary) return;
 
-        const index = this.salaries.findIndex((s) => s.id === this.selectedSalary!.id);
+        const index = this.salaries.findIndex(s => s.id === this.selectedSalary!.id);
         if (index !== -1) {
             this.salaries[index] = {
                 ...this.salaries[index],
@@ -214,7 +229,7 @@ export class SalaryManagementComponent implements OnInit, OnDestroy {
     approveAll(): void {
         let count = 0;
         const now = new Date().toISOString();
-        this.salaries = this.salaries.map((s) => {
+        this.salaries = this.salaries.map(s => {
             if (s.status === 'pending_approval') {
                 count++;
                 return {
@@ -242,7 +257,7 @@ export class SalaryManagementComponent implements OnInit, OnDestroy {
     confirmRejection(): void {
         if (!this.selectedSalary || this.rejectionForm.invalid) return;
 
-        const index = this.salaries.findIndex((s) => s.id === this.selectedSalary!.id);
+        const index = this.salaries.findIndex(s => s.id === this.selectedSalary!.id);
         if (index !== -1) {
             this.salaries[index] = {
                 ...this.salaries[index],
@@ -262,7 +277,7 @@ export class SalaryManagementComponent implements OnInit, OnDestroy {
     }
 
     markAsPaid(salary: Salary): void {
-        const index = this.salaries.findIndex((s) => s.id === salary.id);
+        const index = this.salaries.findIndex(s => s.id === salary.id);
         if (index !== -1) {
             this.salaries[index] = {
                 ...this.salaries[index],
@@ -281,7 +296,7 @@ export class SalaryManagementComponent implements OnInit, OnDestroy {
     markAllAsPaid(): void {
         let count = 0;
         const now = new Date().toISOString();
-        this.salaries = this.salaries.map((s) => {
+        this.salaries = this.salaries.map(s => {
             if (s.status === 'approved') {
                 count++;
                 return { ...s, status: 'paid' as SalaryStatus, paid_at: now };
@@ -346,7 +361,7 @@ export class SalaryManagementComponent implements OnInit, OnDestroy {
     confirmDelete(): void {
         if (!this.selectedSalary) return;
 
-        this.salaries = this.salaries.filter((s) => s.id !== this.selectedSalary!.id);
+        this.salaries = this.salaries.filter(s => s.id !== this.selectedSalary!.id);
         this.messageService.add({
             severity: 'success',
             summary: 'Удалено',
@@ -368,8 +383,7 @@ export class SalaryManagementComponent implements OnInit, OnDestroy {
     }
 
     exportPayslips(): void {
-        this.salaryService
-            .exportPayslips(this.selectedMonth, this.selectedYear)
+        this.salaryService.exportPayslips(this.selectedMonth, this.selectedYear)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (blob) => {
@@ -398,30 +412,23 @@ export class SalaryManagementComponent implements OnInit, OnDestroy {
 
     getStatusSeverity(status: string): 'success' | 'info' | 'warn' | 'danger' | 'secondary' | 'contrast' {
         switch (status) {
-            case 'paid':
-                return 'success';
-            case 'approved':
-                return 'info';
-            case 'pending_approval':
-                return 'warn';
-            case 'calculated':
-                return 'secondary';
-            case 'rejected':
-                return 'danger';
-            case 'draft':
-                return 'contrast';
-            default:
-                return 'info';
+            case 'paid': return 'success';
+            case 'approved': return 'info';
+            case 'pending_approval': return 'warn';
+            case 'calculated': return 'secondary';
+            case 'rejected': return 'danger';
+            case 'draft': return 'contrast';
+            default: return 'info';
         }
     }
 
     getStatusLabel(status: string): string {
-        const found = this.salaryStatuses.find((s) => s.id === status);
+        const found = this.salaryStatuses.find(s => s.id === status);
         return found ? found.name : status;
     }
 
     getMonthLabel(month: number): string {
-        const found = this.months.find((m) => m.id === month);
+        const found = this.months.find(m => m.id === month);
         return found ? found.name : month.toString();
     }
 
@@ -442,19 +449,19 @@ export class SalaryManagementComponent implements OnInit, OnDestroy {
     }
 
     get calculatedCount(): number {
-        return this.salaries.filter((s) => s.status === 'calculated').length;
+        return this.salaries.filter(s => s.status === 'calculated').length;
     }
 
     get pendingApprovalCount(): number {
-        return this.salaries.filter((s) => s.status === 'pending_approval').length;
+        return this.salaries.filter(s => s.status === 'pending_approval').length;
     }
 
     get approvedCount(): number {
-        return this.salaries.filter((s) => s.status === 'approved').length;
+        return this.salaries.filter(s => s.status === 'approved').length;
     }
 
     get paidCount(): number {
-        return this.salaries.filter((s) => s.status === 'paid').length;
+        return this.salaries.filter(s => s.status === 'paid').length;
     }
 
     ngOnDestroy() {

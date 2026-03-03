@@ -3,7 +3,7 @@ import { AppLayout } from '@/layout/component/app.layout';
 import { Dashboard } from '@/pages/dashboard/dashboard';
 import { Notfound } from '@/pages/notfound/notfound';
 
-import { adminGuard, authGuard, raisGuard, scGuard } from '@/core/guards/auth.guard';
+import { adminGuard, authGuard, hrmGuard, positionsGuard, raisGuard, scGuard } from '@/core/guards/auth.guard';
 import { User } from '@/pages/hrm/users/user.component';
 import { Role } from '@/pages/hrm/roles/roles';
 import { CategoriesComponent } from '@/pages/categories/categories.component';
@@ -18,6 +18,7 @@ import { ConstructionComponent } from '@/pages/situation-center/construction/con
 import { ReceptionComponent } from '@/pages/planning/reception/reception.component';
 import { ReservoirsSummaryComponent } from '@/pages/situation-center/reservoirs-info/reservoirs-summary/reservoirs-summary.component';
 import { ReservoirSummaryPdfComponent } from '@/pages/situation-center/reservoirs-info/reservoir-summaty-pdf/reservoir-summary-pdf.component';
+import { ReservoirSummaryHourlyComponent } from '@/pages/situation-center/reservoirs-info/reservoir-summary-hourly/reservoir-summary-hourly.component';
 import { DischargesComponent } from '@/pages/situation-center/ges/discharges/discharges.component';
 import { VisitsComponent } from '@/pages/situation-center/other/visits/visits.component';
 import { IncidentsComponent } from '@/pages/situation-center/other/incidents/incidents.component';
@@ -37,14 +38,12 @@ import { PendingSignaturesComponent } from '@/pages/chancellery/pending-signatur
 import { LegalDocumentsComponent } from '@/pages/legal-documents/legal-documents.component';
 import { LexSearchComponent } from '@/pages/lex-search/lex-search.component';
 import { CallsComponent } from '@/pages/calls/calls.component';
+import { NewsComponent } from '@/pages/media/news/news.component';
 import { InvestActiveProjectsComponent } from '@/pages/invest/invest-active-projects/invest-active-projects.component';
 import { ScDashboardComponent } from '@/pages/situation-center/sc-dashboard/sc-dashboard.component';
 import { GesDetailComponent } from '@/pages/situation-center/ges/ges-detail/ges-detail.component';
-import { CompanyNewsComponent } from '@/pages/company-news/company-news.component';
-
-// HRM components
-import { HRMDashboardComponent } from '@/pages/hrm/dashboard/dashboard.component';
-import { EmployeeCabinetComponent } from '@/pages/hrm/employee-cabinet/employee-cabinet.component';
+import { UzgidroNewsComponent } from '@/pages/uzgidro-news/uzgidro-news.component';
+import { SnowCoverComponent } from '@/pages/situation-center/reservoirs-info/snow-cover/snow-cover.component';
 import { PersonnelRecordsComponent } from '@/pages/hrm/personnel-records/personnel-records.component';
 import { VacationManagementComponent } from '@/pages/hrm/vacation-management/vacation-management.component';
 import { SalaryManagementComponent } from '@/pages/hrm/salary-management/salary-management.component';
@@ -53,6 +52,8 @@ import { TrainingComponent } from '@/pages/hrm/training/training.component';
 import { CompetencyAssessmentComponent } from '@/pages/hrm/competency-assessment/competency-assessment.component';
 import { PerformanceManagementComponent } from '@/pages/hrm/performance-management/performance-management.component';
 import { AnalyticsComponent } from '@/pages/hrm/analytics/analytics.component';
+import { HRMDashboardComponent } from '@/pages/hrm/dashboard/dashboard.component';
+import { EmployeeCabinetComponent } from '@/pages/hrm/employee-cabinet/employee-cabinet.component';
 import { TimesheetComponent } from '@/pages/hrm/timesheet/timesheet.component';
 import { HRDocumentsComponent } from '@/pages/hrm/hr-documents/hr-documents.component';
 import { AccessControlComponent } from '@/pages/hrm/access-control/access-control.component';
@@ -75,9 +76,23 @@ export const appRoutes: Routes = [
             { path: 'roles', component: Role, canActivate: [adminGuard] },
             { path: 'categories', component: CategoriesComponent, canActivate: [scGuard] },
             { path: 'files', component: FilesComponent, canActivate: [scGuard] },
-            { path: 'positions', component: PositionComponent },
-            { path: 'departments', component: DepartmentComponent },
-            { path: 'employees', component: EmployeeComponent },
+            { path: 'positions', component: PositionComponent, canActivate: [positionsGuard] },
+            { path: 'departments', component: DepartmentComponent, canActivate: [adminGuard] },
+            { path: 'employees', component: EmployeeComponent, canActivate: [adminGuard] },
+            { path: 'hrm/dashboard', component: HRMDashboardComponent, canActivate: [hrmGuard] },
+            { path: 'hrm/my-cabinet', component: EmployeeCabinetComponent, canActivate: [authGuard] },
+            { path: 'hrm/personnel-records', component: PersonnelRecordsComponent, canActivate: [hrmGuard] },
+            { path: 'hrm/vacations', component: VacationManagementComponent, canActivate: [hrmGuard] },
+            { path: 'hrm/salary', component: SalaryManagementComponent, canActivate: [hrmGuard] },
+            { path: 'hrm/recruiting', component: RecruitingComponent, canActivate: [hrmGuard] },
+            { path: 'hrm/training', component: TrainingComponent, canActivate: [hrmGuard] },
+            { path: 'hrm/competency', component: CompetencyAssessmentComponent, canActivate: [hrmGuard] },
+            { path: 'hrm/performance', component: PerformanceManagementComponent, canActivate: [hrmGuard] },
+            { path: 'hrm/analytics', component: AnalyticsComponent, canActivate: [hrmGuard] },
+            { path: 'hrm/timesheet', component: TimesheetComponent, canActivate: [hrmGuard] },
+            { path: 'hrm/documents', component: HRDocumentsComponent, canActivate: [hrmGuard] },
+            { path: 'hrm/access-control', component: AccessControlComponent, canActivate: [hrmGuard] },
+            { path: 'hrm/org-structure', component: OrgStructureComponent, canActivate: [hrmGuard] },
             { path: 'viewer', component: DocumentViewerComponent, canActivate: [raisGuard] },
             { path: 'discharges', component: DischargesComponent, canActivate: [raisGuard] },
             { path: 'shutdowns', component: ShutdownComponent, canActivate: [raisGuard] },
@@ -85,6 +100,7 @@ export const appRoutes: Routes = [
             { path: 'planning/events', component: EventsComponent, canActivate: [raisGuard] },
             { path: 'planning/reception', component: ReceptionComponent, canActivate: [raisGuard] },
             { path: 'reservoir-summary', component: ReservoirsSummaryComponent, canActivate: [raisGuard] },
+            { path: 'shutdowns', component: ShutdownComponent, canActivate: [raisGuard] },
             { path: 'financial-dashboard', component: FinancialDashboardComponent, canActivate: [raisGuard] },
             { path: 'invest-perspective', component: InvestPerspectiveProjectsComponent, canActivate: [raisGuard] },
             { path: 'invest-active', component: InvestActiveProjectsComponent, canActivate: [raisGuard] },
@@ -94,9 +110,11 @@ export const appRoutes: Routes = [
             { path: 'kpi', component: KpiComponent, canActivate: [raisGuard] },
             { path: 'salary', component: SalaryComponent, canActivate: [raisGuard] },
             { path: 'reservoir-summary/pdf', component: ReservoirSummaryPdfComponent, canActivate: [raisGuard] },
+            { path: 'reservoir-summary-hourly', component: ReservoirSummaryHourlyComponent, canActivate: [raisGuard] },
             { path: 'visits', component: VisitsComponent, canActivate: [raisGuard] },
             { path: 'incidents', component: IncidentsComponent, canActivate: [raisGuard] },
             { path: 'reservoir-device', component: ReservoirsDeviceComponent, canActivate: [raisGuard] },
+            { path: 'snow-cover', component: SnowCoverComponent, canActivate: [raisGuard] },
             { path: 'chancellery/pending-signatures', component: PendingSignaturesComponent, canActivate: [raisGuard] },
             { path: 'chancellery/orders', component: OrdersComponent, canActivate: [raisGuard] },
             { path: 'chancellery/reports', component: ReportsComponent, canActivate: [raisGuard] },
@@ -105,24 +123,9 @@ export const appRoutes: Routes = [
             { path: 'legal-documents', component: LegalDocumentsComponent, canActivate: [raisGuard] },
             { path: 'lex-search', component: LexSearchComponent, canActivate: [raisGuard] },
             { path: 'calls', component: CallsComponent, canActivate: [raisGuard] },
-            { path: 'company-news', component: CompanyNewsComponent, canActivate: [raisGuard] },
-            { path: 'plant/:id', component: GesDetailComponent, canActivate: [raisGuard] },
-
-            // HRM routes
-            { path: 'hrm/dashboard', component: HRMDashboardComponent },
-            { path: 'hrm/my-cabinet', component: EmployeeCabinetComponent },
-            { path: 'hrm/personnel-records', component: PersonnelRecordsComponent },
-            { path: 'hrm/vacations', component: VacationManagementComponent },
-            { path: 'hrm/salary', component: SalaryManagementComponent },
-            { path: 'hrm/recruiting', component: RecruitingComponent },
-            { path: 'hrm/training', component: TrainingComponent },
-            { path: 'hrm/competency', component: CompetencyAssessmentComponent },
-            { path: 'hrm/performance', component: PerformanceManagementComponent },
-            { path: 'hrm/analytics', component: AnalyticsComponent },
-            { path: 'hrm/timesheet', component: TimesheetComponent },
-            { path: 'hrm/documents', component: HRDocumentsComponent },
-            { path: 'hrm/access-control', component: AccessControlComponent },
-            { path: 'hrm/org-structure', component: OrgStructureComponent }
+            { path: 'media/news', component: NewsComponent, canActivate: [raisGuard] },
+            { path: 'uzgidro-news', component: UzgidroNewsComponent, canActivate: [raisGuard] },
+            { path: 'ges/:id', component: GesDetailComponent, canActivate: [raisGuard] }
         ]
     },
     { path: 'dashboard', component: ScDashboardComponent, canActivate: [authGuard] },

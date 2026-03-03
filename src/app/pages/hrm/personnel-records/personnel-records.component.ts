@@ -107,8 +107,7 @@ export class PersonnelRecordsComponent implements OnInit, OnDestroy {
     }
 
     private loadRecords(): void {
-        this.personnelRecordService
-            .getPersonnelRecords()
+        this.personnelRecordService.getPersonnelRecords()
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (data) => {
@@ -123,8 +122,7 @@ export class PersonnelRecordsComponent implements OnInit, OnDestroy {
     }
 
     private loadDepartments(): void {
-        this.departmentService
-            .getDepartments()
+        this.departmentService.getDepartments()
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (data) => {
@@ -135,8 +133,7 @@ export class PersonnelRecordsComponent implements OnInit, OnDestroy {
     }
 
     private loadPositions(): void {
-        this.positionService
-            .getPositions()
+        this.positionService.getPositions()
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (data) => {
@@ -147,12 +144,11 @@ export class PersonnelRecordsComponent implements OnInit, OnDestroy {
     }
 
     private loadEmployees(): void {
-        this.contactService
-            .getContacts()
+        this.contactService.getContacts()
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (data: Contact[]) => {
-                    this.employees = data.map((c) => ({ id: c.id, name: c.name }));
+                    this.employees = data.map(c => ({ id: c.id, name: c.name }));
                 },
                 error: (err) => console.error(err)
             });
@@ -177,11 +173,11 @@ export class PersonnelRecordsComponent implements OnInit, OnDestroy {
         this.submitted = false;
         this.recordForm.reset();
 
-        const selectedEmployee = this.employees.find((e) => e.id === record.employee_id);
-        const selectedDept = this.departments.find((d) => d.id === record.department_id);
-        const selectedPos = this.positions.find((p) => p.id === record.position_id);
-        const selectedContractType = this.contractTypes.find((c) => c.id === record.contract_type);
-        const selectedStatus = this.statuses.find((s) => s.id === record.status);
+        const selectedEmployee = this.employees.find(e => e.id === record.employee_id);
+        const selectedDept = this.departments.find(d => d.id === record.department_id);
+        const selectedPos = this.positions.find(p => p.id === record.position_id);
+        const selectedContractType = this.contractTypes.find(c => c.id === record.contract_type);
+        const selectedStatus = this.statuses.find(s => s.id === record.status);
 
         this.recordForm.patchValue({
             employee_id: selectedEmployee || null,
@@ -227,8 +223,7 @@ export class PersonnelRecordsComponent implements OnInit, OnDestroy {
             status: formValue.status?.id
         };
 
-        this.personnelRecordService
-            .createPersonnelRecord(payload)
+        this.personnelRecordService.createPersonnelRecord(payload)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
@@ -258,8 +253,7 @@ export class PersonnelRecordsComponent implements OnInit, OnDestroy {
             status: formValue.status?.id
         };
 
-        this.personnelRecordService
-            .updatePersonnelRecord(this.selectedRecord.id, payload)
+        this.personnelRecordService.updatePersonnelRecord(this.selectedRecord.id, payload)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
@@ -282,8 +276,7 @@ export class PersonnelRecordsComponent implements OnInit, OnDestroy {
     confirmDelete(): void {
         if (!this.selectedRecord) return;
 
-        this.personnelRecordService
-            .deletePersonnelRecord(this.selectedRecord.id)
+        this.personnelRecordService.deletePersonnelRecord(this.selectedRecord.id)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
@@ -301,24 +294,20 @@ export class PersonnelRecordsComponent implements OnInit, OnDestroy {
 
     getStatusSeverity(status: string): 'success' | 'info' | 'warn' | 'danger' | 'secondary' | 'contrast' {
         switch (status) {
-            case 'active':
-                return 'success';
-            case 'on_leave':
-                return 'warn';
-            case 'dismissed':
-                return 'danger';
-            default:
-                return 'info';
+            case 'active': return 'success';
+            case 'on_leave': return 'warn';
+            case 'dismissed': return 'danger';
+            default: return 'info';
         }
     }
 
     getStatusLabel(status: string): string {
-        const found = this.statuses.find((s) => s.id === status);
+        const found = this.statuses.find(s => s.id === status);
         return found ? found.name : status;
     }
 
     getContractTypeLabel(type: string): string {
-        const found = this.contractTypes.find((c) => c.id === type);
+        const found = this.contractTypes.find(c => c.id === type);
         return found ? found.name : type;
     }
 

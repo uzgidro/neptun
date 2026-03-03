@@ -10,34 +10,34 @@ export interface Salary {
 
     // Gross salary components
     base_salary: number;
-    rank_allowance: number; // Надбавка за ранг
-    education_allowance: number; // Надбавка за образование
-    seniority_allowance: number; // Надбавка за выслугу лет
-    other_allowances: number; // Прочие надбавки
-    bonuses: number; // Премии
-    overtime_pay: number; // Сверхурочные
-    absence_deduction: number; // Вычеты за пропуски
+    rank_allowance: number;        // Надбавка за ранг
+    education_allowance: number;   // Надбавка за образование
+    seniority_allowance: number;   // Надбавка за выслугу лет
+    other_allowances: number;      // Прочие надбавки
+    bonuses: number;               // Премии
+    overtime_pay: number;          // Сверхурочные
+    absence_deduction: number;     // Вычеты за пропуски
 
-    gross_salary: number; // Итого начислено
+    gross_salary: number;          // Итого начислено
 
     // Taxes and deductions (Uzbekistan rates)
-    income_tax: number; // НДФЛ 10%
-    social_fund: number; // Соц. фонд 0.5%
-    pension_fund: number; // Пенсионный фонд 3%
-    health_insurance: number; // Мед. страхование 2%
-    trade_union: number; // Профсоюз 1% (опционально)
-    other_deductions: number; // Другие удержания (кредиты, алименты)
+    income_tax: number;            // НДФЛ 10%
+    social_fund: number;           // Соц. фонд 0.5%
+    pension_fund: number;          // Пенсионный фонд 3%
+    health_insurance: number;      // Мед. страхование 2%
+    trade_union: number;           // Профсоюз 1% (опционально)
+    other_deductions: number;      // Другие удержания (кредиты, алименты)
 
-    total_deductions: number; // Всего удержаний
-    net_salary: number; // К выплате
+    total_deductions: number;      // Всего удержаний
+    net_salary: number;            // К выплате
 
     // Work time data
-    working_days: number; // Рабочих дней в месяце
-    worked_days: number; // Отработано дней
-    sick_days: number; // Больничные дни
-    vacation_days: number; // Отпускные дни
-    absent_days: number; // Дни отсутствия
-    overtime_hours: number; // Часов переработки
+    working_days: number;          // Рабочих дней в месяце
+    worked_days: number;           // Отработано дней
+    sick_days: number;             // Больничные дни
+    vacation_days: number;         // Отпускные дни
+    absent_days: number;           // Дни отсутствия
+    overtime_hours: number;        // Часов переработки
 
     status: SalaryStatus;
     calculated_at?: string;
@@ -128,19 +128,19 @@ export interface EmployeeDeduction {
 }
 
 export interface TaxRates {
-    income_tax: number; // 10% в Узбекистане
-    social_fund: number; // 0.5%
-    pension_fund: number; // 3%
+    income_tax: number;      // 10% в Узбекистане
+    social_fund: number;     // 0.5%
+    pension_fund: number;    // 3%
     health_insurance: number; // 2%
-    trade_union: number; // 1%
+    trade_union: number;     // 1%
 }
 
 export const DEFAULT_TAX_RATES: TaxRates = {
-    income_tax: 0.1, // 10%
-    social_fund: 0.005, // 0.5%
-    pension_fund: 0.03, // 3%
-    health_insurance: 0.02, // 2%
-    trade_union: 0.01 // 1%
+    income_tax: 0.10,        // 10%
+    social_fund: 0.005,      // 0.5%
+    pension_fund: 0.03,      // 3%
+    health_insurance: 0.02,  // 2%
+    trade_union: 0.01        // 1%
 };
 
 export interface SalaryReport {
@@ -160,6 +160,12 @@ export type SalaryStatus = 'draft' | 'calculated' | 'pending_approval' | 'approv
 export type BonusType = 'performance' | 'holiday' | 'quarterly' | 'annual' | 'one_time' | 'other';
 export type DeductionType = 'loan' | 'alimony' | 'fine' | 'advance' | 'other';
 export type ReportType = 'payroll_register' | 'tax_report' | 'social_fund_report' | 'payslip';
+
+// Type aliases used by HrmSalaryService
+export type SalaryPayload = SalaryCalculationInput;
+export type SalaryStructure = EmployeeSalaryStructure;
+export type SalaryDeduction = EmployeeDeduction;
+export type SalaryBonus = EmployeeBonus;
 
 export const SALARY_STATUSES: { value: SalaryStatus; label: string }[] = [
     { value: 'draft', label: 'Черновик' },

@@ -7,7 +7,7 @@ import { InputIcon } from 'primeng/inputicon';
 import { InputText } from 'primeng/inputtext';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-import { forkJoin, Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil, forkJoin, of, catchError } from 'rxjs';
 import { Tooltip } from 'primeng/tooltip';
 import { Tag } from 'primeng/tag';
 import { TabsModule } from 'primeng/tabs';
@@ -18,38 +18,56 @@ import { Textarea } from 'primeng/textarea';
 import { Select } from 'primeng/select';
 import { DatePicker } from 'primeng/datepicker';
 import { InputNumber } from 'primeng/inputnumber';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { RecruitingService } from '@/core/services/recruiting.service';
 import { DepartmentService } from '@/core/services/department.service';
 import { PositionService } from '@/core/services/position.service';
 import {
-    Candidate,
-    CANDIDATE_SOURCES,
-    CANDIDATE_STATUSES,
-    CandidateStatus,
-    EMPLOYMENT_TYPES,
-    Interview,
-    INTERVIEW_RECOMMENDATIONS,
-    INTERVIEW_TYPES,
-    JobOffer,
-    OFFER_STATUSES,
-    Onboarding,
-    ONBOARDING_CATEGORIES,
-    OnboardingStatus,
-    OnboardingTask,
-    RECRUITING_STAGES,
-    RecruitingStage,
-    ReferenceCheck,
     Vacancy,
-    VACANCY_PRIORITIES,
+    Candidate,
+    Interview,
+    JobOffer,
+    Onboarding,
+    OnboardingTask,
+    ReferenceCheck,
     VACANCY_STATUSES,
-    VacancyStatus
+    CANDIDATE_STATUSES,
+    EMPLOYMENT_TYPES,
+    VACANCY_PRIORITIES,
+    INTERVIEW_TYPES,
+    INTERVIEW_RECOMMENDATIONS,
+    CANDIDATE_SOURCES,
+    RECRUITING_STAGES,
+    VacancyStatus,
+    CandidateStatus,
+    OnboardingStatus,
+    RecruitingStage
 } from '@/core/interfaces/hrm/recruiting';
 
 @Component({
     selector: 'app-recruiting',
     standalone: true,
-    imports: [CommonModule, TableModule, ButtonDirective, IconField, InputIcon, InputText, ReactiveFormsModule, FormsModule, Tooltip, Tag, TabsModule, Dialog, ProgressBar, Rating, Textarea, Select, DatePicker, InputNumber, TranslateModule],
+    imports: [
+        CommonModule,
+        TableModule,
+        ButtonDirective,
+        IconField,
+        InputIcon,
+        InputText,
+        ReactiveFormsModule,
+        FormsModule,
+        Tooltip,
+        Tag,
+        TabsModule,
+        Dialog,
+        ProgressBar,
+        Rating,
+        Textarea,
+        Select,
+        DatePicker,
+        InputNumber,
+        TranslateModule
+    ],
     templateUrl: './recruiting.component.html',
     styleUrl: './recruiting.component.scss'
 })
@@ -73,8 +91,6 @@ export class RecruitingComponent implements OnInit, OnDestroy {
     displayReferenceDialog: boolean = false;
     displayRejectDialog: boolean = false;
     displayOnboardingDialog: boolean = false;
-    displayDeleteDialog: boolean = false;
-    displayApprovalDialog: boolean = false;
 
     // Выбранные объекты
     selectedVacancy: Vacancy | null = null;
@@ -106,13 +122,12 @@ export class RecruitingComponent implements OnInit, OnDestroy {
     vacancyPriorities = VACANCY_PRIORITIES;
     interviewTypes = INTERVIEW_TYPES;
     interviewRecommendations = INTERVIEW_RECOMMENDATIONS;
-    offerStatuses = OFFER_STATUSES;
-    onboardingCategories = ONBOARDING_CATEGORIES;
     candidateSources = CANDIDATE_SOURCES;
     recruitingStages = RECRUITING_STAGES;
 
     private fb = inject(FormBuilder);
     private messageService = inject(MessageService);
+    private translate = inject(TranslateService);
     private recruitingService = inject(RecruitingService);
     private departmentService = inject(DepartmentService);
     private positionService = inject(PositionService);
@@ -148,7 +163,7 @@ export class RecruitingComponent implements OnInit, OnDestroy {
 
         this.interviewForm = this.fb.group({
             interview_type: [null, Validators.required],
-            interviewer_id: [null, Validators.required],
+            interviewer_id: [null],
             scheduled_at: [null, Validators.required],
             duration_minutes: [60, [Validators.required, Validators.min(15)]],
             location: [''],
@@ -185,34 +200,42 @@ export class RecruitingComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.translateOptionLabels();
+        this.translate.onLangChange.pipe(takeUntil(this.destroy$)).subscribe(() => this.translateOptionLabels());
         this.loadData();
+    }
+
+    private translateOptionLabels(): void {
+        this.employmentTypes = EMPLOYMENT_TYPES.map((t) => ({ ...t, label: this.translate.instant(t.label) }));
+        this.vacancyStatuses = VACANCY_STATUSES.map((t) => ({ ...t, label: this.translate.instant(t.label) }));
+        this.vacancyPriorities = VACANCY_PRIORITIES.map((t) => ({ ...t, label: this.translate.instant(t.label) }));
+        this.candidateStatuses = CANDIDATE_STATUSES.map((t) => ({ ...t, label: this.translate.instant(t.label) }));
+        this.recruitingStages = RECRUITING_STAGES.map((t) => ({ ...t, label: this.translate.instant(t.label) }));
+        this.interviewTypes = INTERVIEW_TYPES.map((t) => ({ ...t, label: this.translate.instant(t.label) }));
+        this.interviewRecommendations = INTERVIEW_RECOMMENDATIONS.map((t) => ({ ...t, label: this.translate.instant(t.label) }));
+        this.candidateSources = CANDIDATE_SOURCES.map((t) => ({ ...t, label: this.translate.instant(t.label) }));
     }
 
     private loadData(): void {
         this.loading = true;
 
+        const logError = (label: string, err: any) => console.warn(`[Recruiting] Failed to load ${label}:`, err);
+
         forkJoin({
-            vacancies: this.recruitingService.getVacancies(),
-            candidates: this.recruitingService.getCandidates(),
-            onboardings: this.recruitingService.getOnboardings(),
-            departments: this.departmentService.getDepartments(),
-            positions: this.positionService.getPositions()
+            vacancies: this.recruitingService.getVacancies().pipe(catchError((err) => { logError('vacancies', err); return of([] as Vacancy[]); })),
+            candidates: this.recruitingService.getCandidates().pipe(catchError((err) => { logError('candidates', err); return of([] as Candidate[]); })),
+            onboardings: this.recruitingService.getOnboardings().pipe(catchError((err) => { logError('onboardings', err); return of([] as Onboarding[]); })),
+            departments: this.departmentService.getDepartments().pipe(catchError((err) => { logError('departments', err); return of([] as any[]); })),
+            positions: this.positionService.getPositions().pipe(catchError((err) => { logError('positions', err); return of([] as any[]); }))
         })
             .pipe(takeUntil(this.destroy$))
-            .subscribe({
-                next: (data) => {
-                    this.vacancies = data.vacancies;
-                    this.candidates = data.candidates;
-                    this.onboardings = data.onboardings;
-                    this.departments = data.departments.map((d) => ({ id: d.id, name: d.name }));
-                    this.positions = data.positions.map((p) => ({ id: p.id, name: p.name }));
-                    this.loading = false;
-                },
-                error: (err) => {
-                    console.error('Ошибка загрузки данных:', err);
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось загрузить данные' });
-                    this.loading = false;
-                }
+            .subscribe((data) => {
+                this.vacancies = data.vacancies;
+                this.candidates = data.candidates;
+                this.onboardings = data.onboardings;
+                this.departments = data.departments.map((d: any) => ({ id: d.id, name: d.name }));
+                this.positions = data.positions.map((p: any) => ({ id: p.id, name: p.name }));
+                this.loading = false;
             });
     }
 
@@ -284,12 +307,12 @@ export class RecruitingComponent implements OnInit, OnDestroy {
                             this.vacancies[index] = updated;
                             this.vacancies = [...this.vacancies];
                         }
-                        this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Вакансия обновлена' });
+                        this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('HRM.RECRUITING.VACANCY_UPDATED') });
                         this.displayVacancyDialog = false;
                     },
                     error: (err) => {
                         console.error('Ошибка обновления:', err);
-                        this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось обновить вакансию' });
+                        this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('HRM.RECRUITING.VACANCY_UPDATE_ERROR') });
                     }
                 });
         } else {
@@ -299,12 +322,12 @@ export class RecruitingComponent implements OnInit, OnDestroy {
                 .subscribe({
                     next: (created) => {
                         this.vacancies = [...this.vacancies, created];
-                        this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Вакансия создана' });
+                        this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('HRM.RECRUITING.VACANCY_CREATED') });
                         this.displayVacancyDialog = false;
                     },
                     error: (err) => {
                         console.error('Ошибка создания:', err);
-                        this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось создать вакансию' });
+                        this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('HRM.RECRUITING.VACANCY_CREATE_ERROR') });
                     }
                 });
         }
@@ -315,7 +338,7 @@ export class RecruitingComponent implements OnInit, OnDestroy {
         if (index !== -1) {
             this.vacancies[index].status = 'pending_approval';
             this.vacancies = [...this.vacancies];
-            this.messageService.add({ severity: 'info', summary: 'Отправлено', detail: 'Вакансия отправлена на согласование' });
+            this.messageService.add({ severity: 'info', summary: this.translate.instant('COMMON.INFO'), detail: this.translate.instant('HRM.RECRUITING.VACANCY_SUBMITTED') });
         }
     }
 
@@ -326,12 +349,12 @@ export class RecruitingComponent implements OnInit, OnDestroy {
                 ...this.vacancies[index],
                 status: 'approved',
                 approved_by: 3,
-                approved_by_name: 'Соколов Андрей',
+                approved_by_name: this.translate.instant('HRM.RECRUITING.MOCK.APPROVER_NAME'),
                 approved_date: new Date().toISOString().split('T')[0],
                 finance_approved: true
             };
             this.vacancies = [...this.vacancies];
-            this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Вакансия согласована' });
+            this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('HRM.RECRUITING.VACANCY_APPROVED') });
         }
     }
 
@@ -344,7 +367,7 @@ export class RecruitingComponent implements OnInit, OnDestroy {
                 published_at: new Date().toISOString().split('T')[0]
             };
             this.vacancies = [...this.vacancies];
-            this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Вакансия опубликована на портале госслужбы' });
+            this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('HRM.RECRUITING.VACANCY_PUBLISHED_PORTAL') });
         }
     }
 
@@ -357,7 +380,7 @@ export class RecruitingComponent implements OnInit, OnDestroy {
                 closed_at: new Date().toISOString().split('T')[0]
             };
             this.vacancies = [...this.vacancies];
-            this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Вакансия закрыта' });
+            this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('HRM.RECRUITING.VACANCY_CLOSED') });
         }
     }
 
@@ -408,12 +431,12 @@ export class RecruitingComponent implements OnInit, OnDestroy {
                         this.vacancies = [...this.vacancies];
                     }
 
-                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Кандидат добавлен' });
+                    this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('HRM.RECRUITING.CANDIDATE_CREATED') });
                     this.displayCandidateDialog = false;
                 },
                 error: (err) => {
                     console.error('Ошибка добавления кандидата:', err);
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось добавить кандидата' });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('HRM.RECRUITING.CANDIDATE_CREATE_ERROR') });
                 }
             });
     }
@@ -428,7 +451,7 @@ export class RecruitingComponent implements OnInit, OnDestroy {
                     status: 'screening',
                     stage: 'screening'
                 };
-                this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Кандидат прошел первичный отбор' });
+                this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('HRM.RECRUITING.SCREENING_PASSED') });
             } else {
                 this.selectedCandidate = candidate;
                 this.rejectForm.reset();
@@ -489,12 +512,12 @@ export class RecruitingComponent implements OnInit, OnDestroy {
                         this.candidates = [...this.candidates];
                     }
 
-                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Собеседование запланировано' });
+                    this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('HRM.RECRUITING.INTERVIEW_SCHEDULED') });
                     this.displayInterviewDialog = false;
                 },
                 error: (err) => {
                     console.error('Ошибка планирования собеседования:', err);
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось запланировать собеседование' });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('HRM.RECRUITING.INTERVIEW_SCHEDULE_ERROR') });
                 }
             });
     }
@@ -539,7 +562,7 @@ export class RecruitingComponent implements OnInit, OnDestroy {
             }
         }
 
-        this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Обратная связь сохранена' });
+        this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('HRM.RECRUITING.FEEDBACK_SAVED') });
         this.displayInterviewFeedbackDialog = false;
     }
 
@@ -586,7 +609,7 @@ export class RecruitingComponent implements OnInit, OnDestroy {
             this.candidates = [...this.candidates];
         }
 
-        this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Рекомендация добавлена' });
+        this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('HRM.RECRUITING.REFERENCE_ADDED') });
         this.displayReferenceDialog = false;
     }
 
@@ -598,13 +621,13 @@ export class RecruitingComponent implements OnInit, OnDestroy {
                 this.candidates[candidateIndex].reference_checks![refIndex] = {
                     ...this.candidates[candidateIndex].reference_checks![refIndex],
                     status: 'completed',
-                    feedback: 'Положительный отзыв',
+                    feedback: this.translate.instant('HRM.RECRUITING.MOCK.POSITIVE_FEEDBACK'),
                     rating: 4,
                     would_rehire: true,
                     completed_at: new Date().toISOString()
                 };
                 this.candidates = [...this.candidates];
-                this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Проверка рекомендации завершена' });
+                this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('HRM.RECRUITING.REFERENCE_VERIFIED') });
             }
         }
     }
@@ -659,12 +682,12 @@ export class RecruitingComponent implements OnInit, OnDestroy {
                         this.candidates = [...this.candidates];
                     }
 
-                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Оффер отправлен кандидату' });
+                    this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('HRM.RECRUITING.OFFER_SENT') });
                     this.displayOfferDialog = false;
                 },
                 error: (err) => {
                     console.error('Ошибка отправки оффера:', err);
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось отправить оффер' });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('HRM.RECRUITING.OFFER_SEND_ERROR') });
                 }
             });
     }
@@ -676,7 +699,7 @@ export class RecruitingComponent implements OnInit, OnDestroy {
             this.candidates[index].offer!.responded_at = new Date().toISOString().split('T')[0];
             this.candidates[index].status = 'offer_accepted';
             this.candidates = [...this.candidates];
-            this.messageService.add({ severity: 'success', summary: 'Отлично!', detail: 'Кандидат принял предложение' });
+            this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('HRM.RECRUITING.OFFER_ACCEPTED') });
         }
     }
 
@@ -706,15 +729,22 @@ export class RecruitingComponent implements OnInit, OnDestroy {
                 start_date: candidate.offer?.start_date || new Date().toISOString().split('T')[0],
                 status: 'not_started',
                 tasks: [
-                    { id: 1, title: 'Оформление документов', category: 'documents', status: 'pending', due_date: candidate.offer?.start_date },
-                    { id: 2, title: 'Создание учетной записи email', category: 'it_setup', status: 'pending' },
-                    { id: 3, title: 'Настройка доступа к системам', category: 'it_setup', status: 'pending' },
-                    { id: 4, title: 'Вводное обучение', category: 'training', status: 'pending' },
-                    { id: 5, title: 'Знакомство с командой', category: 'introduction', status: 'pending' },
-                    { id: 6, title: 'Ознакомление с политиками компании', category: 'compliance', status: 'pending' }
+                    { id: 1, title: this.translate.instant('HRM.RECRUITING.MOCK.TASK_PROCESS_DOCUMENTS'), category: 'documents', status: 'pending', due_date: candidate.offer?.start_date },
+                    { id: 2, title: this.translate.instant('HRM.RECRUITING.MOCK.TASK_CREATE_EMAIL'), category: 'it_setup', status: 'pending' },
+                    { id: 3, title: this.translate.instant('HRM.RECRUITING.MOCK.TASK_SETUP_ACCESS'), category: 'it_setup', status: 'pending' },
+                    { id: 4, title: this.translate.instant('HRM.RECRUITING.MOCK.TASK_INTRO_TRAINING'), category: 'training', status: 'pending' },
+                    { id: 5, title: this.translate.instant('HRM.RECRUITING.MOCK.TASK_MEET_TEAM'), category: 'introduction', status: 'pending' },
+                    { id: 6, title: this.translate.instant('HRM.RECRUITING.MOCK.TASK_COMPANY_POLICIES'), category: 'compliance', status: 'pending' }
                 ],
                 documents_submitted: [],
-                documents_pending: ['Паспорт', 'ИНН', 'СНИЛС', 'Трудовая книжка', 'Фото 3x4', 'Диплом'],
+                documents_pending: [
+                    this.translate.instant('HRM.RECRUITING.MOCK.DOC_PASSPORT'),
+                    this.translate.instant('HRM.RECRUITING.MOCK.DOC_INN'),
+                    this.translate.instant('HRM.RECRUITING.MOCK.DOC_SNILS'),
+                    this.translate.instant('HRM.RECRUITING.MOCK.DOC_WORK_BOOK'),
+                    this.translate.instant('HRM.RECRUITING.MOCK.DOC_PHOTO'),
+                    this.translate.instant('HRM.RECRUITING.MOCK.DOC_DIPLOMA')
+                ],
                 overall_progress: 0
             };
 
@@ -733,7 +763,7 @@ export class RecruitingComponent implements OnInit, OnDestroy {
             }
 
             this.candidates = [...this.candidates];
-            this.messageService.add({ severity: 'success', summary: 'Поздравляем!', detail: 'Сотрудник успешно принят на работу' });
+            this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.CONGRATULATIONS'), detail: this.translate.instant('HRM.RECRUITING.HIRED') });
         }
     }
 
@@ -743,11 +773,11 @@ export class RecruitingComponent implements OnInit, OnDestroy {
             this.onboardings[index] = {
                 ...this.onboardings[index],
                 mentor_id: 7,
-                mentor_name: 'Волкова Ольга Николаевна',
+                mentor_name: this.translate.instant('HRM.RECRUITING.MOCK.MENTOR_NAME'),
                 status: 'in_progress'
             };
             this.onboardings = [...this.onboardings];
-            this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Наставник назначен' });
+            this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('HRM.RECRUITING.MENTOR_ASSIGNED') });
         }
     }
 
@@ -768,7 +798,7 @@ export class RecruitingComponent implements OnInit, OnDestroy {
                 this.onboardings[onboardingIndex].overall_progress = Math.round((completedTasks / totalTasks) * 100);
 
                 this.onboardings = [...this.onboardings];
-                this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Задача выполнена' });
+                this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('HRM.RECRUITING.TASK_COMPLETED') });
             }
         }
     }
@@ -797,7 +827,7 @@ export class RecruitingComponent implements OnInit, OnDestroy {
                 rejection_date: new Date().toISOString().split('T')[0]
             };
             this.candidates = [...this.candidates];
-            this.messageService.add({ severity: 'info', summary: 'Готово', detail: 'Кандидат отклонён, уведомление отправлено' });
+            this.messageService.add({ severity: 'info', summary: this.translate.instant('COMMON.INFO'), detail: this.translate.instant('HRM.RECRUITING.CANDIDATE_REJECTED') });
         }
 
         this.displayRejectDialog = false;
@@ -888,8 +918,20 @@ export class RecruitingComponent implements OnInit, OnDestroy {
         return found ? found.label : status;
     }
 
-    getVacanciesForSelect() {
-        return this.vacancies.filter((v) => v.status === 'open').map((v) => ({ id: v.id, name: v.title }));
+    getSourceLabel(source: string): string {
+        const found = this.candidateSources.find((s) => s.value === source);
+        return found ? found.label : source;
+    }
+
+    private _cachedVacanciesForSelect: { id: number; name: string }[] = [];
+    private _lastVacanciesRef: Vacancy[] | null = null;
+
+    get vacanciesForSelect(): { id: number; name: string }[] {
+        if (this._lastVacanciesRef !== this.vacancies) {
+            this._lastVacanciesRef = this.vacancies;
+            this._cachedVacanciesForSelect = this.vacancies.filter((v) => v.status === 'open').map((v) => ({ id: v.id, name: v.title }));
+        }
+        return this._cachedVacanciesForSelect;
     }
 
     getStageProgress(stage: RecruitingStage): number {

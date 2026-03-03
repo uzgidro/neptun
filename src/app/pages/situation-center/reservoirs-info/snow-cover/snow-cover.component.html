@@ -1,0 +1,195 @@
+<div class="snow-cover-page">
+    <!-- Toolbar -->
+    <div class="toolbar">
+        <div class="toolbar-left">
+            <h3>{{ 'SNOW_COVER.TITLE' | translate }}</h3>
+        </div>
+        <div class="toolbar-right">
+            <div class="date-picker-wrap">
+                <app-date (dateChange)="onDateChange($event)"></app-date>
+            </div>
+            <p-button
+                icon="pi pi-refresh"
+                [loading]="loading"
+                severity="secondary"
+                [rounded]="true"
+                (onClick)="loadData()"
+                [pTooltip]="'SNOW_COVER.TITLE' | translate">
+            </p-button>
+        </div>
+    </div>
+
+    @if (loading && !data) {
+        <div class="loading-container">
+            <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+        </div>
+    }
+
+    @if (data) {
+        <!-- Summary Cards -->
+        <div class="summary-cards-row">
+            <div class="summary-card today-card">
+                <div class="card-content">
+                    <div class="card-icon today-icon">
+                        <i class="pi pi-sun"></i>
+                    </div>
+                    <div class="card-info">
+                        <span class="card-label">{{ 'SNOW_COVER.TODAY' | translate }}</span>
+                        <span class="card-sublabel">{{ data.today.date }}</span>
+                        <span class="card-value text-blue-500">
+                            @if (data.today.overall_cover !== null) {
+                                {{ data.today.overall_cover }}%
+                            } @else {
+                                —
+                            }
+                        </span>
+                        <span class="card-desc">{{ 'SNOW_COVER.AVG_COVER' | translate }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="summary-card yesterday-card">
+                <div class="card-content">
+                    <div class="card-icon yesterday-icon">
+                        <i class="pi pi-history"></i>
+                    </div>
+                    <div class="card-info">
+                        <span class="card-label">{{ 'SNOW_COVER.YESTERDAY' | translate }}</span>
+                        <span class="card-sublabel">{{ data.yesterday.date }}</span>
+                        <span class="card-value text-orange-500">
+                            @if (data.yesterday.overall_cover !== null) {
+                                {{ data.yesterday.overall_cover }}%
+                            } @else {
+                                —
+                            }
+                        </span>
+                        <span class="card-desc">{{ 'SNOW_COVER.AVG_COVER' | translate }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="summary-card year-ago-card">
+                <div class="card-content">
+                    <div class="card-icon year-ago-icon">
+                        <i class="pi pi-calendar"></i>
+                    </div>
+                    <div class="card-info">
+                        <span class="card-label">{{ 'SNOW_COVER.YEAR_AGO' | translate }}</span>
+                        <span class="card-sublabel">{{ data.year_ago.date }}</span>
+                        <span class="card-value text-gray-500">
+                            @if (data.year_ago.overall_cover !== null) {
+                                {{ data.year_ago.overall_cover }}%
+                            } @else {
+                                —
+                            }
+                        </span>
+                        <span class="card-desc">{{ 'SNOW_COVER.AVG_COVER' | translate }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bar Chart -->
+        <div class="chart-section">
+            <div class="chart-header">
+                <h4>{{ 'SNOW_COVER.COVER' | translate }}</h4>
+            </div>
+            <div class="chart-body" [style.height]="chartHeight">
+                <p-chart
+                    type="bar"
+                    [data]="chartData"
+                    [options]="chartOptions"
+                    height="100%"
+                ></p-chart>
+            </div>
+        </div>
+
+        <!-- Zones Line Chart -->
+        @if (zonesChartData.labels?.length) {
+            <div class="chart-section">
+                <div class="chart-header">
+                    <h4>{{ 'SNOW_COVER.ZONES' | translate }}</h4>
+                </div>
+                <div class="chart-body" style="height: 450px">
+                    <p-chart
+                        type="line"
+                        [data]="zonesChartData"
+                        [options]="zonesChartOptions"
+                        height="100%"
+                    ></p-chart>
+                </div>
+            </div>
+        }
+
+        <!-- Table -->
+        <div class="table-section">
+            <p-table
+                [value]="data.today.items"
+                [rowHover]="true"
+                [rows]="50"
+                styleClass="p-datatable-sm p-datatable-gridlines">
+                <ng-template #header>
+                    <tr>
+                        <th>{{ 'SNOW_COVER.ORGANIZATION' | translate }}</th>
+                        <th class="text-center">{{ 'SNOW_COVER.TODAY' | translate }}, %</th>
+                        <th class="text-center">{{ 'SNOW_COVER.YESTERDAY' | translate }}, %</th>
+                        <th class="text-center">{{ 'SNOW_COVER.YEAR_AGO' | translate }}, %</th>
+                        <th class="text-center">{{ 'SNOW_COVER.DELTA' | translate }}</th>
+                        <th class="text-center">{{ 'SNOW_COVER.RESOURCE_DATE' | translate }}</th>
+                    </tr>
+                </ng-template>
+                <ng-template #body let-item>
+                    <tr>
+                        <td>{{ item.organization_name }}</td>
+                        <td class="text-center">
+                            @if (item.overall_cover !== null) {
+                                <span class="cover-value">{{ item.overall_cover }}%</span>
+                            } @else {
+                                <span class="no-data">—</span>
+                            }
+                        </td>
+                        <td class="text-center">
+                            @if (getYesterdayCover(item.organization_id) !== null) {
+                                {{ getYesterdayCover(item.organization_id) }}%
+                            } @else {
+                                <span class="no-data">—</span>
+                            }
+                        </td>
+                        <td class="text-center">
+                            @if (getYearAgoCover(item.organization_id) !== null) {
+                                {{ getYearAgoCover(item.organization_id) }}%
+                            } @else {
+                                <span class="no-data">—</span>
+                            }
+                        </td>
+                        <td class="text-center">
+                            @if (getDelta(item) !== null) {
+                                <span [ngClass]="{
+                                    'delta-positive': getDelta(item)! > 0,
+                                    'delta-negative': getDelta(item)! < 0,
+                                    'delta-zero': getDelta(item) === 0
+                                }">
+                                    {{ getDelta(item)! > 0 ? '+' : '' }}{{ getDelta(item) }}%
+                                </span>
+                            } @else {
+                                <span class="no-data">—</span>
+                            }
+                        </td>
+                        <td class="text-center">
+                            @if (getResourceDate(item.organization_id)) {
+                                {{ getResourceDate(item.organization_id) }}
+                            } @else {
+                                <span class="no-data">—</span>
+                            }
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template #emptymessage>
+                    <tr>
+                        <td colspan="6" class="text-center">{{ 'SNOW_COVER.NO_DATA' | translate }}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    }
+</div>

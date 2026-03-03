@@ -58,8 +58,8 @@ export class TrainingComponent implements OnInit, OnDestroy {
     selectedTraining: Training | null = null;
     trainingForm: FormGroup;
 
-    trainingTypes = TRAINING_TYPES.map((t) => ({ id: t.value, name: t.label }));
-    trainingStatuses = TRAINING_STATUSES.map((s) => ({ id: s.value, name: s.label }));
+    trainingTypes = TRAINING_TYPES.map(t => ({ id: t.value, name: t.label }));
+    trainingStatuses = TRAINING_STATUSES.map(s => ({ id: s.value, name: s.label }));
 
     private trainingService = inject(TrainingService);
     private fb = inject(FormBuilder);
@@ -89,8 +89,7 @@ export class TrainingComponent implements OnInit, OnDestroy {
     }
 
     private loadTrainings(): void {
-        this.trainingService
-            .getTrainings()
+        this.trainingService.getTrainings()
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (data) => {
@@ -123,7 +122,7 @@ export class TrainingComponent implements OnInit, OnDestroy {
         this.submitted = false;
         this.trainingForm.reset();
 
-        const selectedType = this.trainingTypes.find((t) => t.id === training.training_type);
+        const selectedType = this.trainingTypes.find(t => t.id === training.training_type);
 
         this.trainingForm.patchValue({
             title: training.title,
@@ -177,8 +176,7 @@ export class TrainingComponent implements OnInit, OnDestroy {
             certificate_provided: formValue.certificate_provided
         };
 
-        this.trainingService
-            .createTraining(payload)
+        this.trainingService.createTraining(payload)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
@@ -212,8 +210,7 @@ export class TrainingComponent implements OnInit, OnDestroy {
             certificate_provided: formValue.certificate_provided
         };
 
-        this.trainingService
-            .updateTraining(this.selectedTraining.id, payload)
+        this.trainingService.updateTraining(this.selectedTraining.id, payload)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
@@ -236,8 +233,7 @@ export class TrainingComponent implements OnInit, OnDestroy {
     confirmDelete(): void {
         if (!this.selectedTraining) return;
 
-        this.trainingService
-            .deleteTraining(this.selectedTraining.id)
+        this.trainingService.deleteTraining(this.selectedTraining.id)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
@@ -255,26 +251,21 @@ export class TrainingComponent implements OnInit, OnDestroy {
 
     getStatusSeverity(status: string): 'success' | 'info' | 'warn' | 'danger' | 'secondary' | 'contrast' {
         switch (status) {
-            case 'completed':
-                return 'success';
-            case 'in_progress':
-                return 'info';
-            case 'planned':
-                return 'warn';
-            case 'cancelled':
-                return 'danger';
-            default:
-                return 'secondary';
+            case 'completed': return 'success';
+            case 'in_progress': return 'info';
+            case 'planned': return 'warn';
+            case 'cancelled': return 'danger';
+            default: return 'secondary';
         }
     }
 
     getStatusLabel(status: string): string {
-        const found = this.trainingStatuses.find((s) => s.id === status);
+        const found = this.trainingStatuses.find(s => s.id === status);
         return found ? found.name : status;
     }
 
     getTypeLabel(type: string): string {
-        const found = this.trainingTypes.find((t) => t.id === type);
+        const found = this.trainingTypes.find(t => t.id === type);
         return found ? found.name : type;
     }
 

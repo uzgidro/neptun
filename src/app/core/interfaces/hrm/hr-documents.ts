@@ -104,44 +104,44 @@ export interface DocumentStats {
 
 // Types
 export type DocumentType =
-    | 'employment_contract' // Трудовой договор
-    | 'contract_amendment' // Дополнительное соглашение
-    | 'order' // Приказ
-    | 'statement' // Заявление
-    | 'certificate' // Справка
-    | 'memo' // Служебная записка
-    | 'act' // Акт
-    | 'protocol' // Протокол
-    | 'regulation' // Положение
-    | 'instruction' // Инструкция
-    | 'report' // Отчёт
-    | 'other'; // Прочее
+    | 'employment_contract'    // Трудовой договор
+    | 'contract_amendment'     // Дополнительное соглашение
+    | 'order'                  // Приказ
+    | 'statement'              // Заявление
+    | 'certificate'            // Справка
+    | 'memo'                   // Служебная записка
+    | 'act'                    // Акт
+    | 'protocol'               // Протокол
+    | 'regulation'             // Положение
+    | 'instruction'            // Инструкция
+    | 'report'                 // Отчёт
+    | 'other';                 // Прочее
 
 export type DocumentCategory =
-    | 'personnel' // Кадровые
-    | 'financial' // Финансовые
-    | 'administrative' // Административные
-    | 'regulatory' // Нормативные
-    | 'organizational'; // Организационные
+    | 'personnel'              // Кадровые
+    | 'financial'              // Финансовые
+    | 'administrative'         // Административные
+    | 'regulatory'             // Нормативные
+    | 'organizational';        // Организационные
 
 export type DocumentStatus =
-    | 'draft' // Черновик
-    | 'pending_signature' // На подписании
-    | 'signed' // Подписан
-    | 'rejected' // Отклонён
-    | 'expired' // Истёк срок
-    | 'archived'; // В архиве
+    | 'draft'                  // Черновик
+    | 'pending_signature'      // На подписании
+    | 'signed'                 // Подписан
+    | 'rejected'               // Отклонён
+    | 'expired'                // Истёк срок
+    | 'archived';              // В архиве
 
 export type SignatureStatus =
-    | 'pending' // Ожидает подписи
-    | 'signed' // Подписано
-    | 'rejected'; // Отклонено
+    | 'pending'                // Ожидает подписи
+    | 'signed'                 // Подписано
+    | 'rejected';              // Отклонено
 
 export type RequestStatus =
-    | 'pending' // На рассмотрении
-    | 'in_progress' // В работе
-    | 'completed' // Выполнено
-    | 'rejected'; // Отклонено
+    | 'pending'                // На рассмотрении
+    | 'in_progress'            // В работе
+    | 'completed'              // Выполнено
+    | 'rejected';              // Отклонено
 
 // Constants
 export const DOCUMENT_TYPES: { value: DocumentType; label: string; icon: string }[] = [

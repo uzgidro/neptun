@@ -95,9 +95,19 @@ export class MenuComponent implements OnInit {
                                         routerLink: ['/reservoir-summary/pdf']
                                     },
                                     {
+                                        label: this.t('MENU.RESERVOIR_SUMMARY_HOURLY'),
+                                        role: ['rais', 'sc'],
+                                        routerLink: ['/reservoir-summary-hourly']
+                                    },
+                                    {
                                         label: this.t('MENU.HYDRAULIC_STRUCTURES'),
                                         role: ['rais', 'sc'],
                                         routerLink: ['/reservoir-device']
+                                    },
+                                    {
+                                        label: this.t('MENU.SNOW_COVER'),
+                                        role: ['rais', 'sc'],
+                                        routerLink: ['/snow-cover']
                                     }
                                 ]
                             },
@@ -105,6 +115,12 @@ export class MenuComponent implements OnInit {
                                 label: this.t('MENU.OTHER_INFO'),
                                 role: ['rais', 'sc'],
                                 items: [
+                                    {
+                                        label: this.t('MENU.EARTHQUAKE'),
+                                        role: ['rais', 'sc'],
+                                        url: 'https://soep.uz/',
+                                        target: '_blank'
+                                    },
                                     {
                                         label: this.t('MENU.INCIDENTS'),
                                         role: ['rais', 'sc'],
@@ -123,26 +139,27 @@ export class MenuComponent implements OnInit {
                     },
                     {
                         label: this.t('MENU.HRM'),
+                        role: ['hrm_admin', 'hrm_manager', 'hrm_employee', 'rais'],
                         items: [
-                            { label: this.t('MENU.HRM_DASHBOARD'), routerLink: ['/hrm/dashboard'] },
-                            { label: this.t('MENU.MY_CABINET'), routerLink: ['/hrm/my-cabinet'] },
-                            { label: this.t('MENU.PERSONNEL_RECORDS'), routerLink: ['/hrm/personnel-records'] },
-                            { label: this.t('MENU.EMPLOYEES'), routerLink: ['/employees'] },
-                            { label: this.t('MENU.POSITIONS'), routerLink: ['/positions'] },
-                            { label: this.t('MENU.DEPARTMENTS'), routerLink: ['/departments'] },
-                            { label: this.t('MENU.ORG_STRUCTURE'), routerLink: ['/hrm/org-structure'] },
-                            { label: this.t('MENU.VACATIONS'), routerLink: ['/hrm/vacations'] },
-                            { label: this.t('MENU.SALARY_MANAGEMENT'), routerLink: ['/hrm/salary'] },
-                            { label: this.t('MENU.RECRUITING'), routerLink: ['/hrm/recruiting'] },
-                            { label: this.t('MENU.TRAINING'), routerLink: ['/hrm/training'] },
-                            { label: this.t('MENU.COMPETENCY_ASSESSMENT'), routerLink: ['/hrm/competency'] },
-                            { label: this.t('MENU.PERFORMANCE_MANAGEMENT'), routerLink: ['/hrm/performance'] },
-                            { label: this.t('MENU.ANALYTICS'), routerLink: ['/hrm/analytics'] },
-                            { label: this.t('MENU.TIMESHEET'), routerLink: ['/hrm/timesheet'] },
-                            { label: this.t('MENU.HR_DOCUMENTS'), routerLink: ['/hrm/documents'] },
-                            { label: this.t('MENU.ACCESS_CONTROL'), routerLink: ['/hrm/access-control'] },
-                            { label: this.t('MENU.USERS'), routerLink: ['/users'] },
-                            { label: this.t('MENU.ROLES'), routerLink: ['/roles'] }
+                            { label: this.t('HRM.MENU.DASHBOARD'), icon: 'pi pi-home', role: ['hrm_admin', 'hrm_manager', 'hrm_employee', 'rais'], routerLink: ['/hrm/dashboard'] },
+                            { label: this.t('HRM.MENU.MY_CABINET'), icon: 'pi pi-user', routerLink: ['/hrm/my-cabinet'] },
+                            { label: this.t('HRM.MENU.PERSONNEL_RECORDS'), role: ['hrm_admin', 'hrm_manager', 'hrm_employee', 'rais'], routerLink: ['/hrm/personnel-records'] },
+                            { label: this.t('HRM.MENU.VACATION_MANAGEMENT'), role: ['hrm_admin', 'hrm_manager', 'hrm_employee', 'rais'], routerLink: ['/hrm/vacations'] },
+                            { label: this.t('HRM.MENU.SALARY_MANAGEMENT'), role: ['hrm_admin', 'hrm_manager', 'hrm_employee', 'rais'], routerLink: ['/hrm/salary'] },
+                            { label: this.t('HRM.MENU.RECRUITING'), role: ['hrm_admin', 'hrm_manager', 'hrm_employee', 'rais'], routerLink: ['/hrm/recruiting'] },
+                            { label: this.t('HRM.MENU.TRAINING'), role: ['hrm_admin', 'hrm_manager', 'hrm_employee', 'rais'], routerLink: ['/hrm/training'] },
+                            { label: this.t('HRM.MENU.COMPETENCY_ASSESSMENT'), role: ['hrm_admin', 'hrm_manager', 'hrm_employee', 'rais'], routerLink: ['/hrm/competency'] },
+                            { label: this.t('HRM.MENU.PERFORMANCE_MANAGEMENT'), role: ['hrm_admin', 'hrm_manager', 'hrm_employee', 'rais'], routerLink: ['/hrm/performance'] },
+                            { label: this.t('HRM.MENU.ANALYTICS'), role: ['hrm_admin', 'hrm_manager', 'hrm_employee', 'rais'], routerLink: ['/hrm/analytics'] },
+                            { label: this.t('HRM.MENU.TIMESHEET'), icon: 'pi pi-calendar', role: ['hrm_admin', 'hrm_manager', 'hrm_employee', 'rais'], routerLink: ['/hrm/timesheet'] },
+                            { label: this.t('HRM.MENU.HR_DOCUMENTS'), icon: 'pi pi-file', role: ['hrm_admin', 'hrm_manager', 'hrm_employee', 'rais'], routerLink: ['/hrm/documents'] },
+                            { label: this.t('HRM.MENU.ACCESS_CONTROL'), icon: 'pi pi-lock', role: ['hrm_admin', 'hrm_manager'], routerLink: ['/hrm/access-control'] },
+                            { label: this.t('HRM.MENU.ORG_STRUCTURE'), icon: 'pi pi-sitemap', role: ['hrm_admin', 'hrm_manager', 'hrm_employee', 'rais'], routerLink: ['/hrm/org-structure'] },
+                            { label: this.t('MENU.EMPLOYEES'), role: ['hrm_admin', 'hrm_manager'], routerLink: ['/employees'] },
+                            { label: this.t('MENU.POSITIONS'), role: ['hrm_admin', 'hrm_manager'], routerLink: ['/positions'] },
+                            { label: this.t('MENU.DEPARTMENTS'), role: ['hrm_admin', 'hrm_manager'], routerLink: ['/departments'] },
+                            { label: this.t('MENU.USERS'), role: ['admin'], routerLink: ['/users'] },
+                            { label: this.t('MENU.ROLES'), role: ['admin'], routerLink: ['/roles'] }
                         ]
                     },
                     {
@@ -177,10 +194,6 @@ export class MenuComponent implements OnInit {
                         label: this.t('MENU.PLANNING'),
                         role: ['rais', 'assistant', 'sc'],
                         items: [
-                            // { label: 'Встречи', role: ['rais'], routerLink: ['/planning'], queryParams: { type: 'meeting' }, routerLinkActiveOptions: { queryParams: 'exact' } },
-                            // { label: 'Созвоны', role: ['rais'], routerLink: ['/planning'], queryParams: { type: 'call' }, routerLinkActiveOptions: { queryParams: 'exact' } },
-                            // { label: 'Переговоры', role: ['rais'], routerLink: ['/planning'], queryParams: { type: 'negotiation' }, routerLinkActiveOptions: { queryParams: 'exact' } },
-                            // { label: 'ВКС', role: ['rais'], routerLink: ['/planning'], queryParams: { type: 'vcs' }, routerLinkActiveOptions: { queryParams: 'exact' } },
                             { label: this.t('MENU.PLANNING_EVENTS'), role: ['rais', 'assistant'], routerLink: ['/planning/events'] },
                             { label: this.t('MENU.CHAIRMAN_RECEPTION'), role: ['rais', 'assistant', 'sc'], routerLink: ['/planning/reception'] }
                         ]
@@ -215,7 +228,7 @@ export class MenuComponent implements OnInit {
                         ]
                     },
                     { label: this.t('MENU.CALLS'), role: ['rais'], routerLink: ['/calls'] },
-                    { label: this.t('MENU.PRESS_SERVICE'), routerLink: ['/company-news'] }
+                    { label: this.t('MENU.PRESS_SERVICE'), routerLink: ['/uzgidro-news'] }
                 ]
             }
         ];

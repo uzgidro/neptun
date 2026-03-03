@@ -17,9 +17,8 @@ import { SelectComponent } from '@/layout/component/dialog/select/select.compone
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
 import { DeleteConfirmationComponent } from '@/layout/component/dialog/delete-confirmation/delete-confirmation.component';
 import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
-import { TextareaComponent } from '@/layout/component/dialog/textarea/textarea.component';
-import { PerformanceGoal, GoalPayload, GOAL_STATUSES, REVIEW_TYPES } from '@/core/interfaces/hrm/performance';
-import { PerformanceService } from '@/core/services/performance.service';
+import { GOAL_STATUSES, GoalPayload, PerformanceGoal, REVIEW_TYPES } from '@/core/interfaces/hrm/performance';
+import { PerformanceService } from '@/core/services/hrm/performance.service';
 import { ContactService } from '@/core/services/contact.service';
 import { Contact } from '@/core/interfaces/contact';
 
@@ -44,7 +43,6 @@ import { Contact } from '@/core/interfaces/contact';
         Tag,
         ProgressBarModule,
         DialogComponent,
-        TextareaComponent,
         TranslateModule
     ],
     templateUrl: './performance-management.component.html',
@@ -77,12 +75,9 @@ export class PerformanceManagementComponent implements OnInit, OnDestroy {
         this.goalForm = this.fb.group({
             employee_id: [null, Validators.required],
             title: ['', Validators.required],
-            description: ['', Validators.required],
-            metric: ['', Validators.required],
-            target_value: ['', Validators.required],
-            weight: [100, [Validators.required, Validators.min(1), Validators.max(100)]],
-            start_date: [null, Validators.required],
-            due_date: [null, Validators.required]
+            target_value: [null],
+            weight: [1.0, [Validators.required, Validators.min(0), Validators.max(1)]],
+            due_date: [null]
         });
     }
 
@@ -143,11 +138,8 @@ export class PerformanceManagementComponent implements OnInit, OnDestroy {
         this.goalForm.patchValue({
             employee_id: selectedEmployee || null,
             title: goal.title,
-            description: goal.description,
-            metric: goal.metric,
             target_value: goal.target_value,
             weight: goal.weight,
-            start_date: goal.start_date ? new Date(goal.start_date) : null,
             due_date: goal.due_date ? new Date(goal.due_date) : null
         });
 
@@ -176,11 +168,8 @@ export class PerformanceManagementComponent implements OnInit, OnDestroy {
         const payload: GoalPayload = {
             employee_id: formValue.employee_id?.id,
             title: formValue.title,
-            description: formValue.description,
-            metric: formValue.metric,
             target_value: formValue.target_value,
             weight: formValue.weight,
-            start_date: formValue.start_date ? this.dateToYMD(formValue.start_date) : undefined,
             due_date: formValue.due_date ? this.dateToYMD(formValue.due_date) : undefined
         };
 
@@ -207,11 +196,8 @@ export class PerformanceManagementComponent implements OnInit, OnDestroy {
         const payload: GoalPayload = {
             employee_id: formValue.employee_id?.id,
             title: formValue.title,
-            description: formValue.description,
-            metric: formValue.metric,
             target_value: formValue.target_value,
             weight: formValue.weight,
-            start_date: formValue.start_date ? this.dateToYMD(formValue.start_date) : undefined,
             due_date: formValue.due_date ? this.dateToYMD(formValue.due_date) : undefined
         };
 

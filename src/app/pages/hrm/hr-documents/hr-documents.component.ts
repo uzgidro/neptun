@@ -11,15 +11,27 @@ import { InputText } from 'primeng/inputtext';
 import { Textarea } from 'primeng/textarea';
 import { TabsModule } from 'primeng/tabs';
 import { ConfirmDialog } from 'primeng/confirmdialog';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { MessageService, ConfirmationService } from 'primeng/api';
 import { InputGroup } from 'primeng/inputgroup';
 import { InputGroupAddon } from 'primeng/inputgroupaddon';
-import { forkJoin, Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil, forkJoin } from 'rxjs';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { HRDocumentsService } from '@/core/services/hr-documents.service';
 import { DepartmentService } from '@/core/services/department.service';
 import { ContactService } from '@/core/services/contact.service';
-import { DOCUMENT_CATEGORIES, DOCUMENT_STATUSES, DOCUMENT_TYPES, DocumentCategory, DocumentRequest, DocumentStats, DocumentStatus, DocumentType, HRDocument, REQUEST_STATUSES, RequestStatus } from '@/core/interfaces/hrm/hr-documents';
+import {
+    HRDocument,
+    DocumentRequest,
+    DocumentStats,
+    DocumentType,
+    DocumentCategory,
+    DocumentStatus,
+    RequestStatus,
+    DOCUMENT_TYPES,
+    DOCUMENT_CATEGORIES,
+    DOCUMENT_STATUSES,
+    REQUEST_STATUSES
+} from '@/core/interfaces/hrm/hr-documents';
 
 interface Department {
     id: number;
@@ -35,7 +47,23 @@ interface Employee {
 @Component({
     selector: 'app-hr-documents',
     standalone: true,
-    imports: [CommonModule, FormsModule, ButtonDirective, Select, TableModule, Tag, Tooltip, Dialog, InputText, Textarea, TabsModule, ConfirmDialog, InputGroup, InputGroupAddon, TranslateModule],
+    imports: [
+        CommonModule,
+        FormsModule,
+        ButtonDirective,
+        Select,
+        TableModule,
+        Tag,
+        Tooltip,
+        Dialog,
+        InputText,
+        Textarea,
+        TabsModule,
+        ConfirmDialog,
+        InputGroup,
+        InputGroupAddon,
+        TranslateModule
+    ],
     providers: [ConfirmationService],
     templateUrl: './hr-documents.component.html',
     styleUrl: './hr-documents.component.scss'
@@ -114,23 +142,21 @@ export class HRDocumentsComponent implements OnInit, OnDestroy {
             requests: this.hrDocumentsService.getRequests(),
             departments: this.departmentService.getDepartments(),
             employees: this.contactService.getContacts()
-        })
-            .pipe(takeUntil(this.destroy$))
-            .subscribe({
-                next: (data) => {
-                    this.documents = data.documents;
-                    this.requests = data.requests;
-                    this.departments = data.departments.map((d) => ({ id: d.id, name: d.name }));
-                    this.employees = data.employees.map((e) => ({ id: e.id, name: e.name, department: e.department?.name || '' }));
-                    this.calculateStats();
-                    this.loading = false;
-                },
-                error: (err) => {
-                    console.error('Error loading data:', err);
-                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('HRM.DOCUMENTS.LOAD_ERROR') });
-                    this.loading = false;
-                }
-            });
+        }).pipe(takeUntil(this.destroy$)).subscribe({
+            next: (data) => {
+                this.documents = data.documents;
+                this.requests = data.requests;
+                this.departments = data.departments.map(d => ({ id: d.id, name: d.name }));
+                this.employees = data.employees.map(e => ({ id: e.id, name: e.name, department: e.department?.name || '' }));
+                this.calculateStats();
+                this.loading = false;
+            },
+            error: (err) => {
+                console.error('Error loading data:', err);
+                this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('HRM.DOCUMENTS.LOAD_ERROR') });
+                this.loading = false;
+            }
+        });
     }
 
     ngOnDestroy(): void {
@@ -141,10 +167,10 @@ export class HRDocumentsComponent implements OnInit, OnDestroy {
     private calculateStats(): void {
         this.stats = {
             total_documents: this.documents.length,
-            pending_signatures: this.documents.filter((d) => d.status === 'pending_signature').length,
+            pending_signatures: this.documents.filter(d => d.status === 'pending_signature').length,
             my_pending_signatures: 0,
-            expiring_soon: this.documents.filter((d) => d.valid_until && this.isExpiringSoon(d.valid_until)).length,
-            requests_pending: this.requests.filter((r) => r.status === 'pending').length,
+            expiring_soon: this.documents.filter(d => d.valid_until && this.isExpiringSoon(d.valid_until)).length,
+            requests_pending: this.requests.filter(r => r.status === 'pending').length,
             documents_by_type: this.getDocumentsByType(),
             documents_by_status: this.getDocumentsByStatus()
         };
@@ -159,7 +185,7 @@ export class HRDocumentsComponent implements OnInit, OnDestroy {
 
     private getDocumentsByType(): { type: DocumentType; count: number }[] {
         const counts = new Map<DocumentType, number>();
-        this.documents.forEach((d) => {
+        this.documents.forEach(d => {
             counts.set(d.type, (counts.get(d.type) || 0) + 1);
         });
         return Array.from(counts.entries()).map(([type, count]) => ({ type, count }));
@@ -167,7 +193,7 @@ export class HRDocumentsComponent implements OnInit, OnDestroy {
 
     private getDocumentsByStatus(): { status: DocumentStatus; count: number }[] {
         const counts = new Map<DocumentStatus, number>();
-        this.documents.forEach((d) => {
+        this.documents.forEach(d => {
             counts.set(d.status, (counts.get(d.status) || 0) + 1);
         });
         return Array.from(counts.entries()).map(([status, count]) => ({ status, count }));
@@ -175,16 +201,19 @@ export class HRDocumentsComponent implements OnInit, OnDestroy {
 
     // Filtering
     get filteredDocuments(): HRDocument[] {
-        return this.documents.filter((doc) => {
+        return this.documents.filter(doc => {
             if (this.searchQuery) {
                 const query = this.searchQuery.toLowerCase();
-                const matchesSearch = doc.title.toLowerCase().includes(query) || doc.document_number.toLowerCase().includes(query) || doc.employee_name?.toLowerCase().includes(query);
+                const matchesSearch = doc.title.toLowerCase().includes(query) ||
+                    doc.document_number.toLowerCase().includes(query) ||
+                    doc.employee_name?.toLowerCase().includes(query);
                 if (!matchesSearch) return false;
             }
             if (this.selectedType && doc.type !== this.selectedType) return false;
             if (this.selectedCategory && doc.category !== this.selectedCategory) return false;
             if (this.selectedStatus && doc.status !== this.selectedStatus) return false;
-            return !(this.selectedDepartment && doc.department_id !== this.selectedDepartment);
+            if (this.selectedDepartment && doc.department_id !== this.selectedDepartment) return false;
+            return true;
         });
     }
 
@@ -229,7 +258,7 @@ export class HRDocumentsComponent implements OnInit, OnDestroy {
 
         if (this.isEditMode && this.selectedDocument) {
             // Update existing
-            const index = this.documents.findIndex((d) => d.id === this.selectedDocument!.id);
+            const index = this.documents.findIndex(d => d.id === this.selectedDocument!.id);
             if (index !== -1) {
                 this.documents[index] = { ...this.documents[index], ...this.documentForm } as HRDocument;
             }
@@ -241,7 +270,7 @@ export class HRDocumentsComponent implements OnInit, OnDestroy {
         } else {
             // Create new
             const newDoc: HRDocument = {
-                id: Math.max(...this.documents.map((d) => d.id)) + 1,
+                id: Math.max(...this.documents.map(d => d.id)) + 1,
                 document_number: this.generateDocNumber(this.documentForm.type as DocumentType),
                 title: this.documentForm.title!,
                 type: this.documentForm.type as DocumentType,
@@ -283,7 +312,7 @@ export class HRDocumentsComponent implements OnInit, OnDestroy {
             other: 'ДОК'
         };
         const year = new Date().getFullYear();
-        const num = String(this.documents.filter((d) => d.type === type).length + 1).padStart(3, '0');
+        const num = String(this.documents.filter(d => d.type === type).length + 1).padStart(3, '0');
         return `${prefixes[type]}-${year}-${num}`;
     }
 
@@ -295,7 +324,7 @@ export class HRDocumentsComponent implements OnInit, OnDestroy {
             acceptLabel: this.translate.instant('COMMON.DELETE'),
             rejectLabel: this.translate.instant('COMMON.CANCEL'),
             accept: () => {
-                this.documents = this.documents.filter((d) => d.id !== doc.id);
+                this.documents = this.documents.filter(d => d.id !== doc.id);
                 this.messageService.add({
                     severity: 'success',
                     summary: this.translate.instant('COMMON.SUCCESS'),
@@ -323,15 +352,15 @@ export class HRDocumentsComponent implements OnInit, OnDestroy {
         if (!this.selectedDocument) return;
 
         // Find pending signature for current user
-        const signature = this.selectedDocument.signatures?.find((s) => s.status === 'pending' && s.order === 1);
+        const signature = this.selectedDocument.signatures?.find(s => s.status === 'pending' && s.order === 1);
         if (signature) {
             signature.status = approve ? 'signed' : 'rejected';
             signature.signed_at = new Date().toISOString();
             signature.comment = this.signComment || undefined;
 
             // Check if all signatures are completed
-            const allSigned = this.selectedDocument.signatures?.every((s) => s.status === 'signed');
-            const anyRejected = this.selectedDocument.signatures?.some((s) => s.status === 'rejected');
+            const allSigned = this.selectedDocument.signatures?.every(s => s.status === 'signed');
+            const anyRejected = this.selectedDocument.signatures?.some(s => s.status === 'rejected');
 
             if (anyRejected) {
                 this.selectedDocument.status = 'rejected';
@@ -403,32 +432,32 @@ export class HRDocumentsComponent implements OnInit, OnDestroy {
 
     // Helpers
     getTypeLabel(type: DocumentType): string {
-        return this.documentTypes.find((t) => t.value === type)?.label || type;
+        return this.documentTypes.find(t => t.value === type)?.label || type;
     }
 
     getTypeIcon(type: DocumentType): string {
-        return this.documentTypes.find((t) => t.value === type)?.icon || 'pi-file';
+        return this.documentTypes.find(t => t.value === type)?.icon || 'pi-file';
     }
 
     getCategoryLabel(category: DocumentCategory): string {
-        return this.documentCategories.find((c) => c.value === category)?.label || category;
+        return this.documentCategories.find(c => c.value === category)?.label || category;
     }
 
     getStatusLabel(status: DocumentStatus): string {
-        return this.documentStatuses.find((s) => s.value === status)?.label || status;
+        return this.documentStatuses.find(s => s.value === status)?.label || status;
     }
 
     getStatusSeverity(status: DocumentStatus): 'success' | 'info' | 'warn' | 'danger' | 'secondary' {
-        const found = this.documentStatuses.find((s) => s.value === status);
+        const found = this.documentStatuses.find(s => s.value === status);
         return (found?.severity as any) || 'secondary';
     }
 
     getRequestStatusLabel(status: RequestStatus): string {
-        return this.requestStatuses.find((s) => s.value === status)?.label || status;
+        return this.requestStatuses.find(s => s.value === status)?.label || status;
     }
 
     getRequestStatusSeverity(status: RequestStatus): 'success' | 'info' | 'warn' | 'danger' | 'secondary' {
-        const found = this.requestStatuses.find((s) => s.value === status);
+        const found = this.requestStatuses.find(s => s.value === status);
         return (found?.severity as any) || 'secondary';
     }
 
@@ -443,7 +472,7 @@ export class HRDocumentsComponent implements OnInit, OnDestroy {
     canSign(doc: HRDocument): boolean {
         if (doc.status !== 'pending_signature') return false;
         // Check if current user has pending signature
-        return doc.signatures?.some((s) => s.status === 'pending' && s.order === 1) || false;
+        return doc.signatures?.some(s => s.status === 'pending' && s.order === 1) || false;
     }
 
     canEdit(doc: HRDocument): boolean {

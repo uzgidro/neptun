@@ -1,0 +1,118 @@
+@if (isVisible) {
+    <div class="splash-screen" [@fadeOut]="animationState">
+        <!-- Background grid effect -->
+        <div class="bg-grid"></div>
+
+        <!-- Energy circle -->
+        <div class="energy-circle">
+            <div class="circle circle-1"></div>
+            <div class="circle circle-2"></div>
+            <div class="circle circle-3"></div>
+        </div>
+
+        <div class="splash-content">
+            <!-- Logo -->
+            <div class="logo-container">
+                <img src="/images/logo-x.png" alt="Узбекгидроэнерго" class="company-logo">
+            </div>
+
+            <!-- Lightning section -->
+            <div class="lightning-section">
+                <!-- Side lightning left -->
+                <svg class="side-lightning left" [class.flash]="sideLightning1Active" viewBox="0 0 50 120">
+                    <path d="M30 0 L20 40 L28 40 L15 80 L25 80 L10 120 L40 70 L28 70 L38 35 L26 35 L30 0"
+                        fill="url(#sideGradient)" filter="url(#glowSide)"/>
+                    <defs>
+                        <linearGradient id="sideGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#fff;stop-opacity:0.8" />
+                            <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:0.6" />
+                        </linearGradient>
+                        <filter id="glowSide">
+                            <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                            <feMerge>
+                                <feMergeNode in="coloredBlur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+                    </defs>
+                </svg>
+
+                <!-- Main lightning container -->
+                <div class="lightning-container">
+                    <!-- Main lightning bolt SVG -->
+                    <svg class="lightning-bolt" [class.flash]="lightningActive" viewBox="0 0 100 200" fill="none">
+                        <defs>
+                            <linearGradient id="lightningGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" style="stop-color:#fff;stop-opacity:1" />
+                                <stop offset="50%" style="stop-color:#60a5fa;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
+                            </linearGradient>
+                            <filter id="glow">
+                                <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                                <feMerge>
+                                    <feMergeNode in="coloredBlur"/>
+                                    <feMergeNode in="SourceGraphic"/>
+                                </feMerge>
+                            </filter>
+                        </defs>
+                        <path class="bolt-path" d="M60 0 L40 80 L55 80 L35 130 L50 130 L25 200 L70 110 L50 110 L65 70 L45 70 L60 0"
+                            fill="url(#lightningGradient)" filter="url(#glow)"/>
+                    </svg>
+
+                    <!-- Electric particles -->
+                    <div class="particles">
+                        @for (i of [1,2,3,4,5,6,7,8,9,10,11,12]; track i) {
+                            <div class="particle" [style.--delay]="i * 0.15 + 's'"></div>
+                        }
+                    </div>
+                </div>
+
+                <!-- Side lightning right -->
+                <svg class="side-lightning right" [class.flash]="sideLightning2Active" viewBox="0 0 50 120">
+                    <path d="M20 0 L30 40 L22 40 L35 80 L25 80 L40 120 L10 70 L22 70 L12 35 L24 35 L20 0"
+                        fill="url(#sideGradient2)" filter="url(#glowSide2)"/>
+                    <defs>
+                        <linearGradient id="sideGradient2" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#fff;stop-opacity:0.8" />
+                            <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:0.6" />
+                        </linearGradient>
+                        <filter id="glowSide2">
+                            <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                            <feMerge>
+                                <feMergeNode in="coloredBlur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+                    </defs>
+                </svg>
+            </div>
+
+            <!-- Power counter -->
+            <div class="power-display">
+                <div class="power-value">
+                    <span class="number">{{ currentPower | number:'1.0-0' }}</span>
+                    <span class="unit">МВт</span>
+                </div>
+                <div class="power-label">Текущая выработка</div>
+            </div>
+
+            <!-- Company name -->
+            <div class="company-name">
+                <span class="highlight">АО</span> Узбекгидроэнерго
+            </div>
+
+            <!-- Tagline -->
+            <div class="tagline">Энергия воды — сила прогресса</div>
+        </div>
+
+        <!-- Skip button -->
+        <button class="skip-btn" (click)="skipSplash()">
+            Пропустить <i class="pi pi-arrow-right"></i>
+        </button>
+
+        <!-- Loading indicator -->
+        <div class="loading-bar">
+            <div class="loading-progress"></div>
+        </div>
+    </div>
+}

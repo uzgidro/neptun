@@ -21,7 +21,6 @@ import { GesIncidentsSectionComponent } from './sections/incidents/ges-incidents
 import { GesVisitsSectionComponent } from './sections/visits/ges-visits-section.component';
 import { GesTelemetrySectionComponent } from './sections/telemetry/ges-telemetry-section.component';
 
-
 @Component({
     selector: 'app-ges-detail',
     standalone: true,

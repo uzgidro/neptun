@@ -1,51 +1,46 @@
 import { Injectable } from '@angular/core';
-import { ApiService } from '@/core/services/api.service';
-import { Observable, of } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import { ApiService, BASE_URL } from '@/core/services/api.service';
+import { Observable } from 'rxjs';
 import { Department, DepartmentPayload } from '@/core/interfaces/department';
 import { CrudService } from '@/core/interfaces/crud-service.interface';
 
-// Мок-данные отделов
-const MOCK_DEPARTMENTS: Department[] = [
-    { id: 1, name: 'Руководство', organization_id: 1 },
-    { id: 2, name: 'Производственный отдел', organization_id: 1 },
-    { id: 3, name: 'Отдел контроля качества', organization_id: 1 },
-    { id: 4, name: 'Отдел логистики', organization_id: 1 },
-    { id: 5, name: 'Финансовый отдел', organization_id: 1 },
-    { id: 6, name: 'IT-отдел', organization_id: 1 },
-    { id: 7, name: 'Отдел кадров', organization_id: 1 },
-    { id: 8, name: 'Юридический отдел', organization_id: 1 }
-] as Department[];
+const DEPARTMENTS = '/department';
 
 @Injectable({
     providedIn: 'root'
 })
 export class DepartmentService extends ApiService implements CrudService<Department, DepartmentPayload> {
-    getAll(): Observable<Department[]> {
-        return of(MOCK_DEPARTMENTS).pipe(delay(200));
+    // Legacy methods (keep for backward compatibility)
+    getDepartments(): Observable<Department[]> {
+        return this.http.get<Department[]>(BASE_URL + DEPARTMENTS);
     }
 
-    getById(id: number): Observable<Department> {
-        return of(MOCK_DEPARTMENTS.find(d => d.id === id) || MOCK_DEPARTMENTS[0]).pipe(delay(200));
+    createDepartment(payload: DepartmentPayload): Observable<Department> {
+        return this.http.post<Department>(BASE_URL + DEPARTMENTS, payload);
+    }
+
+    updateDepartment(id: number, payload: DepartmentPayload): Observable<Department> {
+        return this.http.patch<Department>(BASE_URL + DEPARTMENTS + '/' + id, payload);
+    }
+
+    deleteDepartment(id: number): Observable<void> {
+        return this.http.delete<void>(BASE_URL + DEPARTMENTS + '/' + id);
+    }
+
+    // CrudService interface implementation
+    getAll(): Observable<Department[]> {
+        return this.getDepartments();
     }
 
     create(payload: DepartmentPayload): Observable<Department> {
-        const newDept: Department = { id: Date.now(), ...payload } as Department;
-        return of(newDept).pipe(delay(300));
+        return this.createDepartment(payload);
     }
 
     update(id: number, payload: DepartmentPayload): Observable<Department> {
-        const updated: Department = { id, ...payload } as Department;
-        return of(updated).pipe(delay(300));
+        return this.updateDepartment(id, payload);
     }
 
     delete(id: number): Observable<void> {
-        return of(undefined as void).pipe(delay(200));
+        return this.deleteDepartment(id);
     }
-
-    // Legacy aliases
-    getDepartments = this.getAll.bind(this);
-    createDepartment = this.create.bind(this);
-    updateDepartment = this.update.bind(this);
-    deleteDepartment = this.delete.bind(this);
 }

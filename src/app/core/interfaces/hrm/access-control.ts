@@ -135,34 +135,34 @@ export interface ZoneOccupancy {
 
 // Types
 export type CardStatus =
-    | 'active' // Активна
-    | 'blocked' // Заблокирована
-    | 'expired' // Истёк срок
-    | 'lost' // Утеряна
-    | 'returned'; // Сдана
+    | 'active'      // Активна
+    | 'blocked'     // Заблокирована
+    | 'expired'     // Истёк срок
+    | 'lost'        // Утеряна
+    | 'returned';   // Сдана
 
 export type SecurityLevel =
-    | 'public' // Общедоступная
-    | 'standard' // Стандартная
-    | 'restricted' // Ограниченный доступ
-    | 'high' // Высокий уровень
-    | 'critical'; // Критический
+    | 'public'      // Общедоступная
+    | 'standard'    // Стандартная
+    | 'restricted'  // Ограниченный доступ
+    | 'high'        // Высокий уровень
+    | 'critical';   // Критический
 
 export type ReaderType =
-    | 'card' // Карточный
-    | 'biometric' // Биометрический
-    | 'pin' // PIN-код
-    | 'combined'; // Комбинированный
+    | 'card'        // Карточный
+    | 'biometric'   // Биометрический
+    | 'pin'         // PIN-код
+    | 'combined';   // Комбинированный
 
 export type AccessEventStatus =
-    | 'granted' // Доступ разрешён
-    | 'denied' // Доступ запрещён
-    | 'error'; // Ошибка
+    | 'granted'     // Доступ разрешён
+    | 'denied'      // Доступ запрещён
+    | 'error';      // Ошибка
 
 export type RequestStatus =
-    | 'pending' // На рассмотрении
-    | 'approved' // Одобрено
-    | 'rejected'; // Отклонено
+    | 'pending'     // На рассмотрении
+    | 'approved'    // Одобрено
+    | 'rejected';   // Отклонено
 
 // Constants
 export const CARD_STATUSES: { value: CardStatus; label: string; severity: string; icon: string }[] = [

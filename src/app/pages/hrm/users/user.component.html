@@ -17,8 +17,7 @@
                     <p-inputicon>
                         <i class="pi pi-search"></i>
                     </p-inputicon>
-                    <input pInputText type="text" (input)="onGlobalFilter(ut, $event)"
-                           [placeholder]="'COMMON.SEARCH' | translate" />
+                    <input pInputText type="text" (input)="onGlobalFilter(ut, $event)" [placeholder]="'COMMON.SEARCH' | translate" />
                 </p-iconfield>
                 <button pButton (click)="openDialog()">
                     <i class="pi pi-user-plus" pButtonIcon></i>
@@ -95,8 +94,7 @@
 </div>
 
 @if (displayDialog) {
-    <app-dialog [header]="isEditMode ? ('HRM.USERS.EDIT_USER' | translate) : ('HRM.USERS.NEW_USER' | translate)"
-                [(visible)]="displayDialog"
+    <app-dialog [header]="isEditMode ? ('HRM.USERS.EDIT_USER' | translate) : ('HRM.USERS.NEW_USER' | translate)" [(visible)]="displayDialog"
                 (save)="onSubmit()"
     >
         <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
@@ -124,8 +122,7 @@
                 <div class="flex flex-col gap-2">
                     <label for="roles">{{ 'HRM.USERS.ROLES' | translate }}</label>
                     <p-multiSelect id="roles" [options]="allRoles" formControlName="roles" optionLabel="name"
-                                   [placeholder]="'HRM.USERS.SELECT_ROLES' | translate"
-                                   [appendTo]="'body'"></p-multiSelect>
+                                   [placeholder]="'HRM.USERS.SELECT_ROLES' | translate" [appendTo]="'body'"></p-multiSelect>
                 </div>
 
                 <!-- Contact Information -->
@@ -266,8 +263,7 @@
         </form>
         <ng-template pTemplate="footer">
             <p-button [label]="'COMMON.CANCEL' | translate" (click)="closeDialog()" styleClass="p-button-text" />
-            <p-button [label]="isEditMode ? ('COMMON.UPDATE' | translate) : ('COMMON.SAVE' | translate)" type="submit"
-                      (click)="onSubmit()" />
+            <p-button [label]="isEditMode ? ('COMMON.UPDATE' | translate) : ('COMMON.SAVE' | translate)" type="submit" (click)="onSubmit()" />
         </ng-template>
     </app-dialog>
 }

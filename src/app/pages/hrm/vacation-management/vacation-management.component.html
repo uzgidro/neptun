@@ -45,8 +45,7 @@
                     <p-inputicon>
                         <i class="pi pi-search"></i>
                     </p-inputicon>
-                    <input pInputText type="text" (input)="onGlobalFilter(dt, $event)"
-                           [placeholder]="'COMMON.SEARCH' | translate" />
+                    <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" [placeholder]="'COMMON.SEARCH' | translate" />
                 </p-iconfield>
                 <button pButton (click)="openDialog()">
                     <i class="pi pi-plus" pButtonIcon></i>
@@ -56,8 +55,7 @@
         </ng-template>
         <ng-template #header>
             <tr>
-                <th pSortableColumn="employee_name" style="min-width: 12rem">{{ 'HRM.VACATION.EMPLOYEE' | translate }}
-                </th>
+                <th pSortableColumn="employee_name" style="min-width: 12rem">{{ 'HRM.VACATION.EMPLOYEE' | translate }}</th>
                 <th style="min-width: 8rem">{{ 'HRM.VACATION.DEPARTMENT' | translate }}</th>
                 <th style="min-width: 8rem">{{ 'HRM.VACATION.TYPE' | translate }}</th>
                 <th style="min-width: 8rem">{{ 'HRM.VACATION.START_DATE' | translate }}</th>
@@ -89,11 +87,9 @@
                 </td>
                 <td>
                     <div class="flex flex-col gap-1">
-                        <p-tag [value]="getStatusLabel(vacation.status)"
-                               [severity]="getStatusSeverity(vacation.status)"></p-tag>
+                        <p-tag [value]="getStatusLabel(vacation.status)" [severity]="getStatusSeverity(vacation.status)"></p-tag>
                         @if (vacation.status === 'rejected' && vacation.rejection_reason) {
-                            <span class="text-xs text-red-600" [pTooltip]="vacation.rejection_reason"
-                                  tooltipPosition="top">
+                            <span class="text-xs text-red-600" [pTooltip]="vacation.rejection_reason" tooltipPosition="top">
                                 <i class="pi pi-info-circle"></i> {{ 'HRM.VACATION.REASON' | translate }}
                             </span>
                         }
@@ -191,9 +187,7 @@
             <!-- Employee Balance Info -->
             @if (selectedEmployeeBalance) {
                 <div class="mb-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
-                    <div
-                        class="text-sm font-semibold text-blue-800 mb-2">{{ 'HRM.VACATION.BALANCE_FOR_YEAR' | translate }} {{ selectedEmployeeBalance.year }}
-                    </div>
+                    <div class="text-sm font-semibold text-blue-800 mb-2">{{ 'HRM.VACATION.BALANCE_FOR_YEAR' | translate }} {{ selectedEmployeeBalance.year }}</div>
                     <div class="grid grid-cols-4 gap-2 text-center">
                         <div>
                             <div class="text-xs text-gray-500">{{ 'HRM.VACATION.TOTAL' | translate }}</div>
@@ -309,9 +303,7 @@
                     <div>{{ getTypeLabel(selectedVacation.vacation_type) }}</div>
 
                     <div class="text-gray-500">{{ 'HRM.VACATION.PERIOD' | translate }}:</div>
-                    <div>{{ selectedVacation.start_date | date:'dd.MM.yyyy' }}
-                        - {{ selectedVacation.end_date | date:'dd.MM.yyyy' }}
-                    </div>
+                    <div>{{ selectedVacation.start_date | date:'dd.MM.yyyy' }} - {{ selectedVacation.end_date | date:'dd.MM.yyyy' }}</div>
 
                     <div class="text-gray-500">{{ 'HRM.VACATION.DAYS' | translate }}:</div>
                     <div class="font-semibold">{{ selectedVacation.days_count }}</div>
@@ -331,10 +323,8 @@
             </div>
         </div>
         <div class="flex justify-end gap-2 p-4 border-t">
-            <button pButton [label]="'COMMON.CANCEL' | translate" icon="pi pi-times" class="p-button-text"
-                    (click)="displayApprovalDialog = false"></button>
-            <button pButton [label]="'HRM.VACATION.APPROVE' | translate" icon="pi pi-check" class="p-button-success"
-                    (click)="confirmApproval()"></button>
+            <button pButton [label]="'COMMON.CANCEL' | translate" icon="pi pi-times" class="p-button-text" (click)="displayApprovalDialog = false"></button>
+            <button pButton [label]="'HRM.VACATION.APPROVE' | translate" icon="pi pi-check" class="p-button-success" (click)="confirmApproval()"></button>
         </div>
     }
 </p-dialog>
@@ -356,9 +346,7 @@
                     <div class="font-semibold">{{ selectedVacation.employee_name }}</div>
 
                     <div class="text-gray-500">{{ 'HRM.VACATION.PERIOD' | translate }}:</div>
-                    <div>{{ selectedVacation.start_date | date:'dd.MM.yyyy' }}
-                        - {{ selectedVacation.end_date | date:'dd.MM.yyyy' }}
-                    </div>
+                    <div>{{ selectedVacation.start_date | date:'dd.MM.yyyy' }} - {{ selectedVacation.end_date | date:'dd.MM.yyyy' }}</div>
 
                     <div class="text-gray-500">{{ 'HRM.VACATION.DAYS' | translate }}:</div>
                     <div class="font-semibold">{{ selectedVacation.days_count }}</div>
@@ -391,10 +379,8 @@
             </div>
         </div>
         <div class="flex justify-end gap-2 p-4 border-t">
-            <button pButton [label]="'COMMON.CANCEL' | translate" icon="pi pi-times" class="p-button-text"
-                    (click)="displayRejectionDialog = false"></button>
-            <button pButton [label]="'HRM.VACATION.REJECT' | translate" icon="pi pi-ban" class="p-button-danger"
-                    (click)="confirmRejection()" [disabled]="rejectionForm.invalid"></button>
+            <button pButton [label]="'COMMON.CANCEL' | translate" icon="pi pi-times" class="p-button-text" (click)="displayRejectionDialog = false"></button>
+            <button pButton [label]="'HRM.VACATION.REJECT' | translate" icon="pi pi-ban" class="p-button-danger" (click)="confirmRejection()" [disabled]="rejectionForm.invalid"></button>
         </div>
     }
 </p-dialog>

@@ -12,7 +12,16 @@ import { Textarea } from 'primeng/textarea';
 import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { EmployeeTimesheet, TimesheetDay, TimesheetSummary, AttendanceStatus, ATTENDANCE_STATUSES, MONTHS, DAYS_OF_WEEK, Holiday } from '@/core/interfaces/hrm/timesheet';
+import {
+    EmployeeTimesheet,
+    TimesheetDay,
+    TimesheetSummary,
+    AttendanceStatus,
+    ATTENDANCE_STATUSES,
+    MONTHS,
+    DAYS_OF_WEEK,
+    Holiday
+} from '@/core/interfaces/hrm/timesheet';
 import { TimesheetService } from '@/core/services/timesheet.service';
 import { DepartmentService } from '@/core/services/department.service';
 import { Department } from '@/core/interfaces/department';
@@ -20,7 +29,19 @@ import { Department } from '@/core/interfaces/department';
 @Component({
     selector: 'app-timesheet',
     standalone: true,
-    imports: [CommonModule, FormsModule, ButtonDirective, Card, Select, TableModule, Tooltip, Dialog, InputText, Textarea, TranslateModule],
+    imports: [
+        CommonModule,
+        FormsModule,
+        ButtonDirective,
+        Card,
+        Select,
+        TableModule,
+        Tooltip,
+        Dialog,
+        InputText,
+        Textarea,
+        TranslateModule
+    ],
     templateUrl: './timesheet.component.html',
     styleUrl: './timesheet.component.scss'
 })
@@ -94,8 +115,7 @@ export class TimesheetComponent implements OnInit, OnDestroy {
     }
 
     private loadDepartments(): void {
-        this.departmentService
-            .getDepartments()
+        this.departmentService.getDepartments()
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (data) => {
@@ -106,8 +126,7 @@ export class TimesheetComponent implements OnInit, OnDestroy {
     }
 
     private loadHolidays(): void {
-        this.timesheetService
-            .getHolidays(this.selectedYear)
+        this.timesheetService.getHolidays(this.selectedYear)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (data) => {
@@ -126,7 +145,7 @@ export class TimesheetComponent implements OnInit, OnDestroy {
             const date = new Date(this.selectedYear, this.selectedMonth - 1, day);
             const dateStr = this.formatDateISO(date);
             const dayOfWeek = date.getDay();
-            const holiday = this.holidays.find((h) => h.date === dateStr);
+            const holiday = this.holidays.find(h => h.date === dateStr);
 
             this.calendarDays.push({
                 date: dateStr,
@@ -148,8 +167,7 @@ export class TimesheetComponent implements OnInit, OnDestroy {
             department_id: this.selectedDepartment || undefined
         };
 
-        this.timesheetService
-            .getTimesheets(filter)
+        this.timesheetService.getTimesheets(filter)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (data) => {
@@ -178,7 +196,7 @@ export class TimesheetComponent implements OnInit, OnDestroy {
             total_undertime_hours: 0
         };
 
-        days.forEach((day) => {
+        days.forEach(day => {
             if (!day.is_weekend && !day.is_holiday) {
                 summary.total_work_days++;
             }
@@ -237,7 +255,7 @@ export class TimesheetComponent implements OnInit, OnDestroy {
             this.totalSummary.total_work_days = this.employees[0].summary.total_work_days;
         }
 
-        this.employees.forEach((emp) => {
+        this.employees.forEach(emp => {
             this.totalSummary.days_present += emp.summary.days_present;
             this.totalSummary.days_absent += emp.summary.days_absent;
             this.totalSummary.days_vacation += emp.summary.days_vacation;
@@ -257,17 +275,17 @@ export class TimesheetComponent implements OnInit, OnDestroy {
 
     // Cell display helpers
     getCellClass(day: TimesheetDay): string {
-        const statusInfo = this.attendanceStatuses.find((s) => s.value === day.status);
+        const statusInfo = this.attendanceStatuses.find(s => s.value === day.status);
         return statusInfo ? `status-${statusInfo.color}` : '';
     }
 
     getCellIcon(day: TimesheetDay): string {
-        const statusInfo = this.attendanceStatuses.find((s) => s.value === day.status);
+        const statusInfo = this.attendanceStatuses.find(s => s.value === day.status);
         return statusInfo?.icon || '';
     }
 
     getCellTooltip(day: TimesheetDay): string {
-        const statusInfo = this.attendanceStatuses.find((s) => s.value === day.status);
+        const statusInfo = this.attendanceStatuses.find(s => s.value === day.status);
         let tooltip = statusInfo?.label || '';
 
         if (day.check_in && day.check_out) {
@@ -287,7 +305,7 @@ export class TimesheetComponent implements OnInit, OnDestroy {
     }
 
     getStatusLabel(status: AttendanceStatus): string {
-        return this.attendanceStatuses.find((s) => s.value === status)?.label || status;
+        return this.attendanceStatuses.find(s => s.value === status)?.label || status;
     }
 
     getStatusSeverity(status: AttendanceStatus): 'success' | 'info' | 'warn' | 'danger' | 'secondary' {
@@ -308,7 +326,7 @@ export class TimesheetComponent implements OnInit, OnDestroy {
     }
 
     getDayOfWeekShort(dayOfWeek: number): string {
-        return this.daysOfWeek.find((d) => d.value === dayOfWeek)?.short || '';
+        return this.daysOfWeek.find(d => d.value === dayOfWeek)?.short || '';
     }
 
     // Edit dialog
@@ -329,7 +347,7 @@ export class TimesheetComponent implements OnInit, OnDestroy {
     saveEdit(): void {
         if (!this.selectedEmployee || !this.selectedDay || !this.editForm.status) return;
 
-        const dayIndex = this.selectedEmployee.days.findIndex((d) => d.date === this.selectedDay!.date);
+        const dayIndex = this.selectedEmployee.days.findIndex(d => d.date === this.selectedDay!.date);
         if (dayIndex !== -1) {
             this.selectedEmployee.days[dayIndex] = {
                 ...this.selectedEmployee.days[dayIndex],
@@ -343,7 +361,7 @@ export class TimesheetComponent implements OnInit, OnDestroy {
             if (this.editForm.check_in && this.editForm.check_out) {
                 const [inH, inM] = this.editForm.check_in.split(':').map(Number);
                 const [outH, outM] = this.editForm.check_out.split(':').map(Number);
-                const worked = outH + outM / 60 - (inH + inM / 60) - 1; // minus 1 hour break
+                const worked = (outH + outM / 60) - (inH + inM / 60) - 1; // minus 1 hour break
                 this.selectedEmployee.days[dayIndex].worked_hours = Math.max(0, worked);
                 this.selectedEmployee.days[dayIndex].overtime_hours = Math.max(0, worked - 8);
             }
@@ -370,8 +388,7 @@ export class TimesheetComponent implements OnInit, OnDestroy {
             department_id: this.selectedDepartment || undefined
         };
 
-        this.timesheetService
-            .exportToExcel(filter)
+        this.timesheetService.exportToExcel(filter)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (blob) => {
@@ -404,7 +421,7 @@ export class TimesheetComponent implements OnInit, OnDestroy {
     }
 
     getMonthName(month: number): string {
-        return this.months.find((m) => m.value === month)?.label || '';
+        return this.months.find(m => m.value === month)?.label || '';
     }
 
     getAttendanceRate(): number {
