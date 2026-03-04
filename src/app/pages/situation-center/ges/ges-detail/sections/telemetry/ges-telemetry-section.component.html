@@ -46,8 +46,8 @@
     [globalFilterFields]="['deviceName', 'deviceGroup', 'name', 'value']"
     [scrollable]="true"
     scrollHeight="500px"
-    [sortField]="'timestamp'"
-    [sortOrder]="-1"
+    [sortField]="'deviceName'"
+    [sortOrder]="1"
     styleClass="p-datatable-sm p-datatable-gridlines">
 
     <ng-template pTemplate="caption">
@@ -98,14 +98,6 @@
                 <p-sortIcon field="value"></p-sortIcon>
             </th>
             <th style="width: 100px">{{ 'GES_DETAIL.TELEMETRY.UNIT' | translate }}</th>
-            <th pSortableColumn="quality" style="width: 100px">
-                {{ 'GES_DETAIL.TELEMETRY.QUALITY' | translate }}
-                <p-sortIcon field="quality"></p-sortIcon>
-            </th>
-            <th pSortableColumn="severity" style="width: 100px">
-                {{ 'GES_DETAIL.TELEMETRY.SEVERITY' | translate }}
-                <p-sortIcon field="severity"></p-sortIcon>
-            </th>
             <th pSortableColumn="timestamp" style="min-width: 150px">
                 {{ 'GES_DETAIL.TELEMETRY.TIMESTAMP' | translate }}
                 <p-sortIcon field="timestamp"></p-sortIcon>
@@ -126,29 +118,13 @@
                 }
             </td>
             <td>{{ row.unit || '—' }}</td>
-            <td>
-                <p-tag
-                    [value]="row.quality"
-                    [severity]="getQualitySeverity(row.quality)">
-                </p-tag>
-            </td>
-            <td>
-                @if (row.severity) {
-                    <p-tag
-                        [value]="row.severity"
-                        [severity]="getSeverityClass(row.severity)">
-                    </p-tag>
-                } @else {
-                    <span class="text-surface-400">—</span>
-                }
-            </td>
             <td>{{ row.timestamp | date:'HH:mm:ss dd.MM.yyyy' }}</td>
         </tr>
     </ng-template>
 
     <ng-template pTemplate="emptymessage">
         <tr>
-            <td colspan="8" class="text-center py-8">
+            <td colspan="6" class="text-center py-8">
                 <div class="text-surface-500">
                     <i class="pi pi-chart-line text-4xl mb-3 block opacity-50"></i>
                     <div>{{ 'GES_DETAIL.TELEMETRY.NO_DATA' | translate }}</div>
