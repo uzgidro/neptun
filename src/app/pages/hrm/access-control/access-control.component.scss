@@ -141,29 +141,23 @@
 
     // Table styling
     .p-datatable {
+        border: 1px solid var(--surface-200);
+        border-radius: 0.5rem;
+        overflow: hidden;
+
         .p-datatable-thead > tr > th {
             background: var(--surface-50);
             color: var(--text-color);
             font-weight: 600;
-
-            :host-context(.dark) & {
-                background: var(--surface-700);
-            }
+            border-bottom: 1px solid var(--surface-200);
         }
 
         .p-datatable-tbody > tr {
             background: var(--surface-0);
-
-            :host-context(.dark) & {
-                background: var(--surface-800);
-            }
+            border-bottom: 1px solid var(--surface-100);
 
             &:hover {
                 background: var(--surface-50) !important;
-
-                :host-context(.dark) & {
-                    background: var(--surface-700) !important;
-                }
             }
         }
     }

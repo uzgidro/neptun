@@ -123,8 +123,6 @@ export class MenuComponent implements OnInit {
                             { label: this.t('MENU.EMPLOYEES'), routerLink: ['/employees'] },
                             { label: this.t('MENU.POSITIONS'), routerLink: ['/positions'] },
                             { label: this.t('MENU.DEPARTMENTS'), routerLink: ['/departments'] },
-                            { label: this.t('MENU.USERS'), routerLink: ['/users'] },
-                            { label: this.t('MENU.ROLES'), routerLink: ['/roles'] }
                         ]
                     },
                     {
