@@ -64,6 +64,7 @@
     border: 1px solid rgba(14, 165, 233, 0.1);
     border-left: 3px solid var(--sc-neon-cyan);
     flex-shrink: 0;
+    overflow: hidden;
 }
 
 .reservoir-header {
@@ -80,19 +81,22 @@
 .reservoir-metrics {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 6px 12px;
+    gap: 6px 8px;
+    overflow: hidden;
 }
 
 .metric {
     display: flex;
     align-items: baseline;
     gap: 4px;
+    min-width: 0;
+    overflow: hidden;
 }
 
 .metric-label {
     font-size: 9px;
     color: var(--sc-text-muted);
-    min-width: 45px;
+    flex-shrink: 0;
 }
 
 .metric-value {

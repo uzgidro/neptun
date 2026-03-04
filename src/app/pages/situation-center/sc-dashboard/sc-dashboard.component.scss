@@ -95,11 +95,20 @@
     gap: 10px;
     flex: 1;
     min-height: 0;
+
+    @media (max-width: 1200px) {
+        flex-direction: column;
+        overflow-y: auto;
+    }
 }
 
 .tile-map {
     flex: 1;
     min-width: 0;
+
+    @media (max-width: 1200px) {
+        min-height: 400px;
+    }
 }
 
 .sc-side-stack {
@@ -115,7 +124,9 @@
     }
 
     @media (max-width: 1200px) {
-        width: 280px;
+        width: 100%;
+        flex-direction: row;
+        min-height: 250px;
     }
 }
 
