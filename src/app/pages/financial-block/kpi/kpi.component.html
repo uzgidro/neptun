@@ -237,6 +237,10 @@
                         {{ 'FINANCIAL_BLOCK.KPI.INDICATOR_NAME' | translate }}
                         <p-sortIcon field="name"></p-sortIcon>
                     </th>
+                    <th pSortableColumn="department" style="width: 130px">
+                        {{ 'FINANCIAL_BLOCK.SALARY.DEPARTMENT' | translate }}
+                        <p-sortIcon field="department"></p-sortIcon>
+                    </th>
                     <th style="width: 120px">{{ 'FINANCIAL_BLOCK.DEBIT_CREDIT.CATEGORY' | translate }}</th>
                     <th pSortableColumn="targetValue" style="width: 110px; text-align: right">
                         {{ 'FINANCIAL_BLOCK.KPI.TARGET_VALUE' | translate }}
@@ -260,10 +264,10 @@
             <ng-template pTemplate="body" let-kpi>
                 <tr>
                     <td>
-                        <div class="flex flex-column">
-                            <span class="font-semibold">{{ kpi.name }}</span>
-                            <span class="text-sm text-500">{{ getDepartmentLabel(kpi.department) }}</span>
-                        </div>
+                        <span class="font-semibold">{{ kpi.name }}</span>
+                    </td>
+                    <td>
+                        <span class="text-500">{{ getDepartmentLabel(kpi.department) }}</span>
                     </td>
                     <td>
                         <div class="flex align-items-center gap-2">
@@ -341,7 +345,7 @@
             </ng-template>
             <ng-template pTemplate="emptymessage">
                 <tr>
-                    <td colspan="10" class="text-center p-4">
+                    <td colspan="11" class="text-center p-4">
                         <div class="flex flex-column align-items-center gap-2">
                             <i class="pi pi-inbox text-4xl text-500"></i>
                             <span class="text-500">{{ 'FINANCIAL_BLOCK.COMMON.NO_DATA' | translate }}</span>

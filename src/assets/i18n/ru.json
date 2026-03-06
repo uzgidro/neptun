@@ -891,6 +891,9 @@
       "ATTENDANCE": "Явка",
       "WORK_DAYS": "Рабочих дней",
       "WORKED_HOURS": "Отработано часов",
+      "HOURS_WORKED": "Отработано часов",
+      "HOURS_SHORT": "ч",
+      "DATA_UPDATED": "Данные табеля обновлены",
       "OVERTIME": "Переработки",
       "ON_VACATION": "В отпуске",
       "EMPLOYEE": "Сотрудник",
@@ -956,6 +959,7 @@
     "ANALYTICS": {
       "TITLE": "Аналитика и отчёты",
       "TOTAL_EMPLOYEES": "Всего сотрудников",
+      "AVG_AGE": "Ср. возраст",
       "ACTIVE": "Активных",
       "HIRED_THIS_MONTH": "Принято за месяц",
       "TERMINATED": "Уволено",
@@ -1141,7 +1145,7 @@
       "POSITION": "Должность",
       "SALARY": "Зарплата",
       "RESPONSES": "Откликов",
-      "PRIORITY": "Приоритет",
+      "PRIORITY_HEADER": "Приоритет",
       "STATUS": "Статус",
       "ACTIONS": "Действия",
       "APPLICANT": "Заявитель",
@@ -1156,8 +1160,9 @@
       "EDIT": "Редактировать",
       "NO_VACANCIES": "Вакансий не найдено",
       "FULL_NAME": "ФИО",
-      "SOURCE": "Источник",
-      "STAGE": "Этап",
+      "VACANCY_HEADER": "Вакансия",
+      "SOURCE_HEADER": "Источник",
+      "STAGE_HEADER": "Этап",
       "RATING": "Рейтинг",
       "NO_CANDIDATES": "Кандидатов не найдено",
       "EMPLOYEE": "Сотрудник",
@@ -1874,7 +1879,10 @@
     "DASHBOARD": {
       "HEADER": {
         "TITLE": "Планшет Руководителя",
-        "TO_HOME": "На главную"
+        "TO_HOME": "На главную",
+        "SOS": "Экстренный вызов",
+        "ENABLE_ALARM": "Включить звук тревоги",
+        "DISABLE_ALARM": "Выключить звук тревоги"
       },
       "MONITORING": {
         "TITLE": "Состояние хранения",
@@ -2029,7 +2037,20 @@
       "INDICATORS": "показателей",
       "PROCUREMENTS": "закупок",
       "REPAIRS": "ремонтов",
-      "EMPLOYEES": "сотрудников"
+      "EMPLOYEES": "сотрудников",
+      "OTHER_EXPENSES": "Прочие расходы"
+    },
+    "OTHER_EXPENSES": {
+      "TITLE": "Прочие расходы",
+      "TOTAL_AMOUNT": "Общая сумма",
+      "EXPENSES_COUNT": "Количество записей",
+      "CATEGORIES_COUNT": "Категорий",
+      "CATEGORY_UTILITIES": "Коммунальные услуги",
+      "CATEGORY_TRANSPORT": "Транспорт",
+      "CATEGORY_COMMUNICATION": "Связь и интернет",
+      "CATEGORY_SECURITY": "Охрана",
+      "CATEGORY_INSURANCE": "Страхование",
+      "CATEGORY_OTHER": "Разное"
     },
     "INVESTMENT": {
       "TITLE": "Инвестиционные проекты",

@@ -7,6 +7,7 @@ import {
     ProcurementSummary,
     KpiSummary,
     SalarySummary,
+    OtherExpensesSummary,
     FinancialDashboardData,
     ModuleCard
 } from '../models/financial-summary.model';
@@ -23,6 +24,7 @@ export class FinancialDashboardService {
     private procurementData = new BehaviorSubject<ProcurementSummary>(this.getEmptyProcurement());
     private kpiData = new BehaviorSubject<KpiSummary>(this.getEmptyKpi());
     private salaryData = new BehaviorSubject<SalarySummary>(this.getEmptySalary());
+    private otherExpensesData = new BehaviorSubject<OtherExpensesSummary>(this.getEmptyOtherExpenses());
 
     // Observables для подписки
     dashboardData$ = this.dashboardData.asObservable();
@@ -32,6 +34,7 @@ export class FinancialDashboardService {
     procurementData$ = this.procurementData.asObservable();
     kpiData$ = this.kpiData.asObservable();
     salaryData$ = this.salaryData.asObservable();
+    otherExpensesData$ = this.otherExpensesData.asObservable();
 
     // Методы обновления данных из модулей
     updateDebitCredit(data: DebitCreditSummary): void {
@@ -64,6 +67,11 @@ export class FinancialDashboardService {
         this.updateDashboard();
     }
 
+    updateOtherExpenses(data: OtherExpensesSummary): void {
+        this.otherExpensesData.next(data);
+        this.updateDashboard();
+    }
+
     private updateDashboard(): void {
         const aggregated: FinancialDashboardData = {
             debitCredit: this.debitCreditData.getValue(),
@@ -72,6 +80,7 @@ export class FinancialDashboardService {
             procurement: this.procurementData.getValue(),
             kpi: this.kpiData.getValue(),
             salary: this.salaryData.getValue(),
+            otherExpenses: this.otherExpensesData.getValue(),
             lastUpdated: new Date()
         };
         this.dashboardData.next(aggregated);
@@ -90,8 +99,9 @@ export class FinancialDashboardService {
         const repair = this.repairCostsData.getValue();
         const proc = this.procurementData.getValue();
         const salary = this.salaryData.getValue();
+        const other = this.otherExpensesData.getValue();
 
-        return dc.totalCredit + inv.totalCredit + repair.totalActualCost + proc.deliveredAmount + salary.totalNetPay;
+        return dc.totalCredit + inv.totalCredit + repair.totalActualCost + proc.deliveredAmount + salary.totalNetPay + other.totalAmount;
     }
 
     getNetBalance(): number {
@@ -106,6 +116,7 @@ export class FinancialDashboardService {
         const proc = this.procurementData.getValue();
         const kpi = this.kpiData.getValue();
         const salary = this.salaryData.getValue();
+        const other = this.otherExpensesData.getValue();
 
         return [
             {
@@ -173,13 +184,23 @@ export class FinancialDashboardService {
                     { label: 'К выплате', value: salary.totalNetPay, format: 'currency', color: 'warning' },
                     { label: 'Сотрудников', value: salary.employeesCount, format: 'number', color: 'info' }
                 ]
+            },
+            {
+                title: 'Прочие расходы',
+                icon: 'pi pi-money-bill',
+                route: '/financial-dashboard',
+                color: '#F97316',
+                metrics: [
+                    { label: 'Общая сумма', value: other.totalAmount, format: 'currency', color: 'danger' },
+                    { label: 'Записей', value: other.expensesCount, format: 'number', color: 'info' },
+                    { label: 'Категорий', value: other.categories.length, format: 'number', color: 'info' }
+                ]
             }
         ];
     }
 
-    // Загрузка начальных данных (вызывается при старте)
+    // Загрузка начальных данных (агрегация mock-данных из модулей)
     loadInitialData(): void {
-        // Данные Дебит/Кредит (из debit-credit модуля)
         this.updateDebitCredit({
             totalDebit: 525000,
             totalCredit: 532000,
@@ -188,7 +209,6 @@ export class FinancialDashboardService {
             pendingCount: 2
         });
 
-        // Данные Инвестиции
         this.updateInvestment({
             totalDebit: 0,
             totalCredit: 0,
@@ -196,44 +216,53 @@ export class FinancialDashboardService {
             projectsCount: 0
         });
 
-        // Данные Ремонт
         this.updateRepairCosts({
-            totalPlannedCost: 0,
-            totalActualCost: 0,
-            costDifference: 0,
-            repairsCount: 0,
-            inProgressCount: 0,
-            completedCount: 0
+            totalPlannedCost: 21600000,
+            totalActualCost: 13000000,
+            costDifference: -700000,
+            repairsCount: 8,
+            inProgressCount: 1,
+            completedCount: 5
         });
 
-        // Данные Закупки
         this.updateProcurement({
-            totalAmount: 0,
-            procurementsCount: 0,
-            pendingCount: 0,
-            inProgressCount: 0,
-            deliveredCount: 0,
-            deliveredAmount: 0
+            totalAmount: 266000000,
+            procurementsCount: 10,
+            pendingCount: 2,
+            inProgressCount: 4,
+            deliveredCount: 4,
+            deliveredAmount: 155000000
         });
 
-        // Данные KPI
         this.updateKpi({
-            overallKpi: 0,
-            criticalCount: 0,
-            warningCount: 0,
-            completedCount: 0,
-            totalCount: 0
+            overallKpi: 93,
+            criticalCount: 3,
+            warningCount: 7,
+            completedCount: 5,
+            totalCount: 15
         });
 
-        // Данные ЗП
         this.updateSalary({
-            totalFOT: 0,
-            totalNetPay: 0,
-            averageSalary: 0,
-            totalDeductions: 0,
-            employeesCount: 0,
-            paidCount: 0,
-            pendingAmount: 0
+            totalFOT: 138200000,
+            totalNetPay: 115825300,
+            averageSalary: 11582530,
+            totalDeductions: 22374700,
+            employeesCount: 10,
+            paidCount: 7,
+            pendingAmount: 5836000
+        });
+
+        this.updateOtherExpenses({
+            totalAmount: 18500000,
+            expensesCount: 12,
+            categories: [
+                { name: 'Коммунальные услуги', amount: 5200000 },
+                { name: 'Транспорт', amount: 3800000 },
+                { name: 'Связь и интернет', amount: 2100000 },
+                { name: 'Охрана', amount: 3400000 },
+                { name: 'Страхование', amount: 2500000 },
+                { name: 'Разное', amount: 1500000 }
+            ]
         });
     }
 
@@ -246,6 +275,7 @@ export class FinancialDashboardService {
             procurement: this.getEmptyProcurement(),
             kpi: this.getEmptyKpi(),
             salary: this.getEmptySalary(),
+            otherExpenses: this.getEmptyOtherExpenses(),
             lastUpdated: new Date()
         };
     }
@@ -272,5 +302,9 @@ export class FinancialDashboardService {
 
     private getEmptySalary(): SalarySummary {
         return { totalFOT: 0, totalNetPay: 0, averageSalary: 0, totalDeductions: 0, employeesCount: 0, paidCount: 0, pendingAmount: 0 };
+    }
+
+    private getEmptyOtherExpenses(): OtherExpensesSummary {
+        return { totalAmount: 0, expensesCount: 0, categories: [] };
     }
 }

@@ -53,6 +53,8 @@ export class FinancialDashboardComponent implements OnInit, OnDestroy {
     cashFlowChartOptions: any;
 
     ngOnInit(): void {
+        this.dashboardService.loadInitialData();
+
         this.subscription.add(
             this.dashboardService.dashboardData$.subscribe(data => {
                 this.dashboardData = data;
@@ -181,16 +183,17 @@ export class FinancialDashboardComponent implements OnInit, OnDestroy {
 
         // Структура расходов
         this.expensesChartData = {
-            labels: ['Дебит/Кредит', 'Инвестиции', 'Ремонт', 'Закупки', 'ЗП'],
+            labels: ['Дебит/Кредит', 'Инвестиции', 'Ремонт', 'Закупки', 'ЗП', 'Прочее'],
             datasets: [{
                 data: [
                     data.debitCredit.totalCredit,
                     data.investment.totalCredit,
                     data.repairCosts.totalActualCost,
                     data.procurement.deliveredAmount,
-                    data.salary.totalNetPay
+                    data.salary.totalNetPay,
+                    data.otherExpenses.totalAmount
                 ],
-                backgroundColor: ['#3B82F6', '#10B981', '#F59E0B', '#8B5CF6', '#06B6D4'],
+                backgroundColor: ['#3B82F6', '#10B981', '#F59E0B', '#8B5CF6', '#06B6D4', '#F97316'],
                 borderWidth: 0
             }]
         };

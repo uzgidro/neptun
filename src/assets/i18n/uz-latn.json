@@ -899,6 +899,9 @@
       "ATTENDANCE": "Qatnashish",
       "WORK_DAYS": "Ish kunlari",
       "WORKED_HOURS": "Ishlangan soatlar",
+      "HOURS_WORKED": "Ishlangan soatlar",
+      "HOURS_SHORT": "s",
+      "DATA_UPDATED": "Tabel ma'lumotlari yangilandi",
       "OVERTIME": "Qo'shimcha ish",
       "ON_VACATION": "Ta'tilda",
       "EMPLOYEE": "Xodim",
@@ -964,6 +967,7 @@
     "ANALYTICS": {
       "TITLE": "Tahlil va hisobotlar",
       "TOTAL_EMPLOYEES": "Jami xodimlar",
+      "AVG_AGE": "O'rt. yosh",
       "ACTIVE": "Faol",
       "HIRED_THIS_MONTH": "Bu oy qabul qilingan",
       "TERMINATED": "Ishdan bo'shatilgan",
@@ -1149,7 +1153,7 @@
       "POSITION": "Lavozim",
       "SALARY": "Maosh",
       "RESPONSES": "Javoblar",
-      "PRIORITY": "Ustunlik",
+      "PRIORITY_HEADER": "Ustunlik",
       "STATUS": "Holat",
       "ACTIONS": "Amallar",
       "APPLICANT": "Ariza beruvchi",
@@ -1164,8 +1168,9 @@
       "EDIT": "Tahrirlash",
       "NO_VACANCIES": "Vakansiyalar topilmadi",
       "FULL_NAME": "To'liq ism",
-      "SOURCE": "Manba",
-      "STAGE": "Bosqich",
+      "VACANCY_HEADER": "Vakansiya",
+      "SOURCE_HEADER": "Manba",
+      "STAGE_HEADER": "Bosqich",
       "RATING": "Reyting",
       "NO_CANDIDATES": "Nomzodlar topilmadi",
       "EMPLOYEE": "Xodim",
@@ -1882,7 +1887,10 @@
       "DASHBOARD": {
           "HEADER": {
               "TITLE": "Boshqaruv Raisi plansheti",
-              "TO_HOME": "Bosh sahifaga"
+              "TO_HOME": "Bosh sahifaga",
+              "SOS": "Favqulodda qo'ng'iroq",
+              "ENABLE_ALARM": "Signal ovozini yoqish",
+              "DISABLE_ALARM": "Signal ovozini o'chirish"
           },
           "MONITORING": {
               "TITLE": "Saqlash holati",
@@ -2037,7 +2045,20 @@
       "INDICATORS": "ko'rsatkichlar",
       "PROCUREMENTS": "xaridlar",
       "REPAIRS": "ta'mirlashlar",
-      "EMPLOYEES": "xodimlar"
+      "EMPLOYEES": "xodimlar",
+      "OTHER_EXPENSES": "Boshqa xarajatlar"
+    },
+    "OTHER_EXPENSES": {
+      "TITLE": "Boshqa xarajatlar",
+      "TOTAL_AMOUNT": "Umumiy summa",
+      "EXPENSES_COUNT": "Yozuvlar soni",
+      "CATEGORIES_COUNT": "Kategoriyalar",
+      "CATEGORY_UTILITIES": "Kommunal xizmatlar",
+      "CATEGORY_TRANSPORT": "Transport",
+      "CATEGORY_COMMUNICATION": "Aloqa va internet",
+      "CATEGORY_SECURITY": "Qo'riqlash",
+      "CATEGORY_INSURANCE": "Sug'urta",
+      "CATEGORY_OTHER": "Turli xil"
     },
     "INVESTMENT": {
       "TITLE": "Investitsiya loyihalari",

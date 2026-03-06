@@ -888,6 +888,9 @@
       "ATTENDANCE": "Қатнашиш",
       "WORK_DAYS": "Иш кунлари",
       "WORKED_HOURS": "Ишланган соатлар",
+      "HOURS_WORKED": "Ишланган соатлар",
+      "HOURS_SHORT": "с",
+      "DATA_UPDATED": "Табел маълумотлари янгиланди",
       "OVERTIME": "Қўшимча иш",
       "ON_VACATION": "Таътилда",
       "EMPLOYEE": "Ходим",
@@ -953,6 +956,7 @@
     "ANALYTICS": {
       "TITLE": "Таҳлил ва ҳисоботлар",
       "TOTAL_EMPLOYEES": "Жами ходимлар",
+      "AVG_AGE": "Ўрт. ёш",
       "ACTIVE": "Фаол",
       "HIRED_THIS_MONTH": "Бу ой қабул қилинган",
       "TERMINATED": "Ишдан бўшатилган",
@@ -1138,7 +1142,7 @@
       "POSITION": "Лавозим",
       "SALARY": "Маош",
       "RESPONSES": "Жавоблар",
-      "PRIORITY": "Устунлик",
+      "PRIORITY_HEADER": "Устунлик",
       "STATUS": "Ҳолат",
       "ACTIONS": "Амаллар",
       "APPLICANT": "Ариза берувчи",
@@ -1153,8 +1157,9 @@
       "EDIT": "Таҳрирлаш",
       "NO_VACANCIES": "Вакансиялар топилмади",
       "FULL_NAME": "Тўлиқ исм",
-      "SOURCE": "Манба",
-      "STAGE": "Босқич",
+      "VACANCY_HEADER": "Вакансия",
+      "SOURCE_HEADER": "Манба",
+      "STAGE_HEADER": "Босқич",
       "RATING": "Рейтинг",
       "NO_CANDIDATES": "Номзодлар топилмади",
       "EMPLOYEE": "Ходим",
@@ -1871,7 +1876,10 @@
     "DASHBOARD": {
       "HEADER": {
         "TITLE": "Бошқарув Раиси планшети",
-        "TO_HOME": "Бош саҳифага"
+        "TO_HOME": "Бош саҳифага",
+        "SOS": "Фавқулодда қўнғироқ",
+        "ENABLE_ALARM": "Сигнал овозини ёқиш",
+        "DISABLE_ALARM": "Сигнал овозини ўчириш"
       },
       "MONITORING": {
         "TITLE": "Сақлаш ҳолати",
@@ -2026,7 +2034,20 @@
       "INDICATORS": "кўрсаткичлар",
       "PROCUREMENTS": "харидлар",
       "REPAIRS": "таъмирлашлар",
-      "EMPLOYEES": "ходимлар"
+      "EMPLOYEES": "ходимлар",
+      "OTHER_EXPENSES": "Бошқа харажатлар"
+    },
+    "OTHER_EXPENSES": {
+      "TITLE": "Бошқа харажатлар",
+      "TOTAL_AMOUNT": "Умумий сумма",
+      "EXPENSES_COUNT": "Ёзувлар сони",
+      "CATEGORIES_COUNT": "Категориялар",
+      "CATEGORY_UTILITIES": "Коммунал хизматлар",
+      "CATEGORY_TRANSPORT": "Транспорт",
+      "CATEGORY_COMMUNICATION": "Алоқа ва интернет",
+      "CATEGORY_SECURITY": "Қўриқлаш",
+      "CATEGORY_INSURANCE": "Суғурта",
+      "CATEGORY_OTHER": "Турли хил"
     },
     "INVESTMENT": {
       "TITLE": "Инвестиция лойиҳалари",

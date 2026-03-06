@@ -121,6 +121,40 @@
     color: var(--sc-text-muted);
 }
 
+// SOS Button
+.sos-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: #dc2626;
+    color: white;
+    border-radius: 2rem;
+    padding: 4px 12px;
+    font-weight: 600;
+    font-size: 12px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    animation: sos-pulse 2s infinite;
+
+    i {
+        font-size: 12px;
+        color: white;
+    }
+
+    &:hover {
+        background: #b91c1c;
+        transform: scale(1.05);
+    }
+}
+
+@keyframes sos-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7); }
+    70% { box-shadow: 0 0 0 8px rgba(220, 38, 38, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
+}
+
 // Alarm Mute Button
 .alarm-mute-btn {
     display: flex;

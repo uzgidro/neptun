@@ -51,6 +51,12 @@ export interface SalarySummary {
     pendingAmount: number;
 }
 
+export interface OtherExpensesSummary {
+    totalAmount: number;
+    expensesCount: number;
+    categories: { name: string; amount: number }[];
+}
+
 export interface FinancialDashboardData {
     debitCredit: DebitCreditSummary;
     investment: InvestmentSummary;
@@ -58,6 +64,7 @@ export interface FinancialDashboardData {
     procurement: ProcurementSummary;
     kpi: KpiSummary;
     salary: SalarySummary;
+    otherExpenses: OtherExpensesSummary;
     lastUpdated: Date;
 }
 

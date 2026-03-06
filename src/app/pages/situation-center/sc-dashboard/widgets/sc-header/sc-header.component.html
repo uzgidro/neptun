@@ -27,6 +27,10 @@
     </div>
 
     <div class="header-right">
+        <a href="tel:112" class="sos-btn" [title]="'SITUATION_CENTER.DASHBOARD.HEADER.SOS' | translate">
+            <i class="pi pi-phone"></i>
+            <span>SOS</span>
+        </a>
         <button class="alarm-mute-btn"
                 [class.muted]="alarmService.muted"
                 [class.has-active]="alarmService.hasActiveShutdowns"

@@ -16,6 +16,7 @@ import { InboxWidget } from '@/layout/component/topbar/inbox/inbox-widget.compon
 import { LanguageSwitcherComponent } from '@/layout/component/topbar/language-switcher/language-switcher.component';
 import { updateSurfacePalette } from '@primeuix/themes';
 import { AuthService } from '@/core/services/auth.service';
+import { AlarmService } from '@/core/services/alarm.service';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
@@ -58,6 +59,15 @@ import { TranslateModule } from '@ngx-translate/core';
                 <i class="pi pi-phone"></i>
                 <span class="emergency-text">SOS</span>
             </a>
+
+            <!-- Alarm Mute Button -->
+            <button type="button" class="alarm-mute-btn"
+                    [class.muted]="alarmService.muted"
+                    [class.has-active]="alarmService.hasActiveShutdowns"
+                    (click)="alarmService.toggleMute()"
+                    [title]="(alarmService.muted ? 'SITUATION_CENTER.DASHBOARD.HEADER.ENABLE_ALARM' : 'SITUATION_CENTER.DASHBOARD.HEADER.DISABLE_ALARM') | translate">
+                <i class="pi" [class.pi-volume-up]="!alarmService.muted" [class.pi-volume-off]="alarmService.muted"></i>
+            </button>
 
             <div class="layout-config-menu">
                 <app-language-switcher></app-language-switcher>
@@ -105,6 +115,7 @@ import { TranslateModule } from '@ngx-translate/core';
 export class AppTopbar {
     layoutService = inject(LayoutService);
     authService: AuthService = inject(AuthService);
+    alarmService = inject(AlarmService);
     configurator = new AppConfigurator();
 
     toggleDarkMode() {

@@ -891,6 +891,9 @@
       "ATTENDANCE": "Attendance",
       "WORK_DAYS": "Work days",
       "WORKED_HOURS": "Worked hours",
+      "HOURS_WORKED": "Worked hours",
+      "HOURS_SHORT": "h",
+      "DATA_UPDATED": "Timesheet data updated",
       "OVERTIME": "Overtime",
       "ON_VACATION": "On vacation",
       "EMPLOYEE": "Employee",
@@ -956,6 +959,7 @@
     "ANALYTICS": {
       "TITLE": "Analytics and Reports",
       "TOTAL_EMPLOYEES": "Total employees",
+      "AVG_AGE": "Avg. age",
       "ACTIVE": "Active",
       "HIRED_THIS_MONTH": "Hired this month",
       "TERMINATED": "Terminated",
@@ -1141,7 +1145,7 @@
       "POSITION": "Position",
       "SALARY": "Salary",
       "RESPONSES": "Responses",
-      "PRIORITY": "Priority",
+      "PRIORITY_HEADER": "Priority",
       "STATUS": "Status",
       "ACTIONS": "Actions",
       "APPLICANT": "Applicant",
@@ -1156,8 +1160,9 @@
       "EDIT": "Edit",
       "NO_VACANCIES": "No vacancies found",
       "FULL_NAME": "Full name",
-      "SOURCE": "Source",
-      "STAGE": "Stage",
+      "VACANCY_HEADER": "Vacancy",
+      "SOURCE_HEADER": "Source",
+      "STAGE_HEADER": "Stage",
       "RATING": "Rating",
       "NO_CANDIDATES": "No candidates found",
       "EMPLOYEE": "Employee",
@@ -1874,7 +1879,10 @@
     "DASHBOARD": {
       "HEADER": {
         "TITLE": "Chairman's Dashboard",
-        "TO_HOME": "Go to Home"
+        "TO_HOME": "Go to Home",
+        "SOS": "Emergency call",
+        "ENABLE_ALARM": "Enable alarm sound",
+        "DISABLE_ALARM": "Disable alarm sound"
       },
       "MONITORING": {
         "TITLE": "Storage Status",
@@ -2029,7 +2037,20 @@
       "INDICATORS": "indicators",
       "PROCUREMENTS": "procurements",
       "REPAIRS": "repairs",
-      "EMPLOYEES": "employees"
+      "EMPLOYEES": "employees",
+      "OTHER_EXPENSES": "Other Expenses"
+    },
+    "OTHER_EXPENSES": {
+      "TITLE": "Other Expenses",
+      "TOTAL_AMOUNT": "Total Amount",
+      "EXPENSES_COUNT": "Number of Records",
+      "CATEGORIES_COUNT": "Categories",
+      "CATEGORY_UTILITIES": "Utilities",
+      "CATEGORY_TRANSPORT": "Transport",
+      "CATEGORY_COMMUNICATION": "Communication & Internet",
+      "CATEGORY_SECURITY": "Security",
+      "CATEGORY_INSURANCE": "Insurance",
+      "CATEGORY_OTHER": "Miscellaneous"
     },
     "INVESTMENT": {
       "TITLE": "Investment Projects",

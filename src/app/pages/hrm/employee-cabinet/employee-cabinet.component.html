@@ -283,52 +283,7 @@
 
             <!-- Right Column -->
             <div class="space-y-4">
-                <!-- Competencies -->
-                @if (competencies) {
-                    <div class="card">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-lg font-semibold m-0">
-                                <i class="pi pi-chart-bar mr-2 text-purple-500"></i>{{ 'HRM.EMPLOYEE_CABINET.MY_COMPETENCIES' | translate }}
-                            </h3>
-                            <a routerLink="/hrm/competency" class="text-blue-500 text-sm hover:underline">{{ 'HRM.EMPLOYEE_CABINET.DETAILS' | translate }}</a>
-                        </div>
-
-                        <div class="space-y-3">
-                            @for (comp of competencies.competencies; track comp.competency_id) {
-                                <div class="flex justify-between items-center">
-                                    <span class="text-sm">{{ comp.competency_name }}</span>
-                                    <div class="flex items-center gap-1">
-                                        @for (star of getCompetencyStars(comp.current_level); track $index) {
-                                            <i class="pi {{ star }} text-yellow-500 text-xs"></i>
-                                        }
-                                        <span class="text-xs text-gray-500 ml-1">({{ comp.current_level }}/{{ comp.max_level }})</span>
-                                    </div>
-                                </div>
-                            }
-                        </div>
-
-                        @if (competencies.development_plan && competencies.development_plan.length > 0) {
-                            <hr class="my-4 border-gray-200 dark:border-gray-700">
-                            <h4 class="text-sm font-medium text-gray-500 mb-2">{{ 'HRM.EMPLOYEE_CABINET.DEVELOPMENT_GOALS' | translate }}</h4>
-                            @for (goal of competencies.development_plan; track goal.id) {
-                                <div class="p-2 bg-purple-50 dark:bg-purple-900/20 rounded-lg mb-2">
-                                    <div class="flex justify-between items-center">
-                                        <span class="text-sm font-medium">{{ goal.competency_name }}</span>
-                                        <span class="text-xs text-gray-500">{{ goal.current_level }} → {{ goal.target_level }}</span>
-                                    </div>
-                                    <div class="text-xs text-gray-500">{{ 'HRM.EMPLOYEE_CABINET.UNTIL_DATE' | translate }} {{ formatDate(goal.target_date) }}</div>
-                                </div>
-                            }
-                        }
-
-                        @if (competencies.next_assessment_date) {
-                            <div class="mt-4 p-3 bg-surface-100 dark:bg-surface-700 rounded-lg text-center">
-                                <div class="text-xs text-gray-500">{{ 'HRM.EMPLOYEE_CABINET.NEXT_ASSESSMENT' | translate }}</div>
-                                <div class="font-medium">{{ formatDate(competencies.next_assessment_date) }}</div>
-                            </div>
-                        }
-                    </div>
-                }
+                <!-- Competencies card removed for demo -->
 
                 <!-- Notifications -->
                 @if (notifications.length > 0) {
