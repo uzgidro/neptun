@@ -46,11 +46,11 @@ const MOCK_VACANCIES: Vacancy[] = [
         created_at: '2026-02-01T08:00:00Z', updated_at: '2026-02-25T14:00:00Z'
     },
     {
-        id: 3, title: 'Электромонтёр по обслуживанию подстанций', department_id: 5, department_name: 'Служба подстанций и линий',
-        position_id: 50, position_name: 'Электромонтёр',
+        id: 3, title: 'Наладчик оборудования по обслуживанию подстанций', department_id: 5, department_name: 'Служба подстанций и линий',
+        position_id: 50, position_name: 'Наладчик оборудования',
         description: 'Техническое обслуживание и ремонт оборудования подстанций 110/35/10 кВ.',
-        requirements: 'Среднее специальное образование (электротехника). Группа по электробезопасности не ниже IV. Опыт от 2 лет.',
-        education_requirements: 'Среднее специальное (электротехника)',
+        requirements: 'Среднее специальное образование (технология производства). Группа по промбезопасности не ниже IV. Опыт от 2 лет.',
+        education_requirements: 'Среднее специальное (технология производства)',
         experience_years: 2, skills: ['Электромонтаж', 'Релейная защита', 'Высоковольтное оборудование', 'Охрана труда'],
         salary_from: 4500000, salary_to: 6000000, employment_type: 'full_time',
         status: 'pending_approval', priority: 'normal',
@@ -159,7 +159,7 @@ const MOCK_CANDIDATES: Candidate[] = [
             { institution: 'Олмалыкский горно-металлургический техникум', degree: 'Среднее специальное', field_of_study: 'Электрооборудование', start_year: 2014, end_year: 2017 }
         ],
         experience: [
-            { company: 'АГМК', position: 'Электромонтёр', start_date: '2017-07-01', end_date: '2025-10-31', description: 'Обслуживание электрооборудования' }
+            { company: 'АГМК', position: 'Наладчик оборудования', start_date: '2017-07-01', end_date: '2025-10-31', description: 'Обслуживание технологического оборудования' }
         ],
         skills: ['Электромонтаж', 'Релейная защита'],
         languages: [{ language: 'Узбекский', level: 'native' }, { language: 'Русский', level: 'intermediate' }],

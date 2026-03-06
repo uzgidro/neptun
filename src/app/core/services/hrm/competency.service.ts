@@ -11,11 +11,11 @@ const USE_MOCK = !BASE_URL;
 
 const MOCK_COMPETENCIES: Competency[] = [
     {
-        id: 1, name: 'Управление производством', description: 'Знание технологических процессов управления молокозаводом, включая пуск/останов агрегатов, контроль параметров, оперативное управление режимами.',
+        id: 1, name: 'Управление производством', description: 'Знание технологических процессов управления молокозаводом, включая пуск/останов оборудования, контроль параметров, оперативное управление режимами.',
         category: 'technical',
         level_definitions: [
             { level: 1, name: 'Начальный', description: 'Знает основные принципы работы молокозавода, может выполнять базовые операции под руководством' },
-            { level: 2, name: 'Базовый', description: 'Самостоятельно выполняет типовые операции по управлению агрегатами' },
+            { level: 2, name: 'Базовый', description: 'Самостоятельно выполняет типовые операции по управлению оборудованием' },
             { level: 3, name: 'Уверенный', description: 'Уверенно управляет всеми режимами работы молокозавода, решает нестандартные ситуации' },
             { level: 4, name: 'Продвинутый', description: 'Оптимизирует режимы работы, обучает других, участвует в разработке регламентов' },
             { level: 5, name: 'Эксперт', description: 'Эксперт по управлению производством, разрабатывает стандарты, консультирует другие заводы' }
@@ -38,10 +38,10 @@ const MOCK_COMPETENCIES: Competency[] = [
         id: 3, name: 'Технология молочного производства', description: 'Знание технологии молочного производства и оборудования: пастеризаторы, сепараторы, распредустройства, автоматика и контроль качества.',
         category: 'technical',
         level_definitions: [
-            { level: 1, name: 'Начальный', description: 'Базовые знания электротехники, понимает схемы простых цепей' },
-            { level: 2, name: 'Базовый', description: 'Читает электрические схемы, обслуживает типовое оборудование' },
+            { level: 1, name: 'Начальный', description: 'Базовые знания технологии, понимает схемы простых процессов' },
+            { level: 2, name: 'Базовый', description: 'Читает технологические схемы, обслуживает типовое оборудование' },
             { level: 3, name: 'Уверенный', description: 'Диагностирует неисправности, проводит наладку оборудования' },
-            { level: 4, name: 'Продвинутый', description: 'Проектирует электрические схемы, настраивает РЗА' },
+            { level: 4, name: 'Продвинутый', description: 'Проектирует технологические схемы, настраивает автоматику' },
             { level: 5, name: 'Эксперт', description: 'Эксперт по оборудованию молокозавода, разрабатывает технические решения' }
         ],
         created_at: '2025-01-15T08:00:00Z', updated_at: '2025-06-20T10:00:00Z'
@@ -157,13 +157,13 @@ const MOCK_ASSESSMENTS: CompetencyAssessment[] = [
         assessor_id: 101, assessor_name: 'Каримов Бахтиёр Рустамович',
         assessment_date: '2026-02-10', assessment_type: 'manager', status: 'completed', overall_score: 3.2,
         competency_scores: [
-            { id: 6, assessment_id: 2, competency_id: 1, competency_name: 'Управление производством', category: 'technical', expected_level: 3, actual_level: 3, gap: 0, notes: 'Уверенно управляет агрегатами' },
+            { id: 6, assessment_id: 2, competency_id: 1, competency_name: 'Управление производством', category: 'technical', expected_level: 3, actual_level: 3, gap: 0, notes: 'Уверенно управляет оборудованием' },
             { id: 7, assessment_id: 2, competency_id: 2, competency_name: 'Промышленная безопасность', category: 'technical', expected_level: 3, actual_level: 3, gap: 0 },
             { id: 8, assessment_id: 2, competency_id: 3, competency_name: 'Технология молочного производства', category: 'technical', expected_level: 3, actual_level: 2, gap: -1, notes: 'Нужны дополнительные знания по РЗА' },
             { id: 9, assessment_id: 2, competency_id: 5, competency_name: 'АСУ ТП и SCADA', category: 'technical', expected_level: 3, actual_level: 3, gap: 0, notes: 'Хорошо владеет SCADA' },
             { id: 10, assessment_id: 2, competency_id: 10, competency_name: 'Работа в команде', category: 'soft', expected_level: 3, actual_level: 4, gap: 1, notes: 'Превышает ожидания, отличный командный игрок' }
         ],
-        feedback: 'Добросовестный оператор. Необходимо повысить квалификацию по электротехнике. Потенциал для роста до старшего оператора.',
+        feedback: 'Добросовестный оператор. Необходимо повысить квалификацию по технологии производства. Потенциал для роста до старшего оператора.',
         strengths: ['SCADA', 'Работа в команде', 'Управление производством'],
         development_areas: ['Технология молочного производства', 'Автоматика'],
         created_at: '2026-02-10T09:00:00Z', updated_at: '2026-02-15T11:00:00Z'

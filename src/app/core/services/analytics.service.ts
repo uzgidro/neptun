@@ -37,10 +37,10 @@ const MOCK_DASHBOARD: HRAnalyticsDashboard = {
         { department_id: 5, department_name: 'Молокозавод «Кадирин»', headcount: 198 },
         { department_id: 6, department_name: 'Молокозавод «Ахангаран»', headcount: 231 },
         { department_id: 7, department_name: 'Чирчик-Бозсуйский молочный комбинат', headcount: 356 },
-        { department_id: 8, department_name: 'Навоийская ТЭС', headcount: 342 },
+        { department_id: 8, department_name: 'Навоийский молокозавод', headcount: 342 },
         { department_id: 9, department_name: 'Центральный аппарат', headcount: 487 },
-        { department_id: 10, department_name: 'Талимарджанская ТЭС', headcount: 315 },
-        { department_id: 11, department_name: 'Сырдарьинская ТЭС', headcount: 298 },
+        { department_id: 10, department_name: 'Талимарджанский молокозавод', headcount: 315 },
+        { department_id: 11, department_name: 'Сырдарьинский молокозавод', headcount: 298 },
         { department_id: 12, department_name: 'Ташкентская ТЭЦ', headcount: 276 }
     ],
     position_headcount: [
@@ -81,7 +81,7 @@ const MOCK_TURNOVER_REPORT: TurnoverReport = {
         { department: 'Молокозавод «Тупаланг»', terminations: 4, turnover_rate: 1.5 },
         { department: 'Молокозавод «Кадирин»', terminations: 2, turnover_rate: 1.0 },
         { department: 'Центральный аппарат', terminations: 5, turnover_rate: 1.0 },
-        { department: 'Навоийская ТЭС', terminations: 4, turnover_rate: 1.2 },
+        { department: 'Навоийский молокозавод', terminations: 4, turnover_rate: 1.2 },
         { department: 'Чирчик-Бозсуйский молочный комбинат', terminations: 3, turnover_rate: 0.8 }
     ]
 };
@@ -108,9 +108,9 @@ const MOCK_ATTENDANCE_REPORT: AttendanceReport = {
         { department: 'Молокозавод «Кадирин»', attendance_rate: 95.9, absence_rate: 4.1 },
         { department: 'Молокозавод «Ахангаран»', attendance_rate: 94.2, absence_rate: 5.8 },
         { department: 'Чирчик-Бозсуйский молочный комбинат', attendance_rate: 93.5, absence_rate: 6.5 },
-        { department: 'Навоийская ТЭС', attendance_rate: 95.4, absence_rate: 4.6 },
+        { department: 'Навоийский молокозавод', attendance_rate: 95.4, absence_rate: 4.6 },
         { department: 'Центральный аппарат', attendance_rate: 96.8, absence_rate: 3.2 },
-        { department: 'Талимарджанская ТЭС', attendance_rate: 94.0, absence_rate: 6.0 }
+        { department: 'Талимарджанский молокозавод', attendance_rate: 94.0, absence_rate: 6.0 }
     ]
 };
 
@@ -130,10 +130,10 @@ const MOCK_SALARY_REPORT: SalaryReport = {
         { department: 'Молокозавод «Кадирин»', avg_salary: 4650000, total_payroll: 920700000, headcount: 198 },
         { department: 'Молокозавод «Ахангаран»', avg_salary: 4720000, total_payroll: 1090320000, headcount: 231 },
         { department: 'Чирчик-Бозсуйский молочный комбинат', avg_salary: 4950000, total_payroll: 1762200000, headcount: 356 },
-        { department: 'Навоийская ТЭС', avg_salary: 4810000, total_payroll: 1645020000, headcount: 342 },
+        { department: 'Навоийский молокозавод', avg_salary: 4810000, total_payroll: 1645020000, headcount: 342 },
         { department: 'Центральный аппарат', avg_salary: 5340000, total_payroll: 2600580000, headcount: 487 },
-        { department: 'Талимарджанская ТЭС', avg_salary: 4760000, total_payroll: 1499400000, headcount: 315 },
-        { department: 'Сырдарьинская ТЭС', avg_salary: 4690000, total_payroll: 1397620000, headcount: 298 },
+        { department: 'Талимарджанский молокозавод', avg_salary: 4760000, total_payroll: 1499400000, headcount: 315 },
+        { department: 'Сырдарьинский молокозавод', avg_salary: 4690000, total_payroll: 1397620000, headcount: 298 },
         { department: 'Ташкентская ТЭЦ', avg_salary: 4580000, total_payroll: 1264080000, headcount: 276 }
     ]
 };

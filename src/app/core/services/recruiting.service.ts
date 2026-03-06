@@ -35,13 +35,13 @@ const MOCK_VACANCIES: Vacancy[] = [
     },
     {
         id: 2,
-        title: 'Инженер-электрик',
+        title: 'Инженер-механик',
         department_id: 11,
         department_name: 'Молокозавод «Ходжикент»',
         position_id: 102,
-        position_name: 'Инженер-электрик',
+        position_name: 'Инженер-механик',
         description: 'Обслуживание технологических систем и технологического оборудования Молокозавода «Ходжикент».',
-        requirements: 'Высшее электротехническое образование, стаж от 5 лет, допуск к работе с высоковольтным оборудованием.',
+        requirements: 'Высшее техническое образование, стаж от 5 лет, допуск к работе с промышленным оборудованием.',
         employment_type: 'full_time',
         status: 'open',
         priority: 'normal',
@@ -138,7 +138,7 @@ const MOCK_CANDIDATES: Candidate[] = [
     {
         id: 3,
         vacancy_id: 2,
-        vacancy_title: 'Инженер-электрик',
+        vacancy_title: 'Инженер-механик',
         full_name: 'Юлдашева Дилноза Камоловна',
         email: 'yuldasheva.d@mail.uz',
         phone: '+998942223344',
@@ -154,7 +154,7 @@ const MOCK_CANDIDATES: Candidate[] = [
     {
         id: 4,
         vacancy_id: 2,
-        vacancy_title: 'Инженер-электрик',
+        vacancy_title: 'Инженер-механик',
         full_name: 'Хасанов Фаррух Тимурович',
         email: 'khasanov.f@mail.uz',
         phone: '+998905556677',
@@ -238,7 +238,7 @@ const MOCK_INTERVIEWS: Interview[] = [
         status: 'completed',
         overall_rating: 4.8,
         recommendation: 'strong_yes',
-        feedback: 'Отличный специалист с глубокими знаниями в электротехнике и релейной защите. Настоятельно рекомендуется к найму.',
+        feedback: 'Отличный специалист с глубокими знаниями в технологии и автоматизации производства. Настоятельно рекомендуется к найму.',
         completed_at: '2026-02-27T12:30:00Z',
         created_at: '2026-02-22T09:00:00Z'
     }
@@ -250,7 +250,7 @@ const MOCK_OFFERS: JobOffer[] = [
         candidate_id: 4,
         vacancy_id: 2,
         offered_salary: 11500000,
-        offered_position: 'Инженер-электрик',
+        offered_position: 'Инженер-механик',
         offered_department: 'Молокозавод «Ходжикент»',
         start_date: '2026-04-01',
         contract_type: 'permanent',

@@ -9,7 +9,7 @@ const USE_MOCK = !BASE_URL;
 
 const MOCK_TRAININGS: Training[] = [
     {
-        id: 1, title: 'Охрана труда и промышленная безопасность', description: 'Обязательное обучение по охране труда для сотрудников энергетических объектов',
+        id: 1, title: 'Охрана труда и промышленная безопасность', description: 'Обязательное обучение по охране труда для сотрудников производственных объектов',
         training_type: 'course', provider: 'Центр ОТ и ПБ', start_date: '2026-03-10', end_date: '2026-03-14', duration_hours: 40,
         location: 'Учебный центр, г.Ташкент', is_online: false, max_participants: 30, current_participants: 24, status: 'planned', cost: 5000000, certificate_provided: true
     },
