@@ -11,30 +11,30 @@ const USE_MOCK = !BASE_URL;
 
 const MOCK_VACANCIES: Vacancy[] = [
     {
-        id: 1, title: 'Инженер-гидротехник', department_id: 1, department_name: 'Управление эксплуатации ГЭС',
-        position_id: 12, position_name: 'Инженер-гидротехник',
-        description: 'Обеспечение технической эксплуатации гидротехнических сооружений Чарвакской ГЭС. Контроль состояния плотины, водоводов и затворов.',
-        requirements: 'Высшее техническое образование по специальности «Гидротехническое строительство». Стаж работы на ГЭС не менее 3 лет.',
-        responsibilities: 'Проведение технических осмотров, контроль параметров ГТС, подготовка отчётов о состоянии сооружений',
-        education_requirements: 'Высшее (гидротехника, гидроэнергетика)',
-        experience_years: 3, skills: ['Гидротехника', 'AutoCAD', 'Мониторинг ГТС', 'Охрана труда'],
+        id: 1, title: 'Инженер-технолог', department_id: 1, department_name: 'Управление производством',
+        position_id: 12, position_name: 'Инженер-технолог',
+        description: 'Обеспечение технической эксплуатации производственных объектов Молокозавода «Чарвак». Контроль состояния пастеризаторов, сепараторов и ёмкостей.',
+        requirements: 'Высшее техническое образование по специальности «Технология молочного производства». Стаж работы на молокозаводе не менее 3 лет.',
+        responsibilities: 'Проведение технических осмотров, контроль параметров производственных объектов, подготовка отчётов о состоянии оборудования',
+        education_requirements: 'Высшее (технология молочного производства)',
+        experience_years: 3, skills: ['Технология молочного производства', 'AutoCAD', 'Мониторинг производства', 'Охрана труда'],
         salary_from: 8000000, salary_to: 12000000, employment_type: 'full_time',
         status: 'open', priority: 'high',
         requested_by: 101, requested_by_name: 'Каримов Б.Р.', request_date: '2026-01-15',
-        request_justification: 'Расширение штата в связи с вводом нового гидроагрегата',
+        request_justification: 'Расширение штата в связи с вводом нового производственного оборудования',
         approved_by: 200, approved_by_name: 'Директор', approved_date: '2026-01-20',
         published_at: '2026-01-25', deadline: '2026-03-31',
-        publish_portals: ['ish.uz', 'hh.uz', 'uzbekgidroenergo.uz'],
+        publish_portals: ['ish.uz', 'hh.uz', 'molokoprom.uz'],
         applications_count: 12, interviews_count: 4, offers_count: 0,
         created_at: '2026-01-15T08:00:00Z', updated_at: '2026-02-28T10:00:00Z'
     },
     {
-        id: 2, title: 'Оператор гидроагрегатов', department_id: 1, department_name: 'Управление эксплуатации ГЭС',
-        position_id: 11, position_name: 'Оператор гидроагрегатов',
-        description: 'Управление работой гидроагрегатов на Ходжикентской ГЭС. Контроль параметров генераторов, турбин и систем регулирования.',
-        requirements: 'Среднее специальное или высшее техническое образование. Опыт работы на энергетических объектах от 2 лет.',
-        education_requirements: 'Среднее специальное / высшее (электроэнергетика)',
-        experience_years: 2, skills: ['Электроэнергетика', 'SCADA', 'Гидроагрегаты', 'Релейная защита'],
+        id: 2, title: 'Оператор производственной линии', department_id: 1, department_name: 'Управление производством',
+        position_id: 11, position_name: 'Оператор производственной линии',
+        description: 'Управление работой производственного оборудования на Молокозаводе «Ходжикент». Контроль параметров сепараторов, пастеризаторов и систем регулирования.',
+        requirements: 'Среднее специальное или высшее техническое образование. Опыт работы на производственных объектах от 2 лет.',
+        education_requirements: 'Среднее специальное / высшее (технология молочного производства)',
+        experience_years: 2, skills: ['Технология молочного производства', 'SCADA', 'Производственное оборудование', 'Автоматика'],
         salary_from: 5000000, salary_to: 7000000, employment_type: 'full_time',
         status: 'open', priority: 'urgent',
         requested_by: 101, requested_by_name: 'Каримов Б.Р.', request_date: '2026-02-01',
@@ -62,7 +62,7 @@ const MOCK_VACANCIES: Vacancy[] = [
     {
         id: 4, title: 'Инженер АСУ ТП', department_id: 6, department_name: 'Отдел автоматизации',
         position_id: 60, position_name: 'Инженер АСУ ТП',
-        description: 'Разработка и сопровождение автоматизированных систем управления технологическими процессами на объектах Узбекгидроэнерго.',
+        description: 'Разработка и сопровождение автоматизированных систем управления технологическими процессами на объектах МолокоПром.',
         requirements: 'Высшее образование (автоматизация, информатика). Знание SCADA-систем, ПЛК. Опыт от 3 лет.',
         education_requirements: 'Высшее (автоматизация, IT)',
         experience_years: 3, skills: ['SCADA', 'PLC', 'Siemens S7', 'Python', 'Сети TCP/IP', 'ОРС'],
@@ -78,7 +78,7 @@ const MOCK_VACANCIES: Vacancy[] = [
     {
         id: 5, title: 'Техник-метролог', department_id: 7, department_name: 'Метрологическая служба',
         position_id: 70, position_name: 'Техник-метролог',
-        description: 'Поверка и калибровка средств измерений на гидроэлектростанциях. Обеспечение метрологической прослеживаемости.',
+        description: 'Поверка и калибровка средств измерений на молокозаводах. Обеспечение метрологической прослеживаемости.',
         requirements: 'Среднее специальное или высшее образование (метрология). Опыт поверки КИП от 1 года.',
         education_requirements: 'Среднее специальное / высшее (метрология)',
         experience_years: 1, skills: ['Метрология', 'КИП', 'Калибровка', 'ISO 17025'],
@@ -93,65 +93,65 @@ const MOCK_VACANCIES: Vacancy[] = [
 
 const MOCK_CANDIDATES: Candidate[] = [
     {
-        id: 1, vacancy_id: 1, vacancy_title: 'Инженер-гидротехник',
+        id: 1, vacancy_id: 1, vacancy_title: 'Инженер-технолог',
         full_name: 'Юсупов Алишер Бахромович', email: 'yusupov.a@mail.uz', phone: '+998901234567',
         birth_date: '1992-05-14', address: 'г. Ташкент, Мирзо-Улугбекский р-н',
         source: 'job_portal', status: 'interview', stage: 'interview',
         education: [
-            { institution: 'Ташкентский институт ирригации и мелиорации (ТИИИМ)', degree: 'Магистр', field_of_study: 'Гидротехническое строительство', start_year: 2010, end_year: 2015 }
+            { institution: 'Ташкентский институт ирригации и мелиорации (ТИИИМ)', degree: 'Магистр', field_of_study: 'Технология молочного производства', start_year: 2010, end_year: 2015 }
         ],
         experience: [
-            { company: 'Сырдарьинская ТЭС', position: 'Инженер-гидротехник', start_date: '2018-03-01', description: 'Контроль ГТС, ведение технической документации', is_current: true }
+            { company: 'Сырдарьинский молокозавод', position: 'Инженер-технолог', start_date: '2018-03-01', description: 'Контроль производственных объектов, ведение технической документации', is_current: true }
         ],
-        skills: ['Гидротехника', 'AutoCAD', 'Мониторинг ГТС', 'MS Office'],
+        skills: ['Технология молочного производства', 'AutoCAD', 'Мониторинг производства', 'MS Office'],
         languages: [{ language: 'Узбекский', level: 'native' }, { language: 'Русский', level: 'fluent' }, { language: 'Английский', level: 'intermediate' }],
         rating: 4.2, hr_rating: 4, technical_rating: 4.5, salary_expectation: 10000000,
         notice_period_days: 30, available_from: '2026-04-01',
         created_at: '2026-02-01T10:00:00Z', updated_at: '2026-02-20T15:00:00Z'
     },
     {
-        id: 2, vacancy_id: 1, vacancy_title: 'Инженер-гидротехник',
+        id: 2, vacancy_id: 1, vacancy_title: 'Инженер-технолог',
         full_name: 'Турсунов Бобур Маъруфович', email: 'tursunov.b@gmail.com', phone: '+998937654321',
         birth_date: '1995-09-20', address: 'г. Чирчик, Ташкентская обл.',
         source: 'website', status: 'screening', stage: 'screening',
         education: [
-            { institution: 'Национальный исследовательский университет «МЭИ» (филиал в Ташкенте)', degree: 'Бакалавр', field_of_study: 'Гидроэнергетика', start_year: 2013, end_year: 2017 }
+            { institution: 'Национальный исследовательский университет «МЭИ» (филиал в Ташкенте)', degree: 'Бакалавр', field_of_study: 'Технология молочного производства', start_year: 2013, end_year: 2017 }
         ],
         experience: [
-            { company: 'Чирчикская ГЭС', position: 'Техник-гидротехник', start_date: '2017-08-01', end_date: '2025-12-31', description: 'Техническое обслуживание ГТС' }
+            { company: 'Молокозавод «Чирчик»', position: 'Техник-технолог', start_date: '2017-08-01', end_date: '2025-12-31', description: 'Техническое обслуживание производственных объектов' }
         ],
-        skills: ['Гидротехника', 'AutoCAD', 'Охрана труда'],
+        skills: ['Технология молочного производства', 'AutoCAD', 'Охрана труда'],
         languages: [{ language: 'Узбекский', level: 'native' }, { language: 'Русский', level: 'advanced' }],
         rating: 3.5, hr_rating: 3.5, salary_expectation: 9000000,
         notice_period_days: 14, available_from: '2026-03-15',
         created_at: '2026-02-05T12:00:00Z', updated_at: '2026-02-15T09:00:00Z'
     },
     {
-        id: 3, vacancy_id: 2, vacancy_title: 'Оператор гидроагрегатов',
+        id: 3, vacancy_id: 2, vacancy_title: 'Оператор производственной линии',
         full_name: 'Кадиров Шерзод Набиевич', email: 'kadirov.sh@mail.uz', phone: '+998944567890',
         birth_date: '1990-01-08', address: 'г. Ангрен, Ташкентская обл.',
         source: 'referral', status: 'offer', stage: 'offer',
         education: [
-            { institution: 'Ташкентский электротехнический институт связи', degree: 'Бакалавр', field_of_study: 'Электроэнергетика', start_year: 2008, end_year: 2012 }
+            { institution: 'Ташкентский институт пищевой промышленности', degree: 'Бакалавр', field_of_study: 'Технология молочного производства', start_year: 2008, end_year: 2012 }
         ],
         experience: [
-            { company: 'Ангренская ТЭС', position: 'Машинист турбины', start_date: '2012-09-01', end_date: '2025-11-30', description: 'Управление турбинным оборудованием, контроль параметров' },
-            { company: 'Навоийская ГЭС', position: 'Оператор', start_date: '2025-12-01', is_current: true, description: 'Управление гидроагрегатами' }
+            { company: 'Ангренский молокозавод', position: 'Оператор линии', start_date: '2012-09-01', end_date: '2025-11-30', description: 'Управление производственным оборудованием, контроль параметров' },
+            { company: 'Навоийский молокозавод', position: 'Оператор', start_date: '2025-12-01', is_current: true, description: 'Управление производственным оборудованием' }
         ],
-        skills: ['Электроэнергетика', 'SCADA', 'Гидроагрегаты', 'Автоматика'],
+        skills: ['Технология молочного производства', 'SCADA', 'Производственное оборудование', 'Автоматика'],
         languages: [{ language: 'Узбекский', level: 'native' }, { language: 'Русский', level: 'fluent' }],
         rating: 4.5, hr_rating: 4, technical_rating: 5, cultural_fit_rating: 4.5,
         salary_expectation: 6500000, notice_period_days: 14, available_from: '2026-03-20',
         offer: {
-            id: 1, candidate_id: 3, vacancy_id: 2, offered_salary: 6000000, offered_position: 'Оператор гидроагрегатов',
-            offered_department: 'Управление эксплуатации ГЭС', start_date: '2026-04-01', contract_type: 'permanent',
+            id: 1, candidate_id: 3, vacancy_id: 2, offered_salary: 6000000, offered_position: 'Оператор производственной линии',
+            offered_department: 'Управление производством', start_date: '2026-04-01', contract_type: 'permanent',
             probation_period_months: 3, benefits: ['ДМС', 'Служебный транспорт', 'Питание'], status: 'sent',
             sent_at: '2026-02-25T10:00:00Z', expires_at: '2026-03-10T23:59:59Z', created_at: '2026-02-24T15:00:00Z'
         },
         created_at: '2026-02-10T14:00:00Z', updated_at: '2026-02-25T10:00:00Z'
     },
     {
-        id: 4, vacancy_id: 2, vacancy_title: 'Оператор гидроагрегатов',
+        id: 4, vacancy_id: 2, vacancy_title: 'Оператор производственной линии',
         full_name: 'Мамадалиев Фаррух Улугбекович', email: 'mamadaliev.f@inbox.uz', phone: '+998905551234',
         birth_date: '1997-11-30', address: 'г. Олмалик, Ташкентская обл.',
         source: 'gov_portal', status: 'rejected', stage: 'closed',
@@ -165,7 +165,7 @@ const MOCK_CANDIDATES: Candidate[] = [
         languages: [{ language: 'Узбекский', level: 'native' }, { language: 'Русский', level: 'intermediate' }],
         rating: 2.5, hr_rating: 3, technical_rating: 2,
         salary_expectation: 5000000,
-        rejection_reason: 'Недостаточный опыт работы с гидроагрегатами', rejection_date: '2026-02-18',
+        rejection_reason: 'Недостаточный опыт работы с производственным оборудованием', rejection_date: '2026-02-18',
         created_at: '2026-02-08T09:00:00Z', updated_at: '2026-02-18T11:00:00Z'
     },
     {
@@ -205,10 +205,10 @@ const MOCK_INTERVIEWS: Interview[] = [
         location: 'Административное здание, каб. 210', status: 'completed',
         competency_scores: [
             { competency: 'Коммуникация', score: 4, notes: 'Хорошо структурирует мысли' },
-            { competency: 'Мотивация', score: 4.5, notes: 'Высокая мотивация к работе в гидроэнергетике' }
+            { competency: 'Мотивация', score: 4.5, notes: 'Высокая мотивация к работе в молочной промышленности' }
         ],
-        overall_rating: 4, strengths: ['Профильное образование', 'Опыт на энергообъектах', 'Хорошие коммуникативные навыки'],
-        weaknesses: ['Нет опыта работы непосредственно на ГЭС'],
+        overall_rating: 4, strengths: ['Профильное образование', 'Опыт на производственных объектах', 'Хорошие коммуникативные навыки'],
+        weaknesses: ['Нет опыта работы непосредственно на молокозаводе'],
         feedback: 'Кандидат показал хорошие знания и высокую мотивацию. Рекомендуется техническое собеседование.',
         recommendation: 'yes', completed_at: '2026-02-20T14:50:00Z',
         created_at: '2026-02-15T10:00:00Z'
@@ -218,14 +218,14 @@ const MOCK_INTERVIEWS: Interview[] = [
         interviewer_id: 101, interviewer_name: 'Каримов Бахтиёр Рустамович',
         interview_type: 'technical', stage: 'technical',
         scheduled_at: '2026-02-18T10:00:00Z', duration_minutes: 90,
-        location: 'Машинный зал Ходжикентской ГЭС (практическое)', status: 'completed',
+        location: 'Производственный цех Молокозавода «Ходжикент» (практическое)', status: 'completed',
         competency_scores: [
-            { competency: 'Управление гидроагрегатами', score: 5, notes: 'Отличные знания и практические навыки' },
+            { competency: 'Управление производственным оборудованием', score: 5, notes: 'Отличные знания и практические навыки' },
             { competency: 'SCADA системы', score: 4, notes: 'Уверенная работа с интерфейсом' },
             { competency: 'Безопасность', score: 5, notes: 'Высокий уровень осведомлённости' }
         ],
-        overall_rating: 4.7, strengths: ['Большой практический опыт', 'Знание типового оборудования ГЭС', 'Ответственный подход к безопасности'],
-        feedback: 'Отличный кандидат. Рекомендую к найму. Опыт работы на ТЭС и ГЭС — сильная сторона.',
+        overall_rating: 4.7, strengths: ['Большой практический опыт', 'Знание типового оборудования молокозавода', 'Ответственный подход к безопасности'],
+        feedback: 'Отличный кандидат. Рекомендую к найму. Опыт работы на молокозаводах — сильная сторона.',
         recommendation: 'strong_yes', completed_at: '2026-02-18T11:30:00Z',
         created_at: '2026-02-12T08:00:00Z'
     },

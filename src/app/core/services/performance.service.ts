@@ -11,7 +11,7 @@ const MOCK_GOALS: PerformanceGoal[] = [
     {
         id: 1,
         employee_id: 101,
-        title: 'Повысить коэффициент использования установленной мощности ГЭС до 92%',
+        title: 'Повысить коэффициент использования установленной мощности производства до 92%',
         target_value: 92,
         current_value: 87,
         weight: 30,
@@ -33,7 +33,7 @@ const MOCK_GOALS: PerformanceGoal[] = [
     {
         id: 3,
         employee_id: 103,
-        title: 'Завершить модернизацию системы автоматического управления Чарвакской ГЭС',
+        title: 'Завершить модернизацию системы автоматического управления Молокозавода «Чарвак»',
         target_value: 100,
         current_value: 100,
         weight: 20,
@@ -44,7 +44,7 @@ const MOCK_GOALS: PerformanceGoal[] = [
     {
         id: 4,
         employee_id: 101,
-        title: 'Обеспечить выполнение годового плана выработки электроэнергии — 2 800 млн кВт·ч',
+        title: 'Обеспечить выполнение годового плана выработки продукции — 2 800 тонн',
         target_value: 2800,
         current_value: 520,
         weight: 35,
@@ -55,7 +55,7 @@ const MOCK_GOALS: PerformanceGoal[] = [
     {
         id: 5,
         employee_id: 104,
-        title: 'Провести аттестацию 100% оперативного персонала каскада ГЭС',
+        title: 'Провести аттестацию 100% оперативного персонала молочного комбината',
         target_value: 100,
         current_value: 0,
         weight: 15,

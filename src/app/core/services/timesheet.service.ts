@@ -29,10 +29,10 @@ function generateDays(month: number, year: number): TimesheetDay[] {
 
 function mockTimesheets(filter: TimesheetFilter): EmployeeTimesheet[] {
     const employees = [
-        { id: 1, name: 'Каримов Бахтиёр Рустамович', code: 'EMP-001', dept: 'Чарвакская ГЭС', pos: 'Главный инженер' },
+        { id: 1, name: 'Каримов Бахтиёр Рустамович', code: 'EMP-001', dept: 'Молокозавод «Чарвак»', pos: 'Главный инженер' },
         { id: 2, name: 'Султанова Дилноза Камолидиновна', code: 'EMP-002', dept: 'Центральный аппарат', pos: 'Начальник отдела' },
-        { id: 3, name: 'Рахимов Отабек Шухратович', code: 'EMP-003', dept: 'Фархадская ГЭС', pos: 'Инженер-энергетик' },
-        { id: 4, name: 'Абдуллаев Жасур Тохирович', code: 'EMP-004', dept: 'Ходжикентская ГЭС', pos: 'Оператор' },
+        { id: 3, name: 'Рахимов Отабек Шухратович', code: 'EMP-003', dept: 'Молокозавод «Фархад»', pos: 'Инженер-технолог' },
+        { id: 4, name: 'Абдуллаев Жасур Тохирович', code: 'EMP-004', dept: 'Молокозавод «Ходжикент»', pos: 'Оператор' },
         { id: 5, name: 'Мирзаева Нодира Бахтиёровна', code: 'EMP-005', dept: 'Центральный аппарат', pos: 'HR-специалист' }
     ];
     return employees.map(e => {

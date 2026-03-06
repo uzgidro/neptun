@@ -26,13 +26,13 @@ const MOCK_DASHBOARD: HRAnalyticsDashboard = {
         { label: '10+ лет', count: 1087, percentage: 28.3 }
     ],
     department_headcount: [
-        { department_id: 1, department_name: 'Чарвакская ГЭС', headcount: 485 },
-        { department_id: 2, department_name: 'Ходжикентская ГЭС', headcount: 312 },
-        { department_id: 3, department_name: 'Газалкентская ГЭС', headcount: 198 },
-        { department_id: 4, department_name: 'Фархадская ГЭС', headcount: 425 },
+        { department_id: 1, department_name: 'Молокозавод «Чарвак»', headcount: 485 },
+        { department_id: 2, department_name: 'Молокозавод «Ходжикент»', headcount: 312 },
+        { department_id: 3, department_name: 'Молокозавод «Газалкент»', headcount: 198 },
+        { department_id: 4, department_name: 'Молокозавод «Фархад»', headcount: 425 },
         { department_id: 5, department_name: 'Центральный аппарат', headcount: 280 },
-        { department_id: 6, department_name: 'Сырдарьинские ГЭС', headcount: 520 },
-        { department_id: 7, department_name: 'Зарафшанские ГЭС', headcount: 345 }
+        { department_id: 6, department_name: 'Сырдарьинский молокозавод', headcount: 520 },
+        { department_id: 7, department_name: 'Зарафшанский молокозавод', headcount: 345 }
     ],
     position_headcount: [
         { position_id: 1, position_name: 'Инженер', count: 842 }, { position_id: 2, position_name: 'Техник', count: 620 },
@@ -86,8 +86,8 @@ export class HRAnalyticsService {
                 { label: 'Прочие', count: 12, percentage: 7.4 }
             ],
             by_department: [
-                { department: 'Чарвакская ГЭС', terminations: 22, turnover_rate: 4.5 },
-                { department: 'Фархадская ГЭС', terminations: 18, turnover_rate: 4.2 },
+                { department: 'Молокозавод «Чарвак»', terminations: 22, turnover_rate: 4.5 },
+                { department: 'Молокозавод «Фархад»', terminations: 18, turnover_rate: 4.2 },
                 { department: 'Центральный аппарат', terminations: 12, turnover_rate: 4.3 }
             ]
         }).pipe(delay(200));
@@ -112,8 +112,8 @@ export class HRAnalyticsService {
                 { label: 'Прочие', count: 30, percentage: 0.8 }
             ],
             by_department: [
-                { department: 'Чарвакская ГЭС', attendance_rate: 95.2, absence_rate: 4.8 },
-                { department: 'Фархадская ГЭС', attendance_rate: 93.8, absence_rate: 6.2 },
+                { department: 'Молокозавод «Чарвак»', attendance_rate: 95.2, absence_rate: 4.8 },
+                { department: 'Молокозавод «Фархад»', attendance_rate: 93.8, absence_rate: 6.2 },
                 { department: 'Центральный аппарат', attendance_rate: 96.1, absence_rate: 3.9 }
             ]
         }).pipe(delay(200));
@@ -125,8 +125,8 @@ export class HRAnalyticsService {
             period_start: '2026-02-01', period_end: '2026-02-28', total_payroll: 18500000000, avg_salary: 4815000,
             median_salary: 4200000, min_salary: 2500000, max_salary: 25000000,
             by_department: [
-                { department: 'Чарвакская ГЭС', avg_salary: 5200000, total_payroll: 2522000000, headcount: 485 },
-                { department: 'Фархадская ГЭС', avg_salary: 4800000, total_payroll: 2040000000, headcount: 425 },
+                { department: 'Молокозавод «Чарвак»', avg_salary: 5200000, total_payroll: 2522000000, headcount: 485 },
+                { department: 'Молокозавод «Фархад»', avg_salary: 4800000, total_payroll: 2040000000, headcount: 425 },
                 { department: 'Центральный аппарат', avg_salary: 6100000, total_payroll: 1708000000, headcount: 280 }
             ]
         }).pipe(delay(200));
@@ -152,8 +152,8 @@ export class HRAnalyticsService {
             ],
             goal_completion: { total: 120, completed: 72, rate: 60 },
             by_department: [
-                { department: 'Чарвакская ГЭС', avg_rating: 4.0, goal_rate: 65 },
-                { department: 'Фархадская ГЭС', avg_rating: 3.7, goal_rate: 58 },
+                { department: 'Молокозавод «Чарвак»', avg_rating: 4.0, goal_rate: 65 },
+                { department: 'Молокозавод «Фархад»', avg_rating: 3.7, goal_rate: 58 },
                 { department: 'Центральный аппарат', avg_rating: 3.9, goal_rate: 62 }
             ]
         }).pipe(delay(200));

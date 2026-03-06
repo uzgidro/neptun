@@ -12,7 +12,7 @@ const API_URL = BASE_URL + '/hrm/performance';
 const USE_MOCK = !BASE_URL;
 
 const MOCK_GOALS: PerformanceGoal[] = [
-    { id: 1, employee_id: 1, title: 'Увеличить выработку ГЭС на 5%', weight: 30, status: 'in_progress', progress: 65, target_value: 105, current_value: 98 },
+    { id: 1, employee_id: 1, title: 'Увеличить выпуск продукции на 5%', weight: 30, status: 'in_progress', progress: 65, target_value: 105, current_value: 98 },
     { id: 2, employee_id: 1, title: 'Снизить аварийность на 20%', weight: 25, status: 'completed', progress: 100, target_value: 80, current_value: 75 },
     { id: 3, employee_id: 2, title: 'Внедрить систему мониторинга', weight: 30, status: 'in_progress', progress: 40, target_value: 100, current_value: 40 },
     { id: 4, employee_id: 3, title: 'Оптимизировать расход воды', weight: 25, status: 'not_started', progress: 0, target_value: 90, current_value: 0 }
@@ -51,7 +51,7 @@ const MOCK_DASHBOARD: PerformanceDashboard = {
 };
 
 const MOCK_KPIS: KPI[] = [
-    { id: 1, employee_id: 1, employee_name: 'Каримов Б.Р.', kpi_name: 'Выработка электроэнергии', target_value: 1200, actual_value: 1150, unit: 'млн кВт·ч', period_month: 2, period_year: 2026, achievement_percent: 95.8, status: 'on_track' },
+    { id: 1, employee_id: 1, employee_name: 'Каримов Б.Р.', kpi_name: 'Выпуск продукции', target_value: 1200, actual_value: 1150, unit: 'тонн', period_month: 2, period_year: 2026, achievement_percent: 95.8, status: 'on_track' },
     { id: 2, employee_id: 1, employee_name: 'Каримов Б.Р.', kpi_name: 'Снижение потерь', target_value: 5, actual_value: 4.2, unit: '%', period_month: 2, period_year: 2026, achievement_percent: 116, status: 'exceeded' },
     { id: 3, employee_id: 2, employee_name: 'Султанова Д.К.', kpi_name: 'Внедрение мониторинга', target_value: 100, actual_value: 40, unit: '%', period_month: 2, period_year: 2026, achievement_percent: 40, status: 'behind' },
     { id: 4, employee_id: 3, employee_name: 'Рахимов О.Ш.', kpi_name: 'Обслуживание оборудования', target_value: 50, actual_value: 42, unit: 'единиц', period_month: 2, period_year: 2026, achievement_percent: 84, status: 'at_risk' }

@@ -59,7 +59,7 @@ const MOCK_PLANS: DevelopmentPlan[] = [
     },
     {
         id: 2, employee_id: 3, employee_name: 'Рахимов Отабек Шухратович', title: 'Техническое развитие',
-        description: 'Повышение квалификации в области ГЭС', start_date: '2026-01-01', target_date: '2026-06-30', status: 'active',
+        description: 'Повышение квалификации в области производства', start_date: '2026-01-01', target_date: '2026-06-30', status: 'active',
         goals: [
             { id: 3, plan_id: 2, title: 'Изучить новое оборудование', target_date: '2026-04-30', status: 'in_progress', progress_percent: 70 },
             { id: 4, plan_id: 2, title: 'Сдать аттестацию', target_date: '2026-06-30', status: 'not_started', progress_percent: 0 }

@@ -30,13 +30,13 @@ const MOCK_DASHBOARD: HRAnalyticsDashboard = {
         { label: 'Более 20 лет', count: 309, percentage: 8.0 }
     ],
     department_headcount: [
-        { department_id: 1, department_name: 'Чарвакская ГЭС', headcount: 412 },
-        { department_id: 2, department_name: 'Ходжикентская ГЭС', headcount: 285 },
-        { department_id: 3, department_name: 'Фархадская ГЭС', headcount: 378 },
-        { department_id: 4, department_name: 'Тупалангская ГЭС', headcount: 264 },
-        { department_id: 5, department_name: 'Кадиринская ГЭС', headcount: 198 },
-        { department_id: 6, department_name: 'Ахангаранская ГЭС', headcount: 231 },
-        { department_id: 7, department_name: 'Чирчик-Бозсуйский каскад ГЭС', headcount: 356 },
+        { department_id: 1, department_name: 'Молокозавод «Чарвак»', headcount: 412 },
+        { department_id: 2, department_name: 'Молокозавод «Ходжикент»', headcount: 285 },
+        { department_id: 3, department_name: 'Молокозавод «Фархад»', headcount: 378 },
+        { department_id: 4, department_name: 'Молокозавод «Тупаланг»', headcount: 264 },
+        { department_id: 5, department_name: 'Молокозавод «Кадирин»', headcount: 198 },
+        { department_id: 6, department_name: 'Молокозавод «Ахангаран»', headcount: 231 },
+        { department_id: 7, department_name: 'Чирчик-Бозсуйский молочный комбинат', headcount: 356 },
         { department_id: 8, department_name: 'Навоийская ТЭС', headcount: 342 },
         { department_id: 9, department_name: 'Центральный аппарат', headcount: 487 },
         { department_id: 10, department_name: 'Талимарджанская ТЭС', headcount: 315 },
@@ -44,9 +44,9 @@ const MOCK_DASHBOARD: HRAnalyticsDashboard = {
         { department_id: 12, department_name: 'Ташкентская ТЭЦ', headcount: 276 }
     ],
     position_headcount: [
-        { position_id: 1, position_name: 'Инженер-энергетик', count: 486 },
-        { position_id: 2, position_name: 'Оператор турбинного оборудования', count: 312 },
-        { position_id: 3, position_name: 'Электромонтёр', count: 578 },
+        { position_id: 1, position_name: 'Инженер-технолог', count: 486 },
+        { position_id: 2, position_name: 'Оператор технологического оборудования', count: 312 },
+        { position_id: 3, position_name: 'Наладчик оборудования', count: 578 },
         { position_id: 4, position_name: 'Диспетчер', count: 198 },
         { position_id: 5, position_name: 'Слесарь-ремонтник', count: 423 },
         { position_id: 6, position_name: 'Начальник смены', count: 145 },
@@ -75,14 +75,14 @@ const MOCK_TURNOVER_REPORT: TurnoverReport = {
         { label: 'Перевод в другую организацию', count: 1, percentage: 2.9 }
     ],
     by_department: [
-        { department: 'Чарвакская ГЭС', terminations: 7, turnover_rate: 1.7 },
-        { department: 'Ходжикентская ГЭС', terminations: 3, turnover_rate: 1.1 },
-        { department: 'Фархадская ГЭС', terminations: 6, turnover_rate: 1.6 },
-        { department: 'Тупалангская ГЭС', terminations: 4, turnover_rate: 1.5 },
-        { department: 'Кадиринская ГЭС', terminations: 2, turnover_rate: 1.0 },
+        { department: 'Молокозавод «Чарвак»', terminations: 7, turnover_rate: 1.7 },
+        { department: 'Молокозавод «Ходжикент»', terminations: 3, turnover_rate: 1.1 },
+        { department: 'Молокозавод «Фархад»', terminations: 6, turnover_rate: 1.6 },
+        { department: 'Молокозавод «Тупаланг»', terminations: 4, turnover_rate: 1.5 },
+        { department: 'Молокозавод «Кадирин»', terminations: 2, turnover_rate: 1.0 },
         { department: 'Центральный аппарат', terminations: 5, turnover_rate: 1.0 },
         { department: 'Навоийская ТЭС', terminations: 4, turnover_rate: 1.2 },
-        { department: 'Чирчик-Бозсуйский каскад ГЭС', terminations: 3, turnover_rate: 0.8 }
+        { department: 'Чирчик-Бозсуйский молочный комбинат', terminations: 3, turnover_rate: 0.8 }
     ]
 };
 
@@ -101,13 +101,13 @@ const MOCK_ATTENDANCE_REPORT: AttendanceReport = {
         { label: 'Учебный отпуск', count: 11, percentage: 0.3 }
     ],
     by_department: [
-        { department: 'Чарвакская ГЭС', attendance_rate: 95.1, absence_rate: 4.9 },
-        { department: 'Ходжикентская ГЭС', attendance_rate: 96.2, absence_rate: 3.8 },
-        { department: 'Фархадская ГЭС', attendance_rate: 93.8, absence_rate: 6.2 },
-        { department: 'Тупалангская ГЭС', attendance_rate: 94.5, absence_rate: 5.5 },
-        { department: 'Кадиринская ГЭС', attendance_rate: 95.9, absence_rate: 4.1 },
-        { department: 'Ахангаранская ГЭС', attendance_rate: 94.2, absence_rate: 5.8 },
-        { department: 'Чирчик-Бозсуйский каскад ГЭС', attendance_rate: 93.5, absence_rate: 6.5 },
+        { department: 'Молокозавод «Чарвак»', attendance_rate: 95.1, absence_rate: 4.9 },
+        { department: 'Молокозавод «Ходжикент»', attendance_rate: 96.2, absence_rate: 3.8 },
+        { department: 'Молокозавод «Фархад»', attendance_rate: 93.8, absence_rate: 6.2 },
+        { department: 'Молокозавод «Тупаланг»', attendance_rate: 94.5, absence_rate: 5.5 },
+        { department: 'Молокозавод «Кадирин»', attendance_rate: 95.9, absence_rate: 4.1 },
+        { department: 'Молокозавод «Ахангаран»', attendance_rate: 94.2, absence_rate: 5.8 },
+        { department: 'Чирчик-Бозсуйский молочный комбинат', attendance_rate: 93.5, absence_rate: 6.5 },
         { department: 'Навоийская ТЭС', attendance_rate: 95.4, absence_rate: 4.6 },
         { department: 'Центральный аппарат', attendance_rate: 96.8, absence_rate: 3.2 },
         { department: 'Талимарджанская ТЭС', attendance_rate: 94.0, absence_rate: 6.0 }
@@ -123,13 +123,13 @@ const MOCK_SALARY_REPORT: SalaryReport = {
     min_salary: 2150000,
     max_salary: 18500000,
     by_department: [
-        { department: 'Чарвакская ГЭС', avg_salary: 5120000, total_payroll: 2109440000, headcount: 412 },
-        { department: 'Ходжикентская ГЭС', avg_salary: 4890000, total_payroll: 1393650000, headcount: 285 },
-        { department: 'Фархадская ГЭС', avg_salary: 5050000, total_payroll: 1908900000, headcount: 378 },
-        { department: 'Тупалангская ГЭС', avg_salary: 4780000, total_payroll: 1261920000, headcount: 264 },
-        { department: 'Кадиринская ГЭС', avg_salary: 4650000, total_payroll: 920700000, headcount: 198 },
-        { department: 'Ахангаранская ГЭС', avg_salary: 4720000, total_payroll: 1090320000, headcount: 231 },
-        { department: 'Чирчик-Бозсуйский каскад ГЭС', avg_salary: 4950000, total_payroll: 1762200000, headcount: 356 },
+        { department: 'Молокозавод «Чарвак»', avg_salary: 5120000, total_payroll: 2109440000, headcount: 412 },
+        { department: 'Молокозавод «Ходжикент»', avg_salary: 4890000, total_payroll: 1393650000, headcount: 285 },
+        { department: 'Молокозавод «Фархад»', avg_salary: 5050000, total_payroll: 1908900000, headcount: 378 },
+        { department: 'Молокозавод «Тупаланг»', avg_salary: 4780000, total_payroll: 1261920000, headcount: 264 },
+        { department: 'Молокозавод «Кадирин»', avg_salary: 4650000, total_payroll: 920700000, headcount: 198 },
+        { department: 'Молокозавод «Ахангаран»', avg_salary: 4720000, total_payroll: 1090320000, headcount: 231 },
+        { department: 'Чирчик-Бозсуйский молочный комбинат', avg_salary: 4950000, total_payroll: 1762200000, headcount: 356 },
         { department: 'Навоийская ТЭС', avg_salary: 4810000, total_payroll: 1645020000, headcount: 342 },
         { department: 'Центральный аппарат', avg_salary: 5340000, total_payroll: 2600580000, headcount: 487 },
         { department: 'Талимарджанская ТЭС', avg_salary: 4760000, total_payroll: 1499400000, headcount: 315 },

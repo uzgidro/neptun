@@ -8,13 +8,13 @@ const DEPARTMENTS = '/department';
 const USE_MOCK = !BASE_URL;
 
 const MOCK_DEPARTMENTS: Department[] = [
-    { id: 1, name: 'Чарвакская ГЭС', description: 'Каскад Чирчик-Бозсуйских ГЭС', organization_id: 1 },
-    { id: 2, name: 'Ходжикентская ГЭС', description: 'Ходжикентский каскад', organization_id: 1 },
-    { id: 3, name: 'Газалкентская ГЭС', description: null, organization_id: 1 },
-    { id: 4, name: 'Фархадская ГЭС', description: 'Сырдарьинский каскад', organization_id: 1 },
+    { id: 1, name: 'Молокозавод «Чарвак»', description: 'Чирчик-Бозсуйский молочный комбинат', organization_id: 1 },
+    { id: 2, name: 'Молокозавод «Ходжикент»', description: 'Ходжикентское производство', organization_id: 1 },
+    { id: 3, name: 'Молокозавод «Газалкент»', description: null, organization_id: 1 },
+    { id: 4, name: 'Молокозавод «Фархад»', description: 'Сырдарьинское производство', organization_id: 1 },
     { id: 5, name: 'Центральный аппарат', description: 'Головной офис', organization_id: 1 },
-    { id: 6, name: 'Сырдарьинские ГЭС', description: 'Каскад Сырдарьинских ГЭС', organization_id: 1 },
-    { id: 7, name: 'Зарафшанские ГЭС', description: 'Каскад Зарафшанских ГЭС', organization_id: 1 },
+    { id: 6, name: 'Сырдарьинский молокозавод', description: 'Сырдарьинское молочное производство', organization_id: 1 },
+    { id: 7, name: 'Зарафшанский молокозавод', description: 'Зарафшанское молочное производство', organization_id: 1 },
     { id: 8, name: 'Управление персоналом', description: 'HR департамент', organization_id: 1 },
     { id: 9, name: 'Финансовый департамент', description: null, organization_id: 1 },
     { id: 10, name: 'ИТ департамент', description: 'Информационные технологии', organization_id: 1 }

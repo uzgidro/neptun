@@ -10,7 +10,7 @@ const USE_MOCK = !BASE_URL;
 const MOCK_DOCUMENTS: HRDocument[] = [
     {
         id: 1, document_number: 'ПР-2026-001', title: 'Приказ о приёме на работу — Каримов Б.Р.', type: 'order', category: 'personnel',
-        status: 'signed', employee_id: 1, employee_name: 'Каримов Бахтиёр Рустамович', department_id: 1, department_name: 'Чарвакская ГЭС',
+        status: 'signed', employee_id: 1, employee_name: 'Каримов Бахтиёр Рустамович', department_id: 1, department_name: 'Молокозавод «Чарвак»',
         created_by: 10, created_by_name: 'HR Admin', created_at: '2026-01-15T10:30:00Z', requires_signature: true, version: 1, is_template: false,
         file_name: 'prikaz_001.pdf', file_size: 245000, file_type: 'application/pdf', tags: ['приём', 'кадры']
     },
@@ -22,7 +22,7 @@ const MOCK_DOCUMENTS: HRDocument[] = [
     },
     {
         id: 3, document_number: 'СЗ-2026-042', title: 'Служебная записка о командировке', type: 'memo', category: 'administrative',
-        status: 'pending_signature', employee_id: 3, employee_name: 'Рахимов Отабек Шухратович', department_id: 4, department_name: 'Фархадская ГЭС',
+        status: 'pending_signature', employee_id: 3, employee_name: 'Рахимов Отабек Шухратович', department_id: 4, department_name: 'Молокозавод «Фархад»',
         created_by: 3, created_by_name: 'Рахимов О.Ш.', created_at: '2026-02-28T09:15:00Z', requires_signature: true, version: 1, is_template: false,
         signatures: [
             { id: 1, document_id: 3, signer_id: 10, signer_name: 'Исмаилов А.Б.', signer_position: 'Начальник отдела кадров', status: 'pending', order: 1 },
@@ -31,7 +31,7 @@ const MOCK_DOCUMENTS: HRDocument[] = [
     },
     {
         id: 4, document_number: 'СПР-2026-008', title: 'Справка с места работы — Абдуллаев Ж.Т.', type: 'certificate', category: 'personnel',
-        status: 'signed', employee_id: 4, employee_name: 'Абдуллаев Жасур Тохирович', department_id: 2, department_name: 'Ходжикентская ГЭС',
+        status: 'signed', employee_id: 4, employee_name: 'Абдуллаев Жасур Тохирович', department_id: 2, department_name: 'Молокозавод «Ходжикент»',
         created_by: 10, created_by_name: 'HR Admin', created_at: '2026-03-01T11:00:00Z', requires_signature: false, version: 1, is_template: false
     },
     {
@@ -48,12 +48,12 @@ const MOCK_DOCUMENTS: HRDocument[] = [
 
 const MOCK_REQUESTS: DocumentRequest[] = [
     {
-        id: 1, document_type: 'certificate', employee_id: 4, employee_name: 'Абдуллаев Жасур Тохирович', department_name: 'Ходжикентская ГЭС',
+        id: 1, document_type: 'certificate', employee_id: 4, employee_name: 'Абдуллаев Жасур Тохирович', department_name: 'Молокозавод «Ходжикент»',
         purpose: 'Для предоставления в банк', status: 'completed', requested_at: '2026-02-28T10:00:00Z',
         processed_at: '2026-03-01T11:00:00Z', processed_by: 10, processed_by_name: 'HR Admin', document_id: 4, copies_count: 2
     },
     {
-        id: 2, document_type: 'certificate', employee_id: 1, employee_name: 'Каримов Бахтиёр Рустамович', department_name: 'Чарвакская ГЭС',
+        id: 2, document_type: 'certificate', employee_id: 1, employee_name: 'Каримов Бахтиёр Рустамович', department_name: 'Молокозавод «Чарвак»',
         purpose: 'Для посольства', status: 'pending', requested_at: '2026-03-03T14:00:00Z', copies_count: 1
     }
 ];

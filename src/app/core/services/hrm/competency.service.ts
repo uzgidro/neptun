@@ -11,19 +11,19 @@ const USE_MOCK = !BASE_URL;
 
 const MOCK_COMPETENCIES: Competency[] = [
     {
-        id: 1, name: 'Управление ГЭС', description: 'Знание технологических процессов управления гидроэлектростанцией, включая пуск/останов агрегатов, контроль параметров, оперативное управление режимами.',
+        id: 1, name: 'Управление производством', description: 'Знание технологических процессов управления молокозаводом, включая пуск/останов агрегатов, контроль параметров, оперативное управление режимами.',
         category: 'technical',
         level_definitions: [
-            { level: 1, name: 'Начальный', description: 'Знает основные принципы работы ГЭС, может выполнять базовые операции под руководством' },
+            { level: 1, name: 'Начальный', description: 'Знает основные принципы работы молокозавода, может выполнять базовые операции под руководством' },
             { level: 2, name: 'Базовый', description: 'Самостоятельно выполняет типовые операции по управлению агрегатами' },
-            { level: 3, name: 'Уверенный', description: 'Уверенно управляет всеми режимами работы ГЭС, решает нестандартные ситуации' },
+            { level: 3, name: 'Уверенный', description: 'Уверенно управляет всеми режимами работы молокозавода, решает нестандартные ситуации' },
             { level: 4, name: 'Продвинутый', description: 'Оптимизирует режимы работы, обучает других, участвует в разработке регламентов' },
-            { level: 5, name: 'Эксперт', description: 'Эксперт по управлению ГЭС, разрабатывает стандарты, консультирует другие станции' }
+            { level: 5, name: 'Эксперт', description: 'Эксперт по управлению производством, разрабатывает стандарты, консультирует другие заводы' }
         ],
         created_at: '2025-01-15T08:00:00Z', updated_at: '2025-06-20T10:00:00Z'
     },
     {
-        id: 2, name: 'Промышленная безопасность', description: 'Знание и соблюдение правил промышленной безопасности на объектах гидроэнергетики, охрана труда, действия в аварийных ситуациях.',
+        id: 2, name: 'Промышленная безопасность', description: 'Знание и соблюдение правил промышленной безопасности на объектах молочного производства, охрана труда, действия в аварийных ситуациях.',
         category: 'technical',
         level_definitions: [
             { level: 1, name: 'Начальный', description: 'Прошёл вводный инструктаж, знает основные правила ОТ' },
@@ -35,26 +35,26 @@ const MOCK_COMPETENCIES: Competency[] = [
         created_at: '2025-01-15T08:00:00Z', updated_at: '2025-06-20T10:00:00Z'
     },
     {
-        id: 3, name: 'Электротехника', description: 'Знание электротехники и электрооборудования: генераторы, трансформаторы, распредустройства, релейная защита и автоматика.',
+        id: 3, name: 'Технология молочного производства', description: 'Знание технологии молочного производства и оборудования: пастеризаторы, сепараторы, распредустройства, автоматика и контроль качества.',
         category: 'technical',
         level_definitions: [
             { level: 1, name: 'Начальный', description: 'Базовые знания электротехники, понимает схемы простых цепей' },
             { level: 2, name: 'Базовый', description: 'Читает электрические схемы, обслуживает типовое оборудование' },
             { level: 3, name: 'Уверенный', description: 'Диагностирует неисправности, проводит наладку оборудования' },
             { level: 4, name: 'Продвинутый', description: 'Проектирует электрические схемы, настраивает РЗА' },
-            { level: 5, name: 'Эксперт', description: 'Эксперт по электрооборудованию ГЭС, разрабатывает технические решения' }
+            { level: 5, name: 'Эксперт', description: 'Эксперт по оборудованию молокозавода, разрабатывает технические решения' }
         ],
         created_at: '2025-01-15T08:00:00Z', updated_at: '2025-06-20T10:00:00Z'
     },
     {
-        id: 4, name: 'Гидротехнические сооружения', description: 'Знание конструкции, эксплуатации и мониторинга состояния гидротехнических сооружений: плотин, водоводов, затворов, водосбросов.',
+        id: 4, name: 'Производственные объекты', description: 'Знание конструкции, эксплуатации и мониторинга состояния производственных объектов: пастеризаторов, сепараторов, ёмкостей, холодильников.',
         category: 'technical',
         level_definitions: [
-            { level: 1, name: 'Начальный', description: 'Знает назначение основных элементов ГТС' },
+            { level: 1, name: 'Начальный', description: 'Знает назначение основных элементов производственных объектов' },
             { level: 2, name: 'Базовый', description: 'Проводит визуальные осмотры, фиксирует отклонения' },
-            { level: 3, name: 'Уверенный', description: 'Анализирует данные мониторинга, оценивает состояние ГТС' },
+            { level: 3, name: 'Уверенный', description: 'Анализирует данные мониторинга, оценивает состояние производственных объектов' },
             { level: 4, name: 'Продвинутый', description: 'Разрабатывает программы наблюдений, интерпретирует результаты' },
-            { level: 5, name: 'Эксперт', description: 'Эксперт по безопасности ГТС, разрабатывает нормативы и методики' }
+            { level: 5, name: 'Эксперт', description: 'Эксперт по безопасности производственных объектов, разрабатывает нормативы и методики' }
         ],
         created_at: '2025-01-15T08:00:00Z', updated_at: '2025-06-20T10:00:00Z'
     },
@@ -107,14 +107,14 @@ const MOCK_COMPETENCIES: Competency[] = [
         created_at: '2025-02-01T08:00:00Z', updated_at: '2025-06-20T10:00:00Z'
     },
     {
-        id: 9, name: 'Энергетический менеджмент', description: 'Знание принципов управления энергопроизводством, балансирование нагрузки, диспетчерское управление, энергоэффективность.',
+        id: 9, name: 'Производственный менеджмент', description: 'Знание принципов управления молочным производством, балансирование нагрузки, диспетчерское управление, эффективность производства.',
         category: 'functional',
         level_definitions: [
-            { level: 1, name: 'Начальный', description: 'Понимает основы энергосистемы и роль ГЭС в ней' },
+            { level: 1, name: 'Начальный', description: 'Понимает основы молочной отрасли и роль молокозавода в ней' },
             { level: 2, name: 'Базовый', description: 'Знает графики нагрузок, участвует в планировании режимов' },
-            { level: 3, name: 'Уверенный', description: 'Оптимизирует режимы работы станции, взаимодействует с диспетчером' },
-            { level: 4, name: 'Продвинутый', description: 'Разрабатывает планы производства, анализирует водно-энергетические режимы' },
-            { level: 5, name: 'Эксперт', description: 'Формирует стратегию энергопроизводства, взаимодействует с регулятором' }
+            { level: 3, name: 'Уверенный', description: 'Оптимизирует режимы работы завода, взаимодействует с диспетчером' },
+            { level: 4, name: 'Продвинутый', description: 'Разрабатывает планы производства, анализирует производственные режимы' },
+            { level: 5, name: 'Эксперт', description: 'Формирует стратегию производства, взаимодействует с регулятором' }
         ],
         created_at: '2025-03-01T08:00:00Z', updated_at: '2025-06-20T10:00:00Z'
     },
@@ -135,37 +135,37 @@ const MOCK_COMPETENCIES: Competency[] = [
 const MOCK_ASSESSMENTS: CompetencyAssessment[] = [
     {
         id: 1, employee_id: 101, employee_name: 'Каримов Бахтиёр Рустамович',
-        department_name: 'Управление эксплуатации ГЭС', position_name: 'Главный инженер',
+        department_name: 'Управление производством', position_name: 'Главный инженер',
         assessor_id: 200, assessor_name: 'Директор',
         assessment_date: '2026-01-20', assessment_type: 'manager', status: 'approved', overall_score: 4.4,
         competency_scores: [
-            { id: 1, assessment_id: 1, competency_id: 1, competency_name: 'Управление ГЭС', category: 'technical', expected_level: 5, actual_level: 5, gap: 0, notes: 'Эксперт. Многолетний опыт.' },
+            { id: 1, assessment_id: 1, competency_id: 1, competency_name: 'Управление производством', category: 'technical', expected_level: 5, actual_level: 5, gap: 0, notes: 'Эксперт. Многолетний опыт.' },
             { id: 2, assessment_id: 1, competency_id: 2, competency_name: 'Промышленная безопасность', category: 'technical', expected_level: 5, actual_level: 4, gap: -1, notes: 'Высокий уровень, нужна актуализация знаний по новым нормативам' },
-            { id: 3, assessment_id: 1, competency_id: 3, competency_name: 'Электротехника', category: 'technical', expected_level: 4, actual_level: 4, gap: 0 },
+            { id: 3, assessment_id: 1, competency_id: 3, competency_name: 'Технология молочного производства', category: 'technical', expected_level: 4, actual_level: 4, gap: 0 },
             { id: 4, assessment_id: 1, competency_id: 6, competency_name: 'Лидерство и управление командой', category: 'leadership', expected_level: 5, actual_level: 4, gap: -1, notes: 'Необходимо развивать делегирование' },
             { id: 5, assessment_id: 1, competency_id: 8, competency_name: 'Принятие решений', category: 'core', expected_level: 5, actual_level: 5, gap: 0, notes: 'Отличные навыки принятия решений в кризисных ситуациях' }
         ],
         feedback: 'Высококвалифицированный специалист. Рекомендуется развитие управленческих компетенций для перехода на позицию директора станции.',
-        strengths: ['Управление ГЭС', 'Принятие решений', 'Электротехника'],
+        strengths: ['Управление производством', 'Принятие решений', 'Технология молочного производства'],
         development_areas: ['Лидерство', 'Промышленная безопасность (новые нормативы)'],
-        career_recommendations: 'Кандидат на позицию директора ГЭС в перспективе 1–2 лет',
+        career_recommendations: 'Кандидат на позицию директора молокозавода в перспективе 1–2 лет',
         created_at: '2026-01-20T10:00:00Z', updated_at: '2026-01-25T14:00:00Z'
     },
     {
         id: 2, employee_id: 104, employee_name: 'Абдуллаев Жасур Тохирович',
-        department_name: 'Управление эксплуатации ГЭС', position_name: 'Оператор гидроагрегатов',
+        department_name: 'Управление производством', position_name: 'Оператор производственной линии',
         assessor_id: 101, assessor_name: 'Каримов Бахтиёр Рустамович',
         assessment_date: '2026-02-10', assessment_type: 'manager', status: 'completed', overall_score: 3.2,
         competency_scores: [
-            { id: 6, assessment_id: 2, competency_id: 1, competency_name: 'Управление ГЭС', category: 'technical', expected_level: 3, actual_level: 3, gap: 0, notes: 'Уверенно управляет агрегатами' },
+            { id: 6, assessment_id: 2, competency_id: 1, competency_name: 'Управление производством', category: 'technical', expected_level: 3, actual_level: 3, gap: 0, notes: 'Уверенно управляет агрегатами' },
             { id: 7, assessment_id: 2, competency_id: 2, competency_name: 'Промышленная безопасность', category: 'technical', expected_level: 3, actual_level: 3, gap: 0 },
-            { id: 8, assessment_id: 2, competency_id: 3, competency_name: 'Электротехника', category: 'technical', expected_level: 3, actual_level: 2, gap: -1, notes: 'Нужны дополнительные знания по РЗА' },
+            { id: 8, assessment_id: 2, competency_id: 3, competency_name: 'Технология молочного производства', category: 'technical', expected_level: 3, actual_level: 2, gap: -1, notes: 'Нужны дополнительные знания по РЗА' },
             { id: 9, assessment_id: 2, competency_id: 5, competency_name: 'АСУ ТП и SCADA', category: 'technical', expected_level: 3, actual_level: 3, gap: 0, notes: 'Хорошо владеет SCADA' },
             { id: 10, assessment_id: 2, competency_id: 10, competency_name: 'Работа в команде', category: 'soft', expected_level: 3, actual_level: 4, gap: 1, notes: 'Превышает ожидания, отличный командный игрок' }
         ],
         feedback: 'Добросовестный оператор. Необходимо повысить квалификацию по электротехнике. Потенциал для роста до старшего оператора.',
-        strengths: ['SCADA', 'Работа в команде', 'Управление ГЭС'],
-        development_areas: ['Электротехника', 'Релейная защита'],
+        strengths: ['SCADA', 'Работа в команде', 'Управление производством'],
+        development_areas: ['Технология молочного производства', 'Автоматика'],
         created_at: '2026-02-10T09:00:00Z', updated_at: '2026-02-15T11:00:00Z'
     },
     {
@@ -174,7 +174,7 @@ const MOCK_ASSESSMENTS: CompetencyAssessment[] = [
         assessor_id: 200, assessor_name: 'Директор',
         assessment_date: '2026-02-15', assessment_type: '360', status: 'in_progress', overall_score: 3.8,
         competency_scores: [
-            { id: 11, assessment_id: 3, competency_id: 9, competency_name: 'Энергетический менеджмент', category: 'functional', expected_level: 3, actual_level: 3, gap: 0 },
+            { id: 11, assessment_id: 3, competency_id: 9, competency_name: 'Производственный менеджмент', category: 'functional', expected_level: 3, actual_level: 3, gap: 0 },
             { id: 12, assessment_id: 3, competency_id: 7, competency_name: 'Коммуникация', category: 'soft', expected_level: 4, actual_level: 4, gap: 0, notes: 'Отлично готовит отчёты и презентации' },
             { id: 13, assessment_id: 3, competency_id: 8, competency_name: 'Принятие решений', category: 'core', expected_level: 3, actual_level: 3, gap: 0 },
             { id: 14, assessment_id: 3, competency_id: 10, competency_name: 'Работа в команде', category: 'soft', expected_level: 4, actual_level: 4, gap: 0 }
@@ -190,33 +190,33 @@ const MOCK_MATRICES: CompetencyMatrix[] = [
     {
         id: 1, position_id: 10, position_name: 'Главный инженер',
         competencies: [
-            { competency_id: 1, competency_name: 'Управление ГЭС', required_level: 5, is_critical: true },
+            { competency_id: 1, competency_name: 'Управление производством', required_level: 5, is_critical: true },
             { competency_id: 2, competency_name: 'Промышленная безопасность', required_level: 5, is_critical: true },
-            { competency_id: 3, competency_name: 'Электротехника', required_level: 4, is_critical: true },
-            { competency_id: 4, competency_name: 'Гидротехнические сооружения', required_level: 4, is_critical: false },
+            { competency_id: 3, competency_name: 'Технология молочного производства', required_level: 4, is_critical: true },
+            { competency_id: 4, competency_name: 'Производственные объекты', required_level: 4, is_critical: false },
             { competency_id: 6, competency_name: 'Лидерство и управление командой', required_level: 5, is_critical: true },
             { competency_id: 8, competency_name: 'Принятие решений', required_level: 5, is_critical: true },
-            { competency_id: 9, competency_name: 'Энергетический менеджмент', required_level: 4, is_critical: false }
+            { competency_id: 9, competency_name: 'Производственный менеджмент', required_level: 4, is_critical: false }
         ],
         created_at: '2025-01-20T08:00:00Z'
     },
     {
-        id: 2, position_id: 11, position_name: 'Оператор гидроагрегатов',
+        id: 2, position_id: 11, position_name: 'Оператор производственной линии',
         competencies: [
-            { competency_id: 1, competency_name: 'Управление ГЭС', required_level: 3, is_critical: true },
+            { competency_id: 1, competency_name: 'Управление производством', required_level: 3, is_critical: true },
             { competency_id: 2, competency_name: 'Промышленная безопасность', required_level: 3, is_critical: true },
-            { competency_id: 3, competency_name: 'Электротехника', required_level: 3, is_critical: true },
+            { competency_id: 3, competency_name: 'Технология молочного производства', required_level: 3, is_critical: true },
             { competency_id: 5, competency_name: 'АСУ ТП и SCADA', required_level: 3, is_critical: false },
             { competency_id: 10, competency_name: 'Работа в команде', required_level: 3, is_critical: false }
         ],
         created_at: '2025-01-20T08:00:00Z'
     },
     {
-        id: 3, position_id: 12, position_name: 'Инженер-гидротехник',
+        id: 3, position_id: 12, position_name: 'Инженер-технолог',
         competencies: [
-            { competency_id: 4, competency_name: 'Гидротехнические сооружения', required_level: 4, is_critical: true },
+            { competency_id: 4, competency_name: 'Производственные объекты', required_level: 4, is_critical: true },
             { competency_id: 2, competency_name: 'Промышленная безопасность', required_level: 3, is_critical: true },
-            { competency_id: 1, competency_name: 'Управление ГЭС', required_level: 2, is_critical: false },
+            { competency_id: 1, competency_name: 'Управление производством', required_level: 2, is_critical: false },
             { competency_id: 7, competency_name: 'Коммуникация', required_level: 3, is_critical: false },
             { competency_id: 8, competency_name: 'Принятие решений', required_level: 3, is_critical: false }
         ],
@@ -226,7 +226,7 @@ const MOCK_MATRICES: CompetencyMatrix[] = [
         id: 4, position_id: 60, position_name: 'Инженер АСУ ТП',
         competencies: [
             { competency_id: 5, competency_name: 'АСУ ТП и SCADA', required_level: 5, is_critical: true },
-            { competency_id: 3, competency_name: 'Электротехника', required_level: 3, is_critical: false },
+            { competency_id: 3, competency_name: 'Технология молочного производства', required_level: 3, is_critical: false },
             { competency_id: 2, competency_name: 'Промышленная безопасность', required_level: 3, is_critical: true },
             { competency_id: 8, competency_name: 'Принятие решений', required_level: 3, is_critical: false },
             { competency_id: 10, competency_name: 'Работа в команде', required_level: 3, is_critical: false }
@@ -238,10 +238,10 @@ const MOCK_MATRICES: CompetencyMatrix[] = [
 const MOCK_GAP_ANALYSIS = {
     employee_id: 104,
     employee_name: 'Абдуллаев Жасур Тохирович',
-    position_name: 'Оператор гидроагрегатов',
+    position_name: 'Оператор производственной линии',
     overall_fit_percentage: 85,
     gaps: [
-        { competency_id: 3, competency_name: 'Электротехника', required_level: 3, actual_level: 2, gap: -1, priority: 'high', recommended_actions: ['Курс по РЗА', 'Стажировка в электроцехе'] }
+        { competency_id: 3, competency_name: 'Технология молочного производства', required_level: 3, actual_level: 2, gap: -1, priority: 'high', recommended_actions: ['Курс по технологии производства', 'Стажировка в производственном цехе'] }
     ],
     strengths: [
         { competency_id: 10, competency_name: 'Работа в команде', required_level: 3, actual_level: 4, surplus: 1 }
@@ -252,15 +252,15 @@ const MOCK_COMPETENCY_REPORT = {
     total_employees_assessed: 3,
     avg_overall_score: 3.8,
     competency_averages: [
-        { competency_id: 1, competency_name: 'Управление ГЭС', avg_score: 4.0, total_assessed: 2 },
+        { competency_id: 1, competency_name: 'Управление производством', avg_score: 4.0, total_assessed: 2 },
         { competency_id: 2, competency_name: 'Промышленная безопасность', avg_score: 3.5, total_assessed: 2 },
-        { competency_id: 3, competency_name: 'Электротехника', avg_score: 3.0, total_assessed: 2 },
+        { competency_id: 3, competency_name: 'Технология молочного производства', avg_score: 3.0, total_assessed: 2 },
         { competency_id: 7, competency_name: 'Коммуникация', avg_score: 4.0, total_assessed: 1 },
         { competency_id: 8, competency_name: 'Принятие решений', avg_score: 4.0, total_assessed: 2 },
         { competency_id: 10, competency_name: 'Работа в команде', avg_score: 4.0, total_assessed: 2 }
     ],
     top_gaps: [
-        { competency_id: 3, competency_name: 'Электротехника', avg_gap: -0.5 },
+        { competency_id: 3, competency_name: 'Технология молочного производства', avg_gap: -0.5 },
         { competency_id: 6, competency_name: 'Лидерство и управление командой', avg_gap: -1.0 }
     ]
 };

@@ -12,7 +12,7 @@ const USE_MOCK = !BASE_URL;
 const MOCK_SALARIES: Salary[] = [
     {
         id: 1, employee_id: 101, employee_name: 'Каримов Бахтиёр Рустамович',
-        department_id: 1, department_name: 'Управление эксплуатации ГЭС', position_name: 'Главный инженер',
+        department_id: 1, department_name: 'Управление производством', position_name: 'Главный инженер',
         period_month: 2, period_year: 2026,
         base_salary: 12000000, rank_allowance: 2400000, education_allowance: 1200000, seniority_allowance: 1800000,
         other_allowances: 600000, bonuses: 3000000, overtime_pay: 0, absence_deduction: 0,
@@ -53,7 +53,7 @@ const MOCK_SALARIES: Salary[] = [
     },
     {
         id: 4, employee_id: 104, employee_name: 'Абдуллаев Жасур Тохирович',
-        department_id: 1, department_name: 'Управление эксплуатации ГЭС', position_name: 'Оператор гидроагрегатов',
+        department_id: 1, department_name: 'Управление производством', position_name: 'Оператор производственной линии',
         period_month: 2, period_year: 2026,
         base_salary: 5000000, rank_allowance: 750000, education_allowance: 500000, seniority_allowance: 500000,
         other_allowances: 300000, bonuses: 1000000, overtime_pay: 1250000, absence_deduction: 0,
@@ -83,7 +83,7 @@ const MOCK_SALARIES: Salary[] = [
 const MOCK_STRUCTURES: EmployeeSalaryStructure[] = [
     {
         id: 1, employee_id: 101, employee_name: 'Каримов Бахтиёр Рустамович',
-        department_id: 1, department_name: 'Управление эксплуатации ГЭС',
+        department_id: 1, department_name: 'Управление производством',
         position_id: 10, position_name: 'Главный инженер',
         base_salary: 12000000, rank_allowance: 2400000, education_allowance: 1200000,
         seniority_allowance: 1800000, seniority_years: 15, effective_date: '2025-01-01', currency: 'UZS'
@@ -104,8 +104,8 @@ const MOCK_STRUCTURES: EmployeeSalaryStructure[] = [
     },
     {
         id: 4, employee_id: 104, employee_name: 'Абдуллаев Жасур Тохирович',
-        department_id: 1, department_name: 'Управление эксплуатации ГЭС',
-        position_id: 11, position_name: 'Оператор гидроагрегатов',
+        department_id: 1, department_name: 'Управление производством',
+        position_id: 11, position_name: 'Оператор производственной линии',
         base_salary: 5000000, rank_allowance: 750000, education_allowance: 500000,
         seniority_allowance: 500000, seniority_years: 4, effective_date: '2025-06-01', currency: 'UZS'
     },
@@ -128,7 +128,7 @@ const MOCK_BONUSES: EmployeeBonus[] = [
     { id: 1, employee_id: 101, bonus_type: 'quarterly', amount: 3000000, period_month: 2, period_year: 2026, description: 'Квартальная премия Q1 2026', approved: true },
     { id: 2, employee_id: 102, bonus_type: 'performance', amount: 2000000, period_month: 2, period_year: 2026, description: 'За выполнение KPI на 110%', approved: true },
     { id: 3, employee_id: 103, bonus_type: 'holiday', amount: 2500000, period_month: 2, period_year: 2026, description: 'Праздничная премия (8 марта)', approved: true },
-    { id: 4, employee_id: 104, bonus_type: 'one_time', amount: 1000000, period_month: 2, period_year: 2026, description: 'За успешный пуск агрегата №3', approved: true },
+    { id: 4, employee_id: 104, bonus_type: 'one_time', amount: 1000000, period_month: 2, period_year: 2026, description: 'За успешный запуск линии №3', approved: true },
     { id: 5, employee_id: 105, bonus_type: 'performance', amount: 1500000, period_month: 2, period_year: 2026, description: 'За подготовку договоров с подрядчиками', approved: false }
 ];
 
