@@ -53,6 +53,20 @@
     overflow: hidden;
 }
 
+// Dark theme overrides
+:host-context(.app-dark) {
+    --sc-bg-primary: #0f172a;
+    --sc-bg-secondary: #1e293b;
+    --sc-bg-card: #1e293b;
+    --sc-bg-card-hover: #334155;
+
+    --sc-text-primary: #f1f5f9;
+    --sc-text-secondary: #94a3b8;
+    --sc-text-muted: #64748b;
+
+    --sc-border-color: #334155;
+}
+
 .sc-dashboard {
     background: var(--sc-bg-primary);
     height: 100vh;
@@ -89,50 +103,22 @@
     }
 }
 
-// Main Content Row — Map left, side stack right
-.sc-main-row {
-    display: flex;
+// Bottom Row — Discharges + Monitoring
+.sc-bottom-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 10px;
     flex: 1;
     min-height: 0;
 
     @media (max-width: 1200px) {
-        flex-direction: column;
+        grid-template-columns: 1fr;
         overflow-y: auto;
-    }
-}
-
-.tile-map {
-    flex: 1;
-    min-width: 0;
-
-    @media (max-width: 1200px) {
-        min-height: 400px;
-    }
-}
-
-.sc-side-stack {
-    width: 340px;
-    flex-shrink: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    min-height: 0;
-
-    @media (max-width: 1400px) {
-        width: 300px;
-    }
-
-    @media (max-width: 1200px) {
-        width: 100%;
-        flex-direction: row;
-        min-height: 250px;
     }
 }
 
 .tile-discharges,
 .tile-monitoring {
-    flex: 1;
     min-height: 0;
 }
 
@@ -200,10 +186,6 @@
 
     .tile-monitoring .neon-card::before {
         background: var(--sc-accent-purple);
-    }
-
-    .tile-map .neon-card::before {
-        background: var(--sc-accent-sky);
     }
 
     // Text classes

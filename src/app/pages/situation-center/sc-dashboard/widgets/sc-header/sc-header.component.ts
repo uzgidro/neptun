@@ -9,6 +9,7 @@ import { WeatherService } from '@/core/services/weather.service';
 import { LanguageService } from '@/core/services/language.service';
 import { AlarmService } from '@/core/services/alarm.service';
 import { AuthService } from '@/core/services/auth.service';
+import { LayoutService } from '@/layout/service/layout.service';
 
 interface WeatherData {
     city: string;
@@ -37,6 +38,7 @@ export class ScHeaderComponent implements OnInit, OnDestroy {
     private languageService = inject(LanguageService);
     alarmService = inject(AlarmService);
     authService = inject(AuthService);
+    layoutService = inject(LayoutService);
 
     // Language switcher
     languages = [
@@ -52,6 +54,10 @@ export class ScHeaderComponent implements OnInit, OnDestroy {
 
     setLanguage(code: string): void {
         this.languageService.setLanguage(code);
+    }
+
+    toggleDarkMode(): void {
+        this.layoutService.layoutConfig.update((state) => ({ ...state, darkTheme: !state.darkTheme }));
     }
 
     ngOnInit(): void {

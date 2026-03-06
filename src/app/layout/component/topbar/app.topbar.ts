@@ -14,7 +14,6 @@ import { TopbarCalendarWidget } from '@/layout/component/topbar/topbar-calendar/
 import { FastCallWidget } from '@/layout/component/topbar/fast-call/fast-call.widget';
 import { InboxWidget } from '@/layout/component/topbar/inbox/inbox-widget.component';
 import { LanguageSwitcherComponent } from '@/layout/component/topbar/language-switcher/language-switcher.component';
-import { updateSurfacePalette } from '@primeuix/themes';
 import { AuthService } from '@/core/services/auth.service';
 import { AlarmService } from '@/core/services/alarm.service';
 import { TranslateModule } from '@ngx-translate/core';
@@ -116,25 +115,7 @@ export class AppTopbar {
     layoutService = inject(LayoutService);
     authService: AuthService = inject(AuthService);
     alarmService = inject(AlarmService);
-    configurator = new AppConfigurator();
-
     toggleDarkMode() {
-        this.layoutService.layoutConfig.update((state) => {
-            let surfaceName: string;
-            if (!state.darkTheme) {
-                let surface = this.configurator.surfaces.find((value) => {
-                    return value.name == 'ocean';
-                });
-                surfaceName = surface?.name ?? 'ocean';
-                updateSurfacePalette(surface?.palette);
-            } else {
-                let surface = this.configurator.surfaces.find((value) => {
-                    return value.name == 'slate';
-                });
-                surfaceName = surface?.name ?? 'ocean';
-                updateSurfacePalette(surface?.palette);
-            }
-            return { ...state, darkTheme: !state.darkTheme, surface: surfaceName };
-        });
+        this.layoutService.layoutConfig.update((state) => ({ ...state, darkTheme: !state.darkTheme }));
     }
 }

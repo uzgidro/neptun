@@ -2,19 +2,16 @@
     <!-- Header -->
     <sc-header class="sc-header-area"></sc-header>
 
-    <!-- Top Tiles Row: KPIs + Station Status + Shutdowns -->
+    <!-- Top Tiles Row: KPIs + Station Status + Discharges -->
     <div class="sc-tiles-row">
         <sc-power-generation class="sc-widget tile-power"></sc-power-generation>
         <sc-station-status class="sc-widget tile-station"></sc-station-status>
-        <sc-shutdowns class="sc-widget tile-shutdowns"></sc-shutdowns>
+        <sc-discharges class="sc-widget tile-discharges"></sc-discharges>
     </div>
 
-    <!-- Main Content: Map + Side Panel -->
-    <div class="sc-main-row">
-        <sc-map class="sc-widget tile-map"></sc-map>
-        <div class="sc-side-stack">
-            <sc-discharges class="sc-widget tile-discharges"></sc-discharges>
-            <sc-monitoring class="sc-widget tile-monitoring"></sc-monitoring>
-        </div>
+    <!-- Bottom Row: Shutdowns + Monitoring -->
+    <div class="sc-bottom-row">
+        <sc-shutdowns class="sc-widget tile-shutdowns"></sc-shutdowns>
+        <sc-monitoring class="sc-widget tile-monitoring"></sc-monitoring>
     </div>
 </div>

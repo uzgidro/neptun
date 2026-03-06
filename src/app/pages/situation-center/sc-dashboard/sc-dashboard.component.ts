@@ -5,7 +5,6 @@ import { ScPowerGenerationComponent } from './widgets/sc-power-generation/sc-pow
 import { ScStationStatusComponent } from './widgets/sc-station-status/sc-station-status.component';
 import { ScShutdownsComponent } from './widgets/sc-shutdowns/sc-shutdowns.component';
 import { ScDischargesComponent } from './widgets/sc-discharges/sc-discharges.component';
-import { ScMapComponent } from './widgets/sc-map/sc-map.component';
 
 @Component({
     selector: 'app-sc-dashboard',
@@ -16,8 +15,7 @@ import { ScMapComponent } from './widgets/sc-map/sc-map.component';
         ScPowerGenerationComponent,
         ScStationStatusComponent,
         ScShutdownsComponent,
-        ScDischargesComponent,
-        ScMapComponent
+        ScDischargesComponent
     ],
     templateUrl: './sc-dashboard.component.html',
     styleUrl: './sc-dashboard.component.scss'
