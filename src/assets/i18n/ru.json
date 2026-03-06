@@ -3259,8 +3259,8 @@
         "NO_DATA": "Нет данных",
         "RESOURCE_DATE": "Дата снимка"
     },
-    "UZGIDRO_NEWS": {
-        "TITLE": "Новости UzGidro",
+    "COMPANY_NEWS": {
+        "TITLE": "Новости компании",
         "TOTAL_NEWS": "Всего новостей",
         "NEWS_COUNT": "новостей",
         "NO_NEWS": "Новости не найдены",

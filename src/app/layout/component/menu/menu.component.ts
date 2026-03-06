@@ -186,7 +186,7 @@ export class MenuComponent implements OnInit {
                         ]
                     },
                     { label: this.t('MENU.CALLS'), routerLink: ['/calls'] },
-                    { label: this.t('MENU.PRESS_SERVICE'), routerLink: ['/uzgidro-news'] }
+                    { label: this.t('MENU.PRESS_SERVICE'), routerLink: ['/company-news'] }
                 ]
             }
         ];

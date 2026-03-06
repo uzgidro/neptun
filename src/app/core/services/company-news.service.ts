@@ -3,56 +3,23 @@ import { Observable, of, delay } from 'rxjs';
 import { ApiService } from '@/core/services/api.service';
 import { CompanyNewsResponse } from '@/core/interfaces/company-news';
 
+const MOCK_NEWS: CompanyNewsResponse = {
+    items: [
+        { id: 1, uz: 'Yangi ishlab chiqarish liniyasi ishga tushirildi', ru: 'Запущена новая производственная линия', eng: 'New production line launched', uztext: 'Yangi ishlab chiqarish liniyasi muvaffaqiyatli ishga tushirildi.', rutext: 'Новая производственная линия успешно запущена на Молокозаводе №1.', engtext: 'A new production line has been successfully launched at Plant No. 1.', uzsmall: 'Yangi liniya ishga tushirildi', rusmall: 'Новая линия запущена', engsmall: 'New line launched', date: '2024-12-25', img: '', views: 245 },
+        { id: 2, uz: 'Yillik hisobot tasdiqlandi', ru: 'Утверждён годовой отчёт', eng: 'Annual report approved', uztext: 'Kompaniyaning yillik hisoboti tasdiqlandi.', rutext: 'Утверждён годовой отчёт компании за 2024 год.', engtext: 'The company annual report for 2024 has been approved.', uzsmall: 'Hisobot tasdiqlandi', rusmall: 'Отчёт утверждён', engsmall: 'Report approved', date: '2024-12-20', img: '', views: 180 },
+        { id: 3, uz: 'Xalqaro hamkorlik shartnomasi imzolandi', ru: 'Подписан договор о международном сотрудничестве', eng: 'International cooperation agreement signed', uztext: 'Xalqaro hamkorlik boʻyicha yangi shartnoma imzolandi.', rutext: 'Подписан новый договор о международном сотрудничестве в области молочной промышленности.', engtext: 'A new international cooperation agreement in the dairy industry has been signed.', uzsmall: 'Shartnoma imzolandi', rusmall: 'Договор подписан', engsmall: 'Agreement signed', date: '2024-12-18', img: '', views: 312 },
+        { id: 4, uz: 'Xodimlar malaka oshirish kursini tugatdi', ru: 'Сотрудники завершили курс повышения квалификации', eng: 'Employees completed advanced training course', uztext: 'Kompaniya xodimlari malaka oshirish kursini muvaffaqiyatli tugatdi.', rutext: 'Группа сотрудников успешно завершила курс повышения квалификации.', engtext: 'A group of employees successfully completed an advanced training course.', uzsmall: 'Kurs tugatildi', rusmall: 'Курс завершён', engsmall: 'Course completed', date: '2024-12-15', img: '', views: 98 }
+    ],
+    _meta: { totalCount: 4, pageCount: 1, currentPage: 1, perPage: 20 },
+    _links: { self: { href: '/news?page=1' }, last: { href: '/news?page=1' } }
+};
+
 @Injectable({
     providedIn: 'root'
 })
 export class CompanyNewsService extends ApiService {
     getNews(page: number = 1): Observable<CompanyNewsResponse> {
-        const mockData: CompanyNewsResponse = {
-            items: [
-                {
-                    id: 1,
-                    uz: 'Yangi sut zavodi ishga tushirildi',
-                    ru: 'Запущен новый молокозавод',
-                    eng: 'New dairy plant launched',
-                    uztext: 'Yangi zamonaviy sut zavodi ishga tushirildi.',
-                    rutext: 'Новый современный молокозавод был запущен в эксплуатацию.',
-                    engtext: 'A new modern dairy plant has been launched.',
-                    uzsmall: 'Yangi zavod ishga tushirildi',
-                    rusmall: 'Новый завод запущен',
-                    engsmall: 'New plant launched',
-                    date: new Date().toISOString().split('T')[0],
-                    img: '',
-                    views: 120
-                },
-                {
-                    id: 2,
-                    uz: 'Ishlab chiqarish hajmi oshdi',
-                    ru: 'Объём производства увеличен',
-                    eng: 'Production volume increased',
-                    uztext: 'Kompaniya ishlab chiqarish hajmini 15% ga oshirdi.',
-                    rutext: 'Компания увеличила объём производства на 15%.',
-                    engtext: 'The company increased production volume by 15%.',
-                    uzsmall: 'Ishlab chiqarish oshdi',
-                    rusmall: 'Производство выросло',
-                    engsmall: 'Production grew',
-                    date: new Date(Date.now() - 86400000).toISOString().split('T')[0],
-                    img: '',
-                    views: 85
-                }
-            ],
-            _meta: {
-                totalCount: 2,
-                pageCount: 1,
-                currentPage: page,
-                perPage: 10
-            },
-            _links: {
-                self: { href: '#' },
-                last: { href: '#' }
-            }
-        };
-        return of(mockData).pipe(delay(200));
+        return of(MOCK_NEWS).pipe(delay(300));
     }
 
     /**

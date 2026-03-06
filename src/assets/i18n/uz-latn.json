@@ -3242,8 +3242,8 @@
         "NO_DATA": "Ma'lumot yo'q",
         "RESOURCE_DATE": "Surat sanasi"
     },
-    "UZGIDRO_NEWS": {
-        "TITLE": "UzGidro Yangiliklari",
+    "COMPANY_NEWS": {
+        "TITLE": "Kompaniya Yangiliklari",
         "TOTAL_NEWS": "Jami yangiliklar",
         "NEWS_COUNT": "yangilik",
         "NO_NEWS": "Yangiliklar topilmadi",

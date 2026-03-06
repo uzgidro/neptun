@@ -3231,8 +3231,8 @@
         "NO_DATA": "Маълумот йўқ",
         "RESOURCE_DATE": "Сурат санаси"
     },
-    "UZGIDRO_NEWS": {
-        "TITLE": "UzGidro Янгиликлари",
+    "COMPANY_NEWS": {
+        "TITLE": "Компания Янгиликлари",
         "TOTAL_NEWS": "Жами янгиликлар",
         "NEWS_COUNT": "янгилик",
         "NO_NEWS": "Янгиликлар топилмади",
