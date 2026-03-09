@@ -1,5 +1,5 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Subject, takeUntil } from 'rxjs';
 import { RouterModule } from '@angular/router';
 import { MenuitemComponent } from '../menuitem/menuitem.component';
 import { WeatherWidget } from '@/pages/dashboard/components/weather/weather.widget';
@@ -9,18 +9,27 @@ import { TranslateService } from '@ngx-translate/core';
 @Component({
     selector: 'app-menu',
     standalone: true,
-    imports: [CommonModule, MenuitemComponent, RouterModule, WeatherWidget],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [MenuitemComponent, RouterModule, WeatherWidget],
     templateUrl: 'menu.component.html'
 })
-export class MenuComponent implements OnInit {
+export class MenuComponent implements OnInit, OnDestroy {
     model: MenuItems[] = [];
     private translate = inject(TranslateService);
+    private cdr = inject(ChangeDetectorRef);
+    private destroy$ = new Subject<void>();
 
     ngOnInit() {
         this.buildMenu();
-        this.translate.onLangChange.subscribe(() => {
+        this.translate.onLangChange.pipe(takeUntil(this.destroy$)).subscribe(() => {
             this.buildMenu();
+            this.cdr.markForCheck();
         });
+    }
+
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 
     private t(key: string): string {
@@ -35,10 +44,6 @@ export class MenuComponent implements OnInit {
                         label: this.t('MENU.HOME'),
                         routerLink: ['/dashboard']
                     },
-                    // {
-                    //     label: this.t('MENU.OPERATIONAL_MONITORING'),
-                    //     routerLink: ['/monitoring']
-                    // },
                     {
                         label: this.t('MENU.SITUATION_CENTER'),
                         items: [

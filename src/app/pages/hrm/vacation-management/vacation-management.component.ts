@@ -115,8 +115,7 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
             rejection_reason: ['', Validators.required]
         });
 
-        // Subscribe to employee changes to update balance display
-        this.vacationForm.get('employee_id')?.valueChanges.subscribe(employee => {
+        this.vacationForm.get('employee_id')?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(employee => {
             if (employee) {
                 this.updateSelectedEmployeeBalance(employee.id);
             } else {
@@ -124,10 +123,9 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
             }
         });
 
-        // Subscribe to date changes to validate
-        this.vacationForm.get('start_date')?.valueChanges.subscribe(() => this.validateVacationRequest());
-        this.vacationForm.get('end_date')?.valueChanges.subscribe(() => this.validateVacationRequest());
-        this.vacationForm.get('vacation_type')?.valueChanges.subscribe(() => this.validateVacationRequest());
+        this.vacationForm.get('start_date')?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => this.validateVacationRequest());
+        this.vacationForm.get('end_date')?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => this.validateVacationRequest());
+        this.vacationForm.get('vacation_type')?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => this.validateVacationRequest());
     }
 
     ngOnInit() {

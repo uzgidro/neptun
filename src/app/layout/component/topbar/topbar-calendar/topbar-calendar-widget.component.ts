@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { DatePicker } from 'primeng/datepicker';
 import { DatePipe, NgClass } from '@angular/common';
 import { Popover } from 'primeng/popover';
@@ -10,6 +10,7 @@ import { isSameDay, parseISO } from 'date-fns';
 import { Dialog } from 'primeng/dialog';
 import { ButtonDirective, ButtonIcon } from 'primeng/button';
 import { Tooltip } from 'primeng/tooltip';
+import { Subject, takeUntil } from 'rxjs';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CalendarEventsService } from '@/core/services/calendar-events.service';
 import { CalendarResponse, DayCounts } from '@/core/interfaces/calendar-events';
@@ -24,7 +25,7 @@ import { Reception } from '@/core/interfaces/reception';
     templateUrl: './topbar-calendar-widget.component.html',
     styleUrl: './topbar-calendar-widget.component.scss'
 })
-export class TopbarCalendarWidget implements OnInit {
+export class TopbarCalendarWidget implements OnInit, OnDestroy {
     eventManagementService = inject(EventManagementService);
     private translate = inject(TranslateService);
     calendarEventsService = inject(CalendarEventsService);
@@ -58,6 +59,7 @@ export class TopbarCalendarWidget implements OnInit {
 
     // Кэш для данных календаря по месяцам (ключ: "year-month")
     private calendarCache = new Map<string, CalendarResponse>();
+    private destroy$ = new Subject<void>();
 
     ngOnInit() {
         this.loadEvents();
@@ -67,27 +69,25 @@ export class TopbarCalendarWidget implements OnInit {
 
     loadEvents() {
         this.loading = true;
-        this.eventManagementService.getEventsShort().subscribe({
+        this.eventManagementService.getEventsShort().pipe(takeUntil(this.destroy$)).subscribe({
             next: (events) => {
                 this.allEvents.set(events);
                 this.onDateSelect(this.selectedDate);
                 this.loading = false;
             },
-            error: (err) => {
-                console.error('Failed to load events:', err);
+            error: () => {
                 this.loading = false;
             }
         });
     }
 
     loadReceptions() {
-        this.receptionService.getReceptions().subscribe({
+        this.receptionService.getReceptions().pipe(takeUntil(this.destroy$)).subscribe({
             next: (receptions) => {
                 this.allReceptions.set(receptions);
                 this.onDateSelect(this.selectedDate);
             },
-            error: (err) => {
-                console.error('Failed to load receptions:', err);
+            error: () => {
             }
         });
     }
@@ -150,13 +150,12 @@ export class TopbarCalendarWidget implements OnInit {
         this.eventDialogVisible = true;
         this.eventDialogHeader = this.translate.instant('TOPBAR.EVENT_INFO');
 
-        this.eventManagementService.getEventById(eventId).subscribe({
+        this.eventManagementService.getEventById(eventId).pipe(takeUntil(this.destroy$)).subscribe({
             next: (event) => {
                 this.selectedEventDetails = event;
                 this.loadingEventDetails = false;
             },
-            error: (err) => {
-                console.error('Failed to load event details:', err);
+            error: () => {
                 this.loadingEventDetails = false;
                 this.eventDialogVisible = false;
             }
@@ -168,13 +167,12 @@ export class TopbarCalendarWidget implements OnInit {
         this.receptionDialogVisible = true;
         this.receptionDialogHeader = this.translate.instant('TOPBAR.RECEPTION_INFO');
 
-        this.receptionService.getReception(receptionId).subscribe({
+        this.receptionService.getReception(receptionId).pipe(takeUntil(this.destroy$)).subscribe({
             next: (reception) => {
                 this.selectedReceptionDetails = reception;
                 this.loadingReceptionDetails = false;
             },
-            error: (err) => {
-                console.error('Failed to load reception details:', err);
+            error: () => {
                 this.loadingReceptionDetails = false;
                 this.receptionDialogVisible = false;
             }
@@ -257,13 +255,12 @@ export class TopbarCalendarWidget implements OnInit {
             return;
         }
 
-        this.calendarEventsService.getCalendarEvents(year, month).subscribe({
+        this.calendarEventsService.getCalendarEvents(year, month).pipe(takeUntil(this.destroy$)).subscribe({
             next: (response) => {
                 this.calendarCache.set(cacheKey, response);
                 this.updateSelectedDayCounts(this.selectedDate);
             },
-            error: (err) => {
-                console.error('Failed to load calendar data:', err);
+            error: () => {
             }
         });
     }
@@ -312,18 +309,22 @@ export class TopbarCalendarWidget implements OnInit {
         this.statisticsDialogVisible = true;
         this.loadingStatistics = true;
 
-        this.pastEventsService.getPastEventsByType(this.selectedDate, apiType).subscribe({
+        this.pastEventsService.getPastEventsByType(this.selectedDate, apiType).pipe(takeUntil(this.destroy$)).subscribe({
             next: (response) => {
                 // Извлекаем массив events из ответа, создаем копию и реверсируем
                 const eventsArray = response?.events ? [...response.events].reverse() : [];
                 this.statisticsPastEvents.set(eventsArray);
                 this.loadingStatistics = false;
             },
-            error: (err) => {
-                console.error('Failed to load statistics:', err);
+            error: () => {
                 this.loadingStatistics = false;
                 this.statisticsDialogVisible = false;
             }
         });
+    }
+
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

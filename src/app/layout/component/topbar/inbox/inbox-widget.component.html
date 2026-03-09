@@ -243,7 +243,7 @@
                 icon="pi pi-times"
                 severity="secondary"
                 [outlined]="true"
-                (onClick)="closeRejectDialog()"
+                (onClick)="closeDialog('reject')"
             />
             <p-button
                 [label]="'TOPBAR.REJECT' | translate"
@@ -309,7 +309,7 @@
                 icon="pi pi-times"
                 severity="secondary"
                 [outlined]="true"
-                (onClick)="closeRescheduleDialog()"
+                (onClick)="closeDialog('reschedule')"
             />
             <p-button
                 [label]="'TOPBAR.SAVE' | translate"

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { ButtonDirective, ButtonIcon } from 'primeng/button';
 import { TableModule } from 'primeng/table';
@@ -9,20 +9,20 @@ import { Organization } from '@/core/interfaces/organizations';
 import { DashboardService } from '@/core/services/dashboard.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
-interface expandedRows {
+interface ExpandedRows {
     [key: string]: boolean;
 }
 
 @Component({
     selector: 'app-ges-widget',
+    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [ButtonDirective, TableModule, FormsModule, ButtonIcon, DecimalPipe, TranslateModule],
-    templateUrl: './ges.widget.html',
-    styleUrl: './ges.widget.scss'
+    templateUrl: './ges.widget.html'
 })
 class GesWidget implements OnInit, OnDestroy {
     cascades: Organization[] = [];
 
-    expandedRows: expandedRows = {};
+    expandedRows: ExpandedRows = {};
 
     loading: boolean = false;
 
@@ -31,6 +31,7 @@ class GesWidget implements OnInit, OnDestroy {
     private dashboardService: DashboardService = inject(DashboardService);
     private translate: TranslateService = inject(TranslateService);
     private router: Router = inject(Router);
+    private cdr = inject(ChangeDetectorRef);
     private refreshSubscription?: Subscription;
 
     @Input() expanded: boolean = false;
@@ -38,8 +39,8 @@ class GesWidget implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.loadData();
-        // Auto-refresh every 2 minutes
-        this.refreshSubscription = interval(120000).subscribe(() => this.loadData());
+        const REFRESH_INTERVAL = 120_000;
+        this.refreshSubscription = interval(REFRESH_INTERVAL).subscribe(() => this.loadData());
     }
 
     private loadData(): void {
@@ -51,12 +52,15 @@ class GesWidget implements OnInit, OnDestroy {
                     contacts: this.sortContacts(cascade.contacts)
                 }));
                 this.lastUpdated = new Date();
+                this.cdr.markForCheck();
             },
-            error: (err) => {
-                console.log(err);
+            error: () => {
+                this.loading = false;
+                this.cdr.markForCheck();
             },
             complete: () => {
                 this.loading = false;
+                this.cdr.markForCheck();
             }
         });
     }

@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { ButtonDirective } from 'primeng/button';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { DCInfo } from '@/core/interfaces/debit-credit';
@@ -13,9 +13,9 @@ import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-debit',
+    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [ButtonDirective, DecimalPipe, DialogModule, TableModule, Ripple, DatePipe, DialogComponent, TranslateModule],
-    templateUrl: './debit-widget.component.html',
-    styleUrl: './debit-widget.component.scss'
+    templateUrl: './debit-widget.component.html'
 })
 export class DebitWidget implements OnInit, OnDestroy {
     @Input({ required: true }) dc?: DCInfo;
@@ -28,6 +28,7 @@ export class DebitWidget implements OnInit, OnDestroy {
     private currency: number = 0;
     private currencyService: CurrencyService = inject(CurrencyService);
     private financialService: FinancialDashboardService = inject(FinancialDashboardService);
+    private cdr = inject(ChangeDetectorRef);
     private subscription = new Subscription();
 
     get debit(): number {
@@ -49,13 +50,14 @@ export class DebitWidget implements OnInit, OnDestroy {
         this.currencyService.getCurrency().subscribe({
             next: ({ rate }: { rate: number }) => {
                 this.currency = rate;
+                this.cdr.markForCheck();
             }
         });
 
-        // Подписка на данные финансового дашборда
         this.subscription.add(
             this.financialService.dashboardData$.subscribe(() => {
                 this.totalIncome = this.financialService.getTotalIncome();
+                this.cdr.markForCheck();
             })
         );
     }

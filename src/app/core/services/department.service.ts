@@ -8,10 +8,10 @@ const DEPARTMENTS = '/department';
 const USE_MOCK = !BASE_URL;
 
 const MOCK_DEPARTMENTS: Department[] = [
-    { id: 1, name: 'Молокозавод «Чарвак»', description: 'Чирчик-Бозсуйский молочный комбинат', organization_id: 1 },
-    { id: 2, name: 'Молокозавод «Ходжикент»', description: 'Ходжикентское производство', organization_id: 1 },
+    { id: 1, name: 'Молокозавод «Чирчик»', description: 'Чирчик-Бозсуйский молочный комбинат', organization_id: 1 },
+    { id: 2, name: 'Молокозавод «Джизак»', description: 'Джизакское производство', organization_id: 1 },
     { id: 3, name: 'Молокозавод «Газалкент»', description: null, organization_id: 1 },
-    { id: 4, name: 'Молокозавод «Фархад»', description: 'Сырдарьинское производство', organization_id: 1 },
+    { id: 4, name: 'Молокозавод «Фергана»', description: 'Сырдарьинское производство', organization_id: 1 },
     { id: 5, name: 'Центральный аппарат', description: 'Головной офис', organization_id: 1 },
     { id: 6, name: 'Сырдарьинский молокозавод', description: 'Сырдарьинское молочное производство', organization_id: 1 },
     { id: 7, name: 'Зарафшанский молокозавод', description: 'Зарафшанское молочное производство', organization_id: 1 },

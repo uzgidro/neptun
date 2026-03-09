@@ -1,5 +1,4 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ChartModule } from 'primeng/chart';
 import { TranslateModule } from '@ngx-translate/core';
@@ -7,7 +6,8 @@ import { TranslateModule } from '@ngx-translate/core';
 @Component({
     selector: 'app-cashflow-widget',
     standalone: true,
-    imports: [CommonModule, RouterModule, ChartModule, TranslateModule],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [RouterModule, ChartModule, TranslateModule],
     template: `
         <div class="dash-tile accent-sky">
             <div class="tile-header">
@@ -19,12 +19,6 @@ import { TranslateModule } from '@ngx-translate/core';
     `,
     styles: [`
         :host { display: block; }
-        .tile-link {
-            font-size: 13px;
-            color: var(--dash-blue, #3b82f6);
-            text-decoration: none;
-            &:hover { text-decoration: underline; }
-        }
     `]
 })
 export class CashflowWidget {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { InputTextModule } from 'primeng/inputtext';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
@@ -7,6 +7,7 @@ import { TranslateModule } from '@ngx-translate/core';
 @Component({
     selector: 'app-topbar-search',
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [InputTextModule, IconFieldModule, InputIconModule, TranslateModule],
     template: `
         <p-iconfield class="topbar-search hidden md:block">

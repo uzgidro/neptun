@@ -230,6 +230,14 @@
         }
     }
 
+    // Tile link (used in financial, KPI, cashflow widgets)
+    .tile-link {
+        font-size: 13px;
+        color: var(--dash-blue, #3b82f6);
+        text-decoration: none;
+        &:hover { text-decoration: underline; }
+    }
+
     // Compact footer
     .tile-footer {
         display: flex;

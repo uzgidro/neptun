@@ -30,9 +30,9 @@ const MOCK_DASHBOARD: HRAnalyticsDashboard = {
         { label: 'Более 20 лет', count: 309, percentage: 8.0 }
     ],
     department_headcount: [
-        { department_id: 1, department_name: 'Молокозавод «Чарвак»', headcount: 412 },
-        { department_id: 2, department_name: 'Молокозавод «Ходжикент»', headcount: 285 },
-        { department_id: 3, department_name: 'Молокозавод «Фархад»', headcount: 378 },
+        { department_id: 1, department_name: 'Молокозавод «Чирчик»', headcount: 412 },
+        { department_id: 2, department_name: 'Молокозавод «Джизак»', headcount: 285 },
+        { department_id: 3, department_name: 'Молокозавод «Фергана»', headcount: 378 },
         { department_id: 4, department_name: 'Молокозавод «Тупаланг»', headcount: 264 },
         { department_id: 5, department_name: 'Молокозавод «Кадирин»', headcount: 198 },
         { department_id: 6, department_name: 'Молокозавод «Ахангаран»', headcount: 231 },
@@ -75,9 +75,9 @@ const MOCK_TURNOVER_REPORT: TurnoverReport = {
         { label: 'Перевод в другую организацию', count: 1, percentage: 2.9 }
     ],
     by_department: [
-        { department: 'Молокозавод «Чарвак»', terminations: 7, turnover_rate: 1.7 },
-        { department: 'Молокозавод «Ходжикент»', terminations: 3, turnover_rate: 1.1 },
-        { department: 'Молокозавод «Фархад»', terminations: 6, turnover_rate: 1.6 },
+        { department: 'Молокозавод «Чирчик»', terminations: 7, turnover_rate: 1.7 },
+        { department: 'Молокозавод «Джизак»', terminations: 3, turnover_rate: 1.1 },
+        { department: 'Молокозавод «Фергана»', terminations: 6, turnover_rate: 1.6 },
         { department: 'Молокозавод «Тупаланг»', terminations: 4, turnover_rate: 1.5 },
         { department: 'Молокозавод «Кадирин»', terminations: 2, turnover_rate: 1.0 },
         { department: 'Центральный аппарат', terminations: 5, turnover_rate: 1.0 },
@@ -101,9 +101,9 @@ const MOCK_ATTENDANCE_REPORT: AttendanceReport = {
         { label: 'Учебный отпуск', count: 11, percentage: 0.3 }
     ],
     by_department: [
-        { department: 'Молокозавод «Чарвак»', attendance_rate: 95.1, absence_rate: 4.9 },
-        { department: 'Молокозавод «Ходжикент»', attendance_rate: 96.2, absence_rate: 3.8 },
-        { department: 'Молокозавод «Фархад»', attendance_rate: 93.8, absence_rate: 6.2 },
+        { department: 'Молокозавод «Чирчик»', attendance_rate: 95.1, absence_rate: 4.9 },
+        { department: 'Молокозавод «Джизак»', attendance_rate: 96.2, absence_rate: 3.8 },
+        { department: 'Молокозавод «Фергана»', attendance_rate: 93.8, absence_rate: 6.2 },
         { department: 'Молокозавод «Тупаланг»', attendance_rate: 94.5, absence_rate: 5.5 },
         { department: 'Молокозавод «Кадирин»', attendance_rate: 95.9, absence_rate: 4.1 },
         { department: 'Молокозавод «Ахангаран»', attendance_rate: 94.2, absence_rate: 5.8 },
@@ -123,9 +123,9 @@ const MOCK_SALARY_REPORT: SalaryReport = {
     min_salary: 2150000,
     max_salary: 18500000,
     by_department: [
-        { department: 'Молокозавод «Чарвак»', avg_salary: 5120000, total_payroll: 2109440000, headcount: 412 },
-        { department: 'Молокозавод «Ходжикент»', avg_salary: 4890000, total_payroll: 1393650000, headcount: 285 },
-        { department: 'Молокозавод «Фархад»', avg_salary: 5050000, total_payroll: 1908900000, headcount: 378 },
+        { department: 'Молокозавод «Чирчик»', avg_salary: 5120000, total_payroll: 2109440000, headcount: 412 },
+        { department: 'Молокозавод «Джизак»', avg_salary: 4890000, total_payroll: 1393650000, headcount: 285 },
+        { department: 'Молокозавод «Фергана»', avg_salary: 5050000, total_payroll: 1908900000, headcount: 378 },
         { department: 'Молокозавод «Тупаланг»', avg_salary: 4780000, total_payroll: 1261920000, headcount: 264 },
         { department: 'Молокозавод «Кадирин»', avg_salary: 4650000, total_payroll: 920700000, headcount: 198 },
         { department: 'Молокозавод «Ахангаран»', avg_salary: 4720000, total_payroll: 1090320000, headcount: 231 },

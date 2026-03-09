@@ -1,5 +1,5 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Subject, takeUntil } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
 import { DCInfo } from '@/core/interfaces/debit-credit';
 import { DebitCreditTempService } from '@/core/services/temp/debit-credit-temp.service';
@@ -12,23 +12,31 @@ import { FinancialDashboardService } from '@/pages/financial-block/dashboard/ser
 @Component({
     standalone: true,
     selector: 'app-stats-widget',
-    imports: [CommonModule, ButtonModule, DebitWidget, CreditWidget, ProductionWidget, EmployeesWidget],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [ButtonModule, DebitWidget, CreditWidget, ProductionWidget, EmployeesWidget],
     templateUrl: './stats.widget.html'
 })
-export class StatsWidget implements OnInit {
+export class StatsWidget implements OnInit, OnDestroy {
     dc?: DCInfo;
 
     private dcService: DebitCreditTempService = inject(DebitCreditTempService);
     private financialService: FinancialDashboardService = inject(FinancialDashboardService);
+    private cdr = inject(ChangeDetectorRef);
+    private destroy$ = new Subject<void>();
 
     ngOnInit() {
-        // Загружаем начальные данные финансового блока
         this.financialService.loadInitialData();
 
-        this.dcService.getDC().subscribe({
+        this.dcService.getDC().pipe(takeUntil(this.destroy$)).subscribe({
             next: (data: DCInfo) => {
                 this.dc = data;
+                this.cdr.markForCheck();
             }
         });
+    }
+
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

@@ -1,5 +1,4 @@
-import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { LanguageService } from '@/core/services/language.service';
 import { Select } from 'primeng/select';
@@ -7,7 +6,8 @@ import { Select } from 'primeng/select';
 @Component({
     selector: 'app-language-switcher',
     standalone: true,
-    imports: [CommonModule, FormsModule, Select],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [FormsModule, Select],
     template: `
         <p-select
             [options]="languageOptions"
@@ -32,7 +32,7 @@ import { Select } from 'primeng/select';
         }
     `]
 })
-export class LanguageSwitcherComponent {
+export class LanguageSwitcherComponent implements OnInit {
     private languageService = inject(LanguageService);
 
     languageOptions = [
@@ -42,17 +42,16 @@ export class LanguageSwitcherComponent {
         { label: 'EN', value: 'en' }
     ];
 
-    get selectedLang(): string {
-        return this.languageService.getCurrentLanguage().code;
-    }
+    selectedLang = '';
 
-    set selectedLang(_: string) {
-        // Setter needed for ngModel binding
+    ngOnInit(): void {
+        this.selectedLang = this.languageService.getCurrentLanguage().code;
     }
 
     onLanguageChange(event: any): void {
         if (event.value) {
             this.languageService.setLanguage(event.value);
+            this.selectedLang = event.value;
         }
     }
 }

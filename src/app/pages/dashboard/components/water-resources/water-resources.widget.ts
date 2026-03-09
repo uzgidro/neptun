@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { ChartModule } from 'primeng/chart';
 import { TableModule } from 'primeng/table';
 import { DashboardService } from '@/core/services/dashboard.service';
@@ -11,11 +11,13 @@ import { TranslateModule } from '@ngx-translate/core';
 @Component({
     standalone: true,
     selector: 'app-water-resources-widget',
+    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [ChartModule, TableModule, DecimalPipe, DatePickerComponent, FormsModule, TranslateModule],
     templateUrl: './water-resources.widget.html'
 })
 export class WaterResourcesWidget implements OnInit {
     private dashboardService = inject(DashboardService);
+    private cdr = inject(ChangeDetectorRef);
 
     reservoirs: Reservoir[] = [];
     loading = false;
@@ -34,10 +36,11 @@ export class WaterResourcesWidget implements OnInit {
             next: (response) => {
                 this.reservoirs = response;
                 this.loading = false;
+                this.cdr.markForCheck();
             },
-            error: (error) => {
-                console.error('Error loading reservoirs:', error);
+            error: () => {
                 this.loading = false;
+                this.cdr.markForCheck();
             }
         });
     }

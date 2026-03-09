@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { ButtonDirective, ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
 import { DatePipe, NgClass } from '@angular/common';
@@ -13,11 +13,13 @@ import { TranslateModule } from '@ngx-translate/core';
 @Component({
     standalone: true,
     selector: 'app-notifications-widget',
+    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [ButtonModule, MenuModule, DatePipe, NgClass, ButtonDirective, DialogComponent, DatePickerComponent, FormsModule, TranslateModule],
     templateUrl: './notifications.widget.html'
 })
 export class NotificationsWidget implements OnInit {
     private pastEventsService = inject(PastEventsService);
+    private cdr = inject(ChangeDetectorRef);
 
     eventsByDate: DateGroup[] = [];
     loading = false;
@@ -30,11 +32,6 @@ export class NotificationsWidget implements OnInit {
     imageViewerVisible = false;
     imageViewerHeader = '';
     selectedImageUrl = '';
-
-    items = [
-        { label: 'Add New', icon: 'pi pi-fw pi-plus' },
-        { label: 'Remove', icon: 'pi pi-fw pi-trash' }
-    ];
 
     ngOnInit() {
         this.loadPastEvents();
@@ -88,10 +85,11 @@ export class NotificationsWidget implements OnInit {
             next: (response) => {
                 this.eventsByDate = response;
                 this.loading = false;
+                this.cdr.markForCheck();
             },
-            error: (error) => {
-                console.error('Error loading past events:', error);
+            error: () => {
                 this.loading = false;
+                this.cdr.markForCheck();
             }
         });
     }

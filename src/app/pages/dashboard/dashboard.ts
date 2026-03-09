@@ -1,6 +1,5 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { StatsWidget } from './components/stats/stats.widget';
-// import { IncomingEventsWidget } from './components/incoming-events/incoming-events.widget';
 import { WaterResourcesWidget } from '@/pages/dashboard/components/water-resources/water-resources.widget';
 import { NotificationsWidget } from '@/pages/dashboard/components/notifications/notifications.widget';
 import GesWidget from '@/pages/dashboard/components/ges/ges.widget';
@@ -11,6 +10,7 @@ import { CashflowWidget } from './components/cashflow/cashflow.widget';
 @Component({
     selector: 'app-dashboard',
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [StatsWidget, WaterResourcesWidget, NotificationsWidget, GesWidget, FinancialSummaryWidget, KpiSummaryWidget, CashflowWidget],
     styleUrl: './dashboard.scss',
     template: `

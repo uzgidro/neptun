@@ -33,7 +33,7 @@ const MOCK_GOALS: PerformanceGoal[] = [
     {
         id: 3,
         employee_id: 103,
-        title: 'Завершить модернизацию системы автоматического управления Молокозавода «Чарвак»',
+        title: 'Завершить модернизацию системы автоматического управления Молокозавода «Чирчик»',
         target_value: 100,
         current_value: 100,
         weight: 20,
@@ -111,7 +111,7 @@ const MOCK_REVIEWS: PerformanceReview[] = [
     {
         id: 3,
         employee_id: 103,
-        employee_name: 'Рахимова Дилноза Фархадовна',
+        employee_name: 'Рахимова Дилноза Ферганаовна',
         reviewer_id: 202,
         reviewer_name: 'Мирзаев Алишер Камолович',
         type: 'project',

@@ -50,8 +50,8 @@ export class MenuitemComponent implements OnInit, OnDestroy {
 
     key: string = '';
 
-    private router = inject(Router)
-    private layoutService = inject(LayoutService)
+    private router = inject(Router);
+    private layoutService = inject(LayoutService);
     private authService = inject(AuthService);
 
     constructor() {

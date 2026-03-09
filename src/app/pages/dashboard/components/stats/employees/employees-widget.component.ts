@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
 import { TableModule } from 'primeng/table';
 import { DecimalPipe } from '@angular/common';
@@ -78,9 +78,9 @@ const ORGANIZATIONS: OrganizationOption[] = [
 
 @Component({
     selector: 'app-employees-widget',
+    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [DialogComponent, TableModule, DecimalPipe, TranslateModule],
-    templateUrl: './employees-widget.component.html',
-    styleUrl: './employees-widget.component.scss'
+    templateUrl: './employees-widget.component.html'
 })
 export class EmployeesWidget {
     showDialog: boolean = false;

@@ -1,5 +1,4 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { KnobModule } from 'primeng/knob';
 import { ProgressBarModule } from 'primeng/progressbar';
@@ -9,7 +8,8 @@ import { TranslateModule } from '@ngx-translate/core';
 @Component({
     selector: 'app-kpi-summary-widget',
     standalone: true,
-    imports: [CommonModule, RouterModule, KnobModule, ProgressBarModule, FormsModule, TranslateModule],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [RouterModule, KnobModule, ProgressBarModule, FormsModule, TranslateModule],
     template: `
         <div class="dash-tile accent-purple">
             <div class="tile-header">
@@ -83,12 +83,6 @@ import { TranslateModule } from '@ngx-translate/core';
             font-weight: 600;
             color: var(--dash-text-primary, #0f172a);
             font-variant-numeric: tabular-nums;
-        }
-        .tile-link {
-            font-size: 13px;
-            color: var(--dash-blue, #3b82f6);
-            text-decoration: none;
-            &:hover { text-decoration: underline; }
         }
     `]
 })

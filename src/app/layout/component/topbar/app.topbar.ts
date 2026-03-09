@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { RouterModule } from '@angular/router';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
@@ -6,8 +6,6 @@ import { StyleClassModule } from 'primeng/styleclass';
 import { ProfileMenu } from './profile/app.profilemenu';
 import { LayoutService } from '../../service/layout.service';
 import { PopoverModule } from 'primeng/popover';
-import { TableModule } from 'primeng/table';
-import { ToastModule } from 'primeng/toast';
 import { FormsModule } from '@angular/forms';
 import { AppConfigurator } from '@/layout/component/app.configurator';
 import { TopbarCalendarWidget } from '@/layout/component/topbar/topbar-calendar/topbar-calendar-widget.component';
@@ -21,14 +19,13 @@ import { TopbarSearchComponent } from '@/layout/component/topbar/topbar-search/t
 @Component({
     selector: 'app-topbar',
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
         RouterModule,
         CommonModule,
         StyleClassModule,
         ProfileMenu,
         PopoverModule,
-        TableModule,
-        ToastModule,
         FormsModule,
         AppConfigurator,
         TopbarCalendarWidget,

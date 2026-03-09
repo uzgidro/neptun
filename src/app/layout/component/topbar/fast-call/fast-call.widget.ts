@@ -1,4 +1,5 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Subject, takeUntil } from 'rxjs';
 import { Popover } from 'primeng/popover';
 import { TableModule } from 'primeng/table';
 import { ButtonDirective } from 'primeng/button';
@@ -13,16 +14,22 @@ import { TranslateModule } from '@ngx-translate/core';
     templateUrl: './fast-call.widget.html',
     styleUrl: './fast-call.widget.scss'
 })
-export class FastCallWidget implements OnInit {
+export class FastCallWidget implements OnInit, OnDestroy {
     contacts: FastCall[] = [];
 
     private fastCallsService: FastCallService = inject(FastCallService);
+    private destroy$ = new Subject<void>();
 
     ngOnInit() {
-        this.fastCallsService.getFastCalls().subscribe({
+        this.fastCallsService.getFastCalls().pipe(takeUntil(this.destroy$)).subscribe({
             next: (data) => {
                 this.contacts = data;
             }
         });
+    }
+
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

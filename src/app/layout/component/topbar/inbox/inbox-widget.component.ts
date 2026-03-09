@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Popover } from 'primeng/popover';
@@ -11,6 +11,7 @@ import { OverlayBadge } from 'primeng/overlaybadge';
 import { Button } from 'primeng/button';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
 import { TextareaComponent } from '@/layout/component/dialog/textarea/textarea.component';
+import { Subject, takeUntil } from 'rxjs';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -31,7 +32,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
     templateUrl: './inbox-widget.component.html',
     styleUrl: './inbox-widget.component.scss'
 })
-export class InboxWidget implements OnInit {
+export class InboxWidget implements OnInit, OnDestroy {
     receptionService = inject(ReceptionService);
     messageService = inject(MessageService);
     fb = inject(FormBuilder);
@@ -50,6 +51,8 @@ export class InboxWidget implements OnInit {
     rejectForm!: FormGroup;
     selectedReceptionForReject: Reception | null = null;
     submittedReject = false;
+
+    private destroy$ = new Subject<void>();
 
     // Reschedule dialog
     rescheduleDialogVisible = false;
@@ -77,13 +80,12 @@ export class InboxWidget implements OnInit {
 
     loadPendingReceptions() {
         this.loading = true;
-        this.receptionService.getReceptions('default').subscribe({
+        this.receptionService.getReceptions('default').pipe(takeUntil(this.destroy$)).subscribe({
             next: (receptions) => {
                 this.pendingReceptions.set(receptions);
                 this.loading = false;
             },
-            error: (err) => {
-                console.error('Failed to load pending receptions:', err);
+            error: () => {
                 this.loading = false;
             }
         });
@@ -94,87 +96,95 @@ export class InboxWidget implements OnInit {
         this.receptionDialogVisible = true;
         this.receptionDialogHeader = this.translate.instant('TOPBAR.RECEPTION_INFO');
 
-        this.receptionService.getReception(receptionId).subscribe({
+        this.receptionService.getReception(receptionId).pipe(takeUntil(this.destroy$)).subscribe({
             next: (reception) => {
                 this.selectedReceptionDetails = reception;
                 this.loadingReceptionDetails = false;
             },
-            error: (err) => {
-                console.error('Failed to load reception details:', err);
+            error: () => {
                 this.loadingReceptionDetails = false;
                 this.receptionDialogVisible = false;
             }
         });
     }
 
+    private readonly statusConfig: Record<string, { severity: 'success' | 'danger' | 'secondary' | 'warn'; labelKey: string }> = {
+        true: { severity: 'success', labelKey: 'TOPBAR.STATUS_APPROVED' },
+        false: { severity: 'danger', labelKey: 'TOPBAR.STATUS_REJECTED' }
+    };
+
     getStatusSeverity(reception: Reception): 'success' | 'danger' | 'secondary' | 'warn' {
         if (reception.status === 'true' && reception.status_change_reason) {
             return 'warn';
         }
-        switch (reception.status) {
-            case 'true':
-                return 'success';
-            case 'false':
-                return 'danger';
-            default:
-                return 'secondary';
-        }
+        return this.statusConfig[reception.status]?.severity ?? 'secondary';
     }
 
     getStatusLabel(reception: Reception): string {
         if (reception.status === 'true' && reception.status_change_reason) {
             return this.translate.instant('TOPBAR.STATUS_RESCHEDULED');
         }
-        switch (reception.status) {
-            case 'true':
-                return this.translate.instant('TOPBAR.STATUS_APPROVED');
-            case 'false':
-                return this.translate.instant('TOPBAR.STATUS_REJECTED');
-            default:
-                return this.translate.instant('TOPBAR.STATUS_PENDING');
-        }
+        const config = this.statusConfig[reception.status];
+        return config ? this.translate.instant(config.labelKey) : this.translate.instant('TOPBAR.STATUS_PENDING');
+    }
+
+    private showToast(severity: string, summaryKey: string, detail?: string): void {
+        this.messageService.add({
+            severity,
+            summary: this.translate.instant(summaryKey),
+            ...(detail && { detail })
+        });
     }
 
     approveReception(reception: Reception): void {
-        this.receptionService.updateReception(reception.id, { status: 'true' }).subscribe({
+        this.receptionService.updateReception(reception.id, { status: 'true' }).pipe(takeUntil(this.destroy$)).subscribe({
             next: () => {
-                this.messageService.add({
-                    severity: 'success',
-                    summary: this.translate.instant('TOPBAR.RECEPTION_APPROVED')
-                });
+                this.showToast('success', 'TOPBAR.RECEPTION_APPROVED');
                 this.receptionDialogVisible = false;
                 this.loadPendingReceptions();
             },
             error: (err) => {
-                this.messageService.add({
-                    severity: 'error',
-                    summary: this.translate.instant('TOPBAR.APPROVAL_ERROR'),
-                    detail: err.message
-                });
+                this.showToast('error', 'TOPBAR.APPROVAL_ERROR', err.message);
             }
         });
     }
 
     rejectReception(reception: Reception): void {
-        this.openRejectDialog(reception);
+        this.openDialog('reject', reception);
     }
 
-    openRejectDialog(reception: Reception): void {
-        this.selectedReceptionForReject = reception;
-        this.rejectForm.reset();
-        this.rejectDialogVisible = true;
+    openDialog(type: 'reject' | 'reschedule', reception: Reception): void {
+        if (type === 'reject') {
+            this.selectedReceptionForReject = reception;
+            this.rejectForm.reset();
+            this.rejectDialogVisible = true;
+        } else {
+            this.selectedReceptionForReschedule = reception;
+            this.rescheduleForm.patchValue({ date: reception.date, reason: '' });
+            this.rescheduleDialogVisible = true;
+        }
         this.receptionDialogVisible = false;
+    }
+
+    closeDialog(type: 'reject' | 'reschedule'): void {
+        if (type === 'reject') {
+            this.rejectDialogVisible = false;
+            this.submittedReject = false;
+            this.rejectForm.reset();
+            this.selectedReceptionForReject = null;
+        } else {
+            this.rescheduleDialogVisible = false;
+            this.submittedReschedule = false;
+            this.rescheduleForm.reset();
+            this.selectedReceptionForReschedule = null;
+        }
     }
 
     saveRejection(): void {
         this.submittedReject = true;
 
         if (this.rejectForm.invalid) {
-            this.messageService.add({
-                severity: 'warn',
-                summary: this.translate.instant('COMMON.WARNING'),
-                detail: this.translate.instant('TOPBAR.SPECIFY_REJECTION_REASON')
-            });
+            this.showToast('warn', 'COMMON.WARNING', this.translate.instant('TOPBAR.SPECIFY_REJECTION_REASON'));
             return;
         }
 
@@ -183,51 +193,28 @@ export class InboxWidget implements OnInit {
                 status: 'false',
                 status_change_reason: this.rejectForm.value.reason
             })
+            .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
-                    this.messageService.add({
-                        severity: 'success',
-                        summary: this.translate.instant('TOPBAR.RECEPTION_REJECTED')
-                    });
-                    this.closeRejectDialog();
+                    this.showToast('success', 'TOPBAR.RECEPTION_REJECTED');
+                    this.closeDialog('reject');
                     this.loadPendingReceptions();
                 },
                 error: (err) => {
-                    this.messageService.add({
-                        severity: 'error',
-                        summary: this.translate.instant('TOPBAR.REJECTION_ERROR'),
-                        detail: err.message
-                    });
+                    this.showToast('error', 'TOPBAR.REJECTION_ERROR', err.message);
                 }
             });
     }
 
-    closeRejectDialog(): void {
-        this.rejectDialogVisible = false;
-        this.submittedReject = false;
-        this.rejectForm.reset();
-        this.selectedReceptionForReject = null;
-    }
-
     openRescheduleDialog(reception: Reception): void {
-        this.selectedReceptionForReschedule = reception;
-        this.rescheduleForm.patchValue({
-            date: reception.date,
-            reason: ''
-        });
-        this.rescheduleDialogVisible = true;
-        this.receptionDialogVisible = false;
+        this.openDialog('reschedule', reception);
     }
 
     saveReschedule(): void {
         this.submittedReschedule = true;
 
         if (this.rescheduleForm.invalid) {
-            this.messageService.add({
-                severity: 'warn',
-                summary: this.translate.instant('COMMON.WARNING'),
-                detail: this.translate.instant('COMMON.FILL_REQUIRED')
-            });
+            this.showToast('warn', 'COMMON.WARNING', this.translate.instant('COMMON.FILL_REQUIRED'));
             return;
         }
 
@@ -239,30 +226,21 @@ export class InboxWidget implements OnInit {
                 date: formValue.date,
                 status_change_reason: formValue.reason
             })
+            .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
-                    this.messageService.add({
-                        severity: 'success',
-                        summary: this.translate.instant('TOPBAR.RECEPTION_RESCHEDULED'),
-                        detail: this.translate.instant('TOPBAR.DATE_UPDATED_APPROVED')
-                    });
-                    this.closeRescheduleDialog();
+                    this.showToast('success', 'TOPBAR.RECEPTION_RESCHEDULED', this.translate.instant('TOPBAR.DATE_UPDATED_APPROVED'));
+                    this.closeDialog('reschedule');
                     this.loadPendingReceptions();
                 },
                 error: (err) => {
-                    this.messageService.add({
-                        severity: 'error',
-                        summary: this.translate.instant('TOPBAR.RESCHEDULE_ERROR'),
-                        detail: err.message
-                    });
+                    this.showToast('error', 'TOPBAR.RESCHEDULE_ERROR', err.message);
                 }
             });
     }
 
-    closeRescheduleDialog(): void {
-        this.rescheduleDialogVisible = false;
-        this.submittedReschedule = false;
-        this.rescheduleForm.reset();
-        this.selectedReceptionForReschedule = null;
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }
