@@ -66,7 +66,7 @@
     <!-- Пустое состояние -->
     @if (!loading && filteredMessages.length === 0) {
         <div class="flex flex-column items-center justify-center py-8">
-            <i class="pi pi-inbox text-6xl text-gray-400 mb-3"></i>
+            <i class="pi pi-inbox text-6xl text-surface-400 mb-3"></i>
             <p class="text-color-secondary mt-2">Сообщения не найдены. Попробуйте изменить фильтры.</p>
         </div>
     }
@@ -285,8 +285,8 @@
 
         <!-- Placeholder если нет медиа -->
         @if (!hasMedia(selectedMessage)) {
-            <div class="w-full h-48 bg-gray-100 flex items-center justify-center border-round mb-4">
-                <i class="pi pi-comment text-6xl text-gray-400"></i>
+            <div class="w-full h-48 bg-surface-100 flex items-center justify-center border-round mb-4">
+                <i class="pi pi-comment text-6xl text-surface-400"></i>
             </div>
         }
 

@@ -16,7 +16,7 @@
         &:hover {
             background: var(--surface-100) !important;
 
-            :host-context(.dark) & {
+            :host-context(.app-dark) & {
                 background: var(--surface-700) !important;
             }
         }
@@ -24,7 +24,7 @@
         &.p-highlight {
             background: var(--primary-50) !important;
 
-            :host-context(.dark) & {
+            :host-context(.app-dark) & {
                 background: rgba(var(--primary-400-rgb), 0.2) !important;
             }
         }
@@ -48,7 +48,7 @@
         border-radius: 0.75rem;
         transition: all 0.2s;
 
-        :host-context(.dark) & {
+        :host-context(.app-dark) & {
             border-color: var(--surface-700);
             background: var(--surface-800);
         }
@@ -56,6 +56,10 @@
         &:hover {
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             transform: translateY(-2px);
+
+            :host-context(.app-dark) & {
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            }
         }
     }
 
@@ -64,7 +68,7 @@
     .p-organizationchart-line-right {
         background: var(--surface-300);
 
-        :host-context(.dark) & {
+        :host-context(.app-dark) & {
             background: var(--surface-600);
         }
     }
@@ -72,7 +76,7 @@
     .p-organizationchart-line-top {
         border-top-color: var(--surface-300);
 
-        :host-context(.dark) & {
+        :host-context(.app-dark) & {
             border-top-color: var(--surface-600);
         }
     }

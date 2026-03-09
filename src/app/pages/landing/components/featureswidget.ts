@@ -125,9 +125,9 @@ import { CommonModule } from '@angular/common';
                 style="border-radius: 20px; background: linear-gradient(0deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)), radial-gradient(77.36% 256.97% at 77.36% 57.52%, #efe1af 0%, #c3dcfa 100%)"
             >
                 <div class="flex flex-col justify-center items-center text-center px-4 py-4 md:py-0">
-                    <div class="text-gray-900 mb-2 text-3xl font-semibold">Joséphine Miller</div>
-                    <span class="text-gray-600 text-2xl">Peak Interactive</span>
-                    <p class="text-gray-900 sm:line-height-2 md:line-height-4 text-2xl mt-6" style="max-width: 800px">
+                    <div class="text-surface-900 dark:text-surface-0 mb-2 text-3xl font-semibold">Joséphine Miller</div>
+                    <span class="text-surface-600 dark:text-surface-200 text-2xl">Peak Interactive</span>
+                    <p class="text-surface-900 dark:text-surface-0 sm:line-height-2 md:line-height-4 text-2xl mt-6" style="max-width: 800px">
                         “Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.”
                     </p>
                     <img src="https://primefaces.org/cdn/templates/sakai/landing/peak-logo.svg" class="mt-6" alt="Company logo" />

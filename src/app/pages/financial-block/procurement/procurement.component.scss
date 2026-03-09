@@ -441,3 +441,28 @@
         }
     }
 }
+
+// ===== DARK THEME OVERRIDES =====
+:host-context(.app-dark) {
+    .procurement-container {
+        .summary-card {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+
+            &:hover {
+                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+            }
+        }
+
+        .chart-card {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+        }
+
+        .toolbar-card {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+        }
+
+        .table-card {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+        }
+    }
+}

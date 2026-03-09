@@ -10,9 +10,9 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             <p-card styleClass="shadow-sm">
                 <div class="flex flex-col items-center">
-                    <span class="text-lg text-gray-500 mb-2">{{ 'HRM.ANALYTICS.TOTAL_EMPLOYEES' | translate }}</span>
+                    <span class="text-lg text-surface-500 mb-2">{{ 'HRM.ANALYTICS.TOTAL_EMPLOYEES' | translate }}</span>
                     <span class="text-4xl font-bold text-blue-600">{{ formatNumber(dashboard.total_employees) }}</span>
-                    <span class="text-sm text-gray-500 mt-1">
+                    <span class="text-sm text-surface-500 mt-1">
                         <i class="pi pi-calendar"></i> {{ 'HRM.ANALYTICS.AVG_AGE' | translate }}
                         : {{ dashboard.avg_age.toFixed(1) }}
                     </span>
@@ -21,7 +21,7 @@
 
             <p-card styleClass="shadow-sm">
                 <div class="flex flex-col items-center">
-                    <span class="text-lg text-gray-500 mb-2">{{ 'HRM.ANALYTICS.HIRED_THIS_MONTH' | translate }}</span>
+                    <span class="text-lg text-surface-500 mb-2">{{ 'HRM.ANALYTICS.HIRED_THIS_MONTH' | translate }}</span>
                     <span class="text-4xl font-bold text-green-600">{{ formatNumber(dashboard.new_hires_month) }}</span>
                     <span class="text-sm text-red-600 mt-1">
                         <i class="pi pi-user-minus"></i> {{ 'HRM.ANALYTICS.TERMINATED' | translate }}
@@ -32,19 +32,19 @@
 
             <p-card styleClass="shadow-sm">
                 <div class="flex flex-col items-center">
-                    <span class="text-lg text-gray-500 mb-2">{{ 'HRM.ANALYTICS.TURNOVER_RATE' | translate }}</span>
+                    <span class="text-lg text-surface-500 mb-2">{{ 'HRM.ANALYTICS.TURNOVER_RATE' | translate }}</span>
                     <span class="text-4xl font-bold" [class.text-red-600]="dashboard.turnover_rate > 10" [class.text-orange-600]="dashboard.turnover_rate <= 10 && dashboard.turnover_rate > 5" [class.text-green-600]="dashboard.turnover_rate <= 5">
                         {{ formatPercent(dashboard.turnover_rate) }}
                     </span>
-                    <span class="text-sm text-gray-500 mt-1">{{ 'HRM.ANALYTICS.LAST_12_MONTHS' | translate }}</span>
+                    <span class="text-sm text-surface-500 mt-1">{{ 'HRM.ANALYTICS.LAST_12_MONTHS' | translate }}</span>
                 </div>
             </p-card>
 
             <p-card styleClass="shadow-sm">
                 <div class="flex flex-col items-center">
-                    <span class="text-lg text-gray-500 mb-2">{{ 'HRM.ANALYTICS.AVERAGE_TENURE' | translate }}</span>
+                    <span class="text-lg text-surface-500 mb-2">{{ 'HRM.ANALYTICS.AVERAGE_TENURE' | translate }}</span>
                     <span class="text-4xl font-bold text-purple-600">{{ dashboard.avg_tenure_years.toFixed(1) }}</span>
-                    <span class="text-sm text-gray-500 mt-1">{{ 'HRM.ANALYTICS.YEARS' | translate }}</span>
+                    <span class="text-sm text-surface-500 mt-1">{{ 'HRM.ANALYTICS.YEARS' | translate }}</span>
                 </div>
             </p-card>
         </div>
@@ -112,7 +112,7 @@
             </div>
         }
     } @else {
-        <div class="flex justify-center items-center h-64 text-gray-500">
+        <div class="flex justify-center items-center h-64 text-surface-500">
             <div class="text-center">
                 <i class="pi pi-chart-bar text-6xl mb-4"></i>
                 <p>{{ 'COMMON.NO_DATA' | translate }}</p>

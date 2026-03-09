@@ -27,26 +27,26 @@
                         <div>
                             <h1 class="text-2xl font-bold text-gray-800 dark:text-white m-0">{{ profile.full_name }}</h1>
                             <p class="text-lg text-gray-600 dark:text-gray-400 mt-1">{{ profile.position_name }}</p>
-                            <p class="text-sm text-gray-500">{{ profile.department_name }}</p>
+                            <p class="text-sm text-surface-500">{{ profile.department_name }}</p>
                         </div>
                         <button pButton icon="pi pi-pencil" [label]="'HRM.EMPLOYEE_CABINET.EDIT_PROFILE' | translate" class="p-button-outlined p-button-sm" (click)="openEditProfileDialog()"></button>
                     </div>
 
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
                         <div>
-                            <span class="text-xs text-gray-400 block">{{ 'HRM.EMPLOYEE_CABINET.EMPLOYEE_ID' | translate }}</span>
+                            <span class="text-xs text-surface-400 block">{{ 'HRM.EMPLOYEE_CABINET.EMPLOYEE_ID' | translate }}</span>
                             <span class="font-medium">{{ profile.employee_id }}</span>
                         </div>
                         <div>
-                            <span class="text-xs text-gray-400 block">{{ 'HRM.EMPLOYEE_CABINET.HIRE_DATE' | translate }}</span>
+                            <span class="text-xs text-surface-400 block">{{ 'HRM.EMPLOYEE_CABINET.HIRE_DATE' | translate }}</span>
                             <span class="font-medium">{{ formatDate(profile.hire_date) }}</span>
                         </div>
                         <div>
-                            <span class="text-xs text-gray-400 block">{{ 'HRM.EMPLOYEE_CABINET.EMAIL' | translate }}</span>
+                            <span class="text-xs text-surface-400 block">{{ 'HRM.EMPLOYEE_CABINET.EMAIL' | translate }}</span>
                             <span class="font-medium">{{ profile.email }}</span>
                         </div>
                         <div>
-                            <span class="text-xs text-gray-400 block">{{ 'HRM.EMPLOYEE_CABINET.PHONE' | translate }}</span>
+                            <span class="text-xs text-surface-400 block">{{ 'HRM.EMPLOYEE_CABINET.PHONE' | translate }}</span>
                             <span class="font-medium">{{ profile.phone || '—' }}</span>
                         </div>
                     </div>
@@ -70,9 +70,9 @@
 
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                             <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4">
-                                <div class="text-sm text-gray-500 mb-1">{{ 'HRM.EMPLOYEE_CABINET.ANNUAL_LEAVE' | translate }}</div>
+                                <div class="text-sm text-surface-500 mb-1">{{ 'HRM.EMPLOYEE_CABINET.ANNUAL_LEAVE' | translate }}</div>
                                 <div class="text-2xl font-bold text-blue-600">{{ leaveBalance.annual_leave_remaining }}</div>
-                                <div class="text-xs text-gray-400">{{ 'HRM.EMPLOYEE_CABINET.OF_DAYS' | translate:{ total: leaveBalance.annual_leave_total } }}</div>
+                                <div class="text-xs text-surface-400">{{ 'HRM.EMPLOYEE_CABINET.OF_DAYS' | translate:{ total: leaveBalance.annual_leave_total } }}</div>
                                 <p-progressBar
                                     [value]="(leaveBalance.annual_leave_remaining / leaveBalance.annual_leave_total) * 100"
                                     [showValue]="false"
@@ -82,9 +82,9 @@
                             </div>
 
                             <div class="bg-green-50 dark:bg-green-900/20 rounded-lg p-4">
-                                <div class="text-sm text-gray-500 mb-1">{{ 'HRM.EMPLOYEE_CABINET.ADDITIONAL_LEAVE' | translate }}</div>
+                                <div class="text-sm text-surface-500 mb-1">{{ 'HRM.EMPLOYEE_CABINET.ADDITIONAL_LEAVE' | translate }}</div>
                                 <div class="text-2xl font-bold text-green-600">{{ leaveBalance.additional_leave_remaining }}</div>
-                                <div class="text-xs text-gray-400">{{ 'HRM.EMPLOYEE_CABINET.OF_DAYS' | translate:{ total: leaveBalance.additional_leave_total } }}</div>
+                                <div class="text-xs text-surface-400">{{ 'HRM.EMPLOYEE_CABINET.OF_DAYS' | translate:{ total: leaveBalance.additional_leave_total } }}</div>
                                 <p-progressBar
                                     [value]="(leaveBalance.additional_leave_remaining / leaveBalance.additional_leave_total) * 100"
                                     [showValue]="false"
@@ -94,9 +94,9 @@
                             </div>
 
                             <div class="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-4">
-                                <div class="text-sm text-gray-500 mb-1">{{ 'HRM.EMPLOYEE_CABINET.STUDY_LEAVE' | translate }}</div>
+                                <div class="text-sm text-surface-500 mb-1">{{ 'HRM.EMPLOYEE_CABINET.STUDY_LEAVE' | translate }}</div>
                                 <div class="text-2xl font-bold text-purple-600">{{ leaveBalance.study_leave_remaining }}</div>
-                                <div class="text-xs text-gray-400">{{ 'HRM.EMPLOYEE_CABINET.OF_DAYS' | translate:{ total: leaveBalance.study_leave_total } }}</div>
+                                <div class="text-xs text-surface-400">{{ 'HRM.EMPLOYEE_CABINET.OF_DAYS' | translate:{ total: leaveBalance.study_leave_total } }}</div>
                                 <p-progressBar
                                     [value]="(leaveBalance.study_leave_remaining / leaveBalance.study_leave_total) * 100"
                                     [showValue]="false"
@@ -106,9 +106,9 @@
                             </div>
 
                             <div class="bg-orange-50 dark:bg-orange-900/20 rounded-lg p-4">
-                                <div class="text-sm text-gray-500 mb-1">{{ 'HRM.EMPLOYEE_CABINET.COMP_DAYS' | translate }}</div>
+                                <div class="text-sm text-surface-500 mb-1">{{ 'HRM.EMPLOYEE_CABINET.COMP_DAYS' | translate }}</div>
                                 <div class="text-2xl font-bold text-orange-600">{{ leaveBalance.comp_days_available }}</div>
-                                <div class="text-xs text-gray-400">{{ 'HRM.EMPLOYEE_CABINET.AVAILABLE' | translate }}</div>
+                                <div class="text-xs text-surface-400">{{ 'HRM.EMPLOYEE_CABINET.AVAILABLE' | translate }}</div>
                             </div>
                         </div>
 
@@ -121,7 +121,7 @@
                                         <div class="flex justify-between items-center p-3 bg-surface-100 dark:bg-surface-700 rounded-lg">
                                             <div>
                                                 <span class="font-medium">{{ getVacationTypeLabel(request.type) }}</span>
-                                                <span class="text-gray-500 ml-2">
+                                                <span class="text-surface-500 ml-2">
                                                     {{ formatDate(request.start_date) }} — {{ formatDate(request.end_date) }}
                                                     ({{ request.days_count }} {{ 'HRM.EMPLOYEE_CABINET.DAYS_SHORT' | translate }})
                                                 </span>
@@ -170,15 +170,15 @@
 
                             <div class="space-y-3">
                                 <div class="flex justify-between items-center">
-                                    <span class="text-gray-500">{{ 'HRM.EMPLOYEE_CABINET.BASE_SALARY' | translate }}</span>
+                                    <span class="text-surface-500">{{ 'HRM.EMPLOYEE_CABINET.BASE_SALARY' | translate }}</span>
                                     <span class="font-medium">{{ formatCurrency(salaryInfo.current_salary.base_salary) }}</span>
                                 </div>
                                 <div class="flex justify-between items-center">
-                                    <span class="text-gray-500">{{ 'HRM.EMPLOYEE_CABINET.ALLOWANCES' | translate }}</span>
+                                    <span class="text-surface-500">{{ 'HRM.EMPLOYEE_CABINET.ALLOWANCES' | translate }}</span>
                                     <span class="font-medium text-green-600">+{{ formatCurrency(salaryInfo.current_salary.total_allowances) }}</span>
                                 </div>
                                 <div class="flex justify-between items-center">
-                                    <span class="text-gray-500">{{ 'HRM.EMPLOYEE_CABINET.DEDUCTIONS' | translate }}</span>
+                                    <span class="text-surface-500">{{ 'HRM.EMPLOYEE_CABINET.DEDUCTIONS' | translate }}</span>
                                     <span class="font-medium text-red-600">-{{ formatCurrency(salaryInfo.last_payment.total_deductions) }}</span>
                                 </div>
                                 <hr class="border-gray-200 dark:border-gray-700">
@@ -204,16 +204,16 @@
                         <!-- In Progress -->
                         @if (training.in_progress.length > 0) {
                             <div class="mb-4">
-                                <h4 class="text-sm font-medium text-gray-500 mb-2">{{ 'HRM.EMPLOYEE_CABINET.CURRENT_COURSES' | translate }}</h4>
+                                <h4 class="text-sm font-medium text-surface-500 mb-2">{{ 'HRM.EMPLOYEE_CABINET.CURRENT_COURSES' | translate }}</h4>
                                 @for (course of training.in_progress; track course.id) {
                                     <div class="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg mb-2">
                                         <div class="flex justify-between items-start">
                                             <div>
                                                 <div class="font-medium">{{ course.course_name }}</div>
-                                                <div class="text-sm text-gray-500">{{ course.course_type }}</div>
+                                                <div class="text-sm text-surface-500">{{ course.course_type }}</div>
                                             </div>
                                             @if (course.deadline) {
-                                                <span class="text-sm text-gray-500">{{ 'HRM.EMPLOYEE_CABINET.UNTIL_DATE' | translate }} {{ formatDate(course.deadline) }}</span>
+                                                <span class="text-sm text-surface-500">{{ 'HRM.EMPLOYEE_CABINET.UNTIL_DATE' | translate }} {{ formatDate(course.deadline) }}</span>
                                             }
                                         </div>
                                         <div class="mt-3">
@@ -222,7 +222,7 @@
                                                 <span>{{ course.progress_percent }}%</span>
                                             </div>
                                             <p-progressBar [value]="course.progress_percent" [showValue]="false" [style]="{ height: '8px' }"></p-progressBar>
-                                            <div class="text-xs text-gray-500 mt-1">{{ 'HRM.EMPLOYEE_CABINET.MODULES' | translate }}: {{ course.modules_completed }} {{ 'HRM.EMPLOYEE_CABINET.OF' | translate }} {{ course.modules_total }}</div>
+                                            <div class="text-xs text-surface-500 mt-1">{{ 'HRM.EMPLOYEE_CABINET.MODULES' | translate }}: {{ course.modules_completed }} {{ 'HRM.EMPLOYEE_CABINET.OF' | translate }} {{ course.modules_total }}</div>
                                         </div>
                                     </div>
                                 }
@@ -232,12 +232,12 @@
                         <!-- Assigned -->
                         @if (training.assigned.length > 0) {
                             <div class="mb-4">
-                                <h4 class="text-sm font-medium text-gray-500 mb-2">{{ 'HRM.EMPLOYEE_CABINET.ASSIGNED' | translate }}</h4>
+                                <h4 class="text-sm font-medium text-surface-500 mb-2">{{ 'HRM.EMPLOYEE_CABINET.ASSIGNED' | translate }}</h4>
                                 @for (course of training.assigned; track course.id) {
                                     <div class="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg mb-2 flex justify-between items-center">
                                         <div>
                                             <div class="font-medium">{{ course.course_name }}</div>
-                                            <div class="text-sm text-gray-500">{{ 'HRM.EMPLOYEE_CABINET.START' | translate }}: {{ formatDate(course.start_date) }}</div>
+                                            <div class="text-sm text-surface-500">{{ 'HRM.EMPLOYEE_CABINET.START' | translate }}: {{ formatDate(course.start_date) }}</div>
                                         </div>
                                         @if (course.is_mandatory) {
                                             <p-tag [value]="'HRM.EMPLOYEE_CABINET.MANDATORY' | translate" severity="danger"></p-tag>
@@ -250,13 +250,13 @@
                         <!-- Completed -->
                         @if (training.completed.length > 0) {
                             <div>
-                                <h4 class="text-sm font-medium text-gray-500 mb-2">{{ 'HRM.EMPLOYEE_CABINET.COMPLETED' | translate }}</h4>
+                                <h4 class="text-sm font-medium text-surface-500 mb-2">{{ 'HRM.EMPLOYEE_CABINET.COMPLETED' | translate }}</h4>
                                 @for (course of training.completed; track course.id) {
                                     <div class="p-3 bg-green-50 dark:bg-green-900/20 rounded-lg mb-2">
                                         <div class="flex justify-between items-start">
                                             <div>
                                                 <div class="font-medium">{{ course.course_name }}</div>
-                                                <div class="text-sm text-gray-500">{{ 'HRM.EMPLOYEE_CABINET.COMPLETED' | translate }}: {{ formatDate(course.completed_at) }}</div>
+                                                <div class="text-sm text-surface-500">{{ 'HRM.EMPLOYEE_CABINET.COMPLETED' | translate }}: {{ formatDate(course.completed_at) }}</div>
                                                 @if (course.certificate_number) {
                                                     <div class="text-sm text-green-600 mt-1">
                                                         <i class="pi pi-verified mr-1"></i>{{ 'HRM.EMPLOYEE_CABINET.CERTIFICATE' | translate }}: {{ course.certificate_number }}
@@ -312,8 +312,8 @@
                                        [class.text-red-500]="notification.severity === 'danger'"></i>
                                     <div class="flex-1 min-w-0">
                                         <div class="font-medium text-sm" [class.font-bold]="!notification.read">{{ notification.title }}</div>
-                                        <div class="text-xs text-gray-500 truncate">{{ notification.message }}</div>
-                                        <div class="text-xs text-gray-400 mt-1">{{ getRelativeTime(notification.created_at) }}</div>
+                                        <div class="text-xs text-surface-500 truncate">{{ notification.message }}</div>
+                                        <div class="text-xs text-surface-400 mt-1">{{ getRelativeTime(notification.created_at) }}</div>
                                     </div>
                                     @if (!notification.read) {
                                         <div class="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
@@ -334,10 +334,10 @@
                         <div class="space-y-2">
                             @for (doc of documents; track doc.id) {
                                 <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700">
-                                    <i class="pi {{ getDocumentIcon(doc.type) }} text-gray-400"></i>
+                                    <i class="pi {{ getDocumentIcon(doc.type) }} text-surface-400"></i>
                                     <div class="flex-1 min-w-0">
                                         <div class="text-sm font-medium truncate">{{ doc.name }}</div>
-                                        <div class="text-xs text-gray-400">{{ formatDate(doc.uploaded_at) }}</div>
+                                        <div class="text-xs text-surface-400">{{ formatDate(doc.uploaded_at) }}</div>
                                     </div>
                                     @if (doc.can_download) {
                                         <button pButton icon="pi pi-download" class="p-button-text p-button-sm p-button-rounded"
@@ -360,7 +360,7 @@
                             @for (task of tasks; track task.id) {
                                 <div class="p-3 border rounded-lg"
                                      [class.border-red-300]="task.priority === 'high' || task.priority === 'urgent'"
-                                     [class.border-gray-200]="task.priority !== 'high' && task.priority !== 'urgent'">
+                                     [class.border-surface-200]="task.priority !== 'high' && task.priority !== 'urgent'">
                                     <div class="flex justify-between items-start">
                                         <div class="font-medium text-sm">{{ task.title }}</div>
                                         @if (task.priority === 'high' || task.priority === 'urgent') {
@@ -368,10 +368,10 @@
                                         }
                                     </div>
                                     @if (task.description) {
-                                        <div class="text-xs text-gray-500 mt-1">{{ task.description }}</div>
+                                        <div class="text-xs text-surface-500 mt-1">{{ task.description }}</div>
                                     }
                                     @if (task.due_date) {
-                                        <div class="text-xs text-gray-400 mt-2">
+                                        <div class="text-xs text-surface-400 mt-2">
                                             <i class="pi pi-clock mr-1"></i>{{ 'HRM.EMPLOYEE_CABINET.UNTIL_DATE' | translate }} {{ formatDate(task.due_date) }}
                                         </div>
                                     }

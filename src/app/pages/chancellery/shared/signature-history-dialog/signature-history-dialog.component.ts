@@ -32,7 +32,7 @@ import { TranslateModule } from '@ngx-translate/core';
                     <i class="pi pi-spin pi-spinner text-4xl text-primary"></i>
                 </div>
             } @else if (signatures.length === 0) {
-                <div class="text-center py-8 text-gray-500">
+                <div class="text-center py-8 text-surface-500">
                     {{ 'CHANCELLERY.SIGNATURE.NO_HISTORY' | translate }}
                 </div>
             } @else {
@@ -79,7 +79,7 @@ import { TranslateModule } from '@ngx-translate/core';
                             }
 
                             <!-- Metadata -->
-                            <div class="flex items-center gap-2 text-xs text-gray-500">
+                            <div class="flex items-center gap-2 text-xs text-surface-500">
                                 <i class="pi pi-calendar"></i>
                                 <span>{{ formatDateTime(signature.signed_at) }}</span>
                                 @if (signature.signed_by) {

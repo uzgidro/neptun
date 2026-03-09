@@ -73,7 +73,7 @@
                                     <i class="pi pi-calendar text-xl"></i>
                                     <div>
                                         <div class="font-semibold">{{ session.name }}</div>
-                                        <div class="text-sm text-gray-500">{{ session.session_date | date:'dd.MM.yyyy' }} | {{ session.location }}</div>
+                                        <div class="text-sm text-surface-500">{{ session.session_date | date:'dd.MM.yyyy' }} | {{ session.location }}</div>
                                     </div>
                                 </div>
                                 <p-tag [value]="getSessionStatusLabel(session.status)" [severity]="getSessionStatusSeverity(session.status)"></p-tag>
@@ -182,7 +182,7 @@
                                                         }
                                                     }
                                                 </div>
-                                                <div class="text-sm text-gray-500 mb-2">
+                                                <div class="text-sm text-surface-500 mb-2">
                                                     {{ getBlockTypeLabel(block.block_type) }} | {{ block.duration_minutes }} мин
                                                 </div>
                                                 @if (block.description) {
@@ -235,7 +235,7 @@
             </p-accordion>
 
             @if (sessions.length === 0) {
-                <div class="text-center py-8 text-gray-500">
+                <div class="text-center py-8 text-surface-500">
                     <i class="pi pi-calendar text-4xl mb-2"></i>
                     <p>{{ 'HRM.COMPETENCY.NO_SESSIONS' | translate }}</p>
                 </div>
@@ -353,7 +353,7 @@
                         </td>
                         <td>
                             <div>{{ plan.start_date | date:'dd.MM.yyyy' }}</div>
-                            <div class="text-sm text-gray-500">{{ plan.end_date | date:'dd.MM.yyyy' }}</div>
+                            <div class="text-sm text-surface-500">{{ plan.end_date | date:'dd.MM.yyyy' }}</div>
                         </td>
                         <td>
                             <div class="flex flex-wrap gap-1">
@@ -504,7 +504,7 @@
         <div class="p-4">
             <div class="mb-4 p-3 bg-surface-100 dark:bg-surface-700 rounded-lg">
                 <div class="font-semibold">{{ evaluatingCandidate.employee_name }}</div>
-                <div class="text-sm text-gray-500">{{ evaluatingBlock.name }}</div>
+                <div class="text-sm text-surface-500">{{ evaluatingBlock.name }}</div>
             </div>
 
             <div class="mb-4">
@@ -548,8 +548,8 @@
             <!-- Заголовок отчета -->
             <div class="text-center mb-6">
                 <h2 class="text-xl font-bold mb-2">{{ currentReport.employee_name }}</h2>
-                <div class="text-gray-500">{{ currentReport.position_name }} | {{ currentReport.department_name }}</div>
-                <div class="text-sm text-gray-400">{{ 'HRM.COMPETENCY.ASSESSMENT_DATE' | translate }}: {{ currentReport.assessment_date | date:'dd.MM.yyyy' }}</div>
+                <div class="text-surface-500">{{ currentReport.position_name }} | {{ currentReport.department_name }}</div>
+                <div class="text-sm text-surface-400">{{ 'HRM.COMPETENCY.ASSESSMENT_DATE' | translate }}: {{ currentReport.assessment_date | date:'dd.MM.yyyy' }}</div>
             </div>
 
             <!-- Общий балл -->
@@ -603,7 +603,7 @@
                                     <p-tag [value]="area.priority === 'high' ? ('HRM.COMPETENCY.PRIORITY_HIGH' | translate) : ('HRM.COMPETENCY.PRIORITY_MEDIUM' | translate)"
                                            [severity]="area.priority === 'high' ? 'danger' : 'warn'"></p-tag>
                                 </div>
-                                <div class="text-sm text-gray-500">
+                                <div class="text-sm text-surface-500">
                                     {{ 'HRM.COMPETENCY.CURRENT' | translate }}: {{ area.current_level }} | {{ 'HRM.COMPETENCY.TARGET' | translate }}: {{ area.target_level }} | {{ 'HRM.COMPETENCY.GAP' | translate }}: {{ area.gap }}
                                 </div>
                             </div>
@@ -615,7 +615,7 @@
             <!-- Рекомендации -->
             <div class="mb-4">
                 <h3 class="font-semibold mb-3"><i class="pi pi-lightbulb mr-2"></i>{{ 'HRM.COMPETENCY.CAREER_RECOMMENDATIONS' | translate }}</h3>
-                <div class="p-3 bg-blue-50 rounded-lg">{{ currentReport.career_recommendations }}</div>
+                <div class="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">{{ currentReport.career_recommendations }}</div>
             </div>
         </div>
     }
@@ -666,7 +666,7 @@
             <div class="flex items-center justify-between mb-6">
                 <div>
                     <h2 class="text-xl font-bold">{{ selectedPlan.employee_name }}</h2>
-                    <div class="text-gray-500">{{ selectedPlan.start_date | date:'dd.MM.yyyy' }} - {{ selectedPlan.end_date | date:'dd.MM.yyyy' }}</div>
+                    <div class="text-surface-500">{{ selectedPlan.start_date | date:'dd.MM.yyyy' }} - {{ selectedPlan.end_date | date:'dd.MM.yyyy' }}</div>
                 </div>
                 <div class="text-center">
                     <p-knob [(ngModel)]="selectedPlan.overall_progress" [readonly]="true" [min]="0" [max]="100"
@@ -711,7 +711,7 @@
                                     }
                                 }
                             </div>
-                            <div class="text-sm text-gray-500">{{ getActivityTypeLabel(activity.activity_type) }}</div>
+                            <div class="text-sm text-surface-500">{{ getActivityTypeLabel(activity.activity_type) }}</div>
                             @if (activity.description) {
                                 <div class="text-sm mt-1">{{ activity.description }}</div>
                             }
@@ -732,8 +732,8 @@
                                 </div>
                                 <div>
                                     <div class="font-medium">{{ mentor.mentor_name }}</div>
-                                    <div class="text-sm text-gray-500">{{ mentor.mentor_position }}</div>
-                                    <div class="text-xs text-gray-400">{{ mentor.meeting_frequency }}</div>
+                                    <div class="text-sm text-surface-500">{{ mentor.mentor_position }}</div>
+                                    <div class="text-xs text-surface-400">{{ mentor.meeting_frequency }}</div>
                                 </div>
                             </div>
                         }

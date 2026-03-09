@@ -42,7 +42,7 @@
             background: var(--surface-0);
             border-radius: 0.5rem 0.5rem 0 0;
 
-            :host-context(.dark) & {
+            :host-context(.app-dark) & {
                 background: var(--surface-800);
             }
         }
@@ -54,7 +54,7 @@
             border: 1px solid var(--surface-200);
             border-top: none;
 
-            :host-context(.dark) & {
+            :host-context(.app-dark) & {
                 background: var(--surface-800);
                 border-color: var(--surface-700);
             }

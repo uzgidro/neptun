@@ -76,8 +76,8 @@
         display: inline-flex !important;
         justify-content: center;
         align-items: center;
-        background: #dc2626 !important;
-        color: white !important;
+        background: var(--p-red-600) !important;
+        color: var(--primary-contrast-color) !important;
         border-radius: 2rem;
         padding: 0.5rem 1rem;
         gap: 0.5rem;
@@ -88,19 +88,19 @@
         animation: pulse-sos 2s infinite;
 
         &:hover {
-            background: #b91c1c !important;
+            background: var(--p-red-700) !important;
             transform: scale(1.05);
         }
 
         i {
             font-size: 1rem;
-            color: white !important;
+            color: var(--primary-contrast-color) !important;
         }
 
         .emergency-text {
             font-size: 0.875rem;
             letter-spacing: 0.05em;
-            color: white !important;
+            color: var(--primary-contrast-color) !important;
         }
     }
 
@@ -114,7 +114,7 @@
         border-radius: 50% !important;
         background: rgba(239, 68, 68, 0.08) !important;
         border: 2px solid rgba(239, 68, 68, 0.25) !important;
-        color: #ef4444 !important;
+        color: var(--p-red-500) !important;
         cursor: pointer;
         transition: all 0.2s ease;
 
@@ -133,7 +133,7 @@
             color: var(--text-color-secondary) !important;
 
             &:hover {
-                background: var(--surface-200) !important;
+                background: var(--surface-hover) !important;
             }
         }
 
@@ -189,9 +189,9 @@
             background-color: var(--surface-overlay);
             transform-origin: top;
             box-shadow:
-                0px 3px 5px rgba(0, 0, 0, 0.02),
-                0px 0px 2px rgba(0, 0, 0, 0.05),
-                0px 1px 4px rgba(0, 0, 0, 0.08);
+                0px 3px 5px var(--shadow-color),
+                0px 0px 2px var(--shadow-color-md),
+                0px 1px 4px var(--shadow-color-lg);
             border-radius: var(--content-border-radius);
             padding: 1rem;
             right: 2rem;

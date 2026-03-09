@@ -1,12 +1,12 @@
 .section-row {
-    background: #e6ecff !important;
+    background: rgba(59, 130, 246, 0.12) !important;
     font-weight: bold;
 }
 
 .table-input {
     width: 90%;
     padding: 4px 6px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--surface-border);
     border-radius: 4px;
 }
 

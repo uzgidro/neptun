@@ -10,7 +10,7 @@
     width: 48px;
     height: 48px;
     border-radius: 12px;
-    background: linear-gradient(135deg, var(--primary-color), var(--primary-600, #4f46e5));
+    background: linear-gradient(135deg, var(--primary-color), var(--p-primary-600));
     display: flex;
     align-items: center;
     justify-content: center;
@@ -18,7 +18,7 @@
 
     i {
         font-size: 1.5rem;
-        color: white;
+        color: var(--p-primary-contrast-color);
     }
 }
 
@@ -78,7 +78,7 @@
 
         .lex-result-number {
             background: var(--primary-color);
-            color: white;
+            color: var(--p-primary-contrast-color);
         }
 
         .lex-result-link {
@@ -91,7 +91,7 @@
     width: 40px;
     height: 40px;
     border-radius: 8px;
-    background: var(--surface-100);
+    background: var(--surface-hover);
     display: flex;
     align-items: center;
     justify-content: center;

@@ -3,7 +3,7 @@
         // Table styling
         .p-datatable {
             .p-datatable-thead > tr > th {
-                background-color: var(--surface-50);
+                background-color: var(--surface-ground);
                 font-weight: 600;
             }
 
@@ -23,7 +23,7 @@
                 font-size: 0.875rem;
 
                 .text-red-500 {
-                    color: #ef4444;
+                    color: var(--p-red-500);
                 }
             }
 

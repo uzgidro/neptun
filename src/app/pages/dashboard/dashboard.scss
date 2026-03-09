@@ -19,8 +19,34 @@
     --dash-text-secondary: #475569;
     --dash-text-muted: #94a3b8;
 
+    // Overlay & interaction
+    --dash-hover-bg: rgba(0, 0, 0, 0.03);
+    --dash-row-hover-bg: rgba(0, 0, 0, 0.02);
+    --dash-shadow-hover: rgba(0, 0, 0, 0.06);
+    --dash-loading-overlay: rgba(255, 255, 255, 0.7);
+    --dash-scrollbar-thumb: #cbd5e1;
+    --dash-scrollbar-thumb-hover: #94a3b8;
+
     display: block;
     width: 100%;
+}
+
+// Dark Theme Overrides
+:host-context(.app-dark) {
+    --dash-bg: #0f172a;
+    --dash-card-bg: #1e293b;
+    --dash-border-color: #334155;
+
+    --dash-text-primary: #f1f5f9;
+    --dash-text-secondary: #94a3b8;
+    --dash-text-muted: #64748b;
+
+    --dash-hover-bg: rgba(255, 255, 255, 0.05);
+    --dash-row-hover-bg: rgba(255, 255, 255, 0.03);
+    --dash-shadow-hover: rgba(0, 0, 0, 0.3);
+    --dash-loading-overlay: rgba(15, 23, 42, 0.7);
+    --dash-scrollbar-thumb: #475569;
+    --dash-scrollbar-thumb-hover: #64748b;
 }
 
 .dash-layout {
@@ -92,7 +118,7 @@
         }
 
         &:hover {
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            box-shadow: 0 2px 8px var(--dash-shadow-hover);
         }
 
         // Accent color variants
@@ -214,7 +240,7 @@
         transition: all 0.2s ease;
 
         &:hover:not(:disabled) {
-            background: rgba(0, 0, 0, 0.03);
+            background: var(--dash-hover-bg);
             color: var(--dash-text-secondary);
         }
 
@@ -240,7 +266,7 @@
         font-size: 12px;
 
         &:hover {
-            background: rgba(0, 0, 0, 0.03);
+            background: var(--dash-hover-bg);
             color: var(--dash-text-secondary);
         }
 
@@ -272,11 +298,11 @@
             }
 
             .p-datatable-tbody > tr:hover {
-                background: rgba(0, 0, 0, 0.02);
+                background: var(--dash-row-hover-bg);
             }
 
             .p-datatable-loading-overlay {
-                background: rgba(255, 255, 255, 0.7);
+                background: var(--dash-loading-overlay);
             }
         }
     }
@@ -423,11 +449,11 @@
     }
 
     ::-webkit-scrollbar-thumb {
-        background: #cbd5e1;
+        background: var(--dash-scrollbar-thumb);
         border-radius: 2px;
 
         &:hover {
-            background: #94a3b8;
+            background: var(--dash-scrollbar-thumb-hover);
         }
     }
 }

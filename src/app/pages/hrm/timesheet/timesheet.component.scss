@@ -24,7 +24,7 @@
         text-align: center;
         vertical-align: middle;
 
-        :host-context(.dark) & {
+        :host-context(.app-dark) & {
             border-color: var(--surface-700);
         }
     }
@@ -39,7 +39,7 @@
             color: var(--text-color);
             font-weight: 600;
 
-            :host-context(.dark) & {
+            :host-context(.app-dark) & {
                 background: var(--surface-800);
             }
         }
@@ -50,7 +50,7 @@
             td {
                 background: var(--surface-50);
 
-                :host-context(.dark) & {
+                :host-context(.app-dark) & {
                     background: var(--surface-700);
                 }
             }
@@ -66,7 +66,7 @@
     text-align: left !important;
     background: var(--surface-100) !important;
 
-    :host-context(.dark) & {
+    :host-context(.app-dark) & {
         background: var(--surface-800) !important;
     }
 }
@@ -79,7 +79,7 @@
     text-align: left !important;
     background: var(--surface-0);
 
-    :host-context(.dark) & {
+    :host-context(.app-dark) & {
         background: var(--surface-900);
     }
 }
@@ -111,7 +111,7 @@
     &.weekend {
         background: var(--surface-200) !important;
 
-        :host-context(.dark) & {
+        :host-context(.app-dark) & {
             background: var(--surface-700) !important;
         }
     }
@@ -119,7 +119,7 @@
     &.holiday {
         background: #fef3c7 !important;
 
-        :host-context(.dark) & {
+        :host-context(.app-dark) & {
             background: #78350f !important;
         }
     }
@@ -144,7 +144,7 @@
     transition: all 0.2s;
     background: var(--surface-0);
 
-    :host-context(.dark) & {
+    :host-context(.app-dark) & {
         background: var(--surface-900);
     }
 
@@ -156,13 +156,17 @@
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
             z-index: 5;
             position: relative;
+
+            :host-context(.app-dark) & {
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+            }
         }
     }
 
     &.weekend {
         background: var(--surface-100) !important;
 
-        :host-context(.dark) & {
+        :host-context(.app-dark) & {
             background: var(--surface-800) !important;
         }
     }
@@ -170,7 +174,7 @@
     &.holiday {
         background: #fef9c3 !important;
 
-        :host-context(.dark) & {
+        :host-context(.app-dark) & {
             background: #713f12 !important;
         }
     }
@@ -191,7 +195,7 @@
     background: #dcfce7 !important;
     color: #166534;
 
-    :host-context(.dark) & {
+    :host-context(.app-dark) & {
         background: #14532d !important;
         color: #86efac;
     }
@@ -201,7 +205,7 @@
     background: #fee2e2 !important;
     color: #991b1b;
 
-    :host-context(.dark) & {
+    :host-context(.app-dark) & {
         background: #7f1d1d !important;
         color: #fca5a5;
     }
@@ -211,7 +215,7 @@
     background: #dbeafe !important;
     color: #1e40af;
 
-    :host-context(.dark) & {
+    :host-context(.app-dark) & {
         background: #1e3a8a !important;
         color: #93c5fd;
     }
@@ -221,7 +225,7 @@
     background: #ffedd5 !important;
     color: #c2410c;
 
-    :host-context(.dark) & {
+    :host-context(.app-dark) & {
         background: #7c2d12 !important;
         color: #fdba74;
     }
@@ -231,7 +235,7 @@
     background: #f3e8ff !important;
     color: #7e22ce;
 
-    :host-context(.dark) & {
+    :host-context(.app-dark) & {
         background: #581c87 !important;
         color: #d8b4fe;
     }
@@ -241,7 +245,7 @@
     background: #cffafe !important;
     color: #0e7490;
 
-    :host-context(.dark) & {
+    :host-context(.app-dark) & {
         background: #164e63 !important;
         color: #67e8f9;
     }
@@ -251,7 +255,7 @@
     background: #f3f4f6 !important;
     color: #4b5563;
 
-    :host-context(.dark) & {
+    :host-context(.app-dark) & {
         background: #374151 !important;
         color: #d1d5db;
     }
@@ -261,7 +265,7 @@
     background: #fce7f3 !important;
     color: #be185d;
 
-    :host-context(.dark) & {
+    :host-context(.app-dark) & {
         background: #831843 !important;
         color: #f9a8d4;
     }
@@ -271,7 +275,7 @@
     background: #fef9c3 !important;
     color: #a16207;
 
-    :host-context(.dark) & {
+    :host-context(.app-dark) & {
         background: #713f12 !important;
         color: #fde047;
     }
@@ -281,7 +285,7 @@
     background: #fef3c7 !important;
     color: #b45309;
 
-    :host-context(.dark) & {
+    :host-context(.app-dark) & {
         background: #78350f !important;
         color: #fcd34d;
     }
@@ -294,7 +298,7 @@
     min-width: 80px;
     background: var(--surface-100) !important;
 
-    :host-context(.dark) & {
+    :host-context(.app-dark) & {
         background: var(--surface-800) !important;
     }
 }
@@ -306,7 +310,7 @@
     min-width: 80px;
     background: var(--surface-50);
 
-    :host-context(.dark) & {
+    :host-context(.app-dark) & {
         background: var(--surface-800);
     }
 
@@ -327,7 +331,7 @@
         color: #ea580c;
         font-weight: 500;
 
-        :host-context(.dark) & {
+        :host-context(.app-dark) & {
             color: #fb923c;
         }
     }
@@ -341,7 +345,7 @@
     border-radius: 4px;
     border: 1px solid var(--surface-300);
 
-    :host-context(.dark) & {
+    :host-context(.app-dark) & {
         border-color: var(--surface-600);
     }
 }

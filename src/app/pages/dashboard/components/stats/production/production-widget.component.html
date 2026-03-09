@@ -7,8 +7,8 @@
     </div>
     @if (isLoading) {
         <div class="animate-pulse">
-            <div class="h-8 bg-gray-200 rounded mb-2 w-3/4"></div>
-            <div class="h-5 bg-gray-200 rounded w-1/2"></div>
+            <div class="h-8 bg-surface-200 dark:bg-surface-700 rounded mb-2 w-3/4"></div>
+            <div class="h-5 bg-surface-200 dark:bg-surface-700 rounded w-1/2"></div>
         </div>
     } @else if (data) {
         <span class="tile-number">{{ data.value | number: '1.0-3' }} {{ 'COMMON.KWH' | translate }}</span>

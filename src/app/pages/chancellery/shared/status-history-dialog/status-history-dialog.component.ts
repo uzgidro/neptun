@@ -33,7 +33,7 @@ import { TranslateModule } from '@ngx-translate/core';
                     <i class="pi pi-spin pi-spinner text-4xl text-primary"></i>
                 </div>
             } @else if (history.length === 0) {
-                <div class="text-center py-8 text-gray-500">
+                <div class="text-center py-8 text-surface-500">
                     {{ 'CHANCELLERY.STATUS_HISTORY.NO_HISTORY' | translate }}
                 </div>
             } @else {
@@ -46,7 +46,7 @@ import { TranslateModule } from '@ngx-translate/core';
                                         [value]="event.from_status.name"
                                         [severity]="statusService.getStatusSeverity(event.from_status.code)"
                                         [rounded]="true" />
-                                    <i class="pi pi-arrow-right text-gray-400"></i>
+                                    <i class="pi pi-arrow-right text-surface-400"></i>
                                 }
                                 <p-tag
                                     [value]="event.to_status.name"
@@ -60,7 +60,7 @@ import { TranslateModule } from '@ngx-translate/core';
                                 </div>
                             }
 
-                            <div class="flex items-center gap-2 text-xs text-gray-500">
+                            <div class="flex items-center gap-2 text-xs text-surface-500">
                                 <i class="pi pi-calendar"></i>
                                 <span>{{ formatDateTime(event.changed_at) }}</span>
                                 @if (event.changed_by) {
@@ -138,7 +138,7 @@ export class StatusHistoryDialogComponent {
             'danger': 'bg-red-100 border-red-500 text-red-500',
             'warn': 'bg-yellow-100 border-yellow-500 text-yellow-500',
             'info': 'bg-blue-100 border-blue-500 text-blue-500',
-            'secondary': 'bg-gray-100 border-gray-500 text-gray-500'
+            'secondary': 'bg-surface-100 border-surface-500 text-surface-500'
         };
         return classes[severity] || classes['secondary'];
     }

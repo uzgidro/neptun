@@ -32,7 +32,7 @@ import { CommonModule } from '@angular/common';
       max-width: 400px;
       margin: auto;
       padding: 20px;
-      border: 1px solid #ccc;
+      border: 1px solid var(--surface-border);
       border-radius: 8px;
     }
     input {
@@ -44,13 +44,13 @@ import { CommonModule } from '@angular/common';
     button {
       width: 100%;
       padding: 10px;
-      background: #28a745;
-      color: #fff;
+      background: var(--primary-color);
+      color: var(--primary-contrast-color);
       border: none;
       border-radius: 4px;
     }
     .error {
-      color: red;
+      color: var(--p-red-500);
       margin-top: 10px;
     }
   `]

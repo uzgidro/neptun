@@ -284,3 +284,28 @@
         }
     }
 }
+
+// ===== DARK THEME OVERRIDES =====
+:host-context(.app-dark) {
+    .financial-dashboard {
+        .summary-cards .summary-card {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+
+            &:hover {
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+            }
+        }
+
+        .charts-section .chart-card {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+        }
+
+        .modules-section .module-card {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+
+            &:hover {
+                box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+            }
+        }
+    }
+}

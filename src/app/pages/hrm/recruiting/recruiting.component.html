@@ -81,7 +81,7 @@
                             <td>
                                 <div class="font-medium">{{ vacancy.title }}</div>
                                 @if (vacancy.requested_by_name) {
-                                    <div class="text-xs text-gray-500">{{ 'HRM.RECRUITING.APPLICANT' | translate }}: {{ vacancy.requested_by_name }}</div>
+                                    <div class="text-xs text-surface-500">{{ 'HRM.RECRUITING.APPLICANT' | translate }}: {{ vacancy.requested_by_name }}</div>
                                 }
                             </td>
                             <td>{{ vacancy.department_name || '—' }}</td>
@@ -207,8 +207,8 @@
                         <tr>
                             <td>
                                 <div class="font-medium">{{ candidate.full_name }}</div>
-                                <div class="text-xs text-gray-500">{{ candidate.email }}</div>
-                                <div class="text-xs text-gray-500">{{ candidate.phone }}</div>
+                                <div class="text-xs text-surface-500">{{ candidate.email }}</div>
+                                <div class="text-xs text-surface-500">{{ candidate.phone }}</div>
                             </td>
                             <td>{{ candidate.vacancy_title || '—' }}</td>
                             <td>
@@ -220,7 +220,7 @@
                                     [showValue]="false"
                                     [style]="{ height: '6px' }">
                                 </p-progressBar>
-                                <div class="text-xs mt-1 text-center text-gray-500">
+                                <div class="text-xs mt-1 text-center text-surface-500">
                                     @for (stage of recruitingStages; track stage.value) {
                                         @if (stage.value === candidate.stage) {
                                             {{ stage.label }}
@@ -238,7 +238,7 @@
                                         <span>{{ candidate.rating }}/5</span>
                                     </div>
                                 } @else {
-                                    <span class="text-gray-400">—</span>
+                                    <span class="text-surface-400">—</span>
                                 }
                             </td>
                             <td>
@@ -362,7 +362,7 @@
                         <tr>
                             <td>
                                 <div class="font-medium">{{ onboarding.employee_name }}</div>
-                                <div class="text-xs text-gray-500">ID: {{ onboarding.employee_id }}</div>
+                                <div class="text-xs text-surface-500">ID: {{ onboarding.employee_id }}</div>
                             </td>
                             <td>{{ onboarding.start_date | date:'dd.MM.yyyy' }}</td>
                             <td>
@@ -663,8 +663,8 @@
                                                 @default { {{ interview.interview_type }} }
                                             }
                                         </div>
-                                        <div class="text-sm text-gray-500">{{ interview.interviewer_name }}</div>
-                                        <div class="text-sm text-gray-500">{{ interview.scheduled_at | date:'dd.MM.yyyy HH:mm' }}</div>
+                                        <div class="text-sm text-surface-500">{{ interview.interviewer_name }}</div>
+                                        <div class="text-sm text-surface-500">{{ interview.scheduled_at | date:'dd.MM.yyyy HH:mm' }}</div>
                                     </div>
                                     <div class="flex items-center gap-2">
                                         @if (interview.status === 'completed') {
@@ -709,7 +709,7 @@
                                 <div class="flex justify-between">
                                     <div>
                                         <div class="font-medium">{{ ref.referee_name }}</div>
-                                        <div class="text-sm text-gray-500">{{ ref.referee_position }}, {{ ref.referee_company }}</div>
+                                        <div class="text-sm text-surface-500">{{ ref.referee_position }}, {{ ref.referee_company }}</div>
                                     </div>
                                     <div>
                                         @if (ref.status === 'completed') {
@@ -741,19 +741,19 @@
                     <div class="border rounded-lg p-4 bg-green-50 dark:bg-green-900/20">
                         <div class="grid grid-cols-2 gap-4">
                             <div>
-                                <div class="text-sm text-gray-500">{{ 'HRM.RECRUITING.OFFER.OFFERED_SALARY' | translate }}</div>
+                                <div class="text-sm text-surface-500">{{ 'HRM.RECRUITING.OFFER.OFFERED_SALARY' | translate }}</div>
                                 <div class="font-medium">{{ selectedCandidate.offer.offered_salary | number:'1.0-0' }}</div>
                             </div>
                             <div>
-                                <div class="text-sm text-gray-500">{{ 'HRM.RECRUITING.OFFER.START_DATE' | translate }}</div>
+                                <div class="text-sm text-surface-500">{{ 'HRM.RECRUITING.OFFER.START_DATE' | translate }}</div>
                                 <div class="font-medium">{{ selectedCandidate.offer.start_date | date:'dd.MM.yyyy' }}</div>
                             </div>
                             <div>
-                                <div class="text-sm text-gray-500">{{ 'HRM.RECRUITING.OFFER.PROBATION_PERIOD' | translate }}</div>
+                                <div class="text-sm text-surface-500">{{ 'HRM.RECRUITING.OFFER.PROBATION_PERIOD' | translate }}</div>
                                 <div class="font-medium">{{ selectedCandidate.offer.probation_period_months }} {{ 'HRM.RECRUITING.OFFER.MONTHS' | translate }}</div>
                             </div>
                             <div>
-                                <div class="text-sm text-gray-500">{{ 'COMMON.STATUS' | translate }}</div>
+                                <div class="text-sm text-surface-500">{{ 'COMMON.STATUS' | translate }}</div>
                                 <p-tag [value]="selectedCandidate.offer.status === 'sent' ? ('HRM.RECRUITING.OFFER.STATUS_SENT' | translate) : selectedCandidate.offer.status === 'accepted' ? ('HRM.RECRUITING.OFFER.STATUS_ACCEPTED' | translate) : ('HRM.RECRUITING.OFFER.STATUS_REJECTED' | translate)"
                                        [severity]="selectedCandidate.offer.status === 'accepted' ? 'success' : selectedCandidate.offer.status === 'sent' ? 'info' : 'danger'"></p-tag>
                             </div>
@@ -976,7 +976,7 @@
     <form [formGroup]="rejectForm" class="p-4">
         <div class="mb-4">
             <p>{{ 'HRM.RECRUITING.REJECT.CONFIRM_MESSAGE' | translate }} <strong>{{ selectedCandidate?.full_name }}</strong>?</p>
-            <p class="text-sm text-gray-500 mt-2">{{ 'HRM.RECRUITING.REJECT.NOTIFICATION_INFO' | translate }}</p>
+            <p class="text-sm text-surface-500 mt-2">{{ 'HRM.RECRUITING.REJECT.NOTIFICATION_INFO' | translate }}</p>
         </div>
         <div class="field">
             <label for="rejection_reason" class="font-medium">{{ 'HRM.RECRUITING.REJECT.REASON' | translate }} *</label>
@@ -1016,11 +1016,11 @@
                             } @else if (task.status === 'in_progress') {
                                 <i class="pi pi-spin pi-spinner text-blue-500 text-xl"></i>
                             } @else {
-                                <i class="pi pi-circle text-gray-400 text-xl"></i>
+                                <i class="pi pi-circle text-surface-400 text-xl"></i>
                             }
                             <div>
-                                <div [class]="task.status === 'completed' ? 'line-through text-gray-400' : ''">{{ task.title }}</div>
-                                <div class="text-xs text-gray-500">
+                                <div [class]="task.status === 'completed' ? 'line-through text-surface-400' : ''">{{ task.title }}</div>
+                                <div class="text-xs text-surface-500">
                                     @switch (task.category) {
                                         @case ('documents') { {{ 'HRM.RECRUITING.ONBOARDING.CAT_DOCUMENTS' | translate }} }
                                         @case ('it_setup') { {{ 'HRM.RECRUITING.ONBOARDING.CAT_IT_SETUP' | translate }} }

@@ -293,5 +293,10 @@
 
     .lang-btn.active {
         background: #1e293b;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+    }
+
+    .home-btn:hover {
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
     }
 }

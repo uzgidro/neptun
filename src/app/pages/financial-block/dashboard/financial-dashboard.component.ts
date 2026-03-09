@@ -13,6 +13,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { FinancialDashboardService } from './services/financial-dashboard.service';
 import { FinancialDashboardData, ModuleCard, MetricItem } from './models/financial-summary.model';
+import { LayoutService } from '../../../layout/service/layout.service';
 
 @Component({
     selector: 'app-financial-dashboard',
@@ -34,6 +35,7 @@ import { FinancialDashboardData, ModuleCard, MetricItem } from './models/financi
 export class FinancialDashboardComponent implements OnInit, OnDestroy {
     private dashboardService = inject(FinancialDashboardService);
     private router = inject(Router);
+    private layoutService = inject(LayoutService);
     private subscription = new Subscription();
 
     dashboardData: FinancialDashboardData | null = null;
@@ -65,6 +67,13 @@ export class FinancialDashboardComponent implements OnInit, OnDestroy {
 
         this.moduleCards = this.dashboardService.getModuleCards();
         this.initChartOptions();
+
+        this.subscription.add(
+            this.layoutService.configUpdate$.subscribe(() => {
+                this.initChartOptions();
+                this.updateCharts();
+            })
+        );
     }
 
     ngOnDestroy(): void {
@@ -87,6 +96,11 @@ export class FinancialDashboardComponent implements OnInit, OnDestroy {
             }).format(value) + ' UZS';
         };
 
+        const documentStyle = getComputedStyle(document.documentElement);
+        const textColor = documentStyle.getPropertyValue('--text-color') || '#495057';
+        const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary') || '#6c757d';
+        const surfaceBorder = documentStyle.getPropertyValue('--surface-border') || '#dfe7ef';
+
         this.overviewChartOptions = {
             plugins: {
                 legend: {
@@ -94,7 +108,8 @@ export class FinancialDashboardComponent implements OnInit, OnDestroy {
                     labels: {
                         usePointStyle: true,
                         padding: 20,
-                        font: { size: 13, weight: '500' }
+                        font: { size: 13, weight: '500' },
+                        color: textColor
                     }
                 },
                 tooltip: {
@@ -115,7 +130,8 @@ export class FinancialDashboardComponent implements OnInit, OnDestroy {
                     labels: {
                         usePointStyle: true,
                         padding: 15,
-                        font: { size: 12 }
+                        font: { size: 12 },
+                        color: textColor
                     }
                 },
                 tooltip: {
@@ -139,7 +155,8 @@ export class FinancialDashboardComponent implements OnInit, OnDestroy {
                     position: 'bottom',
                     labels: {
                         usePointStyle: true,
-                        padding: 20
+                        padding: 20,
+                        color: textColor
                     }
                 },
                 tooltip: {
@@ -151,16 +168,21 @@ export class FinancialDashboardComponent implements OnInit, OnDestroy {
                 }
             },
             scales: {
-                x: { grid: { display: false } },
+                x: {
+                    ticks: { color: textColorSecondary },
+                    grid: { color: surfaceBorder }
+                },
                 y: {
                     beginAtZero: true,
                     ticks: {
+                        color: textColorSecondary,
                         callback: (value: number) => {
                             if (value >= 1000000) return (value / 1000000).toFixed(1) + 'M';
                             if (value >= 1000) return (value / 1000).toFixed(0) + 'K';
                             return value.toString();
                         }
-                    }
+                    },
+                    grid: { color: surfaceBorder }
                 }
             }
         };

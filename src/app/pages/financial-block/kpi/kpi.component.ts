@@ -21,6 +21,7 @@ import { ProgressBarModule } from 'primeng/progressbar';
 import { KnobModule } from 'primeng/knob';
 import { FinancialDashboardService } from '../dashboard/services/financial-dashboard.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { LayoutService } from '../../../layout/service/layout.service';
 
 interface KpiCategory {
     label: string;
@@ -123,6 +124,7 @@ export class KpiComponent implements OnInit {
 
     private dashboardService = inject(FinancialDashboardService);
     private translate = inject(TranslateService);
+    private layoutService = inject(LayoutService);
 
     constructor(
         private confirmationService: ConfirmationService,
@@ -138,6 +140,12 @@ export class KpiComponent implements OnInit {
 
         this.translate.onLangChange.subscribe(() => {
             this.initTranslations();
+            this.updateCharts();
+        });
+
+        // Subscribe to theme changes
+        this.layoutService.configUpdate$.subscribe(() => {
+            this.initChartOptions();
             this.updateCharts();
         });
     }

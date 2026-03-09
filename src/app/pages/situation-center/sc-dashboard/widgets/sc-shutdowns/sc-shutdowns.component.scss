@@ -152,7 +152,7 @@
 
     &.type-micro {
         background: rgba(139, 92, 246, 0.1);
-        color: #7c3aed;
+        color: var(--sc-accent-purple);
     }
 }
 
@@ -297,7 +297,7 @@
 
     &.type-micro {
         background: rgba(139, 92, 246, 0.1);
-        color: #7c3aed;
+        color: var(--sc-accent-purple);
     }
 }
 

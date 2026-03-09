@@ -24,7 +24,7 @@ import { inject } from '@angular/core';
                 <h4 class="font-medium m-0">
                     {{ 'CHANCELLERY.LINKED_DOCS.TITLE' | translate }}
                     @if (documents.length > 0) {
-                        <span class="text-gray-500">({{ documents.length }})</span>
+                        <span class="text-surface-500">({{ documents.length }})</span>
                     }
                 </h4>
                 @if (!readonly) {
@@ -43,7 +43,7 @@ import { inject } from '@angular/core';
 
             <!-- Documents List -->
             @if (documents.length === 0) {
-                <div class="text-gray-500 text-sm py-2">
+                <div class="text-surface-500 text-sm py-2">
                     {{ 'CHANCELLERY.LINKED_DOCS.NO_DOCUMENTS' | translate }}
                 </div>
             } @else {
@@ -63,12 +63,12 @@ import { inject } from '@angular/core';
                                     {{ doc.document_name }}
                                 </div>
                                 @if (doc.document_number) {
-                                    <div class="text-xs text-gray-500">
+                                    <div class="text-xs text-surface-500">
                                         № {{ doc.document_number }}
                                     </div>
                                 }
                                 @if (doc.link_description) {
-                                    <div class="text-xs text-gray-400 italic truncate">
+                                    <div class="text-xs text-surface-400 italic truncate">
                                         {{ doc.link_description }}
                                     </div>
                                 }

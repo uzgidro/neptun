@@ -20,6 +20,7 @@ import { TextareaModule } from 'primeng/textarea';
 import { DividerModule } from 'primeng/divider';
 import { FinancialDashboardService } from '../dashboard/services/financial-dashboard.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { LayoutService } from '../../../layout/service/layout.service';
 
 interface SalaryRecord {
     id: number;
@@ -118,6 +119,7 @@ export class SalaryComponent implements OnInit {
 
     private dashboardService = inject(FinancialDashboardService);
     private translate = inject(TranslateService);
+    private layoutService = inject(LayoutService);
 
     constructor(
         private confirmationService: ConfirmationService,
@@ -135,6 +137,12 @@ export class SalaryComponent implements OnInit {
 
         this.translate.onLangChange.subscribe(() => {
             this.initTranslations();
+            this.updateCharts();
+        });
+
+        // Subscribe to theme changes
+        this.layoutService.configUpdate$.subscribe(() => {
+            this.initChartOptions();
             this.updateCharts();
         });
     }

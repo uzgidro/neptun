@@ -109,13 +109,13 @@
     }
 
     .chart-hint {
-        color: #9ca3af;
+        color: var(--text-color-secondary);
         font-size: 0.875rem;
         cursor: help;
         transition: color 0.2s ease;
 
         &:hover {
-            color: #6b7280;
+            color: var(--text-color);
         }
 
         i {
@@ -206,8 +206,8 @@
         width: 28px;
         height: 28px;
         border-radius: 50%;
-        background: #e5e7eb;
-        border: 2px solid #d1d5db;
+        background: var(--surface-border);
+        border: 2px solid var(--surface-border);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -224,7 +224,7 @@
     .stage-line {
         flex: 1;
         height: 3px;
-        background: #e5e7eb;
+        background: var(--surface-border);
         transition: all 0.3s ease;
 
         &.completed {
@@ -247,7 +247,65 @@
     .stage-label {
         font-size: 13px;
         font-weight: 600;
-        color: #374151;
+        color: var(--text-color-secondary);
         text-align: center;
+    }
+}
+
+// Dark theme overrides
+:host-context(.app-dark) {
+    .kpi-card {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .debit {
+        background: rgba(34, 197, 94, 0.15);
+        color: #4ade80;
+    }
+
+    .credit {
+        background: rgba(239, 68, 68, 0.15);
+        color: #f87171;
+    }
+
+    .balance {
+        background: rgba(59, 130, 246, 0.15);
+        color: #60a5fa;
+    }
+
+    .neutral {
+        background: rgba(255, 255, 255, 0.05);
+        color: #94a3b8;
+    }
+
+    .chart-hint {
+        color: #64748b;
+    }
+
+    .priority-high {
+        background: rgba(239, 68, 68, 0.15);
+        color: #f87171;
+    }
+
+    .priority-medium {
+        background: rgba(245, 158, 11, 0.15);
+        color: #fbbf24;
+    }
+
+    .priority-low {
+        background: rgba(34, 197, 94, 0.15);
+        color: #4ade80;
+    }
+
+    .stage-circle {
+        background: #475569;
+    }
+
+    .stage-line {
+        background: #334155;
+    }
+
+    .stage-label {
+        color: #94a3b8;
     }
 }

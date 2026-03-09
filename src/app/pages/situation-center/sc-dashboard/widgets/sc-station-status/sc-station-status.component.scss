@@ -97,6 +97,10 @@
     flex-shrink: 0;
     background: rgba(0, 0, 0, 0.06);
     margin-bottom: 8px;
+
+    :host-context(.app-dark) & {
+        background: rgba(255, 255, 255, 0.06);
+    }
 }
 
 .bar-segment {

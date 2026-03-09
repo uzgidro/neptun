@@ -17,7 +17,7 @@
 // Base styles for all regions
 :host ::ng-deep svg path {
     fill: rgba(59, 130, 246, 0.08);
-    stroke: #cbd5e1;
+    stroke: var(--sc-border-color);
     stroke-width: 0.5;
     transition: all 0.3s ease;
 }
@@ -25,13 +25,13 @@
 // Clickable regions
 :host ::ng-deep svg path:not(#UZNW):not(#UZBU):not(#UZQR) {
     fill: rgba(59, 130, 246, 0.08);
-    stroke: #cbd5e1;
+    stroke: var(--sc-border-color);
     stroke-width: 1;
     cursor: pointer;
 
     &:hover {
         fill: rgba(59, 130, 246, 0.15);
-        stroke: #94a3b8;
+        stroke: var(--sc-text-muted);
         stroke-width: 1.5;
     }
 }
@@ -40,8 +40,8 @@
 :host ::ng-deep svg path#UZNW,
 :host ::ng-deep svg path#UZBU,
 :host ::ng-deep svg path#UZQR {
-    fill: #f1f5f9;
-    stroke: #cbd5e1;
+    fill: var(--sc-bg-primary);
+    stroke: var(--sc-border-color);
     stroke-width: 1;
     cursor: default;
     pointer-events: none;

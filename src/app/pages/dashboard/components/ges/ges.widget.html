@@ -47,7 +47,7 @@
         </ng-template>
         <ng-template #expandedrow let-cascade>
             @if (cascade.contacts?.length) {
-                <tr style="background-color: rgba(0, 0, 0, 0.02);">
+                <tr class="surface-hover">
                     <td colspan="2"></td>
                     <td [attr.colspan]="5" style="border-left: 3px solid var(--dash-border-color, #e2e8f0);">
                         <div class="flex flex-wrap gap-4">
@@ -64,7 +64,7 @@
                                                 <i pButtonIcon class="pi pi-telegram"></i>
                                             </a>
                                             <a pButton outlined class="p-button-sm" [href]="'https://wa.me/' + contact.phone">
-                                                <i pButtonIcon class="pi pi-whatsapp" style="color: green"></i>
+                                                <i pButtonIcon class="pi pi-whatsapp text-green-500"></i>
                                             </a>
                                         </div>
                                     }
@@ -74,7 +74,7 @@
                     </td>
                 </tr>
             }
-            <tr style="background-color: rgba(0, 0, 0, 0.02);">
+            <tr class="surface-hover">
                 <td colspan="2"></td>
                 <td colspan="5" style="border-left: 3px solid var(--dash-border-color, #e2e8f0);">
                         <p-table [value]="cascade.items" dataKey="name" styleClass="p-datatable-sm">
@@ -99,7 +99,7 @@
                                 </tr>
                             </ng-template>
                             <ng-template #body let-ges>
-                                <tr class="cursor-pointer hover:bg-surface-100" (click)="openGesDetail(ges)">
+                                <tr class="cursor-pointer hover:bg-surface-100 dark:hover:bg-surface-800" (click)="openGesDetail(ges)">
                                     <td>
                                         <span class="status-dot" [class.dot-green]="ges.ascue_metrics" [class.dot-red]="!ges.ascue_metrics"></span>
                                     </td>

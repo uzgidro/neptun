@@ -224,7 +224,7 @@
                 <!-- Existing Files -->
                 @if (isEditMode && getExistingFiles().length > 0) {
                     <div class="mb-3">
-                        <div class="text-sm text-gray-500 mb-2">{{ 'CHANCELLERY.FILES.EXISTING' | translate }}</div>
+                        <div class="text-sm text-surface-500 mb-2">{{ 'CHANCELLERY.FILES.EXISTING' | translate }}</div>
                         <div class="flex flex-wrap gap-2">
                             @for (file of getExistingFiles(); track file.id) {
                                 <div class="flex items-center gap-2 p-2 bg-gray-100 dark:bg-gray-800 rounded">
