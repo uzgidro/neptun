@@ -301,7 +301,9 @@
     "NOT_INFORMED": "Не проинформирован",
     "INFORMED_BY": "Проинформировал",
     "CREATED_BY": "Создал",
-    "UPDATED_BY": "Обновил"
+    "UPDATED_BY": "Обновил",
+    "SEARCH_PLACEHOLDER": "Поиск...",
+    "CONTACTS": "Контакты"
   },
   "DASHBOARD": {
     "EVENTS": "События",
@@ -330,7 +332,14 @@
     "LAST_UPDATED": "Последнее обновление",
     "JUST_NOW": "только что",
     "MINUTES_AGO": "мин. назад",
-    "HOURS_AGO": "ч. назад"
+    "HOURS_AGO": "ч. назад",
+    "FINANCIAL_SUMMARY": "Финансовая сводка",
+    "KPI_OVERVIEW": "Обзор KPI",
+    "CASHFLOW": "Денежный поток",
+    "VIEW_DETAILS": "Подробнее",
+    "TOTAL_INCOME": "Общий доход",
+    "TOTAL_EXPENSES": "Общие расходы",
+    "NET_BALANCE": "Чистый баланс"
   },
   "CALENDAR": {
     "TITLE": "Календарь",

@@ -2,27 +2,31 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LanguageService } from '@/core/services/language.service';
-import { SelectButton } from 'primeng/selectbutton';
+import { Select } from 'primeng/select';
 
 @Component({
     selector: 'app-language-switcher',
     standalone: true,
-    imports: [CommonModule, FormsModule, SelectButton],
+    imports: [CommonModule, FormsModule, Select],
     template: `
-        <p-select-button
+        <p-select
             [options]="languageOptions"
             [(ngModel)]="selectedLang"
             (onChange)="onLanguageChange($event)"
             optionLabel="label"
             optionValue="value"
-            [allowEmpty]="false"
-            styleClass="language-switcher"
+            styleClass="language-select"
+            [style]="{ minWidth: '80px' }"
         />
     `,
     styles: [`
-        :host ::ng-deep .language-switcher {
-            .p-button {
-                padding: 0.5rem 0.75rem;
+        :host {
+            display: flex;
+            align-items: center;
+        }
+        :host ::ng-deep .language-select {
+            .p-select-label {
+                padding: 0.375rem 0.5rem;
                 font-size: 0.875rem;
             }
         }

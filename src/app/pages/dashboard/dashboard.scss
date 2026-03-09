@@ -73,6 +73,22 @@
     }
 }
 
+// Financial row — 2 columns, equal height
+.dash-financial-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+
+    @media (max-width: 1200px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+// Cashflow row — full width
+.dash-cashflow-row {
+    flex-shrink: 0;
+}
+
 // GES row — full width
 .dash-ges-row {
     flex-shrink: 0;

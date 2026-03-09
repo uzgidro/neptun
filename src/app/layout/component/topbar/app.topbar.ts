@@ -15,8 +15,8 @@ import { FastCallWidget } from '@/layout/component/topbar/fast-call/fast-call.wi
 import { InboxWidget } from '@/layout/component/topbar/inbox/inbox-widget.component';
 import { LanguageSwitcherComponent } from '@/layout/component/topbar/language-switcher/language-switcher.component';
 import { AuthService } from '@/core/services/auth.service';
-import { AlarmService } from '@/core/services/alarm.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { TopbarSearchComponent } from '@/layout/component/topbar/topbar-search/topbar-search.component';
 
 @Component({
     selector: 'app-topbar',
@@ -36,7 +36,8 @@ import { TranslateModule } from '@ngx-translate/core';
         FastCallWidget,
         InboxWidget,
         LanguageSwitcherComponent,
-        TranslateModule
+        TranslateModule,
+        TopbarSearchComponent
     ],
     providers: [MessageService],
     template: ` <div class="layout-topbar">
@@ -50,24 +51,10 @@ import { TranslateModule } from '@ngx-translate/core';
                     {{ 'MENU.TABLET_CHAIRMAN' | translate }}
                 </span>
             </a>
+            <app-topbar-search />
         </div>
 
         <div class="layout-topbar-actions">
-            <!-- Emergency SOS Button -->
-            <a href="tel:112" class="layout-topbar-action-emergency">
-                <i class="pi pi-phone"></i>
-                <span class="emergency-text">SOS</span>
-            </a>
-
-            <!-- Alarm Mute Button -->
-            <button type="button" class="alarm-mute-btn"
-                    [class.muted]="alarmService.muted"
-                    [class.has-active]="alarmService.hasActiveShutdowns"
-                    (click)="alarmService.toggleMute()"
-                    [title]="(alarmService.muted ? 'SITUATION_CENTER.DASHBOARD.HEADER.ENABLE_ALARM' : 'SITUATION_CENTER.DASHBOARD.HEADER.DISABLE_ALARM') | translate">
-                <i class="pi" [class.pi-volume-up]="!alarmService.muted" [class.pi-volume-off]="alarmService.muted"></i>
-            </button>
-
             <div class="layout-config-menu">
                 <app-language-switcher></app-language-switcher>
                 <button type="button" class="layout-topbar-action" (click)="toggleDarkMode()">
@@ -114,7 +101,6 @@ import { TranslateModule } from '@ngx-translate/core';
 export class AppTopbar {
     layoutService = inject(LayoutService);
     authService: AuthService = inject(AuthService);
-    alarmService = inject(AlarmService);
     toggleDarkMode() {
         this.layoutService.layoutConfig.update((state) => ({ ...state, darkTheme: !state.darkTheme }));
     }

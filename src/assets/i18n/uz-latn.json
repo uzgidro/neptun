@@ -309,7 +309,9 @@
     "NOT_INFORMED": "Xabardor qilinmagan",
     "INFORMED_BY": "Xabardor qilgan",
     "CREATED_BY": "Yaratgan",
-    "UPDATED_BY": "Yangilagan"
+    "UPDATED_BY": "Yangilagan",
+    "SEARCH_PLACEHOLDER": "Qidirish...",
+    "CONTACTS": "Kontaktlar"
   },
   "DASHBOARD": {
     "EVENTS": "Voqealar",
@@ -338,7 +340,14 @@
       "LAST_UPDATED": "Oxirgi yangilanish",
       "JUST_NOW": "hozirgina",
       "MINUTES_AGO": "daq. oldin",
-      "HOURS_AGO": "soat oldin"
+      "HOURS_AGO": "soat oldin",
+    "FINANCIAL_SUMMARY": "Moliyaviy xulosa",
+    "KPI_OVERVIEW": "KPI ko'rinishi",
+    "CASHFLOW": "Pul oqimi",
+    "VIEW_DETAILS": "Batafsil",
+    "TOTAL_INCOME": "Umumiy daromad",
+    "TOTAL_EXPENSES": "Umumiy xarajatlar",
+    "NET_BALANCE": "Sof balans"
   },
   "CALENDAR": {
     "TITLE": "Kalendar",

@@ -301,7 +301,9 @@
     "NOT_INFORMED": "Not Informed",
     "INFORMED_BY": "Informed By",
     "CREATED_BY": "Created By",
-    "UPDATED_BY": "Updated By"
+    "UPDATED_BY": "Updated By",
+    "SEARCH_PLACEHOLDER": "Search...",
+    "CONTACTS": "Contacts"
   },
   "DASHBOARD": {
     "EVENTS": "Events",
@@ -330,7 +332,14 @@
     "LAST_UPDATED": "Last Updated",
     "JUST_NOW": "just now",
     "MINUTES_AGO": "min. ago",
-    "HOURS_AGO": "h. ago"
+    "HOURS_AGO": "h. ago",
+    "FINANCIAL_SUMMARY": "Financial Summary",
+    "KPI_OVERVIEW": "KPI Overview",
+    "CASHFLOW": "Cash Flow",
+    "VIEW_DETAILS": "View Details",
+    "TOTAL_INCOME": "Total Income",
+    "TOTAL_EXPENSES": "Total Expenses",
+    "NET_BALANCE": "Net Balance"
   },
   "CALENDAR": {
     "TITLE": "Calendar",

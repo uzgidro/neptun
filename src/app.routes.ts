@@ -40,7 +40,7 @@ import { LexSearchComponent } from '@/pages/lex-search/lex-search.component';
 import { CallsComponent } from '@/pages/calls/calls.component';
 import { NewsComponent } from '@/pages/media/news/news.component';
 import { InvestActiveProjectsComponent } from '@/pages/invest/invest-active-projects/invest-active-projects.component';
-import { ScDashboardComponent } from '@/pages/situation-center/sc-dashboard/sc-dashboard.component';
+// import { ScDashboardComponent } from '@/pages/situation-center/sc-dashboard/sc-dashboard.component';
 import { GesDetailComponent } from '@/pages/situation-center/ges/ges-detail/ges-detail.component';
 import { CompanyNewsComponent } from '@/pages/company-news/company-news.component';
 import { SnowCoverComponent } from '@/pages/situation-center/reservoirs-info/snow-cover/snow-cover.component';
@@ -71,7 +71,7 @@ export const appRoutes: Routes = [
         component: AppLayout,
         canActivate: [authGuard],
         children: [
-            { path: 'monitoring', component: Dashboard },
+            { path: 'dashboard', component: Dashboard },
             { path: 'users', component: User, canActivate: [adminGuard] },
             { path: 'roles', component: Role, canActivate: [adminGuard] },
             { path: 'categories', component: CategoriesComponent, canActivate: [scGuard] },
@@ -128,7 +128,7 @@ export const appRoutes: Routes = [
             { path: 'ges/:id', component: GesDetailComponent, canActivate: [raisGuard] }
         ]
     },
-    { path: 'dashboard', component: ScDashboardComponent, canActivate: [authGuard] },
+    // { path: 'dashboard', component: ScDashboardComponent, canActivate: [authGuard] },
     { path: 'notfound', component: Notfound },
     { path: 'auth', loadChildren: () => import('./app/pages/auth/auth.routes') },
     { path: '**', redirectTo: '/notfound' }
