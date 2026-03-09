@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 import { AppLayout } from '@/layout/component/app.layout';
 import { Dashboard } from '@/pages/dashboard/dashboard';
-import { Notfound } from '@/pages/notfound/notfound';
 import { authGuard, adminGuard, positionsGuard, raisGuard, scGuard } from '@/core/guards/auth.guard';
 
 export const appRoutes: Routes = [
@@ -19,7 +18,7 @@ export const appRoutes: Routes = [
             { path: 'dashboard', component: Dashboard },
 
             // HRM
-            { path: 'hrm', loadChildren: () => import('./app/pages/hrm/hrm.routes') },
+            { path: 'hrm', loadChildren: () => import('./app/pages/hrm/hrm.routes'), canActivate: [adminGuard] },
             { path: 'users', loadComponent: () => import('@/pages/hrm/users/user.component').then(m => m.User), canActivate: [adminGuard] },
             { path: 'roles', loadComponent: () => import('@/pages/hrm/roles/roles').then(m => m.Role), canActivate: [adminGuard] },
             { path: 'positions', loadComponent: () => import('@/pages/hrm/position/position.component').then(m => m.PositionComponent), canActivate: [positionsGuard] },
@@ -75,7 +74,7 @@ export const appRoutes: Routes = [
             { path: 'company-news', loadComponent: () => import('@/pages/company-news/company-news.component').then(m => m.CompanyNewsComponent), canActivate: [raisGuard] },
         ]
     },
-    { path: 'notfound', component: Notfound },
+    { path: 'notfound', loadComponent: () => import('./app/pages/notfound/notfound').then(m => m.Notfound) },
     { path: 'auth', loadChildren: () => import('./app/pages/auth/auth.routes') },
     { path: '**', redirectTo: '/notfound' }
 ];

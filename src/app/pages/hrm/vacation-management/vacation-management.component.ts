@@ -140,12 +140,13 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
             .subscribe({
                 next: (data) => {
                     this.vacations = data;
+                    this.loading = false;
                 },
                 error: (err) => {
                     this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось загрузить отпуска' });
                     console.error(err);
-                },
-                complete: () => (this.loading = false)
+                    this.loading = false;
+                }
             });
     }
 

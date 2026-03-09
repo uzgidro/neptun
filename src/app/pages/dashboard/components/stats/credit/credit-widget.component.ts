@@ -18,10 +18,9 @@ import { TranslateModule } from '@ngx-translate/core';
     templateUrl: './credit-widget.component.html'
 })
 export class CreditWidget implements OnInit, OnDestroy {
-    @Input({ required: true }) dc?: DCInfo;
+    @Input() dc?: DCInfo;
 
     showInUSD: boolean = false;
-    convertedValue: number = 0;
     showDialog: boolean = false;
     dialogShowInUSD: boolean = false;
     totalExpenses: number = 0;
@@ -33,26 +32,28 @@ export class CreditWidget implements OnInit, OnDestroy {
 
     get credit(): number {
         // Используем данные из финансового сервиса если есть, иначе из dc
-        if (this.totalExpenses > 0) {
+        if (this.totalExpenses !== 0) {
             return this.totalExpenses; // Значение уже в нужном формате
         }
         return (this.dc?.credit.currentValue ?? 0) * 1000000; // dc в млн, конвертируем в UZS
     }
 
     get displayValue(): number {
-        if (this.showInUSD) {
-            return this.convertedValue;
+        if (this.showInUSD && this.currency > 0) {
+            return this.credit / this.currency;
         }
         return this.credit;
     }
 
     ngOnInit() {
-        this.currencyService.getCurrency().subscribe({
-            next: ({ rate }: { rate: number }) => {
-                this.currency = rate;
-                this.cdr.markForCheck();
-            }
-        });
+        this.subscription.add(
+            this.currencyService.getCurrency().subscribe({
+                next: ({ rate }: { rate: number }) => {
+                    this.currency = rate;
+                    this.cdr.markForCheck();
+                }
+            })
+        );
 
         this.subscription.add(
             this.financialService.dashboardData$.subscribe(() => {
@@ -68,9 +69,6 @@ export class CreditWidget implements OnInit, OnDestroy {
 
     toggleCurrency() {
         this.showInUSD = !this.showInUSD;
-        if (this.showInUSD && this.credit > 0) {
-            this.convertedValue = this.credit / this.currency;
-        }
     }
 
     openDialog() {

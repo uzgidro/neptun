@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Popover } from 'primeng/popover';
@@ -16,6 +16,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-inbox',
+    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
         DatePipe,
         Popover,
@@ -33,10 +34,11 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
     styleUrl: './inbox-widget.component.scss'
 })
 export class InboxWidget implements OnInit, OnDestroy {
-    receptionService = inject(ReceptionService);
-    messageService = inject(MessageService);
-    fb = inject(FormBuilder);
+    private receptionService = inject(ReceptionService);
+    private messageService = inject(MessageService);
+    private fb = inject(FormBuilder);
     private translate = inject(TranslateService);
+    private cdr = inject(ChangeDetectorRef);
 
     pendingReceptions = signal<Reception[]>([]);
     loading = false;
@@ -84,9 +86,11 @@ export class InboxWidget implements OnInit, OnDestroy {
             next: (receptions) => {
                 this.pendingReceptions.set(receptions);
                 this.loading = false;
+                this.cdr.markForCheck();
             },
             error: () => {
                 this.loading = false;
+                this.cdr.markForCheck();
             }
         });
     }
@@ -100,10 +104,12 @@ export class InboxWidget implements OnInit, OnDestroy {
             next: (reception) => {
                 this.selectedReceptionDetails = reception;
                 this.loadingReceptionDetails = false;
+                this.cdr.markForCheck();
             },
             error: () => {
                 this.loadingReceptionDetails = false;
                 this.receptionDialogVisible = false;
+                this.cdr.markForCheck();
             }
         });
     }
@@ -141,10 +147,12 @@ export class InboxWidget implements OnInit, OnDestroy {
             next: () => {
                 this.showToast('success', 'TOPBAR.RECEPTION_APPROVED');
                 this.receptionDialogVisible = false;
+                this.cdr.markForCheck();
                 this.loadPendingReceptions();
             },
             error: (err) => {
                 this.showToast('error', 'TOPBAR.APPROVAL_ERROR', err.message);
+                this.cdr.markForCheck();
             }
         });
     }
@@ -198,10 +206,12 @@ export class InboxWidget implements OnInit, OnDestroy {
                 next: () => {
                     this.showToast('success', 'TOPBAR.RECEPTION_REJECTED');
                     this.closeDialog('reject');
+                    this.cdr.markForCheck();
                     this.loadPendingReceptions();
                 },
                 error: (err) => {
                     this.showToast('error', 'TOPBAR.REJECTION_ERROR', err.message);
+                    this.cdr.markForCheck();
                 }
             });
     }
@@ -231,10 +241,12 @@ export class InboxWidget implements OnInit, OnDestroy {
                 next: () => {
                     this.showToast('success', 'TOPBAR.RECEPTION_RESCHEDULED', this.translate.instant('TOPBAR.DATE_UPDATED_APPROVED'));
                     this.closeDialog('reschedule');
+                    this.cdr.markForCheck();
                     this.loadPendingReceptions();
                 },
                 error: (err) => {
                     this.showToast('error', 'TOPBAR.RESCHEDULE_ERROR', err.message);
+                    this.cdr.markForCheck();
                 }
             });
     }

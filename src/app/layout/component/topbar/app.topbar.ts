@@ -6,13 +6,11 @@ import { StyleClassModule } from 'primeng/styleclass';
 import { ProfileMenu } from './profile/app.profilemenu';
 import { LayoutService } from '../../service/layout.service';
 import { PopoverModule } from 'primeng/popover';
-import { FormsModule } from '@angular/forms';
 import { AppConfigurator } from '@/layout/component/app.configurator';
 import { TopbarCalendarWidget } from '@/layout/component/topbar/topbar-calendar/topbar-calendar-widget.component';
 import { FastCallWidget } from '@/layout/component/topbar/fast-call/fast-call.widget';
 import { InboxWidget } from '@/layout/component/topbar/inbox/inbox-widget.component';
 import { LanguageSwitcherComponent } from '@/layout/component/topbar/language-switcher/language-switcher.component';
-import { AuthService } from '@/core/services/auth.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { TopbarSearchComponent } from '@/layout/component/topbar/topbar-search/topbar-search.component';
 
@@ -26,7 +24,6 @@ import { TopbarSearchComponent } from '@/layout/component/topbar/topbar-search/t
         StyleClassModule,
         ProfileMenu,
         PopoverModule,
-        FormsModule,
         AppConfigurator,
         TopbarCalendarWidget,
         NgOptimizedImage,
@@ -97,7 +94,7 @@ import { TopbarSearchComponent } from '@/layout/component/topbar/topbar-search/t
 })
 export class AppTopbar {
     layoutService = inject(LayoutService);
-    authService: AuthService = inject(AuthService);
+
     toggleDarkMode() {
         this.layoutService.layoutConfig.update((state) => ({ ...state, darkTheme: !state.darkTheme }));
     }

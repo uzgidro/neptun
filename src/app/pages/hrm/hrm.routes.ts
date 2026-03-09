@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 
 const routes: Routes = [
+    { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     { path: 'dashboard', loadComponent: () => import('./dashboard/dashboard.component').then(m => m.HRMDashboardComponent) },
     { path: 'my-cabinet', loadComponent: () => import('./employee-cabinet/employee-cabinet.component').then(m => m.EmployeeCabinetComponent) },
     { path: 'personnel-records', loadComponent: () => import('./personnel-records/personnel-records.component').then(m => m.PersonnelRecordsComponent) },

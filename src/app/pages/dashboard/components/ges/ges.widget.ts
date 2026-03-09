@@ -3,8 +3,7 @@ import { Router } from '@angular/router';
 import { ButtonDirective, ButtonIcon } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { DecimalPipe } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { interval, Subscription } from 'rxjs';
+import { interval, Subject, switchMap, takeUntil } from 'rxjs';
 import { Organization } from '@/core/interfaces/organizations';
 import { DashboardService } from '@/core/services/dashboard.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -16,7 +15,7 @@ interface ExpandedRows {
 @Component({
     selector: 'app-ges-widget',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [ButtonDirective, TableModule, FormsModule, ButtonIcon, DecimalPipe, TranslateModule],
+    imports: [ButtonDirective, TableModule, ButtonIcon, DecimalPipe, TranslateModule],
     templateUrl: './ges.widget.html'
 })
 class GesWidget implements OnInit, OnDestroy {
@@ -32,7 +31,7 @@ class GesWidget implements OnInit, OnDestroy {
     private translate: TranslateService = inject(TranslateService);
     private router: Router = inject(Router);
     private cdr = inject(ChangeDetectorRef);
-    private refreshSubscription?: Subscription;
+    private destroy$ = new Subject<void>();
 
     @Input() expanded: boolean = false;
     @Output() expansionChange = new EventEmitter<boolean>();
@@ -40,12 +39,33 @@ class GesWidget implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.loadData();
         const REFRESH_INTERVAL = 120_000;
-        this.refreshSubscription = interval(REFRESH_INTERVAL).subscribe(() => this.loadData());
+        interval(REFRESH_INTERVAL).pipe(
+            takeUntil(this.destroy$),
+            switchMap(() => {
+                this.loading = true;
+                this.cdr.markForCheck();
+                return this.dashboardService.getOrganizationsCascades();
+            })
+        ).subscribe({
+            next: (res) => {
+                this.cascades = res.map((cascade) => ({
+                    ...cascade,
+                    contacts: this.sortContacts(cascade.contacts)
+                }));
+                this.lastUpdated = new Date();
+                this.loading = false;
+                this.cdr.markForCheck();
+            },
+            error: () => {
+                this.loading = false;
+                this.cdr.markForCheck();
+            }
+        });
     }
 
     private loadData(): void {
         this.loading = true;
-        this.dashboardService.getOrganizationsCascades().subscribe({
+        this.dashboardService.getOrganizationsCascades().pipe(takeUntil(this.destroy$)).subscribe({
             next: (res) => {
                 this.cascades = res.map((cascade) => ({
                     ...cascade,
@@ -85,8 +105,10 @@ class GesWidget implements OnInit, OnDestroy {
             const posA = a.position?.description?.toLowerCase() || '';
             const posB = b.position?.description?.toLowerCase() || '';
             // Директор должен быть первым
-            if (posA.includes('директор')) return -1;
-            if (posB.includes('директор')) return 1;
+            const aIsDirector = posA.includes('директор');
+            const bIsDirector = posB.includes('директор');
+            if (aIsDirector && !bIsDirector) return -1;
+            if (!aIsDirector && bIsDirector) return 1;
             return 0;
         });
     }
@@ -101,7 +123,8 @@ class GesWidget implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        this.refreshSubscription?.unsubscribe();
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }
 

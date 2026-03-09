@@ -1,8 +1,8 @@
-import { Component, HostBinding, inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Subscription } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { Subject, Subscription } from 'rxjs';
+import { filter, takeUntil } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { RippleModule } from 'primeng/ripple';
 import { LayoutService } from '../../service/layout.service';
@@ -12,6 +12,7 @@ import { AuthService } from '@/core/services/auth.service';
 @Component({
     // eslint-disable-next-line @angular-eslint/component-selector
     selector: '[app-menuitem]',
+    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [CommonModule, RouterModule, RippleModule],
     templateUrl: 'menuitem.component.html',
     animations: [
@@ -30,8 +31,7 @@ import { AuthService } from '@/core/services/auth.service';
             ),
             transition('collapsed <=> expanded', animate('400ms cubic-bezier(0.86, 0, 0.07, 1)'))
         ])
-    ],
-    providers: [LayoutService]
+    ]
 })
 export class MenuitemComponent implements OnInit, OnDestroy {
     @Input() item!: MenuItems;
@@ -50,9 +50,11 @@ export class MenuitemComponent implements OnInit, OnDestroy {
 
     key: string = '';
 
+    private destroy$ = new Subject<void>();
     private router = inject(Router);
     private layoutService = inject(LayoutService);
     private authService = inject(AuthService);
+    private cdr = inject(ChangeDetectorRef);
 
     constructor() {
         this.menuSourceSubscription = this.layoutService.menuSource$.subscribe((value) => {
@@ -64,14 +66,16 @@ export class MenuitemComponent implements OnInit, OnDestroy {
                         this.active = false;
                     }
                 }
+                this.cdr.markForCheck();
             });
         });
 
         this.menuResetSubscription = this.layoutService.resetSource$.subscribe(() => {
             this.active = false;
+            this.cdr.markForCheck();
         });
 
-        this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe(() => {
+        this.router.events.pipe(filter((event) => event instanceof NavigationEnd), takeUntil(this.destroy$)).subscribe(() => {
             if (this.item.routerLink) {
                 this.updateActiveStateFromRoute();
             }
@@ -131,6 +135,9 @@ export class MenuitemComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
+
         if (this.menuSourceSubscription) {
             this.menuSourceSubscription.unsubscribe();
         }

@@ -18,10 +18,9 @@ import { TranslateModule } from '@ngx-translate/core';
     templateUrl: './debit-widget.component.html'
 })
 export class DebitWidget implements OnInit, OnDestroy {
-    @Input({ required: true }) dc?: DCInfo;
+    @Input() dc?: DCInfo;
 
     showInUSD: boolean = false;
-    convertedValue: number = 0;
     showDialog: boolean = false;
     dialogShowInUSD: boolean = false;
     totalIncome: number = 0;
@@ -33,26 +32,28 @@ export class DebitWidget implements OnInit, OnDestroy {
 
     get debit(): number {
         // Используем данные из финансового сервиса если есть, иначе из dc
-        if (this.totalIncome > 0) {
+        if (this.totalIncome !== 0) {
             return this.totalIncome; // Значение уже в нужном формате
         }
         return (this.dc?.debit.currentValue ?? 0) * 1000000; // dc в млн, конвертируем в UZS
     }
 
     get displayValue(): number {
-        if (this.showInUSD) {
-            return this.convertedValue;
+        if (this.showInUSD && this.currency > 0) {
+            return this.debit / this.currency;
         }
         return this.debit;
     }
 
     ngOnInit() {
-        this.currencyService.getCurrency().subscribe({
-            next: ({ rate }: { rate: number }) => {
-                this.currency = rate;
-                this.cdr.markForCheck();
-            }
-        });
+        this.subscription.add(
+            this.currencyService.getCurrency().subscribe({
+                next: ({ rate }: { rate: number }) => {
+                    this.currency = rate;
+                    this.cdr.markForCheck();
+                }
+            })
+        );
 
         this.subscription.add(
             this.financialService.dashboardData$.subscribe(() => {
@@ -68,9 +69,6 @@ export class DebitWidget implements OnInit, OnDestroy {
 
     toggleCurrency() {
         this.showInUSD = !this.showInUSD;
-        if (this.showInUSD && this.debit > 0) {
-            this.convertedValue = this.debit / this.currency;
-        }
     }
 
     openDialog() {

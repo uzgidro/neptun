@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
-import { ButtonDirective, ButtonModule } from 'primeng/button';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
 import { DatePipe, NgClass } from '@angular/common';
 import { PastEventsService } from '@/core/services/past-events.service';
@@ -9,17 +9,19 @@ import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.compone
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
     standalone: true,
     selector: 'app-notifications-widget',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [ButtonModule, MenuModule, DatePipe, NgClass, ButtonDirective, DialogComponent, DatePickerComponent, FormsModule, TranslateModule],
+    imports: [ButtonModule, MenuModule, DatePipe, NgClass, DialogComponent, DatePickerComponent, FormsModule, TranslateModule],
     templateUrl: './notifications.widget.html'
 })
-export class NotificationsWidget implements OnInit {
+export class NotificationsWidget implements OnInit, OnDestroy {
     private pastEventsService = inject(PastEventsService);
     private cdr = inject(ChangeDetectorRef);
+    private destroy$ = new Subject<void>();
 
     eventsByDate: DateGroup[] = [];
     loading = false;
@@ -35,6 +37,11 @@ export class NotificationsWidget implements OnInit {
 
     ngOnInit() {
         this.loadPastEvents();
+    }
+
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 
     toggleEventExpansion(eventDate: string) {
@@ -81,7 +88,7 @@ export class NotificationsWidget implements OnInit {
 
     loadPastEvents(date?: Date) {
         this.loading = true;
-        this.pastEventsService.getPastEvents(date).subscribe({
+        this.pastEventsService.getPastEvents(date).pipe(takeUntil(this.destroy$)).subscribe({
             next: (response) => {
                 this.eventsByDate = response;
                 this.loading = false;

@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
-import { ButtonModule } from 'primeng/button';
 import { DCInfo } from '@/core/interfaces/debit-credit';
 import { DebitCreditTempService } from '@/core/services/temp/debit-credit-temp.service';
 import { DebitWidget } from '@/pages/dashboard/components/stats/debit/debit-widget.component';
@@ -13,7 +12,7 @@ import { FinancialDashboardService } from '@/pages/financial-block/dashboard/ser
     standalone: true,
     selector: 'app-stats-widget',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [ButtonModule, DebitWidget, CreditWidget, ProductionWidget, EmployeesWidget],
+    imports: [DebitWidget, CreditWidget, ProductionWidget, EmployeesWidget],
     templateUrl: './stats.widget.html'
 })
 export class StatsWidget implements OnInit, OnDestroy {

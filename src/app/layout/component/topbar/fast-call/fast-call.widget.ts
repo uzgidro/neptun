@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { Popover } from 'primeng/popover';
 import { TableModule } from 'primeng/table';
@@ -10,6 +10,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-fast-call',
+    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [Popover, TableModule, ButtonDirective, Avatar, TranslateModule],
     templateUrl: './fast-call.widget.html',
     styleUrl: './fast-call.widget.scss'
@@ -18,12 +19,14 @@ export class FastCallWidget implements OnInit, OnDestroy {
     contacts: FastCall[] = [];
 
     private fastCallsService: FastCallService = inject(FastCallService);
+    private cdr = inject(ChangeDetectorRef);
     private destroy$ = new Subject<void>();
 
     ngOnInit() {
         this.fastCallsService.getFastCalls().pipe(takeUntil(this.destroy$)).subscribe({
             next: (data) => {
                 this.contacts = data;
+                this.cdr.markForCheck();
             }
         });
     }

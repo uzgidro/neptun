@@ -1,18 +1,20 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { DashboardService } from '@/core/services/dashboard.service';
 import { DashboardResponse } from '@/core/interfaces/ges-production';
-import { TranslateModule, TranslatePipe } from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
     selector: 'app-production',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [DecimalPipe, TranslatePipe, TranslateModule],
+    imports: [DecimalPipe, TranslateModule],
     templateUrl: './production-widget.component.html'
 })
-export class ProductionWidget implements OnInit {
+export class ProductionWidget implements OnInit, OnDestroy {
     private dashboardService = inject(DashboardService);
     private cdr = inject(ChangeDetectorRef);
+    private destroy$ = new Subject<void>();
 
     data: DashboardResponse | null = null;
     isLoading = false;
@@ -21,9 +23,14 @@ export class ProductionWidget implements OnInit {
         this.loadData();
     }
 
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
+    }
+
     private loadData() {
         this.isLoading = true;
-        this.dashboardService.getGESProduction().subscribe({
+        this.dashboardService.getGESProduction().pipe(takeUntil(this.destroy$)).subscribe({
             next: (response) => {
                 this.data = response;
                 this.isLoading = false;
