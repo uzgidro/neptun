@@ -16,8 +16,9 @@ FROM nginxinc/nginx-unprivileged:alpine
 # - OpenSSL (CVE-2025-15467, CVE-2025-69419, CVE-2025-69421)
 # - libexpat (CVE-2026-24515)
 # - libpng (CVE-2026-25646)
+# - zlib (CVE-2026-22184)
 USER root
-RUN apk upgrade --no-cache libcrypto3 libssl3 libexpat libpng
+RUN apk upgrade --no-cache libcrypto3 libssl3 libexpat libpng zlib
 USER nginx
 
 COPY nginx.conf /etc/nginx/nginx.conf
