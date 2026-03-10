@@ -18,7 +18,7 @@ import { OrganizationService } from '@/core/services/organization.service';
 import { FileUploadComponent } from '@/layout/component/dialog/file-upload/file-upload.component';
 import { FileViewerComponent } from '@/layout/component/dialog/file-viewer/file-viewer.component';
 import { FileListComponent } from '@/layout/component/dialog/file-list/file-list.component';
-import { SelectComponent } from '@/layout/component/dialog/select/select.component';
+import { GroupSelectComponent } from '@/layout/component/dialog/group-select/group-select.component';
 import { InputText } from 'primeng/inputtext';
 import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
@@ -46,11 +46,10 @@ import { ScService } from '@/core/services/sc.service';
         FileUploadComponent,
         FileViewerComponent,
         FileListComponent,
-        SelectComponent,
+        GroupSelectComponent,
         InputText,
         IconField,
         InputIcon,
-        SelectComponent,
         TranslateModule,
         DateWidget
     ],
@@ -72,7 +71,7 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
     currentDischargeId: number | null = null;
 
     form!: FormGroup;
-    organizations: Organization[] = [];
+    organizations: any[] = [];
     orgsLoading = false;
 
     authService = inject(AuthService);
@@ -141,7 +140,7 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
 
     private loadOrganizations() {
         this.orgsLoading = true;
-        this.organizationService.getOrganizationsFlat().subscribe({
+        this.organizationService.getCascades().subscribe({
             next: (data) => {
                 this.organizations = data;
             },
@@ -266,9 +265,12 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
 
         let organizationToSet: any = null;
         if (discharge.id && this.organizations) {
-            const foundOrg = this.organizations.find((org: any) => org.id === discharge.organization.id);
-            if (foundOrg) {
-                organizationToSet = foundOrg;
+            for (const cascade of this.organizations) {
+                const foundOrg = cascade.items?.find((org: any) => org.id === discharge.organization.id);
+                if (foundOrg) {
+                    organizationToSet = foundOrg;
+                    break;
+                }
             }
         }
 
