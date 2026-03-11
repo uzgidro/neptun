@@ -48,6 +48,8 @@ export class MenuitemComponent implements OnInit, OnDestroy {
 
     menuResetSubscription: Subscription;
 
+    routerEventsSubscription: Subscription;
+
     key: string = '';
 
     private router = inject(Router)
@@ -71,7 +73,7 @@ export class MenuitemComponent implements OnInit, OnDestroy {
             this.active = false;
         });
 
-        this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe(() => {
+        this.routerEventsSubscription = this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe(() => {
             if (this.item.routerLink) {
                 this.updateActiveStateFromRoute();
             }
@@ -137,6 +139,10 @@ export class MenuitemComponent implements OnInit, OnDestroy {
 
         if (this.menuResetSubscription) {
             this.menuResetSubscription.unsubscribe();
+        }
+
+        if (this.routerEventsSubscription) {
+            this.routerEventsSubscription.unsubscribe();
         }
     }
 }

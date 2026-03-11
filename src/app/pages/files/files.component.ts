@@ -14,7 +14,7 @@ import { FileUpload } from 'primeng/fileupload';
 import { LatestFiles } from '@/core/interfaces/latest-files';
 import { Categories } from '@/core/interfaces/categories';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-files',
@@ -32,6 +32,7 @@ export class FilesComponent implements OnInit, OnDestroy {
     private apiService = inject(ApiService);
     private fb = inject(FormBuilder);
     private messageService = inject(MessageService);
+    private translate = inject(TranslateService);
     private destroy$ = new Subject<void>();
 
     constructor() {
@@ -62,7 +63,7 @@ export class FilesComponent implements OnInit, OnDestroy {
 
     handleFileUpload(event: { files: File[] }, uploader: FileUpload) {
         if (this.uploadForm.invalid) {
-            this.messageService.add({ severity: 'warn', summary: 'Внимание', detail: 'Выберите категорию и дату' });
+            this.messageService.add({ severity: 'warn', summary: this.translate.instant('COMMON.WARNING'), detail: this.translate.instant('FILES.SELECT_CATEGORY_AND_DATE') });
             return;
         }
 
@@ -83,12 +84,12 @@ export class FilesComponent implements OnInit, OnDestroy {
             )
             .subscribe({
                 next: () => {
-                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: `Загружено ${event.files.length} файл(ов)` });
+                    this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('FILES.UPLOADED_SUCCESS', { count: event.files.length }) });
                     this.loadLatestFiles();
                     this.closeDialog();
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось загрузить файлы' });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('FILES.UPLOAD_ERROR') });
                     console.error(err);
                 }
             });
@@ -100,22 +101,30 @@ export class FilesComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
-                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Файл успешно удален' });
+                    this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('FILES.DELETED_SUCCESS') });
                     this.files = this.files.filter((file) => file.id !== id); // Корректное удаление из массива
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось удалить файл' });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('FILES.DELETE_ERROR') });
                     console.error(err);
                 }
             });
     }
 
     private loadLatestFiles(): void {
-        this.apiService.getLatestFiles().subscribe({
+        this.apiService.getLatestFiles().pipe(takeUntil(this.destroy$)).subscribe({
             next: (data) => {
                 this.files = data;
             },
-            error: () => {},
+            error: (err) => {
+                this.messageService.add({
+                    severity: 'error',
+                    summary: this.translate.instant('COMMON.ERROR'),
+                    detail: this.translate.instant('COMMON.LOAD_ERROR')
+                });
+                console.error(err);
+                this.loading = false;
+            },
             complete: () => {
                 this.loading = false;
             }
@@ -123,11 +132,18 @@ export class FilesComponent implements OnInit, OnDestroy {
     }
 
     private loadCategories() {
-        this.apiService.getCategories().subscribe({
+        this.apiService.getCategories().pipe(takeUntil(this.destroy$)).subscribe({
             next: (data) => {
                 this.categories = data;
             },
-            error: () => {}
+            error: (err) => {
+                this.messageService.add({
+                    severity: 'error',
+                    summary: this.translate.instant('COMMON.ERROR'),
+                    detail: this.translate.instant('COMMON.LOAD_ERROR')
+                });
+                console.error(err);
+            }
         });
     }
 

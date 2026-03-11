@@ -11,6 +11,7 @@ export class TokenRefreshService {
 
     private isRefreshing = false;
     private refreshTokenSubject = new BehaviorSubject<string | null>(null);
+    private refreshError$ = new BehaviorSubject<any>(null);
 
     /**
      * Handles token refresh with proper concurrency control.
@@ -30,6 +31,7 @@ export class TokenRefreshService {
     private startRefresh(): Observable<string> {
         this.isRefreshing = true;
         this.refreshTokenSubject.next(null);
+        this.refreshError$.next(null);
 
         return this.authService.refreshToken().pipe(
             switchMap((response) => {
@@ -37,7 +39,7 @@ export class TokenRefreshService {
                 return [response.access_token];
             }),
             catchError((error) => {
-                this.refreshTokenSubject.next(null);
+                this.refreshError$.next(error);
                 this.authService.logout();
                 return throwError(() => error);
             }),
@@ -48,9 +50,30 @@ export class TokenRefreshService {
     }
 
     private waitForRefresh(): Observable<string> {
-        return this.refreshTokenSubject.pipe(
-            filter((token): token is string => token !== null),
-            take(1)
-        );
+        return new Observable<string>((subscriber) => {
+            const tokenSub = this.refreshTokenSubject.pipe(
+                filter((token): token is string => token !== null),
+                take(1)
+            ).subscribe({
+                next: (token) => {
+                    subscriber.next(token);
+                    subscriber.complete();
+                }
+            });
+
+            const errorSub = this.refreshError$.pipe(
+                filter((error) => error !== null),
+                take(1)
+            ).subscribe({
+                next: (error) => {
+                    subscriber.error(error);
+                }
+            });
+
+            return () => {
+                tokenSub.unsubscribe();
+                errorSub.unsubscribe();
+            };
+        });
     }
 }

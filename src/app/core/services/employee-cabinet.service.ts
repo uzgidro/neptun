@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ApiService, BASE_URL } from '@/core/services/api.service';
+import { ApiService } from '@/core/services/api.service';
 import { Observable, map } from 'rxjs';
 import {
     EmployeeProfile,
@@ -192,34 +192,34 @@ function mapCompetencyArrayToMyCompetencies(items: FlatCompetencyItem[]): MyComp
 export class EmployeeCabinetService extends ApiService {
     // Profile
     getMyProfile(): Observable<EmployeeProfile> {
-        return this.http.get<EmployeeProfile>(BASE_URL + MY_PROFILE);
+        return this.http.get<EmployeeProfile>(this.BASE_URL + MY_PROFILE);
     }
 
     updateMyProfile(payload: Partial<EmployeeProfile>): Observable<EmployeeProfile> {
-        return this.http.patch<EmployeeProfile>(BASE_URL + MY_PROFILE, payload);
+        return this.http.patch<EmployeeProfile>(this.BASE_URL + MY_PROFILE, payload);
     }
 
     // Leave Balance
     getMyLeaveBalance(): Observable<LeaveBalance> {
-        return this.http.get<LeaveBalance>(BASE_URL + MY_LEAVE_BALANCE);
+        return this.http.get<LeaveBalance>(this.BASE_URL + MY_LEAVE_BALANCE);
     }
 
     // Vacations
     getMyVacations(): Observable<MyVacationRequest[]> {
-        return this.http.get<MyVacationRequest[]>(BASE_URL + MY_VACATIONS);
+        return this.http.get<MyVacationRequest[]>(this.BASE_URL + MY_VACATIONS);
     }
 
     createVacationRequest(payload: Partial<MyVacationRequest>): Observable<MyVacationRequest> {
-        return this.http.post<MyVacationRequest>(BASE_URL + MY_VACATIONS, payload);
+        return this.http.post<MyVacationRequest>(this.BASE_URL + MY_VACATIONS, payload);
     }
 
     cancelVacationRequest(id: number): Observable<MyVacationRequest> {
-        return this.http.post<MyVacationRequest>(BASE_URL + MY_VACATIONS + '/' + id + '/cancel', {});
+        return this.http.post<MyVacationRequest>(this.BASE_URL + MY_VACATIONS + '/' + id + '/cancel', {});
     }
 
     // Salary
     getMySalaryInfo(): Observable<MySalaryInfo | null> {
-        return this.http.get<MySalaryInfo | Salary[]>(BASE_URL + MY_SALARY).pipe(
+        return this.http.get<MySalaryInfo | Salary[]>(this.BASE_URL + MY_SALARY).pipe(
             map((res) => {
                 if (!Array.isArray(res)) {
                     return res as MySalaryInfo;
@@ -230,14 +230,14 @@ export class EmployeeCabinetService extends ApiService {
     }
 
     downloadPayslip(paymentId: number): Observable<Blob> {
-        return this.http.get(BASE_URL + MY_SALARY + '/payslip/' + paymentId, {
+        return this.http.get(this.BASE_URL + MY_SALARY + '/payslip/' + paymentId, {
             responseType: 'blob'
         });
     }
 
     // Training
     getMyTraining(): Observable<MyTraining> {
-        return this.http.get<MyTraining | FlatTrainingItem[]>(BASE_URL + MY_TRAINING).pipe(
+        return this.http.get<MyTraining | FlatTrainingItem[]>(this.BASE_URL + MY_TRAINING).pipe(
             map((res) => {
                 if (!Array.isArray(res)) {
                     return res as MyTraining;
@@ -249,7 +249,7 @@ export class EmployeeCabinetService extends ApiService {
 
     // Competencies
     getMyCompetencies(): Observable<MyCompetencies> {
-        return this.http.get<MyCompetencies | FlatCompetencyItem[]>(BASE_URL + MY_COMPETENCIES).pipe(
+        return this.http.get<MyCompetencies | FlatCompetencyItem[]>(this.BASE_URL + MY_COMPETENCIES).pipe(
             map((res) => {
                 if (!Array.isArray(res)) {
                     return res as MyCompetencies;
@@ -261,29 +261,29 @@ export class EmployeeCabinetService extends ApiService {
 
     // Notifications
     getMyNotifications(): Observable<MyNotification[]> {
-        return this.http.get<MyNotification[]>(BASE_URL + MY_NOTIFICATIONS);
+        return this.http.get<MyNotification[]>(this.BASE_URL + MY_NOTIFICATIONS);
     }
 
     markNotificationAsRead(id: number): Observable<MyNotification> {
-        return this.http.patch<MyNotification>(BASE_URL + MY_NOTIFICATIONS + '/' + id + '/read', {});
+        return this.http.patch<MyNotification>(this.BASE_URL + MY_NOTIFICATIONS + '/' + id + '/read', {});
     }
 
     markAllNotificationsAsRead(): Observable<any> {
-        return this.http.post(BASE_URL + MY_NOTIFICATIONS + '/read-all', {});
+        return this.http.post(this.BASE_URL + MY_NOTIFICATIONS + '/read-all', {});
     }
 
     // Tasks
     getMyTasks(): Observable<MyTask[]> {
-        return this.http.get<MyTask[]>(BASE_URL + MY_TASKS);
+        return this.http.get<MyTask[]>(this.BASE_URL + MY_TASKS);
     }
 
     // Documents
     getMyDocuments(): Observable<MyDocument[]> {
-        return this.http.get<MyDocument[]>(BASE_URL + MY_DOCUMENTS);
+        return this.http.get<MyDocument[]>(this.BASE_URL + MY_DOCUMENTS);
     }
 
     downloadDocument(id: number): Observable<Blob> {
-        return this.http.get(BASE_URL + MY_DOCUMENTS + '/' + id + '/download', {
+        return this.http.get(this.BASE_URL + MY_DOCUMENTS + '/' + id + '/download', {
             responseType: 'blob'
         });
     }

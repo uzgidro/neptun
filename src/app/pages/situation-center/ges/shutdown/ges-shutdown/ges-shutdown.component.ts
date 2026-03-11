@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Button } from 'primeng/button';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
 import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
@@ -18,10 +18,10 @@ import { OrganizationService } from '@/core/services/organization.service';
 import { FileUploadComponent } from '@/layout/component/dialog/file-upload/file-upload.component';
 import { FileViewerComponent } from '@/layout/component/dialog/file-viewer/file-viewer.component';
 import { FileListComponent } from '@/layout/component/dialog/file-list/file-list.component';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ScService } from '@/core/services/sc.service';
 import { HttpResponse } from '@angular/common/http';
-import { finalize } from 'rxjs';
+import { finalize, Subject, takeUntil } from 'rxjs';
 import { saveAs } from 'file-saver';
 
 @Component({
@@ -47,7 +47,7 @@ import { saveAs } from 'file-saver';
     templateUrl: './ges-shutdown.component.html',
     styleUrl: './ges-shutdown.component.scss'
 })
-export class GesShutdownComponent implements OnInit, OnChanges {
+export class GesShutdownComponent implements OnInit, OnChanges, OnDestroy {
     @Input() date: Date | null = null;
     @Output() shutdownSaved = new EventEmitter<void>();
 
@@ -69,6 +69,8 @@ export class GesShutdownComponent implements OnInit, OnChanges {
     private gesShutdownService: GesShutdownService = inject(GesShutdownService);
     private scService: ScService = inject(ScService);
     private messageService: MessageService = inject(MessageService);
+    private translate = inject(TranslateService);
+    private destroy$ = new Subject<void>();
 
     // Export
     isExcelLoading = false;
@@ -94,7 +96,7 @@ export class GesShutdownComponent implements OnInit, OnChanges {
         this.loadShutdowns();
 
         this.orgsLoading = true;
-        this.organizationService.getCascades().subscribe({
+        this.organizationService.getCascades().pipe(takeUntil(this.destroy$)).subscribe({
             next: (data) => {
                 this.organizations = data;
             },
@@ -105,12 +107,12 @@ export class GesShutdownComponent implements OnInit, OnChanges {
     private loadShutdowns() {
         this.loading = true;
         const dateToUse = this.date || new Date();
-        this.gesShutdownService.getShutdowns(dateToUse).subscribe({
+        this.gesShutdownService.getShutdowns(dateToUse).pipe(takeUntil(this.destroy$)).subscribe({
             next: (data) => {
                 this.shutdowns = data;
             },
             error: (err) => {
-                this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: err.message });
+                this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: err.message });
             },
             complete: () => (this.loading = false)
         });
@@ -157,14 +159,14 @@ export class GesShutdownComponent implements OnInit, OnChanges {
         }
 
         if (this.isEditMode && this.currentShutdownId) {
-            this.gesShutdownService.editShutdown(this.currentShutdownId, formData).subscribe({
+            this.gesShutdownService.editShutdown(this.currentShutdownId, formData).pipe(takeUntil(this.destroy$)).subscribe({
                 next: () => {
-                    this.messageService.add({ severity: 'success', summary: 'Событие обновлено' });
+                    this.messageService.add({ severity: 'success', summary: this.translate.instant('SITUATION_CENTER.SHUTDOWN.EVENT_UPDATED') });
                     this.closeDialog();
                     this.shutdownSaved.emit();
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка обновления события', detail: err.message });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('SITUATION_CENTER.SHUTDOWN.EVENT_UPDATE_ERROR'), detail: err.message });
                     this.isLoading = false;
                 },
                 complete: () => {
@@ -173,16 +175,16 @@ export class GesShutdownComponent implements OnInit, OnChanges {
                 }
             });
         } else {
-            this.gesShutdownService.addShutdown(formData).subscribe({
+            this.gesShutdownService.addShutdown(formData).pipe(takeUntil(this.destroy$)).subscribe({
                 next: () => {
                     this.isFormOpen = false;
                     this.form.reset();
-                    this.messageService.add({ severity: 'success', summary: 'Событие добавлено' });
+                    this.messageService.add({ severity: 'success', summary: this.translate.instant('SITUATION_CENTER.SHUTDOWN.EVENT_CREATED') });
                     this.closeDialog();
                     this.shutdownSaved.emit();
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка добавления события', detail: err.message });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('SITUATION_CENTER.SHUTDOWN.EVENT_CREATE_ERROR'), detail: err.message });
                     this.isLoading = false;
                 },
                 complete: () => {
@@ -274,15 +276,15 @@ export class GesShutdownComponent implements OnInit, OnChanges {
     }
 
     deleteShutdown(id: number) {
-        if (confirm('Вы уверены, что хотите удалить это событие?')) {
-            this.gesShutdownService.deleteShutdown(id).subscribe({
+        if (confirm(this.translate.instant('COMMON.CONFIRM_DELETE'))) {
+            this.gesShutdownService.deleteShutdown(id).pipe(takeUntil(this.destroy$)).subscribe({
                 next: () => {
-                    this.messageService.add({ severity: 'success', summary: 'Событие удалено' });
+                    this.messageService.add({ severity: 'success', summary: this.translate.instant('SITUATION_CENTER.SHUTDOWN.EVENT_DELETED') });
                     this.loadShutdowns();
                     this.shutdownSaved.emit();
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка удаления события', detail: err.message });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('SITUATION_CENTER.SHUTDOWN.EVENT_DELETE_ERROR'), detail: err.message });
                 }
             });
         }
@@ -292,6 +294,11 @@ export class GesShutdownComponent implements OnInit, OnChanges {
         if (changes['date'] && !changes['date'].firstChange) {
             this.loadShutdowns();
         }
+    }
+
+    ngOnDestroy(): void {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 
     get dateYMD(): string {
@@ -308,6 +315,7 @@ export class GesShutdownComponent implements OnInit, OnChanges {
         this.scService
             .downloadScReport(dateToUse, format)
             .pipe(
+                takeUntil(this.destroy$),
                 finalize(() => {
                     this.isExcelLoading = false;
                     this.isPdfLoading = false;
@@ -321,7 +329,7 @@ export class GesShutdownComponent implements OnInit, OnChanges {
                 },
                 error: (err: any) => {
                     console.error('Ошибка при скачивании:', err);
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось скачать файл' });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('COMMON.DOWNLOAD_ERROR') });
                 }
             });
     }

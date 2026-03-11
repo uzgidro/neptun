@@ -5,6 +5,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { TelegramMessage, TelegramNewsParams, TelegramNewsResponse } from '@/core/interfaces/telegram-news';
 import { NewsService } from '@/core/services/news.service';
 import { MessageService, PrimeTemplate } from 'primeng/api';
+import { TranslateService } from '@ngx-translate/core';
 import { Tag } from 'primeng/tag';
 import { ButtonDirective, ButtonIcon, ButtonLabel } from 'primeng/button';
 import { IconField } from 'primeng/iconfield';
@@ -44,6 +45,7 @@ export class NewsComponent implements OnInit, OnDestroy {
 
     private newsService = inject(NewsService);
     private messageService = inject(MessageService);
+    private translate = inject(TranslateService);
     private destroy$ = new Subject<void>();
 
     ngOnInit() {
@@ -70,8 +72,8 @@ export class NewsComponent implements OnInit, OnDestroy {
                 error: (error) => {
                     this.messageService.add({
                         severity: 'error',
-                        summary: 'Ошибка',
-                        detail: 'Не удалось загрузить новости'
+                        summary: this.translate.instant('COMMON.ERROR'),
+                        detail: this.translate.instant('NEWS.MESSAGES.LOAD_FAILED')
                     });
                     console.error('Error loading news:', error);
                 },

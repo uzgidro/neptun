@@ -152,7 +152,7 @@ export class AccessControlComponent implements OnInit, OnDestroy {
             zones: this.accessControlService.getZones(),
             logs: this.accessControlService.getLogs(),
             requests: this.accessControlService.getRequests(),
-            employees: this.contactService.getContacts()
+            employees: this.contactService.getAll()
         }).pipe(takeUntil(this.destroy$)).subscribe({
             next: (data) => {
                 this.cards = data.cards;

@@ -1,41 +1,29 @@
 {
   "COMMON": {
-    "SAVE": "Saqlash",
-    "CANCEL": "Bekor qilish",
-    "DELETE": "O'chirish",
-    "EDIT": "Tahrirlash",
+    "ACTIONS": "Amallar",
     "ADD": "Qo'shish",
-    "SEARCH": "Qidirish",
-    "LOADING": "Yuklanmoqda...",
-    "YES": "Ha",
-    "NO": "Yo'q",
-    "CLOSE": "Yopish",
     "BACK": "Orqaga",
-    "NEXT": "Keyingi",
-    "SUBMIT": "Yuborish",
-    "CONFIRM": "Tasdiqlash",
-    "NAME": "Nomi",
-    "NO_DATA": "Ma'lumot yo'q",
-    "NOT_FOUND": "Hech narsa topilmadi",
-    "CREATE": "Yaratish",
-    "TOTAL": "Jami",
-    "SINCE_YEAR_START": "yil boshidan",
-    "PER_DAY": "kuniga",
-    "SUBCATEGORY": "Kichik kategoriya",
-    "YEAR_START": "Yil boshi",
-    "CURRENT_VALUE": "Joriy qiymat",
+    "CANCEL": "Bekor qilish",
     "CHANGE": "O'zgarish",
-    "MILLION": "mln",
-    "KWH": "kVt·S",
-    "SUCCESS": "Muvaffaqiyatli",
+    "CLOSE": "Yopish",
+    "CONFIRM": "Tasdiqlash",
+    "CONFIRM_DELETE": "Oʻchirishni xohlaysizmi?",
+    "CONGRATULATIONS": "Tabriklaymiz",
+    "CREATE": "Yaratish",
+    "CURRENT_VALUE": "Joriy qiymat",
+    "DELETE": "O'chirish",
+    "DOWNLOAD_ERROR": "Faylni yuklab bo'lmadi",
+    "DOWNLOAD_EXCEL": "Excelni yuklab olish",
+    "EDIT": "Tahrirlash",
     "ERROR": "Xatolik",
-    "WARNING": "Diqqat",
-      "INFO": "Ma'lumot",
-      "CONGRATULATIONS": "Tabriklaymiz",
     "EXPORT": "Eksport",
     "EXPORT_SUCCESS": "Fayl muvaffaqiyatli eksport qilindi",
     "FILL_REQUIRED": "Majburiy maydonlarni to'ldiring",
-    "CONFIRM_DELETE": "O'chirishni tasdiqlang",
+    "INFO": "Ma'lumot",
+    "KWH": "kVt·S",
+    "LOADING": "Yuklanmoqda...",
+    "LOAD_ERROR": "Ma'lumotlarni yuklashda xatolik",
+    "MILLION": "mln",
     "MONTHS": {
       "JAN": "Yan",
       "FEB": "Fev",
@@ -64,8 +52,33 @@
       "NOV": "Noyabr",
       "DEC": "Dekabr"
     },
-      "NO_RESULTS": "Hech narsa topilmadi",
-      "DOWNLOAD_EXCEL": "Excelni yuklab olish"
+    "NAME": "Nomi",
+    "NEXT": "Keyingi",
+    "NO": "Yo'q",
+    "NOT_FOUND": "Hech narsa topilmadi",
+    "NO_DATA": "Ma'lumot yo'q",
+    "NO_RESULTS": "Hech narsa topilmadi",
+    "PER_DAY": "kuniga",
+    "REMOVE": "Oʻchirish",
+    "RESET": "Qayta o'rnatish",
+    "SAVE": "Saqlash",
+    "SEARCH": "Qidirish",
+    "SINCE_YEAR_START": "yil boshidan",
+    "SUBCATEGORY": "Kichik kategoriya",
+    "SUBMIT": "Yuborish",
+    "SUCCESS": "Muvaffaqiyatli",
+    "TOTAL": "Jami",
+    "UPDATE": "Yangilash",
+    "WARNING": "Diqqat",
+    "YEAR_START": "Yil boshi",
+    "YES": "Ha",
+    "APPROVE": "Tasdiqlash",
+    "REJECT": "Rad etish",
+    "STATUS": "Holat",
+    "CLEAR": "Tozalash",
+    "DOWNLOAD": "Yuklab olish",
+    "EMAIL": "Elektron pochta",
+    "PHONE": "Telefon"
   },
   "CATEGORIES": {
     "TITLE": "Rollar",
@@ -75,7 +88,9 @@
     "PREFIX": "Prefiks",
     "SELECT_PREFIX": "Prefiksni tanlang",
     "CATEGORY": "Kategoriya",
-    "NAME_REQUIRED": "Kategoriya nomi majburiy"
+    "NAME_REQUIRED": "Kategoriya nomi majburiy",
+    "CREATED_SUCCESS": "Kategoriya muvaffaqiyatli yaratildi",
+    "CREATED_ERROR": "Kategoriyani yaratib bo'lmadi"
   },
   "FILES": {
     "TITLE": "Fayllar",
@@ -88,7 +103,12 @@
     "DATE_REQUIRED": "Sana majburiy",
     "CHOOSE_FILES": "Fayllarni tanlang",
     "UPLOAD": "Yuklash",
-    "DRAG_DROP": "Yuklash uchun fayllarni shu yerga tashlang."
+    "DRAG_DROP": "Yuklash uchun fayllarni shu yerga tashlang.",
+    "SELECT_CATEGORY_AND_DATE": "Kategoriya va sanani tanlang",
+    "UPLOADED_SUCCESS": "{{count}} ta fayl yuklandi",
+    "UPLOAD_ERROR": "Fayllarni yuklab bo'lmadi",
+    "DELETED_SUCCESS": "Fayl muvaffaqiyatli o'chirildi",
+    "DELETE_ERROR": "Faylni o'chirib bo'lmadi"
   },
   "ERRORS": {
     "NO_CONNECTION": "Serverga ulanish yo'q",
@@ -192,47 +212,36 @@
     "CHANCELLERY_LETTERS": "Xatlar",
     "CHANCELLERY_INSTRUCTIONS": "Ko'rsatmalar",
     "REGULATORY_DOCS": "Normativ-huquqiy kutubxona",
-    "LAWS_AND_ACTS": "O'zbekiston Respublikasi Oliy Kengashi va Oliy Majlisi tomonidan qabul qilingan Qonunlar va boshqa normativ hujjatlar ro'yxati",
-    "PRESIDENT_DECREES_LIST": "O'zbekiston Respublikasi Prezidentining Farmonlari ro'yxati",
-    "PRESIDENT_RESOLUTIONS_LIST": "O'zbekiston Respublikasi Prezidentining Qarorlari ro'yxati",
-    "PRESIDENT_ORDERS_LIST": "O'zbekiston Respublikasi Prezidentining Farmoyishlari ro'yxati",
-    "GOVERNMENT_RESOLUTIONS_LIST": "O'zbekiston Respublikasi Hukumatining Qarorlari ro'yxati",
-    "CABINET_ORDERS_LIST": "O'zbekiston Respublikasi Vazirlar Mahkamasining Farmoyishlari ro'yxati",
-    "DEPARTMENTAL_ACTS": "Vazirliklar, davlat qo'mitalari va idoralarning idoraviy normativ hujjatlari ro'yxati",
-    "LEGISLATION_COLLECTION": "\"O'zbekiston Respublikasi qonun hujjatlari to'plami\"da e'lon qilingan hujjatlar ro'yxati",
-    "OTHER_LISTS": "Boshqa ro'yxatlar",
-    "UGE_ORDERS": "O'zbekgidroenergo buyruqlari",
-    "UGE_PROTOCOLS": "O'zbekgidroenergo bayonnomaalari",
     "RESERVOIR_SUMMARY": "Xulosa",
     "RESERVOIR_SUMMARY_PDF": "Xulosa PDF",
-      "RESERVOIR_SUMMARY_HOURLY": "Tezkor ma'lumot",
+    "RESERVOIR_SUMMARY_HOURLY": "Tezkor ma'lumot",
     "HYDRAULIC_STRUCTURES": "Gidrotexnik inshootlar",
     "INCIDENTS": "Hodisalar",
-      "VISITS": "Tashriflar",
-      "OPERATIONAL_MONITORING": "Operativ monitoring",
-      "LEX_SEARCH": "Lex.uz da qidirish",
-      "CHANCELLERY_PENDING_SIGNATURES": "Imzo kutilmoqda",
-      "LEGAL_LIBRARY": "Normativ-huquqiy kutubxona",
-      "LEGAL_LIBRARY_ALL": "Barcha hujjatlar",
-      "LEGAL_LIBRARY_LAWS": "Qonunlar va normativ hujjatlar",
-      "LEGAL_LIBRARY_PRESIDENT_DECREES": "Prezident farmonlari",
-      "LEGAL_LIBRARY_PRESIDENT_RESOLUTIONS": "Prezident qarorlari",
-      "LEGAL_LIBRARY_PRESIDENT_ORDERS": "Prezident farmoyishlari",
-      "LEGAL_LIBRARY_GOVT_RESOLUTIONS": "Hukumat qarorlari",
-      "LEGAL_LIBRARY_CABINET_ORDERS": "Vazirlar Mahkamasi farmoyishlari",
-      "LEGAL_LIBRARY_DEPT_ACTS": "Idoraviy normativ hujjatlar",
-      "LEGAL_LIBRARY_LEGISLATION": "Qonunchilik to'plami",
-      "LEGAL_LIBRARY_OTHER": "Boshqa ro'yxatlar",
-      "LEGAL_LIBRARY_UHE_ORDERS": "O'zbekgidroenergo buyruqlari",
-      "LEGAL_LIBRARY_UHE_PROTOCOLS": "O'zbekgidroenergo bayonnomalari",
-      "LAWS_RUZ": "O'zbekiston Respublikasi qonunlari",
-      "PRESIDENT_RESOLUTIONS": "O'zbekiston Respublikasi Prezidentining qarorlari",
-      "PRESIDENT_DECREES": "O'zbekiston Respublikasi Prezidentining farmonlari",
-      "CABINET_RESOLUTIONS": "Vazirlar Mahkamasining qarorlari",
-      "MINISTRY_ORDERS": "Vazirlik va idoralarning buyruqlari",
-      "JOINT_AGREEMENTS": "Qo'shma kelishuvlar (NDA)",
-      "OTHER_DOCS": "Boshqa hujjatlar",
-      "SNOW_COVER": "MODSNOW"
+    "VISITS": "Tashriflar",
+    "OPERATIONAL_MONITORING": "Operativ monitoring",
+    "LEX_SEARCH": "Lex.uz da qidirish",
+    "CHANCELLERY_PENDING_SIGNATURES": "Imzo kutilmoqda",
+    "LEGAL_LIBRARY": "Normativ-huquqiy kutubxona",
+    "LEGAL_LIBRARY_ALL": "Barcha hujjatlar",
+    "LEGAL_LIBRARY_LAWS": "Qonunlar va normativ hujjatlar",
+    "LEGAL_LIBRARY_PRESIDENT_DECREES": "Prezident farmonlari",
+    "LEGAL_LIBRARY_PRESIDENT_RESOLUTIONS": "Prezident qarorlari",
+    "LEGAL_LIBRARY_PRESIDENT_ORDERS": "Prezident farmoyishlari",
+    "LEGAL_LIBRARY_GOVT_RESOLUTIONS": "Hukumat qarorlari",
+    "LEGAL_LIBRARY_CABINET_ORDERS": "Vazirlar Mahkamasi farmoyishlari",
+    "LEGAL_LIBRARY_DEPT_ACTS": "Idoraviy normativ hujjatlar",
+    "LEGAL_LIBRARY_LEGISLATION": "Qonunchilik to'plami",
+    "LEGAL_LIBRARY_OTHER": "Boshqa ro'yxatlar",
+    "LEGAL_LIBRARY_UHE_ORDERS": "O'zbekgidroenergo buyruqlari",
+    "LEGAL_LIBRARY_UHE_PROTOCOLS": "O'zbekgidroenergo bayonnomalari",
+    "LAWS_RUZ": "O'zbekiston Respublikasi qonunlari",
+    "PRESIDENT_RESOLUTIONS": "O'zbekiston Respublikasi Prezidentining qarorlari",
+    "PRESIDENT_DECREES": "O'zbekiston Respublikasi Prezidentining farmonlari",
+    "CABINET_RESOLUTIONS": "Vazirlar Mahkamasining qarorlari",
+    "MINISTRY_ORDERS": "Vazirlik va idoralarning buyruqlari",
+    "JOINT_AGREEMENTS": "Qo'shma kelishuvlar (NDA)",
+    "OTHER_DOCS": "Boshqa hujjatlar",
+    "SNOW_COVER": "MODSNOW"
   },
   "TOPBAR": {
     "CALL": "Qo'ng'iroq",
@@ -309,7 +318,21 @@
     "NOT_INFORMED": "Xabardor qilinmagan",
     "INFORMED_BY": "Xabardor qilgan",
     "CREATED_BY": "Yaratgan",
-    "UPDATED_BY": "Yangilagan"
+    "UPDATED_BY": "Yangilagan",
+    "CANCEL": "Bekor qilish",
+    "SAVE": "Saqlash",
+    "DATE_LABEL": "Sana",
+    "TOGETHER_LABEL": "Birga",
+    "REJECT_DIALOG_HEADER": "Rad etish",
+    "RESCHEDULE_DIALOG_HEADER": "Qayta rejalashtirish",
+    "SPECIFY_NEW_DATE_TIME": "Yangi sana va vaqtni kiriting",
+    "EVENT_NAME": "Tadbir nomi",
+    "EVENT_DESCRIPTION": "Tavsif",
+    "EVENT_DATE_TIME": "Sana va vaqt",
+    "EVENT_TYPE": "Tadbir turi",
+    "EVENT_LOCATION": "Oʻtkazish joyi",
+    "EVENT_STATUS": "Holat",
+    "EVENT_RESPONSIBLE": "Masʻul"
   },
   "DASHBOARD": {
     "EVENTS": "Voqealar",
@@ -334,11 +357,11 @@
     "VOLUME": "Hajm, mln. m³",
     "ACTIVE_ENERGY": "Faol energiya, MVt*soat",
     "DEBIT_FOR": "Debet",
-      "CREDIT_FOR": "Kredit",
-      "LAST_UPDATED": "Oxirgi yangilanish",
-      "JUST_NOW": "hozirgina",
-      "MINUTES_AGO": "daq. oldin",
-      "HOURS_AGO": "soat oldin"
+    "CREDIT_FOR": "Kredit",
+    "LAST_UPDATED": "Oxirgi yangilanish",
+    "JUST_NOW": "hozirgina",
+    "MINUTES_AGO": "daq. oldin",
+    "HOURS_AGO": "soat oldin"
   },
   "CALENDAR": {
     "TITLE": "Kalendar",
@@ -948,7 +971,10 @@
       "MONTH_9": "Sentyabr",
       "MONTH_10": "Oktyabr",
       "MONTH_11": "Noyabr",
-      "MONTH_12": "Dekabr"
+      "MONTH_12": "Dekabr",
+      "DATA_UPDATED": "Maʻlumotlar yangilandi",
+      "HOURS_SHORT": "s",
+      "HOURS_WORKED": "Ishlagan soatlar"
     },
     "COMMON": {
       "EMPLOYEE": "Xodim",
@@ -977,7 +1003,8 @@
       "BY_TENURE": "Ish staji bo'yicha taqsimot",
       "HEADCOUNT_BY_DEPARTMENT": "Bo'limlar bo'yicha son",
       "HEADCOUNT": "Son",
-      "PERCENT_OF_TOTAL": "Umumiyning %"
+      "PERCENT_OF_TOTAL": "Umumiyning %",
+      "AVG_AGE": "Oʻrtacha yosh"
     },
     "TRAINING": {
       "TITLE": "Ta'lim va rivojlanish",
@@ -1149,7 +1176,13 @@
       "POSITION": "Lavozim",
       "SALARY": "Maosh",
       "RESPONSES": "Javoblar",
-      "PRIORITY": "Ustunlik",
+      "PRIORITY": {
+        "LABEL": "Ustuvorlik",
+        "LOW": "Past",
+        "NORMAL": "Oddiy",
+        "HIGH": "Yuqori",
+        "URGENT": "Shoshilinch"
+      },
       "STATUS": "Holat",
       "ACTIONS": "Amallar",
       "APPLICANT": "Ariza beruvchi",
@@ -1164,8 +1197,28 @@
       "EDIT": "Tahrirlash",
       "NO_VACANCIES": "Vakansiyalar topilmadi",
       "FULL_NAME": "To'liq ism",
-      "SOURCE": "Manba",
-      "STAGE": "Bosqich",
+      "SOURCE": {
+        "LABEL": "Manba",
+        "WEBSITE": "Kompaniya sayti",
+        "JOB_PORTAL": "Vakansiyalar portali",
+        "GOV_PORTAL": "Davlat xizmati portali",
+        "REFERRAL": "Xodim tavsiyasi",
+        "AGENCY": "Kadrlar agentligi",
+        "SOCIAL_MEDIA": "Ijtimoiy tarmoqlar",
+        "DIRECT": "To'g'ridan-to'g'ri murojaat",
+        "OTHER": "Boshqa"
+      },
+      "STAGE": {
+        "LABEL": "Bosqich",
+        "APPLICATION": "Ariza",
+        "SCREENING": "Tanlov",
+        "INTERVIEW": "Suhbat",
+        "ASSESSMENT": "Baholash",
+        "VERIFICATION": "Tekshirish",
+        "OFFER": "Taklif",
+        "HIRED": "Ishga qabul",
+        "CLOSED": "Yopilgan"
+      },
       "RATING": "Reyting",
       "NO_CANDIDATES": "Nomzodlar topilmadi",
       "EMPLOYEE": "Xodim",
@@ -1182,134 +1235,109 @@
       "VACANCY_UPDATED": "Vakansiya yangilandi",
       "CANDIDATE_CREATED": "Nomzod qo'shildi",
       "CANDIDATE_UPDATED": "Nomzod yangilandi",
-        "SCREENING_PASSED": "Nomzod dastlabki tanlovdan o'tdi",
-        "INTERVIEW_SCHEDULED": "Suhbat rejalashtirildi",
-        "FEEDBACK_SAVED": "Fikr-mulohaza saqlandi",
-        "REFERENCE_ADDED": "Tavsiyanoma qo'shildi",
-        "REFERENCE_VERIFIED": "Tavsiyanoma tekshiruvi yakunlandi",
-        "OFFER_SENT": "Taklif nomzodga yuborildi",
-        "OFFER_ACCEPTED": "Nomzod taklifni qabul qildi",
-        "HIRED": "Xodim muvaffaqiyatli ishga qabul qilindi",
-        "CANDIDATE_REJECTED": "Nomzod rad etildi, xabarnoma yuborildi",
-        "MENTOR_ASSIGNED": "Murabbiy tayinlandi",
-        "TASK_COMPLETED": "Vazifa bajarildi",
-        "VACANCY_PUBLISHED_PORTAL": "Vakansiya davlat portalida e'lon qilindi",
-        "VACANCY_CREATE_ERROR": "Vakansiya yaratib bo'lmadi",
-        "VACANCY_UPDATE_ERROR": "Vakansiya yangilab bo'lmadi",
-        "CANDIDATE_CREATE_ERROR": "Nomzod qo'shib bo'lmadi",
-        "INTERVIEW_SCHEDULE_ERROR": "Suhbat rejalashtirb bo'lmadi",
-        "OFFER_SEND_ERROR": "Taklif yuborib bo'lmadi",
+      "SCREENING_PASSED": "Nomzod dastlabki tanlovdan o'tdi",
+      "INTERVIEW_SCHEDULED": "Suhbat rejalashtirildi",
+      "FEEDBACK_SAVED": "Fikr-mulohaza saqlandi",
+      "REFERENCE_ADDED": "Tavsiyanoma qo'shildi",
+      "REFERENCE_VERIFIED": "Tavsiyanoma tekshiruvi yakunlandi",
+      "OFFER_SENT": "Taklif nomzodga yuborildi",
+      "OFFER_ACCEPTED": "Nomzod taklifni qabul qildi",
+      "HIRED": "Xodim muvaffaqiyatli ishga qabul qilindi",
+      "CANDIDATE_REJECTED": "Nomzod rad etildi, xabarnoma yuborildi",
+      "MENTOR_ASSIGNED": "Murabbiy tayinlandi",
+      "TASK_COMPLETED": "Vazifa bajarildi",
+      "VACANCY_PUBLISHED_PORTAL": "Vakansiya davlat portalida e'lon qilindi",
+      "VACANCY_CREATE_ERROR": "Vakansiya yaratib bo'lmadi",
+      "VACANCY_UPDATE_ERROR": "Vakansiya yangilab bo'lmadi",
+      "CANDIDATE_CREATE_ERROR": "Nomzod qo'shib bo'lmadi",
+      "INTERVIEW_SCHEDULE_ERROR": "Suhbat rejalashtirb bo'lmadi",
+      "OFFER_SEND_ERROR": "Taklif yuborib bo'lmadi",
       "NOT_ASSIGNED": "Tayinlanmagan",
-        "EMPLOYMENT_TYPE": {
-            "FULL_TIME": "To'liq bandlik",
-            "PART_TIME": "Qisman bandlik",
-            "CONTRACT": "Shartnoma",
-            "INTERNSHIP": "Stajirovka",
-            "REMOTE": "Masofaviy ish"
-        },
-        "VACANCY_STATUS": {
-            "DRAFT": "Qoralama",
-            "PENDING_APPROVAL": "Kelishuvda",
-            "APPROVED": "Kelishilgan",
-            "OPEN": "Ochiq",
-            "ON_HOLD": "To'xtatilgan",
-            "CLOSED": "Yopilgan",
-            "CANCELLED": "Bekor qilingan"
-        },
-        "PRIORITY": {
-            "LOW": "Past",
-            "NORMAL": "Oddiy",
-            "HIGH": "Yuqori",
-            "URGENT": "Shoshilinch"
-        },
-        "CANDIDATE_STATUS": {
-            "NEW": "Yangi",
-            "SCREENING": "Dastlabki tanlov",
-            "PHONE_INTERVIEW": "Telefon suhbati",
-            "INTERVIEW": "Suhbat",
-            "TECHNICAL_TEST": "Texnik topshiriq",
-            "REFERENCE_CHECK": "Tavsiyanoma tekshiruvi",
-            "BACKGROUND_CHECK": "Hujjat tekshiruvi",
-            "OFFER": "Taklif",
-            "OFFER_ACCEPTED": "Taklif qabul qilindi",
-            "HIRED": "Ishga qabul qilindi",
-            "REJECTED": "Rad etildi",
-            "WITHDRAWN": "Nomzod rad etdi"
-        },
-        "STAGE": {
-            "APPLICATION": "Ariza",
-            "SCREENING": "Tanlov",
-            "INTERVIEW": "Suhbat",
-            "ASSESSMENT": "Baholash",
-            "VERIFICATION": "Tekshirish",
-            "OFFER": "Taklif",
-            "HIRED": "Ishga qabul",
-            "CLOSED": "Yopilgan"
-        },
-        "INTERVIEW_TYPE": {
-            "PHONE": "Telefon",
-            "VIDEO": "Video qo'ng'iroq",
-            "IN_PERSON": "Yuzma-yuz",
-            "TECHNICAL": "Texnik",
-            "HR": "HR suhbat",
-            "PANEL": "Panel",
-            "FINAL": "Yakuniy"
-        },
-        "RECOMMENDATION": {
-            "STRONG_YES": "Albatta ha",
-            "YES": "Ha",
-            "MAYBE": "Balki",
-            "NO": "Yo'q",
-            "STRONG_NO": "Albatta yo'q"
-        },
-        "OFFER_STATUS": {
-            "DRAFT": "Qoralama",
-            "PENDING_APPROVAL": "Kelishuvda",
-            "APPROVED": "Kelishilgan",
-            "SENT": "Yuborilgan",
-            "ACCEPTED": "Qabul qilindi",
-            "DECLINED": "Rad etildi",
-            "NEGOTIATING": "Muzokaralar",
-            "EXPIRED": "Muddati o'tdi",
-            "WITHDRAWN": "Qaytarib olindi"
-        },
-        "SOURCE": {
-            "WEBSITE": "Kompaniya sayti",
-            "JOB_PORTAL": "Vakansiyalar portali",
-            "GOV_PORTAL": "Davlat xizmati portali",
-            "REFERRAL": "Xodim tavsiyasi",
-            "AGENCY": "Kadrlar agentligi",
-            "SOCIAL_MEDIA": "Ijtimoiy tarmoqlar",
-            "DIRECT": "To'g'ridan-to'g'ri murojaat",
-            "OTHER": "Boshqa"
-        },
-        "TOOLTIP": {
-            "PASS_SCREENING": "Skriningdan o'tkazish",
-            "SCHEDULE_INTERVIEW": "Suhbat tayinlash",
-            "CHECK_REFERENCES": "Tavsiyanomalarni tekshirish",
-            "SEND_OFFER": "Taklif yuborish",
-            "OFFER_ACCEPTED": "Taklif qabul qilindi",
-            "HIRE_EMPLOYEE": "Ishga rasmiylashtirish",
-            "REJECT": "Rad etish"
-        },
-        "MOCK": {
-            "TASK_PROCESS_DOCUMENTS": "Hujjatlarni rasmiylashtirish",
-            "TASK_CREATE_EMAIL": "Email yaratish",
-            "TASK_SETUP_ACCESS": "Tizimlarga kirish sozlash",
-            "TASK_INTRO_TRAINING": "Kirish o'qitish",
-            "TASK_MEET_TEAM": "Jamoa bilan tanishish",
-            "TASK_COMPANY_POLICIES": "Kompaniya siyosatlari bilan tanishish",
-            "DOC_PASSPORT": "Pasport",
-            "DOC_INN": "INN",
-            "DOC_SNILS": "SNILS",
-            "DOC_WORK_BOOK": "Mehnat daftarchasi",
-            "DOC_PHOTO": "Surat 3x4",
-            "DOC_DIPLOMA": "Diplom",
-            "POSITIVE_FEEDBACK": "Ijobiy fikr-mulohaza",
-            "APPROVER_NAME": "Sokolov Andrey",
-            "MENTOR_NAME": "Volkova Olga Nikolaevna"
-        },
+      "EMPLOYMENT_TYPE": {
+        "FULL_TIME": "To'liq bandlik",
+        "PART_TIME": "Qisman bandlik",
+        "CONTRACT": "Shartnoma",
+        "INTERNSHIP": "Stajirovka",
+        "REMOTE": "Masofaviy ish"
+      },
+      "VACANCY_STATUS": {
+        "DRAFT": "Qoralama",
+        "PENDING_APPROVAL": "Kelishuvda",
+        "APPROVED": "Kelishilgan",
+        "OPEN": "Ochiq",
+        "ON_HOLD": "To'xtatilgan",
+        "CLOSED": "Yopilgan",
+        "CANCELLED": "Bekor qilingan"
+      },
+      "CANDIDATE_STATUS": {
+        "NEW": "Yangi",
+        "SCREENING": "Dastlabki tanlov",
+        "PHONE_INTERVIEW": "Telefon suhbati",
+        "INTERVIEW": "Suhbat",
+        "TECHNICAL_TEST": "Texnik topshiriq",
+        "REFERENCE_CHECK": "Tavsiyanoma tekshiruvi",
+        "BACKGROUND_CHECK": "Hujjat tekshiruvi",
+        "OFFER": "Taklif",
+        "OFFER_ACCEPTED": "Taklif qabul qilindi",
+        "HIRED": "Ishga qabul qilindi",
+        "REJECTED": "Rad etildi",
+        "WITHDRAWN": "Nomzod rad etdi"
+      },
+      "INTERVIEW_TYPE": {
+        "PHONE": "Telefon",
+        "VIDEO": "Video qo'ng'iroq",
+        "IN_PERSON": "Yuzma-yuz",
+        "TECHNICAL": "Texnik",
+        "HR": "HR suhbat",
+        "PANEL": "Panel",
+        "FINAL": "Yakuniy"
+      },
+      "RECOMMENDATION": {
+        "STRONG_YES": "Albatta ha",
+        "YES": "Ha",
+        "MAYBE": "Balki",
+        "NO": "Yo'q",
+        "STRONG_NO": "Albatta yo'q"
+      },
+      "OFFER_STATUS": {
+        "DRAFT": "Qoralama",
+        "PENDING_APPROVAL": "Kelishuvda",
+        "APPROVED": "Kelishilgan",
+        "SENT": "Yuborilgan",
+        "ACCEPTED": "Qabul qilindi",
+        "DECLINED": "Rad etildi",
+        "NEGOTIATING": "Muzokaralar",
+        "EXPIRED": "Muddati o'tdi",
+        "WITHDRAWN": "Qaytarib olindi"
+      },
+      "TOOLTIP": {
+        "PASS_SCREENING": "Skriningdan o'tkazish",
+        "SCHEDULE_INTERVIEW": "Suhbat tayinlash",
+        "CHECK_REFERENCES": "Tavsiyanomalarni tekshirish",
+        "SEND_OFFER": "Taklif yuborish",
+        "OFFER_ACCEPTED": "Taklif qabul qilindi",
+        "HIRE_EMPLOYEE": "Ishga rasmiylashtirish",
+        "REJECT": "Rad etish"
+      },
+      "MOCK": {
+        "TASK_PROCESS_DOCUMENTS": "Hujjatlarni rasmiylashtirish",
+        "TASK_CREATE_EMAIL": "Email yaratish",
+        "TASK_SETUP_ACCESS": "Tizimlarga kirish sozlash",
+        "TASK_INTRO_TRAINING": "Kirish o'qitish",
+        "TASK_MEET_TEAM": "Jamoa bilan tanishish",
+        "TASK_COMPANY_POLICIES": "Kompaniya siyosatlari bilan tanishish",
+        "DOC_PASSPORT": "Pasport",
+        "DOC_INN": "INN",
+        "DOC_SNILS": "SNILS",
+        "DOC_WORK_BOOK": "Mehnat daftarchasi",
+        "DOC_PHOTO": "Surat 3x4",
+        "DOC_DIPLOMA": "Diplom",
+        "POSITIVE_FEEDBACK": "Ijobiy fikr-mulohaza",
+        "APPROVER_NAME": "Sokolov Andrey",
+        "MENTOR_NAME": "Volkova Olga Nikolaevna"
+      },
       "ONBOARDING": {
+        "LABEL": "Moslashuv",
         "STATUS_IN_PROGRESS": "Jarayonda",
         "STATUS_COMPLETED": "Yakunlangan",
         "STATUS_NOT_STARTED": "Boshlanmagan",
@@ -1323,12 +1351,13 @@
         "CAT_TRAINING": "O'qitish",
         "CAT_INTRODUCTION": "Tanishish",
         "CAT_COMPLIANCE": "Siyosatlar",
-          "CAT_DEPARTMENT": "Bo'lim",
+        "CAT_DEPARTMENT": "Bo'lim",
         "MARK_COMPLETED": "Bajarilgan deb belgilash",
         "PENDING_DOCUMENTS": "Kutilayotgan hujjatlar",
         "SUBMITTED_DOCUMENTS": "Taqdim etilgan hujjatlar"
       },
       "VACANCY": {
+        "LABEL": "Vakansiya",
         "EDIT_VACANCY": "Vakansiyani tahrirlash",
         "CREATE_REQUEST": "Vakansiya arizasi",
         "TITLE_LABEL": "Vakansiya nomi",
@@ -1672,21 +1701,21 @@
       "REQUEST_REJECTED": "Ariza rad etildi",
       "REQUEST_CANCELLED": "Ariza bekor qilindi"
     },
-      "MENU": {
-          "DASHBOARD": "HRM Bosh sahifa",
-          "MY_CABINET": "Mening kabinetim",
-          "PERSONNEL_RECORDS": "Kadrlar hisobi",
-          "VACATION_MANAGEMENT": "Ta'tillar boshqaruvi",
-          "SALARY_MANAGEMENT": "Maosh boshqaruvi",
-          "RECRUITING": "Rekruting",
-          "TRAINING": "O'qitish va rivojlantirish",
-          "COMPETENCY_ASSESSMENT": "Kompetensiya bahosi",
-          "PERFORMANCE_MANAGEMENT": "Samaradorlik boshqaruvi",
-          "ANALYTICS": "Analitika va hisobotlar",
-          "TIMESHEET": "Tabel",
-          "HR_DOCUMENTS": "HR hujjatlar",
-          "ACCESS_CONTROL": "Kirish nazorati",
-          "ORG_STRUCTURE": "Tashkiliy tuzilma"
+    "MENU": {
+      "DASHBOARD": "HRM Bosh sahifa",
+      "MY_CABINET": "Mening kabinetim",
+      "PERSONNEL_RECORDS": "Kadrlar hisobi",
+      "VACATION_MANAGEMENT": "Ta'tillar boshqaruvi",
+      "SALARY_MANAGEMENT": "Maosh boshqaruvi",
+      "RECRUITING": "Rekruting",
+      "TRAINING": "O'qitish va rivojlantirish",
+      "COMPETENCY_ASSESSMENT": "Kompetensiya bahosi",
+      "PERFORMANCE_MANAGEMENT": "Samaradorlik boshqaruvi",
+      "ANALYTICS": "Analitika va hisobotlar",
+      "TIMESHEET": "Tabel",
+      "HR_DOCUMENTS": "HR hujjatlar",
+      "ACCESS_CONTROL": "Kirish nazorati",
+      "ORG_STRUCTURE": "Tashkiliy tuzilma"
     }
   },
   "VALIDATION": {
@@ -1785,7 +1814,13 @@
       "EVENT_FILES": "Voqea fayllari",
       "ALL_OBJECTS": "Barcha ob'ektlar",
       "APPLY_TO_ALL": "Barcha ob'ektlarga qo'llash",
-      "EVENT_DATE": "Voqea sanasi"
+      "EVENT_DATE": "Voqea sanasi",
+      "EVENT_UPDATED": "Voqea yangilandi",
+      "EVENT_CREATED": "Voqea qo'shildi",
+      "EVENT_DELETED": "Voqea o'chirildi",
+      "EVENT_UPDATE_ERROR": "Voqeani yangilashda xatolik",
+      "EVENT_CREATE_ERROR": "Voqeani qo'shishda xatolik",
+      "EVENT_DELETE_ERROR": "Voqeani o'chirishda xatolik"
     },
     "DISCHARGE": {
       "TITLE": "Bo'sh suv tashlab yuborish",
@@ -1838,7 +1873,21 @@
       "NEW_VISIT": "Yangi tashrif",
       "SPECIFY_RESPONSIBLE": "Mas'ulni kiriting",
       "SPECIFY_DESCRIPTION": "Tavsifni kiriting",
-      "VISIT_FILES": "Tashrif fayllari"
+      "VISIT_FILES": "Tashrif fayllari",
+      "UPDATED": "Tashrif yangilandi",
+      "CREATED": "Tashrif qo'shildi",
+      "DELETED": "Tashrif o'chirildi",
+      "UPDATE_ERROR": "Tashrifni yangilashda xatolik",
+      "CREATE_ERROR": "Tashrifni qo'shishda xatolik",
+      "DELETE_ERROR": "Tashrifni o'chirishda xatolik"
+    },
+    "INCIDENT": {
+      "UPDATED": "Hodisa yangilandi",
+      "CREATED": "Hodisa qo'shildi",
+      "DELETED": "Hodisa o'chirildi",
+      "UPDATE_ERROR": "Hodisani yangilashda xatolik",
+      "CREATE_ERROR": "Hodisani qo'shishda xatolik",
+      "DELETE_ERROR": "Hodisani o'chirishda xatolik"
     },
     "RESERVOIR_DEVICE": {
       "TITLE": "Suv omborlari gidrotexnik inshootlari va qurilmalari",
@@ -1851,7 +1900,10 @@
       "FAULTY": "Nosoz",
       "CRITERION_1": "Mezon 1",
       "CRITERION_2": "Mezon 2",
-      "NO_DATA": "Ma'lumotlar topilmadi"
+      "NO_DATA": "Ma'lumotlar topilmadi",
+      "CHANGES_SAVED": "O'zgarishlar saqlandi",
+      "CHANGES_RESET": "O'zgarishlar bekor qilindi",
+      "SAVE_ERROR": "Saqlashda xatolik"
     },
     "CONSTRUCTION": {
       "TITLE": "Oksuv GES Kaskadi qurilishi",
@@ -1876,109 +1928,109 @@
       "INFLOW_TO_DATE": "Bugungi kunga oqib kirish, mln. m³",
       "MODSNOW": "MODSNOW, qor qoplami %"
     },
-      "RESERVOIR_SUMMARY_HOURLY": {
-          "TITLE": "Suv omborlari bo'yicha tezkor ma'lumot"
+    "RESERVOIR_SUMMARY_HOURLY": {
+      "TITLE": "Suv omborlari bo'yicha tezkor ma'lumot"
     },
-      "DASHBOARD": {
-          "HEADER": {
-              "TITLE": "Boshqaruv Raisi plansheti",
-              "TO_HOME": "Bosh sahifaga"
-          },
-          "MONITORING": {
-              "TITLE": "Suv resurslari",
-              "RESERVOIRS_COUNT": "Suv omborlari",
-              "VOLUME": "Hajm",
-              "LEVEL": "Daraja",
-              "INFLOW": "Oqib kirish",
-              "RELEASE": "Chiqarish",
-              "INFLOW_TOTAL": "m³/s oqib kirish"
-          },
-          "DISCHARGES": {
-              "TITLE": "Bo'sh suv tashlab yuborish",
-              "ACTIVE_COUNT": "Faollar",
-              "TOTAL_FLOW": "m³/s jami",
-              "NO_ACTIVE": "Faol suv tashlab yuborishlar yo'q"
-          },
-          "STATION_STATUS": {
-              "TITLE": "Agregatlar holati",
-              "TOTAL": "Jami",
-              "TOTAL_POWER": "Umumiy quvvat",
-              "STATUS_WORKING": "Ishlamoqda",
-              "STATUS_IDLE": "Zahirada",
-              "STATUS_REPAIR": "Ta'mirda"
-          },
-          "SHUTDOWNS": {
-              "TITLE": "Favqulodda o'chirishlar",
-              "SHUTDOWNS_COUNT": "O'chirishlar",
-              "LOSSES_KWH": "kWh yo'qotishlar",
-              "COMPLETED": "tugallandi",
-              "NO_REASON": "Sabab ko'rsatilmagan",
-              "ALL_WORKING": "Barcha stansiyalar ishlamoqda",
-              "TYPE_GES": "GES",
-              "TYPE_MINI": "mini",
-              "TYPE_MICRO": "mikro",
-              "DETAIL_TITLE": "O'chirish tafsilotlari",
-              "ONGOING": "Davom etmoqda",
-              "GO_TO_GES": "Stansiyaga o'tish"
-          },
-          "POWER_GENERATION": {
-              "YEAR_START": "Yil boshidan",
-              "MONTH_START": "Oy boshidan",
-              "PER_DAY": "Kuniga"
-          },
-          "MAP": {
-              "TITLE": "Interaktiv xarita",
-              "LOADING_DATA": "Ma'lumotlar yuklanmoqda...",
-              "DATA_UNAVAILABLE": "Ma'lumotlar mavjud emas",
-              "TOTAL_AGGREGATES": "Jami agregatlar",
-              "SPILLWAY_DISCHARGES": "Bo'sh suv tashlab yuborish",
-              "NO_ACTIVE_DISCHARGES": "Faol suv tashlab yuborishlar yo'q",
-              "EMERGENCY_SHUTDOWNS": "Favqulodda o'chirishlar",
-              "NO_ACTIVE_SHUTDOWNS": "Faol o'chirishlar yo'q",
-              "RESERVOIRS": "Suv omborlari",
-              "NO_RESERVOIRS": "Suv omborlari yo'q",
-              "WORKING": "Ishlamoqda",
-              "RESERVE": "Zahirada",
-              "IN_REPAIR": "Ta'mirda"
-          },
-          "COMMON": {
-              "LOADING": "Yuklanmoqda...",
-              "NO_DATA": "Ma'lumot yo'q",
-              "UPDATED": "Yangilangan:",
-              "LAST_UPDATE": "Oxirgi yangilanish:"
-          },
-          "TIME": {
-              "JUST_NOW": "hozirgina",
-              "MINUTES_AGO": "{{count}} daq. oldin",
-              "HOURS_AGO": "{{count}} soat oldin",
-              "MINUTES_SHORT": "daq",
-              "HOURS_SHORT": "soat",
-              "DAYS_SHORT": "kun"
-          },
-          "UNITS": {
-              "MLN_M3": "mln m³",
-              "M3_S": "m³/s",
-              "MW": "MVt",
-              "KWH": "kWh",
-              "MLN_KWH": "mln kWh",
-              "M": "m"
-          },
-          "REGIONS": {
-              "FERGANA": "Farg'ona viloyati",
-              "TASHKENT": "Toshkent viloyati",
-              "NAMANGAN": "Namangan viloyati",
-              "ANDIJAN": "Andijon viloyati",
-              "SYRDARYA": "Sirdaryo viloyati",
-              "JIZZAKH": "Jizzax viloyati",
-              "SAMARKAND": "Samarqand viloyati",
-              "KASHKADARYA": "Qashqadaryo viloyati",
-              "SURKHANDARYA": "Surxondaryo viloyati",
-              "KARAKALPAKSTAN": "Qoraqalpog'iston Respublikasi",
-              "NAVOI": "Navoiy viloyati",
-              "KHOREZM": "Xorazm viloyati",
-              "BUKHARA": "Buxoro viloyati",
-              "TASHKENT_CITY": "Toshkent shahri"
-          }
+    "DASHBOARD": {
+      "HEADER": {
+        "TITLE": "Boshqaruv Raisi plansheti",
+        "TO_HOME": "Bosh sahifaga"
+      },
+      "MONITORING": {
+        "TITLE": "Suv resurslari",
+        "RESERVOIRS_COUNT": "Suv omborlari",
+        "VOLUME": "Hajm",
+        "LEVEL": "Daraja",
+        "INFLOW": "Oqib kirish",
+        "RELEASE": "Chiqarish",
+        "INFLOW_TOTAL": "m³/s oqib kirish"
+      },
+      "DISCHARGES": {
+        "TITLE": "Bo'sh suv tashlab yuborish",
+        "ACTIVE_COUNT": "Faollar",
+        "TOTAL_FLOW": "m³/s jami",
+        "NO_ACTIVE": "Faol suv tashlab yuborishlar yo'q"
+      },
+      "STATION_STATUS": {
+        "TITLE": "Agregatlar holati",
+        "TOTAL": "Jami",
+        "TOTAL_POWER": "Umumiy quvvat",
+        "STATUS_WORKING": "Ishlamoqda",
+        "STATUS_IDLE": "Zahirada",
+        "STATUS_REPAIR": "Ta'mirda"
+      },
+      "SHUTDOWNS": {
+        "TITLE": "Favqulodda o'chirishlar",
+        "SHUTDOWNS_COUNT": "O'chirishlar",
+        "LOSSES_KWH": "kWh yo'qotishlar",
+        "COMPLETED": "tugallandi",
+        "NO_REASON": "Sabab ko'rsatilmagan",
+        "ALL_WORKING": "Barcha stansiyalar ishlamoqda",
+        "TYPE_GES": "GES",
+        "TYPE_MINI": "mini",
+        "TYPE_MICRO": "mikro",
+        "DETAIL_TITLE": "O'chirish tafsilotlari",
+        "ONGOING": "Davom etmoqda",
+        "GO_TO_GES": "Stansiyaga o'tish"
+      },
+      "POWER_GENERATION": {
+        "YEAR_START": "Yil boshidan",
+        "MONTH_START": "Oy boshidan",
+        "PER_DAY": "Kuniga"
+      },
+      "MAP": {
+        "TITLE": "Interaktiv xarita",
+        "LOADING_DATA": "Ma'lumotlar yuklanmoqda...",
+        "DATA_UNAVAILABLE": "Ma'lumotlar mavjud emas",
+        "TOTAL_AGGREGATES": "Jami agregatlar",
+        "SPILLWAY_DISCHARGES": "Bo'sh suv tashlab yuborish",
+        "NO_ACTIVE_DISCHARGES": "Faol suv tashlab yuborishlar yo'q",
+        "EMERGENCY_SHUTDOWNS": "Favqulodda o'chirishlar",
+        "NO_ACTIVE_SHUTDOWNS": "Faol o'chirishlar yo'q",
+        "RESERVOIRS": "Suv omborlari",
+        "NO_RESERVOIRS": "Suv omborlari yo'q",
+        "WORKING": "Ishlamoqda",
+        "RESERVE": "Zahirada",
+        "IN_REPAIR": "Ta'mirda"
+      },
+      "COMMON": {
+        "LOADING": "Yuklanmoqda...",
+        "NO_DATA": "Ma'lumot yo'q",
+        "UPDATED": "Yangilangan:",
+        "LAST_UPDATE": "Oxirgi yangilanish:"
+      },
+      "TIME": {
+        "JUST_NOW": "hozirgina",
+        "MINUTES_AGO": "{{count}} daq. oldin",
+        "HOURS_AGO": "{{count}} soat oldin",
+        "MINUTES_SHORT": "daq",
+        "HOURS_SHORT": "soat",
+        "DAYS_SHORT": "kun"
+      },
+      "UNITS": {
+        "MLN_M3": "mln m³",
+        "M3_S": "m³/s",
+        "MW": "MVt",
+        "KWH": "kWh",
+        "MLN_KWH": "mln kWh",
+        "M": "m"
+      },
+      "REGIONS": {
+        "FERGANA": "Farg'ona viloyati",
+        "TASHKENT": "Toshkent viloyati",
+        "NAMANGAN": "Namangan viloyati",
+        "ANDIJAN": "Andijon viloyati",
+        "SYRDARYA": "Sirdaryo viloyati",
+        "JIZZAKH": "Jizzax viloyati",
+        "SAMARKAND": "Samarqand viloyati",
+        "KASHKADARYA": "Qashqadaryo viloyati",
+        "SURKHANDARYA": "Surxondaryo viloyati",
+        "KARAKALPAKSTAN": "Qoraqalpog'iston Respublikasi",
+        "NAVOI": "Navoiy viloyati",
+        "KHOREZM": "Xorazm viloyati",
+        "BUKHARA": "Buxoro viloyati",
+        "TASHKENT_CITY": "Toshkent shahri"
+      }
     }
   },
   "FINANCIAL_BLOCK": {
@@ -2284,29 +2336,54 @@
       }
     },
     "REPAIR_COSTS": {
-      "TITLE": "Ta'mirlash xarajatlari",
-      "ADD_REPAIR": "Ta'mirlash qo'shish",
-      "OBJECT_NAME": "Obyekt nomi",
-      "REPAIR_TYPE": "Ta'mirlash turi",
-      "PLANNED_COST": "Rejalashtirilgan qiymat",
       "ACTUAL_COST": "Haqiqiy qiymat",
-      "START_DATE": "Boshlanish sanasi",
-      "END_DATE": "Tugash sanasi",
+      "ACTUAL_COSTS": "Haqiqiy xarajatlar",
+      "ADD_REPAIR": "Ta'mirlash qo'shish",
+      "CATEGORY_CONSTRUCTION": "Qurilish",
+      "CATEGORY_ELECTRICAL": "Elektr",
+      "CATEGORY_HVAC": "HVAC",
+      "CATEGORY_IT": "IT uskunalari",
+      "CATEGORY_MECHANICAL": "Mexanik",
+      "CATEGORY_OTHER": "Boshqa",
+      "CATEGORY_PLUMBING": "Santexnika",
       "CONTRACTOR": "Pudratchi",
-      "TYPE_CURRENT": "Joriy",
-      "TYPE_CAPITAL": "Kapital",
-      "TYPE_EMERGENCY": "Favqulodda",
-      "STATUS_PLANNED": "Rejalashtirilgan",
-      "STATUS_IN_PROGRESS": "Jarayonda",
-      "STATUS_COMPLETED": "Yakunlangan",
-      "TOTAL_REPAIRS": "Jami ta'mirlashlar",
-      "TOTAL_PLANNED": "Rejalashtirilgan summa",
-      "TOTAL_ACTUAL": "Haqiqiy summa",
+      "DELETE_CONFIRM": "Haqiqatan ham bu ta'mirlashni o'chirmoqchimisiz?",
+      "DESCRIPTION": "Tavsif",
       "DEVIATION": "Og'ish",
-      "REPAIR_UPDATED": "Ta'mirlash yangilandi",
+      "END_DATE": "Tugash sanasi",
+      "EXPORT_COLUMNS": {
+        "ACTUAL_COST": "Haqiqiy qiymat",
+        "CATEGORY": "Kategoriya",
+        "CONTRACTOR": "Pudratchi",
+        "DATE": "Sana",
+        "DESCRIPTION": "Tavsif",
+        "DIFFERENCE": "Farq",
+        "OBJECT": "Obyekt",
+        "PLANNED_COST": "Rejalashtirilgan qiymat",
+        "REPAIR_TYPE": "Taʼmirlash turi",
+        "STATUS": "Holat",
+        "TOTAL": "JAMI"
+      },
+      "OBJECT_NAME": "Obyekt nomi",
+      "PLANNED_COST": "Rejalashtirilgan qiymat",
+      "PLANNED_COSTS": "Rejalashtirilgan xarajatlar",
       "REPAIR_ADDED": "Ta'mirlash qo'shildi",
       "REPAIR_DELETED": "Ta'mirlash o'chirildi",
-      "DELETE_CONFIRM": "Haqiqatan ham bu ta'mirlashni o'chirmoqchimisiz?"
+      "REPAIR_TYPE": "Ta'mirlash turi",
+      "REPAIR_UPDATED": "Ta'mirlash yangilandi",
+      "SPECIFY_PLANNED_COST": "Rejalashtirilgan qiymatni kiriting",
+      "START_DATE": "Boshlanish sanasi",
+      "STATUS_CANCELLED": "Bekor qilingan",
+      "STATUS_COMPLETED": "Yakunlangan",
+      "STATUS_IN_PROGRESS": "Jarayonda",
+      "STATUS_SCHEDULED": "Rejalashtirilgan",
+      "TITLE": "Ta'mirlash xarajatlari",
+      "TOTAL_ACTUAL": "Haqiqiy summa",
+      "TOTAL_PLANNED": "Rejalashtirilgan summa",
+      "TOTAL_REPAIRS": "Jami ta'mirlashlar",
+      "TYPE_EMERGENCY": "Favqulodda",
+      "TYPE_PLANNED": "Rejalashtirilgan",
+      "TYPE_UNPLANNED": "Rejadan tashqari"
     },
     "SALARY": {
       "TITLE": "Ish haqi fondi",
@@ -2611,7 +2688,8 @@
       "UPDATE_ERROR": "Qabulni yangilab bo'lmadi",
       "CREATED": "Qabul yaratildi",
       "CREATE_ERROR": "Qabulni yaratib bo'lmadi",
-      "DELETE_CONFIRM": "Bu qabulni o'chirishni xohlaysizmi?"
+      "DELETE_CONFIRM": "Bu qabulni o'chirishni xohlaysizmi?",
+      "INFORMED_SUCCESS": "Qabul xabardor qilingan deb belgilandi"
     },
     "EVENTS": {
       "TITLE": "Barcha tadbirlar",
@@ -2703,7 +2781,15 @@
       "NO_ANSWER": "Javob yo'q",
       "BUSY": "Band",
       "CANCELLED": "Bekor qilingan"
-    }
+    },
+    "CALLER": "Qoʻngʻiroq qiluvchi",
+    "RECEIVER": "Qabul qiluvchi",
+    "NO_CALLS": "Qoʻngʻiroqlar yoʻq",
+    "NEW_CALL": "Yangi qoʻngʻiroq",
+    "EDIT_CALL": "Qoʻngʻiroqni tahrirlash",
+    "CALLER_REQUIRED": "Qoʻngʻiroq qiluvchini kiriting",
+    "CALLER_PHONE_LABEL": "Qoʻngʻiroq qiluvchi telefoni",
+    "RECEIVER_LABEL": "Qabul qiluvchi"
   },
   "INVEST": {
     "ACTIVE_PROJECTS": {
@@ -2744,6 +2830,23 @@
       "CANCEL": "Bekor qilish",
       "SAVE": "Saqlash",
       "ADD": "Qo'shish"
+    },
+    "MESSAGES": {
+      "PROJECT_UPDATED": "Loyiha muvaffaqiyatli yangilandi",
+      "SAVE_ERROR": "Saqlash xatosi",
+      "UPDATE_FAILED": "Loyihani yangilab bo'lmadi",
+      "PROJECT_ADDED": "Yangi loyiha qo'shildi",
+      "ADD_FAILED": "Loyihani qo'shib bo'lmadi",
+      "LOAD_ERROR": "Yuklash xatosi",
+      "LOAD_ACTIVE_FAILED": "Faol loyihalarni yuklab bo'lmadi",
+      "PROJECT_DELETED": "Loyiha muvaffaqiyatli o'chirildi",
+      "DELETE_ERROR": "O'chirish xatosi",
+      "DELETE_FAILED": "Loyihani o'chirib bo'lmadi",
+      "LOAD_STATUSES_FAILED": "Statuslarni yuklab bo'lmadi",
+      "LOAD_INVESTMENTS_FAILED": "Investitsiya loyihalarini yuklab bo'lmadi",
+      "UPDATE_ERROR": "Yangilash xatosi",
+      "CREATE_ERROR": "Yaratish xatosi",
+      "CREATE_FAILED": "Loyihani yaratib bo'lmadi"
     }
   },
   "NEWS": {
@@ -2821,414 +2924,517 @@
       "SOURCE": "Manba",
       "PUBLISHED": "Nashr qilingan",
       "CREATED": "Yaratilgan"
+    },
+    "MESSAGES": {
+      "LOAD_FAILED": "Yangiliklarni yuklab bo'lmadi"
     }
   },
-    "CHANCELLERY": {
-        "COMMON": {
-            "DELETE_CONFIRM": "Haqiqatan ham o'chirmoqchimisiz"
-        },
-        "ERRORS": {
-            "LOAD_ERROR": "Ma'lumotlarni yuklab bo'lmadi"
-        },
-        "FILTERS": {
-            "ALL_TYPES": "Barcha turlar",
-            "ALL_STATUSES": "Barcha holatlar",
-            "TYPE": "Tur",
-            "STATUS": "Holat"
-        },
-        "FIELDS": {
-            "NAME": "Qisqacha mazmuni",
-            "NUMBER": "Raqam",
-            "DOCUMENT_DATE": "Hujjat sanasi",
-            "TYPE": "Tur",
-            "STATUS": "Holat",
-            "DUE_DATE": "Muddat",
-            "DESCRIPTION": "Tavsif",
-            "FILES": "Fayllar"
-        },
-        "VALIDATION": {
-            "NAME_REQUIRED": "Qisqacha mazmuni kiritish shart",
-            "DATE_REQUIRED": "Sana kiritish shart",
-            "TYPE_REQUIRED": "Tur kiritish shart"
-        },
-        "FILES": {
-            "EXISTING": "Ilova qilingan fayllar",
-            "UPLOAD": "Fayllarni yuklash"
-        },
-        "ACTIONS": {
-            "HISTORY": "Holat tarixi",
-            "CHANGE_STATUS": "Holatni o'zgartirish"
-        },
-        "STATUS_CHANGE": {
-            "TITLE": "Holatni o'zgartirish",
-            "CURRENT_STATUS": "Joriy holat",
-            "NEW_STATUS": "Yangi holat",
-            "COMMENT": "Izoh",
-            "COMMENT_PLACEHOLDER": "Holat o'zgarishi uchun izoh kiriting...",
-            "SUCCESS": "Holat muvaffaqiyatli o'zgartirildi",
-            "ERROR": "Holatni o'zgartirib bo'lmadi"
-        },
-        "STATUS_HISTORY": {
-            "TITLE": "Holat o'zgarishlari tarixi",
-            "NO_HISTORY": "Tarix yo'q",
-            "LOAD_ERROR": "Tarixni yuklab bo'lmadi"
-        },
-        "STATUSES": {
-            "DRAFT": "Qoralama",
-            "PENDING_APPROVAL": "Tasdiqlashda",
-            "APPROVED": "Tasdiqlangan",
-            "REJECTED": "Rad etilgan",
-            "IN_EXECUTION": "Bajarilmoqda",
-            "EXECUTED": "Bajarilgan",
-            "CANCELLED": "Bekor qilingan",
-            "PENDING_SIGNATURE": "Imzo kutilmoqda",
-            "SIGNED": "Imzolangan",
-            "SIGNATURE_REJECTED": "Imzo rad etilgan"
-        },
-        "TYPES": {
-            "DECREE": "Buyruq",
-            "REPORT": "Hisobot",
-            "LETTER": "Xat",
-            "INSTRUCTION": "Ko'rsatma",
-            "LEGAL_DOCUMENT": "Normativ-huquqiy hujjat"
-        },
-        "LINKED_DOCS": {
-            "TITLE": "Bog'langan hujjatlar",
-            "ADD": "Bog'lanish qo'shish",
-            "NO_DOCUMENTS": "Bog'langan hujjatlar yo'q"
-        },
-        "DECREES": {
-            "TITLE": "Buyruqlar",
-            "NEW": "Yangi buyruq",
-            "EDIT": "Buyruqni tahrirlash",
-            "NO_DATA": "Buyruqlar yo'q",
-            "CREATED": "Buyruq yaratildi",
-            "UPDATED": "Buyruq yangilandi",
-            "DELETED": "Buyruq o'chirildi",
-            "CREATE_ERROR": "Buyruqni yaratib bo'lmadi",
-            "UPDATE_ERROR": "Buyruqni yangilab bo'lmadi",
-            "DELETE_ERROR": "Buyruqni o'chirib bo'lmadi"
-        },
-        "REPORTS": {
-            "TITLE": "Hisobotlar",
-            "NEW": "Yangi hisobot",
-            "EDIT": "Hisobotni tahrirlash",
-            "NO_DATA": "Hisobotlar yo'q",
-            "CREATED": "Hisobot yaratildi",
-            "UPDATED": "Hisobot yangilandi",
-            "DELETED": "Hisobot o'chirildi",
-            "CREATE_ERROR": "Hisobotni yaratib bo'lmadi",
-            "UPDATE_ERROR": "Hisobotni yangilab bo'lmadi",
-            "DELETE_ERROR": "Hisobotni o'chirib bo'lmadi"
-        },
-        "LETTERS": {
-            "TITLE": "Xatlar",
-            "NEW": "Yangi xat",
-            "EDIT": "Xatni tahrirlash",
-            "NO_DATA": "Xatlar yo'q",
-            "CREATED": "Xat yaratildi",
-            "UPDATED": "Xat yangilandi",
-            "DELETED": "Xat o'chirildi",
-            "CREATE_ERROR": "Xatni yaratib bo'lmadi",
-            "UPDATE_ERROR": "Xatni yangilab bo'lmadi",
-            "DELETE_ERROR": "Xatni o'chirib bo'lmadi"
-        },
-        "INSTRUCTIONS": {
-            "TITLE": "Ko'rsatmalar",
-            "NEW": "Yangi ko'rsatma",
-            "EDIT": "Ko'rsatmani tahrirlash",
-            "NO_DATA": "Ko'rsatmalar yo'q",
-            "CREATED": "Ko'rsatma yaratildi",
-            "UPDATED": "Ko'rsatma yangilandi",
-            "DELETED": "Ko'rsatma o'chirildi",
-            "CREATE_ERROR": "Ko'rsatmani yaratib bo'lmadi",
-            "UPDATE_ERROR": "Ko'rsatmani yangilab bo'lmadi",
-            "DELETE_ERROR": "Ko'rsatmani o'chirib bo'lmadi"
-        },
-        "SIGNATURE": {
-            "PAGE_TITLE": "Imzo kutayotgan hujjatlar",
-            "DOC_TYPE": "Hujjat ko'rinishi",
-            "ORGANIZATION": "Tashkilot",
-            "RESPONSIBLE": "Mas'ul",
-            "PENDING_COUNT": "Jami hujjatlar",
-            "NO_PENDING": "Imzo kutayotgan hujjatlar yo'q",
-            "LOAD_ERROR": "Hujjatlarni yuklab bo'lmadi",
-            "SIGN_TITLE": "Hujjatni imzolash",
-            "SIGN_DESCRIPTION": "Hujjatni imzolang va kerak bo'lsa rezolyutsiya qo'shing.",
-            "SIGN": "Imzolash",
-            "SIGN_SUCCESS": "Hujjat imzolandi",
-            "SIGN_ERROR": "Hujjatni imzolab bo'lmadi",
-            "REJECT_TITLE": "Imzoni rad etish",
-            "REJECT_DESCRIPTION": "Rad etish sababini ko'rsating.",
-            "REJECT": "Rad etish",
-            "REJECT_SUCCESS": "Imzo rad etildi",
-            "REJECT_ERROR": "Rad etib bo'lmadi",
-            "RESOLUTION": "Rezolyutsiya",
-            "RESOLUTION_PLACEHOLDER": "Rezolyutsiya matnini kiriting...",
-            "ASSIGNED_EXECUTOR": "Ijrochi",
-            "SELECT_EXECUTOR": "Ijrochini tanlang",
-            "ASSIGNED_DUE_DATE": "Bajarish muddati",
-            "REJECTION_REASON": "Rad etish sababi",
-            "REJECTION_REASON_PLACEHOLDER": "Sababni ko'rsating...",
-            "HISTORY_TITLE": "Imzolar tarixi",
-            "VIEW_HISTORY": "Imzolar tarixi",
-            "NO_HISTORY": "Tarix bo'sh",
-            "HISTORY_LOAD_ERROR": "Tarixni yuklab bo'lmadi",
-            "ACTION_SIGNED": "Imzolangan",
-            "ACTION_REJECTED": "Rad etilgan"
-        }
+  "CHANCELLERY": {
+    "COMMON": {
+      "DELETE_CONFIRM": "Haqiqatan ham o'chirmoqchimisiz"
     },
-    "LEGAL_DOCUMENTS": {
-        "TITLE": "Normativ-huquqiy kutubxona",
-        "ALL_DOCUMENTS": "Barcha hujjatlar",
-        "NEW": "Hujjat qo'shish",
-        "EDIT": "Hujjatni tahrirlash",
-        "NO_DATA": "Hujjatlar yo'q",
-        "LOADING": "Yuklanmoqda...",
-        "CREATED": "Hujjat muvaffaqiyatli yaratildi",
-        "UPDATED": "Hujjat muvaffaqiyatli yangilandi",
-        "DELETED": "Hujjat muvaffaqiyatli o'chirildi",
-        "CREATE_ERROR": "Hujjatni yaratib bo'lmadi",
-        "UPDATE_ERROR": "Hujjatni yangilab bo'lmadi",
-        "DELETE_ERROR": "Hujjatni o'chirib bo'lmadi",
-        "DELETE_CONFIRM": "Bu hujjatni o'chirishni xohlaysizmi",
-        "DELETE_HEADER": "O'chirishni tasdiqlash",
-        "ERRORS": {
-            "LOAD_ERROR": "Ma'lumotlarni yuklab bo'lmadi",
-            "LOAD_TYPES_ERROR": "Hujjat turlarini yuklab bo'lmadi"
-        },
-        "FIELDS": {
-            "NAME": "Nomi",
-            "NUMBER": "Raqami",
-            "DOCUMENT_DATE": "Hujjat sanasi",
-            "TYPE": "Hujjat turi",
-            "FILES": "Fayllar",
-            "FILES_COUNT": "Fayllar soni",
-            "CREATED_AT": "Yaratilgan sana",
-            "CREATED_BY": "Yaratdi",
-            "ACTIONS": "Harakatlar"
-        },
-        "VALIDATION": {
-            "NAME_REQUIRED": "Nomi shart",
-            "DATE_REQUIRED": "Hujjat sanasi shart"
-        },
-        "FILES": {
-            "EXISTING": "Ilova qilingan fayllar",
-            "UPLOAD": "Fayllarni yuklash",
-            "VIEW": "Fayllarni ko'rish",
-            "NO_FILES": "Fayllar yo'q"
-        },
-        "FILTERS": {
-            "SEARCH": "Nomi yoki raqami bo'yicha qidiruv",
-            "DATE_RANGE": "Davr",
-            "DATE_FROM": "Sanadan",
-            "DATE_TO": "Sanagacha",
-            "CLEAR": "Filtrlarni tozalash",
-            "ALL_TYPES": "Barcha turlar"
-        },
-        "LEX_SEARCH": {
-            "TITLE": "Lex.uz saytida qidirish",
-            "PLACEHOLDER": "Hujjat nomini kiriting...",
-            "NO_RESULTS": "Hujjatlar topilmadi",
-            "HINT": "Lex.uz portalida hujjatlarni qidirish uchun matn kiriting",
-            "PAGE_REPORT": "Sahifa {currentPage} / {totalPages}"
-        }
+    "ERRORS": {
+      "LOAD_ERROR": "Ma'lumotlarni yuklab bo'lmadi"
+    },
+    "FILTERS": {
+      "ALL_TYPES": "Barcha turlar",
+      "ALL_STATUSES": "Barcha holatlar",
+      "TYPE": "Tur",
+      "STATUS": "Holat"
+    },
+    "FIELDS": {
+      "NAME": "Qisqacha mazmuni",
+      "NUMBER": "Raqam",
+      "DOCUMENT_DATE": "Hujjat sanasi",
+      "TYPE": "Tur",
+      "STATUS": "Holat",
+      "DUE_DATE": "Muddat",
+      "DESCRIPTION": "Tavsif",
+      "FILES": "Fayllar"
+    },
+    "VALIDATION": {
+      "NAME_REQUIRED": "Qisqacha mazmuni kiritish shart",
+      "DATE_REQUIRED": "Sana kiritish shart",
+      "TYPE_REQUIRED": "Tur kiritish shart"
+    },
+    "FILES": {
+      "EXISTING": "Ilova qilingan fayllar",
+      "UPLOAD": "Fayllarni yuklash"
+    },
+    "ACTIONS": {
+      "HISTORY": "Holat tarixi",
+      "CHANGE_STATUS": "Holatni o'zgartirish"
+    },
+    "STATUS_CHANGE": {
+      "TITLE": "Holatni o'zgartirish",
+      "CURRENT_STATUS": "Joriy holat",
+      "NEW_STATUS": "Yangi holat",
+      "COMMENT": "Izoh",
+      "COMMENT_PLACEHOLDER": "Holat o'zgarishi uchun izoh kiriting...",
+      "SUCCESS": "Holat muvaffaqiyatli o'zgartirildi",
+      "ERROR": "Holatni o'zgartirib bo'lmadi"
+    },
+    "STATUS_HISTORY": {
+      "TITLE": "Holat o'zgarishlari tarixi",
+      "NO_HISTORY": "Tarix yo'q",
+      "LOAD_ERROR": "Tarixni yuklab bo'lmadi"
+    },
+    "STATUSES": {
+      "DRAFT": "Qoralama",
+      "PENDING_APPROVAL": "Tasdiqlashda",
+      "APPROVED": "Tasdiqlangan",
+      "REJECTED": "Rad etilgan",
+      "IN_EXECUTION": "Bajarilmoqda",
+      "EXECUTED": "Bajarilgan",
+      "CANCELLED": "Bekor qilingan",
+      "PENDING_SIGNATURE": "Imzo kutilmoqda",
+      "SIGNED": "Imzolangan",
+      "SIGNATURE_REJECTED": "Imzo rad etilgan"
+    },
+    "TYPES": {
+      "DECREE": "Buyruq",
+      "REPORT": "Hisobot",
+      "LETTER": "Xat",
+      "INSTRUCTION": "Ko'rsatma",
+      "LEGAL_DOCUMENT": "Normativ-huquqiy hujjat"
+    },
+    "LINKED_DOCS": {
+      "TITLE": "Bog'langan hujjatlar",
+      "ADD": "Bog'lanish qo'shish",
+      "NO_DOCUMENTS": "Bog'langan hujjatlar yo'q"
+    },
+    "DECREES": {
+      "TITLE": "Buyruqlar",
+      "NEW": "Yangi buyruq",
+      "EDIT": "Buyruqni tahrirlash",
+      "NO_DATA": "Buyruqlar yo'q",
+      "CREATED": "Buyruq yaratildi",
+      "UPDATED": "Buyruq yangilandi",
+      "DELETED": "Buyruq o'chirildi",
+      "CREATE_ERROR": "Buyruqni yaratib bo'lmadi",
+      "UPDATE_ERROR": "Buyruqni yangilab bo'lmadi",
+      "DELETE_ERROR": "Buyruqni o'chirib bo'lmadi"
+    },
+    "REPORTS": {
+      "TITLE": "Hisobotlar",
+      "NEW": "Yangi hisobot",
+      "EDIT": "Hisobotni tahrirlash",
+      "NO_DATA": "Hisobotlar yo'q",
+      "CREATED": "Hisobot yaratildi",
+      "UPDATED": "Hisobot yangilandi",
+      "DELETED": "Hisobot o'chirildi",
+      "CREATE_ERROR": "Hisobotni yaratib bo'lmadi",
+      "UPDATE_ERROR": "Hisobotni yangilab bo'lmadi",
+      "DELETE_ERROR": "Hisobotni o'chirib bo'lmadi"
+    },
+    "LETTERS": {
+      "TITLE": "Xatlar",
+      "NEW": "Yangi xat",
+      "EDIT": "Xatni tahrirlash",
+      "NO_DATA": "Xatlar yo'q",
+      "CREATED": "Xat yaratildi",
+      "UPDATED": "Xat yangilandi",
+      "DELETED": "Xat o'chirildi",
+      "CREATE_ERROR": "Xatni yaratib bo'lmadi",
+      "UPDATE_ERROR": "Xatni yangilab bo'lmadi",
+      "DELETE_ERROR": "Xatni o'chirib bo'lmadi"
+    },
+    "INSTRUCTIONS": {
+      "TITLE": "Ko'rsatmalar",
+      "NEW": "Yangi ko'rsatma",
+      "EDIT": "Ko'rsatmani tahrirlash",
+      "NO_DATA": "Ko'rsatmalar yo'q",
+      "CREATED": "Ko'rsatma yaratildi",
+      "UPDATED": "Ko'rsatma yangilandi",
+      "DELETED": "Ko'rsatma o'chirildi",
+      "CREATE_ERROR": "Ko'rsatmani yaratib bo'lmadi",
+      "UPDATE_ERROR": "Ko'rsatmani yangilab bo'lmadi",
+      "DELETE_ERROR": "Ko'rsatmani o'chirib bo'lmadi"
+    },
+    "SIGNATURE": {
+      "PAGE_TITLE": "Imzo kutayotgan hujjatlar",
+      "DOC_TYPE": "Hujjat ko'rinishi",
+      "ORGANIZATION": "Tashkilot",
+      "RESPONSIBLE": "Mas'ul",
+      "PENDING_COUNT": "Jami hujjatlar",
+      "NO_PENDING": "Imzo kutayotgan hujjatlar yo'q",
+      "LOAD_ERROR": "Hujjatlarni yuklab bo'lmadi",
+      "SIGN_TITLE": "Hujjatni imzolash",
+      "SIGN_DESCRIPTION": "Hujjatni imzolang va kerak bo'lsa rezolyutsiya qo'shing.",
+      "SIGN": "Imzolash",
+      "SIGN_SUCCESS": "Hujjat imzolandi",
+      "SIGN_ERROR": "Hujjatni imzolab bo'lmadi",
+      "REJECT_TITLE": "Imzoni rad etish",
+      "REJECT_DESCRIPTION": "Rad etish sababini ko'rsating.",
+      "REJECT": "Rad etish",
+      "REJECT_SUCCESS": "Imzo rad etildi",
+      "REJECT_ERROR": "Rad etib bo'lmadi",
+      "RESOLUTION": "Rezolyutsiya",
+      "RESOLUTION_PLACEHOLDER": "Rezolyutsiya matnini kiriting...",
+      "ASSIGNED_EXECUTOR": "Ijrochi",
+      "SELECT_EXECUTOR": "Ijrochini tanlang",
+      "ASSIGNED_DUE_DATE": "Bajarish muddati",
+      "REJECTION_REASON": "Rad etish sababi",
+      "REJECTION_REASON_PLACEHOLDER": "Sababni ko'rsating...",
+      "HISTORY_TITLE": "Imzolar tarixi",
+      "VIEW_HISTORY": "Imzolar tarixi",
+      "NO_HISTORY": "Tarix bo'sh",
+      "HISTORY_LOAD_ERROR": "Tarixni yuklab bo'lmadi",
+      "ACTION_SIGNED": "Imzolangan",
+      "ACTION_REJECTED": "Rad etilgan"
+    }
+  },
+  "LEGAL_DOCUMENTS": {
+    "TITLE": "Normativ-huquqiy kutubxona",
+    "ALL_DOCUMENTS": "Barcha hujjatlar",
+    "NEW": "Hujjat qo'shish",
+    "EDIT": "Hujjatni tahrirlash",
+    "NO_DATA": "Hujjatlar yo'q",
+    "LOADING": "Yuklanmoqda...",
+    "CREATED": "Hujjat muvaffaqiyatli yaratildi",
+    "UPDATED": "Hujjat muvaffaqiyatli yangilandi",
+    "DELETED": "Hujjat muvaffaqiyatli o'chirildi",
+    "CREATE_ERROR": "Hujjatni yaratib bo'lmadi",
+    "UPDATE_ERROR": "Hujjatni yangilab bo'lmadi",
+    "DELETE_ERROR": "Hujjatni o'chirib bo'lmadi",
+    "DELETE_CONFIRM": "Bu hujjatni o'chirishni xohlaysizmi",
+    "DELETE_HEADER": "O'chirishni tasdiqlash",
+    "ERRORS": {
+      "LOAD_ERROR": "Ma'lumotlarni yuklab bo'lmadi",
+      "LOAD_TYPES_ERROR": "Hujjat turlarini yuklab bo'lmadi"
+    },
+    "FIELDS": {
+      "NAME": "Nomi",
+      "NUMBER": "Raqami",
+      "DOCUMENT_DATE": "Hujjat sanasi",
+      "TYPE": "Hujjat turi",
+      "FILES": "Fayllar",
+      "FILES_COUNT": "Fayllar soni",
+      "CREATED_AT": "Yaratilgan sana",
+      "CREATED_BY": "Yaratdi",
+      "ACTIONS": "Harakatlar"
+    },
+    "VALIDATION": {
+      "NAME_REQUIRED": "Nomi shart",
+      "DATE_REQUIRED": "Hujjat sanasi shart"
+    },
+    "FILES": {
+      "EXISTING": "Ilova qilingan fayllar",
+      "UPLOAD": "Fayllarni yuklash",
+      "VIEW": "Fayllarni ko'rish",
+      "NO_FILES": "Fayllar yo'q"
+    },
+    "FILTERS": {
+      "SEARCH": "Nomi yoki raqami bo'yicha qidiruv",
+      "DATE_RANGE": "Davr",
+      "DATE_FROM": "Sanadan",
+      "DATE_TO": "Sanagacha",
+      "CLEAR": "Filtrlarni tozalash",
+      "ALL_TYPES": "Barcha turlar"
     },
     "LEX_SEARCH": {
-        "TITLE": "Lex.uz da qidirish",
-        "PLACEHOLDER": "Hujjat nomini kiriting...",
-        "NO_RESULTS": "Hujjatlar topilmadi",
-        "HINT": "Lex.uz portalida hujjatlarni qidirish uchun matn kiriting",
-        "PAGE_REPORT": "Sahifa {currentPage} / {totalPages}",
-        "LOADING": "Yuklanmoqda..."
+      "TITLE": "Lex.uz saytida qidirish",
+      "PLACEHOLDER": "Hujjat nomini kiriting...",
+      "NO_RESULTS": "Hujjatlar topilmadi",
+      "HINT": "Lex.uz portalida hujjatlarni qidirish uchun matn kiriting",
+      "PAGE_REPORT": "Sahifa {currentPage} / {totalPages}"
+    }
+  },
+  "LEX_SEARCH": {
+    "TITLE": "Lex.uz da qidirish",
+    "PLACEHOLDER": "Hujjat nomini kiriting...",
+    "NO_RESULTS": "Hujjatlar topilmadi",
+    "HINT": "Lex.uz portalida hujjatlarni qidirish uchun matn kiriting",
+    "PAGE_REPORT": "Sahifa {currentPage} / {totalPages}",
+    "LOADING": "Yuklanmoqda..."
+  },
+  "GES_DETAIL": {
+    "NOT_FOUND": "GES topilmadi",
+    "ERROR_LOADING": "Ma'lumotlarni yuklashda xatolik",
+    "ERROR_SAVE": "Saqlashda xatolik",
+    "ERROR_DELETE": "O'chirishda xatolik",
+    "CREATED": "Yozuv yaratildi",
+    "UPDATED": "Yozuv yangilandi",
+    "DELETED": "Yozuv o'chirildi",
+    "AGGREGATES_TITLE": "Agregatlar",
+    "MNEMONIC_TITLE": "Mnemosxema",
+    "NO_AGGREGATES": "Agregatlar haqida ma'lumot yo'q",
+    "TABS": {
+      "INFO": "Ma'lumot",
+      "CONTACTS": "Kontaktlar",
+      "SHUTDOWNS": "Favqulodda o'chirishlar",
+      "DISCHARGES": "Bo'sh tashlamalar",
+      "INCIDENTS": "Voqealar",
+      "VISITS": "Tashriflar",
+      "TELEMETRY": "Telemetriya",
+      "MNEMONIC": "Mnemosxema"
     },
-    "GES_DETAIL": {
-        "NOT_FOUND": "GES topilmadi",
-        "ERROR_LOADING": "Ma'lumotlarni yuklashda xatolik",
-        "ERROR_SAVE": "Saqlashda xatolik",
-        "ERROR_DELETE": "O'chirishda xatolik",
-        "CREATED": "Yozuv yaratildi",
-        "UPDATED": "Yozuv yangilandi",
-        "DELETED": "Yozuv o'chirildi",
-        "AGGREGATES_TITLE": "Agregatlar",
-        "MNEMONIC_TITLE": "Mnemosxema",
-        "NO_AGGREGATES": "Agregatlar haqida ma'lumot yo'q",
-        "TABS": {
-            "INFO": "Ma'lumot",
-            "CONTACTS": "Kontaktlar",
-            "SHUTDOWNS": "Favqulodda o'chirishlar",
-            "DISCHARGES": "Bo'sh tashlamalar",
-            "INCIDENTS": "Voqealar",
-            "VISITS": "Tashriflar",
-            "TELEMETRY": "Telemetriya",
-            "MNEMONIC": "Mnemosxema"
-        },
-        "KPI": {
-            "CURRENT_POWER": "Aktiv quvvat",
-            "AGGREGATES": "Agregatlar",
-            "SHUTDOWNS": "Favqulodda o'chirishlar",
-            "DISCHARGES": "Bo'sh suv tashlamalari"
-        },
-        "STATUS": {
-            "ACTIVE": "Ishlamoqda",
-            "PENDING": "Zahirada",
-            "REPAIR": "Ta'mirda",
-            "OFFLINE": "O'chirilgan"
-        },
-        "AGGREGATE": {
-            "PARAM_NAME": "Parametr",
-            "PARAM_VALUE": "Qiymat",
-            "PARAM_UNIT": "O'lch. bir.",
-            "ACTIVE_POWER": "Aktiv quvvat",
-            "REACTIVE_POWER": "Reaktiv quvvat",
-            "VOLTAGE_AB": "Kuchlanish AB",
-            "VOLTAGE_BC": "Kuchlanish BC",
-            "VOLTAGE_CA": "Kuchlanish CA",
-            "CURRENT_A": "Tok faza A",
-            "CURRENT_B": "Tok faza B",
-            "CURRENT_C": "Tok faza C",
-            "FREQUENCY": "Chastota",
-            "POWER_FACTOR": "Quvvat koeffitsiyenti (cos φ)",
-            "ROTOR_VOLTAGE": "Rotor kuchlanishi",
-            "ROTOR_CURRENT": "Rotor toki",
-            "GUIDE_VANE_1": "Yo'naltiruvchi apparat 1",
-            "GUIDE_VANE_2": "Yo'naltiruvchi apparat 2"
-        },
-        "UNIT": {
-            "MW": "MW",
-            "MVAR": "MVar",
-            "KV": "kV",
-            "A": "A",
-            "HZ": "Hz",
-            "V": "V",
-            "PERCENT": "%"
-        },
-        "MNEMONIC": {
-            "STATUS": "Holat",
-            "POWER": "Quvvat",
-            "NO_DATA": "Telemetriya ma'lumotlari yo'q",
-            "PLACEHOLDER": "Ma'lumotlar mavjud bo'lganda mnemosxema ko'rsatiladi",
-            "NO_SCHEMA": "Mnemosxema bu stansiya uchun mavjud emas",
-            "NO_SCHEMA_DESC": "Bu GES uchun sxema hali yuklanmagan",
-            "LOAD_ERROR": "Mnemosxemani yuklashda xatolik"
-        },
-        "INFO": {
-            "BASIC_INFO": "Asosiy ma'lumot",
-            "NAME": "Nomi",
-            "PARENT_ORG": "Bosh tashkilot",
-            "TYPES": "Turlari",
-            "DEPARTMENTS": "Bo'limlar",
-            "DEPARTMENT_NAME": "Nomi",
-            "DEPARTMENT_DESC": "Tavsifi",
-            "NO_DEPARTMENTS": "Bo'limlar yo'q",
-            "SUB_ORGANIZATIONS": "Qo'shimcha tashkilotlar"
-        },
-        "CONTACTS": {
-            "NAME": "F.I.O.",
-            "POSITION": "Lavozim",
-            "DEPARTMENT": "Bo'lim",
-            "PHONE": "Telefon",
-            "EMAIL": "Elektron pochta",
-            "ACTIONS": "Amallar",
-            "CALL": "Qo'ng'iroq qilish",
-            "NO_CONTACTS": "Kontaktlar yo'q"
-        },
-        "FILTERS": {
-            "START_DATE": "Boshlanish sanasi",
-            "END_DATE": "Tugash sanasi",
-            "SELECT_DATE": "Sanani tanlang"
-        },
-        "COMMON": {
-            "CREATED_BY": "Yaratdi",
-            "FILES": "Fayllar",
-            "VIEW_FILES": "Fayllarni ko'rish",
-            "ATTACH_FILES": "Fayllarni biriktirish",
-            "ADD_NEW_FILES": "Yangi fayllar qo'shish"
-        },
-        "SHUTDOWNS": {
-            "ADD": "Favqulodda o'chirish qo'shish",
-            "EDIT": "Favqulodda o'chirishni tahrirlash",
-            "START": "Boshlanishi",
-            "END": "Tugashi",
-            "REASON": "Sababi",
-            "POWER_LOSS": "Quvvat yo'qotish",
-            "IDLE_DISCHARGE": "Bo'sh tashlama",
-            "FILES": "Voqea fayllari",
-            "NO_DATA": "Favqulodda o'chirishlar haqida ma'lumot yo'q"
-        },
-        "DISCHARGES": {
-            "ADD": "Bo'sh tashlama qo'shish",
-            "EDIT": "Bo'sh tashlamani tahrirlash",
-            "START": "Boshlanishi",
-            "END": "Tugashi",
-            "FLOW_RATE": "Sarf, m³/s",
-            "TOTAL_VOLUME": "Hajm, mln m³",
-            "REASON": "Sababi",
-            "STATUS": "Holat",
-            "ONGOING": "Davom etmoqda",
-            "APPROVED": "Tasdiqlangan",
-            "COMPLETED": "Tugallangan",
-            "FILES": "Bo'sh tashlama fayllari",
-            "NO_DATA": "Bo'sh tashlamalar haqida ma'lumot yo'q"
-        },
-        "INCIDENTS": {
-            "ADD": "Voqea qo'shish",
-            "EDIT": "Voqeani tahrirlash",
-            "DATE": "Sana",
-            "DESCRIPTION": "Tavsif",
-            "ORGANIZATION": "Tashkilot",
-            "FILES": "Voqea fayllari",
-            "NO_DATA": "Voqealar haqida ma'lumot yo'q"
-        },
-        "VISITS": {
-            "ADD": "Tashrif qo'shish",
-            "EDIT": "Tashrifni tahrirlash",
-            "DATE": "Sana",
-            "DESCRIPTION": "Tavsif",
-            "RESPONSIBLE": "Mas'ul",
-            "ORGANIZATION": "Tashkilot",
-            "FILES": "Tashrif fayllari",
-            "NO_DATA": "Tashriflar haqida ma'lumot yo'q"
-        },
-        "TELEMETRY": {
-            "DEVICE": "Qurilma",
-            "DEVICE_GROUP": "Qurilmalar guruhi",
-            "GROUP": "Guruh",
-            "PARAMETER": "Parametr",
-            "VALUE": "Qiymat",
-            "UNIT": "O'lch. bir.",
-            "QUALITY": "Sifat",
-            "SEVERITY": "Muhimlik",
-            "TIMESTAMP": "Vaqt",
-            "ALL_GROUPS": "Barcha guruhlar",
-            "ALL_DEVICES": "Barcha qurilmalar",
-            "TOTAL_RECORDS": "Jami yozuvlar",
-            "NO_DATA": "Telemetriya ma'lumotlari yo'q"
-        }
+    "KPI": {
+      "CURRENT_POWER": "Aktiv quvvat",
+      "AGGREGATES": "Agregatlar",
+      "SHUTDOWNS": "Favqulodda o'chirishlar",
+      "DISCHARGES": "Bo'sh suv tashlamalari"
     },
-    "SNOW_COVER": {
-        "TITLE": "Qor qoplami (MODSNOW)",
-        "TODAY": "Bugun",
-        "YESTERDAY": "Kecha",
-        "YEAR_AGO": "Bir yil oldin",
-        "AVG_COVER": "O'rtacha qoplam",
-        "ORGANIZATION": "Tashkilot",
-        "COVER": "Qoplam, %",
-        "DELTA": "Δ bir yil oldinga",
-        "ZONES": "Balandlik zonalari",
-        "ELEVATION": "Balandlik, m",
-        "SCA_PCT": "Qoplam, %",
-        "NO_DATA": "Ma'lumot yo'q",
-        "RESOURCE_DATE": "Surat sanasi"
+    "STATUS": {
+      "ACTIVE": "Ishlamoqda",
+      "PENDING": "Zahirada",
+      "REPAIR": "Ta'mirda",
+      "OFFLINE": "O'chirilgan"
     },
-    "UZGIDRO_NEWS": {
-        "TITLE": "UzGidro Yangiliklari",
-        "TOTAL_NEWS": "Jami yangiliklar",
-        "NEWS_COUNT": "yangilik",
-        "NO_NEWS": "Yangiliklar topilmadi",
-        "VIEWS": "Ko'rishlar",
-        "PUBLISHED": "Nashr etilgan",
-        "LOAD_ERROR": "Yangiliklarni yuklashda xatolik",
-        "PAGE_REPORT": "{first}-{last} ko'rsatilmoqda, jami {totalRecords}"
+    "AGGREGATE": {
+      "PARAM_NAME": "Parametr",
+      "PARAM_VALUE": "Qiymat",
+      "PARAM_UNIT": "O'lch. bir.",
+      "ACTIVE_POWER": "Aktiv quvvat",
+      "REACTIVE_POWER": "Reaktiv quvvat",
+      "VOLTAGE_AB": "Kuchlanish AB",
+      "VOLTAGE_BC": "Kuchlanish BC",
+      "VOLTAGE_CA": "Kuchlanish CA",
+      "CURRENT_A": "Tok faza A",
+      "CURRENT_B": "Tok faza B",
+      "CURRENT_C": "Tok faza C",
+      "FREQUENCY": "Chastota",
+      "POWER_FACTOR": "Quvvat koeffitsiyenti (cos φ)",
+      "ROTOR_VOLTAGE": "Rotor kuchlanishi",
+      "ROTOR_CURRENT": "Rotor toki",
+      "GUIDE_VANE_1": "Yo'naltiruvchi apparat 1",
+      "GUIDE_VANE_2": "Yo'naltiruvchi apparat 2"
+    },
+    "UNIT": {
+      "MW": "MW",
+      "MVAR": "MVar",
+      "KV": "kV",
+      "A": "A",
+      "HZ": "Hz",
+      "V": "V",
+      "PERCENT": "%"
+    },
+    "MNEMONIC": {
+      "STATUS": "Holat",
+      "POWER": "Quvvat",
+      "NO_DATA": "Telemetriya ma'lumotlari yo'q",
+      "PLACEHOLDER": "Ma'lumotlar mavjud bo'lganda mnemosxema ko'rsatiladi",
+      "NO_SCHEMA": "Mnemosxema bu stansiya uchun mavjud emas",
+      "NO_SCHEMA_DESC": "Bu GES uchun sxema hali yuklanmagan",
+      "LOAD_ERROR": "Mnemosxemani yuklashda xatolik"
+    },
+    "INFO": {
+      "BASIC_INFO": "Asosiy ma'lumot",
+      "NAME": "Nomi",
+      "PARENT_ORG": "Bosh tashkilot",
+      "TYPES": "Turlari",
+      "DEPARTMENTS": "Bo'limlar",
+      "DEPARTMENT_NAME": "Nomi",
+      "DEPARTMENT_DESC": "Tavsifi",
+      "NO_DEPARTMENTS": "Bo'limlar yo'q",
+      "SUB_ORGANIZATIONS": "Qo'shimcha tashkilotlar"
+    },
+    "CONTACTS": {
+      "NAME": "F.I.O.",
+      "POSITION": "Lavozim",
+      "DEPARTMENT": "Bo'lim",
+      "PHONE": "Telefon",
+      "EMAIL": "Elektron pochta",
+      "ACTIONS": "Amallar",
+      "CALL": "Qo'ng'iroq qilish",
+      "NO_CONTACTS": "Kontaktlar yo'q"
+    },
+    "FILTERS": {
+      "START_DATE": "Boshlanish sanasi",
+      "END_DATE": "Tugash sanasi",
+      "SELECT_DATE": "Sanani tanlang"
+    },
+    "COMMON": {
+      "CREATED_BY": "Yaratdi",
+      "FILES": "Fayllar",
+      "VIEW_FILES": "Fayllarni ko'rish",
+      "ATTACH_FILES": "Fayllarni biriktirish",
+      "ADD_NEW_FILES": "Yangi fayllar qo'shish"
+    },
+    "SHUTDOWNS": {
+      "ADD": "Favqulodda o'chirish qo'shish",
+      "EDIT": "Favqulodda o'chirishni tahrirlash",
+      "START": "Boshlanishi",
+      "END": "Tugashi",
+      "REASON": "Sababi",
+      "POWER_LOSS": "Quvvat yo'qotish",
+      "IDLE_DISCHARGE": "Bo'sh tashlama",
+      "FILES": "Voqea fayllari",
+      "NO_DATA": "Favqulodda o'chirishlar haqida ma'lumot yo'q"
+    },
+    "DISCHARGES": {
+      "ADD": "Bo'sh tashlama qo'shish",
+      "EDIT": "Bo'sh tashlamani tahrirlash",
+      "START": "Boshlanishi",
+      "END": "Tugashi",
+      "FLOW_RATE": "Sarf, m³/s",
+      "TOTAL_VOLUME": "Hajm, mln m³",
+      "REASON": "Sababi",
+      "STATUS": "Holat",
+      "ONGOING": "Davom etmoqda",
+      "APPROVED": "Tasdiqlangan",
+      "COMPLETED": "Tugallangan",
+      "FILES": "Bo'sh tashlama fayllari",
+      "NO_DATA": "Bo'sh tashlamalar haqida ma'lumot yo'q"
+    },
+    "INCIDENTS": {
+      "ADD": "Voqea qo'shish",
+      "EDIT": "Voqeani tahrirlash",
+      "DATE": "Sana",
+      "DESCRIPTION": "Tavsif",
+      "ORGANIZATION": "Tashkilot",
+      "FILES": "Voqea fayllari",
+      "NO_DATA": "Voqealar haqida ma'lumot yo'q"
+    },
+    "VISITS": {
+      "ADD": "Tashrif qo'shish",
+      "EDIT": "Tashrifni tahrirlash",
+      "DATE": "Sana",
+      "DESCRIPTION": "Tavsif",
+      "RESPONSIBLE": "Mas'ul",
+      "ORGANIZATION": "Tashkilot",
+      "FILES": "Tashrif fayllari",
+      "NO_DATA": "Tashriflar haqida ma'lumot yo'q"
+    },
+    "TELEMETRY": {
+      "DEVICE": "Qurilma",
+      "DEVICE_GROUP": "Qurilmalar guruhi",
+      "GROUP": "Guruh",
+      "PARAMETER": "Parametr",
+      "VALUE": "Qiymat",
+      "UNIT": "O'lch. bir.",
+      "QUALITY": "Sifat",
+      "SEVERITY": "Muhimlik",
+      "TIMESTAMP": "Vaqt",
+      "ALL_GROUPS": "Barcha guruhlar",
+      "ALL_DEVICES": "Barcha qurilmalar",
+      "TOTAL_RECORDS": "Jami yozuvlar",
+      "NO_DATA": "Telemetriya ma'lumotlari yo'q"
+    }
+  },
+  "SNOW_COVER": {
+    "TITLE": "Qor qoplami (MODSNOW)",
+    "TODAY": "Bugun",
+    "YESTERDAY": "Kecha",
+    "YEAR_AGO": "Bir yil oldin",
+    "AVG_COVER": "O'rtacha qoplam",
+    "ORGANIZATION": "Tashkilot",
+    "COVER": "Qoplam, %",
+    "DELTA": "Δ bir yil oldinga",
+    "ZONES": "Balandlik zonalari",
+    "ELEVATION": "Balandlik, m",
+    "SCA_PCT": "Qoplam, %",
+    "NO_DATA": "Ma'lumot yo'q",
+    "RESOURCE_DATE": "Surat sanasi"
+  },
+  "UZGIDRO_NEWS": {
+    "TITLE": "UzGidro Yangiliklari",
+    "TOTAL_NEWS": "Jami yangiliklar",
+    "NEWS_COUNT": "yangilik",
+    "NO_NEWS": "Yangiliklar topilmadi",
+    "VIEWS": "Ko'rishlar",
+    "PUBLISHED": "Nashr etilgan",
+    "LOAD_ERROR": "Yangiliklarni yuklashda xatolik",
+    "PAGE_REPORT": "{first}-{last} ko'rsatilmoqda, jami {totalRecords}"
+  },
+  "WEATHER": {
+    "LOADING": "Ob-havo yuklanmoqda...",
+    "HUMIDITY": "Namlik",
+    "WIND": "Shamol",
+    "WIND_UNIT": "m/s",
+    "LOCATION_ERROR": "Joylashuvingizni aniqlab boʻlmadi",
+    "LOAD_ERROR": "Ob-havo prognozini yuklab boʻlmadi"
+  },
+  "RESERVOIRS": {
+    "MESSAGES": {
+      "DATA_UPDATED": "Ma'lumotlar yangilandi",
+      "ERROR_OCCURRED": "Xatolik yuz berdi"
+    }
+  },
+  "DISCHARGE": {
+    "MESSAGES": {
+      "RECORD_UPDATED": "Suv tashlab yuborish yozuvi yangilandi",
+      "SAVE_ERROR": "Saqlash xatosi",
+      "SAVE_FAILED": "Ma'lumotlarni saqlab bo'lmadi",
+      "RECORD_ADDED": "Yangi suv tashlab yuborish yozuvi qo'shildi",
+      "DELETED": "Suv tashlab yuborish o'chirildi",
+      "DELETE_ERROR": "Suv tashlab yuborishni o'chirish xatosi",
+      "DOWNLOAD_FAILED": "Faylni yuklab bo'lmadi"
+    }
+  },
+  "VACATION": {
+    "MESSAGES": {
+      "LOAD_FAILED": "Ta'tillarni yuklab bo'lmadi",
+      "EDIT_ONLY_DRAFTS": "Faqat qoralamalar va ko'rib chiqilayotgan arizalarni tahrirlash mumkin",
+      "VALIDATION_ERROR": "Tekshirish xatosi",
+      "CHECK_REQUEST_DATA": "Ariza ma'lumotlarini tekshiring",
+      "SUBMITTED": "Yuborildi",
+      "SENT_FOR_APPROVAL": "Ariza rahbar tasdig'iga yuborildi",
+      "SUBMIT_FAILED": "Arizani yuborib bo'lmadi",
+      "REQUEST_CREATED": "Ta'til arizasi yaratildi va tasdig'ga yuborildi",
+      "CREATE_FAILED": "Arizani yaratib bo'lmadi",
+      "REQUEST_UPDATED": "Ariza yangilandi",
+      "UPDATE_FAILED": "Arizani yangilab bo'lmadi",
+      "APPROVED": "Tasdiqlandi",
+      "APPROVED_DETAIL": "{{name}} xodimining ta'tili tasdiqlandi. Sanalar kalendarda bloklandi.",
+      "APPROVE_FAILED": "Arizani tasdiqlab bo'lmadi",
+      "REJECTED": "Rad etildi",
+      "REJECTED_DETAIL": "Ariza rad etildi. {{name}} xodimi xabardor qilindi.",
+      "REJECT_FAILED": "Arizani rad etib bo'lmadi",
+      "CANCEL_ONLY_DRAFTS": "Faqat qoralamalar va ko'rib chiqilayotgan arizalarni bekor qilish mumkin",
+      "CANCELLED": "Bekor qilindi",
+      "REQUEST_CANCELLED": "Ta'til arizasi bekor qilindi",
+      "CANCEL_FAILED": "Arizani bekor qilib bo'lmadi",
+      "REQUEST_DELETED": "Ariza o'chirildi",
+      "DELETE_FAILED": "Arizani o'chirib bo'lmadi",
+      "INSUFFICIENT_DAYS": "Ta'til kunlari yetarli emas. So'ralgan: {{requested}}, mavjud: {{available}}"
+    }
+  },
+  "SALARY": {
+    "MESSAGES": {
+      "LOAD_FAILED": "Ma'lumotlarni yuklab bo'lmadi",
+      "CALCULATION_COMPLETE": "Hisoblash yakunlandi",
+      "CALCULATED_COUNT": "{{total}} dan {{successful}} ta ish haqi hisoblandi",
+      "CALCULATION_FAILED": "Ish haqi hisoblab bo'lmadi",
+      "SUBMITTED": "Yuborildi",
+      "SENT_FOR_APPROVAL": "{{name}} ish haqi tasdig'ga yuborildi",
+      "BATCH_SENT_APPROVAL": "{{count}} yozuv tasdig'ga yuborildi",
+      "APPROVED_TITLE": "Tasdiqlandi",
+      "SALARY_APPROVED": "{{name}} ish haqi tasdiqlandi",
+      "BATCH_APPROVED": "{{count}} yozuv tasdiqlandi",
+      "REJECTED_TITLE": "Rad etildi",
+      "SALARY_REJECTED": "{{name}} ish haqi rad etildi",
+      "PAID_TITLE": "To'landi",
+      "MARKED_PAID": "{{name}} ish haqi to'langan deb belgilandi",
+      "BATCH_PAID": "{{count}} yozuv to'langan deb belgilandi",
+      "DELETED": "O'chirildi",
+      "RECORD_DELETED": "Yozuv o'chirildi",
+      "GENERATING": "Shakllantirilmoqda",
+      "PAYSLIP_GENERATING": "{{name}} uchun hisob varaqasi shakllantirilmoqda...",
+      "PAYROLL_REPORT_GENERATING": "Ish haqi reyestri shakllantirilmoqda...",
+      "TAX_REPORT_GENERATING": "Soliq hisoboti shakllantirilmoqda...",
+      "SOCIAL_FUND_REPORT_GENERATING": "Ijtimoiy fond hisoboti shakllantirilmoqda...",
+      "PAYSLIPS_EXPORTED": "Hisob varaqlari eksport qilindi",
+      "EXPORT_FAILED": "Hisob varaqlarini eksport qilib bo'lmadi"
+    }
+  },
+  "COMPETENCY": {
+    "MESSAGES": {
+      "SESSION_UPDATED": "Sessiya yangilandi",
+      "SESSION_CREATED": "Sessiya yaratildi",
+      "INVITATIONS_SENT": "Taklifnomalar yuborildi",
+      "SESSION_STARTED": "Sessiya boshlandi",
+      "ASSESSMENT_CENTER_STARTED": "Baholash markazi boshlandi",
+      "SESSION_COMPLETED": "Sessiya yakunlandi",
+      "BLOCK_ADDED": "Blok qo'shildi",
+      "BLOCK_COMPLETED": "Blok yakunlandi",
+      "EVALUATION_SAVED": "Baho saqlandi",
+      "FINAL_ASSESSMENT_GENERATED": "Yakuniy baho shakllandi",
+      "ASSESSMENT_APPROVED": "Baho tasdiqlandi",
+      "PLAN_CREATED": "Rivojlanish rejasi yaratildi",
+      "PLAN_ACTIVATED": "Reja faollashtirildi",
+      "PLAN_COMPLETED": "Reja yakunlandi",
+      "SESSION_DELETED": "Sessiya o'chirildi"
+    }
   }
 }

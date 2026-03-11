@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { ApiService, BASE_URL } from '@/core/services/api.service';
+import { ApiService } from '@/core/services/api.service';
 import { Observable } from 'rxjs';
+import { shareReplay, tap } from 'rxjs/operators';
 import { Position, PositionPayload } from '@/core/interfaces/position';
 import { CrudService } from '@/core/interfaces/crud-service.interface';
 
@@ -10,37 +11,37 @@ const POSITIONS = '/positions';
     providedIn: 'root'
 })
 export class PositionService extends ApiService implements CrudService<Position, PositionPayload> {
-    // Legacy methods (keep for backward compatibility)
-    getPositions(): Observable<Position[]> {
-        return this.http.get<Position[]>(BASE_URL + POSITIONS);
-    }
+    private positions$: Observable<Position[]> | null = null;
 
-    createPosition(payload: PositionPayload): Observable<Position> {
-        return this.http.post<Position>(BASE_URL + POSITIONS, payload);
-    }
-
-    updatePosition(id: number, payload: PositionPayload): Observable<Position> {
-        return this.http.patch<Position>(BASE_URL + POSITIONS + '/' + id, payload);
-    }
-
-    deletePosition(id: number): Observable<void> {
-        return this.http.delete<void>(BASE_URL + POSITIONS + '/' + id);
+    private invalidateCache(): void {
+        this.positions$ = null;
     }
 
     // CrudService interface implementation
     getAll(): Observable<Position[]> {
-        return this.getPositions();
+        if (!this.positions$) {
+            this.positions$ = this.http.get<Position[]>(this.BASE_URL + POSITIONS).pipe(
+                shareReplay({ bufferSize: 1, refCount: true })
+            );
+        }
+        return this.positions$;
     }
 
     create(payload: PositionPayload): Observable<Position> {
-        return this.createPosition(payload);
+        return this.http.post<Position>(this.BASE_URL + POSITIONS, payload).pipe(
+            tap(() => this.invalidateCache())
+        );
     }
 
     update(id: number, payload: PositionPayload): Observable<Position> {
-        return this.updatePosition(id, payload);
+        return this.http.patch<Position>(this.BASE_URL + POSITIONS + '/' + id, payload).pipe(
+            tap(() => this.invalidateCache())
+        );
     }
 
     delete(id: number): Observable<void> {
-        return this.deletePosition(id);
+        return this.http.delete<void>(this.BASE_URL + POSITIONS + '/' + id).pipe(
+            tap(() => this.invalidateCache())
+        );
     }
 }

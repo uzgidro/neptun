@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ApiService, BASE_URL } from '@/core/services/api.service';
+import { ApiService } from '@/core/services/api.service';
 import { Observable } from 'rxjs';
 import { InvestActiveProject } from '@/core/interfaces/invest-active-project';
 
@@ -32,22 +32,22 @@ export interface EditInvestActiveProjectRequest {
 })
 export class InvestActiveProjectService extends ApiService {
     getActiveProjects(): Observable<InvestActiveProject[]> {
-        return this.http.get<InvestActiveProject[]>(BASE_URL + INVEST_ACTIVE_PROJECTS);
+        return this.http.get<InvestActiveProject[]>(this.BASE_URL + INVEST_ACTIVE_PROJECTS);
     }
 
     getById(id: number): Observable<InvestActiveProject> {
-        return this.http.get<InvestActiveProject>(`${BASE_URL}${INVEST_ACTIVE_PROJECTS}/${id}`);
+        return this.http.get<InvestActiveProject>(`${this.BASE_URL}${INVEST_ACTIVE_PROJECTS}/${id}`);
     }
 
     add(data: AddInvestActiveProjectRequest): Observable<InvestActiveProject> {
-        return this.http.post<InvestActiveProject>(BASE_URL + INVEST_ACTIVE_PROJECTS, data);
+        return this.http.post<InvestActiveProject>(this.BASE_URL + INVEST_ACTIVE_PROJECTS, data);
     }
 
     edit(id: number, data: EditInvestActiveProjectRequest): Observable<InvestActiveProject> {
-        return this.http.patch<InvestActiveProject>(`${BASE_URL}${INVEST_ACTIVE_PROJECTS}/${id}`, data);
+        return this.http.patch<InvestActiveProject>(`${this.BASE_URL}${INVEST_ACTIVE_PROJECTS}/${id}`, data);
     }
 
     delete(id: number): Observable<void> {
-        return this.http.delete<void>(`${BASE_URL}${INVEST_ACTIVE_PROJECTS}/${id}`);
+        return this.http.delete<void>(`${this.BASE_URL}${INVEST_ACTIVE_PROJECTS}/${id}`);
     }
 }

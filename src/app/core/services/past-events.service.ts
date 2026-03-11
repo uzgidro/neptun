@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ApiService, BASE_URL } from '@/core/services/api.service';
+import { ApiService } from '@/core/services/api.service';
 import { Observable } from 'rxjs';
 import { DateGroup, PastEventsByTypeResponse } from '@/core/interfaces/past-events';
 import { HttpParams } from '@angular/common/http';
@@ -15,11 +15,11 @@ export class PastEventsService extends ApiService {
         if (date) {
             params = params.set('date', this.dateToYMD(date));
         }
-        return this.http.get<DateGroup[]>(BASE_URL + PAST_EVENTS, { params });
+        return this.http.get<DateGroup[]>(this.BASE_URL + PAST_EVENTS, { params });
     }
 
     getPastEventsByType(date: Date, type: 'incident' | 'shutdown' | 'discharge' | 'visit'): Observable<PastEventsByTypeResponse> {
         const params = new HttpParams().set('date', this.dateToYMD(date)).set('type', type);
-        return this.http.get<PastEventsByTypeResponse>(BASE_URL + PAST_EVENTS + '/by-type', { params });
+        return this.http.get<PastEventsByTypeResponse>(this.BASE_URL + PAST_EVENTS + '/by-type', { params });
     }
 }

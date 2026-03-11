@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { ApiService, BASE_URL } from '@/core/services/api.service';
+import { ApiService } from '@/core/services/api.service';
 import { Observable } from 'rxjs';
+import { shareReplay, tap } from 'rxjs/operators';
 import { Department, DepartmentPayload } from '@/core/interfaces/department';
 import { CrudService } from '@/core/interfaces/crud-service.interface';
 
@@ -10,37 +11,36 @@ const DEPARTMENTS = '/department';
     providedIn: 'root'
 })
 export class DepartmentService extends ApiService implements CrudService<Department, DepartmentPayload> {
-    // Legacy methods (keep for backward compatibility)
-    getDepartments(): Observable<Department[]> {
-        return this.http.get<Department[]>(BASE_URL + DEPARTMENTS);
-    }
+    private departments$: Observable<Department[]> | null = null;
 
-    createDepartment(payload: DepartmentPayload): Observable<Department> {
-        return this.http.post<Department>(BASE_URL + DEPARTMENTS, payload);
-    }
-
-    updateDepartment(id: number, payload: DepartmentPayload): Observable<Department> {
-        return this.http.patch<Department>(BASE_URL + DEPARTMENTS + '/' + id, payload);
-    }
-
-    deleteDepartment(id: number): Observable<void> {
-        return this.http.delete<void>(BASE_URL + DEPARTMENTS + '/' + id);
-    }
-
-    // CrudService interface implementation
     getAll(): Observable<Department[]> {
-        return this.getDepartments();
+        if (!this.departments$) {
+            this.departments$ = this.http.get<Department[]>(this.BASE_URL + DEPARTMENTS).pipe(
+                shareReplay({ bufferSize: 1, refCount: true })
+            );
+        }
+        return this.departments$;
     }
 
     create(payload: DepartmentPayload): Observable<Department> {
-        return this.createDepartment(payload);
+        return this.http.post<Department>(this.BASE_URL + DEPARTMENTS, payload).pipe(
+            tap(() => this.invalidateCache())
+        );
     }
 
     update(id: number, payload: DepartmentPayload): Observable<Department> {
-        return this.updateDepartment(id, payload);
+        return this.http.patch<Department>(this.BASE_URL + DEPARTMENTS + '/' + id, payload).pipe(
+            tap(() => this.invalidateCache())
+        );
     }
 
     delete(id: number): Observable<void> {
-        return this.deleteDepartment(id);
+        return this.http.delete<void>(this.BASE_URL + DEPARTMENTS + '/' + id).pipe(
+            tap(() => this.invalidateCache())
+        );
+    }
+
+    private invalidateCache(): void {
+        this.departments$ = null;
     }
 }

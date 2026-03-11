@@ -57,8 +57,8 @@ export class InvestActiveProjectsComponent implements OnInit {
             error: (err) => {
                 this.messageService.add({
                     severity: 'error',
-                    summary: 'Ошибка загрузки',
-                    detail: 'Не удалось загрузить активные проекты'
+                    summary: this.translateService.instant('INVEST.MESSAGES.LOAD_ERROR'),
+                    detail: this.translateService.instant('INVEST.MESSAGES.LOAD_ACTIVE_FAILED')
                 });
                 console.error(err);
                 this.loading = false;
@@ -97,7 +97,7 @@ export class InvestActiveProjectsComponent implements OnInit {
     }
 
     confirmDelete(project: InvestActiveProject): void {
-        if (confirm('Вы уверены, что хотите удалить этот проект?')) {
+        if (confirm(this.translateService.instant('COMMON.CONFIRM_DELETE'))) {
             this.deleteProject(project.id);
         }
     }
@@ -107,16 +107,16 @@ export class InvestActiveProjectsComponent implements OnInit {
             next: () => {
                 this.messageService.add({
                     severity: 'success',
-                    summary: 'Успешно',
-                    detail: 'Проект успешно удален'
+                    summary: this.translateService.instant('COMMON.SUCCESS'),
+                    detail: this.translateService.instant('INVEST.MESSAGES.PROJECT_DELETED')
                 });
                 this.loadProjects();
             },
             error: (err) => {
                 this.messageService.add({
                     severity: 'error',
-                    summary: 'Ошибка удаления',
-                    detail: err.error?.message || 'Не удалось удалить проект'
+                    summary: this.translateService.instant('INVEST.MESSAGES.DELETE_ERROR'),
+                    detail: err.error?.message || this.translateService.instant('INVEST.MESSAGES.DELETE_FAILED')
                 });
             }
         });

@@ -273,7 +273,7 @@ export class EventsComponent implements OnInit, OnDestroy {
         const query = event.query.toLowerCase();
 
         this.contactService
-            .getContacts()
+            .getAll()
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (contacts) => {

@@ -231,16 +231,22 @@
                     </td>
                     <td>{{ transaction.counterparty }}</td>
                     <td class="text-right">
-                        <span *ngIf="transaction.debit" class="text-green-600 font-semibold">
+                        @if (transaction.debit) {
+                        <span class="text-green-600 font-semibold">
                             +{{ formatCurrency(transaction.debit) }}
                         </span>
-                        <span *ngIf="!transaction.debit" class="text-400">-</span>
+                        } @else {
+                        <span class="text-400">-</span>
+                        }
                     </td>
                     <td class="text-right">
-                        <span *ngIf="transaction.credit" class="text-red-600 font-semibold">
+                        @if (transaction.credit) {
+                        <span class="text-red-600 font-semibold">
                             -{{ formatCurrency(transaction.credit) }}
                         </span>
-                        <span *ngIf="!transaction.credit" class="text-400">-</span>
+                        } @else {
+                        <span class="text-400">-</span>
+                        }
                     </td>
                     <td class="text-right">
                         <span [ngClass]="{'text-green-600': transaction.balance >= 0, 'text-red-600': transaction.balance < 0}">

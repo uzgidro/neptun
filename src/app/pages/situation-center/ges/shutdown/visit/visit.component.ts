@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { Button } from 'primeng/button';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
 import { DatePipe } from '@angular/common';
@@ -18,10 +18,10 @@ import { SelectComponent } from '@/layout/component/dialog/select/select.compone
 import { FileUploadComponent } from '@/layout/component/dialog/file-upload/file-upload.component';
 import { FileViewerComponent } from '@/layout/component/dialog/file-viewer/file-viewer.component';
 import { FileListComponent } from '@/layout/component/dialog/file-list/file-list.component';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ScService } from '@/core/services/sc.service';
 import { HttpResponse } from '@angular/common/http';
-import { finalize } from 'rxjs';
+import { finalize, Subject, takeUntil } from 'rxjs';
 import { saveAs } from 'file-saver';
 
 @Component({
@@ -46,7 +46,7 @@ import { saveAs } from 'file-saver';
     templateUrl: './visit.component.html',
     styleUrl: './visit.component.scss'
 })
-export class VisitComponent implements OnInit, OnChanges {
+export class VisitComponent implements OnInit, OnChanges, OnDestroy {
     @Input() date: Date | null = null;
 
     isFormOpen = false;
@@ -67,6 +67,8 @@ export class VisitComponent implements OnInit, OnChanges {
     private visitService: VisitService = inject(VisitService);
     private scService: ScService = inject(ScService);
     private messageService: MessageService = inject(MessageService);
+    private translate = inject(TranslateService);
+    private destroy$ = new Subject<void>();
 
     // Export
     isExcelLoading = false;
@@ -90,7 +92,7 @@ export class VisitComponent implements OnInit, OnChanges {
         this.loadVisits();
 
         this.orgsLoading = true;
-        this.organizationService.getOrganizationsFlat().subscribe({
+        this.organizationService.getOrganizationsFlat().pipe(takeUntil(this.destroy$)).subscribe({
             next: (data) => {
                 this.organizations = data;
             },
@@ -101,12 +103,12 @@ export class VisitComponent implements OnInit, OnChanges {
     private loadVisits() {
         this.loading = true;
         const dateToUse = this.date || new Date();
-        this.visitService.getVisits(dateToUse).subscribe({
+        this.visitService.getVisits(dateToUse).pipe(takeUntil(this.destroy$)).subscribe({
             next: (data) => {
                 this.visits = data;
             },
             error: (err) => {
-                this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: err.message });
+                this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: err.message });
             },
             complete: () => (this.loading = false)
         });
@@ -147,13 +149,13 @@ export class VisitComponent implements OnInit, OnChanges {
         }
 
         if (this.isEditMode && this.currentVisitId) {
-            this.visitService.editVisit(this.currentVisitId, formData).subscribe({
+            this.visitService.editVisit(this.currentVisitId, formData).pipe(takeUntil(this.destroy$)).subscribe({
                 next: () => {
-                    this.messageService.add({ severity: 'success', summary: 'Визит обновлен' });
+                    this.messageService.add({ severity: 'success', summary: this.translate.instant('SITUATION_CENTER.VISIT.UPDATED') });
                     this.closeDialog();
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка обновления визита', detail: err.message });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('SITUATION_CENTER.VISIT.UPDATE_ERROR'), detail: err.message });
                     this.isLoading = false;
                 },
                 complete: () => {
@@ -162,13 +164,13 @@ export class VisitComponent implements OnInit, OnChanges {
                 }
             });
         } else {
-            this.visitService.addVisit(formData).subscribe({
+            this.visitService.addVisit(formData).pipe(takeUntil(this.destroy$)).subscribe({
                 next: () => {
-                    this.messageService.add({ severity: 'success', summary: 'Визит добавлен' });
+                    this.messageService.add({ severity: 'success', summary: this.translate.instant('SITUATION_CENTER.VISIT.CREATED') });
                     this.closeDialog();
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка добавления визита', detail: err.message });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('SITUATION_CENTER.VISIT.CREATE_ERROR'), detail: err.message });
                     this.isLoading = false;
                 },
                 complete: () => {
@@ -254,23 +256,15 @@ export class VisitComponent implements OnInit, OnChanges {
         this.showFilesDialog = true;
     }
 
-    formatFileSize(bytes: number): string {
-        if (!bytes || bytes === 0) return '0 Bytes';
-        const k = 1024;
-        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-        const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
-    }
-
     deleteVisit(id: number) {
-        if (confirm('Вы уверены, что хотите удалить этот визит?')) {
-            this.visitService.deleteVisit(id).subscribe({
+        if (confirm(this.translate.instant('COMMON.CONFIRM_DELETE'))) {
+            this.visitService.deleteVisit(id).pipe(takeUntil(this.destroy$)).subscribe({
                 next: () => {
-                    this.messageService.add({ severity: 'success', summary: 'Визит удален' });
+                    this.messageService.add({ severity: 'success', summary: this.translate.instant('SITUATION_CENTER.VISIT.DELETED') });
                     this.loadVisits();
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка удаления визита', detail: err.message });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('SITUATION_CENTER.VISIT.DELETE_ERROR'), detail: err.message });
                 }
             });
         }
@@ -280,6 +274,11 @@ export class VisitComponent implements OnInit, OnChanges {
         if (changes['date'] && !changes['date'].firstChange) {
             this.loadVisits();
         }
+    }
+
+    ngOnDestroy(): void {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 
     get dateYMD(): string {
@@ -296,6 +295,7 @@ export class VisitComponent implements OnInit, OnChanges {
         this.scService
             .downloadScReport(dateToUse, format)
             .pipe(
+                takeUntil(this.destroy$),
                 finalize(() => {
                     this.isExcelLoading = false;
                     this.isPdfLoading = false;
@@ -309,7 +309,7 @@ export class VisitComponent implements OnInit, OnChanges {
                 },
                 error: (err: any) => {
                     console.error('Ошибка при скачивании:', err);
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось скачать файл' });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('COMMON.DOWNLOAD_ERROR') });
                 }
             });
     }

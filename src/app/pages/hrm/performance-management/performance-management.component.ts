@@ -104,7 +104,7 @@ export class PerformanceManagementComponent implements OnInit, OnDestroy {
 
     private loadEmployees(): void {
         this.contactService
-            .getContacts()
+            .getAll()
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (data: Contact[]) => {

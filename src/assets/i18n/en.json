@@ -33,8 +33,8 @@
     "SUCCESS": "Success",
     "ERROR": "Error",
     "WARNING": "Warning",
-      "INFO": "Info",
-      "CONGRATULATIONS": "Congratulations",
+    "INFO": "Info",
+    "CONGRATULATIONS": "Congratulations",
     "EXPORT": "Export",
     "EXPORT_SUCCESS": "File exported successfully",
     "FILL_REQUIRED": "Fill in required fields",
@@ -67,8 +67,15 @@
       "NOV": "November",
       "DEC": "December"
     },
-      "NO_RESULTS": "Nothing found",
-      "DOWNLOAD_EXCEL": "Download Excel"
+    "NO_RESULTS": "Nothing found",
+    "DOWNLOAD_EXCEL": "Download Excel",
+    "APPROVE": "Approve",
+    "REJECT": "Reject",
+    "STATUS": "Status",
+    "CLEAR": "Clear",
+    "DOWNLOAD": "Download",
+    "EMAIL": "Email",
+    "PHONE": "Phone"
   },
   "CATEGORIES": {
     "TITLE": "Roles",
@@ -220,11 +227,11 @@
     "OTHER_DOCS": "Other Documents",
     "RESERVOIR_SUMMARY": "Summary",
     "RESERVOIR_SUMMARY_PDF": "Summary PDF",
-      "RESERVOIR_SUMMARY_HOURLY": "Operative Summary",
+    "RESERVOIR_SUMMARY_HOURLY": "Operative Summary",
     "HYDRAULIC_STRUCTURES": "Hydraulic Structures",
     "INCIDENTS": "Incidents",
-      "VISITS": "Visits",
-      "SNOW_COVER": "MODSNOW"
+    "VISITS": "Visits",
+    "SNOW_COVER": "MODSNOW"
   },
   "TOPBAR": {
     "CALL": "Call",
@@ -301,7 +308,21 @@
     "NOT_INFORMED": "Not Informed",
     "INFORMED_BY": "Informed By",
     "CREATED_BY": "Created By",
-    "UPDATED_BY": "Updated By"
+    "UPDATED_BY": "Updated By",
+    "CANCEL": "Cancel",
+    "SAVE": "Save",
+    "DATE_LABEL": "Date",
+    "TOGETHER_LABEL": "Together with",
+    "REJECT_DIALOG_HEADER": "Reject",
+    "RESCHEDULE_DIALOG_HEADER": "Reschedule",
+    "SPECIFY_NEW_DATE_TIME": "Specify new date and time",
+    "EVENT_NAME": "Event name",
+    "EVENT_DESCRIPTION": "Description",
+    "EVENT_DATE_TIME": "Date and time",
+    "EVENT_TYPE": "Event type",
+    "EVENT_LOCATION": "Location",
+    "EVENT_STATUS": "Status",
+    "EVENT_RESPONSIBLE": "Responsible"
   },
   "DASHBOARD": {
     "EVENTS": "Events",
@@ -940,7 +961,10 @@
       "MONTH_9": "September",
       "MONTH_10": "October",
       "MONTH_11": "November",
-      "MONTH_12": "December"
+      "MONTH_12": "December",
+      "DATA_UPDATED": "Data updated",
+      "HOURS_SHORT": "h",
+      "HOURS_WORKED": "Hours worked"
     },
     "COMMON": {
       "EMPLOYEE": "Employee",
@@ -969,7 +993,8 @@
       "BY_TENURE": "Distribution by tenure",
       "HEADCOUNT_BY_DEPARTMENT": "Headcount by department",
       "HEADCOUNT": "Headcount",
-      "PERCENT_OF_TOTAL": "% of total"
+      "PERCENT_OF_TOTAL": "% of total",
+      "AVG_AGE": "Average age"
     },
     "TRAINING": {
       "TITLE": "Training and Development",
@@ -1141,7 +1166,13 @@
       "POSITION": "Position",
       "SALARY": "Salary",
       "RESPONSES": "Responses",
-      "PRIORITY": "Priority",
+      "PRIORITY": {
+        "LABEL": "Priority",
+        "LOW": "Low",
+        "NORMAL": "Normal",
+        "HIGH": "High",
+        "URGENT": "Urgent"
+      },
       "STATUS": "Status",
       "ACTIONS": "Actions",
       "APPLICANT": "Applicant",
@@ -1156,8 +1187,28 @@
       "EDIT": "Edit",
       "NO_VACANCIES": "No vacancies found",
       "FULL_NAME": "Full name",
-      "SOURCE": "Source",
-      "STAGE": "Stage",
+      "SOURCE": {
+        "LABEL": "Source",
+        "WEBSITE": "Company website",
+        "JOB_PORTAL": "Job portal",
+        "GOV_PORTAL": "Government portal",
+        "REFERRAL": "Employee referral",
+        "AGENCY": "Recruitment agency",
+        "SOCIAL_MEDIA": "Social media",
+        "DIRECT": "Direct application",
+        "OTHER": "Other"
+      },
+      "STAGE": {
+        "LABEL": "Stage",
+        "APPLICATION": "Application",
+        "SCREENING": "Screening",
+        "INTERVIEW": "Interview",
+        "ASSESSMENT": "Assessment",
+        "VERIFICATION": "Verification",
+        "OFFER": "Offer",
+        "HIRED": "Hired",
+        "CLOSED": "Closed"
+      },
       "RATING": "Rating",
       "NO_CANDIDATES": "No candidates found",
       "EMPLOYEE": "Employee",
@@ -1174,134 +1225,109 @@
       "VACANCY_UPDATED": "Vacancy updated",
       "CANDIDATE_CREATED": "Candidate added",
       "CANDIDATE_UPDATED": "Candidate updated",
-        "SCREENING_PASSED": "Candidate passed initial screening",
-        "INTERVIEW_SCHEDULED": "Interview scheduled",
-        "FEEDBACK_SAVED": "Feedback saved",
-        "REFERENCE_ADDED": "Reference added",
-        "REFERENCE_VERIFIED": "Reference check completed",
-        "OFFER_SENT": "Offer sent to candidate",
-        "OFFER_ACCEPTED": "Candidate accepted the offer",
-        "HIRED": "Employee successfully hired",
-        "CANDIDATE_REJECTED": "Candidate rejected, notification sent",
-        "MENTOR_ASSIGNED": "Mentor assigned",
-        "TASK_COMPLETED": "Task completed",
-        "VACANCY_PUBLISHED_PORTAL": "Vacancy published on government portal",
-        "VACANCY_CREATE_ERROR": "Failed to create vacancy",
-        "VACANCY_UPDATE_ERROR": "Failed to update vacancy",
-        "CANDIDATE_CREATE_ERROR": "Failed to add candidate",
-        "INTERVIEW_SCHEDULE_ERROR": "Failed to schedule interview",
-        "OFFER_SEND_ERROR": "Failed to send offer",
+      "SCREENING_PASSED": "Candidate passed initial screening",
+      "INTERVIEW_SCHEDULED": "Interview scheduled",
+      "FEEDBACK_SAVED": "Feedback saved",
+      "REFERENCE_ADDED": "Reference added",
+      "REFERENCE_VERIFIED": "Reference check completed",
+      "OFFER_SENT": "Offer sent to candidate",
+      "OFFER_ACCEPTED": "Candidate accepted the offer",
+      "HIRED": "Employee successfully hired",
+      "CANDIDATE_REJECTED": "Candidate rejected, notification sent",
+      "MENTOR_ASSIGNED": "Mentor assigned",
+      "TASK_COMPLETED": "Task completed",
+      "VACANCY_PUBLISHED_PORTAL": "Vacancy published on government portal",
+      "VACANCY_CREATE_ERROR": "Failed to create vacancy",
+      "VACANCY_UPDATE_ERROR": "Failed to update vacancy",
+      "CANDIDATE_CREATE_ERROR": "Failed to add candidate",
+      "INTERVIEW_SCHEDULE_ERROR": "Failed to schedule interview",
+      "OFFER_SEND_ERROR": "Failed to send offer",
       "NOT_ASSIGNED": "Not assigned",
-        "EMPLOYMENT_TYPE": {
-            "FULL_TIME": "Full-time",
-            "PART_TIME": "Part-time",
-            "CONTRACT": "Contract",
-            "INTERNSHIP": "Internship",
-            "REMOTE": "Remote"
-        },
-        "VACANCY_STATUS": {
-            "DRAFT": "Draft",
-            "PENDING_APPROVAL": "Pending approval",
-            "APPROVED": "Approved",
-            "OPEN": "Open",
-            "ON_HOLD": "On hold",
-            "CLOSED": "Closed",
-            "CANCELLED": "Cancelled"
-        },
-        "PRIORITY": {
-            "LOW": "Low",
-            "NORMAL": "Normal",
-            "HIGH": "High",
-            "URGENT": "Urgent"
-        },
-        "CANDIDATE_STATUS": {
-            "NEW": "New",
-            "SCREENING": "Screening",
-            "PHONE_INTERVIEW": "Phone interview",
-            "INTERVIEW": "Interview",
-            "TECHNICAL_TEST": "Technical test",
-            "REFERENCE_CHECK": "Reference check",
-            "BACKGROUND_CHECK": "Background check",
-            "OFFER": "Offer",
-            "OFFER_ACCEPTED": "Offer accepted",
-            "HIRED": "Hired",
-            "REJECTED": "Rejected",
-            "WITHDRAWN": "Withdrawn"
-        },
-        "STAGE": {
-            "APPLICATION": "Application",
-            "SCREENING": "Screening",
-            "INTERVIEW": "Interview",
-            "ASSESSMENT": "Assessment",
-            "VERIFICATION": "Verification",
-            "OFFER": "Offer",
-            "HIRED": "Hired",
-            "CLOSED": "Closed"
-        },
-        "INTERVIEW_TYPE": {
-            "PHONE": "Phone",
-            "VIDEO": "Video call",
-            "IN_PERSON": "In-person",
-            "TECHNICAL": "Technical",
-            "HR": "HR interview",
-            "PANEL": "Panel",
-            "FINAL": "Final"
-        },
-        "RECOMMENDATION": {
-            "STRONG_YES": "Definitely yes",
-            "YES": "Yes",
-            "MAYBE": "Maybe",
-            "NO": "No",
-            "STRONG_NO": "Definitely no"
-        },
-        "OFFER_STATUS": {
-            "DRAFT": "Draft",
-            "PENDING_APPROVAL": "Pending approval",
-            "APPROVED": "Approved",
-            "SENT": "Sent",
-            "ACCEPTED": "Accepted",
-            "DECLINED": "Declined",
-            "NEGOTIATING": "Negotiating",
-            "EXPIRED": "Expired",
-            "WITHDRAWN": "Withdrawn"
-        },
-        "SOURCE": {
-            "WEBSITE": "Company website",
-            "JOB_PORTAL": "Job portal",
-            "GOV_PORTAL": "Government portal",
-            "REFERRAL": "Employee referral",
-            "AGENCY": "Recruitment agency",
-            "SOCIAL_MEDIA": "Social media",
-            "DIRECT": "Direct application",
-            "OTHER": "Other"
-        },
-        "TOOLTIP": {
-            "PASS_SCREENING": "Pass screening",
-            "SCHEDULE_INTERVIEW": "Schedule interview",
-            "CHECK_REFERENCES": "Check references",
-            "SEND_OFFER": "Send offer",
-            "OFFER_ACCEPTED": "Offer accepted",
-            "HIRE_EMPLOYEE": "Hire employee",
-            "REJECT": "Reject"
-        },
-        "MOCK": {
-            "TASK_PROCESS_DOCUMENTS": "Process documents",
-            "TASK_CREATE_EMAIL": "Create email account",
-            "TASK_SETUP_ACCESS": "Set up system access",
-            "TASK_INTRO_TRAINING": "Introductory training",
-            "TASK_MEET_TEAM": "Meet the team",
-            "TASK_COMPANY_POLICIES": "Review company policies",
-            "DOC_PASSPORT": "Passport",
-            "DOC_INN": "TIN",
-            "DOC_SNILS": "SNILS",
-            "DOC_WORK_BOOK": "Employment record book",
-            "DOC_PHOTO": "Photo 3x4",
-            "DOC_DIPLOMA": "Diploma",
-            "POSITIVE_FEEDBACK": "Positive feedback",
-            "APPROVER_NAME": "Sokolov Andrey",
-            "MENTOR_NAME": "Volkova Olga Nikolaevna"
-        },
+      "EMPLOYMENT_TYPE": {
+        "FULL_TIME": "Full-time",
+        "PART_TIME": "Part-time",
+        "CONTRACT": "Contract",
+        "INTERNSHIP": "Internship",
+        "REMOTE": "Remote"
+      },
+      "VACANCY_STATUS": {
+        "DRAFT": "Draft",
+        "PENDING_APPROVAL": "Pending approval",
+        "APPROVED": "Approved",
+        "OPEN": "Open",
+        "ON_HOLD": "On hold",
+        "CLOSED": "Closed",
+        "CANCELLED": "Cancelled"
+      },
+      "CANDIDATE_STATUS": {
+        "NEW": "New",
+        "SCREENING": "Screening",
+        "PHONE_INTERVIEW": "Phone interview",
+        "INTERVIEW": "Interview",
+        "TECHNICAL_TEST": "Technical test",
+        "REFERENCE_CHECK": "Reference check",
+        "BACKGROUND_CHECK": "Background check",
+        "OFFER": "Offer",
+        "OFFER_ACCEPTED": "Offer accepted",
+        "HIRED": "Hired",
+        "REJECTED": "Rejected",
+        "WITHDRAWN": "Withdrawn"
+      },
+      "INTERVIEW_TYPE": {
+        "PHONE": "Phone",
+        "VIDEO": "Video call",
+        "IN_PERSON": "In-person",
+        "TECHNICAL": "Technical",
+        "HR": "HR interview",
+        "PANEL": "Panel",
+        "FINAL": "Final"
+      },
+      "RECOMMENDATION": {
+        "STRONG_YES": "Definitely yes",
+        "YES": "Yes",
+        "MAYBE": "Maybe",
+        "NO": "No",
+        "STRONG_NO": "Definitely no"
+      },
+      "OFFER_STATUS": {
+        "DRAFT": "Draft",
+        "PENDING_APPROVAL": "Pending approval",
+        "APPROVED": "Approved",
+        "SENT": "Sent",
+        "ACCEPTED": "Accepted",
+        "DECLINED": "Declined",
+        "NEGOTIATING": "Negotiating",
+        "EXPIRED": "Expired",
+        "WITHDRAWN": "Withdrawn"
+      },
+      "TOOLTIP": {
+        "PASS_SCREENING": "Pass screening",
+        "SCHEDULE_INTERVIEW": "Schedule interview",
+        "CHECK_REFERENCES": "Check references",
+        "SEND_OFFER": "Send offer",
+        "OFFER_ACCEPTED": "Offer accepted",
+        "HIRE_EMPLOYEE": "Hire employee",
+        "REJECT": "Reject"
+      },
+      "MOCK": {
+        "TASK_PROCESS_DOCUMENTS": "Process documents",
+        "TASK_CREATE_EMAIL": "Create email account",
+        "TASK_SETUP_ACCESS": "Set up system access",
+        "TASK_INTRO_TRAINING": "Introductory training",
+        "TASK_MEET_TEAM": "Meet the team",
+        "TASK_COMPANY_POLICIES": "Review company policies",
+        "DOC_PASSPORT": "Passport",
+        "DOC_INN": "TIN",
+        "DOC_SNILS": "SNILS",
+        "DOC_WORK_BOOK": "Employment record book",
+        "DOC_PHOTO": "Photo 3x4",
+        "DOC_DIPLOMA": "Diploma",
+        "POSITIVE_FEEDBACK": "Positive feedback",
+        "APPROVER_NAME": "Sokolov Andrey",
+        "MENTOR_NAME": "Volkova Olga Nikolaevna"
+      },
       "ONBOARDING": {
+        "LABEL": "Onboarding",
         "STATUS_IN_PROGRESS": "In progress",
         "STATUS_COMPLETED": "Completed",
         "STATUS_NOT_STARTED": "Not started",
@@ -1315,12 +1341,13 @@
         "CAT_TRAINING": "Training",
         "CAT_INTRODUCTION": "Introduction",
         "CAT_COMPLIANCE": "Policies",
-          "CAT_DEPARTMENT": "Department",
+        "CAT_DEPARTMENT": "Department",
         "MARK_COMPLETED": "Mark as completed",
         "PENDING_DOCUMENTS": "Pending documents",
         "SUBMITTED_DOCUMENTS": "Submitted documents"
       },
       "VACANCY": {
+        "LABEL": "Vacancy",
         "EDIT_VACANCY": "Edit vacancy",
         "CREATE_REQUEST": "Vacancy request",
         "TITLE_LABEL": "Vacancy title",
@@ -1664,21 +1691,21 @@
       "REQUEST_REJECTED": "Request rejected",
       "REQUEST_CANCELLED": "Request cancelled"
     },
-      "MENU": {
-          "DASHBOARD": "HRM Dashboard",
-          "MY_CABINET": "My Cabinet",
-          "PERSONNEL_RECORDS": "Personnel Records",
-          "VACATION_MANAGEMENT": "Vacation Management",
-          "SALARY_MANAGEMENT": "Salary Management",
-          "RECRUITING": "Recruiting",
-          "TRAINING": "Training & Development",
-          "COMPETENCY_ASSESSMENT": "Competency Assessment",
-          "PERFORMANCE_MANAGEMENT": "Performance Management",
-          "ANALYTICS": "Analytics & Reports",
-          "TIMESHEET": "Timesheet",
-          "HR_DOCUMENTS": "HR Documents",
-          "ACCESS_CONTROL": "Access Control",
-          "ORG_STRUCTURE": "Org Structure"
+    "MENU": {
+      "DASHBOARD": "HRM Dashboard",
+      "MY_CABINET": "My Cabinet",
+      "PERSONNEL_RECORDS": "Personnel Records",
+      "VACATION_MANAGEMENT": "Vacation Management",
+      "SALARY_MANAGEMENT": "Salary Management",
+      "RECRUITING": "Recruiting",
+      "TRAINING": "Training & Development",
+      "COMPETENCY_ASSESSMENT": "Competency Assessment",
+      "PERFORMANCE_MANAGEMENT": "Performance Management",
+      "ANALYTICS": "Analytics & Reports",
+      "TIMESHEET": "Timesheet",
+      "HR_DOCUMENTS": "HR Documents",
+      "ACCESS_CONTROL": "Access Control",
+      "ORG_STRUCTURE": "Org Structure"
     }
   },
   "VALIDATION": {
@@ -1868,8 +1895,8 @@
       "INFLOW_TO_DATE": "Inflow to Date, mln m³",
       "MODSNOW": "MODSNOW, snow cover %"
     },
-      "RESERVOIR_SUMMARY_HOURLY": {
-          "TITLE": "Operative Reservoir Summary"
+    "RESERVOIR_SUMMARY_HOURLY": {
+      "TITLE": "Operative Reservoir Summary"
     },
     "DASHBOARD": {
       "HEADER": {
@@ -1908,10 +1935,10 @@
         "ALL_WORKING": "All stations operational",
         "TYPE_GES": "HPP",
         "TYPE_MINI": "mini",
-          "TYPE_MICRO": "micro",
-          "DETAIL_TITLE": "Shutdown Details",
-          "ONGOING": "Ongoing",
-          "GO_TO_GES": "Go to station"
+        "TYPE_MICRO": "micro",
+        "DETAIL_TITLE": "Shutdown Details",
+        "ONGOING": "Ongoing",
+        "GO_TO_GES": "Go to station"
       },
       "POWER_GENERATION": {
         "YEAR_START": "Year to Date",
@@ -1928,10 +1955,10 @@
         "EMERGENCY_SHUTDOWNS": "Emergency Shutdowns",
         "NO_ACTIVE_SHUTDOWNS": "No active shutdowns",
         "RESERVOIRS": "Reservoirs",
-          "NO_RESERVOIRS": "No reservoirs",
-          "WORKING": "Working",
-          "RESERVE": "In reserve",
-          "IN_REPAIR": "Under repair"
+        "NO_RESERVOIRS": "No reservoirs",
+        "WORKING": "Working",
+        "RESERVE": "In reserve",
+        "IN_REPAIR": "Under repair"
       },
       "COMMON": {
         "LOADING": "Loading...",
@@ -2931,7 +2958,15 @@
       "NO_ANSWER": "No Answer",
       "BUSY": "Busy",
       "CANCELLED": "Cancelled"
-    }
+    },
+    "CALLER": "Caller",
+    "RECEIVER": "Receiver",
+    "NO_CALLS": "No calls",
+    "NEW_CALL": "New call",
+    "EDIT_CALL": "Edit call",
+    "CALLER_REQUIRED": "Caller is required",
+    "CALLER_PHONE_LABEL": "Caller phone",
+    "RECEIVER_LABEL": "Receiver"
   },
   "INVEST": {
     "ACTIVE_PROJECTS": {
@@ -3059,193 +3094,193 @@
     "PAGE_REPORT": "Page {currentPage} of {totalPages}",
     "LOADING": "Loading..."
   },
-    "GES_DETAIL": {
-        "NOT_FOUND": "HPP not found",
-        "ERROR_LOADING": "Error loading data",
-        "ERROR_SAVE": "Error saving",
-        "ERROR_DELETE": "Error deleting",
-        "CREATED": "Record created",
-        "UPDATED": "Record updated",
-        "DELETED": "Record deleted",
-        "AGGREGATES_TITLE": "Aggregates",
-        "MNEMONIC_TITLE": "Mnemonic Scheme",
-        "NO_AGGREGATES": "No aggregate data",
-        "TABS": {
-            "INFO": "Information",
-            "CONTACTS": "Contacts",
-            "SHUTDOWNS": "Emergency Outages",
-            "DISCHARGES": "Idle Discharges",
-            "INCIDENTS": "Incidents",
-            "VISITS": "Visits",
-            "TELEMETRY": "Telemetry",
-            "MNEMONIC": "Mnemonic Scheme"
-        },
-        "KPI": {
-            "CURRENT_POWER": "Active Power",
-            "AGGREGATES": "Aggregates",
-            "SHUTDOWNS": "Emergency Outages",
-            "DISCHARGES": "Idle Discharges"
-        },
-        "STATUS": {
-            "ACTIVE": "Active",
-            "PENDING": "In Reserve",
-            "REPAIR": "Repair",
-            "OFFLINE": "Offline"
-        },
-        "AGGREGATE": {
-            "PARAM_NAME": "Parameter",
-            "PARAM_VALUE": "Value",
-            "PARAM_UNIT": "Unit",
-            "ACTIVE_POWER": "Active Power",
-            "REACTIVE_POWER": "Reactive Power",
-            "VOLTAGE_AB": "Voltage AB",
-            "VOLTAGE_BC": "Voltage BC",
-            "VOLTAGE_CA": "Voltage CA",
-            "CURRENT_A": "Current Phase A",
-            "CURRENT_B": "Current Phase B",
-            "CURRENT_C": "Current Phase C",
-            "FREQUENCY": "Frequency",
-            "POWER_FACTOR": "Power Factor (cos φ)",
-            "ROTOR_VOLTAGE": "Rotor Voltage",
-            "ROTOR_CURRENT": "Rotor Current",
-            "GUIDE_VANE_1": "Guide Vane 1",
-            "GUIDE_VANE_2": "Guide Vane 2"
-        },
-        "UNIT": {
-            "MW": "MW",
-            "MVAR": "MVar",
-            "KV": "kV",
-            "A": "A",
-            "HZ": "Hz",
-            "V": "V",
-            "PERCENT": "%"
-        },
-        "MNEMONIC": {
-            "STATUS": "Status",
-            "POWER": "Power",
-            "NO_DATA": "No telemetry data",
-            "PLACEHOLDER": "Mnemonic scheme will be displayed when data is available",
-            "NO_SCHEMA": "Mnemonic scheme is not available for this station",
-            "NO_SCHEMA_DESC": "The schema for this HPP has not been uploaded yet",
-            "LOAD_ERROR": "Error loading mnemonic scheme"
-        },
-        "INFO": {
-            "BASIC_INFO": "Basic Information",
-            "NAME": "Name",
-            "PARENT_ORG": "Parent Organization",
-            "TYPES": "Types",
-            "DEPARTMENTS": "Departments",
-            "DEPARTMENT_NAME": "Name",
-            "DEPARTMENT_DESC": "Description",
-            "NO_DEPARTMENTS": "No departments",
-            "SUB_ORGANIZATIONS": "Sub-organizations"
-        },
-        "CONTACTS": {
-            "NAME": "Full Name",
-            "POSITION": "Position",
-            "DEPARTMENT": "Department",
-            "PHONE": "Phone",
-            "EMAIL": "Email",
-            "ACTIONS": "Actions",
-            "CALL": "Call",
-            "NO_CONTACTS": "No contacts"
-        },
-        "FILTERS": {
-            "START_DATE": "Start Date",
-            "END_DATE": "End Date",
-            "SELECT_DATE": "Select date"
-        },
-        "COMMON": {
-            "CREATED_BY": "Created by",
-            "FILES": "Files",
-            "VIEW_FILES": "View files",
-            "ATTACH_FILES": "Attach files",
-            "ADD_NEW_FILES": "Add new files"
-        },
-        "SHUTDOWNS": {
-            "ADD": "Add Emergency Outage",
-            "EDIT": "Edit Emergency Outage",
-            "START": "Start",
-            "END": "End",
-            "REASON": "Reason",
-            "POWER_LOSS": "Power Loss",
-            "IDLE_DISCHARGE": "Idle Discharge",
-            "FILES": "Event Files",
-            "NO_DATA": "No emergency outage data"
-        },
-        "DISCHARGES": {
-            "ADD": "Add Idle Discharge",
-            "EDIT": "Edit Idle Discharge",
-            "START": "Start",
-            "END": "End",
-            "FLOW_RATE": "Flow Rate, m³/s",
-            "TOTAL_VOLUME": "Volume, mln m³",
-            "REASON": "Reason",
-            "STATUS": "Status",
-            "ONGOING": "Ongoing",
-            "APPROVED": "Approved",
-            "COMPLETED": "Completed",
-            "FILES": "Idle Discharge Files",
-            "NO_DATA": "No idle discharge data"
-        },
-        "INCIDENTS": {
-            "ADD": "Add Incident",
-            "EDIT": "Edit Incident",
-            "DATE": "Date",
-            "DESCRIPTION": "Description",
-            "ORGANIZATION": "Organization",
-            "FILES": "Incident Files",
-            "NO_DATA": "No incident data"
-        },
-        "VISITS": {
-            "ADD": "Add Visit",
-            "EDIT": "Edit Visit",
-            "DATE": "Date",
-            "DESCRIPTION": "Description",
-            "RESPONSIBLE": "Responsible",
-            "ORGANIZATION": "Organization",
-            "FILES": "Visit Files",
-            "NO_DATA": "No visit data"
-        },
-        "TELEMETRY": {
-            "DEVICE": "Device",
-            "DEVICE_GROUP": "Device Group",
-            "GROUP": "Group",
-            "PARAMETER": "Parameter",
-            "VALUE": "Value",
-            "UNIT": "Unit",
-            "QUALITY": "Quality",
-            "SEVERITY": "Severity",
-            "TIMESTAMP": "Timestamp",
-            "ALL_GROUPS": "All Groups",
-            "ALL_DEVICES": "All Devices",
-            "TOTAL_RECORDS": "Total Records",
-            "NO_DATA": "No telemetry data"
-        }
+  "GES_DETAIL": {
+    "NOT_FOUND": "HPP not found",
+    "ERROR_LOADING": "Error loading data",
+    "ERROR_SAVE": "Error saving",
+    "ERROR_DELETE": "Error deleting",
+    "CREATED": "Record created",
+    "UPDATED": "Record updated",
+    "DELETED": "Record deleted",
+    "AGGREGATES_TITLE": "Aggregates",
+    "MNEMONIC_TITLE": "Mnemonic Scheme",
+    "NO_AGGREGATES": "No aggregate data",
+    "TABS": {
+      "INFO": "Information",
+      "CONTACTS": "Contacts",
+      "SHUTDOWNS": "Emergency Outages",
+      "DISCHARGES": "Idle Discharges",
+      "INCIDENTS": "Incidents",
+      "VISITS": "Visits",
+      "TELEMETRY": "Telemetry",
+      "MNEMONIC": "Mnemonic Scheme"
     },
-    "SNOW_COVER": {
-        "TITLE": "Snow Cover (MODSNOW)",
-        "TODAY": "Today",
-        "YESTERDAY": "Yesterday",
-        "YEAR_AGO": "Year Ago",
-        "AVG_COVER": "Average Cover",
-        "ORGANIZATION": "Organization",
-        "COVER": "Cover, %",
-        "DELTA": "Δ vs Year Ago",
-        "ZONES": "Elevation Zones",
-        "ELEVATION": "Elevation, m",
-        "SCA_PCT": "Cover, %",
-        "NO_DATA": "No data",
-        "RESOURCE_DATE": "Image Date"
+    "KPI": {
+      "CURRENT_POWER": "Active Power",
+      "AGGREGATES": "Aggregates",
+      "SHUTDOWNS": "Emergency Outages",
+      "DISCHARGES": "Idle Discharges"
     },
-    "UZGIDRO_NEWS": {
-        "TITLE": "UzGidro News",
-        "TOTAL_NEWS": "Total news",
-        "NEWS_COUNT": "news",
-        "NO_NEWS": "No news found",
-        "VIEWS": "Views",
-        "PUBLISHED": "Published",
-        "LOAD_ERROR": "Failed to load news",
-        "PAGE_REPORT": "Showing {first}-{last} of {totalRecords}"
+    "STATUS": {
+      "ACTIVE": "Active",
+      "PENDING": "In Reserve",
+      "REPAIR": "Repair",
+      "OFFLINE": "Offline"
+    },
+    "AGGREGATE": {
+      "PARAM_NAME": "Parameter",
+      "PARAM_VALUE": "Value",
+      "PARAM_UNIT": "Unit",
+      "ACTIVE_POWER": "Active Power",
+      "REACTIVE_POWER": "Reactive Power",
+      "VOLTAGE_AB": "Voltage AB",
+      "VOLTAGE_BC": "Voltage BC",
+      "VOLTAGE_CA": "Voltage CA",
+      "CURRENT_A": "Current Phase A",
+      "CURRENT_B": "Current Phase B",
+      "CURRENT_C": "Current Phase C",
+      "FREQUENCY": "Frequency",
+      "POWER_FACTOR": "Power Factor (cos φ)",
+      "ROTOR_VOLTAGE": "Rotor Voltage",
+      "ROTOR_CURRENT": "Rotor Current",
+      "GUIDE_VANE_1": "Guide Vane 1",
+      "GUIDE_VANE_2": "Guide Vane 2"
+    },
+    "UNIT": {
+      "MW": "MW",
+      "MVAR": "MVar",
+      "KV": "kV",
+      "A": "A",
+      "HZ": "Hz",
+      "V": "V",
+      "PERCENT": "%"
+    },
+    "MNEMONIC": {
+      "STATUS": "Status",
+      "POWER": "Power",
+      "NO_DATA": "No telemetry data",
+      "PLACEHOLDER": "Mnemonic scheme will be displayed when data is available",
+      "NO_SCHEMA": "Mnemonic scheme is not available for this station",
+      "NO_SCHEMA_DESC": "The schema for this HPP has not been uploaded yet",
+      "LOAD_ERROR": "Error loading mnemonic scheme"
+    },
+    "INFO": {
+      "BASIC_INFO": "Basic Information",
+      "NAME": "Name",
+      "PARENT_ORG": "Parent Organization",
+      "TYPES": "Types",
+      "DEPARTMENTS": "Departments",
+      "DEPARTMENT_NAME": "Name",
+      "DEPARTMENT_DESC": "Description",
+      "NO_DEPARTMENTS": "No departments",
+      "SUB_ORGANIZATIONS": "Sub-organizations"
+    },
+    "CONTACTS": {
+      "NAME": "Full Name",
+      "POSITION": "Position",
+      "DEPARTMENT": "Department",
+      "PHONE": "Phone",
+      "EMAIL": "Email",
+      "ACTIONS": "Actions",
+      "CALL": "Call",
+      "NO_CONTACTS": "No contacts"
+    },
+    "FILTERS": {
+      "START_DATE": "Start Date",
+      "END_DATE": "End Date",
+      "SELECT_DATE": "Select date"
+    },
+    "COMMON": {
+      "CREATED_BY": "Created by",
+      "FILES": "Files",
+      "VIEW_FILES": "View files",
+      "ATTACH_FILES": "Attach files",
+      "ADD_NEW_FILES": "Add new files"
+    },
+    "SHUTDOWNS": {
+      "ADD": "Add Emergency Outage",
+      "EDIT": "Edit Emergency Outage",
+      "START": "Start",
+      "END": "End",
+      "REASON": "Reason",
+      "POWER_LOSS": "Power Loss",
+      "IDLE_DISCHARGE": "Idle Discharge",
+      "FILES": "Event Files",
+      "NO_DATA": "No emergency outage data"
+    },
+    "DISCHARGES": {
+      "ADD": "Add Idle Discharge",
+      "EDIT": "Edit Idle Discharge",
+      "START": "Start",
+      "END": "End",
+      "FLOW_RATE": "Flow Rate, m³/s",
+      "TOTAL_VOLUME": "Volume, mln m³",
+      "REASON": "Reason",
+      "STATUS": "Status",
+      "ONGOING": "Ongoing",
+      "APPROVED": "Approved",
+      "COMPLETED": "Completed",
+      "FILES": "Idle Discharge Files",
+      "NO_DATA": "No idle discharge data"
+    },
+    "INCIDENTS": {
+      "ADD": "Add Incident",
+      "EDIT": "Edit Incident",
+      "DATE": "Date",
+      "DESCRIPTION": "Description",
+      "ORGANIZATION": "Organization",
+      "FILES": "Incident Files",
+      "NO_DATA": "No incident data"
+    },
+    "VISITS": {
+      "ADD": "Add Visit",
+      "EDIT": "Edit Visit",
+      "DATE": "Date",
+      "DESCRIPTION": "Description",
+      "RESPONSIBLE": "Responsible",
+      "ORGANIZATION": "Organization",
+      "FILES": "Visit Files",
+      "NO_DATA": "No visit data"
+    },
+    "TELEMETRY": {
+      "DEVICE": "Device",
+      "DEVICE_GROUP": "Device Group",
+      "GROUP": "Group",
+      "PARAMETER": "Parameter",
+      "VALUE": "Value",
+      "UNIT": "Unit",
+      "QUALITY": "Quality",
+      "SEVERITY": "Severity",
+      "TIMESTAMP": "Timestamp",
+      "ALL_GROUPS": "All Groups",
+      "ALL_DEVICES": "All Devices",
+      "TOTAL_RECORDS": "Total Records",
+      "NO_DATA": "No telemetry data"
+    }
+  },
+  "SNOW_COVER": {
+    "TITLE": "Snow Cover (MODSNOW)",
+    "TODAY": "Today",
+    "YESTERDAY": "Yesterday",
+    "YEAR_AGO": "Year Ago",
+    "AVG_COVER": "Average Cover",
+    "ORGANIZATION": "Organization",
+    "COVER": "Cover, %",
+    "DELTA": "Δ vs Year Ago",
+    "ZONES": "Elevation Zones",
+    "ELEVATION": "Elevation, m",
+    "SCA_PCT": "Cover, %",
+    "NO_DATA": "No data",
+    "RESOURCE_DATE": "Image Date"
+  },
+  "UZGIDRO_NEWS": {
+    "TITLE": "UzGidro News",
+    "TOTAL_NEWS": "Total news",
+    "NEWS_COUNT": "news",
+    "NO_NEWS": "No news found",
+    "VIEWS": "Views",
+    "PUBLISHED": "Published",
+    "LOAD_ERROR": "Failed to load news",
+    "PAGE_REPORT": "Showing {first}-{last} of {totalRecords}"
   }
 }

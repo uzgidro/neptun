@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ApiService, BASE_URL } from '@/core/services/api.service';
+import { ApiService } from '@/core/services/api.service';
 import { Observable, of, tap } from 'rxjs';
 import { InvestmentDto, InvestmentResponse, InvestmentStatus, InvestmentType } from '@/core/interfaces/investment';
 
@@ -18,19 +18,19 @@ export class InvestmentService extends ApiService {
         if (typeId) {
             params.type_id = typeId;
         }
-        return this.http.get<InvestmentResponse[]>(BASE_URL + INVESTMENTS, { params });
+        return this.http.get<InvestmentResponse[]>(this.BASE_URL + INVESTMENTS, { params });
     }
 
     createInvestment(formData: FormData): Observable<any> {
-        return this.http.post(BASE_URL + INVESTMENTS, formData);
+        return this.http.post(this.BASE_URL + INVESTMENTS, formData);
     }
 
     updateInvestment(id: number, formData: FormData): Observable<any> {
-        return this.http.patch(`${BASE_URL}${INVESTMENTS}/${id}`, formData);
+        return this.http.patch(`${this.BASE_URL}${INVESTMENTS}/${id}`, formData);
     }
 
     deleteInvestment(id: number): Observable<any> {
-        return this.http.delete(`${BASE_URL}${INVESTMENTS}/${id}`);
+        return this.http.delete(`${this.BASE_URL}${INVESTMENTS}/${id}`);
     }
 
     getStatuses(typeId?: number): Observable<InvestmentStatus[]> {
@@ -44,7 +44,7 @@ export class InvestmentService extends ApiService {
             params.type_id = typeId;
         }
 
-        return this.http.get<InvestmentStatus[]>(BASE_URL + INVESTMENTS + STATUSES, { params }).pipe(
+        return this.http.get<InvestmentStatus[]>(this.BASE_URL + INVESTMENTS + STATUSES, { params }).pipe(
             tap((statuses) => {
                 this.statusesCache.set(cacheKey, statuses);
             })
@@ -57,7 +57,7 @@ export class InvestmentService extends ApiService {
         if (this.typesCache) {
             return of(this.typesCache);
         }
-        return this.http.get<InvestmentType[]>(BASE_URL + INVESTMENTS + TYPES).pipe(
+        return this.http.get<InvestmentType[]>(this.BASE_URL + INVESTMENTS + TYPES).pipe(
             tap((types) => {
                 this.typesCache = types;
             })

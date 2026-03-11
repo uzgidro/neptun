@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ApiService, BASE_URL } from '@/core/services/api.service';
+import { ApiService } from '@/core/services/api.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ReservoirResponse } from '@/core/interfaces/reservoir';
@@ -31,11 +31,11 @@ export class DashboardService extends ApiService {
         if (date) {
             params = params.set('date', this.dateToYMD(date));
         }
-        return this.http.get<ReservoirResponse>(BASE_URL + DASHBOARD + RESERVOIR, { params: params });
+        return this.http.get<ReservoirResponse>(this.BASE_URL + DASHBOARD + RESERVOIR, { params: params });
     }
 
     getOrganizationsCascades(): Observable<Organization[]> {
-        return this.http.get<Organization[]>(BASE_URL + DASHBOARD + CASCADES).pipe(
+        return this.http.get<Organization[]>(this.BASE_URL + DASHBOARD + CASCADES).pipe(
             map(cascades => this.normalizeCascades(cascades))
         );
     }
@@ -88,10 +88,10 @@ export class DashboardService extends ApiService {
     }
 
     getGESProduction(): Observable<DashboardResponse> {
-        return this.http.get<DashboardResponse>(BASE_URL + DASHBOARD + PRODUCTION);
+        return this.http.get<DashboardResponse>(this.BASE_URL + DASHBOARD + PRODUCTION);
     }
 
     getProductionStats(): Observable<ProductionStatsResponse> {
-        return this.http.get<ProductionStatsResponse>(BASE_URL + DASHBOARD + PRODUCTION_STATS);
+        return this.http.get<ProductionStatsResponse>(this.BASE_URL + DASHBOARD + PRODUCTION_STATS);
     }
 }

@@ -100,6 +100,7 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
     private contactService = inject(ContactService);
     private fb = inject(FormBuilder);
     private messageService = inject(MessageService);
+    private translate = inject(TranslateService);
     private destroy$ = new Subject<void>();
 
     constructor() {
@@ -144,7 +145,7 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
                     this.vacations = data;
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось загрузить отпуска' });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('VACATION.MESSAGES.LOAD_FAILED') });
                     console.error(err);
                 },
                 complete: () => (this.loading = false)
@@ -163,7 +164,7 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
     }
 
     private loadEmployees(): void {
-        this.contactService.getContacts()
+        this.contactService.getAll()
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (data: Contact[]) => {
@@ -316,8 +317,8 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
         if (vacation.status !== 'draft' && vacation.status !== 'pending') {
             this.messageService.add({
                 severity: 'warn',
-                summary: 'Внимание',
-                detail: 'Редактировать можно только черновики и заявки на согласовании'
+                summary: this.translate.instant('COMMON.WARNING'),
+                detail: this.translate.instant('VACATION.MESSAGES.EDIT_ONLY_DRAFTS')
             });
             return;
         }
@@ -358,8 +359,8 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
         if (this.validationResult && !this.validationResult.isValid) {
             this.messageService.add({
                 severity: 'error',
-                summary: 'Ошибка валидации',
-                detail: this.validationResult.errors[0]?.message || 'Проверьте данные заявки'
+                summary: this.translate.instant('VACATION.MESSAGES.VALIDATION_ERROR'),
+                detail: this.validationResult.errors[0]?.message || this.translate.instant('VACATION.MESSAGES.CHECK_REQUEST_DATA')
             });
             return;
         }
@@ -383,8 +384,8 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
             if (balance && vacation.days_count > balance.remaining_days) {
                 this.messageService.add({
                     severity: 'error',
-                    summary: 'Ошибка',
-                    detail: `Недостаточно дней отпуска. Запрошено: ${vacation.days_count}, доступно: ${balance.remaining_days}`
+                    summary: this.translate.instant('COMMON.ERROR'),
+                    detail: this.translate.instant('VACATION.MESSAGES.INSUFFICIENT_DAYS', { requested: vacation.days_count, available: balance.remaining_days })
                 });
                 return;
             }
@@ -397,14 +398,14 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
                 next: () => {
                     this.messageService.add({
                         severity: 'success',
-                        summary: 'Отправлено',
-                        detail: 'Заявка отправлена на согласование руководителю'
+                        summary: this.translate.instant('VACATION.MESSAGES.SUBMITTED'),
+                        detail: this.translate.instant('VACATION.MESSAGES.SENT_FOR_APPROVAL')
                     });
                     this.loadVacations();
                     this.loadVacationBalances();
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось отправить заявку' });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('VACATION.MESSAGES.SUBMIT_FAILED') });
                     console.error(err);
                 }
             });
@@ -429,15 +430,15 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
                 next: () => {
                     this.messageService.add({
                         severity: 'success',
-                        summary: 'Успех',
-                        detail: 'Заявка на отпуск создана и отправлена на согласование'
+                        summary: this.translate.instant('COMMON.SUCCESS'),
+                        detail: this.translate.instant('VACATION.MESSAGES.REQUEST_CREATED')
                     });
                     this.loadVacations();
                     this.loadVacationBalances();
                     this.closeDialog();
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось создать заявку' });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('VACATION.MESSAGES.CREATE_FAILED') });
                     console.error(err);
                 }
             });
@@ -462,13 +463,13 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
-                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Заявка обновлена' });
+                    this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('VACATION.MESSAGES.REQUEST_UPDATED') });
                     this.loadVacations();
                     this.loadVacationBalances();
                     this.closeDialog();
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось обновить заявку' });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('VACATION.MESSAGES.UPDATE_FAILED') });
                     console.error(err);
                 }
             });
@@ -492,8 +493,8 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
                 next: () => {
                     this.messageService.add({
                         severity: 'success',
-                        summary: 'Одобрено',
-                        detail: `Отпуск сотрудника ${vacation.employee_name} одобрен. Даты заблокированы в календаре.`
+                        summary: this.translate.instant('VACATION.MESSAGES.APPROVED'),
+                        detail: this.translate.instant('VACATION.MESSAGES.APPROVED_DETAIL', { name: vacation.employee_name })
                     });
                     this.loadVacations();
                     this.loadVacationBalances();
@@ -501,7 +502,7 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
                     this.selectedVacation = null;
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось одобрить заявку' });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('VACATION.MESSAGES.APPROVE_FAILED') });
                     console.error(err);
                 }
             });
@@ -527,8 +528,8 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
                 next: () => {
                     this.messageService.add({
                         severity: 'warn',
-                        summary: 'Отклонено',
-                        detail: `Заявка отклонена. Сотрудник ${vacation.employee_name} уведомлен.`
+                        summary: this.translate.instant('VACATION.MESSAGES.REJECTED'),
+                        detail: this.translate.instant('VACATION.MESSAGES.REJECTED_DETAIL', { name: vacation.employee_name })
                     });
                     this.loadVacations();
                     this.loadVacationBalances();
@@ -536,7 +537,7 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
                     this.selectedVacation = null;
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось отклонить заявку' });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('VACATION.MESSAGES.REJECT_FAILED') });
                     console.error(err);
                 }
             });
@@ -547,8 +548,8 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
         if (!['draft', 'pending'].includes(vacation.status)) {
             this.messageService.add({
                 severity: 'warn',
-                summary: 'Внимание',
-                detail: 'Отменить можно только черновики и заявки на согласовании'
+                summary: this.translate.instant('COMMON.WARNING'),
+                detail: this.translate.instant('VACATION.MESSAGES.CANCEL_ONLY_DRAFTS')
             });
             return;
         }
@@ -559,14 +560,14 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
                 next: () => {
                     this.messageService.add({
                         severity: 'info',
-                        summary: 'Отменено',
-                        detail: 'Заявка на отпуск отменена'
+                        summary: this.translate.instant('VACATION.MESSAGES.CANCELLED'),
+                        detail: this.translate.instant('VACATION.MESSAGES.REQUEST_CANCELLED')
                     });
                     this.loadVacations();
                     this.loadVacationBalances();
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось отменить заявку' });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('VACATION.MESSAGES.CANCEL_FAILED') });
                     console.error(err);
                 }
             });
@@ -584,14 +585,14 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
-                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Заявка удалена' });
+                    this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('VACATION.MESSAGES.REQUEST_DELETED') });
                     this.loadVacations();
                     this.loadVacationBalances();
                     this.displayDeleteDialog = false;
                     this.selectedVacation = null;
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось удалить заявку' });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('VACATION.MESSAGES.DELETE_FAILED') });
                     console.error(err);
                 }
             });

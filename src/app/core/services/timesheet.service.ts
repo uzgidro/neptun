@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ApiService, BASE_URL } from '@/core/services/api.service';
+import { ApiService } from '@/core/services/api.service';
 import { Observable } from 'rxjs';
 import { EmployeeTimesheet, TimesheetEntry, Holiday, TimesheetFilter, TimesheetCorrection } from '@/core/interfaces/hrm/timesheet';
 import { HttpParams } from '@angular/common/http';
@@ -24,12 +24,12 @@ export class TimesheetService extends ApiService {
             params = params.set('employee_id', filter.employee_id.toString());
         }
 
-        return this.http.get<EmployeeTimesheet[]>(BASE_URL + TIMESHEET, { params });
+        return this.http.get<EmployeeTimesheet[]>(this.BASE_URL + TIMESHEET, { params });
     }
 
     // Update timesheet entry
     updateTimesheetEntry(entryId: number, data: Partial<TimesheetEntry>): Observable<TimesheetEntry> {
-        return this.http.patch<TimesheetEntry>(BASE_URL + TIMESHEET + '/' + entryId, data);
+        return this.http.patch<TimesheetEntry>(this.BASE_URL + TIMESHEET + '/' + entryId, data);
     }
 
     // Holidays
@@ -38,32 +38,32 @@ export class TimesheetService extends ApiService {
         if (year) {
             params = params.set('year', year.toString());
         }
-        return this.http.get<Holiday[]>(BASE_URL + HOLIDAYS, { params });
+        return this.http.get<Holiday[]>(this.BASE_URL + HOLIDAYS, { params });
     }
 
     createHoliday(holiday: Omit<Holiday, 'id'>): Observable<Holiday> {
-        return this.http.post<Holiday>(BASE_URL + HOLIDAYS, holiday);
+        return this.http.post<Holiday>(this.BASE_URL + HOLIDAYS, holiday);
     }
 
     deleteHoliday(id: number): Observable<any> {
-        return this.http.delete(BASE_URL + HOLIDAYS + '/' + id);
+        return this.http.delete(this.BASE_URL + HOLIDAYS + '/' + id);
     }
 
     // Corrections
     getCorrections(): Observable<TimesheetCorrection[]> {
-        return this.http.get<TimesheetCorrection[]>(BASE_URL + TIMESHEET + '/corrections');
+        return this.http.get<TimesheetCorrection[]>(this.BASE_URL + TIMESHEET + '/corrections');
     }
 
     requestCorrection(data: Omit<TimesheetCorrection, 'id' | 'status' | 'requested_at'>): Observable<TimesheetCorrection> {
-        return this.http.post<TimesheetCorrection>(BASE_URL + TIMESHEET + '/corrections', data);
+        return this.http.post<TimesheetCorrection>(this.BASE_URL + TIMESHEET + '/corrections', data);
     }
 
     approveCorrection(id: number): Observable<TimesheetCorrection> {
-        return this.http.post<TimesheetCorrection>(BASE_URL + TIMESHEET + '/corrections/' + id + '/approve', {});
+        return this.http.post<TimesheetCorrection>(this.BASE_URL + TIMESHEET + '/corrections/' + id + '/approve', {});
     }
 
     rejectCorrection(id: number, reason: string): Observable<TimesheetCorrection> {
-        return this.http.post<TimesheetCorrection>(BASE_URL + TIMESHEET + '/corrections/' + id + '/reject', { reason });
+        return this.http.post<TimesheetCorrection>(this.BASE_URL + TIMESHEET + '/corrections/' + id + '/reject', { reason });
     }
 
     // Export
@@ -76,7 +76,7 @@ export class TimesheetService extends ApiService {
             params = params.set('department_id', filter.department_id.toString());
         }
 
-        return this.http.get(BASE_URL + TIMESHEET + '/export', {
+        return this.http.get(this.BASE_URL + TIMESHEET + '/export', {
             params,
             responseType: 'blob'
         });

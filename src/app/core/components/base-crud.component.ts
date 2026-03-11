@@ -177,7 +177,15 @@ export abstract class BaseCrudComponent<T extends BaseEntity, TPayload = Partial
                 next: (data) => {
                     this.items = data;
                 },
-                error: () => {},
+                error: (err) => {
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: this.translate.instant('COMMON.ERROR'),
+                        detail: this.translate.instant('COMMON.LOAD_ERROR')
+                    });
+                    console.error(err);
+                    this.loading = false;
+                },
                 complete: () => {
                     this.loading = false;
                 }

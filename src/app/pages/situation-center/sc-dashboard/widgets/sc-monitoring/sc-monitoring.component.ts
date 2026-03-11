@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { Subscription, interval } from 'rxjs';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -10,11 +10,13 @@ import { Reservoir } from '@/core/interfaces/reservoir';
     standalone: true,
     imports: [DecimalPipe, TranslateModule],
     templateUrl: './sc-monitoring.component.html',
-    styleUrl: './sc-monitoring.component.scss'
+    styleUrl: './sc-monitoring.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ScMonitoringComponent implements OnInit, OnDestroy {
     private dashboardService = inject(DashboardService);
     private translateService = inject(TranslateService);
+    private cdr = inject(ChangeDetectorRef);
     private refreshSubscription?: Subscription;
 
     reservoirs: Reservoir[] = [];
@@ -33,10 +35,12 @@ export class ScMonitoringComponent implements OnInit, OnDestroy {
                 this.reservoirs = data;
                 this.lastUpdated = new Date();
                 this.loading = false;
+                this.cdr.markForCheck();
             },
             error: (err) => {
                 console.error('Error loading reservoirs:', err);
                 this.loading = false;
+                this.cdr.markForCheck();
             }
         });
     }

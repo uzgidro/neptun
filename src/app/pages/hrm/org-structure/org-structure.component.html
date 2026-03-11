@@ -286,7 +286,8 @@
 
 <!-- Employee View Dialog -->
 <p-dialog [header]="'HRM.ORG_STRUCTURE.EMPLOYEE_INFO' | translate" [(visible)]="displayEmployeeDialog" [modal]="true" [style]="{ width: '450px' }">
-    <div *ngIf="selectedEmployee" class="flex flex-col gap-4">
+    @if (selectedEmployee) {
+    <div class="flex flex-col gap-4">
         <div class="flex items-center gap-4">
             @if (selectedEmployee.photo_url) {
                 <img [src]="selectedEmployee.photo_url" alt="" class="w-16 h-16 rounded-full object-cover">
@@ -332,6 +333,7 @@
             </div>
         }
     </div>
+    }
 
     <ng-template pTemplate="footer">
         <button pButton [label]="'COMMON.EDIT' | translate" icon="pi pi-pencil" class="p-button-outlined"

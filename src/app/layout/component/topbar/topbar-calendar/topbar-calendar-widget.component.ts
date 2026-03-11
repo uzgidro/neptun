@@ -13,6 +13,7 @@ import { Tooltip } from 'primeng/tooltip';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CalendarEventsService } from '@/core/services/calendar-events.service';
 import { CalendarResponse, DayCounts } from '@/core/interfaces/calendar-events';
+import { formatFileSize as formatFileSizeFn } from '@/core/utils/format';
 import { PastEventsService } from '@/core/services/past-events.service';
 import { PastEvent as PastEvent } from '@/core/interfaces/past-events';
 import { ReceptionService } from '@/core/services/reception.service';
@@ -195,13 +196,7 @@ export class TopbarCalendarWidget implements OnInit {
         return parts.length > 0 ? parts.join(' - ') : '-';
     }
 
-    formatFileSize(bytes: number): string {
-        if (bytes === 0) return '0 Bytes';
-        const k = 1024;
-        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-        const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
-    }
+    formatFileSize = formatFileSizeFn;
 
     isImageFile(fileName: string): boolean {
         const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.bmp'];

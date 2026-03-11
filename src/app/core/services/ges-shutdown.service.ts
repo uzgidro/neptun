@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ApiService, BASE_URL } from '@/core/services/api.service';
+import { ApiService } from '@/core/services/api.service';
 import { Observable } from 'rxjs';
 import { GesShutdownDto, GesShutdownPayload, GesShutdownResponse, ShutdownDto, ShutdownResponse } from '@/core/interfaces/ges-shutdown';
 import { map } from 'rxjs/operators';
@@ -16,7 +16,7 @@ export class GesShutdownService extends ApiService {
         if (date) {
             params = params.set('date', this.dateToYMD(date));
         }
-        return this.http.get<GesShutdownResponse>(BASE_URL + SHUTDOWNS, {params: params}).pipe(
+        return this.http.get<GesShutdownResponse>(this.BASE_URL + SHUTDOWNS, {params: params}).pipe(
             map(response => ({
                 ges: response.ges.map(this.transformToDto),
                 mini: response.mini.map(this.transformToDto),
@@ -26,19 +26,19 @@ export class GesShutdownService extends ApiService {
     }
 
     addShutdown(formData: FormData): Observable<any> {
-        return this.http.post(BASE_URL + SHUTDOWNS, formData);
+        return this.http.post(this.BASE_URL + SHUTDOWNS, formData);
     }
 
     editShutdown(id: number, formData: FormData): Observable<any> {
-        return this.http.patch(`${BASE_URL}${SHUTDOWNS}/${id}`, formData);
+        return this.http.patch(`${this.BASE_URL}${SHUTDOWNS}/${id}`, formData);
     }
 
     deleteShutdown(id: number): Observable<any> {
-        return this.http.delete(`${BASE_URL}${SHUTDOWNS}/${id}`);
+        return this.http.delete(`${this.BASE_URL}${SHUTDOWNS}/${id}`);
     }
 
     markAsViewed(id: number): Observable<void> {
-        return this.http.patch<void>(`${BASE_URL}${SHUTDOWNS}/${id}/viewed`, {});
+        return this.http.patch<void>(`${this.BASE_URL}${SHUTDOWNS}/${id}/viewed`, {});
     }
 
     private transformToDto(shutdown: ShutdownResponse): ShutdownDto {

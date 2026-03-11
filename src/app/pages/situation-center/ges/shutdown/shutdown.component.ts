@@ -6,7 +6,7 @@ import { GesShutdownComponent } from '@/pages/situation-center/ges/shutdown/ges-
 import { ShutdownDischargeComponent } from '@/pages/situation-center/ges/shutdown/shutdown_discharges/shutdown-discharge.component';
 import { OrganizationService } from '@/core/services/organization.service';
 import { TimeService } from '@/core/services/time.service';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { DateWidget } from '@/layout/component/widget/date/date.widget';
 
 @Component({
@@ -25,6 +25,7 @@ export class ShutdownComponent implements OnInit {
 
     private organizationService: OrganizationService = inject(OrganizationService);
     private messageService: MessageService = inject(MessageService);
+    private translate = inject(TranslateService);
 
     ngOnInit(): void {
         this.orgsLoading = true;
@@ -33,7 +34,7 @@ export class ShutdownComponent implements OnInit {
                 this.organizations = data;
             },
             error: (err) => {
-                this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: err.message });
+                this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: err.message });
             },
             complete: () => (this.orgsLoading = false)
         });

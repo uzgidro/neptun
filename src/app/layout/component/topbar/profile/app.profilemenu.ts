@@ -57,9 +57,10 @@ export class ProfileMenu implements OnInit {
     contact?: Contact;
 
     ngOnInit(): void {
-        let id = this.jwtService.getDecodedToken().contact_id;
+        const decoded = this.jwtService.getDecodedToken();
+        const id = decoded?.['contact_id'];
         if (typeof id === 'number') {
-            this.contactService.getContact(id).subscribe({
+            this.contactService.getById(id).subscribe({
                 next: (data) => {
                     this.contact = data;
                 }

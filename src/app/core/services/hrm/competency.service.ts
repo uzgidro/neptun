@@ -1,16 +1,19 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { BASE_URL } from '@/core/services/api.service';
+import { ConfigService } from '@/core/services/config.service';
 import { Competency, CompetencyPayload, CompetencyAssessment, AssessmentPayload, CompetencyMatrix } from '@/core/interfaces/hrm/competency';
-
-const API_URL = BASE_URL + '/hrm/competencies';
 
 @Injectable({
     providedIn: 'root'
 })
 export class CompetencyService {
     private http = inject(HttpClient);
+    private configService = inject(ConfigService);
+
+    private get API_URL(): string {
+        return this.configService.apiBaseUrl + '/hrm/competencies';
+    }
 
     // Competencies
     getCompetencies(category?: string): Observable<Competency[]> {
@@ -18,23 +21,23 @@ export class CompetencyService {
         if (category) {
             params = params.set('category', category);
         }
-        return this.http.get<Competency[]>(API_URL, { params });
+        return this.http.get<Competency[]>(this.API_URL, { params });
     }
 
     getCompetencyById(id: number): Observable<Competency> {
-        return this.http.get<Competency>(`${API_URL}/${id}`);
+        return this.http.get<Competency>(`${this.API_URL}/${id}`);
     }
 
     createCompetency(payload: CompetencyPayload): Observable<Competency> {
-        return this.http.post<Competency>(API_URL, payload);
+        return this.http.post<Competency>(this.API_URL, payload);
     }
 
     updateCompetency(id: number, payload: Partial<CompetencyPayload>): Observable<Competency> {
-        return this.http.put<Competency>(`${API_URL}/${id}`, payload);
+        return this.http.put<Competency>(`${this.API_URL}/${id}`, payload);
     }
 
     deleteCompetency(id: number): Observable<void> {
-        return this.http.delete<void>(`${API_URL}/${id}`);
+        return this.http.delete<void>(`${this.API_URL}/${id}`);
     }
 
     // Assessments
@@ -46,53 +49,53 @@ export class CompetencyService {
         if (params?.status) {
             httpParams = httpParams.set('status', params.status);
         }
-        return this.http.get<CompetencyAssessment[]>(`${API_URL}/assessments`, { params: httpParams });
+        return this.http.get<CompetencyAssessment[]>(`${this.API_URL}/assessments`, { params: httpParams });
     }
 
     getAssessmentById(id: number): Observable<CompetencyAssessment> {
-        return this.http.get<CompetencyAssessment>(`${API_URL}/assessments/${id}`);
+        return this.http.get<CompetencyAssessment>(`${this.API_URL}/assessments/${id}`);
     }
 
     createAssessment(payload: AssessmentPayload): Observable<CompetencyAssessment> {
-        return this.http.post<CompetencyAssessment>(`${API_URL}/assessments`, payload);
+        return this.http.post<CompetencyAssessment>(`${this.API_URL}/assessments`, payload);
     }
 
     updateAssessment(id: number, payload: Partial<AssessmentPayload>): Observable<CompetencyAssessment> {
-        return this.http.put<CompetencyAssessment>(`${API_URL}/assessments/${id}`, payload);
+        return this.http.put<CompetencyAssessment>(`${this.API_URL}/assessments/${id}`, payload);
     }
 
     deleteAssessment(id: number): Observable<void> {
-        return this.http.delete<void>(`${API_URL}/assessments/${id}`);
+        return this.http.delete<void>(`${this.API_URL}/assessments/${id}`);
     }
 
     completeAssessment(id: number): Observable<CompetencyAssessment> {
-        return this.http.post<CompetencyAssessment>(`${API_URL}/assessments/${id}/complete`, {});
+        return this.http.post<CompetencyAssessment>(`${this.API_URL}/assessments/${id}/complete`, {});
     }
 
     getEmployeeAssessments(employeeId: number): Observable<CompetencyAssessment[]> {
-        return this.http.get<CompetencyAssessment[]>(`${API_URL}/employees/${employeeId}/assessments`);
+        return this.http.get<CompetencyAssessment[]>(`${this.API_URL}/employees/${employeeId}/assessments`);
     }
 
     // Competency Matrix
     getMatrices(): Observable<CompetencyMatrix[]> {
-        return this.http.get<CompetencyMatrix[]>(`${API_URL}/matrices`);
+        return this.http.get<CompetencyMatrix[]>(`${this.API_URL}/matrices`);
     }
 
     getMatrixByPosition(positionId: number): Observable<CompetencyMatrix> {
-        return this.http.get<CompetencyMatrix>(`${API_URL}/matrices/position/${positionId}`);
+        return this.http.get<CompetencyMatrix>(`${this.API_URL}/matrices/position/${positionId}`);
     }
 
     createMatrix(positionId: number, competencies: { competency_id: number; required_level: number; is_critical: boolean }[]): Observable<CompetencyMatrix> {
-        return this.http.post<CompetencyMatrix>(`${API_URL}/matrices`, { position_id: positionId, competencies });
+        return this.http.post<CompetencyMatrix>(`${this.API_URL}/matrices`, { position_id: positionId, competencies });
     }
 
     updateMatrix(id: number, competencies: { competency_id: number; required_level: number; is_critical: boolean }[]): Observable<CompetencyMatrix> {
-        return this.http.put<CompetencyMatrix>(`${API_URL}/matrices/${id}`, { competencies });
+        return this.http.put<CompetencyMatrix>(`${this.API_URL}/matrices/${id}`, { competencies });
     }
 
     // Gap Analysis
     getGapAnalysis(employeeId: number): Observable<any> {
-        return this.http.get<any>(`${API_URL}/employees/${employeeId}/gap-analysis`);
+        return this.http.get<any>(`${this.API_URL}/employees/${employeeId}/gap-analysis`);
     }
 
     // Reports
@@ -104,6 +107,6 @@ export class CompetencyService {
         if (params?.competency_id) {
             httpParams = httpParams.set('competency_id', params.competency_id.toString());
         }
-        return this.http.get<any>(`${API_URL}/reports`, { params: httpParams });
+        return this.http.get<any>(`${this.API_URL}/reports`, { params: httpParams });
     }
 }

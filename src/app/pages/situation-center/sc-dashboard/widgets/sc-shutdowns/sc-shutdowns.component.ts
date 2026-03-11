@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { DecimalPipe, DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { Subscription, interval } from 'rxjs';
@@ -33,13 +33,15 @@ interface ShutdownItem {
     standalone: true,
     imports: [DecimalPipe, DatePipe, TranslateModule, DialogModule, ButtonModule, FileViewerComponent],
     templateUrl: './sc-shutdowns.component.html',
-    styleUrl: './sc-shutdowns.component.scss'
+    styleUrl: './sc-shutdowns.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ScShutdownsComponent implements OnInit, OnDestroy {
     private shutdownService = inject(GesShutdownService);
     private translateService = inject(TranslateService);
     private router = inject(Router);
     private alarmService = inject(AlarmService);
+    private cdr = inject(ChangeDetectorRef);
     private refreshSubscription?: Subscription;
 
     shutdowns: ShutdownItem[] = [];
@@ -62,10 +64,12 @@ export class ScShutdownsComponent implements OnInit, OnDestroy {
                 this.processShutdowns(data);
                 this.lastUpdated = new Date();
                 this.loading = false;
+                this.cdr.markForCheck();
             },
             error: (err) => {
                 console.error('Error loading shutdowns:', err);
                 this.loading = false;
+                this.cdr.markForCheck();
             }
         });
     }
@@ -199,6 +203,7 @@ export class ScShutdownsComponent implements OnInit, OnDestroy {
                 // Update alarm state after marking as viewed
                 const hasUnviewedActive = this.shutdowns.some((s) => s.isOngoing && !s.viewed);
                 this.alarmService.setHasActiveShutdowns(hasUnviewedActive);
+                this.cdr.markForCheck();
             },
             error: (err) => {
                 console.error('Error marking shutdown as viewed:', err);

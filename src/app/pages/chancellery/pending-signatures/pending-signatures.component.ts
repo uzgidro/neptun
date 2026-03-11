@@ -84,7 +84,7 @@ export class PendingSignaturesComponent implements OnInit, OnDestroy {
 
         forkJoin({
             documents: this.signatureService.getPendingDocuments(),
-            contacts: this.contactService.getContacts()
+            contacts: this.contactService.getAll()
         })
             .pipe(takeUntil(this.destroy$))
             .subscribe({

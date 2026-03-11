@@ -140,8 +140,8 @@ export class HRDocumentsComponent implements OnInit, OnDestroy {
         forkJoin({
             documents: this.hrDocumentsService.getDocuments(),
             requests: this.hrDocumentsService.getRequests(),
-            departments: this.departmentService.getDepartments(),
-            employees: this.contactService.getContacts()
+            departments: this.departmentService.getAll(),
+            employees: this.contactService.getAll()
         }).pipe(takeUntil(this.destroy$)).subscribe({
             next: (data) => {
                 this.documents = data.documents;

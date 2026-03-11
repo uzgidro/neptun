@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpParams } from '@angular/common/http';
 import { TelegramNewsParams, TelegramNewsResponse } from '@/core/interfaces/telegram-news';
-import { ApiService, BASE_URL } from '@/core/services/api.service';
+import { ApiService } from '@/core/services/api.service';
 
 const NEWS = '/news';
 
@@ -26,6 +26,6 @@ export class NewsService extends ApiService {
             httpParams = httpParams.set('date_to', params.date_to);
         }
 
-        return this.http.get<TelegramNewsResponse>(BASE_URL + NEWS, { params: httpParams });
+        return this.http.get<TelegramNewsResponse>(this.BASE_URL + NEWS, { params: httpParams });
     }
 }

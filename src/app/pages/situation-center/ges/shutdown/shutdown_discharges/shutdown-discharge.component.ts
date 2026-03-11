@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { MessageService, PrimeTemplate } from 'primeng/api';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -22,9 +22,9 @@ import { GroupSelectComponent } from '@/layout/component/dialog/group-select/gro
 import { InputText } from 'primeng/inputtext';
 import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { DateWidget } from '@/layout/component/widget/date/date.widget';
-import { finalize } from 'rxjs';
+import { finalize, Subject, takeUntil } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
 import { saveAs } from 'file-saver';
 import { ScService } from '@/core/services/sc.service';
@@ -56,7 +56,7 @@ import { ScService } from '@/core/services/sc.service';
     templateUrl: './shutdown-discharge.component.html',
     styleUrl: './shutdown-discharge.component.scss'
 })
-export class ShutdownDischargeComponent implements OnInit, OnChanges {
+export class ShutdownDischargeComponent implements OnInit, OnChanges, OnDestroy {
     @Input() date: Date | null = null;
     @Output() dateChange = new EventEmitter<Date>();
 
@@ -80,6 +80,8 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
     private dischargeService: DischargeService = inject(DischargeService);
     private scService: ScService = inject(ScService);
     private messageService: MessageService = inject(MessageService);
+    private translate: TranslateService = inject(TranslateService);
+    private destroy$ = new Subject<void>();
 
     // File handling
     selectedFiles: File[] = [];
@@ -127,12 +129,12 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
     loadDischarges() {
         this.loading = true;
         const dateToUse = this.date || new Date();
-        this.dischargeService.getFlatDischarges(dateToUse).subscribe({
+        this.dischargeService.getFlatDischarges(dateToUse).pipe(takeUntil(this.destroy$)).subscribe({
             next: (data) => {
                 this.discharges = data;
             },
             error: (err) => {
-                this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: err.message });
+                this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: err.message });
             },
             complete: () => (this.loading = false)
         });
@@ -140,7 +142,7 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
 
     private loadOrganizations() {
         this.orgsLoading = true;
-        this.organizationService.getCascades().subscribe({
+        this.organizationService.getCascades().pipe(takeUntil(this.destroy$)).subscribe({
             next: (data) => {
                 this.organizations = data;
             },
@@ -218,13 +220,13 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
         this.isLoading = true;
 
         if (this.isEditMode && this.currentDischargeId) {
-            this.dischargeService.editDischarge(this.currentDischargeId, formData).subscribe({
+            this.dischargeService.editDischarge(this.currentDischargeId, formData).pipe(takeUntil(this.destroy$)).subscribe({
                 next: () => {
-                    this.messageService.add({ severity: 'success', summary: 'Успешно', detail: 'Запись о водосбросе обновлена' });
+                    this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('DISCHARGE.MESSAGES.RECORD_UPDATED') });
                     this.closeDialog();
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка сохранения', detail: err.error?.message || 'Не удалось сохранить данные' });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('DISCHARGE.MESSAGES.SAVE_ERROR'), detail: err.error?.message || this.translate.instant('DISCHARGE.MESSAGES.SAVE_FAILED') });
                     this.isLoading = false;
                 },
                 complete: () => {
@@ -233,13 +235,13 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
                 }
             });
         } else {
-            this.dischargeService.addDischarge(formData).subscribe({
+            this.dischargeService.addDischarge(formData).pipe(takeUntil(this.destroy$)).subscribe({
                 next: () => {
-                    this.messageService.add({ severity: 'success', summary: 'Успешно', detail: 'Новая запись о водосбросе добавлена' });
+                    this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('DISCHARGE.MESSAGES.RECORD_ADDED') });
                     this.closeDialog();
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка сохранения', detail: err.error?.message || 'Не удалось сохранить данные' });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('DISCHARGE.MESSAGES.SAVE_ERROR'), detail: err.error?.message || this.translate.instant('DISCHARGE.MESSAGES.SAVE_FAILED') });
                     this.isLoading = false;
                 },
                 complete: () => {
@@ -312,14 +314,14 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
     }
 
     deleteDischarge(discharge: IdleDischargeResponse) {
-        if (confirm('Вы уверены, что хотите удалить этот водосброс?')) {
-            this.dischargeService.deleteDischarge(discharge.id).subscribe({
+        if (confirm(this.translate.instant('COMMON.CONFIRM_DELETE'))) {
+            this.dischargeService.deleteDischarge(discharge.id).pipe(takeUntil(this.destroy$)).subscribe({
                 next: () => {
-                    this.messageService.add({ severity: 'success', summary: 'Водосброс удален' });
+                    this.messageService.add({ severity: 'success', summary: this.translate.instant('DISCHARGE.MESSAGES.DELETED') });
                     this.loadDischarges();
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка удаления водосброса', detail: err.message });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('DISCHARGE.MESSAGES.DELETE_ERROR'), detail: err.message });
                 }
             });
         }
@@ -329,6 +331,11 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
         if (changes['date'] && !changes['date'].firstChange) {
             this.loadDischarges();
         }
+    }
+
+    ngOnDestroy(): void {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 
     getAverageFlowRate(organizationName: string): number {
@@ -361,6 +368,7 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
         this.scService
             .downloadScReport(dateToUse, format)
             .pipe(
+                takeUntil(this.destroy$),
                 finalize(() => {
                     this.isExcelLoading = false;
                     this.isPdfLoading = false;
@@ -374,7 +382,7 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges {
                 },
                 error: (err: any) => {
                     console.error('Ошибка при скачивании:', err);
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось скачать файл' });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('DISCHARGE.MESSAGES.DOWNLOAD_FAILED') });
                 }
             });
     }

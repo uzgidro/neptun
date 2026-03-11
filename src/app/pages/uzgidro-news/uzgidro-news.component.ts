@@ -2,10 +2,10 @@ import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angula
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { UzgidroNewsService } from '@/core/services/uzgidro-news.service';
 import { UzgidroNewsItem, UzgidroNewsMeta } from '@/core/interfaces/uzgidro-news';
+import { sanitizeHtml } from '@/core/utils/sanitize';
 import { MessageService, PrimeTemplate } from 'primeng/api';
 import { Tag } from 'primeng/tag';
 import { ButtonDirective, ButtonIcon, ButtonLabel } from 'primeng/button';
@@ -28,7 +28,6 @@ export class UzgidroNewsComponent implements OnInit {
     private newsService = inject(UzgidroNewsService);
     private messageService = inject(MessageService);
     private translateService = inject(TranslateService);
-    private sanitizer = inject(DomSanitizer);
     private route = inject(ActivatedRoute);
     private router = inject(Router);
     private destroyRef = inject(DestroyRef);
@@ -129,10 +128,10 @@ export class UzgidroNewsComponent implements OnInit {
         return (item[field] as string) || item.rusmall;
     }
 
-    getFullText(item: UzgidroNewsItem): SafeHtml {
+    getFullText(item: UzgidroNewsItem): string {
         const field = `${this.langField()}text` as keyof UzgidroNewsItem;
         const html = (item[field] as string) || item.rutext;
-        return this.sanitizer.bypassSecurityTrustHtml(html);
+        return sanitizeHtml(html);
     }
 
     formatDate(dateStr: string): string {

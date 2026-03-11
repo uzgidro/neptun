@@ -143,6 +143,7 @@ export class CompetencyAssessmentComponent implements OnInit, OnDestroy {
 
     private fb = inject(FormBuilder);
     private messageService = inject(MessageService);
+    private translate = inject(TranslateService);
     private destroy$ = new Subject<void>();
 
     constructor() {
@@ -283,7 +284,7 @@ export class CompetencyAssessmentComponent implements OnInit, OnDestroy {
                     }))
                 };
                 this.sessions = [...this.sessions];
-                this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Сессия обновлена' });
+                this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('COMPETENCY.MESSAGES.SESSION_UPDATED') });
             }
         } else {
             const newSession: AssessmentSession = {
@@ -321,7 +322,7 @@ export class CompetencyAssessmentComponent implements OnInit, OnDestroy {
                 created_at: new Date().toISOString().split('T')[0]
             };
             this.sessions = [...this.sessions, newSession];
-            this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Сессия создана' });
+            this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('COMPETENCY.MESSAGES.SESSION_CREATED') });
         }
 
         this.displaySessionDialog = false;
@@ -336,7 +337,7 @@ export class CompetencyAssessmentComponent implements OnInit, OnDestroy {
                 invitation_sent_at: new Date().toISOString()
             }));
             this.sessions = [...this.sessions];
-            this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Приглашения отправлены' });
+            this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('COMPETENCY.MESSAGES.INVITATIONS_SENT') });
         }
     }
 
@@ -345,7 +346,7 @@ export class CompetencyAssessmentComponent implements OnInit, OnDestroy {
         if (index !== -1) {
             this.sessions[index].status = 'in_progress';
             this.sessions = [...this.sessions];
-            this.messageService.add({ severity: 'info', summary: 'Сессия начата', detail: 'Ассессмент-центр начался' });
+            this.messageService.add({ severity: 'info', summary: this.translate.instant('COMPETENCY.MESSAGES.SESSION_STARTED'), detail: this.translate.instant('COMPETENCY.MESSAGES.ASSESSMENT_CENTER_STARTED') });
         }
     }
 
@@ -354,7 +355,7 @@ export class CompetencyAssessmentComponent implements OnInit, OnDestroy {
         if (index !== -1) {
             this.sessions[index].status = 'completed';
             this.sessions = [...this.sessions];
-            this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Сессия завершена' });
+            this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('COMPETENCY.MESSAGES.SESSION_COMPLETED') });
         }
     }
 
@@ -396,7 +397,7 @@ export class CompetencyAssessmentComponent implements OnInit, OnDestroy {
                 newBlock
             ];
             this.sessions = [...this.sessions];
-            this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Блок добавлен' });
+            this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('COMPETENCY.MESSAGES.BLOCK_ADDED') });
         }
 
         this.displayBlockDialog = false;
@@ -409,7 +410,7 @@ export class CompetencyAssessmentComponent implements OnInit, OnDestroy {
             if (blockIndex !== -1) {
                 this.sessions[sessionIndex].assessment_blocks[blockIndex].status = 'completed';
                 this.sessions = [...this.sessions];
-                this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Блок завершен' });
+                this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('COMPETENCY.MESSAGES.BLOCK_COMPLETED') });
             }
         }
     }
@@ -467,7 +468,7 @@ export class CompetencyAssessmentComponent implements OnInit, OnDestroy {
             }
         }
 
-        this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Оценка сохранена' });
+        this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('COMPETENCY.MESSAGES.EVALUATION_SAVED') });
         this.displayEvaluationDialog = false;
     }
 
@@ -539,7 +540,7 @@ export class CompetencyAssessmentComponent implements OnInit, OnDestroy {
         };
 
         this.assessments = [...this.assessments, newAssessment];
-        this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Итоговая оценка сформирована' });
+        this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('COMPETENCY.MESSAGES.FINAL_ASSESSMENT_GENERATED') });
     }
 
     // =====================
@@ -596,7 +597,7 @@ export class CompetencyAssessmentComponent implements OnInit, OnDestroy {
         if (index !== -1) {
             this.assessments[index].status = 'approved';
             this.assessments = [...this.assessments];
-            this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Оценка утверждена' });
+            this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('COMPETENCY.MESSAGES.ASSESSMENT_APPROVED') });
         }
     }
 
@@ -664,7 +665,7 @@ export class CompetencyAssessmentComponent implements OnInit, OnDestroy {
         };
 
         this.developmentPlans = [...this.developmentPlans, newPlan];
-        this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'План развития создан' });
+        this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('COMPETENCY.MESSAGES.PLAN_CREATED') });
         this.displayPlanDialog = false;
     }
 
@@ -678,7 +679,7 @@ export class CompetencyAssessmentComponent implements OnInit, OnDestroy {
         if (index !== -1) {
             this.developmentPlans[index].status = 'active';
             this.developmentPlans = [...this.developmentPlans];
-            this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'План активирован' });
+            this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('COMPETENCY.MESSAGES.PLAN_ACTIVATED') });
         }
     }
 
@@ -688,7 +689,7 @@ export class CompetencyAssessmentComponent implements OnInit, OnDestroy {
             this.developmentPlans[index].status = 'completed';
             this.developmentPlans[index].overall_progress = 100;
             this.developmentPlans = [...this.developmentPlans];
-            this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'План завершен' });
+            this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('COMPETENCY.MESSAGES.PLAN_COMPLETED') });
         }
     }
 
@@ -704,7 +705,7 @@ export class CompetencyAssessmentComponent implements OnInit, OnDestroy {
     confirmDelete(): void {
         if (this.selectedSession) {
             this.sessions = this.sessions.filter(s => s.id !== this.selectedSession!.id);
-            this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Сессия удалена' });
+            this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('COMPETENCY.MESSAGES.SESSION_DELETED') });
         }
         this.displayDeleteDialog = false;
         this.selectedSession = null;

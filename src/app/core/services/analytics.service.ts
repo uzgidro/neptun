@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ApiService, BASE_URL } from '@/core/services/api.service';
+import { ApiService } from '@/core/services/api.service';
 import { Observable } from 'rxjs';
 import { HRAnalyticsDashboard, TurnoverReport, AttendanceReport, SalaryReport, AnalyticsFilter } from '@/core/interfaces/hrm/analytics';
 
@@ -10,23 +10,23 @@ const ANALYTICS = '/hrm/analytics';
 })
 export class AnalyticsService extends ApiService {
     getDashboard(): Observable<HRAnalyticsDashboard> {
-        return this.http.get<HRAnalyticsDashboard>(BASE_URL + ANALYTICS + '/dashboard');
+        return this.http.get<HRAnalyticsDashboard>(this.BASE_URL + ANALYTICS + '/dashboard');
     }
 
     getTurnoverReport(filter?: AnalyticsFilter): Observable<TurnoverReport> {
-        return this.http.post<TurnoverReport>(BASE_URL + ANALYTICS + '/turnover', filter || {});
+        return this.http.post<TurnoverReport>(this.BASE_URL + ANALYTICS + '/turnover', filter || {});
     }
 
     getAttendanceReport(filter?: AnalyticsFilter): Observable<AttendanceReport> {
-        return this.http.post<AttendanceReport>(BASE_URL + ANALYTICS + '/attendance', filter || {});
+        return this.http.post<AttendanceReport>(this.BASE_URL + ANALYTICS + '/attendance', filter || {});
     }
 
     getSalaryReport(filter?: AnalyticsFilter): Observable<SalaryReport> {
-        return this.http.post<SalaryReport>(BASE_URL + ANALYTICS + '/salary', filter || {});
+        return this.http.post<SalaryReport>(this.BASE_URL + ANALYTICS + '/salary', filter || {});
     }
 
     exportReport(reportType: string, format: 'xlsx' | 'pdf' | 'csv'): Observable<Blob> {
-        return this.http.get(BASE_URL + ANALYTICS + '/export/' + reportType, {
+        return this.http.get(this.BASE_URL + ANALYTICS + '/export/' + reportType, {
             params: { format },
             responseType: 'blob'
         });

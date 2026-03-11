@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ApiService, BASE_URL } from '@/core/services/api.service';
+import { ApiService } from '@/core/services/api.service';
 import { Observable } from 'rxjs';
 import { ReservoirSummaryRequest, ReservoirSummaryResponse } from '@/core/interfaces/reservoir-summary';
 import { HttpParams, HttpResponse } from '@angular/common/http';
@@ -18,15 +18,15 @@ export class ReservoirSummaryService extends ApiService {
     getReservoirSummary(date: Date): Observable<ReservoirSummaryResponse[]> {
         let params = new HttpParams();
         params = params.set('date', this.dateToYMD(date));
-        return this.http.get<ReservoirSummaryResponse[]>(BASE_URL + RESERVOIR_SUMMARY, { params: params });
+        return this.http.get<ReservoirSummaryResponse[]>(this.BASE_URL + RESERVOIR_SUMMARY, { params: params });
     }
 
     upsetReservoirData(data: ReservoirSummaryRequest[]): Observable<any> {
-        return this.http.post(BASE_URL + RESERVOIR_SUMMARY, data);
+        return this.http.post(this.BASE_URL + RESERVOIR_SUMMARY, data);
     }
 
     downloadSummary(date: Date, format: string): Observable<HttpResponse<Blob>> {
-        return this.http.get(BASE_URL + RESERVOIR_SUMMARY + EXPORT, {
+        return this.http.get(this.BASE_URL + RESERVOIR_SUMMARY + EXPORT, {
             params: {
                 date: this.dateToYMD(date),
                 format: format
@@ -37,7 +37,7 @@ export class ReservoirSummaryService extends ApiService {
     }
 
     downloadHourlySummaryPdf(): Observable<HttpResponse<Blob>> {
-        return this.http.get(BASE_URL + RESERVOIR_SUMMARY_HOURLY + EXPORT, {
+        return this.http.get(this.BASE_URL + RESERVOIR_SUMMARY_HOURLY + EXPORT, {
             params: { format: PDF },
             responseType: 'blob',
             observe: 'response'
@@ -45,7 +45,7 @@ export class ReservoirSummaryService extends ApiService {
     }
 
     downloadHourlySummaryExcel(): Observable<HttpResponse<Blob>> {
-        return this.http.get(BASE_URL + RESERVOIR_SUMMARY_HOURLY + EXPORT, {
+        return this.http.get(this.BASE_URL + RESERVOIR_SUMMARY_HOURLY + EXPORT, {
             responseType: 'blob',
             observe: 'response'
         });

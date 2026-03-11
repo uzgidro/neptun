@@ -1,41 +1,29 @@
 {
   "COMMON": {
-    "SAVE": "Сақлаш",
-    "CANCEL": "Бекор қилиш",
-    "DELETE": "Ўчириш",
-    "EDIT": "Таҳрирлаш",
+    "ACTIONS": "Амаллар",
     "ADD": "Қўшиш",
-    "SEARCH": "Қидириш",
-    "LOADING": "Юкланмоқда...",
-    "YES": "Ҳа",
-    "NO": "Йўқ",
-    "CLOSE": "Ёпиш",
     "BACK": "Орқага",
-    "NEXT": "Кейинги",
-    "SUBMIT": "Юбориш",
-    "CONFIRM": "Тасдиқлаш",
-    "NAME": "Номи",
-    "NO_DATA": "Маълумот йўқ",
-    "NOT_FOUND": "Ҳеч нарса топилмади",
-    "CREATE": "Яратиш",
-    "TOTAL": "Жами",
-    "SINCE_YEAR_START": "йил бошидан",
-    "PER_DAY": "кунига",
-    "SUBCATEGORY": "Кичик категория",
-    "YEAR_START": "Йил боши",
-    "CURRENT_VALUE": "Жорий қиймат",
+    "CANCEL": "Бекор қилиш",
     "CHANGE": "Ўзгариш",
-    "MILLION": "млн",
-    "KWH": "кВт·С",
-    "SUCCESS": "Муваффақиятли",
+    "CLOSE": "Ёпиш",
+    "CONFIRM": "Тасдиқлаш",
+    "CONFIRM_DELETE": "Ўчиришни хоҳлайсизми?",
+    "CONGRATULATIONS": "Табриклаймиз",
+    "CREATE": "Яратиш",
+    "CURRENT_VALUE": "Жорий қиймат",
+    "DELETE": "Ўчириш",
+    "DOWNLOAD_ERROR": "Файлни юклаб бўлмади",
+    "DOWNLOAD_EXCEL": "Экселни юклаб олиш",
+    "EDIT": "Таҳрирлаш",
     "ERROR": "Хатолик",
-    "WARNING": "Диққат",
-      "INFO": "Маълумот",
-      "CONGRATULATIONS": "Табриклаймиз",
     "EXPORT": "Экспорт",
     "EXPORT_SUCCESS": "Файл муваффақиятли экспорт қилинди",
     "FILL_REQUIRED": "Мажбурий майдонларни тўлдиринг",
-    "CONFIRM_DELETE": "Ўчиришни тасдиқланг",
+    "INFO": "Маълумот",
+    "KWH": "кВт·С",
+    "LOADING": "Юкланмоқда...",
+    "LOAD_ERROR": "Маълумотларни юклашда хатолик",
+    "MILLION": "млн",
     "MONTHS": {
       "JAN": "Янв",
       "FEB": "Фев",
@@ -64,8 +52,33 @@
       "NOV": "Ноябр",
       "DEC": "Декабр"
     },
-      "NO_RESULTS": "Ҳеч нарса топилмади",
-      "DOWNLOAD_EXCEL": "Экселни юклаб олиш"
+    "NAME": "Номи",
+    "NEXT": "Кейинги",
+    "NO": "Йўқ",
+    "NOT_FOUND": "Ҳеч нарса топилмади",
+    "NO_DATA": "Маълумот йўқ",
+    "NO_RESULTS": "Ҳеч нарса топилмади",
+    "PER_DAY": "кунига",
+    "REMOVE": "Ўчириш",
+    "RESET": "Қайта ўрнатиш",
+    "SAVE": "Сақлаш",
+    "SEARCH": "Қидириш",
+    "SINCE_YEAR_START": "йил бошидан",
+    "SUBCATEGORY": "Кичик категория",
+    "SUBMIT": "Юбориш",
+    "SUCCESS": "Муваффақиятли",
+    "TOTAL": "Жами",
+    "UPDATE": "Янгилаш",
+    "WARNING": "Диққат",
+    "YEAR_START": "Йил боши",
+    "YES": "Ҳа",
+    "APPROVE": "Тасдиқлаш",
+    "REJECT": "Рад этиш",
+    "STATUS": "Ҳолат",
+    "CLEAR": "Тозалаш",
+    "DOWNLOAD": "Юклаб олиш",
+    "EMAIL": "Электрон почта",
+    "PHONE": "Телефон"
   },
   "CATEGORIES": {
     "TITLE": "Роллар",
@@ -75,7 +88,9 @@
     "PREFIX": "Префикс",
     "SELECT_PREFIX": "Префиксни танланг",
     "CATEGORY": "Категория",
-    "NAME_REQUIRED": "Категория номи мажбурий"
+    "NAME_REQUIRED": "Категория номи мажбурий",
+    "CREATED_SUCCESS": "Категория муваффақиятли яратилди",
+    "CREATED_ERROR": "Категорияни яратиб бўлмади"
   },
   "FILES": {
     "TITLE": "Файллар",
@@ -88,7 +103,12 @@
     "DATE_REQUIRED": "Сана мажбурий",
     "CHOOSE_FILES": "Файлларни танланг",
     "UPLOAD": "Юклаш",
-    "DRAG_DROP": "Юклаш учун файлларни шу ерга ташланг."
+    "DRAG_DROP": "Юклаш учун файлларни шу ерга ташланг.",
+    "SELECT_CATEGORY_AND_DATE": "Категория ва санани танланг",
+    "UPLOADED_SUCCESS": "{{count}} та файл юкланди",
+    "UPLOAD_ERROR": "Файлларни юклаб бўлмади",
+    "DELETED_SUCCESS": "Файл муваффақиятли ўчирилди",
+    "DELETE_ERROR": "Файлни ўчириб бўлмади"
   },
   "ERRORS": {
     "NO_CONNECTION": "Серверга уланиш йўқ",
@@ -217,11 +237,11 @@
     "OTHER_DOCS": "Бошқа ҳужжатлар",
     "RESERVOIR_SUMMARY": "Хулоса",
     "RESERVOIR_SUMMARY_PDF": "Хулоса PDF",
-      "RESERVOIR_SUMMARY_HOURLY": "Тезкор маълумот",
+    "RESERVOIR_SUMMARY_HOURLY": "Тезкор маълумот",
     "HYDRAULIC_STRUCTURES": "Гидротехник иншоотлар",
     "INCIDENTS": "Ҳодисалар",
-      "VISITS": "Ташрифлар",
-      "SNOW_COVER": "MODSNOW"
+    "VISITS": "Ташрифлар",
+    "SNOW_COVER": "MODSNOW"
   },
   "TOPBAR": {
     "CALL": "Қўнғироқ",
@@ -298,7 +318,21 @@
     "NOT_INFORMED": "Хабардор қилинмаган",
     "INFORMED_BY": "Хабардор қилган",
     "CREATED_BY": "Яратган",
-    "UPDATED_BY": "Янгилаган"
+    "UPDATED_BY": "Янгилаган",
+    "CANCEL": "Бекор қилиш",
+    "SAVE": "Сақлаш",
+    "DATE_LABEL": "Сана",
+    "TOGETHER_LABEL": "Бирга",
+    "REJECT_DIALOG_HEADER": "Рад этиш",
+    "RESCHEDULE_DIALOG_HEADER": "Қайта режалаштириш",
+    "SPECIFY_NEW_DATE_TIME": "Янги сана ва вақтни киритинг",
+    "EVENT_NAME": "Тадбир номи",
+    "EVENT_DESCRIPTION": "Тавсиф",
+    "EVENT_DATE_TIME": "Сана ва вақт",
+    "EVENT_TYPE": "Тадбир тури",
+    "EVENT_LOCATION": "Ўтказиш жойи",
+    "EVENT_STATUS": "Ҳолат",
+    "EVENT_RESPONSIBLE": "Масъул"
   },
   "DASHBOARD": {
     "EVENTS": "Воқеалар",
@@ -937,7 +971,10 @@
       "MONTH_9": "Сентябр",
       "MONTH_10": "Октябр",
       "MONTH_11": "Ноябр",
-      "MONTH_12": "Декабр"
+      "MONTH_12": "Декабр",
+      "DATA_UPDATED": "Маълумотлар янгиланди",
+      "HOURS_SHORT": "с",
+      "HOURS_WORKED": "Ишлаган соатлар"
     },
     "COMMON": {
       "EMPLOYEE": "Ходим",
@@ -966,7 +1003,8 @@
       "BY_TENURE": "Иш стажи бўйича тақсимот",
       "HEADCOUNT_BY_DEPARTMENT": "Бўлимлар бўйича сон",
       "HEADCOUNT": "Сон",
-      "PERCENT_OF_TOTAL": "Умумийнинг %"
+      "PERCENT_OF_TOTAL": "Умумийнинг %",
+      "AVG_AGE": "Ўртача ёш"
     },
     "TRAINING": {
       "TITLE": "Таълим ва ривожланиш",
@@ -1138,7 +1176,13 @@
       "POSITION": "Лавозим",
       "SALARY": "Маош",
       "RESPONSES": "Жавоблар",
-      "PRIORITY": "Устунлик",
+      "PRIORITY": {
+        "LABEL": "Устуворлик",
+        "LOW": "Паст",
+        "NORMAL": "Оддий",
+        "HIGH": "Юқори",
+        "URGENT": "Шошилинч"
+      },
       "STATUS": "Ҳолат",
       "ACTIONS": "Амаллар",
       "APPLICANT": "Ариза берувчи",
@@ -1153,8 +1197,28 @@
       "EDIT": "Таҳрирлаш",
       "NO_VACANCIES": "Вакансиялар топилмади",
       "FULL_NAME": "Тўлиқ исм",
-      "SOURCE": "Манба",
-      "STAGE": "Босқич",
+      "SOURCE": {
+        "LABEL": "Манба",
+        "WEBSITE": "Компания сайти",
+        "JOB_PORTAL": "Вакансиялар портали",
+        "GOV_PORTAL": "Давлат хизмати портали",
+        "REFERRAL": "Ходим тавсияси",
+        "AGENCY": "Кадрлар агентлиги",
+        "SOCIAL_MEDIA": "Ижтимоий тармоқлар",
+        "DIRECT": "Тўғридан-тўғри мурожаат",
+        "OTHER": "Бошқа"
+      },
+      "STAGE": {
+        "LABEL": "Босқич",
+        "APPLICATION": "Ариза",
+        "SCREENING": "Танлов",
+        "INTERVIEW": "Суҳбат",
+        "ASSESSMENT": "Баҳолаш",
+        "VERIFICATION": "Текшириш",
+        "OFFER": "Таклиф",
+        "HIRED": "Ишга қабул",
+        "CLOSED": "Ёпилган"
+      },
       "RATING": "Рейтинг",
       "NO_CANDIDATES": "Номзодлар топилмади",
       "EMPLOYEE": "Ходим",
@@ -1171,134 +1235,109 @@
       "VACANCY_UPDATED": "Вакансия янгиланди",
       "CANDIDATE_CREATED": "Номзод қўшилди",
       "CANDIDATE_UPDATED": "Номзод янгиланди",
-        "SCREENING_PASSED": "Номзод дастлабки танловдан ўтди",
-        "INTERVIEW_SCHEDULED": "Суҳбат режалаштирилди",
-        "FEEDBACK_SAVED": "Фикр-мулоҳаза сақланди",
-        "REFERENCE_ADDED": "Тавсиянома қўшилди",
-        "REFERENCE_VERIFIED": "Тавсиянома текшируви якунланди",
-        "OFFER_SENT": "Таклиф номзодга юборилди",
-        "OFFER_ACCEPTED": "Номзод таклифни қабул қилди",
-        "HIRED": "Ходим муваффақиятли ишга қабул қилинди",
-        "CANDIDATE_REJECTED": "Номзод рад этилди, хабарнома юборилди",
-        "MENTOR_ASSIGNED": "Мураббий тайинланди",
-        "TASK_COMPLETED": "Вазифа бажарилди",
-        "VACANCY_PUBLISHED_PORTAL": "Вакансия давлат порталида эълон қилинди",
-        "VACANCY_CREATE_ERROR": "Вакансия яратиб бўлмади",
-        "VACANCY_UPDATE_ERROR": "Вакансия янгилаб бўлмади",
-        "CANDIDATE_CREATE_ERROR": "Номзод қўшиб бўлмади",
-        "INTERVIEW_SCHEDULE_ERROR": "Суҳбат режалаштириб бўлмади",
-        "OFFER_SEND_ERROR": "Таклиф юбориб бўлмади",
+      "SCREENING_PASSED": "Номзод дастлабки танловдан ўтди",
+      "INTERVIEW_SCHEDULED": "Суҳбат режалаштирилди",
+      "FEEDBACK_SAVED": "Фикр-мулоҳаза сақланди",
+      "REFERENCE_ADDED": "Тавсиянома қўшилди",
+      "REFERENCE_VERIFIED": "Тавсиянома текшируви якунланди",
+      "OFFER_SENT": "Таклиф номзодга юборилди",
+      "OFFER_ACCEPTED": "Номзод таклифни қабул қилди",
+      "HIRED": "Ходим муваффақиятли ишга қабул қилинди",
+      "CANDIDATE_REJECTED": "Номзод рад этилди, хабарнома юборилди",
+      "MENTOR_ASSIGNED": "Мураббий тайинланди",
+      "TASK_COMPLETED": "Вазифа бажарилди",
+      "VACANCY_PUBLISHED_PORTAL": "Вакансия давлат порталида эълон қилинди",
+      "VACANCY_CREATE_ERROR": "Вакансия яратиб бўлмади",
+      "VACANCY_UPDATE_ERROR": "Вакансия янгилаб бўлмади",
+      "CANDIDATE_CREATE_ERROR": "Номзод қўшиб бўлмади",
+      "INTERVIEW_SCHEDULE_ERROR": "Суҳбат режалаштириб бўлмади",
+      "OFFER_SEND_ERROR": "Таклиф юбориб бўлмади",
       "NOT_ASSIGNED": "Тайинланмаган",
-        "EMPLOYMENT_TYPE": {
-            "FULL_TIME": "Тўлиқ бандлик",
-            "PART_TIME": "Қисман бандлик",
-            "CONTRACT": "Шартнома",
-            "INTERNSHIP": "Стажировка",
-            "REMOTE": "Масофавий иш"
-        },
-        "VACANCY_STATUS": {
-            "DRAFT": "Қоралама",
-            "PENDING_APPROVAL": "Келишувда",
-            "APPROVED": "Келишилган",
-            "OPEN": "Очиқ",
-            "ON_HOLD": "Тўхтатилган",
-            "CLOSED": "Ёпилган",
-            "CANCELLED": "Бекор қилинган"
-        },
-        "PRIORITY": {
-            "LOW": "Паст",
-            "NORMAL": "Оддий",
-            "HIGH": "Юқори",
-            "URGENT": "Шошилинч"
-        },
-        "CANDIDATE_STATUS": {
-            "NEW": "Янги",
-            "SCREENING": "Дастлабки танлов",
-            "PHONE_INTERVIEW": "Телефон суҳбати",
-            "INTERVIEW": "Суҳбат",
-            "TECHNICAL_TEST": "Техник топшириқ",
-            "REFERENCE_CHECK": "Тавсияномa текшируви",
-            "BACKGROUND_CHECK": "Ҳужжат текшируви",
-            "OFFER": "Таклиф",
-            "OFFER_ACCEPTED": "Таклиф қабул қилинди",
-            "HIRED": "Ишга қабул қилинди",
-            "REJECTED": "Рад этилди",
-            "WITHDRAWN": "Номзод рад этди"
-        },
-        "STAGE": {
-            "APPLICATION": "Ариза",
-            "SCREENING": "Танлов",
-            "INTERVIEW": "Суҳбат",
-            "ASSESSMENT": "Баҳолаш",
-            "VERIFICATION": "Текшириш",
-            "OFFER": "Таклиф",
-            "HIRED": "Ишга қабул",
-            "CLOSED": "Ёпилган"
-        },
-        "INTERVIEW_TYPE": {
-            "PHONE": "Телефон",
-            "VIDEO": "Видео қўнғироқ",
-            "IN_PERSON": "Юзма-юз",
-            "TECHNICAL": "Техник",
-            "HR": "HR суҳбат",
-            "PANEL": "Панел",
-            "FINAL": "Якуний"
-        },
-        "RECOMMENDATION": {
-            "STRONG_YES": "Албатта ҳа",
-            "YES": "Ҳа",
-            "MAYBE": "Балки",
-            "NO": "Йўқ",
-            "STRONG_NO": "Албатта йўқ"
-        },
-        "OFFER_STATUS": {
-            "DRAFT": "Қоралама",
-            "PENDING_APPROVAL": "Келишувда",
-            "APPROVED": "Келишилган",
-            "SENT": "Юборилган",
-            "ACCEPTED": "Қабул қилинди",
-            "DECLINED": "Рад этилди",
-            "NEGOTIATING": "Музокаралар",
-            "EXPIRED": "Муддати ўтди",
-            "WITHDRAWN": "Қайтариб олинди"
-        },
-        "SOURCE": {
-            "WEBSITE": "Компания сайти",
-            "JOB_PORTAL": "Вакансиялар портали",
-            "GOV_PORTAL": "Давлат хизмати портали",
-            "REFERRAL": "Ходим тавсияси",
-            "AGENCY": "Кадрлар агентлиги",
-            "SOCIAL_MEDIA": "Ижтимоий тармоқлар",
-            "DIRECT": "Тўғридан-тўғри мурожаат",
-            "OTHER": "Бошқа"
-        },
-        "TOOLTIP": {
-            "PASS_SCREENING": "Скринингдан ўтказиш",
-            "SCHEDULE_INTERVIEW": "Суҳбат тайинлаш",
-            "CHECK_REFERENCES": "Тавсияномаларни текшириш",
-            "SEND_OFFER": "Таклиф юбориш",
-            "OFFER_ACCEPTED": "Таклиф қабул қилинди",
-            "HIRE_EMPLOYEE": "Ишга расмийлаштириш",
-            "REJECT": "Рад этиш"
-        },
-        "MOCK": {
-            "TASK_PROCESS_DOCUMENTS": "Ҳужжатларни расмийлаштириш",
-            "TASK_CREATE_EMAIL": "Email яратиш",
-            "TASK_SETUP_ACCESS": "Тизимларга кириш сўзлаш",
-            "TASK_INTRO_TRAINING": "Кириш ўқитиш",
-            "TASK_MEET_TEAM": "Жамоа билан танишиш",
-            "TASK_COMPANY_POLICIES": "Компания сиёсатлари билан танишиш",
-            "DOC_PASSPORT": "Паспорт",
-            "DOC_INN": "ИНН",
-            "DOC_SNILS": "СНИЛС",
-            "DOC_WORK_BOOK": "Меҳнат дафтарчаси",
-            "DOC_PHOTO": "Сурат 3x4",
-            "DOC_DIPLOMA": "Диплом",
-            "POSITIVE_FEEDBACK": "Ижобий фикр-мулоҳаза",
-            "APPROVER_NAME": "Соколов Андрей",
-            "MENTOR_NAME": "Волкова Олга Николаевна"
-        },
+      "EMPLOYMENT_TYPE": {
+        "FULL_TIME": "Тўлиқ бандлик",
+        "PART_TIME": "Қисман бандлик",
+        "CONTRACT": "Шартнома",
+        "INTERNSHIP": "Стажировка",
+        "REMOTE": "Масофавий иш"
+      },
+      "VACANCY_STATUS": {
+        "DRAFT": "Қоралама",
+        "PENDING_APPROVAL": "Келишувда",
+        "APPROVED": "Келишилган",
+        "OPEN": "Очиқ",
+        "ON_HOLD": "Тўхтатилган",
+        "CLOSED": "Ёпилган",
+        "CANCELLED": "Бекор қилинган"
+      },
+      "CANDIDATE_STATUS": {
+        "NEW": "Янги",
+        "SCREENING": "Дастлабки танлов",
+        "PHONE_INTERVIEW": "Телефон суҳбати",
+        "INTERVIEW": "Суҳбат",
+        "TECHNICAL_TEST": "Техник топшириқ",
+        "REFERENCE_CHECK": "Тавсияномa текшируви",
+        "BACKGROUND_CHECK": "Ҳужжат текшируви",
+        "OFFER": "Таклиф",
+        "OFFER_ACCEPTED": "Таклиф қабул қилинди",
+        "HIRED": "Ишга қабул қилинди",
+        "REJECTED": "Рад этилди",
+        "WITHDRAWN": "Номзод рад этди"
+      },
+      "INTERVIEW_TYPE": {
+        "PHONE": "Телефон",
+        "VIDEO": "Видео қўнғироқ",
+        "IN_PERSON": "Юзма-юз",
+        "TECHNICAL": "Техник",
+        "HR": "HR суҳбат",
+        "PANEL": "Панел",
+        "FINAL": "Якуний"
+      },
+      "RECOMMENDATION": {
+        "STRONG_YES": "Албатта ҳа",
+        "YES": "Ҳа",
+        "MAYBE": "Балки",
+        "NO": "Йўқ",
+        "STRONG_NO": "Албатта йўқ"
+      },
+      "OFFER_STATUS": {
+        "DRAFT": "Қоралама",
+        "PENDING_APPROVAL": "Келишувда",
+        "APPROVED": "Келишилган",
+        "SENT": "Юборилган",
+        "ACCEPTED": "Қабул қилинди",
+        "DECLINED": "Рад этилди",
+        "NEGOTIATING": "Музокаралар",
+        "EXPIRED": "Муддати ўтди",
+        "WITHDRAWN": "Қайтариб олинди"
+      },
+      "TOOLTIP": {
+        "PASS_SCREENING": "Скринингдан ўтказиш",
+        "SCHEDULE_INTERVIEW": "Суҳбат тайинлаш",
+        "CHECK_REFERENCES": "Тавсияномаларни текшириш",
+        "SEND_OFFER": "Таклиф юбориш",
+        "OFFER_ACCEPTED": "Таклиф қабул қилинди",
+        "HIRE_EMPLOYEE": "Ишга расмийлаштириш",
+        "REJECT": "Рад этиш"
+      },
+      "MOCK": {
+        "TASK_PROCESS_DOCUMENTS": "Ҳужжатларни расмийлаштириш",
+        "TASK_CREATE_EMAIL": "Email яратиш",
+        "TASK_SETUP_ACCESS": "Тизимларга кириш сўзлаш",
+        "TASK_INTRO_TRAINING": "Кириш ўқитиш",
+        "TASK_MEET_TEAM": "Жамоа билан танишиш",
+        "TASK_COMPANY_POLICIES": "Компания сиёсатлари билан танишиш",
+        "DOC_PASSPORT": "Паспорт",
+        "DOC_INN": "ИНН",
+        "DOC_SNILS": "СНИЛС",
+        "DOC_WORK_BOOK": "Меҳнат дафтарчаси",
+        "DOC_PHOTO": "Сурат 3x4",
+        "DOC_DIPLOMA": "Диплом",
+        "POSITIVE_FEEDBACK": "Ижобий фикр-мулоҳаза",
+        "APPROVER_NAME": "Соколов Андрей",
+        "MENTOR_NAME": "Волкова Олга Николаевна"
+      },
       "ONBOARDING": {
+        "LABEL": "Мослашув",
         "STATUS_IN_PROGRESS": "Жараёнда",
         "STATUS_COMPLETED": "Якунланган",
         "STATUS_NOT_STARTED": "Бошланмаган",
@@ -1312,12 +1351,13 @@
         "CAT_TRAINING": "Ўқитиш",
         "CAT_INTRODUCTION": "Танишиш",
         "CAT_COMPLIANCE": "Сиёсатлар",
-          "CAT_DEPARTMENT": "Бўлим",
+        "CAT_DEPARTMENT": "Бўлим",
         "MARK_COMPLETED": "Бажарилган деб белгилаш",
         "PENDING_DOCUMENTS": "Кутилаётган ҳужжатлар",
         "SUBMITTED_DOCUMENTS": "Тақдим этилган ҳужжатлар"
       },
       "VACANCY": {
+        "LABEL": "Вакансия",
         "EDIT_VACANCY": "Вакансияни таҳрирлаш",
         "CREATE_REQUEST": "Вакансия аризаси",
         "TITLE_LABEL": "Вакансия номи",
@@ -1661,21 +1701,21 @@
       "REQUEST_REJECTED": "Ариза рад этилди",
       "REQUEST_CANCELLED": "Ариза бекор қилинди"
     },
-      "MENU": {
-          "DASHBOARD": "HRM Бош саҳифа",
-          "MY_CABINET": "Менинг кабинетим",
-          "PERSONNEL_RECORDS": "Кадрлар ҳисоби",
-          "VACATION_MANAGEMENT": "Таътиллар бошқаруви",
-          "SALARY_MANAGEMENT": "Маош бошқаруви",
-          "RECRUITING": "Рекрутинг",
-          "TRAINING": "Ўқитиш ва ривожлантириш",
-          "COMPETENCY_ASSESSMENT": "Компетенция баҳоси",
-          "PERFORMANCE_MANAGEMENT": "Самарадорлик бошқаруви",
-          "ANALYTICS": "Аналитика ва ҳисоботлар",
-          "TIMESHEET": "Табель",
-          "HR_DOCUMENTS": "HR ҳужжатлар",
-          "ACCESS_CONTROL": "Кириш назорати",
-          "ORG_STRUCTURE": "Ташкилий тузилма"
+    "MENU": {
+      "DASHBOARD": "HRM Бош саҳифа",
+      "MY_CABINET": "Менинг кабинетим",
+      "PERSONNEL_RECORDS": "Кадрлар ҳисоби",
+      "VACATION_MANAGEMENT": "Таътиллар бошқаруви",
+      "SALARY_MANAGEMENT": "Маош бошқаруви",
+      "RECRUITING": "Рекрутинг",
+      "TRAINING": "Ўқитиш ва ривожлантириш",
+      "COMPETENCY_ASSESSMENT": "Компетенция баҳоси",
+      "PERFORMANCE_MANAGEMENT": "Самарадорлик бошқаруви",
+      "ANALYTICS": "Аналитика ва ҳисоботлар",
+      "TIMESHEET": "Табель",
+      "HR_DOCUMENTS": "HR ҳужжатлар",
+      "ACCESS_CONTROL": "Кириш назорати",
+      "ORG_STRUCTURE": "Ташкилий тузилма"
     }
   },
   "VALIDATION": {
@@ -1774,7 +1814,13 @@
       "INCIDENT_END": "Авария тугаши",
       "LOST_POWER": "Йўқотилган қувват",
       "INCIDENT_FILES": "Ҳодиса файллари",
-      "EVENT_FILES": "Воқеа файллари"
+      "EVENT_FILES": "Воқеа файллари",
+      "EVENT_UPDATED": "Воқеа янгиланди",
+      "EVENT_CREATED": "Воқеа қўшилди",
+      "EVENT_DELETED": "Воқеа ўчирилди",
+      "EVENT_UPDATE_ERROR": "Воқеани янгилашда хатолик",
+      "EVENT_CREATE_ERROR": "Воқеани қўшишда хатолик",
+      "EVENT_DELETE_ERROR": "Воқеани ўчиришда хатолик"
     },
     "DISCHARGE": {
       "TITLE": "Бўш сув ташлаб юбориш",
@@ -1827,7 +1873,21 @@
       "NEW_VISIT": "Янги ташриф",
       "SPECIFY_RESPONSIBLE": "Масъулни киритинг",
       "SPECIFY_DESCRIPTION": "Тавсифни киритинг",
-      "VISIT_FILES": "Ташриф файллари"
+      "VISIT_FILES": "Ташриф файллари",
+      "UPDATED": "Ташриф янгиланди",
+      "CREATED": "Ташриф қўшилди",
+      "DELETED": "Ташриф ўчирилди",
+      "UPDATE_ERROR": "Ташрифни янгилашда хатолик",
+      "CREATE_ERROR": "Ташрифни қўшишда хатолик",
+      "DELETE_ERROR": "Ташрифни ўчиришда хатолик"
+    },
+    "INCIDENT": {
+      "UPDATED": "Ҳодиса янгиланди",
+      "CREATED": "Ҳодиса қўшилди",
+      "DELETED": "Ҳодиса ўчирилди",
+      "UPDATE_ERROR": "Ҳодисани янгилашда хатолик",
+      "CREATE_ERROR": "Ҳодисани қўшишда хатолик",
+      "DELETE_ERROR": "Ҳодисани ўчиришда хатолик"
     },
     "RESERVOIR_DEVICE": {
       "TITLE": "Сув омборлари гидротехник иншоотлари ва қурилмалари",
@@ -1840,7 +1900,10 @@
       "FAULTY": "Носоз",
       "CRITERION_1": "Мезон 1",
       "CRITERION_2": "Мезон 2",
-      "NO_DATA": "Маълумотлар топилмади"
+      "NO_DATA": "Маълумотлар топилмади",
+      "CHANGES_SAVED": "Ўзгаришлар сақланди",
+      "CHANGES_RESET": "Ўзгаришлар бекор қилинди",
+      "SAVE_ERROR": "Сақлашда хатолик"
     },
     "CONSTRUCTION": {
       "TITLE": "Оксув ГЭС Каскади қурилиши",
@@ -1865,8 +1928,8 @@
       "INFLOW_TO_DATE": "Бугунги кунга оқиб кириш, млн. м³",
       "MODSNOW": "MODSNOW, қор қоплами %"
     },
-      "RESERVOIR_SUMMARY_HOURLY": {
-          "TITLE": "Сув омборлари бўйича тезкор маълумот"
+    "RESERVOIR_SUMMARY_HOURLY": {
+      "TITLE": "Сув омборлари бўйича тезкор маълумот"
     },
     "DASHBOARD": {
       "HEADER": {
@@ -1905,10 +1968,10 @@
         "ALL_WORKING": "Барча станциялар ишламоқда",
         "TYPE_GES": "ГЭС",
         "TYPE_MINI": "мини",
-          "TYPE_MICRO": "микро",
-          "DETAIL_TITLE": "Ўчириш тафсилотлари",
-          "ONGOING": "Давом этмоқда",
-          "GO_TO_GES": "Станцияга ўтиш"
+        "TYPE_MICRO": "микро",
+        "DETAIL_TITLE": "Ўчириш тафсилотлари",
+        "ONGOING": "Давом этмоқда",
+        "GO_TO_GES": "Станцияга ўтиш"
       },
       "POWER_GENERATION": {
         "YEAR_START": "Йил бошидан",
@@ -1925,10 +1988,10 @@
         "EMERGENCY_SHUTDOWNS": "Фавқулодда ўчиришлар",
         "NO_ACTIVE_SHUTDOWNS": "Фаол ўчиришлар йўқ",
         "RESERVOIRS": "Сув омборлари",
-          "NO_RESERVOIRS": "Сув омборлари йўқ",
-          "WORKING": "Ишлаяпти",
-          "RESERVE": "Заҳирада",
-          "IN_REPAIR": "Таъмирда"
+        "NO_RESERVOIRS": "Сув омборлари йўқ",
+        "WORKING": "Ишлаяпти",
+        "RESERVE": "Заҳирада",
+        "IN_REPAIR": "Таъмирда"
       },
       "COMMON": {
         "LOADING": "Юкланмоқда...",
@@ -2273,29 +2336,54 @@
       }
     },
     "REPAIR_COSTS": {
-      "TITLE": "Таъмирлаш харажатлари",
-      "ADD_REPAIR": "Таъмирлаш қўшиш",
-      "OBJECT_NAME": "Объект номи",
-      "REPAIR_TYPE": "Таъмирлаш тури",
-      "PLANNED_COST": "Режалаштирилган қиймат",
       "ACTUAL_COST": "Ҳақиқий қиймат",
-      "START_DATE": "Бошланиш санаси",
-      "END_DATE": "Тугаш санаси",
+      "ACTUAL_COSTS": "Ҳақиқий харажатлар",
+      "ADD_REPAIR": "Таъмирлаш қўшиш",
+      "CATEGORY_CONSTRUCTION": "Қурилиш",
+      "CATEGORY_ELECTRICAL": "Электр",
+      "CATEGORY_HVAC": "HVAC",
+      "CATEGORY_IT": "IT ускуналари",
+      "CATEGORY_MECHANICAL": "Механик",
+      "CATEGORY_OTHER": "Бошқа",
+      "CATEGORY_PLUMBING": "Сантехника",
       "CONTRACTOR": "Пудратчи",
-      "TYPE_CURRENT": "Жорий",
-      "TYPE_CAPITAL": "Капитал",
-      "TYPE_EMERGENCY": "Фавқулодда",
-      "STATUS_PLANNED": "Режалаштирилган",
-      "STATUS_IN_PROGRESS": "Жараёнда",
-      "STATUS_COMPLETED": "Якунланган",
-      "TOTAL_REPAIRS": "Жами таъмирлашлар",
-      "TOTAL_PLANNED": "Режалаштирилган сумма",
-      "TOTAL_ACTUAL": "Ҳақиқий сумма",
+      "DELETE_CONFIRM": "Ҳақиқатан ҳам бу таъмирлашни ўчирмоқчимисиз?",
+      "DESCRIPTION": "Тавсиф",
       "DEVIATION": "Оғиш",
-      "REPAIR_UPDATED": "Таъмирлаш янгиланди",
+      "END_DATE": "Тугаш санаси",
+      "EXPORT_COLUMNS": {
+        "ACTUAL_COST": "Ҳақиқий қиймат",
+        "CATEGORY": "Категория",
+        "CONTRACTOR": "Пудратчи",
+        "DATE": "Сана",
+        "DESCRIPTION": "Тавсиф",
+        "DIFFERENCE": "Фарқ",
+        "OBJECT": "Объект",
+        "PLANNED_COST": "Режалаштирилган қиймат",
+        "REPAIR_TYPE": "Таъмирлаш тури",
+        "STATUS": "Ҳолат",
+        "TOTAL": "ЖАМИ"
+      },
+      "OBJECT_NAME": "Объект номи",
+      "PLANNED_COST": "Режалаштирилган қиймат",
+      "PLANNED_COSTS": "Режалаштирилган харажатлар",
       "REPAIR_ADDED": "Таъмирлаш қўшилди",
       "REPAIR_DELETED": "Таъмирлаш ўчирилди",
-      "DELETE_CONFIRM": "Ҳақиқатан ҳам бу таъмирлашни ўчирмоқчимисиз?"
+      "REPAIR_TYPE": "Таъмирлаш тури",
+      "REPAIR_UPDATED": "Таъмирлаш янгиланди",
+      "SPECIFY_PLANNED_COST": "Режалаштирилган қийматни киритинг",
+      "START_DATE": "Бошланиш санаси",
+      "STATUS_CANCELLED": "Бекор қилинган",
+      "STATUS_COMPLETED": "Якунланган",
+      "STATUS_IN_PROGRESS": "Жараёнда",
+      "STATUS_SCHEDULED": "Режалаштирилган",
+      "TITLE": "Таъмирлаш харажатлари",
+      "TOTAL_ACTUAL": "Ҳақиқий сумма",
+      "TOTAL_PLANNED": "Режалаштирилган сумма",
+      "TOTAL_REPAIRS": "Жами таъмирлашлар",
+      "TYPE_EMERGENCY": "Фавқулодда",
+      "TYPE_PLANNED": "Режалаштирилган",
+      "TYPE_UNPLANNED": "Режадан ташқари"
     },
     "SALARY": {
       "TITLE": "Иш ҳақи фонди",
@@ -2755,7 +2843,8 @@
       "UPDATE_ERROR": "Қабулни янгилаб бўлмади",
       "CREATED": "Қабул яратилди",
       "CREATE_ERROR": "Қабулни яратиб бўлмади",
-      "DELETE_CONFIRM": "Бу қабулни ўчиришни хоҳлайсизми?"
+      "DELETE_CONFIRM": "Бу қабулни ўчиришни хоҳлайсизми?",
+      "INFORMED_SUCCESS": "Қабул хабардор қилинган деб белгиланди"
     },
     "EVENTS": {
       "TITLE": "Барча тадбирлар",
@@ -2903,7 +2992,15 @@
       "NO_ANSWER": "Жавоб йўқ",
       "BUSY": "Банд",
       "CANCELLED": "Бекор қилинган"
-    }
+    },
+    "CALLER": "Қўнғироқ қилувчи",
+    "RECEIVER": "Қабул қилувчи",
+    "NO_CALLS": "Қўнғироқлар йўқ",
+    "NEW_CALL": "Янги қўнғироқ",
+    "EDIT_CALL": "Қўнғироқни таҳрирлаш",
+    "CALLER_REQUIRED": "Қўнғироқ қилувчини киритинг",
+    "CALLER_PHONE_LABEL": "Қўнғироқ қилувчи телефони",
+    "RECEIVER_LABEL": "Қабул қилувчи"
   },
   "INVEST": {
     "ACTIVE_PROJECTS": {
@@ -2944,6 +3041,23 @@
       "CANCEL": "Бекор қилиш",
       "SAVE": "Сақлаш",
       "ADD": "Қўшиш"
+    },
+    "MESSAGES": {
+      "PROJECT_UPDATED": "Лойиҳа муваффақиятли янгиланди",
+      "SAVE_ERROR": "Сақлаш хатоси",
+      "UPDATE_FAILED": "Лойиҳани янгилаб бўлмади",
+      "PROJECT_ADDED": "Янги лойиҳа қўшилди",
+      "ADD_FAILED": "Лойиҳани қўшиб бўлмади",
+      "LOAD_ERROR": "Юклаш хатоси",
+      "LOAD_ACTIVE_FAILED": "Фаол лойиҳаларни юклаб бўлмади",
+      "PROJECT_DELETED": "Лойиҳа муваффақиятли ўчирилди",
+      "DELETE_ERROR": "Ўчириш хатоси",
+      "DELETE_FAILED": "Лойиҳани ўчириб бўлмади",
+      "LOAD_STATUSES_FAILED": "Статусларни юклаб бўлмади",
+      "LOAD_INVESTMENTS_FAILED": "Инвестиция лойиҳаларини юклаб бўлмади",
+      "UPDATE_ERROR": "Янгилаш хатоси",
+      "CREATE_ERROR": "Яратиш хатоси",
+      "CREATE_FAILED": "Лойиҳани яратиб бўлмади"
     }
   },
   "NEWS": {
@@ -3021,6 +3135,9 @@
       "SOURCE": "Манба",
       "PUBLISHED": "Нашр қилинган",
       "CREATED": "Яратилган"
+    },
+    "MESSAGES": {
+      "LOAD_FAILED": "Янгиликларни юклаб бўлмади"
     }
   },
   "LEX_SEARCH": {
@@ -3031,193 +3148,293 @@
     "PAGE_REPORT": "Саҳифа {currentPage} / {totalPages}",
     "LOADING": "Юкланмоқда..."
   },
-    "GES_DETAIL": {
-        "NOT_FOUND": "ГЭС топилмади",
-        "ERROR_LOADING": "Маълумотларни юклашда хатолик",
-        "ERROR_SAVE": "Сақлашда хатолик",
-        "ERROR_DELETE": "Ўчиришда хатолик",
-        "CREATED": "Ёзув яратилди",
-        "UPDATED": "Ёзув янгиланди",
-        "DELETED": "Ёзув ўчирилди",
-        "AGGREGATES_TITLE": "Агрегатлар",
-        "MNEMONIC_TITLE": "Мнемосхема",
-        "NO_AGGREGATES": "Агрегатлар ҳақида маълумот йўқ",
-        "TABS": {
-            "INFO": "Маълумот",
-            "CONTACTS": "Контактлар",
-            "SHUTDOWNS": "Фавқулодда ўчиришлар",
-            "DISCHARGES": "Бўш ташламалар",
-            "INCIDENTS": "Воқеалар",
-            "VISITS": "Ташрифлар",
-            "TELEMETRY": "Телеметрия",
-            "MNEMONIC": "Мнемосхема"
-        },
-        "KPI": {
-            "CURRENT_POWER": "Актив қувват",
-            "AGGREGATES": "Агрегатлар",
-            "SHUTDOWNS": "Фавқулодда ўчиришлар",
-            "DISCHARGES": "Бўш сув ташламалари"
-        },
-        "STATUS": {
-            "ACTIVE": "Ишлаяпти",
-            "PENDING": "Заҳирада",
-            "REPAIR": "Таъмирда",
-            "OFFLINE": "Ўчирилган"
-        },
-        "AGGREGATE": {
-            "PARAM_NAME": "Параметр",
-            "PARAM_VALUE": "Қиймат",
-            "PARAM_UNIT": "Ўлч. бир.",
-            "ACTIVE_POWER": "Актив қувват",
-            "REACTIVE_POWER": "Реактив қувват",
-            "VOLTAGE_AB": "Кучланиш AB",
-            "VOLTAGE_BC": "Кучланиш BC",
-            "VOLTAGE_CA": "Кучланиш CA",
-            "CURRENT_A": "Ток фаза A",
-            "CURRENT_B": "Ток фаза B",
-            "CURRENT_C": "Ток фаза C",
-            "FREQUENCY": "Частота",
-            "POWER_FACTOR": "Қувват коэффициенти (cos φ)",
-            "ROTOR_VOLTAGE": "Ротор кучланиши",
-            "ROTOR_CURRENT": "Ротор токи",
-            "GUIDE_VANE_1": "Йўналтирувчи аппарат 1",
-            "GUIDE_VANE_2": "Йўналтирувчи аппарат 2"
-        },
-        "UNIT": {
-            "MW": "МВт",
-            "MVAR": "МВАр",
-            "KV": "кВ",
-            "A": "А",
-            "HZ": "Гц",
-            "V": "В",
-            "PERCENT": "%"
-        },
-        "MNEMONIC": {
-            "STATUS": "Ҳолат",
-            "POWER": "Қувват",
-            "NO_DATA": "Телеметрия маълумотлари йўқ",
-            "PLACEHOLDER": "Маълумотлар мавжуд бўлганда мнемосхема кўрсатилади",
-            "NO_SCHEMA": "Мнемосхема бу станция учун мавжуд эмас",
-            "NO_SCHEMA_DESC": "Бу ГЭС учун схема ҳали юкланмаган",
-            "LOAD_ERROR": "Мнемосхемани юклашда хатолик"
-        },
-        "INFO": {
-            "BASIC_INFO": "Асосий маълумот",
-            "NAME": "Номи",
-            "PARENT_ORG": "Бош ташкилот",
-            "TYPES": "Турлари",
-            "DEPARTMENTS": "Бўлимлар",
-            "DEPARTMENT_NAME": "Номи",
-            "DEPARTMENT_DESC": "Тавсифи",
-            "NO_DEPARTMENTS": "Бўлимлар йўқ",
-            "SUB_ORGANIZATIONS": "Қўшимча ташкилотлар"
-        },
-        "CONTACTS": {
-            "NAME": "Ф.И.О.",
-            "POSITION": "Лавозим",
-            "DEPARTMENT": "Бўлим",
-            "PHONE": "Телефон",
-            "EMAIL": "Электрон почта",
-            "ACTIONS": "Амаллар",
-            "CALL": "Қўнғироқ қилиш",
-            "NO_CONTACTS": "Контактлар йўқ"
-        },
-        "FILTERS": {
-            "START_DATE": "Бошланиш санаси",
-            "END_DATE": "Тугаш санаси",
-            "SELECT_DATE": "Санани танланг"
-        },
-        "COMMON": {
-            "CREATED_BY": "Яратди",
-            "FILES": "Файллар",
-            "VIEW_FILES": "Файлларни кўриш",
-            "ATTACH_FILES": "Файлларни бириктириш",
-            "ADD_NEW_FILES": "Янги файллар қўшиш"
-        },
-        "SHUTDOWNS": {
-            "ADD": "Фавқулодда ўчириш қўшиш",
-            "EDIT": "Фавқулодда ўчиришни таҳрирлаш",
-            "START": "Бошланиши",
-            "END": "Тугаши",
-            "REASON": "Сабаби",
-            "POWER_LOSS": "Қувват йўқотиш",
-            "IDLE_DISCHARGE": "Бўш ташлама",
-            "FILES": "Воқеа файллари",
-            "NO_DATA": "Фавқулодда ўчиришлар ҳақида маълумот йўқ"
-        },
-        "DISCHARGES": {
-            "ADD": "Бўш ташлама қўшиш",
-            "EDIT": "Бўш ташламани таҳрирлаш",
-            "START": "Бошланиши",
-            "END": "Тугаши",
-            "FLOW_RATE": "Сарф, м³/с",
-            "TOTAL_VOLUME": "Ҳажм, млн м³",
-            "REASON": "Сабаби",
-            "STATUS": "Ҳолат",
-            "ONGOING": "Давом этмоқда",
-            "APPROVED": "Тасдиқланган",
-            "COMPLETED": "Тугалланган",
-            "FILES": "Бўш ташлама файллари",
-            "NO_DATA": "Бўш ташламалар ҳақида маълумот йўқ"
-        },
-        "INCIDENTS": {
-            "ADD": "Воқеа қўшиш",
-            "EDIT": "Воқеани таҳрирлаш",
-            "DATE": "Сана",
-            "DESCRIPTION": "Тавсиф",
-            "ORGANIZATION": "Ташкилот",
-            "FILES": "Воқеа файллари",
-            "NO_DATA": "Воқеалар ҳақида маълумот йўқ"
-        },
-        "VISITS": {
-            "ADD": "Ташриф қўшиш",
-            "EDIT": "Ташрифни таҳрирлаш",
-            "DATE": "Сана",
-            "DESCRIPTION": "Тавсиф",
-            "RESPONSIBLE": "Масъул",
-            "ORGANIZATION": "Ташкилот",
-            "FILES": "Ташриф файллари",
-            "NO_DATA": "Ташрифлар ҳақида маълумот йўқ"
-        },
-        "TELEMETRY": {
-            "DEVICE": "Қурилма",
-            "DEVICE_GROUP": "Қурилмалар гуруҳи",
-            "GROUP": "Гуруҳ",
-            "PARAMETER": "Параметр",
-            "VALUE": "Қиймат",
-            "UNIT": "Ўлч. бир.",
-            "QUALITY": "Сифат",
-            "SEVERITY": "Муҳимлик",
-            "TIMESTAMP": "Вақт",
-            "ALL_GROUPS": "Барча гуруҳлар",
-            "ALL_DEVICES": "Барча қурилмалар",
-            "TOTAL_RECORDS": "Жами ёзувлар",
-            "NO_DATA": "Телеметрия маълумотлари йўқ"
-        }
+  "GES_DETAIL": {
+    "NOT_FOUND": "ГЭС топилмади",
+    "ERROR_LOADING": "Маълумотларни юклашда хатолик",
+    "ERROR_SAVE": "Сақлашда хатолик",
+    "ERROR_DELETE": "Ўчиришда хатолик",
+    "CREATED": "Ёзув яратилди",
+    "UPDATED": "Ёзув янгиланди",
+    "DELETED": "Ёзув ўчирилди",
+    "AGGREGATES_TITLE": "Агрегатлар",
+    "MNEMONIC_TITLE": "Мнемосхема",
+    "NO_AGGREGATES": "Агрегатлар ҳақида маълумот йўқ",
+    "TABS": {
+      "INFO": "Маълумот",
+      "CONTACTS": "Контактлар",
+      "SHUTDOWNS": "Фавқулодда ўчиришлар",
+      "DISCHARGES": "Бўш ташламалар",
+      "INCIDENTS": "Воқеалар",
+      "VISITS": "Ташрифлар",
+      "TELEMETRY": "Телеметрия",
+      "MNEMONIC": "Мнемосхема"
     },
-    "SNOW_COVER": {
-        "TITLE": "Қор қоплами (MODSNOW)",
-        "TODAY": "Бугун",
-        "YESTERDAY": "Кеча",
-        "YEAR_AGO": "Бир йил олдин",
-        "AVG_COVER": "Ўртача қоплам",
-        "ORGANIZATION": "Ташкилот",
-        "COVER": "Қоплам, %",
-        "DELTA": "Δ бир йил олдинга",
-        "ZONES": "Баландлик зоналари",
-        "ELEVATION": "Баландлик, м",
-        "SCA_PCT": "Қоплам, %",
-        "NO_DATA": "Маълумот йўқ",
-        "RESOURCE_DATE": "Сурат санаси"
+    "KPI": {
+      "CURRENT_POWER": "Актив қувват",
+      "AGGREGATES": "Агрегатлар",
+      "SHUTDOWNS": "Фавқулодда ўчиришлар",
+      "DISCHARGES": "Бўш сув ташламалари"
     },
-    "UZGIDRO_NEWS": {
-        "TITLE": "UzGidro Янгиликлари",
-        "TOTAL_NEWS": "Жами янгиликлар",
-        "NEWS_COUNT": "янгилик",
-        "NO_NEWS": "Янгиликлар топилмади",
-        "VIEWS": "Кўришлар",
-        "PUBLISHED": "Нашр этилган",
-        "LOAD_ERROR": "Янгиликларни юклашда хатолик",
-        "PAGE_REPORT": "{first}-{last} кўрсатилмоқда, жами {totalRecords}"
+    "STATUS": {
+      "ACTIVE": "Ишлаяпти",
+      "PENDING": "Заҳирада",
+      "REPAIR": "Таъмирда",
+      "OFFLINE": "Ўчирилган"
+    },
+    "AGGREGATE": {
+      "PARAM_NAME": "Параметр",
+      "PARAM_VALUE": "Қиймат",
+      "PARAM_UNIT": "Ўлч. бир.",
+      "ACTIVE_POWER": "Актив қувват",
+      "REACTIVE_POWER": "Реактив қувват",
+      "VOLTAGE_AB": "Кучланиш AB",
+      "VOLTAGE_BC": "Кучланиш BC",
+      "VOLTAGE_CA": "Кучланиш CA",
+      "CURRENT_A": "Ток фаза A",
+      "CURRENT_B": "Ток фаза B",
+      "CURRENT_C": "Ток фаза C",
+      "FREQUENCY": "Частота",
+      "POWER_FACTOR": "Қувват коэффициенти (cos φ)",
+      "ROTOR_VOLTAGE": "Ротор кучланиши",
+      "ROTOR_CURRENT": "Ротор токи",
+      "GUIDE_VANE_1": "Йўналтирувчи аппарат 1",
+      "GUIDE_VANE_2": "Йўналтирувчи аппарат 2"
+    },
+    "UNIT": {
+      "MW": "МВт",
+      "MVAR": "МВАр",
+      "KV": "кВ",
+      "A": "А",
+      "HZ": "Гц",
+      "V": "В",
+      "PERCENT": "%"
+    },
+    "MNEMONIC": {
+      "STATUS": "Ҳолат",
+      "POWER": "Қувват",
+      "NO_DATA": "Телеметрия маълумотлари йўқ",
+      "PLACEHOLDER": "Маълумотлар мавжуд бўлганда мнемосхема кўрсатилади",
+      "NO_SCHEMA": "Мнемосхема бу станция учун мавжуд эмас",
+      "NO_SCHEMA_DESC": "Бу ГЭС учун схема ҳали юкланмаган",
+      "LOAD_ERROR": "Мнемосхемани юклашда хатолик"
+    },
+    "INFO": {
+      "BASIC_INFO": "Асосий маълумот",
+      "NAME": "Номи",
+      "PARENT_ORG": "Бош ташкилот",
+      "TYPES": "Турлари",
+      "DEPARTMENTS": "Бўлимлар",
+      "DEPARTMENT_NAME": "Номи",
+      "DEPARTMENT_DESC": "Тавсифи",
+      "NO_DEPARTMENTS": "Бўлимлар йўқ",
+      "SUB_ORGANIZATIONS": "Қўшимча ташкилотлар"
+    },
+    "CONTACTS": {
+      "NAME": "Ф.И.О.",
+      "POSITION": "Лавозим",
+      "DEPARTMENT": "Бўлим",
+      "PHONE": "Телефон",
+      "EMAIL": "Электрон почта",
+      "ACTIONS": "Амаллар",
+      "CALL": "Қўнғироқ қилиш",
+      "NO_CONTACTS": "Контактлар йўқ"
+    },
+    "FILTERS": {
+      "START_DATE": "Бошланиш санаси",
+      "END_DATE": "Тугаш санаси",
+      "SELECT_DATE": "Санани танланг"
+    },
+    "COMMON": {
+      "CREATED_BY": "Яратди",
+      "FILES": "Файллар",
+      "VIEW_FILES": "Файлларни кўриш",
+      "ATTACH_FILES": "Файлларни бириктириш",
+      "ADD_NEW_FILES": "Янги файллар қўшиш"
+    },
+    "SHUTDOWNS": {
+      "ADD": "Фавқулодда ўчириш қўшиш",
+      "EDIT": "Фавқулодда ўчиришни таҳрирлаш",
+      "START": "Бошланиши",
+      "END": "Тугаши",
+      "REASON": "Сабаби",
+      "POWER_LOSS": "Қувват йўқотиш",
+      "IDLE_DISCHARGE": "Бўш ташлама",
+      "FILES": "Воқеа файллари",
+      "NO_DATA": "Фавқулодда ўчиришлар ҳақида маълумот йўқ"
+    },
+    "DISCHARGES": {
+      "ADD": "Бўш ташлама қўшиш",
+      "EDIT": "Бўш ташламани таҳрирлаш",
+      "START": "Бошланиши",
+      "END": "Тугаши",
+      "FLOW_RATE": "Сарф, м³/с",
+      "TOTAL_VOLUME": "Ҳажм, млн м³",
+      "REASON": "Сабаби",
+      "STATUS": "Ҳолат",
+      "ONGOING": "Давом этмоқда",
+      "APPROVED": "Тасдиқланган",
+      "COMPLETED": "Тугалланган",
+      "FILES": "Бўш ташлама файллари",
+      "NO_DATA": "Бўш ташламалар ҳақида маълумот йўқ"
+    },
+    "INCIDENTS": {
+      "ADD": "Воқеа қўшиш",
+      "EDIT": "Воқеани таҳрирлаш",
+      "DATE": "Сана",
+      "DESCRIPTION": "Тавсиф",
+      "ORGANIZATION": "Ташкилот",
+      "FILES": "Воқеа файллари",
+      "NO_DATA": "Воқеалар ҳақида маълумот йўқ"
+    },
+    "VISITS": {
+      "ADD": "Ташриф қўшиш",
+      "EDIT": "Ташрифни таҳрирлаш",
+      "DATE": "Сана",
+      "DESCRIPTION": "Тавсиф",
+      "RESPONSIBLE": "Масъул",
+      "ORGANIZATION": "Ташкилот",
+      "FILES": "Ташриф файллари",
+      "NO_DATA": "Ташрифлар ҳақида маълумот йўқ"
+    },
+    "TELEMETRY": {
+      "DEVICE": "Қурилма",
+      "DEVICE_GROUP": "Қурилмалар гуруҳи",
+      "GROUP": "Гуруҳ",
+      "PARAMETER": "Параметр",
+      "VALUE": "Қиймат",
+      "UNIT": "Ўлч. бир.",
+      "QUALITY": "Сифат",
+      "SEVERITY": "Муҳимлик",
+      "TIMESTAMP": "Вақт",
+      "ALL_GROUPS": "Барча гуруҳлар",
+      "ALL_DEVICES": "Барча қурилмалар",
+      "TOTAL_RECORDS": "Жами ёзувлар",
+      "NO_DATA": "Телеметрия маълумотлари йўқ"
+    }
+  },
+  "SNOW_COVER": {
+    "TITLE": "Қор қоплами (MODSNOW)",
+    "TODAY": "Бугун",
+    "YESTERDAY": "Кеча",
+    "YEAR_AGO": "Бир йил олдин",
+    "AVG_COVER": "Ўртача қоплам",
+    "ORGANIZATION": "Ташкилот",
+    "COVER": "Қоплам, %",
+    "DELTA": "Δ бир йил олдинга",
+    "ZONES": "Баландлик зоналари",
+    "ELEVATION": "Баландлик, м",
+    "SCA_PCT": "Қоплам, %",
+    "NO_DATA": "Маълумот йўқ",
+    "RESOURCE_DATE": "Сурат санаси"
+  },
+  "UZGIDRO_NEWS": {
+    "TITLE": "UzGidro Янгиликлари",
+    "TOTAL_NEWS": "Жами янгиликлар",
+    "NEWS_COUNT": "янгилик",
+    "NO_NEWS": "Янгиликлар топилмади",
+    "VIEWS": "Кўришлар",
+    "PUBLISHED": "Нашр этилган",
+    "LOAD_ERROR": "Янгиликларни юклашда хатолик",
+    "PAGE_REPORT": "{first}-{last} кўрсатилмоқда, жами {totalRecords}"
+  },
+  "WEATHER": {
+    "LOADING": "Об-ҳаво юкланмоқда...",
+    "HUMIDITY": "Намлик",
+    "WIND": "Шамол",
+    "WIND_UNIT": "м/с",
+    "LOCATION_ERROR": "Жойлашувингизни аниқлаб бўлмади",
+    "LOAD_ERROR": "Об-ҳаво прогнозини юклаб бўлмади"
+  },
+  "RESERVOIRS": {
+    "MESSAGES": {
+      "DATA_UPDATED": "Маълумотлар янгиланди",
+      "ERROR_OCCURRED": "Хатолик юз берди"
+    }
+  },
+  "DISCHARGE": {
+    "MESSAGES": {
+      "RECORD_UPDATED": "Сув ташлаб юбориш ёзуви янгиланди",
+      "SAVE_ERROR": "Сақлаш хатоси",
+      "SAVE_FAILED": "Маълумотларни сақлаб бўлмади",
+      "RECORD_ADDED": "Янги сув ташлаб юбориш ёзуви қўшилди",
+      "DELETED": "Сув ташлаб юбориш ўчирилди",
+      "DELETE_ERROR": "Сув ташлаб юборишни ўчириш хатоси",
+      "DOWNLOAD_FAILED": "Файлни юклаб бўлмади"
+    }
+  },
+  "VACATION": {
+    "MESSAGES": {
+      "LOAD_FAILED": "Таътилларни юклаб бўлмади",
+      "EDIT_ONLY_DRAFTS": "Фақат қораламалар ва кўриб чиқилаётган аризаларни таҳрирлаш мумкин",
+      "VALIDATION_ERROR": "Текшириш хатоси",
+      "CHECK_REQUEST_DATA": "Ариза маълумотларини текширинг",
+      "SUBMITTED": "Юборилди",
+      "SENT_FOR_APPROVAL": "Ариза раҳбар тасдиғига юборилди",
+      "SUBMIT_FAILED": "Аризани юбориб бўлмади",
+      "REQUEST_CREATED": "Таътил аризаси яратилди ва тасдиққа юборилди",
+      "CREATE_FAILED": "Аризани яратиб бўлмади",
+      "REQUEST_UPDATED": "Ариза янгиланди",
+      "UPDATE_FAILED": "Аризани янгилаб бўлмади",
+      "APPROVED": "Тасдиқланди",
+      "APPROVED_DETAIL": "{{name}} ходимининг таътили тасдиқланди. Саналар календарда блокланди.",
+      "APPROVE_FAILED": "Аризани тасдиқлаб бўлмади",
+      "REJECTED": "Рад этилди",
+      "REJECTED_DETAIL": "Ариза рад этилди. {{name}} ходими хабардор қилинди.",
+      "REJECT_FAILED": "Аризани рад этиб бўлмади",
+      "CANCEL_ONLY_DRAFTS": "Фақат қораламалар ва кўриб чиқилаётган аризаларни бекор қилиш мумкин",
+      "CANCELLED": "Бекор қилинди",
+      "REQUEST_CANCELLED": "Таътил аризаси бекор қилинди",
+      "CANCEL_FAILED": "Аризани бекор қилиб бўлмади",
+      "REQUEST_DELETED": "Ариза ўчирилди",
+      "DELETE_FAILED": "Аризани ўчириб бўлмади",
+      "INSUFFICIENT_DAYS": "Таътил кунлари етарли эмас. Сўралган: {{requested}}, мавжуд: {{available}}"
+    }
+  },
+  "SALARY": {
+    "MESSAGES": {
+      "LOAD_FAILED": "Маълумотларни юклаб бўлмади",
+      "CALCULATION_COMPLETE": "Ҳисоблаш якунланди",
+      "CALCULATED_COUNT": "{{total}} дан {{successful}} та иш ҳақи ҳисобланди",
+      "CALCULATION_FAILED": "Иш ҳақи ҳисоблаб бўлмади",
+      "SUBMITTED": "Юборилди",
+      "SENT_FOR_APPROVAL": "{{name}} иш ҳақи тасдиққа юборилди",
+      "BATCH_SENT_APPROVAL": "{{count}} ёзув тасдиққа юборилди",
+      "APPROVED_TITLE": "Тасдиқланди",
+      "SALARY_APPROVED": "{{name}} иш ҳақи тасдиқланди",
+      "BATCH_APPROVED": "{{count}} ёзув тасдиқланди",
+      "REJECTED_TITLE": "Рад этилди",
+      "SALARY_REJECTED": "{{name}} иш ҳақи рад этилди",
+      "PAID_TITLE": "Тўланди",
+      "MARKED_PAID": "{{name}} иш ҳақи тўланган деб белгиланди",
+      "BATCH_PAID": "{{count}} ёзув тўланган деб белгиланди",
+      "DELETED": "Ўчирилди",
+      "RECORD_DELETED": "Ёзув ўчирилди",
+      "GENERATING": "Шакллантирилмоқда",
+      "PAYSLIP_GENERATING": "{{name}} учун ҳисоб варақаси шакллантирилмоқда...",
+      "PAYROLL_REPORT_GENERATING": "Иш ҳақи реестри шакллантирилмоқда...",
+      "TAX_REPORT_GENERATING": "Солиқ ҳисоботи шакллантирилмоқда...",
+      "SOCIAL_FUND_REPORT_GENERATING": "Ижтимоий фонд ҳисоботи шакллантирилмоқда...",
+      "PAYSLIPS_EXPORTED": "Ҳисоб варақалари экспорт қилинди",
+      "EXPORT_FAILED": "Ҳисоб варақаларини экспорт қилиб бўлмади"
+    }
+  },
+  "COMPETENCY": {
+    "MESSAGES": {
+      "SESSION_UPDATED": "Сессия янгиланди",
+      "SESSION_CREATED": "Сессия яратилди",
+      "INVITATIONS_SENT": "Таклифномалар юборилди",
+      "SESSION_STARTED": "Сессия бошланди",
+      "ASSESSMENT_CENTER_STARTED": "Баҳолаш маркази бошланди",
+      "SESSION_COMPLETED": "Сессия якунланди",
+      "BLOCK_ADDED": "Блок қўшилди",
+      "BLOCK_COMPLETED": "Блок якунланди",
+      "EVALUATION_SAVED": "Баҳо сақланди",
+      "FINAL_ASSESSMENT_GENERATED": "Якуний баҳо шаклланди",
+      "ASSESSMENT_APPROVED": "Баҳо тасдиқланди",
+      "PLAN_CREATED": "Ривожланиш режаси яратилди",
+      "PLAN_ACTIVATED": "Режа фаоллаштирилди",
+      "PLAN_COMPLETED": "Режа якунланди",
+      "SESSION_DELETED": "Сессия ўчирилди"
+    }
   }
 }

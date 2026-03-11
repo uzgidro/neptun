@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Button } from 'primeng/button';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
 import { DatePipe } from '@angular/common';
@@ -18,10 +18,10 @@ import { SelectComponent } from '@/layout/component/dialog/select/select.compone
 import { FileUploadComponent } from '@/layout/component/dialog/file-upload/file-upload.component';
 import { FileViewerComponent } from '@/layout/component/dialog/file-viewer/file-viewer.component';
 import { FileListComponent } from '@/layout/component/dialog/file-list/file-list.component';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ScService } from '@/core/services/sc.service';
 import { HttpResponse } from '@angular/common/http';
-import { finalize } from 'rxjs';
+import { finalize, Subject, takeUntil } from 'rxjs';
 import { saveAs } from 'file-saver';
 
 @Component({
@@ -46,7 +46,7 @@ import { saveAs } from 'file-saver';
     templateUrl: './incident.component.html',
     styleUrl: './incident.component.scss'
 })
-export class IncidentComponent implements OnInit, OnChanges {
+export class IncidentComponent implements OnInit, OnChanges, OnDestroy {
     @Input() date: Date | null = null;
     @Output() incidentSaved = new EventEmitter<void>();
 
@@ -68,6 +68,8 @@ export class IncidentComponent implements OnInit, OnChanges {
     private incidentService: IncidentService = inject(IncidentService);
     private scService: ScService = inject(ScService);
     private messageService: MessageService = inject(MessageService);
+    private translate = inject(TranslateService);
+    private destroy$ = new Subject<void>();
 
     // Export
     isExcelLoading = false;
@@ -89,7 +91,7 @@ export class IncidentComponent implements OnInit, OnChanges {
         });
 
         // Watch for changes to applies_to_all checkbox
-        this.form.get('applies_to_all')?.valueChanges.subscribe((appliesToAll) => {
+        this.form.get('applies_to_all')?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((appliesToAll) => {
             const organizationControl = this.form.get('organization');
             if (appliesToAll) {
                 organizationControl?.clearValidators();
@@ -105,7 +107,7 @@ export class IncidentComponent implements OnInit, OnChanges {
         this.loadIncidents();
 
         this.orgsLoading = true;
-        this.organizationService.getOrganizationsFlat().subscribe({
+        this.organizationService.getOrganizationsFlat().pipe(takeUntil(this.destroy$)).subscribe({
             next: (data) => {
                 this.organizations = data;
             },
@@ -116,12 +118,12 @@ export class IncidentComponent implements OnInit, OnChanges {
     private loadIncidents() {
         this.loading = true;
         const dateToUse = this.date || new Date();
-        this.incidentService.getIncidents(dateToUse).subscribe({
+        this.incidentService.getIncidents(dateToUse).pipe(takeUntil(this.destroy$)).subscribe({
             next: (data) => {
                 this.incidents = data;
             },
             error: (err) => {
-                this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: err.message });
+                this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: err.message });
             },
             complete: () => (this.loading = false)
         });
@@ -159,14 +161,14 @@ export class IncidentComponent implements OnInit, OnChanges {
         }
 
         if (this.isEditMode && this.currentIncidentId) {
-            this.incidentService.editIncident(this.currentIncidentId, formData).subscribe({
+            this.incidentService.editIncident(this.currentIncidentId, formData).pipe(takeUntil(this.destroy$)).subscribe({
                 next: () => {
-                    this.messageService.add({ severity: 'success', summary: 'Инцидент обновлен' });
+                    this.messageService.add({ severity: 'success', summary: this.translate.instant('SITUATION_CENTER.INCIDENT.UPDATED') });
                     this.incidentSaved.emit();
                     this.closeDialog();
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка обновления инцидента', detail: err.message });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('SITUATION_CENTER.INCIDENT.UPDATE_ERROR'), detail: err.message });
                     this.isLoading = false;
                 },
                 complete: () => {
@@ -175,16 +177,16 @@ export class IncidentComponent implements OnInit, OnChanges {
                 }
             });
         } else {
-            this.incidentService.addIncident(formData).subscribe({
+            this.incidentService.addIncident(formData).pipe(takeUntil(this.destroy$)).subscribe({
                 next: () => {
                     this.isFormOpen = false;
                     this.form.reset();
-                    this.messageService.add({ severity: 'success', summary: 'Инцидент добавлен' });
+                    this.messageService.add({ severity: 'success', summary: this.translate.instant('SITUATION_CENTER.INCIDENT.CREATED') });
                     this.incidentSaved.emit();
                     this.closeDialog();
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка добавления инцидента', detail: err.message });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('SITUATION_CENTER.INCIDENT.CREATE_ERROR'), detail: err.message });
                     this.isLoading = false;
                 },
                 complete: () => {
@@ -272,23 +274,15 @@ export class IncidentComponent implements OnInit, OnChanges {
         this.showFilesDialog = true;
     }
 
-    formatFileSize(bytes: number): string {
-        if (!bytes || bytes === 0) return '0 Bytes';
-        const k = 1024;
-        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-        const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
-    }
-
     deleteIncident(incident: IncidentDto) {
-        if (confirm('Вы уверены, что хотите удалить этот инцидент?')) {
-            this.incidentService.deleteIncident(incident.id).subscribe({
+        if (confirm(this.translate.instant('COMMON.CONFIRM_DELETE'))) {
+            this.incidentService.deleteIncident(incident.id).pipe(takeUntil(this.destroy$)).subscribe({
                 next: () => {
-                    this.messageService.add({ severity: 'success', summary: 'Инцидент удален' });
+                    this.messageService.add({ severity: 'success', summary: this.translate.instant('SITUATION_CENTER.INCIDENT.DELETED') });
                     this.loadIncidents();
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка удаления инцидента', detail: err.message });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('SITUATION_CENTER.INCIDENT.DELETE_ERROR'), detail: err.message });
                 }
             });
         }
@@ -298,6 +292,11 @@ export class IncidentComponent implements OnInit, OnChanges {
         if (changes['date'] && !changes['date'].firstChange) {
             this.loadIncidents();
         }
+    }
+
+    ngOnDestroy(): void {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 
     get dateYMD(): string {
@@ -314,6 +313,7 @@ export class IncidentComponent implements OnInit, OnChanges {
         this.scService
             .downloadScReport(dateToUse, format)
             .pipe(
+                takeUntil(this.destroy$),
                 finalize(() => {
                     this.isExcelLoading = false;
                     this.isPdfLoading = false;
@@ -327,7 +327,7 @@ export class IncidentComponent implements OnInit, OnChanges {
                 },
                 error: (err: any) => {
                     console.error('Ошибка при скачивании:', err);
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось скачать файл' });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('COMMON.DOWNLOAD_ERROR') });
                 }
             });
     }

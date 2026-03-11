@@ -315,10 +315,13 @@
                         ></p-tag>
                     </td>
                     <td>
-                        <span *ngIf="procurement.plannedDeliveryDate" [ngClass]="{'text-red-500': isOverdue(procurement)}">
+                        @if (procurement.plannedDeliveryDate) {
+                        <span [ngClass]="{'text-red-500': isOverdue(procurement)}">
                             {{ procurement.plannedDeliveryDate | date: 'dd.MM.yyyy' }}
                         </span>
-                        <span *ngIf="!procurement.plannedDeliveryDate" class="text-400">-</span>
+                        } @else {
+                        <span class="text-400">-</span>
+                        }
                     </td>
                     <td class="text-center">
                         <div class="flex align-items-center justify-content-center gap-1">

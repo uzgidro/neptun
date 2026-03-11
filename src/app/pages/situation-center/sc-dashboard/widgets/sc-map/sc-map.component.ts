@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy } from '@angular/core';
+import { Component, inject, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -101,13 +101,15 @@ interface StationMarker {
     standalone: true,
     imports: [UzMapComponent, DatePipe, DecimalPipe, TranslateModule],
     templateUrl: './sc-map.component.html',
-    styleUrl: './sc-map.component.scss'
+    styleUrl: './sc-map.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ScMapComponent implements OnDestroy {
     private dashboardService = inject(DashboardService);
     private shutdownService = inject(GesShutdownService);
     private translateService = inject(TranslateService);
     private router = inject(Router);
+    private cdr = inject(ChangeDetectorRef);
     private destroy$ = new Subject<void>();
 
     selectedStation: StationMarker | null = null;
@@ -179,9 +181,11 @@ export class ScMapComponent implements OnDestroy {
                 next: ({ cascades, reservoirs, shutdowns }) => {
                     this.regionData = this.filterRegionData(cascades, reservoirs, shutdowns, regionOrgs);
                     this.isLoadingRegionData = false;
+                    this.cdr.markForCheck();
                 },
                 error: () => {
                     this.isLoadingRegionData = false;
+                    this.cdr.markForCheck();
                 }
             });
     }

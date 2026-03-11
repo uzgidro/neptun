@@ -8,6 +8,7 @@ import { ReservoirSummaryService } from '@/core/services/reservoir-summary.servi
 import { ReservoirSummaryRequest, ReservoirSummaryResponse } from '@/core/interfaces/reservoir-summary';
 import localeRu from '@angular/common/locales/ru';
 import { MessageService } from 'primeng/api';
+import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from '@/core/services/auth.service';
 import { finalize } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
@@ -29,6 +30,7 @@ export class ReservoirsSummaryComponent implements OnInit {
     private reservoirService: ReservoirSummaryService = inject(ReservoirSummaryService);
     private messageService: MessageService = inject(MessageService);
     private levelVolumeService: LevelVolumeService = inject(LevelVolumeService);
+    private translate: TranslateService = inject(TranslateService);
     authService: AuthService = inject(AuthService);
 
     selectedDate: Date | null = null;
@@ -109,13 +111,13 @@ export class ReservoirsSummaryComponent implements OnInit {
 
         this.reservoirService.upsetReservoirData(dataToSave).subscribe({
             next: () => {
-                this.messageService.add({ severity: 'success', summary: 'Данные обновлены' });
+                this.messageService.add({ severity: 'success', summary: this.translate.instant('RESERVOIRS.MESSAGES.DATA_UPDATED') });
                 if (this.selectedDate) {
                     this.loadData(this.selectedDate);
                 }
             },
             error: (err) => {
-                this.messageService.add({ severity: 'warn', summary: 'Произошла ошибка', detail: err });
+                this.messageService.add({ severity: 'warn', summary: this.translate.instant('RESERVOIRS.MESSAGES.ERROR_OCCURRED'), detail: err });
             }
         });
         this.originalData = JSON.parse(JSON.stringify(this.data));

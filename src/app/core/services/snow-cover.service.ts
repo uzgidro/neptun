@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ApiService, BASE_URL } from '@/core/services/api.service';
+import { ApiService } from '@/core/services/api.service';
 import { Observable } from 'rxjs';
 import { SnowCoverResponse } from '@/core/interfaces/snow-cover';
 import { HttpParams } from '@angular/common/http';
@@ -15,6 +15,6 @@ export class SnowCoverService extends ApiService {
         if (date) {
             params = params.set('date', this.dateToYMD(date));
         }
-        return this.http.get<SnowCoverResponse>(BASE_URL + SNOW_COVER, { params });
+        return this.http.get<SnowCoverResponse>(this.BASE_URL + SNOW_COVER, { params });
     }
 }
