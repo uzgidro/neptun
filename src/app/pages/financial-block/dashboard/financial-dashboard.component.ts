@@ -205,7 +205,7 @@ export class FinancialDashboardComponent implements OnInit, OnDestroy {
 
         // Структура расходов
         this.expensesChartData = {
-            labels: ['Дебит/Кредит', 'Инвестиции', 'Ремонт', 'Закупки', 'ЗП', 'Прочее'],
+            labels: ['Дебет/Кредит', 'Инвестиции', 'Ремонт', 'Закупки', 'ЗП', 'Прочее'],
             datasets: [{
                 data: [
                     data.debitCredit.totalCredit,
