@@ -109,12 +109,12 @@ export class FinancialDashboardService {
 
         return [
             {
-                title: 'Дебит/Кредит',
+                title: 'Дебет/Кредит',
                 icon: 'pi pi-wallet',
                 route: '/debit-credit',
                 color: '#3B82F6',
                 metrics: [
-                    { label: 'Дебит', value: dc.totalDebit, format: 'currency', color: 'success' },
+                    { label: 'Дебет', value: dc.totalDebit, format: 'currency', color: 'success' },
                     { label: 'Кредит', value: dc.totalCredit, format: 'currency', color: 'danger' },
                     { label: 'Баланс', value: dc.balance, format: 'currency', color: dc.balance >= 0 ? 'success' : 'danger' }
                 ]
@@ -125,7 +125,7 @@ export class FinancialDashboardService {
                 route: '/invest-perspective-projects',
                 color: '#10B981',
                 metrics: [
-                    { label: 'Дебит', value: inv.totalDebit, format: 'currency', color: 'success' },
+                    { label: 'Дебет', value: inv.totalDebit, format: 'currency', color: 'success' },
                     { label: 'Кредит', value: inv.totalCredit, format: 'currency', color: 'danger' },
                     { label: 'Проекты', value: inv.projectsCount, format: 'number', color: 'info' }
                 ]
@@ -179,7 +179,7 @@ export class FinancialDashboardService {
 
     // Загрузка начальных данных (вызывается при старте)
     loadInitialData(): void {
-        // Данные Дебит/Кредит (из debit-credit модуля)
+        // Данные Дебет/Кредит (из debit-credit модуля)
         this.updateDebitCredit({
             totalDebit: 525000,
             totalCredit: 532000,
