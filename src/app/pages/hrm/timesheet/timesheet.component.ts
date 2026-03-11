@@ -115,7 +115,7 @@ export class TimesheetComponent implements OnInit, OnDestroy {
     }
 
     private loadDepartments(): void {
-        this.departmentService.getDepartments()
+        this.departmentService.getAll()
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (data) => {

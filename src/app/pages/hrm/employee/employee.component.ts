@@ -159,7 +159,7 @@ export class EmployeeComponent extends BaseCrudComponent<Contact, FormData> impl
     }
 
     private loadDepartments(): void {
-        this.departmentService.getDepartments()
+        this.departmentService.getAll()
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (data) => this.departments = data
@@ -167,7 +167,7 @@ export class EmployeeComponent extends BaseCrudComponent<Contact, FormData> impl
     }
 
     private loadPositions(): void {
-        this.positionService.getPositions()
+        this.positionService.getAll()
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (data) => this.positions = data

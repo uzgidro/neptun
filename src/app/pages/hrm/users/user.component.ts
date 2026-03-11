@@ -118,7 +118,7 @@ export class User implements OnInit, OnDestroy {
             next: (roles) => (this.allRoles = roles),
             error: (err) => console.error('Failed to load roles:', err)
         });
-        this.contactService.getContacts().pipe(takeUntil(this.destroy$)).subscribe({
+        this.contactService.getAll().pipe(takeUntil(this.destroy$)).subscribe({
             next: (contacts) => (this.allContacts = contacts),
             error: (err) => console.error('Failed to load contacts:', err)
         });
@@ -126,11 +126,11 @@ export class User implements OnInit, OnDestroy {
             next: (orgs) => (this.organizations = orgs),
             error: (err) => console.error('Failed to load organizations:', err)
         });
-        this.departmentService.getDepartments().pipe(takeUntil(this.destroy$)).subscribe({
+        this.departmentService.getAll().pipe(takeUntil(this.destroy$)).subscribe({
             next: (depts) => (this.departments = depts),
             error: (err) => console.error('Failed to load departments:', err)
         });
-        this.positionService.getPositions().pipe(takeUntil(this.destroy$)).subscribe({
+        this.positionService.getAll().pipe(takeUntil(this.destroy$)).subscribe({
             next: (positions) => (this.positions = positions),
             error: (err) => console.error('Failed to load positions:', err)
         });

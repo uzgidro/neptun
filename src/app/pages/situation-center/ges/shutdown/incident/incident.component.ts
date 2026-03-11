@@ -274,14 +274,6 @@ export class IncidentComponent implements OnInit, OnChanges, OnDestroy {
         this.showFilesDialog = true;
     }
 
-    formatFileSize(bytes: number): string {
-        if (!bytes || bytes === 0) return '0 Bytes';
-        const k = 1024;
-        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-        const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
-    }
-
     deleteIncident(incident: IncidentDto) {
         if (confirm(this.translate.instant('COMMON.CONFIRM_DELETE'))) {
             this.incidentService.deleteIncident(incident.id).pipe(takeUntil(this.destroy$)).subscribe({

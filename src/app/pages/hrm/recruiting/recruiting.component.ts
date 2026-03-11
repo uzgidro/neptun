@@ -223,8 +223,8 @@ export class RecruitingComponent implements OnInit, OnDestroy {
             vacancies: this.recruitingService.getVacancies().pipe(catchError(() => of([] as Vacancy[]))),
             candidates: this.recruitingService.getCandidates().pipe(catchError(() => of([] as Candidate[]))),
             onboardings: this.recruitingService.getOnboardings().pipe(catchError(() => of([] as Onboarding[]))),
-            departments: this.departmentService.getDepartments().pipe(catchError(() => of([] as any[]))),
-            positions: this.positionService.getPositions().pipe(catchError(() => of([] as any[])))
+            departments: this.departmentService.getAll().pipe(catchError(() => of([] as any[]))),
+            positions: this.positionService.getAll().pipe(catchError(() => of([] as any[])))
         })
             .pipe(takeUntil(this.destroy$))
             .subscribe((data) => {

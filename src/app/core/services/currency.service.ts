@@ -19,8 +19,4 @@ export class CurrencyService extends ApiService {
         }
         return this.currency$;
     }
-
-    invalidateCurrencyCache(): void {
-        this.currency$ = null;
-    }
 }

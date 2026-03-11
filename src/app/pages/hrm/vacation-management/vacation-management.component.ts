@@ -164,7 +164,7 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
     }
 
     private loadEmployees(): void {
-        this.contactService.getContacts()
+        this.contactService.getAll()
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (data: Contact[]) => {

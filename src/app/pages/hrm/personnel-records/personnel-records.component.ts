@@ -122,7 +122,7 @@ export class PersonnelRecordsComponent implements OnInit, OnDestroy {
     }
 
     private loadDepartments(): void {
-        this.departmentService.getDepartments()
+        this.departmentService.getAll()
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (data) => {
@@ -133,7 +133,7 @@ export class PersonnelRecordsComponent implements OnInit, OnDestroy {
     }
 
     private loadPositions(): void {
-        this.positionService.getPositions()
+        this.positionService.getAll()
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (data) => {
@@ -144,7 +144,7 @@ export class PersonnelRecordsComponent implements OnInit, OnDestroy {
     }
 
     private loadEmployees(): void {
-        this.contactService.getContacts()
+        this.contactService.getAll()
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (data: Contact[]) => {

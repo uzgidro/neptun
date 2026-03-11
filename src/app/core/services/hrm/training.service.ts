@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ConfigService } from '@/core/services/config.service';
-import { Training, TrainingPayload, TrainingParticipant, Certificate, DevelopmentPlan, DevelopmentGoal } from '@/core/interfaces/hrm/training';
+import { Training, TrainingPayload } from '@/core/interfaces/hrm/training';
 
 @Injectable({
     providedIn: 'root'
@@ -41,87 +41,5 @@ export class TrainingService {
 
     deleteTraining(id: number): Observable<void> {
         return this.http.delete<void>(`${this.API_URL}/trainings/${id}`);
-    }
-
-    // Participants
-    getParticipants(trainingId: number): Observable<TrainingParticipant[]> {
-        return this.http.get<TrainingParticipant[]>(`${this.API_URL}/trainings/${trainingId}/participants`);
-    }
-
-    enrollParticipant(trainingId: number, employeeId: number): Observable<TrainingParticipant> {
-        return this.http.post<TrainingParticipant>(`${this.API_URL}/trainings/${trainingId}/participants`, { employee_id: employeeId });
-    }
-
-    removeParticipant(trainingId: number, participantId: number): Observable<void> {
-        return this.http.delete<void>(`${this.API_URL}/trainings/${trainingId}/participants/${participantId}`);
-    }
-
-    completeParticipant(trainingId: number, participantId: number, score?: number): Observable<TrainingParticipant> {
-        return this.http.post<TrainingParticipant>(`${this.API_URL}/trainings/${trainingId}/participants/${participantId}/complete`, { score });
-    }
-
-    getEmployeeTrainings(employeeId: number): Observable<TrainingParticipant[]> {
-        return this.http.get<TrainingParticipant[]>(`${this.API_URL}/employees/${employeeId}/trainings`);
-    }
-
-    // Certificates
-    getCertificates(employeeId: number): Observable<Certificate[]> {
-        return this.http.get<Certificate[]>(`${this.API_URL}/employees/${employeeId}/certificates`);
-    }
-
-    addCertificate(employeeId: number, certificate: Partial<Certificate>, file?: File): Observable<Certificate> {
-        const formData = new FormData();
-        Object.keys(certificate).forEach(key => {
-            const value = (certificate as any)[key];
-            if (value !== undefined && value !== null) {
-                formData.append(key, value);
-            }
-        });
-        if (file) {
-            formData.append('file', file);
-        }
-        return this.http.post<Certificate>(`${this.API_URL}/employees/${employeeId}/certificates`, formData);
-    }
-
-    deleteCertificate(employeeId: number, certificateId: number): Observable<void> {
-        return this.http.delete<void>(`${this.API_URL}/employees/${employeeId}/certificates/${certificateId}`);
-    }
-
-    // Development Plans
-    getDevelopmentPlans(employeeId?: number): Observable<DevelopmentPlan[]> {
-        let params = new HttpParams();
-        if (employeeId) {
-            params = params.set('employee_id', employeeId.toString());
-        }
-        return this.http.get<DevelopmentPlan[]>(`${this.API_URL}/development-plans`, { params });
-    }
-
-    getDevelopmentPlanById(id: number): Observable<DevelopmentPlan> {
-        return this.http.get<DevelopmentPlan>(`${this.API_URL}/development-plans/${id}`);
-    }
-
-    createDevelopmentPlan(plan: Partial<DevelopmentPlan>): Observable<DevelopmentPlan> {
-        return this.http.post<DevelopmentPlan>(`${this.API_URL}/development-plans`, plan);
-    }
-
-    updateDevelopmentPlan(id: number, plan: Partial<DevelopmentPlan>): Observable<DevelopmentPlan> {
-        return this.http.put<DevelopmentPlan>(`${this.API_URL}/development-plans/${id}`, plan);
-    }
-
-    deleteDevelopmentPlan(id: number): Observable<void> {
-        return this.http.delete<void>(`${this.API_URL}/development-plans/${id}`);
-    }
-
-    // Goals
-    addGoal(planId: number, goal: Partial<DevelopmentGoal>): Observable<DevelopmentGoal> {
-        return this.http.post<DevelopmentGoal>(`${this.API_URL}/development-plans/${planId}/goals`, goal);
-    }
-
-    updateGoal(planId: number, goalId: number, goal: Partial<DevelopmentGoal>): Observable<DevelopmentGoal> {
-        return this.http.put<DevelopmentGoal>(`${this.API_URL}/development-plans/${planId}/goals/${goalId}`, goal);
-    }
-
-    deleteGoal(planId: number, goalId: number): Observable<void> {
-        return this.http.delete<void>(`${this.API_URL}/development-plans/${planId}/goals/${goalId}`);
     }
 }

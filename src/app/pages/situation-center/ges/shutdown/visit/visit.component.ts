@@ -256,14 +256,6 @@ export class VisitComponent implements OnInit, OnChanges, OnDestroy {
         this.showFilesDialog = true;
     }
 
-    formatFileSize(bytes: number): string {
-        if (!bytes || bytes === 0) return '0 Bytes';
-        const k = 1024;
-        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-        const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
-    }
-
     deleteVisit(id: number) {
         if (confirm(this.translate.instant('COMMON.CONFIRM_DELETE'))) {
             this.visitService.deleteVisit(id).pipe(takeUntil(this.destroy$)).subscribe({

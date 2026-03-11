@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Button } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
+import { formatFileSize as formatFileSizeFn } from '@/core/utils/format';
 
 export interface ExistingFile {
     id: number;
@@ -28,13 +29,7 @@ export class FileListComponent {
         this.removeFile.emit(fileId);
     }
 
-    formatFileSize(bytes: number): string {
-        if (bytes === 0) return '0 Bytes';
-        const k = 1024;
-        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-        const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
-    }
+    formatFileSize = formatFileSizeFn;
 
     isImageFile(fileName: string): boolean {
         const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.bmp'];
