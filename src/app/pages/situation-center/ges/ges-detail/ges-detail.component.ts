@@ -77,7 +77,7 @@ export class GesDetailComponent implements OnInit, OnDestroy {
 
     loadGesInfo(): void {
         this.loading = true;
-        this.gesService.getGesInfo(this.gesId).subscribe({
+        this.gesService.getGesInfo(this.gesId).pipe(takeUntil(this.destroy$)).subscribe({
             next: (data) => {
                 this.gesInfo = data;
             },

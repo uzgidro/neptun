@@ -114,11 +114,26 @@ export class User implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.loadUsers();
-        this.apiService.getRoles().subscribe((roles) => (this.allRoles = roles));
-        this.contactService.getContacts().subscribe((contacts) => (this.allContacts = contacts));
-        this.organizationService.getOrganizationsFlat().subscribe((orgs) => (this.organizations = orgs));
-        this.departmentService.getDepartments().subscribe((depts) => (this.departments = depts));
-        this.positionService.getPositions().subscribe((positions) => (this.positions = positions));
+        this.apiService.getRoles().pipe(takeUntil(this.destroy$)).subscribe({
+            next: (roles) => (this.allRoles = roles),
+            error: (err) => console.error('Failed to load roles:', err)
+        });
+        this.contactService.getContacts().pipe(takeUntil(this.destroy$)).subscribe({
+            next: (contacts) => (this.allContacts = contacts),
+            error: (err) => console.error('Failed to load contacts:', err)
+        });
+        this.organizationService.getOrganizationsFlat().pipe(takeUntil(this.destroy$)).subscribe({
+            next: (orgs) => (this.organizations = orgs),
+            error: (err) => console.error('Failed to load organizations:', err)
+        });
+        this.departmentService.getDepartments().pipe(takeUntil(this.destroy$)).subscribe({
+            next: (depts) => (this.departments = depts),
+            error: (err) => console.error('Failed to load departments:', err)
+        });
+        this.positionService.getPositions().pipe(takeUntil(this.destroy$)).subscribe({
+            next: (positions) => (this.positions = positions),
+            error: (err) => console.error('Failed to load positions:', err)
+        });
     }
 
     onGlobalFilter(table: Table, event: Event) {
@@ -348,11 +363,19 @@ export class User implements OnInit, OnDestroy {
     }
 
     private loadUsers(): void {
-        this.apiService.getUsers().subscribe({
+        this.apiService.getUsers().pipe(takeUntil(this.destroy$)).subscribe({
             next: (data) => {
                 this.users = data;
             },
-            error: () => {},
+            error: (err) => {
+                this.messageService.add({
+                    severity: 'error',
+                    summary: this.translate.instant('COMMON.ERROR'),
+                    detail: this.translate.instant('COMMON.LOAD_ERROR')
+                });
+                console.error(err);
+                this.loading = false;
+            },
             complete: () => (this.loading = false)
         });
     }

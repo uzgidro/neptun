@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ApiService, BASE_URL } from '@/core/services/api.service';
+import { ApiService } from '@/core/services/api.service';
 import { Cascade, IdleDischargeResponse } from '@/core/interfaces/discharge';
 import { Observable } from 'rxjs';
 import { HttpParams, HttpResponse } from '@angular/common/http';
@@ -12,11 +12,11 @@ const FLAT = '/flat';
 })
 export class DischargeService extends ApiService {
     addDischarge(formData: FormData): Observable<any> {
-        return this.http.post(BASE_URL + DISCHARGES, formData);
+        return this.http.post(this.BASE_URL + DISCHARGES, formData);
     }
 
     getDischarges(): Observable<Cascade[]> {
-        return this.http.get<Cascade[]>(BASE_URL + DISCHARGES);
+        return this.http.get<Cascade[]>(this.BASE_URL + DISCHARGES);
     }
 
     getFlatDischarges(date?: Date): Observable<IdleDischargeResponse[]> {
@@ -25,23 +25,23 @@ export class DischargeService extends ApiService {
             params = params.set('start_date', this.dateToYMD(date));
             params = params.set('end_date', this.dateToYMD(date));
         }
-        return this.http.get<IdleDischargeResponse[]>(BASE_URL + DISCHARGES + FLAT, { params: params });
+        return this.http.get<IdleDischargeResponse[]>(this.BASE_URL + DISCHARGES + FLAT, { params: params });
     }
 
     editDischarge(id: number, formData: FormData): Observable<any> {
-        return this.http.patch(BASE_URL + DISCHARGES + '/' + id.toString(), formData);
+        return this.http.patch(this.BASE_URL + DISCHARGES + '/' + id.toString(), formData);
     }
 
     approveDischarge(id: number): Observable<any> {
-        return this.http.patch(BASE_URL + DISCHARGES + '/' + id.toString(), { approved: true });
+        return this.http.patch(this.BASE_URL + DISCHARGES + '/' + id.toString(), { approved: true });
     }
 
     deleteDischarge(id: number): Observable<any> {
-        return this.http.delete(BASE_URL + DISCHARGES + '/' + id.toString());
+        return this.http.delete(this.BASE_URL + DISCHARGES + '/' + id.toString());
     }
 
     downloadDischarges(date: Date, format: 'excel' | 'pdf'): Observable<HttpResponse<Blob>> {
-        return this.http.get(BASE_URL + DISCHARGES + '/export', {
+        return this.http.get(this.BASE_URL + DISCHARGES + '/export', {
             params: {
                 date: this.dateToYMD(date),
                 format: format

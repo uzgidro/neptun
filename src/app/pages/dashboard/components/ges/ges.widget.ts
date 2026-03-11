@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { ButtonDirective, ButtonIcon } from 'primeng/button';
 import { TableModule } from 'primeng/table';
@@ -17,7 +17,8 @@ interface expandedRows {
     selector: 'app-ges-widget',
     imports: [ButtonDirective, TableModule, FormsModule, ButtonIcon, NgClass, DecimalPipe, TranslateModule],
     templateUrl: './ges.widget.html',
-    styleUrl: './ges.widget.scss'
+    styleUrl: './ges.widget.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 class GesWidget implements OnInit, OnDestroy {
     cascades: Organization[] = [];
@@ -31,6 +32,7 @@ class GesWidget implements OnInit, OnDestroy {
     private dashboardService: DashboardService = inject(DashboardService);
     private translate: TranslateService = inject(TranslateService);
     private router: Router = inject(Router);
+    private cdr = inject(ChangeDetectorRef);
     private refreshSubscription?: Subscription;
 
     @Input() expanded: boolean = false;
@@ -51,12 +53,12 @@ class GesWidget implements OnInit, OnDestroy {
                     contacts: this.sortContacts(cascade.contacts)
                 }));
                 this.lastUpdated = new Date();
-            },
-            error: (err) => {
-                console.log(err);
-            },
-            complete: () => {
                 this.loading = false;
+                this.cdr.markForCheck();
+            },
+            error: () => {
+                this.loading = false;
+                this.cdr.markForCheck();
             }
         });
     }

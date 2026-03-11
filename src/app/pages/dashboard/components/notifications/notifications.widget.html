@@ -21,7 +21,7 @@
                 <i class="pi pi-spin pi-spinner text-4xl"></i>
             </div>
         } @else {
-            @for (dateGroup of eventsByDate; track $index) {
+            @for (dateGroup of eventsByDate; track dateGroup.date) {
                 <span
                     class="block text-muted-color font-medium mb-4 sticky top-0 bg-surface-0 dark:bg-surface-900 py-2 z-10">{{ dateGroup.date | date:'dd.MM' }}</span>
                 <ul class="p-0 m-0 list-none mb-6">

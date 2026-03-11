@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ApiService, BASE_URL } from '@/core/services/api.service';
+import { ApiService } from '@/core/services/api.service';
 import { Observable } from 'rxjs';
 import { OrgUnit, OrgEmployee } from '@/core/interfaces/hrm/org-structure';
 
@@ -11,39 +11,39 @@ const ORG_STRUCTURE = '/hrm/org-structure';
 export class OrgStructureService extends ApiService {
     // Org Units
     getOrgUnits(): Observable<OrgUnit[]> {
-        return this.http.get<OrgUnit[]>(BASE_URL + ORG_STRUCTURE + '/units');
+        return this.http.get<OrgUnit[]>(this.BASE_URL + ORG_STRUCTURE + '/units');
     }
 
     getOrgUnit(id: number): Observable<OrgUnit> {
-        return this.http.get<OrgUnit>(BASE_URL + ORG_STRUCTURE + '/units/' + id);
+        return this.http.get<OrgUnit>(this.BASE_URL + ORG_STRUCTURE + '/units/' + id);
     }
 
     createOrgUnit(data: Partial<OrgUnit>): Observable<OrgUnit> {
-        return this.http.post<OrgUnit>(BASE_URL + ORG_STRUCTURE + '/units', data);
+        return this.http.post<OrgUnit>(this.BASE_URL + ORG_STRUCTURE + '/units', data);
     }
 
     updateOrgUnit(id: number, data: Partial<OrgUnit>): Observable<OrgUnit> {
-        return this.http.patch<OrgUnit>(BASE_URL + ORG_STRUCTURE + '/units/' + id, data);
+        return this.http.patch<OrgUnit>(this.BASE_URL + ORG_STRUCTURE + '/units/' + id, data);
     }
 
     deleteOrgUnit(id: number): Observable<any> {
-        return this.http.delete(BASE_URL + ORG_STRUCTURE + '/units/' + id);
+        return this.http.delete(this.BASE_URL + ORG_STRUCTURE + '/units/' + id);
     }
 
     // Employees in org structure
     getOrgEmployees(): Observable<OrgEmployee[]> {
-        return this.http.get<OrgEmployee[]>(BASE_URL + ORG_STRUCTURE + '/employees');
+        return this.http.get<OrgEmployee[]>(this.BASE_URL + ORG_STRUCTURE + '/employees');
     }
 
     getUnitEmployees(unitId: number): Observable<OrgEmployee[]> {
-        return this.http.get<OrgEmployee[]>(BASE_URL + ORG_STRUCTURE + '/units/' + unitId + '/employees');
+        return this.http.get<OrgEmployee[]>(this.BASE_URL + ORG_STRUCTURE + '/units/' + unitId + '/employees');
     }
 
     assignEmployee(unitId: number, employeeId: number): Observable<any> {
-        return this.http.post(BASE_URL + ORG_STRUCTURE + '/units/' + unitId + '/employees', { employee_id: employeeId });
+        return this.http.post(this.BASE_URL + ORG_STRUCTURE + '/units/' + unitId + '/employees', { employee_id: employeeId });
     }
 
     removeEmployee(unitId: number, employeeId: number): Observable<any> {
-        return this.http.delete(BASE_URL + ORG_STRUCTURE + '/units/' + unitId + '/employees/' + employeeId);
+        return this.http.delete(this.BASE_URL + ORG_STRUCTURE + '/units/' + unitId + '/employees/' + employeeId);
     }
 }

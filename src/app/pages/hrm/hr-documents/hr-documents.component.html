@@ -178,8 +178,11 @@
                             <td>{{ getTypeLabel(doc.type) }}</td>
                             <td>{{ getCategoryLabel(doc.category) }}</td>
                             <td>
-                                <span *ngIf="doc.employee_name">{{ doc.employee_name }}</span>
-                                <span *ngIf="!doc.employee_name" class="text-surface-400">—</span>
+                                @if (doc.employee_name) {
+                                <span>{{ doc.employee_name }}</span>
+                                } @else {
+                                <span class="text-surface-400">—</span>
+                                }
                             </td>
                             <td>
                                 <p-tag [value]="getStatusLabel(doc.status)" [severity]="getStatusSeverity(doc.status)"></p-tag>
@@ -188,10 +191,18 @@
                             <td>
                                 <div class="flex gap-1">
                                     <button pButton icon="pi pi-eye" class="p-button-text p-button-sm" [pTooltip]="'HRM.DOCUMENTS.VIEW' | translate" (click)="viewDocumentDetails(doc)"></button>
-                                    <button *ngIf="canEdit(doc)" pButton icon="pi pi-pencil" class="p-button-text p-button-sm" [pTooltip]="'HRM.DOCUMENTS.EDIT' | translate" (click)="openEditDocumentDialog(doc)"></button>
-                                    <button *ngIf="canSendForSignature(doc)" pButton icon="pi pi-send" class="p-button-text p-button-sm p-button-info" [pTooltip]="'HRM.DOCUMENTS.SEND_FOR_SIGNATURE' | translate" (click)="sendForSignature(doc)"></button>
-                                    <button *ngIf="canSign(doc)" pButton icon="pi pi-check" class="p-button-text p-button-sm p-button-success" [pTooltip]="'HRM.DOCUMENTS.SIGN' | translate" (click)="openSignDialog(doc)"></button>
-                                    <button *ngIf="canEdit(doc)" pButton icon="pi pi-trash" class="p-button-text p-button-sm p-button-danger" [pTooltip]="'HRM.DOCUMENTS.DELETE' | translate" (click)="deleteDocument(doc)"></button>
+                                    @if (canEdit(doc)) {
+                                    <button pButton icon="pi pi-pencil" class="p-button-text p-button-sm" [pTooltip]="'HRM.DOCUMENTS.EDIT' | translate" (click)="openEditDocumentDialog(doc)"></button>
+                                    }
+                                    @if (canSendForSignature(doc)) {
+                                    <button pButton icon="pi pi-send" class="p-button-text p-button-sm p-button-info" [pTooltip]="'HRM.DOCUMENTS.SEND_FOR_SIGNATURE' | translate" (click)="sendForSignature(doc)"></button>
+                                    }
+                                    @if (canSign(doc)) {
+                                    <button pButton icon="pi pi-check" class="p-button-text p-button-sm p-button-success" [pTooltip]="'HRM.DOCUMENTS.SIGN' | translate" (click)="openSignDialog(doc)"></button>
+                                    }
+                                    @if (canEdit(doc)) {
+                                    <button pButton icon="pi pi-trash" class="p-button-text p-button-sm p-button-danger" [pTooltip]="'HRM.DOCUMENTS.DELETE' | translate" (click)="deleteDocument(doc)"></button>
+                                    }
                                 </div>
                             </td>
                         </tr>
@@ -246,16 +257,16 @@
                             <td>{{ formatDate(request.requested_at) }}</td>
                             <td>
                                 <div class="flex gap-1">
-                                    <ng-container *ngIf="request.status === 'pending'">
+                                    @if (request.status === 'pending') {
                                         <button pButton icon="pi pi-check" class="p-button-text p-button-sm p-button-success" [pTooltip]="'HRM.DOCUMENTS.ACCEPT' | translate" (click)="processRequest(request, true)"></button>
                                         <button pButton icon="pi pi-times" class="p-button-text p-button-sm p-button-danger" [pTooltip]="'HRM.DOCUMENTS.REJECT' | translate" (click)="processRequest(request, false)"></button>
-                                    </ng-container>
-                                    <ng-container *ngIf="request.status === 'in_progress'">
+                                    }
+                                    @if (request.status === 'in_progress') {
                                         <button pButton icon="pi pi-check-circle" class="p-button-text p-button-sm p-button-success" [pTooltip]="'HRM.DOCUMENTS.COMPLETE' | translate" (click)="completeRequest(request)"></button>
-                                    </ng-container>
-                                    <ng-container *ngIf="request.status === 'completed' && request.document_id">
+                                    }
+                                    @if (request.status === 'completed' && request.document_id) {
                                         <button pButton icon="pi pi-file" class="p-button-text p-button-sm" [pTooltip]="'HRM.DOCUMENTS.OPEN_DOCUMENT' | translate"></button>
-                                    </ng-container>
+                                    }
                                 </div>
                             </td>
                         </tr>
@@ -377,7 +388,8 @@
     [style]="{ width: '700px' }"
     [draggable]="false"
     [resizable]="false">
-    <div *ngIf="viewDocument" class="flex flex-col gap-4">
+    @if (viewDocument) {
+    <div class="flex flex-col gap-4">
         <div class="bg-surface-100 dark:bg-surface-700 rounded-lg p-4">
             <div class="flex items-start justify-between">
                 <div>
@@ -397,14 +409,18 @@
                 <p class="text-sm text-surface-500 dark:text-surface-400 m-0">{{ 'HRM.DOCUMENTS.CATEGORY' | translate }}</p>
                 <p class="font-medium text-surface-900 dark:text-surface-0 m-0">{{ getCategoryLabel(viewDocument.category) }}</p>
             </div>
-            <div *ngIf="viewDocument.employee_name">
+            @if (viewDocument.employee_name) {
+            <div>
                 <p class="text-sm text-surface-500 dark:text-surface-400 m-0">{{ 'HRM.DOCUMENTS.EMPLOYEE' | translate }}</p>
                 <p class="font-medium text-surface-900 dark:text-surface-0 m-0">{{ viewDocument.employee_name }}</p>
             </div>
-            <div *ngIf="viewDocument.department_name">
+            }
+            @if (viewDocument.department_name) {
+            <div>
                 <p class="text-sm text-surface-500 dark:text-surface-400 m-0">{{ 'HRM.DOCUMENTS.DEPARTMENT' | translate }}</p>
                 <p class="font-medium text-surface-900 dark:text-surface-0 m-0">{{ viewDocument.department_name }}</p>
             </div>
+            }
             <div>
                 <p class="text-sm text-surface-500 dark:text-surface-400 m-0">{{ 'HRM.DOCUMENTS.CREATED' | translate }}</p>
                 <p class="font-medium text-surface-900 dark:text-surface-0 m-0">{{ formatDateTime(viewDocument.created_at) }}</p>
@@ -413,23 +429,30 @@
                 <p class="text-sm text-surface-500 dark:text-surface-400 m-0">{{ 'HRM.DOCUMENTS.AUTHOR' | translate }}</p>
                 <p class="font-medium text-surface-900 dark:text-surface-0 m-0">{{ viewDocument.created_by_name }}</p>
             </div>
-            <div *ngIf="viewDocument.valid_from">
+            @if (viewDocument.valid_from) {
+            <div>
                 <p class="text-sm text-surface-500 dark:text-surface-400 m-0">{{ 'HRM.DOCUMENTS.VALID_FROM' | translate }}</p>
                 <p class="font-medium text-surface-900 dark:text-surface-0 m-0">{{ formatDate(viewDocument.valid_from) }}</p>
             </div>
-            <div *ngIf="viewDocument.valid_until">
+            }
+            @if (viewDocument.valid_until) {
+            <div>
                 <p class="text-sm text-surface-500 dark:text-surface-400 m-0">{{ 'HRM.DOCUMENTS.VALID_UNTIL' | translate }}</p>
                 <p class="font-medium text-surface-900 dark:text-surface-0 m-0">{{ formatDate(viewDocument.valid_until) }}</p>
             </div>
+            }
         </div>
 
-        <div *ngIf="viewDocument.description">
+        @if (viewDocument.description) {
+        <div>
             <p class="text-sm text-surface-500 dark:text-surface-400 m-0">{{ 'HRM.DOCUMENTS.DESCRIPTION' | translate }}</p>
             <p class="text-surface-900 dark:text-surface-0 m-0">{{ viewDocument.description }}</p>
         </div>
+        }
 
         <!-- Signatures -->
-        <div *ngIf="viewDocument.signatures && viewDocument.signatures.length > 0">
+        @if (viewDocument.signatures && viewDocument.signatures.length > 0) {
+        <div>
             <p class="text-sm text-surface-500 dark:text-surface-400 mb-2">{{ 'HRM.DOCUMENTS.SIGNATURES' | translate }}</p>
             <div class="border border-surface-200 dark:border-surface-700 rounded-lg overflow-hidden">
                 <table class="w-full">
@@ -442,46 +465,56 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let sig of viewDocument.signatures" class="border-t border-surface-200 dark:border-surface-700">
-                            <td class="p-3 text-surface-900 dark:text-surface-0">{{ sig.signer_name }}</td>
-                            <td class="p-3 text-surface-600 dark:text-surface-400">{{ sig.signer_position }}</td>
-                            <td class="p-3">
-                                <span class="inline-flex items-center gap-1">
-                                    <i class="pi" [ngClass]="{
-                                        'pi-check-circle text-green-500': sig.status === 'signed',
-                                        'pi-clock text-orange-500': sig.status === 'pending',
-                                        'pi-times-circle text-red-500': sig.status === 'rejected'
-                                    }"></i>
-                                    <span [ngClass]="{
-                                        'text-green-600 dark:text-green-400': sig.status === 'signed',
-                                        'text-orange-600 dark:text-orange-400': sig.status === 'pending',
-                                        'text-red-600 dark:text-red-400': sig.status === 'rejected'
-                                    }">
-                                        {{ sig.status === 'signed' ? ('HRM.DOCUMENTS.SIGNED' | translate) : sig.status === 'pending' ? ('HRM.DOCUMENTS.PENDING' | translate) : ('HRM.DOCUMENTS.REJECTED' | translate) }}
+                        @for (sig of viewDocument.signatures; track sig.id) {
+                            <tr class="border-t border-surface-200 dark:border-surface-700">
+                                <td class="p-3 text-surface-900 dark:text-surface-0">{{ sig.signer_name }}</td>
+                                <td class="p-3 text-surface-600 dark:text-surface-400">{{ sig.signer_position }}</td>
+                                <td class="p-3">
+                                    <span class="inline-flex items-center gap-1">
+                                        <i class="pi" [ngClass]="{
+                                            'pi-check-circle text-green-500': sig.status === 'signed',
+                                            'pi-clock text-orange-500': sig.status === 'pending',
+                                            'pi-times-circle text-red-500': sig.status === 'rejected'
+                                        }"></i>
+                                        <span [ngClass]="{
+                                            'text-green-600 dark:text-green-400': sig.status === 'signed',
+                                            'text-orange-600 dark:text-orange-400': sig.status === 'pending',
+                                            'text-red-600 dark:text-red-400': sig.status === 'rejected'
+                                        }">
+                                            {{ sig.status === 'signed' ? ('HRM.DOCUMENTS.SIGNED' | translate) : sig.status === 'pending' ? ('HRM.DOCUMENTS.PENDING' | translate) : ('HRM.DOCUMENTS.REJECTED' | translate) }}
+                                        </span>
                                     </span>
-                                </span>
-                            </td>
-                            <td class="p-3 text-surface-600 dark:text-surface-400">
-                                {{ sig.signed_at ? formatDateTime(sig.signed_at) : '—' }}
-                            </td>
-                        </tr>
+                                </td>
+                                <td class="p-3 text-surface-600 dark:text-surface-400">
+                                    {{ sig.signed_at ? formatDateTime(sig.signed_at) : '—' }}
+                                </td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>
         </div>
+        }
 
         <!-- Tags -->
-        <div *ngIf="viewDocument.tags && viewDocument.tags.length > 0">
+        @if (viewDocument.tags && viewDocument.tags.length > 0) {
+        <div>
             <p class="text-sm text-surface-500 dark:text-surface-400 mb-2">{{ 'HRM.DOCUMENTS.TAGS' | translate }}</p>
             <div class="flex flex-wrap gap-2">
-                <p-tag *ngFor="let tag of viewDocument.tags" [value]="tag" severity="info"></p-tag>
+                @for (tag of viewDocument.tags; track tag) {
+                    <p-tag [value]="tag" severity="info"></p-tag>
+                }
             </div>
         </div>
+        }
     </div>
+    }
 
     <ng-template pTemplate="footer">
         <button pButton [label]="'HRM.DOCUMENTS.CLOSE' | translate" class="p-button-text" (click)="displayViewDialog = false"></button>
-        <button *ngIf="viewDocument && canSign(viewDocument)" pButton [label]="'HRM.DOCUMENTS.SIGN' | translate" icon="pi pi-check" class="p-button-success" (click)="displayViewDialog = false; openSignDialog(viewDocument)"></button>
+        @if (viewDocument && canSign(viewDocument)) {
+        <button pButton [label]="'HRM.DOCUMENTS.SIGN' | translate" icon="pi pi-check" class="p-button-success" (click)="displayViewDialog = false; openSignDialog(viewDocument)"></button>
+        }
     </ng-template>
 </p-dialog>
 
@@ -493,7 +526,8 @@
     [style]="{ width: '450px' }"
     [draggable]="false"
     [resizable]="false">
-    <div class="flex flex-col gap-4" *ngIf="selectedDocument">
+    @if (selectedDocument) {
+    <div class="flex flex-col gap-4">
         <div class="bg-surface-100 dark:bg-surface-700 rounded-lg p-3">
             <p class="font-medium text-surface-900 dark:text-surface-0 m-0">{{ selectedDocument.title }}</p>
             <p class="text-sm text-surface-500 dark:text-surface-400 m-0">{{ selectedDocument.document_number }}</p>
@@ -513,6 +547,7 @@
             </div>
         </div>
     </div>
+    }
 
     <ng-template pTemplate="footer">
         <button pButton [label]="'HRM.DOCUMENTS.REJECT' | translate" icon="pi pi-times" class="p-button-danger p-button-outlined" (click)="signDocument(false)"></button>

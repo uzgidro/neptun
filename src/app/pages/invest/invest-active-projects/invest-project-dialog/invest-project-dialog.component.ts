@@ -107,7 +107,6 @@ export class InvestProjectDialogComponent implements OnInit, OnChanges {
         this.submitted = true;
 
         if (this.projectForm.invalid) {
-            console.warn('Форма невалидна');
             return;
         }
 
@@ -129,8 +128,8 @@ export class InvestProjectDialogComponent implements OnInit, OnChanges {
                 next: () => {
                     this.messageService.add({
                         severity: 'success',
-                        summary: 'Успешно',
-                        detail: 'Проект успешно обновлен'
+                        summary: this.translateService.instant('COMMON.SUCCESS'),
+                        detail: this.translateService.instant('INVEST.MESSAGES.PROJECT_UPDATED')
                     });
                     this.save.emit();
                     this.closeDialog();
@@ -138,8 +137,8 @@ export class InvestProjectDialogComponent implements OnInit, OnChanges {
                 error: (err) => {
                     this.messageService.add({
                         severity: 'error',
-                        summary: 'Ошибка сохранения',
-                        detail: err.error?.message || 'Не удалось обновить проект'
+                        summary: this.translateService.instant('INVEST.MESSAGES.SAVE_ERROR'),
+                        detail: err.error?.message || this.translateService.instant('INVEST.MESSAGES.UPDATE_FAILED')
                     });
                 }
             });
@@ -160,8 +159,8 @@ export class InvestProjectDialogComponent implements OnInit, OnChanges {
                 next: () => {
                     this.messageService.add({
                         severity: 'success',
-                        summary: 'Успешно',
-                        detail: 'Новый проект добавлен'
+                        summary: this.translateService.instant('COMMON.SUCCESS'),
+                        detail: this.translateService.instant('INVEST.MESSAGES.PROJECT_ADDED')
                     });
                     this.save.emit();
                     this.closeDialog();
@@ -169,8 +168,8 @@ export class InvestProjectDialogComponent implements OnInit, OnChanges {
                 error: (err) => {
                     this.messageService.add({
                         severity: 'error',
-                        summary: 'Ошибка сохранения',
-                        detail: err.error?.message || 'Не удалось добавить проект'
+                        summary: this.translateService.instant('INVEST.MESSAGES.SAVE_ERROR'),
+                        detail: err.error?.message || this.translateService.instant('INVEST.MESSAGES.ADD_FAILED')
                     });
                 }
             });

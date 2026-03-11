@@ -4,10 +4,12 @@
             <h1>{{ 'FINANCIAL_BLOCK.DASHBOARD.TITLE' | translate }}</h1>
             <p class="subtitle">{{ 'FINANCIAL_BLOCK.DASHBOARD.SUBTITLE' | translate }}</p>
         </div>
-        <div class="last-updated" *ngIf="dashboardData?.lastUpdated">
+        @if (dashboardData?.lastUpdated) {
+        <div class="last-updated">
             <i class="pi pi-clock"></i>
             <span>{{ 'DASHBOARD.LAST_UPDATED' | translate }}: {{ dashboardData!.lastUpdated | date:'dd.MM.yyyy HH:mm' }}</span>
         </div>
+        }
     </div>
 
     <div class="summary-cards">
@@ -102,44 +104,47 @@
         <p class="section-subtitle">{{ 'FINANCIAL_BLOCK.DASHBOARD.MODULES_HINT' | translate }}</p>
 
         <div class="modules-grid">
-            <div
-                *ngFor="let card of moduleCards"
-                class="module-card"
-                [style.--card-color]="card.color"
-                (click)="navigateToModule(card.route)"
-                [pTooltip]="'FINANCIAL_BLOCK.DASHBOARD.GO_TO_MODULE' | translate"
-                tooltipPosition="top">
+            @for (card of moduleCards; track card.route) {
+                <div
+                    class="module-card"
+                    [style.--card-color]="card.color"
+                    (click)="navigateToModule(card.route)"
+                    [pTooltip]="'FINANCIAL_BLOCK.DASHBOARD.GO_TO_MODULE' | translate"
+                    tooltipPosition="top">
 
-                <div class="card-header">
-                    <div class="icon-wrapper" [style.background]="card.color">
-                        <i [class]="card.icon"></i>
+                    <div class="card-header">
+                        <div class="icon-wrapper" [style.background]="card.color">
+                            <i [class]="card.icon"></i>
+                        </div>
+                        <h4>{{ card.title }}</h4>
+                        <i class="pi pi-arrow-right navigate-icon"></i>
                     </div>
-                    <h4>{{ card.title }}</h4>
-                    <i class="pi pi-arrow-right navigate-icon"></i>
-                </div>
 
-                <p-divider></p-divider>
+                    <p-divider></p-divider>
 
-                <div class="metrics-list">
-                    <div *ngFor="let metric of card.metrics" class="metric-item">
-                        <span class="metric-label">{{ metric.label }}</span>
-                        <p-tag
-                            [value]="formatMetricValue(metric)"
-                            [severity]="getMetricSeverity(metric.color)">
-                        </p-tag>
+                    <div class="metrics-list">
+                        @for (metric of card.metrics; track metric.label) {
+                            <div class="metric-item">
+                                <span class="metric-label">{{ metric.label }}</span>
+                                <p-tag
+                                    [value]="formatMetricValue(metric)"
+                                    [severity]="getMetricSeverity(metric.color)">
+                                </p-tag>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="card-footer">
+                        <p-button
+                            [label]="'FINANCIAL_BLOCK.DASHBOARD.DETAILS' | translate"
+                            icon="pi pi-external-link"
+                            [text]="true"
+                            size="small"
+                            (click)="navigateToModule(card.route); $event.stopPropagation()">
+                        </p-button>
                     </div>
                 </div>
-
-                <div class="card-footer">
-                    <p-button
-                        [label]="'FINANCIAL_BLOCK.DASHBOARD.DETAILS' | translate"
-                        icon="pi pi-external-link"
-                        [text]="true"
-                        size="small"
-                        (click)="navigateToModule(card.route); $event.stopPropagation()">
-                    </p-button>
-                </div>
-            </div>
+            }
         </div>
     </div>
 </div>

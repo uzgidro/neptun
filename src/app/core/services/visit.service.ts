@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ApiService, BASE_URL } from '@/core/services/api.service';
+import { ApiService } from '@/core/services/api.service';
 import { Observable } from 'rxjs';
 import { HttpParams } from '@angular/common/http';
 import { AddVisitRequest, EditVisitRequest, VisitDto, VisitResponse } from '@/core/interfaces/visits';
@@ -16,7 +16,7 @@ export class VisitService extends ApiService {
     if (date) {
       params = params.set('date', this.dateToYMD(date));
     }
-    return this.http.get<VisitResponse[]>(BASE_URL + VISITS, { params: params }).pipe(
+    return this.http.get<VisitResponse[]>(this.BASE_URL + VISITS, { params: params }).pipe(
       map(responseArray => {
         if (!responseArray) {
           return [];
@@ -34,14 +34,14 @@ export class VisitService extends ApiService {
   }
 
   addVisit(formData: FormData): Observable<any> {
-    return this.http.post(BASE_URL + VISITS, formData);
+    return this.http.post(this.BASE_URL + VISITS, formData);
   }
 
   editVisit(id: number, formData: FormData): Observable<any> {
-    return this.http.patch(`${BASE_URL}${VISITS}/${id}`, formData);
+    return this.http.patch(`${this.BASE_URL}${VISITS}/${id}`, formData);
   }
 
   deleteVisit(id: number): Observable<any> {
-    return this.http.delete(`${BASE_URL}${VISITS}/${id}`);
+    return this.http.delete(`${this.BASE_URL}${VISITS}/${id}`);
   }
 }

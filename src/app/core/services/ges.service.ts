@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ApiService, BASE_URL } from '@/core/services/api.service';
+import { ApiService } from '@/core/services/api.service';
 import { Observable } from 'rxjs';
 import { HttpParams } from '@angular/common/http';
 import { GesResponse, GesContact, GesShutdown, GesDischarge, GesIncident, GesVisit, TelemetryEnvelope, DateRangeParams, ASCUEMetrics } from '@/core/interfaces/ges';
@@ -13,17 +13,17 @@ const GES = '/ges';
 export class GesService extends ApiService {
     // GET /ges/{id}
     getGesInfo(id: number): Observable<GesResponse> {
-        return this.http.get<GesResponse>(`${BASE_URL}${GES}/${id}`);
+        return this.http.get<GesResponse>(`${this.BASE_URL}${GES}/${id}`);
     }
 
     // GET /ges/{id}/departments
     getDepartments(id: number): Observable<Department[]> {
-        return this.http.get<Department[]>(`${BASE_URL}${GES}/${id}/departments`);
+        return this.http.get<Department[]>(`${this.BASE_URL}${GES}/${id}/departments`);
     }
 
     // GET /ges/{id}/contacts
     getContacts(id: number): Observable<GesContact[]> {
-        return this.http.get<GesContact[]>(`${BASE_URL}${GES}/${id}/contacts`);
+        return this.http.get<GesContact[]>(`${this.BASE_URL}${GES}/${id}/contacts`);
     }
 
     // GET /ges/{id}/shutdowns?start_date&end_date
@@ -35,7 +35,7 @@ export class GesService extends ApiService {
         if (dateRange?.end_date) {
             params = params.set('end_date', dateRange.end_date);
         }
-        return this.http.get<GesShutdown[]>(`${BASE_URL}${GES}/${id}/shutdowns`, { params });
+        return this.http.get<GesShutdown[]>(`${this.BASE_URL}${GES}/${id}/shutdowns`, { params });
     }
 
     // GET /ges/{id}/discharges?start_date&end_date
@@ -47,7 +47,7 @@ export class GesService extends ApiService {
         if (dateRange?.end_date) {
             params = params.set('end_date', dateRange.end_date);
         }
-        return this.http.get<GesDischarge[]>(`${BASE_URL}${GES}/${id}/discharges`, { params });
+        return this.http.get<GesDischarge[]>(`${this.BASE_URL}${GES}/${id}/discharges`, { params });
     }
 
     // GET /ges/{id}/incidents?start_date&end_date
@@ -59,7 +59,7 @@ export class GesService extends ApiService {
         if (dateRange?.end_date) {
             params = params.set('end_date', dateRange.end_date);
         }
-        return this.http.get<GesIncident[]>(`${BASE_URL}${GES}/${id}/incidents`, { params });
+        return this.http.get<GesIncident[]>(`${this.BASE_URL}${GES}/${id}/incidents`, { params });
     }
 
     // GET /ges/{id}/visits?start_date&end_date
@@ -71,73 +71,73 @@ export class GesService extends ApiService {
         if (dateRange?.end_date) {
             params = params.set('end_date', dateRange.end_date);
         }
-        return this.http.get<GesVisit[]>(`${BASE_URL}${GES}/${id}/visits`, { params });
+        return this.http.get<GesVisit[]>(`${this.BASE_URL}${GES}/${id}/visits`, { params });
     }
 
     // GET /ges/{id}/telemetry
     getTelemetry(id: number): Observable<TelemetryEnvelope[]> {
-        return this.http.get<TelemetryEnvelope[]>(`${BASE_URL}${GES}/${id}/telemetry`);
+        return this.http.get<TelemetryEnvelope[]>(`${this.BASE_URL}${GES}/${id}/telemetry`);
     }
 
     // GET /ges/{id}/telemetry/{device_id}
     getDeviceTelemetry(id: number, deviceId: string): Observable<TelemetryEnvelope> {
-        return this.http.get<TelemetryEnvelope>(`${BASE_URL}${GES}/${id}/telemetry/${deviceId}`);
+        return this.http.get<TelemetryEnvelope>(`${this.BASE_URL}${GES}/${id}/telemetry/${deviceId}`);
     }
 
     // GET /ges/{id}/askue
     getAskue(id: number): Observable<ASCUEMetrics> {
-        return this.http.get<ASCUEMetrics>(`${BASE_URL}${GES}/${id}/askue`);
+        return this.http.get<ASCUEMetrics>(`${this.BASE_URL}${GES}/${id}/askue`);
     }
 
     // CRUD операции для остановов
     addShutdown(gesId: number, formData: FormData): Observable<any> {
-        return this.http.post(`${BASE_URL}${GES}/${gesId}/shutdowns`, formData);
+        return this.http.post(`${this.BASE_URL}${GES}/${gesId}/shutdowns`, formData);
     }
 
     editShutdown(gesId: number, shutdownId: number, formData: FormData): Observable<any> {
-        return this.http.patch(`${BASE_URL}${GES}/${gesId}/shutdowns/${shutdownId}`, formData);
+        return this.http.patch(`${this.BASE_URL}${GES}/${gesId}/shutdowns/${shutdownId}`, formData);
     }
 
     deleteShutdown(gesId: number, shutdownId: number): Observable<any> {
-        return this.http.delete(`${BASE_URL}${GES}/${gesId}/shutdowns/${shutdownId}`);
+        return this.http.delete(`${this.BASE_URL}${GES}/${gesId}/shutdowns/${shutdownId}`);
     }
 
     // CRUD операции для сбросов
     addDischarge(gesId: number, formData: FormData): Observable<any> {
-        return this.http.post(`${BASE_URL}${GES}/${gesId}/discharges`, formData);
+        return this.http.post(`${this.BASE_URL}${GES}/${gesId}/discharges`, formData);
     }
 
     editDischarge(gesId: number, dischargeId: number, formData: FormData): Observable<any> {
-        return this.http.patch(`${BASE_URL}${GES}/${gesId}/discharges/${dischargeId}`, formData);
+        return this.http.patch(`${this.BASE_URL}${GES}/${gesId}/discharges/${dischargeId}`, formData);
     }
 
     deleteDischarge(gesId: number, dischargeId: number): Observable<any> {
-        return this.http.delete(`${BASE_URL}${GES}/${gesId}/discharges/${dischargeId}`);
+        return this.http.delete(`${this.BASE_URL}${GES}/${gesId}/discharges/${dischargeId}`);
     }
 
     // CRUD операции для инцидентов
     addIncident(gesId: number, formData: FormData): Observable<any> {
-        return this.http.post(`${BASE_URL}${GES}/${gesId}/incidents`, formData);
+        return this.http.post(`${this.BASE_URL}${GES}/${gesId}/incidents`, formData);
     }
 
     editIncident(gesId: number, incidentId: number, formData: FormData): Observable<any> {
-        return this.http.patch(`${BASE_URL}${GES}/${gesId}/incidents/${incidentId}`, formData);
+        return this.http.patch(`${this.BASE_URL}${GES}/${gesId}/incidents/${incidentId}`, formData);
     }
 
     deleteIncident(gesId: number, incidentId: number): Observable<any> {
-        return this.http.delete(`${BASE_URL}${GES}/${gesId}/incidents/${incidentId}`);
+        return this.http.delete(`${this.BASE_URL}${GES}/${gesId}/incidents/${incidentId}`);
     }
 
     // CRUD операции для посещений
     addVisit(gesId: number, formData: FormData): Observable<any> {
-        return this.http.post(`${BASE_URL}${GES}/${gesId}/visits`, formData);
+        return this.http.post(`${this.BASE_URL}${GES}/${gesId}/visits`, formData);
     }
 
     editVisit(gesId: number, visitId: number, formData: FormData): Observable<any> {
-        return this.http.patch(`${BASE_URL}${GES}/${gesId}/visits/${visitId}`, formData);
+        return this.http.patch(`${this.BASE_URL}${GES}/${gesId}/visits/${visitId}`, formData);
     }
 
     deleteVisit(gesId: number, visitId: number): Observable<any> {
-        return this.http.delete(`${BASE_URL}${GES}/${gesId}/visits/${visitId}`);
+        return this.http.delete(`${this.BASE_URL}${GES}/${gesId}/visits/${visitId}`);
     }
 }

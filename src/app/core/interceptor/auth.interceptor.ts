@@ -39,6 +39,10 @@ function handle401Error(
     return tokenRefreshService.refreshToken().pipe(
         switchMap((newToken) => {
             return next(addToken(req, newToken));
+        }),
+        catchError((refreshError) => {
+            // Token refresh failed — don't retry, propagate error
+            return throwError(() => refreshError);
         })
     );
 }

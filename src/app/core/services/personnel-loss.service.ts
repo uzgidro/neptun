@@ -2,6 +2,10 @@ import { Injectable } from '@angular/core';
 import { Observable, of, delay } from 'rxjs';
 import { PersonnelLoss, PersonnelLossPayload, PersonnelLossStats, LossType } from '@/core/interfaces/personnel-loss';
 
+/**
+ * TODO: This service currently uses mock/hardcoded data.
+ * Replace with real API integration when backend endpoints are available.
+ */
 @Injectable({
     providedIn: 'root'
 })
@@ -116,14 +120,17 @@ export class PersonnelLossService {
 
     private nextId = 8;
 
+    // TODO: Replace mock data with real API call - GET /api/personnel-losses
     getAll(): Observable<PersonnelLoss[]> {
         return of([...this.mockData]).pipe(delay(300));
     }
 
+    // TODO: Replace mock data with real API call - GET /api/personnel-losses/:id
     getById(id: number): Observable<PersonnelLoss | undefined> {
         return of(this.mockData.find(item => item.id === id)).pipe(delay(200));
     }
 
+    // TODO: Replace mock data with real API call - GET /api/personnel-losses/stats
     getStats(): Observable<PersonnelLossStats> {
         const currentYear = new Date().getFullYear();
         const thisYearData = this.mockData.filter(item =>
@@ -162,10 +169,12 @@ export class PersonnelLossService {
         return result;
     }
 
+    // TODO: Replace mock data with real API call - GET /api/personnel-losses?lossType=death
     getDeceased(): Observable<PersonnelLoss[]> {
         return of(this.mockData.filter(item => item.lossType === 'death')).pipe(delay(200));
     }
 
+    // TODO: Replace mock data with real API call - POST /api/personnel-losses
     create(payload: PersonnelLossPayload): Observable<PersonnelLoss> {
         const newItem: PersonnelLoss = {
             id: this.nextId++,
@@ -187,6 +196,7 @@ export class PersonnelLossService {
         return of(newItem).pipe(delay(300));
     }
 
+    // TODO: Replace mock data with real API call - PATCH /api/personnel-losses/:id
     update(id: number, payload: PersonnelLossPayload): Observable<PersonnelLoss> {
         const index = this.mockData.findIndex(item => item.id === id);
         if (index !== -1) {
@@ -206,6 +216,7 @@ export class PersonnelLossService {
         return of(this.mockData[index]).pipe(delay(300));
     }
 
+    // TODO: Replace mock data with real API call - DELETE /api/personnel-losses/:id
     delete(id: number): Observable<void> {
         const index = this.mockData.findIndex(item => item.id === id);
         if (index !== -1) {

@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { interval, Subscription } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
@@ -16,10 +16,12 @@ interface ProductionMetric {
     standalone: true,
     imports: [DecimalPipe, TranslateModule],
     templateUrl: './sc-power-generation.component.html',
-    styleUrl: './sc-power-generation.component.scss'
+    styleUrl: './sc-power-generation.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ScPowerGenerationComponent implements OnInit, OnDestroy {
     private dashboardService = inject(DashboardService);
+    private cdr = inject(ChangeDetectorRef);
 
     // Main counter - current day generation in MWh
     currentDayGeneration = 0;
@@ -61,10 +63,12 @@ export class ScPowerGenerationComponent implements OnInit, OnDestroy {
                 } else {
                     this.displayedGeneration = this.currentDayGeneration;
                 }
+                this.cdr.markForCheck();
             },
             error: (err) => {
                 console.error('Error loading production stats:', err);
                 this.loading = false;
+                this.cdr.markForCheck();
             }
         });
     }
@@ -83,6 +87,7 @@ export class ScPowerGenerationComponent implements OnInit, OnDestroy {
             } else {
                 this.displayedGeneration = stepValue * currentStep;
             }
+            this.cdr.markForCheck();
         });
     }
 

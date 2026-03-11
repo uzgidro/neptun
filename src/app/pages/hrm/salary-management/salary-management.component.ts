@@ -13,7 +13,7 @@ import { Tag } from 'primeng/tag';
 import { Card } from 'primeng/card';
 import { Dialog } from 'primeng/dialog';
 import { ProgressBar } from 'primeng/progressbar';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { DeleteConfirmationComponent } from '@/layout/component/dialog/delete-confirmation/delete-confirmation.component';
 import { SalaryService } from '@/core/services/salary.service';
 import {
@@ -93,6 +93,7 @@ export class SalaryManagementComponent implements OnInit, OnDestroy {
     private fb = inject(FormBuilder);
     private messageService = inject(MessageService);
     private salaryService = inject(SalaryService);
+    private translate = inject(TranslateService);
     private destroy$ = new Subject<void>();
 
     constructor() {
@@ -121,7 +122,7 @@ export class SalaryManagementComponent implements OnInit, OnDestroy {
             },
             error: (err) => {
                 console.error('Ошибка загрузки данных:', err);
-                this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось загрузить данные' });
+                this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('SALARY.MESSAGES.LOAD_FAILED') });
                 this.loading = false;
             }
         });
@@ -148,8 +149,8 @@ export class SalaryManagementComponent implements OnInit, OnDestroy {
 
                     this.messageService.add({
                         severity: 'success',
-                        summary: 'Расчёт завершён',
-                        detail: `Рассчитано ${result.successful} из ${result.total} зарплат`
+                        summary: this.translate.instant('SALARY.MESSAGES.CALCULATION_COMPLETE'),
+                        detail: this.translate.instant('SALARY.MESSAGES.CALCULATED_COUNT', { successful: result.successful, total: result.total })
                     });
                 },
                 error: (err) => {
@@ -157,8 +158,8 @@ export class SalaryManagementComponent implements OnInit, OnDestroy {
                     console.error('Ошибка расчёта:', err);
                     this.messageService.add({
                         severity: 'error',
-                        summary: 'Ошибка',
-                        detail: 'Не удалось выполнить расчёт зарплат'
+                        summary: this.translate.instant('COMMON.ERROR'),
+                        detail: this.translate.instant('SALARY.MESSAGES.CALCULATION_FAILED')
                     });
                 }
             });
@@ -176,8 +177,8 @@ export class SalaryManagementComponent implements OnInit, OnDestroy {
             this.salaries = [...this.salaries];
             this.messageService.add({
                 severity: 'info',
-                summary: 'Отправлено',
-                detail: `Зарплата ${salary.employee_name} отправлена на утверждение`
+                summary: this.translate.instant('SALARY.MESSAGES.SUBMITTED'),
+                detail: this.translate.instant('SALARY.MESSAGES.SENT_FOR_APPROVAL', { name: salary.employee_name })
             });
         }
     }
@@ -193,8 +194,8 @@ export class SalaryManagementComponent implements OnInit, OnDestroy {
         });
         this.messageService.add({
             severity: 'success',
-            summary: 'Отправлено',
-            detail: `${count} записей отправлено на утверждение`
+            summary: this.translate.instant('SALARY.MESSAGES.SUBMITTED'),
+            detail: this.translate.instant('SALARY.MESSAGES.BATCH_SENT_APPROVAL', { count })
         });
     }
 
@@ -217,8 +218,8 @@ export class SalaryManagementComponent implements OnInit, OnDestroy {
             this.salaries = [...this.salaries];
             this.messageService.add({
                 severity: 'success',
-                summary: 'Утверждено',
-                detail: `Зарплата ${this.selectedSalary.employee_name} утверждена`
+                summary: this.translate.instant('SALARY.MESSAGES.APPROVED_TITLE'),
+                detail: this.translate.instant('SALARY.MESSAGES.SALARY_APPROVED', { name: this.selectedSalary.employee_name })
             });
         }
 
@@ -243,8 +244,8 @@ export class SalaryManagementComponent implements OnInit, OnDestroy {
         });
         this.messageService.add({
             severity: 'success',
-            summary: 'Утверждено',
-            detail: `${count} записей утверждено`
+            summary: this.translate.instant('SALARY.MESSAGES.APPROVED_TITLE'),
+            detail: this.translate.instant('SALARY.MESSAGES.BATCH_APPROVED', { count })
         });
     }
 
@@ -267,8 +268,8 @@ export class SalaryManagementComponent implements OnInit, OnDestroy {
             this.salaries = [...this.salaries];
             this.messageService.add({
                 severity: 'warn',
-                summary: 'Отклонено',
-                detail: `Зарплата ${this.selectedSalary.employee_name} отклонена`
+                summary: this.translate.instant('SALARY.MESSAGES.REJECTED_TITLE'),
+                detail: this.translate.instant('SALARY.MESSAGES.SALARY_REJECTED', { name: this.selectedSalary.employee_name })
             });
         }
 
@@ -287,8 +288,8 @@ export class SalaryManagementComponent implements OnInit, OnDestroy {
             this.salaries = [...this.salaries];
             this.messageService.add({
                 severity: 'success',
-                summary: 'Выплачено',
-                detail: `Зарплата ${salary.employee_name} отмечена как выплаченная`
+                summary: this.translate.instant('SALARY.MESSAGES.PAID_TITLE'),
+                detail: this.translate.instant('SALARY.MESSAGES.MARKED_PAID', { name: salary.employee_name })
             });
         }
     }
@@ -305,8 +306,8 @@ export class SalaryManagementComponent implements OnInit, OnDestroy {
         });
         this.messageService.add({
             severity: 'success',
-            summary: 'Выплачено',
-            detail: `${count} записей отмечено как выплаченные`
+            summary: this.translate.instant('SALARY.MESSAGES.PAID_TITLE'),
+            detail: this.translate.instant('SALARY.MESSAGES.BATCH_PAID', { count })
         });
     }
 
@@ -320,8 +321,8 @@ export class SalaryManagementComponent implements OnInit, OnDestroy {
     generatePayslip(salary: Salary): void {
         this.messageService.add({
             severity: 'info',
-            summary: 'Формирование',
-            detail: `Расчётный лист для ${salary.employee_name} формируется...`
+            summary: this.translate.instant('SALARY.MESSAGES.GENERATING'),
+            detail: this.translate.instant('SALARY.MESSAGES.PAYSLIP_GENERATING', { name: salary.employee_name })
         });
         // In real app, would generate PDF
     }
@@ -329,8 +330,8 @@ export class SalaryManagementComponent implements OnInit, OnDestroy {
     generatePayrollReport(): void {
         this.messageService.add({
             severity: 'info',
-            summary: 'Формирование',
-            detail: 'Реестр зарплаты формируется...'
+            summary: this.translate.instant('SALARY.MESSAGES.GENERATING'),
+            detail: this.translate.instant('SALARY.MESSAGES.PAYROLL_REPORT_GENERATING')
         });
         // In real app, would generate report
     }
@@ -338,16 +339,16 @@ export class SalaryManagementComponent implements OnInit, OnDestroy {
     generateTaxReport(): void {
         this.messageService.add({
             severity: 'info',
-            summary: 'Формирование',
-            detail: 'Отчёт в налоговую формируется...'
+            summary: this.translate.instant('SALARY.MESSAGES.GENERATING'),
+            detail: this.translate.instant('SALARY.MESSAGES.TAX_REPORT_GENERATING')
         });
     }
 
     generateSocialFundReport(): void {
         this.messageService.add({
             severity: 'info',
-            summary: 'Формирование',
-            detail: 'Отчёт в соцфонд формируется...'
+            summary: this.translate.instant('SALARY.MESSAGES.GENERATING'),
+            detail: this.translate.instant('SALARY.MESSAGES.SOCIAL_FUND_REPORT_GENERATING')
         });
     }
 
@@ -364,8 +365,8 @@ export class SalaryManagementComponent implements OnInit, OnDestroy {
         this.salaries = this.salaries.filter(s => s.id !== this.selectedSalary!.id);
         this.messageService.add({
             severity: 'success',
-            summary: 'Удалено',
-            detail: 'Запись удалена'
+            summary: this.translate.instant('SALARY.MESSAGES.DELETED'),
+            detail: this.translate.instant('SALARY.MESSAGES.RECORD_DELETED')
         });
         this.displayDeleteDialog = false;
         this.selectedSalary = null;
@@ -395,16 +396,16 @@ export class SalaryManagementComponent implements OnInit, OnDestroy {
                     window.URL.revokeObjectURL(url);
                     this.messageService.add({
                         severity: 'success',
-                        summary: 'Экспорт',
-                        detail: 'Расчётные листы экспортированы'
+                        summary: this.translate.instant('COMMON.EXPORT'),
+                        detail: this.translate.instant('SALARY.MESSAGES.PAYSLIPS_EXPORTED')
                     });
                 },
                 error: (err) => {
                     console.error('Ошибка экспорта:', err);
                     this.messageService.add({
                         severity: 'error',
-                        summary: 'Ошибка',
-                        detail: 'Не удалось экспортировать расчётные листы'
+                        summary: this.translate.instant('COMMON.ERROR'),
+                        detail: this.translate.instant('SALARY.MESSAGES.EXPORT_FAILED')
                     });
                 }
             });

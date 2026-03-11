@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { Button } from 'primeng/button';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -7,10 +7,10 @@ import { MessageService } from 'primeng/api';
 import { ReservoirDeviceService } from '@/core/services/reservoir-device.service';
 import { PatchReservoirDeviceSummaryItem, PatchReservoirDeviceSummaryRequest, ReservoirDeviceSummaryResponse } from '@/core/interfaces/reservoir-device';
 import { AuthService } from '@/core/services/auth.service';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ScService } from '@/core/services/sc.service';
 import { HttpResponse } from '@angular/common/http';
-import { finalize } from 'rxjs';
+import { finalize, Subject, takeUntil } from 'rxjs';
 import { saveAs } from 'file-saver';
 
 @Component({
@@ -19,7 +19,7 @@ import { saveAs } from 'file-saver';
   templateUrl: './reservoir-device.component.html',
   styleUrl: './reservoir-device.component.scss'
 })
-export class ReservoirDeviceComponent implements OnInit {
+export class ReservoirDeviceComponent implements OnInit, OnDestroy {
   devices: ReservoirDeviceSummaryResponse[] = [];
   loading = false;
   saving = false;
@@ -48,6 +48,8 @@ export class ReservoirDeviceComponent implements OnInit {
   private reservoirDeviceService = inject(ReservoirDeviceService);
   private scService = inject(ScService);
   private messageService = inject(MessageService);
+  private translate = inject(TranslateService);
+  private destroy$ = new Subject<void>();
 
   // Export
   isExcelLoading = false;
@@ -59,7 +61,7 @@ export class ReservoirDeviceComponent implements OnInit {
 
   loadDevices(): void {
     this.loading = true;
-    this.reservoirDeviceService.getReservoirDevices().subscribe({
+    this.reservoirDeviceService.getReservoirDevices().pipe(takeUntil(this.destroy$)).subscribe({
       next: (data) => {
         this.devices = data;
         this.originalDevices = JSON.parse(JSON.stringify(data));
@@ -68,7 +70,7 @@ export class ReservoirDeviceComponent implements OnInit {
       error: (err) => {
         this.messageService.add({
           severity: 'error',
-          summary: 'Ошибка',
+          summary: this.translate.instant('COMMON.ERROR'),
           detail: err.message
         });
       },
@@ -89,8 +91,8 @@ export class ReservoirDeviceComponent implements OnInit {
     this.editedRows.clear();
     this.messageService.add({
       severity: 'info',
-      summary: 'Сброс',
-      detail: 'Изменения отменены'
+      summary: this.translate.instant('COMMON.RESET'),
+      detail: this.translate.instant('SITUATION_CENTER.RESERVOIR_DEVICE.CHANGES_RESET')
     });
   }
 
@@ -122,24 +124,29 @@ export class ReservoirDeviceComponent implements OnInit {
     const payload: PatchReservoirDeviceSummaryRequest = { updates };
 
     this.saving = true;
-    this.reservoirDeviceService.patchReservoirDevices(payload).subscribe({
+    this.reservoirDeviceService.patchReservoirDevices(payload).pipe(takeUntil(this.destroy$)).subscribe({
       next: () => {
         this.messageService.add({
           severity: 'success',
-          summary: 'Успешно',
-          detail: 'Изменения сохранены'
+          summary: this.translate.instant('COMMON.SUCCESS'),
+          detail: this.translate.instant('SITUATION_CENTER.RESERVOIR_DEVICE.CHANGES_SAVED')
         });
         this.loadDevices();
       },
       error: (err) => {
         this.messageService.add({
           severity: 'error',
-          summary: 'Ошибка сохранения',
+          summary: this.translate.instant('SITUATION_CENTER.RESERVOIR_DEVICE.SAVE_ERROR'),
           detail: err.message
         });
       },
       complete: () => (this.saving = false)
     });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   get dateYMD(): string {
@@ -156,6 +163,7 @@ export class ReservoirDeviceComponent implements OnInit {
     this.scService
       .downloadScReport(dateToUse, format)
       .pipe(
+        takeUntil(this.destroy$),
         finalize(() => {
           this.isExcelLoading = false;
           this.isPdfLoading = false;
@@ -169,7 +177,7 @@ export class ReservoirDeviceComponent implements OnInit {
         },
         error: (err: any) => {
           console.error('Ошибка при скачивании:', err);
-          this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось скачать файл' });
+          this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('COMMON.DOWNLOAD_ERROR') });
         }
       });
   }

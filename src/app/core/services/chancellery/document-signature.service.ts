@@ -9,7 +9,7 @@ import {
     RejectSignatureRequest,
     Signature
 } from '@/core/interfaces/chancellery/signature';
-import { BASE_URL } from '@/core/services/api.service';
+import { ConfigService } from '@/core/services/config.service';
 
 /**
  * Service for document signature operations.
@@ -20,7 +20,11 @@ import { BASE_URL } from '@/core/services/api.service';
 })
 export class DocumentSignatureService {
     private http = inject(HttpClient);
-    private readonly apiUrl = BASE_URL;
+    private configService = inject(ConfigService);
+
+    private get apiUrl(): string {
+        return this.configService.apiBaseUrl;
+    }
 
     /**
      * Get all documents pending signature for current user

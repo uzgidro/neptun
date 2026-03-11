@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { interval, Subscription } from 'rxjs';
@@ -22,7 +22,8 @@ interface WeatherData {
     standalone: true,
     imports: [DatePipe, RouterLink, TranslateModule],
     templateUrl: './sc-header.component.html',
-    styleUrl: './sc-header.component.scss'
+    styleUrl: './sc-header.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ScHeaderComponent implements OnInit, OnDestroy {
     currentDate: Date = new Date();
@@ -37,6 +38,7 @@ export class ScHeaderComponent implements OnInit, OnDestroy {
     private languageService = inject(LanguageService);
     alarmService = inject(AlarmService);
     authService = inject(AuthService);
+    private cdr = inject(ChangeDetectorRef);
 
     // Language switcher
     languages = [
@@ -58,6 +60,7 @@ export class ScHeaderComponent implements OnInit, OnDestroy {
         // Update time every second
         this.timerSubscription = interval(1000).subscribe(() => {
             this.currentDate = new Date();
+            this.cdr.markForCheck();
         });
 
         // Load real weather
@@ -71,7 +74,10 @@ export class ScHeaderComponent implements OnInit, OnDestroy {
     private loadWeather(): void {
         this.locationService
             .getCurrentPosition()
-            .pipe(finalize(() => (this.weatherLoading = false)))
+            .pipe(finalize(() => {
+                this.weatherLoading = false;
+                this.cdr.markForCheck();
+            }))
             .subscribe({
                 next: (position) => {
                     this.fetchWeather(position.coords.latitude, position.coords.longitude);
@@ -92,9 +98,11 @@ export class ScHeaderComponent implements OnInit, OnDestroy {
                     description: data.weather[0].description,
                     iconClass: this.getWeatherIcon(data.weather[0].icon)
                 };
+                this.cdr.markForCheck();
             },
             error: () => {
                 this.weatherError = true;
+                this.cdr.markForCheck();
             }
         });
     }

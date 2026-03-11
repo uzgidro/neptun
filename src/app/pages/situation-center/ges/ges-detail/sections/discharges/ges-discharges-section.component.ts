@@ -11,7 +11,7 @@ import { InputIcon } from 'primeng/inputicon';
 import { TooltipModule } from 'primeng/tooltip';
 import { DatePicker } from 'primeng/datepicker';
 import { TagModule } from 'primeng/tag';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MessageService } from 'primeng/api';
 
 import { GesService } from '@/core/services/ges.service';
@@ -61,6 +61,7 @@ export class GesDischargesSectionComponent implements OnInit, OnDestroy {
     private gesService = inject(GesService);
     private messageService = inject(MessageService);
     private fb = inject(FormBuilder);
+    private translate = inject(TranslateService);
 
     data: GesDischarge[] = [];
     loading = false;
@@ -226,7 +227,7 @@ export class GesDischargesSectionComponent implements OnInit, OnDestroy {
     }
 
     deleteItem(id: number): void {
-        if (confirm('Вы уверены, что хотите удалить эту запись?')) {
+        if (confirm(this.translate.instant('COMMON.CONFIRM_DELETE'))) {
             this.gesService.deleteDischarge(this.gesId, id).subscribe({
                 next: () => {
                     this.messageService.add({

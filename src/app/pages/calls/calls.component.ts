@@ -19,7 +19,7 @@ import { SelectComponent } from '@/layout/component/dialog/select/select.compone
 import { TextareaComponent } from '@/layout/component/dialog/textarea/textarea.component';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
 import { DeleteConfirmationComponent } from '@/layout/component/dialog/delete-confirmation/delete-confirmation.component';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-calls',
@@ -95,6 +95,7 @@ export class CallsComponent implements OnInit, OnDestroy {
     private callService = inject(CallService);
     private messageService = inject(MessageService);
     private fb = inject(FormBuilder);
+    private translate = inject(TranslateService);
     private destroy$ = new Subject<void>();
 
     constructor() {
@@ -215,12 +216,12 @@ export class CallsComponent implements OnInit, OnDestroy {
                 .pipe(takeUntil(this.destroy$))
                 .subscribe({
                     next: () => {
-                        this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Звонок обновлён' });
+                        this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('CALLS.UPDATED') });
                         this.loadCalls();
                         this.closeDialog();
                     },
                     error: () => {
-                        this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось обновить звонок' });
+                        this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('CALLS.UPDATE_ERROR') });
                     }
                 });
         } else {
@@ -229,12 +230,12 @@ export class CallsComponent implements OnInit, OnDestroy {
                 .pipe(takeUntil(this.destroy$))
                 .subscribe({
                     next: () => {
-                        this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Звонок добавлен' });
+                        this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('CALLS.CREATED') });
                         this.loadCalls();
                         this.closeDialog();
                     },
                     error: () => {
-                        this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось добавить звонок' });
+                        this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('CALLS.CREATE_ERROR') });
                     }
                 });
         }
@@ -253,13 +254,13 @@ export class CallsComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
-                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Звонок удалён' });
+                    this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('CALLS.DELETED') });
                     this.loadCalls();
                     this.displayDeleteDialog = false;
                     this.selectedCall = null;
                 },
                 error: () => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось удалить звонок' });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('CALLS.DELETE_ERROR') });
                 }
             });
     }

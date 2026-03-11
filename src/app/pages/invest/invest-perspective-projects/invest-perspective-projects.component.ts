@@ -18,7 +18,7 @@ import { InvestmentService } from '@/core/services/investment.service';
 import { InvestmentDto, InvestmentStatus } from '@/core/interfaces/investment';
 import { ActivatedRoute } from '@angular/router';
 import { ProgressBarModule } from 'primeng/progressbar';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-invest-perspective-projects',
@@ -72,6 +72,7 @@ export class InvestPerspectiveProjectsComponent implements OnInit {
     private dashboardService = inject(FinancialDashboardService);
     private investmentService = inject(InvestmentService);
     private route = inject(ActivatedRoute);
+    private translate = inject(TranslateService);
 
     statusOptions: InvestmentStatus[] = [];
     typeId: number | undefined;
@@ -114,8 +115,8 @@ export class InvestPerspectiveProjectsComponent implements OnInit {
             error: (err) => {
                 this.messageService.add({
                     severity: 'error',
-                    summary: 'Ошибка загрузки',
-                    detail: 'Не удалось загрузить статусы'
+                    summary: this.translate.instant('INVEST.MESSAGES.LOAD_ERROR'),
+                    detail: this.translate.instant('INVEST.MESSAGES.LOAD_STATUSES_FAILED')
                 });
                 console.error(err);
             }
@@ -132,8 +133,8 @@ export class InvestPerspectiveProjectsComponent implements OnInit {
             error: (err) => {
                 this.messageService.add({
                     severity: 'error',
-                    summary: 'Ошибка загрузки',
-                    detail: 'Не удалось загрузить инвестиционные проекты'
+                    summary: this.translate.instant('INVEST.MESSAGES.LOAD_ERROR'),
+                    detail: this.translate.instant('INVEST.MESSAGES.LOAD_INVESTMENTS_FAILED')
                 });
                 console.error(err);
             },
@@ -258,15 +259,15 @@ export class InvestPerspectiveProjectsComponent implements OnInit {
                 next: () => {
                     this.messageService.add({
                         severity: 'success',
-                        summary: 'Проект обновлен'
+                        summary: this.translate.instant('INVEST.MESSAGES.PROJECT_UPDATED')
                     });
                     this.closeDialog();
                 },
                 error: (err) => {
                     this.messageService.add({
                         severity: 'error',
-                        summary: 'Ошибка обновления',
-                        detail: err.message || 'Не удалось обновить проект'
+                        summary: this.translate.instant('INVEST.MESSAGES.UPDATE_ERROR'),
+                        detail: err.message || this.translate.instant('INVEST.MESSAGES.UPDATE_FAILED')
                     });
                     this.isLoading = false;
                 },
@@ -279,15 +280,15 @@ export class InvestPerspectiveProjectsComponent implements OnInit {
                 next: () => {
                     this.messageService.add({
                         severity: 'success',
-                        summary: 'Проект добавлен'
+                        summary: this.translate.instant('INVEST.MESSAGES.PROJECT_ADDED')
                     });
                     this.closeDialog();
                 },
                 error: (err) => {
                     this.messageService.add({
                         severity: 'error',
-                        summary: 'Ошибка создания',
-                        detail: err.message || 'Не удалось создать проект'
+                        summary: this.translate.instant('INVEST.MESSAGES.CREATE_ERROR'),
+                        detail: err.message || this.translate.instant('INVEST.MESSAGES.CREATE_FAILED')
                     });
                     this.isLoading = false;
                 },
@@ -314,20 +315,20 @@ export class InvestPerspectiveProjectsComponent implements OnInit {
     }
 
     deleteInvestment(id: number) {
-        if (confirm('Вы уверены, что хотите удалить этот проект?')) {
+        if (confirm(this.translate.instant('COMMON.CONFIRM_DELETE'))) {
             this.investmentService.deleteInvestment(id).subscribe({
                 next: () => {
                     this.messageService.add({
                         severity: 'success',
-                        summary: 'Проект удален'
+                        summary: this.translate.instant('INVEST.MESSAGES.PROJECT_DELETED')
                     });
                     this.loadInvestments();
                 },
                 error: (err) => {
                     this.messageService.add({
                         severity: 'error',
-                        summary: 'Ошибка удаления',
-                        detail: err.message || 'Не удалось удалить проект'
+                        summary: this.translate.instant('INVEST.MESSAGES.DELETE_ERROR'),
+                        detail: err.message || this.translate.instant('INVEST.MESSAGES.DELETE_FAILED')
                     });
                     console.error(err);
                 }

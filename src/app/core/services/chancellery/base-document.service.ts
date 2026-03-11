@@ -21,7 +21,7 @@ import {
     RejectSignatureRequest,
     Signature
 } from '@/core/interfaces/chancellery/signature';
-import { BASE_URL } from '@/core/services/api.service';
+import { ConfigService } from '@/core/services/config.service';
 
 /**
  * Abstract base service for all chancellery document types.
@@ -37,13 +37,14 @@ export abstract class BaseDocumentService<
     F extends DocumentFilters = DocumentFilters
 > {
     protected http = inject(HttpClient);
+    protected configService = inject(ConfigService);
 
     /** API endpoint path without base URL (e.g., '/decrees') */
     protected abstract readonly endpoint: string;
 
     /** Full API URL for this document type */
     protected get apiUrl(): string {
-        return `${BASE_URL}${this.endpoint}`;
+        return `${this.configService.apiBaseUrl}${this.endpoint}`;
     }
 
     // =========================================================================

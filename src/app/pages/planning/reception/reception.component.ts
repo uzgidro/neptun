@@ -113,7 +113,7 @@ export class ReceptionComponent implements OnInit, OnDestroy {
                     console.error('Error loading receptions:', error);
                     this.messageService.add({
                         severity: 'error',
-                        summary: this.translate.instant('PLANNING.COMMON.ERROR'),
+                        summary: this.translate.instant('COMMON.ERROR'),
                         detail: this.translate.instant('PLANNING.RECEPTION.LOAD_ERROR')
                     });
                     this.loading.set(false);
@@ -279,7 +279,7 @@ export class ReceptionComponent implements OnInit, OnDestroy {
                     next: () => {
                         this.messageService.add({
                             severity: 'success',
-                            summary: this.translate.instant('PLANNING.COMMON.SUCCESS'),
+                            summary: this.translate.instant('COMMON.SUCCESS'),
                             detail: this.translate.instant('PLANNING.RECEPTION.UPDATED')
                         });
                         this.loadReceptions();
@@ -289,7 +289,7 @@ export class ReceptionComponent implements OnInit, OnDestroy {
                         console.error('Error updating reception:', error);
                         this.messageService.add({
                             severity: 'error',
-                            summary: this.translate.instant('PLANNING.COMMON.ERROR'),
+                            summary: this.translate.instant('COMMON.ERROR'),
                             detail: this.translate.instant('PLANNING.RECEPTION.UPDATE_ERROR')
                         });
                     }
@@ -311,7 +311,7 @@ export class ReceptionComponent implements OnInit, OnDestroy {
                     next: () => {
                         this.messageService.add({
                             severity: 'success',
-                            summary: this.translate.instant('PLANNING.COMMON.SUCCESS'),
+                            summary: this.translate.instant('COMMON.SUCCESS'),
                             detail: this.translate.instant('PLANNING.RECEPTION.CREATED')
                         });
                         this.loadReceptions();
@@ -321,7 +321,7 @@ export class ReceptionComponent implements OnInit, OnDestroy {
                         console.error('Error creating reception:', error);
                         this.messageService.add({
                             severity: 'error',
-                            summary: this.translate.instant('PLANNING.COMMON.ERROR'),
+                            summary: this.translate.instant('COMMON.ERROR'),
                             detail: this.translate.instant('PLANNING.RECEPTION.CREATE_ERROR')
                         });
                     }
@@ -343,15 +343,15 @@ export class ReceptionComponent implements OnInit, OnDestroy {
             next: () => {
                 this.messageService.add({
                     severity: 'success',
-                    summary: 'Успешно',
-                    detail: 'Прием отмечен как проинформированный'
+                    summary: this.translate.instant('COMMON.SUCCESS'),
+                    detail: this.translate.instant('PLANNING.RECEPTION.INFORMED_SUCCESS')
                 });
                 this.loadReceptions();
             },
             error: (err) => {
                 this.messageService.add({
                     severity: 'error',
-                    summary: 'Ошибка',
+                    summary: this.translate.instant('COMMON.ERROR'),
                     detail: err.message
                 });
             }

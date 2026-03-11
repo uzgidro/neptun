@@ -33,8 +33,8 @@
     "SUCCESS": "Успешно",
     "ERROR": "Ошибка",
     "WARNING": "Внимание",
-      "INFO": "Информация",
-      "CONGRATULATIONS": "Поздравляем",
+    "INFO": "Информация",
+    "CONGRATULATIONS": "Поздравляем",
     "EXPORT": "Экспорт",
     "EXPORT_SUCCESS": "Файл успешно экспортирован",
     "FILL_REQUIRED": "Заполните обязательные поля",
@@ -67,8 +67,15 @@
       "NOV": "Ноябрь",
       "DEC": "Декабрь"
     },
-      "NO_RESULTS": "Ничего не найдено",
-      "DOWNLOAD_EXCEL": "Скачать Excel"
+    "NO_RESULTS": "Ничего не найдено",
+    "DOWNLOAD_EXCEL": "Скачать Excel",
+    "APPROVE": "Одобрить",
+    "REJECT": "Отклонить",
+    "STATUS": "Статус",
+    "CLEAR": "Очистить",
+    "DOWNLOAD": "Скачать",
+    "EMAIL": "Эл. почта",
+    "PHONE": "Телефон"
   },
   "CATEGORIES": {
     "TITLE": "Роли",
@@ -220,11 +227,11 @@
     "OTHER_DOCS": "Иные документы",
     "RESERVOIR_SUMMARY": "Сводка",
     "RESERVOIR_SUMMARY_PDF": "Сводка PDF",
-      "RESERVOIR_SUMMARY_HOURLY": "Оперативная сводка",
+    "RESERVOIR_SUMMARY_HOURLY": "Оперативная сводка",
     "HYDRAULIC_STRUCTURES": "Гидротехнические сооружения",
     "INCIDENTS": "Инциденты",
-      "VISITS": "Визиты",
-      "SNOW_COVER": "MODSNOW"
+    "VISITS": "Визиты",
+    "SNOW_COVER": "MODSNOW"
   },
   "TOPBAR": {
     "CALL": "Звонок",
@@ -301,7 +308,21 @@
     "NOT_INFORMED": "Не проинформирован",
     "INFORMED_BY": "Проинформировал",
     "CREATED_BY": "Создал",
-    "UPDATED_BY": "Обновил"
+    "UPDATED_BY": "Обновил",
+    "CANCEL": "Отмена",
+    "SAVE": "Сохранить",
+    "DATE_LABEL": "Дата",
+    "TOGETHER_LABEL": "Совместно с",
+    "REJECT_DIALOG_HEADER": "Отклонить",
+    "RESCHEDULE_DIALOG_HEADER": "Перенести",
+    "SPECIFY_NEW_DATE_TIME": "Укажите новую дату и время",
+    "EVENT_NAME": "Название события",
+    "EVENT_DESCRIPTION": "Описание",
+    "EVENT_DATE_TIME": "Дата и время",
+    "EVENT_TYPE": "Тип события",
+    "EVENT_LOCATION": "Место проведения",
+    "EVENT_STATUS": "Статус",
+    "EVENT_RESPONSIBLE": "Ответственный"
   },
   "DASHBOARD": {
     "EVENTS": "События",
@@ -940,7 +961,10 @@
       "MONTH_9": "Сентябрь",
       "MONTH_10": "Октябрь",
       "MONTH_11": "Ноябрь",
-      "MONTH_12": "Декабрь"
+      "MONTH_12": "Декабрь",
+      "DATA_UPDATED": "Данные обновлены",
+      "HOURS_SHORT": "ч",
+      "HOURS_WORKED": "Отработано часов"
     },
     "COMMON": {
       "EMPLOYEE": "Сотрудник",
@@ -969,7 +993,8 @@
       "BY_TENURE": "Распределение по стажу",
       "HEADCOUNT_BY_DEPARTMENT": "Численность по отделам",
       "HEADCOUNT": "Численность",
-      "PERCENT_OF_TOTAL": "% от общего"
+      "PERCENT_OF_TOTAL": "% от общего",
+      "AVG_AGE": "Средний возраст"
     },
     "TRAINING": {
       "TITLE": "Обучение и развитие",
@@ -1141,7 +1166,13 @@
       "POSITION": "Должность",
       "SALARY": "Зарплата",
       "RESPONSES": "Откликов",
-      "PRIORITY": "Приоритет",
+      "PRIORITY": {
+        "LABEL": "Приоритет",
+        "LOW": "Низкий",
+        "NORMAL": "Обычный",
+        "HIGH": "Высокий",
+        "URGENT": "Срочный"
+      },
       "STATUS": "Статус",
       "ACTIONS": "Действия",
       "APPLICANT": "Заявитель",
@@ -1156,8 +1187,28 @@
       "EDIT": "Редактировать",
       "NO_VACANCIES": "Вакансий не найдено",
       "FULL_NAME": "ФИО",
-      "SOURCE": "Источник",
-      "STAGE": "Этап",
+      "SOURCE": {
+        "LABEL": "Источник",
+        "WEBSITE": "Сайт компании",
+        "JOB_PORTAL": "Портал вакансий",
+        "GOV_PORTAL": "Портал госслужбы",
+        "REFERRAL": "Рекомендация сотрудника",
+        "AGENCY": "Кадровое агентство",
+        "SOCIAL_MEDIA": "Социальные сети",
+        "DIRECT": "Прямое обращение",
+        "OTHER": "Другое"
+      },
+      "STAGE": {
+        "LABEL": "Этап",
+        "APPLICATION": "Заявка",
+        "SCREENING": "Отбор",
+        "INTERVIEW": "Собеседование",
+        "ASSESSMENT": "Оценка",
+        "VERIFICATION": "Проверка",
+        "OFFER": "Оффер",
+        "HIRED": "Найм",
+        "CLOSED": "Закрыто"
+      },
       "RATING": "Рейтинг",
       "NO_CANDIDATES": "Кандидатов не найдено",
       "EMPLOYEE": "Сотрудник",
@@ -1174,134 +1225,109 @@
       "VACANCY_UPDATED": "Вакансия обновлена",
       "CANDIDATE_CREATED": "Кандидат добавлен",
       "CANDIDATE_UPDATED": "Кандидат обновлен",
-        "SCREENING_PASSED": "Кандидат прошел первичный отбор",
-        "INTERVIEW_SCHEDULED": "Собеседование запланировано",
-        "FEEDBACK_SAVED": "Обратная связь сохранена",
-        "REFERENCE_ADDED": "Рекомендация добавлена",
-        "REFERENCE_VERIFIED": "Проверка рекомендации завершена",
-        "OFFER_SENT": "Оффер отправлен кандидату",
-        "OFFER_ACCEPTED": "Кандидат принял предложение",
-        "HIRED": "Сотрудник успешно принят на работу",
-        "CANDIDATE_REJECTED": "Кандидат отклонён, уведомление отправлено",
-        "MENTOR_ASSIGNED": "Наставник назначен",
-        "TASK_COMPLETED": "Задача выполнена",
-        "VACANCY_PUBLISHED_PORTAL": "Вакансия опубликована на портале госслужбы",
-        "VACANCY_CREATE_ERROR": "Не удалось создать вакансию",
-        "VACANCY_UPDATE_ERROR": "Не удалось обновить вакансию",
-        "CANDIDATE_CREATE_ERROR": "Не удалось добавить кандидата",
-        "INTERVIEW_SCHEDULE_ERROR": "Не удалось запланировать собеседование",
-        "OFFER_SEND_ERROR": "Не удалось отправить оффер",
+      "SCREENING_PASSED": "Кандидат прошел первичный отбор",
+      "INTERVIEW_SCHEDULED": "Собеседование запланировано",
+      "FEEDBACK_SAVED": "Обратная связь сохранена",
+      "REFERENCE_ADDED": "Рекомендация добавлена",
+      "REFERENCE_VERIFIED": "Проверка рекомендации завершена",
+      "OFFER_SENT": "Оффер отправлен кандидату",
+      "OFFER_ACCEPTED": "Кандидат принял предложение",
+      "HIRED": "Сотрудник успешно принят на работу",
+      "CANDIDATE_REJECTED": "Кандидат отклонён, уведомление отправлено",
+      "MENTOR_ASSIGNED": "Наставник назначен",
+      "TASK_COMPLETED": "Задача выполнена",
+      "VACANCY_PUBLISHED_PORTAL": "Вакансия опубликована на портале госслужбы",
+      "VACANCY_CREATE_ERROR": "Не удалось создать вакансию",
+      "VACANCY_UPDATE_ERROR": "Не удалось обновить вакансию",
+      "CANDIDATE_CREATE_ERROR": "Не удалось добавить кандидата",
+      "INTERVIEW_SCHEDULE_ERROR": "Не удалось запланировать собеседование",
+      "OFFER_SEND_ERROR": "Не удалось отправить оффер",
       "NOT_ASSIGNED": "Не назначен",
-        "EMPLOYMENT_TYPE": {
-            "FULL_TIME": "Полная занятость",
-            "PART_TIME": "Частичная занятость",
-            "CONTRACT": "Контракт",
-            "INTERNSHIP": "Стажировка",
-            "REMOTE": "Удалённая работа"
-        },
-        "VACANCY_STATUS": {
-            "DRAFT": "Черновик",
-            "PENDING_APPROVAL": "На согласовании",
-            "APPROVED": "Согласована",
-            "OPEN": "Открыта",
-            "ON_HOLD": "Приостановлена",
-            "CLOSED": "Закрыта",
-            "CANCELLED": "Отменена"
-        },
-        "PRIORITY": {
-            "LOW": "Низкий",
-            "NORMAL": "Обычный",
-            "HIGH": "Высокий",
-            "URGENT": "Срочный"
-        },
-        "CANDIDATE_STATUS": {
-            "NEW": "Новый",
-            "SCREENING": "Первичный отбор",
-            "PHONE_INTERVIEW": "Телефонное интервью",
-            "INTERVIEW": "Собеседование",
-            "TECHNICAL_TEST": "Техническое задание",
-            "REFERENCE_CHECK": "Проверка рекомендаций",
-            "BACKGROUND_CHECK": "Проверка документов",
-            "OFFER": "Оффер",
-            "OFFER_ACCEPTED": "Оффер принят",
-            "HIRED": "Принят на работу",
-            "REJECTED": "Отклонён",
-            "WITHDRAWN": "Отказ кандидата"
-        },
-        "STAGE": {
-            "APPLICATION": "Заявка",
-            "SCREENING": "Отбор",
-            "INTERVIEW": "Собеседование",
-            "ASSESSMENT": "Оценка",
-            "VERIFICATION": "Проверка",
-            "OFFER": "Оффер",
-            "HIRED": "Найм",
-            "CLOSED": "Закрыто"
-        },
-        "INTERVIEW_TYPE": {
-            "PHONE": "Телефонное",
-            "VIDEO": "Видеозвонок",
-            "IN_PERSON": "Очное",
-            "TECHNICAL": "Техническое",
-            "HR": "HR интервью",
-            "PANEL": "Панельное",
-            "FINAL": "Финальное"
-        },
-        "RECOMMENDATION": {
-            "STRONG_YES": "Однозначно да",
-            "YES": "Да",
-            "MAYBE": "Возможно",
-            "NO": "Нет",
-            "STRONG_NO": "Однозначно нет"
-        },
-        "OFFER_STATUS": {
-            "DRAFT": "Черновик",
-            "PENDING_APPROVAL": "На согласовании",
-            "APPROVED": "Согласован",
-            "SENT": "Отправлен",
-            "ACCEPTED": "Принят",
-            "DECLINED": "Отклонён",
-            "NEGOTIATING": "Переговоры",
-            "EXPIRED": "Истёк",
-            "WITHDRAWN": "Отозван"
-        },
-        "SOURCE": {
-            "WEBSITE": "Сайт компании",
-            "JOB_PORTAL": "Портал вакансий",
-            "GOV_PORTAL": "Портал госслужбы",
-            "REFERRAL": "Рекомендация сотрудника",
-            "AGENCY": "Кадровое агентство",
-            "SOCIAL_MEDIA": "Социальные сети",
-            "DIRECT": "Прямое обращение",
-            "OTHER": "Другое"
-        },
-        "TOOLTIP": {
-            "PASS_SCREENING": "Пройти скрининг",
-            "SCHEDULE_INTERVIEW": "Назначить собеседование",
-            "CHECK_REFERENCES": "Проверка рекомендаций",
-            "SEND_OFFER": "Отправить оффер",
-            "OFFER_ACCEPTED": "Оффер принят",
-            "HIRE_EMPLOYEE": "Оформить на работу",
-            "REJECT": "Отклонить"
-        },
-        "MOCK": {
-            "TASK_PROCESS_DOCUMENTS": "Оформление документов",
-            "TASK_CREATE_EMAIL": "Создание учетной записи email",
-            "TASK_SETUP_ACCESS": "Настройка доступа к системам",
-            "TASK_INTRO_TRAINING": "Вводное обучение",
-            "TASK_MEET_TEAM": "Знакомство с командой",
-            "TASK_COMPANY_POLICIES": "Ознакомление с политиками компании",
-            "DOC_PASSPORT": "Паспорт",
-            "DOC_INN": "ИНН",
-            "DOC_SNILS": "СНИЛС",
-            "DOC_WORK_BOOK": "Трудовая книжка",
-            "DOC_PHOTO": "Фото 3x4",
-            "DOC_DIPLOMA": "Диплом",
-            "POSITIVE_FEEDBACK": "Положительный отзыв",
-            "APPROVER_NAME": "Соколов Андрей",
-            "MENTOR_NAME": "Волкова Ольга Николаевна"
-        },
+      "EMPLOYMENT_TYPE": {
+        "FULL_TIME": "Полная занятость",
+        "PART_TIME": "Частичная занятость",
+        "CONTRACT": "Контракт",
+        "INTERNSHIP": "Стажировка",
+        "REMOTE": "Удалённая работа"
+      },
+      "VACANCY_STATUS": {
+        "DRAFT": "Черновик",
+        "PENDING_APPROVAL": "На согласовании",
+        "APPROVED": "Согласована",
+        "OPEN": "Открыта",
+        "ON_HOLD": "Приостановлена",
+        "CLOSED": "Закрыта",
+        "CANCELLED": "Отменена"
+      },
+      "CANDIDATE_STATUS": {
+        "NEW": "Новый",
+        "SCREENING": "Первичный отбор",
+        "PHONE_INTERVIEW": "Телефонное интервью",
+        "INTERVIEW": "Собеседование",
+        "TECHNICAL_TEST": "Техническое задание",
+        "REFERENCE_CHECK": "Проверка рекомендаций",
+        "BACKGROUND_CHECK": "Проверка документов",
+        "OFFER": "Оффер",
+        "OFFER_ACCEPTED": "Оффер принят",
+        "HIRED": "Принят на работу",
+        "REJECTED": "Отклонён",
+        "WITHDRAWN": "Отказ кандидата"
+      },
+      "INTERVIEW_TYPE": {
+        "PHONE": "Телефонное",
+        "VIDEO": "Видеозвонок",
+        "IN_PERSON": "Очное",
+        "TECHNICAL": "Техническое",
+        "HR": "HR интервью",
+        "PANEL": "Панельное",
+        "FINAL": "Финальное"
+      },
+      "RECOMMENDATION": {
+        "STRONG_YES": "Однозначно да",
+        "YES": "Да",
+        "MAYBE": "Возможно",
+        "NO": "Нет",
+        "STRONG_NO": "Однозначно нет"
+      },
+      "OFFER_STATUS": {
+        "DRAFT": "Черновик",
+        "PENDING_APPROVAL": "На согласовании",
+        "APPROVED": "Согласован",
+        "SENT": "Отправлен",
+        "ACCEPTED": "Принят",
+        "DECLINED": "Отклонён",
+        "NEGOTIATING": "Переговоры",
+        "EXPIRED": "Истёк",
+        "WITHDRAWN": "Отозван"
+      },
+      "TOOLTIP": {
+        "PASS_SCREENING": "Пройти скрининг",
+        "SCHEDULE_INTERVIEW": "Назначить собеседование",
+        "CHECK_REFERENCES": "Проверка рекомендаций",
+        "SEND_OFFER": "Отправить оффер",
+        "OFFER_ACCEPTED": "Оффер принят",
+        "HIRE_EMPLOYEE": "Оформить на работу",
+        "REJECT": "Отклонить"
+      },
+      "MOCK": {
+        "TASK_PROCESS_DOCUMENTS": "Оформление документов",
+        "TASK_CREATE_EMAIL": "Создание учетной записи email",
+        "TASK_SETUP_ACCESS": "Настройка доступа к системам",
+        "TASK_INTRO_TRAINING": "Вводное обучение",
+        "TASK_MEET_TEAM": "Знакомство с командой",
+        "TASK_COMPANY_POLICIES": "Ознакомление с политиками компании",
+        "DOC_PASSPORT": "Паспорт",
+        "DOC_INN": "ИНН",
+        "DOC_SNILS": "СНИЛС",
+        "DOC_WORK_BOOK": "Трудовая книжка",
+        "DOC_PHOTO": "Фото 3x4",
+        "DOC_DIPLOMA": "Диплом",
+        "POSITIVE_FEEDBACK": "Положительный отзыв",
+        "APPROVER_NAME": "Соколов Андрей",
+        "MENTOR_NAME": "Волкова Ольга Николаевна"
+      },
       "ONBOARDING": {
+        "LABEL": "Адаптация",
         "STATUS_IN_PROGRESS": "В процессе",
         "STATUS_COMPLETED": "Завершен",
         "STATUS_NOT_STARTED": "Не начат",
@@ -1315,12 +1341,13 @@
         "CAT_TRAINING": "Обучение",
         "CAT_INTRODUCTION": "Знакомство",
         "CAT_COMPLIANCE": "Политики",
-          "CAT_DEPARTMENT": "Отдел",
+        "CAT_DEPARTMENT": "Отдел",
         "MARK_COMPLETED": "Отметить выполненным",
         "PENDING_DOCUMENTS": "Ожидаемые документы",
         "SUBMITTED_DOCUMENTS": "Предоставленные документы"
       },
       "VACANCY": {
+        "LABEL": "Вакансия",
         "EDIT_VACANCY": "Редактировать вакансию",
         "CREATE_REQUEST": "Заявка на вакансию",
         "TITLE_LABEL": "Название вакансии",
@@ -1664,21 +1691,21 @@
       "REQUEST_REJECTED": "Заявка отклонена",
       "REQUEST_CANCELLED": "Заявка отменена"
     },
-      "MENU": {
-          "DASHBOARD": "Главная HRM",
-          "MY_CABINET": "Мой кабинет",
-          "PERSONNEL_RECORDS": "Учет кадров",
-          "VACATION_MANAGEMENT": "Управление отпусками",
-          "SALARY_MANAGEMENT": "Управление зарплатой",
-          "RECRUITING": "Рекрутинг",
-          "TRAINING": "Обучение и развитие",
-          "COMPETENCY_ASSESSMENT": "Оценка компетенций",
-          "PERFORMANCE_MANAGEMENT": "Управление эффективностью",
-          "ANALYTICS": "Аналитика и отчеты",
-          "TIMESHEET": "Табель",
-          "HR_DOCUMENTS": "HR-документы",
-          "ACCESS_CONTROL": "Контроль доступа",
-          "ORG_STRUCTURE": "Оргструктура"
+    "MENU": {
+      "DASHBOARD": "Главная HRM",
+      "MY_CABINET": "Мой кабинет",
+      "PERSONNEL_RECORDS": "Учет кадров",
+      "VACATION_MANAGEMENT": "Управление отпусками",
+      "SALARY_MANAGEMENT": "Управление зарплатой",
+      "RECRUITING": "Рекрутинг",
+      "TRAINING": "Обучение и развитие",
+      "COMPETENCY_ASSESSMENT": "Оценка компетенций",
+      "PERFORMANCE_MANAGEMENT": "Управление эффективностью",
+      "ANALYTICS": "Аналитика и отчеты",
+      "TIMESHEET": "Табель",
+      "HR_DOCUMENTS": "HR-документы",
+      "ACCESS_CONTROL": "Контроль доступа",
+      "ORG_STRUCTURE": "Оргструктура"
     }
   },
   "VALIDATION": {
@@ -1868,8 +1895,8 @@
       "INFLOW_TO_DATE": "Приток до сегодняшнего дня, млн. м³",
       "MODSNOW": "MODSNOW, снежный покров %"
     },
-      "RESERVOIR_SUMMARY_HOURLY": {
-          "TITLE": "Оперативная сводка по водохранилищам"
+    "RESERVOIR_SUMMARY_HOURLY": {
+      "TITLE": "Оперативная сводка по водохранилищам"
     },
     "DASHBOARD": {
       "HEADER": {
@@ -1908,10 +1935,10 @@
         "ALL_WORKING": "Все станции в работе",
         "TYPE_GES": "ГЭС",
         "TYPE_MINI": "мини",
-          "TYPE_MICRO": "микро",
-          "DETAIL_TITLE": "Детали отключения",
-          "ONGOING": "В процессе",
-          "GO_TO_GES": "Перейти к станции"
+        "TYPE_MICRO": "микро",
+        "DETAIL_TITLE": "Детали отключения",
+        "ONGOING": "В процессе",
+        "GO_TO_GES": "Перейти к станции"
       },
       "POWER_GENERATION": {
         "YEAR_START": "С начала года",
@@ -1928,10 +1955,10 @@
         "EMERGENCY_SHUTDOWNS": "Аварийные отключения",
         "NO_ACTIVE_SHUTDOWNS": "Нет активных отключений",
         "RESERVOIRS": "Водохранилища",
-          "NO_RESERVOIRS": "Нет водохранилищ",
-          "WORKING": "Рабочие",
-          "RESERVE": "В резерве",
-          "IN_REPAIR": "На ремонте"
+        "NO_RESERVOIRS": "Нет водохранилищ",
+        "WORKING": "Рабочие",
+        "RESERVE": "В резерве",
+        "IN_REPAIR": "На ремонте"
       },
       "COMMON": {
         "LOADING": "Загрузка...",
@@ -2931,7 +2958,15 @@
       "NO_ANSWER": "Нет ответа",
       "BUSY": "Занято",
       "CANCELLED": "Отменён"
-    }
+    },
+    "CALLER": "Звонящий",
+    "RECEIVER": "Получатель",
+    "NO_CALLS": "Нет звонков",
+    "NEW_CALL": "Новый звонок",
+    "EDIT_CALL": "Редактировать звонок",
+    "CALLER_REQUIRED": "Укажите звонящего",
+    "CALLER_PHONE_LABEL": "Телефон звонящего",
+    "RECEIVER_LABEL": "Получатель"
   },
   "INVEST": {
     "ACTIVE_PROJECTS": {
@@ -3059,193 +3094,193 @@
     "PAGE_REPORT": "Страница {currentPage} из {totalPages}",
     "LOADING": "Загрузка..."
   },
-    "GES_DETAIL": {
-        "NOT_FOUND": "ГЭС не найдена",
-        "ERROR_LOADING": "Ошибка загрузки данных",
-        "ERROR_SAVE": "Ошибка сохранения",
-        "ERROR_DELETE": "Ошибка удаления",
-        "CREATED": "Запись создана",
-        "UPDATED": "Запись обновлена",
-        "DELETED": "Запись удалена",
-        "AGGREGATES_TITLE": "Агрегаты",
-        "MNEMONIC_TITLE": "Мнемосхема",
-        "NO_AGGREGATES": "Нет данных об агрегатах",
-        "TABS": {
-            "INFO": "Информация",
-            "CONTACTS": "Контакты",
-            "SHUTDOWNS": "Аварийные отключения",
-            "DISCHARGES": "Холостые водосбросы",
-            "INCIDENTS": "Инциденты",
-            "VISITS": "Посещения",
-            "TELEMETRY": "Телеметрия",
-            "MNEMONIC": "Мнемосхема"
-        },
-        "KPI": {
-            "CURRENT_POWER": "Активная мощность",
-            "AGGREGATES": "Агрегаты",
-            "SHUTDOWNS": "Аварийные отключения",
-            "DISCHARGES": "Холостые водосбросы"
-        },
-        "STATUS": {
-            "ACTIVE": "Работает",
-            "PENDING": "В резерве",
-            "REPAIR": "Ремонт",
-            "OFFLINE": "Отключен"
-        },
-        "AGGREGATE": {
-            "PARAM_NAME": "Параметр",
-            "PARAM_VALUE": "Значение",
-            "PARAM_UNIT": "Ед. изм.",
-            "ACTIVE_POWER": "Активная мощность",
-            "REACTIVE_POWER": "Реактивная мощность",
-            "VOLTAGE_AB": "Напряжение AB",
-            "VOLTAGE_BC": "Напряжение BC",
-            "VOLTAGE_CA": "Напряжение CA",
-            "CURRENT_A": "Ток фазы A",
-            "CURRENT_B": "Ток фазы B",
-            "CURRENT_C": "Ток фазы C",
-            "FREQUENCY": "Частота",
-            "POWER_FACTOR": "Коэффициент мощности (cos φ)",
-            "ROTOR_VOLTAGE": "Напряжение ротора",
-            "ROTOR_CURRENT": "Ток ротора",
-            "GUIDE_VANE_1": "Направляющий аппарат 1",
-            "GUIDE_VANE_2": "Направляющий аппарат 2"
-        },
-        "UNIT": {
-            "MW": "МВт",
-            "MVAR": "МВАр",
-            "KV": "кВ",
-            "A": "А",
-            "HZ": "Гц",
-            "V": "В",
-            "PERCENT": "%"
-        },
-        "MNEMONIC": {
-            "STATUS": "Статус",
-            "POWER": "Мощность",
-            "NO_DATA": "Нет данных телеметрии",
-            "PLACEHOLDER": "Мнемосхема будет отображена при наличии данных",
-            "NO_SCHEMA": "Мнемосхема не доступна для данной станции",
-            "NO_SCHEMA_DESC": "Схема для данной ГЭС ещё не загружена",
-            "LOAD_ERROR": "Ошибка загрузки мнемосхемы"
-        },
-        "INFO": {
-            "BASIC_INFO": "Основная информация",
-            "NAME": "Название",
-            "PARENT_ORG": "Родительская организация",
-            "TYPES": "Типы",
-            "DEPARTMENTS": "Подразделения",
-            "DEPARTMENT_NAME": "Название",
-            "DEPARTMENT_DESC": "Описание",
-            "NO_DEPARTMENTS": "Нет подразделений",
-            "SUB_ORGANIZATIONS": "Дочерние организации"
-        },
-        "CONTACTS": {
-            "NAME": "ФИО",
-            "POSITION": "Должность",
-            "DEPARTMENT": "Отдел",
-            "PHONE": "Телефон",
-            "EMAIL": "Email",
-            "ACTIONS": "Действия",
-            "CALL": "Позвонить",
-            "NO_CONTACTS": "Нет контактов"
-        },
-        "FILTERS": {
-            "START_DATE": "Дата с",
-            "END_DATE": "Дата по",
-            "SELECT_DATE": "Выберите дату"
-        },
-        "COMMON": {
-            "CREATED_BY": "Создал",
-            "FILES": "Файлы",
-            "VIEW_FILES": "Просмотр файлов",
-            "ATTACH_FILES": "Прикрепить файлы",
-            "ADD_NEW_FILES": "Добавить новые файлы"
-        },
-        "SHUTDOWNS": {
-            "ADD": "Добавить аварийное отключение",
-            "EDIT": "Редактировать аварийное отключение",
-            "START": "Начало",
-            "END": "Окончание",
-            "REASON": "Причина",
-            "POWER_LOSS": "Потери мощности",
-            "IDLE_DISCHARGE": "Холостой сброс",
-            "FILES": "Файлы события",
-            "NO_DATA": "Нет данных об аварийных отключениях"
-        },
-        "DISCHARGES": {
-            "ADD": "Добавить холостой сброс",
-            "EDIT": "Редактировать холостой сброс",
-            "START": "Начало",
-            "END": "Окончание",
-            "FLOW_RATE": "Расход, м³/с",
-            "TOTAL_VOLUME": "Объём, млн. м³",
-            "REASON": "Причина",
-            "STATUS": "Статус",
-            "ONGOING": "Активен",
-            "APPROVED": "Подтверждён",
-            "COMPLETED": "Завершён",
-            "FILES": "Файлы холостого сброса",
-            "NO_DATA": "Нет данных о холостых сбросах"
-        },
-        "INCIDENTS": {
-            "ADD": "Добавить инцидент",
-            "EDIT": "Редактировать инцидент",
-            "DATE": "Дата",
-            "DESCRIPTION": "Описание",
-            "ORGANIZATION": "Организация",
-            "FILES": "Файлы инцидента",
-            "NO_DATA": "Нет данных об инцидентах"
-        },
-        "VISITS": {
-            "ADD": "Добавить посещение",
-            "EDIT": "Редактировать посещение",
-            "DATE": "Дата",
-            "DESCRIPTION": "Описание",
-            "RESPONSIBLE": "Ответственный",
-            "ORGANIZATION": "Организация",
-            "FILES": "Файлы посещения",
-            "NO_DATA": "Нет данных о посещениях"
-        },
-        "TELEMETRY": {
-            "DEVICE": "Устройство",
-            "DEVICE_GROUP": "Группа устройств",
-            "GROUP": "Группа",
-            "PARAMETER": "Параметр",
-            "VALUE": "Значение",
-            "UNIT": "Ед. изм.",
-            "QUALITY": "Качество",
-            "SEVERITY": "Критичность",
-            "TIMESTAMP": "Время",
-            "ALL_GROUPS": "Все группы",
-            "ALL_DEVICES": "Все устройства",
-            "TOTAL_RECORDS": "Всего записей",
-            "NO_DATA": "Нет данных телеметрии"
-        }
+  "GES_DETAIL": {
+    "NOT_FOUND": "ГЭС не найдена",
+    "ERROR_LOADING": "Ошибка загрузки данных",
+    "ERROR_SAVE": "Ошибка сохранения",
+    "ERROR_DELETE": "Ошибка удаления",
+    "CREATED": "Запись создана",
+    "UPDATED": "Запись обновлена",
+    "DELETED": "Запись удалена",
+    "AGGREGATES_TITLE": "Агрегаты",
+    "MNEMONIC_TITLE": "Мнемосхема",
+    "NO_AGGREGATES": "Нет данных об агрегатах",
+    "TABS": {
+      "INFO": "Информация",
+      "CONTACTS": "Контакты",
+      "SHUTDOWNS": "Аварийные отключения",
+      "DISCHARGES": "Холостые водосбросы",
+      "INCIDENTS": "Инциденты",
+      "VISITS": "Посещения",
+      "TELEMETRY": "Телеметрия",
+      "MNEMONIC": "Мнемосхема"
     },
-    "SNOW_COVER": {
-        "TITLE": "Снежный покров (MODSNOW)",
-        "TODAY": "Сегодня",
-        "YESTERDAY": "Вчера",
-        "YEAR_AGO": "Год назад",
-        "AVG_COVER": "Средний покров",
-        "ORGANIZATION": "Организация",
-        "COVER": "Покров, %",
-        "DELTA": "Δ к году назад",
-        "ZONES": "Зоны высотности",
-        "ELEVATION": "Высота, м",
-        "SCA_PCT": "Покров, %",
-        "NO_DATA": "Нет данных",
-        "RESOURCE_DATE": "Дата снимка"
+    "KPI": {
+      "CURRENT_POWER": "Активная мощность",
+      "AGGREGATES": "Агрегаты",
+      "SHUTDOWNS": "Аварийные отключения",
+      "DISCHARGES": "Холостые водосбросы"
     },
-    "UZGIDRO_NEWS": {
-        "TITLE": "Новости UzGidro",
-        "TOTAL_NEWS": "Всего новостей",
-        "NEWS_COUNT": "новостей",
-        "NO_NEWS": "Новости не найдены",
-        "VIEWS": "Просмотры",
-        "PUBLISHED": "Опубликовано",
-        "LOAD_ERROR": "Не удалось загрузить новости",
-        "PAGE_REPORT": "Показано {first}-{last} из {totalRecords}"
+    "STATUS": {
+      "ACTIVE": "Работает",
+      "PENDING": "В резерве",
+      "REPAIR": "Ремонт",
+      "OFFLINE": "Отключен"
+    },
+    "AGGREGATE": {
+      "PARAM_NAME": "Параметр",
+      "PARAM_VALUE": "Значение",
+      "PARAM_UNIT": "Ед. изм.",
+      "ACTIVE_POWER": "Активная мощность",
+      "REACTIVE_POWER": "Реактивная мощность",
+      "VOLTAGE_AB": "Напряжение AB",
+      "VOLTAGE_BC": "Напряжение BC",
+      "VOLTAGE_CA": "Напряжение CA",
+      "CURRENT_A": "Ток фазы A",
+      "CURRENT_B": "Ток фазы B",
+      "CURRENT_C": "Ток фазы C",
+      "FREQUENCY": "Частота",
+      "POWER_FACTOR": "Коэффициент мощности (cos φ)",
+      "ROTOR_VOLTAGE": "Напряжение ротора",
+      "ROTOR_CURRENT": "Ток ротора",
+      "GUIDE_VANE_1": "Направляющий аппарат 1",
+      "GUIDE_VANE_2": "Направляющий аппарат 2"
+    },
+    "UNIT": {
+      "MW": "МВт",
+      "MVAR": "МВАр",
+      "KV": "кВ",
+      "A": "А",
+      "HZ": "Гц",
+      "V": "В",
+      "PERCENT": "%"
+    },
+    "MNEMONIC": {
+      "STATUS": "Статус",
+      "POWER": "Мощность",
+      "NO_DATA": "Нет данных телеметрии",
+      "PLACEHOLDER": "Мнемосхема будет отображена при наличии данных",
+      "NO_SCHEMA": "Мнемосхема не доступна для данной станции",
+      "NO_SCHEMA_DESC": "Схема для данной ГЭС ещё не загружена",
+      "LOAD_ERROR": "Ошибка загрузки мнемосхемы"
+    },
+    "INFO": {
+      "BASIC_INFO": "Основная информация",
+      "NAME": "Название",
+      "PARENT_ORG": "Родительская организация",
+      "TYPES": "Типы",
+      "DEPARTMENTS": "Подразделения",
+      "DEPARTMENT_NAME": "Название",
+      "DEPARTMENT_DESC": "Описание",
+      "NO_DEPARTMENTS": "Нет подразделений",
+      "SUB_ORGANIZATIONS": "Дочерние организации"
+    },
+    "CONTACTS": {
+      "NAME": "ФИО",
+      "POSITION": "Должность",
+      "DEPARTMENT": "Отдел",
+      "PHONE": "Телефон",
+      "EMAIL": "Email",
+      "ACTIONS": "Действия",
+      "CALL": "Позвонить",
+      "NO_CONTACTS": "Нет контактов"
+    },
+    "FILTERS": {
+      "START_DATE": "Дата с",
+      "END_DATE": "Дата по",
+      "SELECT_DATE": "Выберите дату"
+    },
+    "COMMON": {
+      "CREATED_BY": "Создал",
+      "FILES": "Файлы",
+      "VIEW_FILES": "Просмотр файлов",
+      "ATTACH_FILES": "Прикрепить файлы",
+      "ADD_NEW_FILES": "Добавить новые файлы"
+    },
+    "SHUTDOWNS": {
+      "ADD": "Добавить аварийное отключение",
+      "EDIT": "Редактировать аварийное отключение",
+      "START": "Начало",
+      "END": "Окончание",
+      "REASON": "Причина",
+      "POWER_LOSS": "Потери мощности",
+      "IDLE_DISCHARGE": "Холостой сброс",
+      "FILES": "Файлы события",
+      "NO_DATA": "Нет данных об аварийных отключениях"
+    },
+    "DISCHARGES": {
+      "ADD": "Добавить холостой сброс",
+      "EDIT": "Редактировать холостой сброс",
+      "START": "Начало",
+      "END": "Окончание",
+      "FLOW_RATE": "Расход, м³/с",
+      "TOTAL_VOLUME": "Объём, млн. м³",
+      "REASON": "Причина",
+      "STATUS": "Статус",
+      "ONGOING": "Активен",
+      "APPROVED": "Подтверждён",
+      "COMPLETED": "Завершён",
+      "FILES": "Файлы холостого сброса",
+      "NO_DATA": "Нет данных о холостых сбросах"
+    },
+    "INCIDENTS": {
+      "ADD": "Добавить инцидент",
+      "EDIT": "Редактировать инцидент",
+      "DATE": "Дата",
+      "DESCRIPTION": "Описание",
+      "ORGANIZATION": "Организация",
+      "FILES": "Файлы инцидента",
+      "NO_DATA": "Нет данных об инцидентах"
+    },
+    "VISITS": {
+      "ADD": "Добавить посещение",
+      "EDIT": "Редактировать посещение",
+      "DATE": "Дата",
+      "DESCRIPTION": "Описание",
+      "RESPONSIBLE": "Ответственный",
+      "ORGANIZATION": "Организация",
+      "FILES": "Файлы посещения",
+      "NO_DATA": "Нет данных о посещениях"
+    },
+    "TELEMETRY": {
+      "DEVICE": "Устройство",
+      "DEVICE_GROUP": "Группа устройств",
+      "GROUP": "Группа",
+      "PARAMETER": "Параметр",
+      "VALUE": "Значение",
+      "UNIT": "Ед. изм.",
+      "QUALITY": "Качество",
+      "SEVERITY": "Критичность",
+      "TIMESTAMP": "Время",
+      "ALL_GROUPS": "Все группы",
+      "ALL_DEVICES": "Все устройства",
+      "TOTAL_RECORDS": "Всего записей",
+      "NO_DATA": "Нет данных телеметрии"
+    }
+  },
+  "SNOW_COVER": {
+    "TITLE": "Снежный покров (MODSNOW)",
+    "TODAY": "Сегодня",
+    "YESTERDAY": "Вчера",
+    "YEAR_AGO": "Год назад",
+    "AVG_COVER": "Средний покров",
+    "ORGANIZATION": "Организация",
+    "COVER": "Покров, %",
+    "DELTA": "Δ к году назад",
+    "ZONES": "Зоны высотности",
+    "ELEVATION": "Высота, м",
+    "SCA_PCT": "Покров, %",
+    "NO_DATA": "Нет данных",
+    "RESOURCE_DATE": "Дата снимка"
+  },
+  "UZGIDRO_NEWS": {
+    "TITLE": "Новости UzGidro",
+    "TOTAL_NEWS": "Всего новостей",
+    "NEWS_COUNT": "новостей",
+    "NO_NEWS": "Новости не найдены",
+    "VIEWS": "Просмотры",
+    "PUBLISHED": "Опубликовано",
+    "LOAD_ERROR": "Не удалось загрузить новости",
+    "PAGE_REPORT": "Показано {first}-{last} из {totalRecords}"
   }
 }

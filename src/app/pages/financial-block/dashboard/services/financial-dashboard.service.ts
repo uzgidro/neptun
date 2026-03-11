@@ -177,7 +177,7 @@ export class FinancialDashboardService {
         ];
     }
 
-    // Загрузка начальных данных (вызывается при старте)
+    // TODO: Replace hardcoded initial data with real API call - GET /api/financial-dashboard/summary
     loadInitialData(): void {
         // Данные Дебет/Кредит (из debit-credit модуля)
         this.updateDebitCredit({

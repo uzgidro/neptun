@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ApiService, BASE_URL } from '@/core/services/api.service';
+import { ApiService } from '@/core/services/api.service';
 import { Observable } from 'rxjs';
 import { HRDocument, DocumentRequest } from '@/core/interfaces/hrm/hr-documents';
 import { HttpParams } from '@angular/common/http';
@@ -17,43 +17,43 @@ export class HRDocumentsService extends ApiService {
         if (params?.type) httpParams = httpParams.set('type', params.type);
         if (params?.category) httpParams = httpParams.set('category', params.category);
         if (params?.search) httpParams = httpParams.set('search', params.search);
-        return this.http.get<HRDocument[]>(BASE_URL + HR_DOCUMENTS, { params: httpParams });
+        return this.http.get<HRDocument[]>(this.BASE_URL + HR_DOCUMENTS, { params: httpParams });
     }
 
     getDocument(id: number): Observable<HRDocument> {
-        return this.http.get<HRDocument>(BASE_URL + HR_DOCUMENTS + '/' + id);
+        return this.http.get<HRDocument>(this.BASE_URL + HR_DOCUMENTS + '/' + id);
     }
 
     createDocument(formData: FormData): Observable<HRDocument> {
-        return this.http.post<HRDocument>(BASE_URL + HR_DOCUMENTS, formData);
+        return this.http.post<HRDocument>(this.BASE_URL + HR_DOCUMENTS, formData);
     }
 
     updateDocument(id: number, data: Partial<HRDocument>): Observable<HRDocument> {
-        return this.http.patch<HRDocument>(BASE_URL + HR_DOCUMENTS + '/' + id, data);
+        return this.http.patch<HRDocument>(this.BASE_URL + HR_DOCUMENTS + '/' + id, data);
     }
 
     deleteDocument(id: number): Observable<any> {
-        return this.http.delete(BASE_URL + HR_DOCUMENTS + '/' + id);
+        return this.http.delete(this.BASE_URL + HR_DOCUMENTS + '/' + id);
     }
 
     downloadDocument(id: number): Observable<Blob> {
-        return this.http.get(BASE_URL + HR_DOCUMENTS + '/' + id + '/download', { responseType: 'blob' });
+        return this.http.get(this.BASE_URL + HR_DOCUMENTS + '/' + id + '/download', { responseType: 'blob' });
     }
 
     // Document Requests
     getRequests(): Observable<DocumentRequest[]> {
-        return this.http.get<DocumentRequest[]>(BASE_URL + HR_DOCUMENTS + '/requests');
+        return this.http.get<DocumentRequest[]>(this.BASE_URL + HR_DOCUMENTS + '/requests');
     }
 
     createRequest(data: Partial<DocumentRequest>): Observable<DocumentRequest> {
-        return this.http.post<DocumentRequest>(BASE_URL + HR_DOCUMENTS + '/requests', data);
+        return this.http.post<DocumentRequest>(this.BASE_URL + HR_DOCUMENTS + '/requests', data);
     }
 
     approveRequest(id: number): Observable<DocumentRequest> {
-        return this.http.post<DocumentRequest>(BASE_URL + HR_DOCUMENTS + '/requests/' + id + '/approve', {});
+        return this.http.post<DocumentRequest>(this.BASE_URL + HR_DOCUMENTS + '/requests/' + id + '/approve', {});
     }
 
     rejectRequest(id: number, reason: string): Observable<DocumentRequest> {
-        return this.http.post<DocumentRequest>(BASE_URL + HR_DOCUMENTS + '/requests/' + id + '/reject', { reason });
+        return this.http.post<DocumentRequest>(this.BASE_URL + HR_DOCUMENTS + '/requests/' + id + '/reject', { reason });
     }
 }

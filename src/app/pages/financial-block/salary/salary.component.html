@@ -298,14 +298,15 @@
                     </td>
                     <td class="text-center">
                         <div class="flex align-items-center justify-content-center gap-1">
+                            @if (salary.status !== 'paid') {
                             <p-button
-                                *ngIf="salary.status !== 'paid'"
                                 icon="pi pi-check"
                                 [rounded]="true"
                                 [text]="true"
                                 severity="success"
                                 (onClick)="markAsPaid(salary)"
                             ></p-button>
+                            }
                             <p-button
                                 icon="pi pi-pencil"
                                 [rounded]="true"

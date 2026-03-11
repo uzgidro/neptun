@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, Input, OnDestroy, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { ButtonDirective } from 'primeng/button';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { DCInfo } from '@/core/interfaces/debit-credit';
@@ -15,7 +15,8 @@ import { TranslateModule } from '@ngx-translate/core';
     selector: 'app-credit',
     imports: [ButtonDirective, DecimalPipe, DialogModule, TableModule, Ripple, DatePipe, DialogComponent, TranslateModule],
     templateUrl: './credit-widget.component.html',
-    styleUrl: './credit-widget.component.scss'
+    styleUrl: './credit-widget.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CreditWidget implements OnInit, OnDestroy {
     @Input({ required: true }) dc?: DCInfo;
@@ -28,6 +29,7 @@ export class CreditWidget implements OnInit, OnDestroy {
     private currency: number = 0;
     private currencyService: CurrencyService = inject(CurrencyService);
     private financialService: FinancialDashboardService = inject(FinancialDashboardService);
+    private cdr = inject(ChangeDetectorRef);
     private subscription = new Subscription();
 
     get credit(): number {
@@ -49,6 +51,7 @@ export class CreditWidget implements OnInit, OnDestroy {
         this.currencyService.getCurrency().subscribe({
             next: ({ rate }: { rate: number }) => {
                 this.currency = rate;
+                this.cdr.markForCheck();
             }
         });
 
@@ -56,6 +59,7 @@ export class CreditWidget implements OnInit, OnDestroy {
         this.subscription.add(
             this.financialService.dashboardData$.subscribe(() => {
                 this.totalExpenses = this.financialService.getTotalExpenses();
+                this.cdr.markForCheck();
             })
         );
     }

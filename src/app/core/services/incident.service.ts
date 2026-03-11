@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ApiService, BASE_URL } from '@/core/services/api.service';
+import { ApiService } from '@/core/services/api.service';
 import { Observable } from 'rxjs';
 import { HttpParams } from '@angular/common/http';
 import { IncidentDto, IncidentPayload, IncidentResponse } from '@/core/interfaces/incidents';
@@ -16,7 +16,7 @@ export class IncidentService extends ApiService {
         if (date) {
             params = params.set('date', this.dateToYMD(date));
         }
-        return this.http.get<IncidentResponse[]>(BASE_URL + INCIDENTS, { params: params }).pipe(
+        return this.http.get<IncidentResponse[]>(this.BASE_URL + INCIDENTS, { params: params }).pipe(
             map(responseArray => {
                 if (!responseArray) {
                     return [];
@@ -34,14 +34,14 @@ export class IncidentService extends ApiService {
     }
 
     addIncident(formData: FormData): Observable<any> {
-        return this.http.post(BASE_URL + INCIDENTS, formData);
+        return this.http.post(this.BASE_URL + INCIDENTS, formData);
     }
 
     editIncident(id: number, formData: FormData): Observable<any> {
-        return this.http.patch(`${BASE_URL}${INCIDENTS}/${id}`, formData);
+        return this.http.patch(`${this.BASE_URL}${INCIDENTS}/${id}`, formData);
     }
 
     deleteIncident(id: number): Observable<any> {
-        return this.http.delete(`${BASE_URL}${INCIDENTS}/${id}`);
+        return this.http.delete(`${this.BASE_URL}${INCIDENTS}/${id}`);
     }
 }

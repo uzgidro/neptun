@@ -11,7 +11,7 @@ import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
 import { Categories } from '@/core/interfaces/categories';
 import { Select } from 'primeng/select';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-categories',
@@ -29,6 +29,7 @@ export class CategoriesComponent implements OnInit, OnDestroy {
     private apiService = inject(ApiService);
     private fb = inject(FormBuilder);
     private messageService = inject(MessageService);
+    private translate = inject(TranslateService);
     private destroy$ = new Subject<void>();
 
     constructor() {
@@ -77,23 +78,31 @@ export class CategoriesComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
-                    this.messageService.add({ severity: 'success', summary: 'Успех', detail: 'Категоия успешно создана' });
+                    this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('CATEGORIES.CREATED_SUCCESS') });
                     this.loadCategories();
                     this.closeDialog();
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось создать категорию' });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('CATEGORIES.CREATED_ERROR') });
                     console.error(err);
                 }
             });
     }
 
     private loadCategories(): void {
-        this.apiService.getCategories().subscribe({
+        this.apiService.getCategories().pipe(takeUntil(this.destroy$)).subscribe({
             next: (data) => {
                 this.categories = data;
             },
-            error: () => {},
+            error: (err) => {
+                this.messageService.add({
+                    severity: 'error',
+                    summary: this.translate.instant('COMMON.ERROR'),
+                    detail: this.translate.instant('COMMON.LOAD_ERROR')
+                });
+                console.error(err);
+                this.loading = false;
+            },
             complete: () => {
                 this.loading = false;
             }

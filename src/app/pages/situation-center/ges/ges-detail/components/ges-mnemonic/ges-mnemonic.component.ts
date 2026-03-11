@@ -1,11 +1,11 @@
 import { Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { TranslateModule } from '@ngx-translate/core';
 import { ProgressSpinner } from 'primeng/progressspinner';
 
 import { TelemetryEnvelope } from '@/core/interfaces/ges';
+import { sanitizeSvg } from '@/core/utils/sanitize';
 import { getSvgAssetUrl, hasSvgSchema } from './ges-svg-registry';
 
 @Component({
@@ -22,9 +22,8 @@ export class GesMnemonicComponent implements OnChanges {
     @ViewChild('svgContainer', { static: false }) svgContainer!: ElementRef<HTMLDivElement>;
 
     private http = inject(HttpClient);
-    private sanitizer = inject(DomSanitizer);
 
-    svgContent: SafeHtml | null = null;
+    svgContent: string | null = null;
     svgLoading = false;
     svgError = false;
     hasSvg = false;
@@ -60,7 +59,7 @@ export class GesMnemonicComponent implements OnChanges {
 
         this.http.get(url, { responseType: 'text' }).subscribe({
             next: (svgText) => {
-                this.svgContent = this.sanitizer.bypassSecurityTrustHtml(svgText);
+                this.svgContent = sanitizeSvg(svgText);
                 this.svgLoading = false;
                 // Bind telemetry after DOM update
                 setTimeout(() => this.bindTelemetryToSvg(), 0);

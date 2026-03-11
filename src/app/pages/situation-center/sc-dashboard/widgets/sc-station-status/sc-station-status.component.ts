@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { ChartModule } from 'primeng/chart';
 import { Subscription, interval } from 'rxjs';
@@ -18,11 +18,13 @@ interface StatusItem {
     standalone: true,
     imports: [ChartModule, DecimalPipe, TranslateModule],
     templateUrl: './sc-station-status.component.html',
-    styleUrl: './sc-station-status.component.scss'
+    styleUrl: './sc-station-status.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ScStationStatusComponent implements OnInit, OnDestroy {
     private dashboardService = inject(DashboardService);
     private translateService = inject(TranslateService);
+    private cdr = inject(ChangeDetectorRef);
     private refreshSubscription?: Subscription;
 
     statusData: StatusItem[] = [
@@ -54,10 +56,12 @@ export class ScStationStatusComponent implements OnInit, OnDestroy {
                 this.updateChart();
                 this.lastUpdated = new Date();
                 this.loading = false;
+                this.cdr.markForCheck();
             },
             error: (err) => {
                 console.error('Error loading cascades:', err);
                 this.loading = false;
+                this.cdr.markForCheck();
             }
         });
     }

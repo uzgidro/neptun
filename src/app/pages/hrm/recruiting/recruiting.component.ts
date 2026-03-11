@@ -219,14 +219,12 @@ export class RecruitingComponent implements OnInit, OnDestroy {
     private loadData(): void {
         this.loading = true;
 
-        const logError = (label: string, err: any) => console.warn(`[Recruiting] Failed to load ${label}:`, err);
-
         forkJoin({
-            vacancies: this.recruitingService.getVacancies().pipe(catchError((err) => { logError('vacancies', err); return of([] as Vacancy[]); })),
-            candidates: this.recruitingService.getCandidates().pipe(catchError((err) => { logError('candidates', err); return of([] as Candidate[]); })),
-            onboardings: this.recruitingService.getOnboardings().pipe(catchError((err) => { logError('onboardings', err); return of([] as Onboarding[]); })),
-            departments: this.departmentService.getDepartments().pipe(catchError((err) => { logError('departments', err); return of([] as any[]); })),
-            positions: this.positionService.getPositions().pipe(catchError((err) => { logError('positions', err); return of([] as any[]); }))
+            vacancies: this.recruitingService.getVacancies().pipe(catchError(() => of([] as Vacancy[]))),
+            candidates: this.recruitingService.getCandidates().pipe(catchError(() => of([] as Candidate[]))),
+            onboardings: this.recruitingService.getOnboardings().pipe(catchError(() => of([] as Onboarding[]))),
+            departments: this.departmentService.getDepartments().pipe(catchError(() => of([] as any[]))),
+            positions: this.positionService.getPositions().pipe(catchError(() => of([] as any[])))
         })
             .pipe(takeUntil(this.destroy$))
             .subscribe((data) => {

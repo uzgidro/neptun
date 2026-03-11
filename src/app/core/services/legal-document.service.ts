@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { BASE_URL } from './api.service';
+import { ConfigService } from '@/core/services/config.service';
 import {
     LegalDocument,
     LegalDocumentPayload,
@@ -22,7 +22,11 @@ import {
 })
 export class LegalDocumentService {
     private http = inject(HttpClient);
-    private readonly apiUrl = `${BASE_URL}/legal-documents`;
+    private configService = inject(ConfigService);
+
+    private get apiUrl(): string {
+        return `${this.configService.apiBaseUrl}/legal-documents`;
+    }
 
     /**
      * Get all legal documents with optional filters
@@ -131,6 +135,6 @@ export class LegalDocumentService {
             .set('searchtitle', searchTitle)
             .set('page', page.toString());
 
-        return this.http.get<LexSearchResponse>(`${BASE_URL}/lex-search`, { params });
+        return this.http.get<LexSearchResponse>(`${this.configService.apiBaseUrl}/lex-search`, { params });
     }
 }

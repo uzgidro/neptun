@@ -1,32 +1,55 @@
 import { Injectable } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
 
+interface JwtPayload {
+    exp?: number;
+    roles?: string[];
+    [key: string]: any;
+}
+
 @Injectable({
     providedIn: 'root'
 })
 export class JwtService {
+    private token: string | null = null;
+
     getToken(): string | null {
-        return window.localStorage.getItem('access_token');
+        if (this.token && this.isTokenExpired()) {
+            this.token = null;
+            return null;
+        }
+        return this.token;
     }
 
     saveToken(token: string): void {
-        window.localStorage.setItem('access_token', token);
+        this.token = token;
     }
 
     destroyToken(): void {
-        window.localStorage.removeItem('access_token');
+        this.token = null;
     }
 
     isAuthenticated(): boolean {
         return !!this.getToken();
     }
 
-    getDecodedToken(): any {
+    isTokenExpired(): boolean {
+        if (!this.token) return true;
+        try {
+            const decoded = jwtDecode<JwtPayload>(this.token);
+            if (!decoded.exp) return false;
+            // Expire 30s early to prevent sending already-expired tokens
+            return decoded.exp * 1000 < Date.now() + 30000;
+        } catch {
+            return true;
+        }
+    }
+
+    getDecodedToken(): JwtPayload | null {
         const token = this.getToken();
         if (token) {
             try {
-                // 2. Просто вызываем ее
-                return jwtDecode(token);
+                return jwtDecode<JwtPayload>(token);
             } catch (e) {
                 console.error('Error decoding token:', e);
                 return null;

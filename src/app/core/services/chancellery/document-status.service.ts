@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, shareReplay } from 'rxjs';
 import { DocumentStatus, StatusCode, StatusSeverity, STATUS_DISPLAY_CONFIG } from '@/core/interfaces/chancellery/document-status';
-import { BASE_URL } from '@/core/services/api.service';
+import { ConfigService } from '@/core/services/config.service';
 
 /**
  * Service for managing document statuses.
@@ -14,7 +14,11 @@ import { BASE_URL } from '@/core/services/api.service';
 })
 export class DocumentStatusService {
     private http = inject(HttpClient);
-    private readonly apiUrl = `${BASE_URL}/document-statuses`;
+    private configService = inject(ConfigService);
+
+    private get apiUrl(): string {
+        return `${this.configService.apiBaseUrl}/document-statuses`;
+    }
 
     /** Cached statuses observable (shared across subscribers) */
     private statusesCache$?: Observable<DocumentStatus[]>;

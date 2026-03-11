@@ -1,8 +1,10 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LocationService } from '@/core/services/location.service';
 import { WeatherService } from '@/core/services/weather.service';
-import { finalize } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { finalize, takeUntil } from 'rxjs/operators';
 
 interface WeatherData {
     city: string;
@@ -16,34 +18,44 @@ interface WeatherData {
 @Component({
     selector: 'app-weather-widget',
     standalone: true,
-    imports: [CommonModule],
-    templateUrl: './weather.widget.html'
+    imports: [CommonModule, TranslateModule],
+    templateUrl: './weather.widget.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class WeatherWidget implements OnInit {
+export class WeatherWidget implements OnInit, OnDestroy {
     weather: WeatherData | null = null;
     loading: boolean = true;
     errorMessage: string | null = null;
 
     private locationService = inject(LocationService);
     private weatherService = inject(WeatherService);
+    private cdr = inject(ChangeDetectorRef);
+    private translate = inject(TranslateService);
+    private destroy$ = new Subject<void>();
 
     ngOnInit() {
         this.locationService
             .getCurrentPosition()
-            .pipe(finalize(() => (this.loading = false)))
+            .pipe(
+                takeUntil(this.destroy$),
+                finalize(() => {
+                this.loading = false;
+                this.cdr.markForCheck();
+            }))
             .subscribe({
                 next: (position) => {
                     this.loadWeather(position.coords.latitude, position.coords.longitude);
                 },
                 error: (error) => {
                     console.error('Ошибка получения местоположения:', error);
-                    this.errorMessage = 'Не удалось определить ваше местоположение.';
+                    this.errorMessage = this.translate.instant('WEATHER.LOCATION_ERROR');
+                    this.cdr.markForCheck();
                 }
             });
     }
 
     private loadWeather(lat: number, lon: number) {
-        this.weatherService.getWeatherByCoords(lat, lon).subscribe({
+        this.weatherService.getWeatherByCoords(lat, lon).pipe(takeUntil(this.destroy$)).subscribe({
             next: (data) => {
                 this.weather = {
                     city: data.name,
@@ -53,12 +65,19 @@ export class WeatherWidget implements OnInit {
                     humidity: data.main.humidity,
                     wind: Math.round(data.wind.speed)
                 };
+                this.cdr.markForCheck();
             },
             error: (error) => {
                 console.error('Ошибка получения погоды:', error);
-                this.errorMessage = 'Не удалось загрузить прогноз погоды.';
+                this.errorMessage = this.translate.instant('WEATHER.LOAD_ERROR');
+                this.cdr.markForCheck();
             }
         });
+    }
+
+    ngOnDestroy(): void {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 
     private getWeatherIcon(iconCode: string): string {

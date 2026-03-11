@@ -240,7 +240,9 @@
                     <td>
                         <div class="flex flex-column">
                             <span class="font-semibold">{{ repair.objectName }}</span>
-                            <span class="text-sm text-500" *ngIf="repair.description">{{ repair.description }}</span>
+                            @if (repair.description) {
+                                <span class="text-sm text-500">{{ repair.description }}</span>
+                            }
                         </div>
                     </td>
                     <td>
@@ -261,16 +263,22 @@
                         </span>
                     </td>
                     <td class="text-right">
-                        <span *ngIf="repair.actualCost !== null" class="text-green-600 font-semibold">
+                        @if (repair.actualCost !== null) {
+                        <span class="text-green-600 font-semibold">
                             {{ formatCurrency(repair.actualCost) }}
                         </span>
-                        <span *ngIf="repair.actualCost === null" class="text-400">-</span>
+                        } @else {
+                        <span class="text-400">-</span>
+                        }
                     </td>
                     <td class="text-right">
-                        <span *ngIf="getCostVariance(repair) !== null" [ngClass]="getCostVarianceClass(repair)" class="font-semibold">
+                        @if (getCostVariance(repair) !== null) {
+                        <span [ngClass]="getCostVarianceClass(repair)" class="font-semibold">
                             {{ getCostVariance(repair)! >= 0 ? '+' : '' }}{{ formatCurrency(getCostVariance(repair)!) }}
                         </span>
-                        <span *ngIf="getCostVariance(repair) === null" class="text-400">-</span>
+                        } @else {
+                        <span class="text-400">-</span>
+                        }
                     </td>
                     <td>{{ repair.contractor }}</td>
                     <td>

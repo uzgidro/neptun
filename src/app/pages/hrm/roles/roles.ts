@@ -83,11 +83,19 @@ export class Role implements OnInit, OnDestroy {
     }
 
     private loadRoles(): void {
-        this.apiService.getRoles().subscribe({
+        this.apiService.getRoles().pipe(takeUntil(this.destroy$)).subscribe({
             next: (data) => {
                 this.roles = data;
             },
-            error: () => {},
+            error: (err) => {
+                this.messageService.add({
+                    severity: 'error',
+                    summary: this.translate.instant('COMMON.ERROR'),
+                    detail: this.translate.instant('COMMON.LOAD_ERROR')
+                });
+                console.error(err);
+                this.loading = false;
+            },
             complete: () => {
                 this.loading = false;
             }

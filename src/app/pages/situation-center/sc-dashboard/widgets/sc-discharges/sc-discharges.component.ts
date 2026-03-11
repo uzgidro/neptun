@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { Subscription, interval } from 'rxjs';
@@ -17,12 +17,14 @@ interface DischargeItem {
     standalone: true,
     imports: [DecimalPipe, TranslateModule],
     templateUrl: './sc-discharges.component.html',
-    styleUrl: './sc-discharges.component.scss'
+    styleUrl: './sc-discharges.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ScDischargesComponent implements OnInit, OnDestroy {
     private dashboardService = inject(DashboardService);
     private translateService = inject(TranslateService);
     private router = inject(Router);
+    private cdr = inject(ChangeDetectorRef);
     private refreshSubscription?: Subscription;
 
     discharges: DischargeItem[] = [];
@@ -41,10 +43,12 @@ export class ScDischargesComponent implements OnInit, OnDestroy {
                 this.extractDischarges(cascades);
                 this.lastUpdated = new Date();
                 this.loading = false;
+                this.cdr.markForCheck();
             },
             error: (err) => {
                 console.error('Error loading discharges:', err);
                 this.loading = false;
+                this.cdr.markForCheck();
             }
         });
     }
