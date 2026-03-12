@@ -108,6 +108,16 @@ export class MenuComponent implements OnInit {
                                         label: this.t('MENU.SNOW_COVER'),
                                         role: ['rais', 'sc'],
                                         routerLink: ['/snow-cover']
+                                    },
+                                    {
+                                        label: this.t('MENU.FILTRATION_COMPARISON'),
+                                        role: ['sc', 'rais', 'reservoir'],
+                                        routerLink: ['/filtration-comparison']
+                                    },
+                                    {
+                                        label: this.t('MENU.FILTRATION_SETTINGS'),
+                                        role: ['sc'],
+                                        routerLink: ['/filtration-settings']
                                     }
                                 ]
                             },

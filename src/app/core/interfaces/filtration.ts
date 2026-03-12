@@ -14,6 +14,7 @@ export interface Piezometer {
     name: string;
     type: 'pressure' | 'non_pressure';
     norm: number | null;
+    count: number | null;
     sort_order: number;
     created_at: string;
     updated_at: string;
@@ -37,6 +38,7 @@ export interface CreatePiezometerRequest {
     name: string;
     type: 'pressure' | 'non_pressure';
     norm?: number | null;
+    count?: number | null;
     sort_order?: number;
 }
 
@@ -44,5 +46,6 @@ export interface UpdatePiezometerRequest {
     name?: string;
     type?: 'pressure' | 'non_pressure';
     norm?: number | null;
+    count?: number | null;
     sort_order?: number;
 }

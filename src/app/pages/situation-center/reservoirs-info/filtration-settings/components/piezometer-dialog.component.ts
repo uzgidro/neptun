@@ -50,6 +50,7 @@ export class PiezometerDialogComponent implements OnChanges {
             name: ['', Validators.required],
             type: ['pressure', Validators.required],
             norm: [null],
+            count: [null],
             sort_order: [0]
         });
     }
@@ -60,6 +61,7 @@ export class PiezometerDialogComponent implements OnChanges {
             name: [this.piezometer.name, Validators.required],
             type: [this.piezometer.type, Validators.required],
             norm: [this.piezometer.norm],
+            count: [this.piezometer.count],
             sort_order: [this.piezometer.sort_order]
         });
     }
