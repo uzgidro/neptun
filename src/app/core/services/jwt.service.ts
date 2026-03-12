@@ -11,11 +11,16 @@ interface JwtPayload {
     providedIn: 'root'
 })
 export class JwtService {
+    private static readonly TOKEN_KEY = 'access_token';
     private token: string | null = null;
+
+    constructor() {
+        this.token = sessionStorage.getItem(JwtService.TOKEN_KEY);
+    }
 
     getToken(): string | null {
         if (this.token && this.isTokenExpired()) {
-            this.token = null;
+            this.destroyToken();
             return null;
         }
         return this.token;
@@ -23,10 +28,12 @@ export class JwtService {
 
     saveToken(token: string): void {
         this.token = token;
+        sessionStorage.setItem(JwtService.TOKEN_KEY, token);
     }
 
     destroyToken(): void {
         this.token = null;
+        sessionStorage.removeItem(JwtService.TOKEN_KEY);
     }
 
     isAuthenticated(): boolean {
