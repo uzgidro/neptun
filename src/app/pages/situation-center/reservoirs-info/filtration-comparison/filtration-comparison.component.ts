@@ -30,7 +30,7 @@ export class FiltrationComparisonComponent implements OnInit, OnDestroy {
     private destroy$ = new Subject<void>();
 
     data: OrgComparison[] = [];
-    form: FormGroup = new FormGroup({});
+    form!: FormGroup<{ organizations: FormArray<FormGroup<any>> }>;
     selectedDate!: Date;
     loading = false;
     saving = false;
