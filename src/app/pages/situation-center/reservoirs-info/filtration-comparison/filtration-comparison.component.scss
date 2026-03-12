@@ -5,4 +5,8 @@
         z-index: 1;
         background: var(--p-surface-0);
     }
+
+    .app-dark & .sticky-col {
+        background: var(--p-surface-900);
+    }
 }

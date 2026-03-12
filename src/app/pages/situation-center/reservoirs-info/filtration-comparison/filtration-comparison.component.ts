@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, Observable, forkJoin, of } from 'rxjs';
 import { takeUntil, catchError } from 'rxjs/operators';
 import { DatePickerModule } from 'primeng/datepicker';
@@ -24,18 +25,21 @@ import { OrgComparisonCardComponent } from './components/org-comparison-card.com
         OrgComparisonCardComponent
     ],
     templateUrl: './filtration-comparison.component.html',
-    styleUrl: './filtration-comparison.component.scss'
+    styleUrl: './filtration-comparison.component.scss',
+    providers: [ConfirmationService]
 })
 export class FiltrationComparisonComponent implements OnInit, OnDestroy {
     private destroy$ = new Subject<void>();
 
     data: OrgComparison[] = [];
-    form!: FormGroup<{ organizations: FormArray<FormGroup<any>> }>;
+    form: FormGroup<{ organizations: FormArray<FormGroup<any>> }> | undefined;
     selectedDate!: Date;
     loading = false;
     saving = false;
 
     constructor(
+        private route: ActivatedRoute,
+        private router: Router,
         private comparisonService: FiltrationComparisonService,
         private messageService: MessageService,
         private confirmationService: ConfirmationService,
@@ -43,10 +47,16 @@ export class FiltrationComparisonComponent implements OnInit, OnDestroy {
     ) {}
 
     ngOnInit(): void {
-        const yesterday = new Date();
-        yesterday.setDate(yesterday.getDate() - 1);
-        this.selectedDate = yesterday;
-        this.loadComparison(this.dateToYMD(yesterday));
+        const dateParam = this.route.snapshot.queryParamMap.get('date');
+        if (dateParam && /^\d{4}-\d{2}-\d{2}$/.test(dateParam)) {
+            const [y, m, d] = dateParam.split('-').map(Number);
+            this.selectedDate = new Date(y, m - 1, d);
+        } else {
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            this.selectedDate = yesterday;
+        }
+        this.loadComparison(this.dateToYMD(this.selectedDate));
     }
 
     ngOnDestroy(): void {
@@ -55,7 +65,7 @@ export class FiltrationComparisonComponent implements OnInit, OnDestroy {
     }
 
     onDateChange(date: Date): void {
-        if (this.form.dirty) {
+        if (this.form?.dirty) {
             this.confirmationService.confirm({
                 message: this.translate.instant('FILTRATION.UNSAVED_CHANGES'),
                 accept: () => {
@@ -73,6 +83,7 @@ export class FiltrationComparisonComponent implements OnInit, OnDestroy {
     }
 
     private loadComparison(date: string): void {
+        this.router.navigate([], { queryParams: { date }, queryParamsHandling: 'merge', replaceUrl: true });
         this.loading = true;
         this.comparisonService.getComparison(date)
             .pipe(takeUntil(this.destroy$))
@@ -124,7 +135,7 @@ export class FiltrationComparisonComponent implements OnInit, OnDestroy {
     }
 
     get orgFormArray(): FormArray {
-        return this.form.get('organizations') as unknown as FormArray;
+        return this.form!.get('organizations') as unknown as FormArray;
     }
 
     getOrgFormGroup(index: number): FormGroup {
@@ -204,7 +215,7 @@ export class FiltrationComparisonComponent implements OnInit, OnDestroy {
     }
 
     canDeactivate(): boolean | Observable<boolean> {
-        if (!this.form.dirty) return true;
+        if (!this.form?.dirty) return true;
         return new Observable<boolean>(observer => {
             this.confirmationService.confirm({
                 message: this.translate.instant('FILTRATION.UNSAVED_CHANGES'),

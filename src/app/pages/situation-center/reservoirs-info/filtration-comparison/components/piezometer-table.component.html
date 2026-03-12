@@ -3,13 +3,13 @@
         <h4 class="text-sm font-semibold mb-2">{{ group.label | translate }} ({{ group.count }})</h4>
         <table class="w-full border-collapse text-sm">
             <thead>
-                <tr class="bg-surface-100">
-                    <th class="sticky-col border p-2 text-left min-w-24">{{ 'FILTRATION.DATE' | translate }}</th>
+                <tr class="bg-surface-100 dark:bg-surface-800">
+                    <th class="sticky-col border border-surface-200 dark:border-surface-700 p-2 text-left min-w-24">{{ 'FILTRATION.DATE' | translate }}</th>
                     @for (p of group.currentItems; track p.id) {
-                        <th class="border p-2 text-center min-w-20">{{ p.name }}</th>
+                        <th class="border border-surface-200 dark:border-surface-700 p-2 text-center min-w-20">{{ p.name }}</th>
                         @if (p.norm !== null) {
-                            <th class="border p-2 text-center min-w-16">{{ 'FILTRATION.NORM' | translate }}</th>
-                            <th class="border p-2 text-center min-w-16">{{ 'FILTRATION.DEVIATION' | translate }}</th>
+                            <th class="border border-surface-200 dark:border-surface-700 p-2 text-center min-w-16">{{ 'FILTRATION.NORM' | translate }}</th>
+                            <th class="border border-surface-200 dark:border-surface-700 p-2 text-center min-w-16">{{ 'FILTRATION.DEVIATION' | translate }}</th>
                         }
                     }
                 </tr>
@@ -17,52 +17,54 @@
             <tbody>
                 <!-- Current row -->
                 <tr>
-                    <td class="sticky-col border p-2 font-semibold">{{ currentDate }}</td>
+                    <td class="sticky-col border border-surface-200 dark:border-surface-700 p-2 font-semibold">{{ currentDate }}</td>
                     @for (p of group.currentItems; track p.id; let j = $index) {
-                        <td class="border p-1 text-center" [class.bg-red-100]="exceedsNorm(p, currentFormArray, group.currentIndices[j])">
+                        <td class="border border-surface-200 dark:border-surface-700 p-1 text-center"
+                            [ngClass]="{'bg-red-100 dark:bg-red-900/30': exceedsNorm(p, currentFormArray, group.currentIndices[j])}">
                             <p-inputNumber
                                 [formControl]="$any(currentFormArray.at(group.currentIndices[j]).get('level'))"
                                 mode="decimal" [maxFractionDigits]="2" [minFractionDigits]="0"
                                 [inputStyle]="{'width': '5rem', 'text-align': 'center'}" />
                         </td>
                         @if (p.norm !== null) {
-                            <td class="border p-2 text-center text-surface-500">{{ p.norm }}</td>
-                            <td class="border p-2 text-center">{{ getDeviation(p, currentFormArray, group.currentIndices[j]) ?? '—' }}</td>
+                            <td class="border border-surface-200 dark:border-surface-700 p-2 text-center text-surface-500">{{ p.norm }}</td>
+                            <td class="border border-surface-200 dark:border-surface-700 p-2 text-center">{{ getDeviation(p, currentFormArray, group.currentIndices[j]) ?? '—' }}</td>
                         }
                     }
                 </tr>
 
                 <!-- Delta row -->
                 @if (group.historicalItems) {
-                    <tr class="bg-surface-50 text-xs text-surface-500">
-                        <td class="sticky-col border p-2">{{ 'FILTRATION.DEVIATION' | translate }}</td>
+                    <tr class="bg-surface-50 dark:bg-surface-900 text-xs text-surface-500">
+                        <td class="sticky-col border border-surface-200 dark:border-surface-700 p-2">{{ 'FILTRATION.DEVIATION' | translate }}</td>
                         @for (p of group.currentItems; track p.id; let j = $index) {
-                            <td class="border p-2 text-center">
+                            <td class="border border-surface-200 dark:border-surface-700 p-2 text-center">
                                 @let delta = getDelta(group.currentIndices[j], group.historicalIndices[j]);
                                 @if (delta !== null) {
                                     {{ delta >= 0 ? '+' : '' }}{{ delta.toFixed(2) }}
                                 } @else { — }
                             </td>
                             @if (p.norm !== null) {
-                                <td class="border p-2"></td>
-                                <td class="border p-2"></td>
+                                <td class="border border-surface-200 dark:border-surface-700 p-2"></td>
+                                <td class="border border-surface-200 dark:border-surface-700 p-2"></td>
                             }
                         }
                     </tr>
 
                     <!-- Historical row -->
                     <tr>
-                        <td class="sticky-col border p-2 font-semibold">{{ historicalDate }}</td>
+                        <td class="sticky-col border border-surface-200 dark:border-surface-700 p-2 font-semibold">{{ historicalDate }}</td>
                         @for (p of group.historicalItems!; track p.id; let j = $index) {
-                            <td class="border p-1 text-center" [class.bg-red-100]="exceedsNorm(p, historicalFormArray!, group.historicalIndices[j])">
+                            <td class="border border-surface-200 dark:border-surface-700 p-1 text-center"
+                                [ngClass]="{'bg-red-100 dark:bg-red-900/30': exceedsNorm(p, historicalFormArray!, group.historicalIndices[j])}">
                                 <p-inputNumber
                                     [formControl]="$any(historicalFormArray!.at(group.historicalIndices[j]).get('level'))"
                                     mode="decimal" [maxFractionDigits]="2" [minFractionDigits]="0"
                                     [inputStyle]="{'width': '5rem', 'text-align': 'center'}" />
                             </td>
                             @if (p.norm !== null) {
-                                <td class="border p-2 text-center text-surface-500">{{ p.norm }}</td>
-                                <td class="border p-2 text-center">{{ getDeviation(p, historicalFormArray!, group.historicalIndices[j]) ?? '—' }}</td>
+                                <td class="border border-surface-200 dark:border-surface-700 p-2 text-center text-surface-500">{{ p.norm }}</td>
+                                <td class="border border-surface-200 dark:border-surface-700 p-2 text-center">{{ getDeviation(p, historicalFormArray!, group.historicalIndices[j]) ?? '—' }}</td>
                             }
                         }
                     </tr>
