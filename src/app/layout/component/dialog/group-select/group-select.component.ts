@@ -1,4 +1,4 @@
-import { Component, forwardRef, inject, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, forwardRef, inject, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 import { FloatLabel } from 'primeng/floatlabel';
 import { Select } from 'primeng/select';
@@ -34,6 +34,8 @@ export class GroupSelectComponent implements ControlValueAccessor, OnChanges {
 
     @Input() items: any[] = [];
     filteredItems: any[] = [];
+
+    @ViewChild('filterInput') filterInput!: ElementRef<HTMLInputElement>;
 
     internalValue: any = null;
     isDisabled: boolean = false;
@@ -90,6 +92,10 @@ export class GroupSelectComponent implements ControlValueAccessor, OnChanges {
                 return filteredItems.length ? { ...group, items: filteredItems } : null;
             })
             .filter(Boolean);
+    }
+
+    onDropdownShow(): void {
+        setTimeout(() => this.filterInput?.nativeElement.focus());
     }
 
     onValueChange(newValue: any) {

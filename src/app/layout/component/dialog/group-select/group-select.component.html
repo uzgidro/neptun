@@ -7,6 +7,7 @@
             [(ngModel)]="internalValue"
             (onChange)="onValueChange($event.value)"
             (onBlur)="onTouched()"
+            (onShow)="onDropdownShow()"
 
             optionLabel="name"
             [loading]="loading"
@@ -29,7 +30,7 @@
                 <div class="p-1">
                     <p-iconfield class="w-full">
                         <p-inputicon class="pi pi-search" />
-                        <input type="text" pInputText class="w-full" (input)="onFilterInput($event)" placeholder="Поиск..." role="searchbox" autocomplete="off" />
+                        <input #filterInput type="text" pInputText class="w-full" (input)="onFilterInput($event)" placeholder="Поиск..." role="searchbox" autocomplete="off" />
                     </p-iconfield>
                 </div>
             </ng-template>

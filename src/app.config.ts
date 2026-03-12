@@ -14,7 +14,6 @@ import localeRu from '@angular/common/locales/ru';
 import { provideTranslateService } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { GlobalErrorHandler } from '@/core/services/global-error-handler.service';
-
 registerLocaleData(localeRu);
 
 export const appConfig: ApplicationConfig = {
