@@ -2,7 +2,7 @@
     <p-floatlabel>
         <p-select
             [inputId]="uniqueId"
-            [options]="items"
+            [options]="filteredItems"
 
             [(ngModel)]="internalValue"
             (onChange)="onValueChange($event.value)"
@@ -16,12 +16,23 @@
             [showClear]="true"
             [group]="true"
             [filter]="true"
+            filterBy="name"
             [appendTo]="'body'"
             [style]="{ width: '100%' }"
             [required]="true"
 
+            [emptyMessage]="emptyFilterMessage"
+            [emptyFilterMessage]="emptyFilterMessage"
             [ngClass]="{ 'ng-invalid ng-dirty': submitted && !internalValue }"
         >
+            <ng-template pTemplate="filter">
+                <div class="p-1">
+                    <p-iconfield class="w-full">
+                        <p-inputicon class="pi pi-search" />
+                        <input type="text" pInputText class="w-full" (input)="onFilterInput($event)" placeholder="Поиск..." role="searchbox" autocomplete="off" />
+                    </p-iconfield>
+                </div>
+            </ng-template>
             <ng-template let-group pTemplate="group">
                 <div class="flex items-center">
                     <span>{{ group.name }}</span>
