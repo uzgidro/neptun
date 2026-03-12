@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormArray, ReactiveFormsModule } from '@angular/forms';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -19,7 +19,8 @@ interface PiezoGroup {
     selector: 'app-piezometer-table',
     standalone: true,
     imports: [CommonModule, ReactiveFormsModule, InputNumberModule, TranslateModule],
-    templateUrl: './piezometer-table.component.html'
+    templateUrl: './piezometer-table.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PiezometerTableComponent implements OnChanges {
     @Input() currentPiezometers: PiezoReading[] = [];

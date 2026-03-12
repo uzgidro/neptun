@@ -26,6 +26,11 @@ export class PiezometerDialogComponent implements OnChanges {
 
     constructor(private fb: FormBuilder, private translate: TranslateService) {
         this.initForm();
+        this.buildTypeOptions();
+        this.translate.onLangChange.subscribe(() => this.buildTypeOptions());
+    }
+
+    private buildTypeOptions(): void {
         this.typeOptions = [
             { label: this.translate.instant('FILTRATION.PRESSURE'), value: 'pressure' },
             { label: this.translate.instant('FILTRATION.NON_PRESSURE'), value: 'non_pressure' }

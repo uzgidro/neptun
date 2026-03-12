@@ -16,7 +16,7 @@
             [currentDate]="org.current.date"
             [historicalDate]="org.historical?.date ?? null"
             [currentFormArray]="$any(formGroup.get('current.locations'))"
-            [historicalFormArray]="$any(formGroup.get('historical.locations'))" />
+            [historicalFormArray]="org.historical ? $any(formGroup.get('historical.locations')) : null" />
 
         <!-- Piezometer table -->
         <app-piezometer-table
@@ -26,6 +26,6 @@
             [currentDate]="org.current.date"
             [historicalDate]="org.historical?.date ?? null"
             [currentFormArray]="$any(formGroup.get('current.piezometers'))"
-            [historicalFormArray]="$any(formGroup.get('historical.piezometers'))" />
+            [historicalFormArray]="org.historical ? $any(formGroup.get('historical.piezometers')) : null" />
     </div>
 </div>

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormArray, ReactiveFormsModule } from '@angular/forms';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -9,7 +9,8 @@ import { LocationReading } from '@/core/interfaces/filtration-comparison';
     selector: 'app-filtration-table',
     standalone: true,
     imports: [CommonModule, ReactiveFormsModule, InputNumberModule, TranslateModule],
-    templateUrl: './filtration-table.component.html'
+    templateUrl: './filtration-table.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FiltrationTableComponent {
     @Input() currentLocations: LocationReading[] = [];
@@ -19,15 +20,20 @@ export class FiltrationTableComponent {
     @Input() currentFormArray!: FormArray;
     @Input() historicalFormArray: FormArray | null = null;
 
-    get totalCurrent(): number | null {
-        const values = this.currentLocations.map(l => l.flow_rate).filter(v => v !== null) as number[];
+    private sumFromFormArray(formArray: FormArray | null): number | null {
+        if (!formArray) return null;
+        const values = formArray.controls
+            .map(c => c.get('flow_rate')?.value)
+            .filter(v => v !== null && v !== undefined) as number[];
         return values.length ? values.reduce((a, b) => a + b, 0) : null;
     }
 
+    get totalCurrent(): number | null {
+        return this.sumFromFormArray(this.currentFormArray);
+    }
+
     get totalHistorical(): number | null {
-        if (!this.historicalLocations) return null;
-        const values = this.historicalLocations.map(l => l.flow_rate).filter(v => v !== null) as number[];
-        return values.length ? values.reduce((a, b) => a + b, 0) : null;
+        return this.sumFromFormArray(this.historicalFormArray);
     }
 
     get totalDelta(): number | null {

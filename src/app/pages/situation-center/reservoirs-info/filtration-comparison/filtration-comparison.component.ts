@@ -144,27 +144,29 @@ export class FiltrationComparisonComponent implements OnInit, OnDestroy {
             const orgName = this.data[i].organization_name;
             orgNames.push(orgName);
 
-            // Current
+            // Current (only if dirty)
             const currentFg = orgFg.get('current') as FormGroup;
-            const currentReq: UpsertRequest = {
-                organization_id: orgId,
-                date: currentFg.get('date')!.value,
-                filtration_measurements: (currentFg.get('locations') as FormArray).controls.map((c: any) => ({
-                    location_id: c.get('location_id').value,
-                    flow_rate: c.get('flow_rate').value
-                })),
-                piezometer_measurements: (currentFg.get('piezometers') as FormArray).controls.map((c: any) => ({
-                    piezometer_id: c.get('piezometer_id').value,
-                    level: c.get('level').value
-                }))
-            };
-            requests.push(
-                this.comparisonService.saveMeasurements(currentReq).pipe(catchError(() => of({ error: true, org: orgName })))
-            );
+            if (currentFg.dirty) {
+                const currentReq: UpsertRequest = {
+                    organization_id: orgId,
+                    date: currentFg.get('date')!.value,
+                    filtration_measurements: (currentFg.get('locations') as FormArray).controls.map((c: any) => ({
+                        location_id: c.get('location_id').value,
+                        flow_rate: c.get('flow_rate').value
+                    })),
+                    piezometer_measurements: (currentFg.get('piezometers') as FormArray).controls.map((c: any) => ({
+                        piezometer_id: c.get('piezometer_id').value,
+                        level: c.get('level').value
+                    }))
+                };
+                requests.push(
+                    this.comparisonService.saveMeasurements(currentReq).pipe(catchError(() => of({ error: true, org: orgName })))
+                );
+            }
 
-            // Historical (if exists)
+            // Historical (only if dirty and exists)
             const histFg = orgFg.get('historical');
-            if (histFg?.value && histFg instanceof FormGroup) {
+            if (histFg?.dirty && histFg instanceof FormGroup) {
                 const histReq: UpsertRequest = {
                     organization_id: orgId,
                     date: histFg.get('date')!.value,
@@ -202,6 +204,10 @@ export class FiltrationComparisonComponent implements OnInit, OnDestroy {
                 }
                 this.saving = false;
                 this.loadComparison(this.dateToYMD(this.selectedDate));
+            },
+            error: () => {
+                this.saving = false;
+                this.messageService.add({ severity: 'error', summary: this.translate.instant('FILTRATION.SAVE_ERROR') });
             }
         });
     }
