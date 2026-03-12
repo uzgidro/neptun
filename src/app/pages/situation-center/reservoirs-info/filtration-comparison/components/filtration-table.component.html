@@ -1,0 +1,73 @@
+<div class="overflow-x-auto">
+    <table class="w-full border-collapse text-sm">
+        <thead>
+            <tr class="bg-surface-100">
+                <th class="sticky-col border p-2 text-left min-w-24">{{ 'FILTRATION.DATE' | translate }}</th>
+                <th class="border p-2 text-center min-w-20">{{ 'FILTRATION.TOTAL' | translate }}</th>
+                @for (loc of currentLocations; track loc.id) {
+                    <th class="border p-2 text-center min-w-20">{{ loc.name }}</th>
+                    @if (loc.norm !== null) {
+                        <th class="border p-2 text-center min-w-16">{{ 'FILTRATION.NORM' | translate }}</th>
+                        <th class="border p-2 text-center min-w-16">{{ 'FILTRATION.DEVIATION' | translate }}</th>
+                    }
+                }
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Current row -->
+            <tr>
+                <td class="sticky-col border p-2 font-semibold">{{ currentDate }}</td>
+                <td class="border p-2 text-center">{{ totalCurrent ?? '—' }}</td>
+                @for (loc of currentLocations; track loc.id; let i = $index) {
+                    <td class="border p-1 text-center" [class.bg-red-100]="exceedsNorm(loc, currentFormArray, i)">
+                        <p-inputNumber
+                            [formControl]="currentFormArray.at(i).get('flow_rate')"
+                            mode="decimal" [maxFractionDigits]="2" [minFractionDigits]="0"
+                            [inputStyle]="{'width': '5rem', 'text-align': 'center'}" />
+                    </td>
+                    @if (loc.norm !== null) {
+                        <td class="border p-2 text-center text-surface-500">{{ loc.norm }}</td>
+                        <td class="border p-2 text-center">{{ getDeviation(loc, currentFormArray, i) ?? '—' }}</td>
+                    }
+                }
+            </tr>
+
+            <!-- Delta row (only if historical exists) -->
+            @if (historicalLocations) {
+                <tr class="bg-surface-50 text-xs text-surface-500">
+                    <td class="sticky-col border p-2">{{ 'FILTRATION.DEVIATION' | translate }}</td>
+                    <td class="border p-2 text-center">{{ totalDelta !== null ? (totalDelta >= 0 ? '+' : '') + totalDelta.toFixed(2) : '—' }}</td>
+                    @for (loc of currentLocations; track loc.id; let i = $index) {
+                        <td class="border p-2 text-center">
+                            @if (getDelta(i) !== null) {
+                                {{ getDelta(i)! >= 0 ? '+' : '' }}{{ getDelta(i)!.toFixed(2) }}
+                            } @else { — }
+                        </td>
+                        @if (loc.norm !== null) {
+                            <td class="border p-2"></td>
+                            <td class="border p-2"></td>
+                        }
+                    }
+                </tr>
+
+                <!-- Historical row -->
+                <tr>
+                    <td class="sticky-col border p-2 font-semibold">{{ historicalDate }}</td>
+                    <td class="border p-2 text-center">{{ totalHistorical ?? '—' }}</td>
+                    @for (loc of historicalLocations!; track loc.id; let i = $index) {
+                        <td class="border p-1 text-center" [class.bg-red-100]="exceedsNorm(loc, historicalFormArray!, i)">
+                            <p-inputNumber
+                                [formControl]="historicalFormArray!.at(i).get('flow_rate')"
+                                mode="decimal" [maxFractionDigits]="2" [minFractionDigits]="0"
+                                [inputStyle]="{'width': '5rem', 'text-align': 'center'}" />
+                        </td>
+                        @if (loc.norm !== null) {
+                            <td class="border p-2 text-center text-surface-500">{{ loc.norm }}</td>
+                            <td class="border p-2 text-center">{{ getDeviation(loc, historicalFormArray!, i) ?? '—' }}</td>
+                        }
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

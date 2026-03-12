@@ -1,0 +1,72 @@
+@for (group of groups; track group.type) {
+    <div class="overflow-x-auto mt-4">
+        <h4 class="text-sm font-semibold mb-2">{{ group.label | translate }} ({{ group.count }})</h4>
+        <table class="w-full border-collapse text-sm">
+            <thead>
+                <tr class="bg-surface-100">
+                    <th class="sticky-col border p-2 text-left min-w-24">{{ 'FILTRATION.DATE' | translate }}</th>
+                    @for (p of group.currentItems; track p.id) {
+                        <th class="border p-2 text-center min-w-20">{{ p.name }}</th>
+                        @if (p.norm !== null) {
+                            <th class="border p-2 text-center min-w-16">{{ 'FILTRATION.NORM' | translate }}</th>
+                            <th class="border p-2 text-center min-w-16">{{ 'FILTRATION.DEVIATION' | translate }}</th>
+                        }
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Current row -->
+                <tr>
+                    <td class="sticky-col border p-2 font-semibold">{{ currentDate }}</td>
+                    @for (p of group.currentItems; track p.id; let j = $index) {
+                        <td class="border p-1 text-center" [class.bg-red-100]="exceedsNorm(p, currentFormArray, group.currentIndices[j])">
+                            <p-inputNumber
+                                [formControl]="currentFormArray.at(group.currentIndices[j]).get('level')"
+                                mode="decimal" [maxFractionDigits]="2" [minFractionDigits]="0"
+                                [inputStyle]="{'width': '5rem', 'text-align': 'center'}" />
+                        </td>
+                        @if (p.norm !== null) {
+                            <td class="border p-2 text-center text-surface-500">{{ p.norm }}</td>
+                            <td class="border p-2 text-center">{{ getDeviation(p, currentFormArray, group.currentIndices[j]) ?? '—' }}</td>
+                        }
+                    }
+                </tr>
+
+                <!-- Delta row -->
+                @if (group.historicalItems) {
+                    <tr class="bg-surface-50 text-xs text-surface-500">
+                        <td class="sticky-col border p-2">{{ 'FILTRATION.DEVIATION' | translate }}</td>
+                        @for (p of group.currentItems; track p.id; let j = $index) {
+                            <td class="border p-2 text-center">
+                                @if (getDelta(group.currentIndices[j], group.historicalIndices[j]) !== null) {
+                                    {{ getDelta(group.currentIndices[j], group.historicalIndices[j])! >= 0 ? '+' : '' }}{{ getDelta(group.currentIndices[j], group.historicalIndices[j])!.toFixed(2) }}
+                                } @else { — }
+                            </td>
+                            @if (p.norm !== null) {
+                                <td class="border p-2"></td>
+                                <td class="border p-2"></td>
+                            }
+                        }
+                    </tr>
+
+                    <!-- Historical row -->
+                    <tr>
+                        <td class="sticky-col border p-2 font-semibold">{{ historicalDate }}</td>
+                        @for (p of group.historicalItems!; track p.id; let j = $index) {
+                            <td class="border p-1 text-center" [class.bg-red-100]="exceedsNorm(p, historicalFormArray!, group.historicalIndices[j])">
+                                <p-inputNumber
+                                    [formControl]="historicalFormArray!.at(group.historicalIndices[j]).get('level')"
+                                    mode="decimal" [maxFractionDigits]="2" [minFractionDigits]="0"
+                                    [inputStyle]="{'width': '5rem', 'text-align': 'center'}" />
+                            </td>
+                            @if (p.norm !== null) {
+                                <td class="border p-2 text-center text-surface-500">{{ p.norm }}</td>
+                                <td class="border p-2 text-center">{{ getDeviation(p, historicalFormArray!, group.historicalIndices[j]) ?? '—' }}</td>
+                            }
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

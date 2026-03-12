@@ -1,0 +1,31 @@
+<div class="border border-surface rounded-lg mb-6">
+    <!-- Header -->
+    <div class="bg-surface-100 p-4 rounded-t-lg">
+        <h3 class="text-lg font-bold m-0">{{ org.organization_name }}</h3>
+        <div class="flex gap-6 mt-2 text-sm">
+            <span>{{ 'FILTRATION.LEVEL' | translate }}: <strong>{{ org.current.level ?? '—' }}</strong></span>
+            <span>{{ 'FILTRATION.VOLUME' | translate }}: <strong>{{ org.current.volume ?? '—' }}</strong></span>
+        </div>
+    </div>
+
+    <div class="p-4 flex flex-col gap-6">
+        <!-- Filtration table -->
+        <app-filtration-table
+            [currentLocations]="org.current.locations"
+            [historicalLocations]="org.historical?.locations ?? null"
+            [currentDate]="org.current.date"
+            [historicalDate]="org.historical?.date ?? null"
+            [currentFormArray]="formGroup.get('current.locations')"
+            [historicalFormArray]="formGroup.get('historical.locations')" />
+
+        <!-- Piezometer table -->
+        <app-piezometer-table
+            [currentPiezometers]="org.current.piezometers"
+            [historicalPiezometers]="org.historical?.piezometers ?? null"
+            [piezometerCounts]="org.current.piezometer_counts"
+            [currentDate]="org.current.date"
+            [historicalDate]="org.historical?.date ?? null"
+            [currentFormArray]="formGroup.get('current.piezometers')"
+            [historicalFormArray]="formGroup.get('historical.piezometers')" />
+    </div>
+</div>
