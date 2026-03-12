@@ -1,5 +1,6 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router, UrlTree } from '@angular/router';
+import { Observable } from 'rxjs';
 import { AuthService } from '@/core/services/auth.service';
 
 export const authGuard: CanActivateFn = (): boolean | UrlTree => {
@@ -42,5 +43,19 @@ export const positionsGuard: CanActivateFn = (): boolean | UrlTree => {
     const router = inject(Router);
 
     return authService.hasRole(['admin', 'hrm_admin', 'hrm_manager', 'hrm_employee', 'rais']) ? true : router.createUrlTree(['/notfound']);
+}
+
+export const filtrationGuard: CanActivateFn = (): boolean | UrlTree => {
+    const authService = inject(AuthService);
+    const router = inject(Router);
+
+    return authService.hasRole(['sc', 'rais', 'reservoir']) ? true : router.createUrlTree(['/notfound']);
+}
+
+export const unsavedChangesGuard = (component: any): boolean | Observable<boolean> => {
+    if (component.canDeactivate) {
+        return component.canDeactivate();
+    }
+    return true;
 }
 

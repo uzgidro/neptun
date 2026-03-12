@@ -4,7 +4,7 @@ import { Dashboard } from '@/pages/dashboard/dashboard';
 import { Notfound } from '@/pages/notfound/notfound';
 import { ScDashboardComponent } from '@/pages/situation-center/sc-dashboard/sc-dashboard.component';
 
-import { adminGuard, authGuard, hrmGuard, positionsGuard, raisGuard, scGuard } from '@/core/guards/auth.guard';
+import { adminGuard, authGuard, filtrationGuard, hrmGuard, positionsGuard, raisGuard, scGuard, unsavedChangesGuard } from '@/core/guards/auth.guard';
 
 
 export const appRoutes: Routes = [
@@ -61,6 +61,8 @@ export const appRoutes: Routes = [
             { path: 'incidents', loadComponent: () => import('./app/pages/situation-center/other/incidents/incidents.component').then(m => m.IncidentsComponent), canActivate: [raisGuard] },
             { path: 'reservoir-device', loadComponent: () => import('./app/pages/situation-center/reservoirs-info/reservoirs-device/reservoirs-device.component').then(m => m.ReservoirsDeviceComponent), canActivate: [raisGuard] },
             { path: 'snow-cover', loadComponent: () => import('./app/pages/situation-center/reservoirs-info/snow-cover/snow-cover.component').then(m => m.SnowCoverComponent), canActivate: [raisGuard] },
+            { path: 'filtration-settings', loadComponent: () => import('./app/pages/situation-center/reservoirs-info/filtration-settings/filtration-settings.component').then(m => m.FiltrationSettingsComponent), canActivate: [scGuard] },
+            { path: 'filtration-comparison', loadComponent: () => import('./app/pages/situation-center/reservoirs-info/filtration-comparison/filtration-comparison.component').then(m => m.FiltrationComparisonComponent), canActivate: [filtrationGuard], canDeactivate: [unsavedChangesGuard] },
             { path: 'chancellery/pending-signatures', loadComponent: () => import('./app/pages/chancellery/pending-signatures/pending-signatures.component').then(m => m.PendingSignaturesComponent), canActivate: [raisGuard] },
             { path: 'chancellery/orders', loadComponent: () => import('./app/pages/chancellery/orders/orders.component').then(m => m.OrdersComponent), canActivate: [raisGuard] },
             { path: 'chancellery/reports', loadComponent: () => import('./app/pages/chancellery/reports/reports.component').then(m => m.ReportsComponent), canActivate: [raisGuard] },
