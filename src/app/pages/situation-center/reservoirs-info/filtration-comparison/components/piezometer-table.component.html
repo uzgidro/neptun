@@ -21,7 +21,7 @@
                     @for (p of group.currentItems; track p.id; let j = $index) {
                         <td class="border p-1 text-center" [class.bg-red-100]="exceedsNorm(p, currentFormArray, group.currentIndices[j])">
                             <p-inputNumber
-                                [formControl]="currentFormArray.at(group.currentIndices[j]).get('level')"
+                                [formControl]="$any(currentFormArray.at(group.currentIndices[j]).get('level'))"
                                 mode="decimal" [maxFractionDigits]="2" [minFractionDigits]="0"
                                 [inputStyle]="{'width': '5rem', 'text-align': 'center'}" />
                         </td>
@@ -55,7 +55,7 @@
                         @for (p of group.historicalItems!; track p.id; let j = $index) {
                             <td class="border p-1 text-center" [class.bg-red-100]="exceedsNorm(p, historicalFormArray!, group.historicalIndices[j])">
                                 <p-inputNumber
-                                    [formControl]="historicalFormArray!.at(group.historicalIndices[j]).get('level')"
+                                    [formControl]="$any(historicalFormArray!.at(group.historicalIndices[j]).get('level'))"
                                     mode="decimal" [maxFractionDigits]="2" [minFractionDigits]="0"
                                     [inputStyle]="{'width': '5rem', 'text-align': 'center'}" />
                             </td>

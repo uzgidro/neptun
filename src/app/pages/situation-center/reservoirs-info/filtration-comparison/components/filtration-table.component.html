@@ -21,7 +21,7 @@
                 @for (loc of currentLocations; track loc.id; let i = $index) {
                     <td class="border p-1 text-center" [class.bg-red-100]="exceedsNorm(loc, currentFormArray, i)">
                         <p-inputNumber
-                            [formControl]="currentFormArray.at(i).get('flow_rate')"
+                            [formControl]="$any(currentFormArray.at(i).get('flow_rate'))"
                             mode="decimal" [maxFractionDigits]="2" [minFractionDigits]="0"
                             [inputStyle]="{'width': '5rem', 'text-align': 'center'}" />
                     </td>
@@ -57,7 +57,7 @@
                     @for (loc of historicalLocations!; track loc.id; let i = $index) {
                         <td class="border p-1 text-center" [class.bg-red-100]="exceedsNorm(loc, historicalFormArray!, i)">
                             <p-inputNumber
-                                [formControl]="historicalFormArray!.at(i).get('flow_rate')"
+                                [formControl]="$any(historicalFormArray!.at(i).get('flow_rate'))"
                                 mode="decimal" [maxFractionDigits]="2" [minFractionDigits]="0"
                                 [inputStyle]="{'width': '5rem', 'text-align': 'center'}" />
                         </td>

@@ -7,27 +7,27 @@
     (save)="onSave()"
     (cancel)="onCancel()">
 
-    <div class="flex flex-col gap-4">
+    <div class="flex flex-col gap-4" [formGroup]="form">
         <div class="flex flex-col gap-2">
             <label for="name">{{ 'FILTRATION.NAME' | translate }}</label>
-            <input pInputText id="name" [formControl]="form.controls['name']" />
+            <input pInputText id="name" formControlName="name" />
         </div>
 
         <div class="flex flex-col gap-2">
             <label for="type">{{ 'FILTRATION.TYPE' | translate }}</label>
-            <p-select id="type" [formControl]="form.controls['type']"
+            <p-select id="type" formControlName="type"
                 [options]="typeOptions" optionLabel="label" optionValue="value" />
         </div>
 
         <div class="flex flex-col gap-2">
             <label for="norm">{{ 'FILTRATION.NORM' | translate }}</label>
-            <p-inputNumber id="norm" [formControl]="form.controls['norm']"
+            <p-inputNumber id="norm" formControlName="norm"
                 mode="decimal" [maxFractionDigits]="2" [minFractionDigits]="0" />
         </div>
 
         <div class="flex flex-col gap-2">
             <label for="sort_order">{{ 'FILTRATION.SORT_ORDER' | translate }}</label>
-            <p-inputNumber id="sort_order" [formControl]="form.controls['sort_order']" />
+            <p-inputNumber id="sort_order" formControlName="sort_order" />
         </div>
     </div>
 </app-dialog>

@@ -1,0 +1,8 @@
+:host ::ng-deep {
+    .sticky-col {
+        position: sticky;
+        left: 0;
+        z-index: 1;
+        background: var(--p-surface-0);
+    }
+}
