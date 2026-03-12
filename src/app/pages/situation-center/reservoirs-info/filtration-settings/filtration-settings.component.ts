@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Subject, forkJoin } from 'rxjs';
+import { Observable, Subject, forkJoin } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
@@ -125,28 +125,14 @@ export class FiltrationSettingsComponent implements OnInit, OnDestroy {
             },
             error: (err) => {
                 this.locationSubmitting = false;
-                const msg = err.status === 409
-                    ? this.translate.instant('FILTRATION.NAME_EXISTS')
-                    : this.translate.instant('FILTRATION.SAVE_ERROR');
-                this.messageService.add({ severity: 'error', summary: msg });
+                this.showSaveError(err);
             }
         });
     }
 
     confirmDeleteLocation(loc: Location): void {
-        this.deleteMessage = this.translate.instant('FILTRATION.DELETE_LOCATION_CONFIRM');
-        this.deleteDialogVisible = true;
-        this.pendingDelete = () => {
-            this.filtrationService.deleteLocation(loc.id)
-                .pipe(takeUntil(this.destroy$))
-                .subscribe({
-                    next: () => {
-                        this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.DELETE') });
-                        this.loadData();
-                    },
-                    error: () => this.messageService.add({ severity: 'error', summary: this.translate.instant('FILTRATION.SAVE_ERROR') })
-                });
-        };
+        this.confirmDelete('FILTRATION.DELETE_LOCATION_CONFIRM', () =>
+            this.filtrationService.deleteLocation(loc.id));
     }
 
     // Piezometer CRUD
@@ -175,33 +161,40 @@ export class FiltrationSettingsComponent implements OnInit, OnDestroy {
             },
             error: (err) => {
                 this.piezometerSubmitting = false;
-                const msg = err.status === 409
-                    ? this.translate.instant('FILTRATION.NAME_EXISTS')
-                    : this.translate.instant('FILTRATION.SAVE_ERROR');
-                this.messageService.add({ severity: 'error', summary: msg });
+                this.showSaveError(err);
             }
         });
     }
 
     confirmDeletePiezometer(p: Piezometer): void {
-        this.deleteMessage = this.translate.instant('FILTRATION.DELETE_PIEZOMETER_CONFIRM');
-        this.deleteDialogVisible = true;
-        this.pendingDelete = () => {
-            this.filtrationService.deletePiezometer(p.id)
-                .pipe(takeUntil(this.destroy$))
-                .subscribe({
-                    next: () => {
-                        this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.DELETE') });
-                        this.loadData();
-                    },
-                    error: () => this.messageService.add({ severity: 'error', summary: this.translate.instant('FILTRATION.SAVE_ERROR') })
-                });
-        };
+        this.confirmDelete('FILTRATION.DELETE_PIEZOMETER_CONFIRM', () =>
+            this.filtrationService.deletePiezometer(p.id));
     }
 
     onDeleteConfirm(): void {
         this.pendingDelete?.();
         this.deleteDialogVisible = false;
         this.pendingDelete = null;
+    }
+
+    private showSaveError(err: any): void {
+        const msg = err.status === 409
+            ? this.translate.instant('FILTRATION.NAME_EXISTS')
+            : this.translate.instant('FILTRATION.SAVE_ERROR');
+        this.messageService.add({ severity: 'error', summary: msg });
+    }
+
+    private confirmDelete(messageKey: string, deleteFn: () => Observable<any>): void {
+        this.deleteMessage = this.translate.instant(messageKey);
+        this.deleteDialogVisible = true;
+        this.pendingDelete = () => {
+            deleteFn().pipe(takeUntil(this.destroy$)).subscribe({
+                next: () => {
+                    this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.DELETE') });
+                    this.loadData();
+                },
+                error: () => this.messageService.add({ severity: 'error', summary: this.translate.instant('FILTRATION.SAVE_ERROR') })
+            });
+        };
     }
 }

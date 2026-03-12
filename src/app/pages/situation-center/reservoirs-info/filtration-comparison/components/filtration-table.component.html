@@ -39,8 +39,9 @@
                     <td class="border p-2 text-center">{{ totalDelta !== null ? (totalDelta >= 0 ? '+' : '') + totalDelta.toFixed(2) : '—' }}</td>
                     @for (loc of currentLocations; track loc.id; let i = $index) {
                         <td class="border p-2 text-center">
-                            @if (getDelta(i) !== null) {
-                                {{ getDelta(i)! >= 0 ? '+' : '' }}{{ getDelta(i)!.toFixed(2) }}
+                            @let delta = getDelta(i);
+                            @if (delta !== null) {
+                                {{ delta >= 0 ? '+' : '' }}{{ delta.toFixed(2) }}
                             } @else { — }
                         </td>
                         @if (loc.norm !== null) {

@@ -131,10 +131,24 @@ export class FiltrationComparisonComponent implements OnInit, OnDestroy {
         return this.orgFormArray.at(index) as FormGroup;
     }
 
+    private buildUpsertRequest(orgId: number, fg: FormGroup): UpsertRequest {
+        return {
+            organization_id: orgId,
+            date: fg.get('date')!.value,
+            filtration_measurements: (fg.get('locations') as FormArray).controls.map((c: any) => ({
+                location_id: c.get('location_id').value,
+                flow_rate: c.get('flow_rate').value
+            })),
+            piezometer_measurements: (fg.get('piezometers') as FormArray).controls.map((c: any) => ({
+                piezometer_id: c.get('piezometer_id').value,
+                level: c.get('level').value
+            }))
+        };
+    }
+
     save(): void {
         this.saving = true;
         const requests: Observable<any>[] = [];
-        const orgNames: string[] = [];
 
         for (let i = 0; i < this.data.length; i++) {
             const orgFg = this.getOrgFormGroup(i);
@@ -142,45 +156,22 @@ export class FiltrationComparisonComponent implements OnInit, OnDestroy {
 
             const orgId = this.data[i].organization_id;
             const orgName = this.data[i].organization_name;
-            orgNames.push(orgName);
 
             // Current (only if dirty)
             const currentFg = orgFg.get('current') as FormGroup;
             if (currentFg.dirty) {
-                const currentReq: UpsertRequest = {
-                    organization_id: orgId,
-                    date: currentFg.get('date')!.value,
-                    filtration_measurements: (currentFg.get('locations') as FormArray).controls.map((c: any) => ({
-                        location_id: c.get('location_id').value,
-                        flow_rate: c.get('flow_rate').value
-                    })),
-                    piezometer_measurements: (currentFg.get('piezometers') as FormArray).controls.map((c: any) => ({
-                        piezometer_id: c.get('piezometer_id').value,
-                        level: c.get('level').value
-                    }))
-                };
                 requests.push(
-                    this.comparisonService.saveMeasurements(currentReq).pipe(catchError(() => of({ error: true, org: orgName })))
+                    this.comparisonService.saveMeasurements(this.buildUpsertRequest(orgId, currentFg))
+                        .pipe(catchError(() => of({ error: true, org: orgName })))
                 );
             }
 
             // Historical (only if dirty and exists)
             const histFg = orgFg.get('historical');
             if (histFg?.dirty && histFg instanceof FormGroup) {
-                const histReq: UpsertRequest = {
-                    organization_id: orgId,
-                    date: histFg.get('date')!.value,
-                    filtration_measurements: (histFg.get('locations') as FormArray).controls.map((c: any) => ({
-                        location_id: c.get('location_id').value,
-                        flow_rate: c.get('flow_rate').value
-                    })),
-                    piezometer_measurements: (histFg.get('piezometers') as FormArray).controls.map((c: any) => ({
-                        piezometer_id: c.get('piezometer_id').value,
-                        level: c.get('level').value
-                    }))
-                };
                 requests.push(
-                    this.comparisonService.saveMeasurements(histReq).pipe(catchError(() => of({ error: true, org: orgName })))
+                    this.comparisonService.saveMeasurements(this.buildUpsertRequest(orgId, histFg))
+                        .pipe(catchError(() => of({ error: true, org: orgName })))
                 );
             }
         }

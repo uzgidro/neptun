@@ -38,8 +38,9 @@
                         <td class="sticky-col border p-2">{{ 'FILTRATION.DEVIATION' | translate }}</td>
                         @for (p of group.currentItems; track p.id; let j = $index) {
                             <td class="border p-2 text-center">
-                                @if (getDelta(group.currentIndices[j], group.historicalIndices[j]) !== null) {
-                                    {{ getDelta(group.currentIndices[j], group.historicalIndices[j])! >= 0 ? '+' : '' }}{{ getDelta(group.currentIndices[j], group.historicalIndices[j])!.toFixed(2) }}
+                                @let delta = getDelta(group.currentIndices[j], group.historicalIndices[j]);
+                                @if (delta !== null) {
+                                    {{ delta >= 0 ? '+' : '' }}{{ delta.toFixed(2) }}
                                 } @else { — }
                             </td>
                             @if (p.norm !== null) {
