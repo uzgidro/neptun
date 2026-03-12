@@ -30,7 +30,7 @@ export class FiltrationComparisonComponent implements OnInit, OnDestroy {
     private destroy$ = new Subject<void>();
 
     data: OrgComparison[] = [];
-    form!: FormGroup;
+    form: FormGroup = new FormGroup({});
     selectedDate!: Date;
     loading = false;
     saving = false;
@@ -55,7 +55,7 @@ export class FiltrationComparisonComponent implements OnInit, OnDestroy {
     }
 
     onDateChange(date: Date): void {
-        if (this.form?.dirty) {
+        if (this.form.dirty) {
             this.confirmationService.confirm({
                 message: this.translate.instant('FILTRATION.UNSAVED_CHANGES'),
                 accept: () => {
@@ -124,7 +124,7 @@ export class FiltrationComparisonComponent implements OnInit, OnDestroy {
     }
 
     get orgFormArray(): FormArray {
-        return this.form?.get('organizations') as FormArray;
+        return this.form.get('organizations') as unknown as FormArray;
     }
 
     getOrgFormGroup(index: number): FormGroup {
@@ -204,7 +204,7 @@ export class FiltrationComparisonComponent implements OnInit, OnDestroy {
     }
 
     canDeactivate(): boolean | Observable<boolean> {
-        if (!this.form?.dirty) return true;
+        if (!this.form.dirty) return true;
         return new Observable<boolean>(observer => {
             this.confirmationService.confirm({
                 message: this.translate.instant('FILTRATION.UNSAVED_CHANGES'),

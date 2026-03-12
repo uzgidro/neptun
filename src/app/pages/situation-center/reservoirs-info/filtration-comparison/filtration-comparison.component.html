@@ -23,7 +23,7 @@
             <p-button
                 [label]="'COMMON.SAVE' | translate"
                 icon="pi pi-save"
-                [disabled]="!form?.dirty || saving"
+                [disabled]="!form.dirty || saving"
                 [loading]="saving"
                 (onClick)="save()" />
         </div>
