@@ -36,6 +36,7 @@ export class GroupSelectComponent implements ControlValueAccessor, OnChanges {
     filteredItems: any[] = [];
 
     @ViewChild('filterInput') filterInput!: ElementRef<HTMLInputElement>;
+    @ViewChild(Select) selectComponent!: Select;
 
     internalValue: any = null;
     isDisabled: boolean = false;
@@ -92,6 +93,10 @@ export class GroupSelectComponent implements ControlValueAccessor, OnChanges {
                 return filteredItems.length ? { ...group, items: filteredItems } : null;
             })
             .filter(Boolean);
+    }
+
+    onFilterKeyDown(event: KeyboardEvent): void {
+        this.selectComponent.onFilterKeyDown(event);
     }
 
     onDropdownShow(): void {

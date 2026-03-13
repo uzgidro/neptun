@@ -30,7 +30,7 @@
                 <div class="p-1">
                     <p-iconfield class="w-full">
                         <p-inputicon class="pi pi-search" />
-                        <input #filterInput type="text" pInputText class="w-full" (input)="onFilterInput($event)" placeholder="Поиск..." role="searchbox" autocomplete="off" />
+                        <input #filterInput type="text" pInputText class="w-full" (input)="onFilterInput($event)" (keydown)="onFilterKeyDown($event)" placeholder="Поиск..." role="searchbox" autocomplete="off" />
                     </p-iconfield>
                 </div>
             </ng-template>
