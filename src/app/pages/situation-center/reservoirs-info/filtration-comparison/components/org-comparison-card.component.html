@@ -1,14 +1,16 @@
 <div class="border border-surface rounded-lg mb-6">
     <!-- Header -->
     <div class="bg-surface-100 dark:bg-surface-800 p-4 rounded-t-lg">
-        <h3 class="text-lg font-bold m-0">{{ org.organization_name }}</h3>
-        <div class="flex gap-6 mt-2 text-sm">
-            <span>{{ 'FILTRATION.LEVEL' | translate }}: <strong>{{ org.current.level ?? '—' }}</strong></span>
-            <span>{{ 'FILTRATION.VOLUME' | translate }}: <strong>{{ org.current.volume ?? '—' }}</strong></span>
-        </div>
+        <h3 class="text-lg font-bold m-0">
+            {{ org.organization_name }}
+            <span class="font-normal text-sm text-surface-500 ml-2">
+                {{ 'FILTRATION.LEVEL' | translate }}: {{ org.current.level ?? '—' }},
+                {{ 'FILTRATION.VOLUME' | translate }}: {{ org.current.volume ?? '—' }}
+            </span>
+        </h3>
     </div>
 
-    <div class="p-4 flex flex-col gap-6">
+    <div class="p-4 grid grid-cols-1 xl:grid-cols-2 gap-6">
         <!-- Filtration table -->
         <app-filtration-table
             [currentLocations]="org.current.locations"

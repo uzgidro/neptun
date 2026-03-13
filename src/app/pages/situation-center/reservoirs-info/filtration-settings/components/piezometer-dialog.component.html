@@ -14,20 +14,9 @@
         </div>
 
         <div class="flex flex-col gap-2">
-            <label for="type">{{ 'FILTRATION.TYPE' | translate }}</label>
-            <p-select id="type" formControlName="type"
-                [options]="typeOptions" optionLabel="label" optionValue="value" />
-        </div>
-
-        <div class="flex flex-col gap-2">
             <label for="norm">{{ 'FILTRATION.NORM' | translate }}</label>
             <p-inputNumber id="norm" formControlName="norm"
                 mode="decimal" [maxFractionDigits]="2" [minFractionDigits]="0" />
-        </div>
-
-        <div class="flex flex-col gap-2">
-            <label for="count">{{ 'FILTRATION.COUNT' | translate }}</label>
-            <p-inputNumber id="count" formControlName="count" />
         </div>
 
         <div class="flex flex-col gap-2">

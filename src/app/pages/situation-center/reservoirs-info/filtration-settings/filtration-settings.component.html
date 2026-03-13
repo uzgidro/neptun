@@ -62,9 +62,7 @@
                     <tr>
                         <th style="width: 60px">№</th>
                         <th>{{ 'FILTRATION.NAME' | translate }}</th>
-                        <th>{{ 'FILTRATION.TYPE' | translate }}</th>
                         <th>{{ 'FILTRATION.NORM' | translate }}</th>
-                        <th>{{ 'FILTRATION.COUNT' | translate }}</th>
                         <th>{{ 'FILTRATION.SORT_ORDER' | translate }}</th>
                         <th style="width: 100px">{{ 'COMMON.ACTIONS' | translate }}</th>
                     </tr>
@@ -73,9 +71,7 @@
                     <tr>
                         <td>{{ i + 1 }}</td>
                         <td>{{ p.name }}</td>
-                        <td>{{ p.type === 'pressure' ? ('FILTRATION.PRESSURE' | translate) : ('FILTRATION.NON_PRESSURE' | translate) }}</td>
                         <td>{{ p.norm ?? '—' }}</td>
-                        <td>{{ p.count ?? '—' }}</td>
                         <td>{{ p.sort_order }}</td>
                         <td>
                             <div class="flex gap-2">
@@ -86,9 +82,29 @@
                     </tr>
                 </ng-template>
                 <ng-template #emptymessage>
-                    <tr><td colspan="7" class="text-center p-4">{{ 'FILTRATION.NO_PIEZOMETERS' | translate }}</td></tr>
+                    <tr><td colspan="5" class="text-center p-4">{{ 'FILTRATION.NO_PIEZOMETERS' | translate }}</td></tr>
                 </ng-template>
             </p-table>
+        </div>
+
+        <!-- Piezometer counts -->
+        <div class="flex flex-col gap-2">
+            <h3 class="text-lg font-semibold m-0">{{ 'FILTRATION.PIEZOMETER_COUNTS' | translate }}</h3>
+            <div class="flex items-end gap-4" [formGroup]="piezometerCountsForm">
+                <div class="flex flex-col gap-1">
+                    <label class="text-sm">{{ 'FILTRATION.PRESSURE' | translate }}</label>
+                    <p-inputNumber formControlName="pressure_count" [min]="0" />
+                </div>
+                <div class="flex flex-col gap-1">
+                    <label class="text-sm">{{ 'FILTRATION.NON_PRESSURE' | translate }}</label>
+                    <p-inputNumber formControlName="non_pressure_count" [min]="0" />
+                </div>
+                <p-button
+                    [label]="'COMMON.SAVE' | translate"
+                    icon="pi pi-check"
+                    [loading]="savingCounts"
+                    (onClick)="onSavePiezometerCounts()" />
+            </div>
         </div>
     }
 </div>

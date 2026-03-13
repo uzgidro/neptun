@@ -8,12 +8,15 @@ import {
     CreateLocationRequest,
     UpdateLocationRequest,
     CreatePiezometerRequest,
-    UpdatePiezometerRequest
+    UpdatePiezometerRequest,
+    PiezometerCountsRecord,
+    UpsertPiezometerCountsRequest
 } from '@/core/interfaces/filtration';
 
 const FILTRATION = '/filtration';
 const LOCATIONS = '/locations';
 const PIEZOMETERS = '/piezometers';
+const PIEZOMETER_COUNTS = '/piezometer-counts';
 
 @Injectable({ providedIn: 'root' })
 export class FiltrationService extends ApiService {
@@ -52,5 +55,15 @@ export class FiltrationService extends ApiService {
 
     deletePiezometer(id: number): Observable<{ status: string }> {
         return this.http.delete<{ status: string }>(`${this.BASE_URL}${FILTRATION}${PIEZOMETERS}/${id}`);
+    }
+
+    // Piezometer counts
+    getPiezometerCounts(organizationId: number): Observable<PiezometerCountsRecord> {
+        const params = new HttpParams().set('organization_id', organizationId);
+        return this.http.get<PiezometerCountsRecord>(`${this.BASE_URL}${FILTRATION}${PIEZOMETER_COUNTS}`, { params });
+    }
+
+    upsertPiezometerCounts(payload: UpsertPiezometerCountsRequest): Observable<{ status: string }> {
+        return this.http.post<{ status: string }>(`${this.BASE_URL}${FILTRATION}${PIEZOMETER_COUNTS}`, payload);
     }
 }

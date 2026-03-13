@@ -2,23 +2,55 @@
     <table class="w-full border-collapse text-sm">
         <thead>
             <tr class="bg-surface-100 dark:bg-surface-800">
-                <th class="sticky-col border border-surface-200 dark:border-surface-700 p-2 text-left min-w-24">{{ 'FILTRATION.DATE' | translate }}</th>
-                <th class="border border-surface-200 dark:border-surface-700 p-2 text-center min-w-20">{{ 'FILTRATION.TOTAL' | translate }}</th>
-                @for (loc of currentLocations; track loc.id) {
-                    <th class="border border-surface-200 dark:border-surface-700 p-2 text-center min-w-20">{{ loc.name }}</th>
-                    @if (loc.norm !== null) {
-                        <th class="border border-surface-200 dark:border-surface-700 p-2 text-center min-w-16">{{ 'FILTRATION.NORM' | translate }}</th>
-                        <th class="border border-surface-200 dark:border-surface-700 p-2 text-center min-w-16">{{ 'FILTRATION.DEVIATION' | translate }}</th>
-                    }
+                <th class="sticky-col border border-surface-200 dark:border-surface-700 p-2 text-left min-w-36">
+                    {{ 'FILTRATION.TOTAL' | translate }}, л/с
+                </th>
+                @if (historicalLocations) {
+                    <th class="border border-surface-200 dark:border-surface-700 p-2 text-center min-w-24">{{ historicalDate }}</th>
                 }
+                <th class="border border-surface-200 dark:border-surface-700 p-2 text-center min-w-24">{{ currentDate }}</th>
+                @if (historicalLocations) {
+                    <th class="border border-surface-200 dark:border-surface-700 p-2 text-center min-w-16">+,-</th>
+                }
+                <th class="border border-surface-200 dark:border-surface-700 p-2 text-center min-w-16">{{ 'FILTRATION.NORM' | translate }}</th>
+                <th class="border border-surface-200 dark:border-surface-700 p-2 text-center min-w-16">+,-</th>
             </tr>
         </thead>
         <tbody>
-            <!-- Current row -->
-            <tr>
-                <td class="sticky-col border border-surface-200 dark:border-surface-700 p-2 font-semibold">{{ currentDate }}</td>
-                <td class="border border-surface-200 dark:border-surface-700 p-2 text-center">{{ totalCurrent ?? '—' }}</td>
-                @for (loc of currentLocations; track loc.id; let i = $index) {
+            <!-- Total row -->
+            <tr class="font-semibold bg-surface-50 dark:bg-surface-900">
+                <td class="sticky-col border border-surface-200 dark:border-surface-700 p-2"></td>
+                @if (historicalLocations) {
+                    <td class="border border-surface-200 dark:border-surface-700 p-2 text-center">{{ totalHistorical !== null ? totalHistorical.toFixed(2) : '—' }}</td>
+                }
+                <td class="border border-surface-200 dark:border-surface-700 p-2 text-center">{{ totalCurrent !== null ? totalCurrent.toFixed(2) : '—' }}</td>
+                @if (historicalLocations) {
+                    <td class="border border-surface-200 dark:border-surface-700 p-2 text-center">
+                        @if (totalDelta !== null) {
+                            {{ totalDelta >= 0 ? '+' : '' }}{{ totalDelta.toFixed(2) }}
+                        } @else { — }
+                    </td>
+                }
+                <td class="border border-surface-200 dark:border-surface-700 p-2 text-center">{{ totalNorm !== null ? totalNorm.toFixed(2) : '—' }}</td>
+                <td class="border border-surface-200 dark:border-surface-700 p-2 text-center">
+                    @if (totalDeviation !== null) {
+                        {{ totalDeviation >= 0 ? '+' : '' }}{{ totalDeviation.toFixed(2) }}
+                    } @else { — }
+                </td>
+            </tr>
+
+            <!-- Location rows -->
+            @for (loc of currentLocations; track loc.id; let i = $index) {
+                <tr>
+                    <td class="sticky-col border border-surface-200 dark:border-surface-700 p-2">{{ loc.name }}</td>
+                    @if (historicalLocations && historicalFormArray) {
+                        <td class="border border-surface-200 dark:border-surface-700 p-1 text-center">
+                            <p-inputNumber
+                                [formControl]="$any(historicalFormArray.at(i).get('flow_rate'))"
+                                mode="decimal" [maxFractionDigits]="2" [minFractionDigits]="0"
+                                [inputStyle]="{'width': '5rem', 'text-align': 'center'}" />
+                        </td>
+                    }
                     <td class="border border-surface-200 dark:border-surface-700 p-1 text-center"
                         [ngClass]="{'bg-red-100 dark:bg-red-900/30': exceedsNorm(loc, currentFormArray, i)}">
                         <p-inputNumber
@@ -26,49 +58,22 @@
                             mode="decimal" [maxFractionDigits]="2" [minFractionDigits]="0"
                             [inputStyle]="{'width': '5rem', 'text-align': 'center'}" />
                     </td>
-                    @if (loc.norm !== null) {
-                        <td class="border border-surface-200 dark:border-surface-700 p-2 text-center text-surface-500">{{ loc.norm }}</td>
-                        <td class="border border-surface-200 dark:border-surface-700 p-2 text-center">{{ getDeviation(loc, currentFormArray, i) ?? '—' }}</td>
-                    }
-                }
-            </tr>
-
-            <!-- Delta row (only if historical exists) -->
-            @if (historicalLocations) {
-                <tr class="bg-surface-50 dark:bg-surface-900 text-xs text-surface-500">
-                    <td class="sticky-col border border-surface-200 dark:border-surface-700 p-2">{{ 'FILTRATION.DEVIATION' | translate }}</td>
-                    <td class="border border-surface-200 dark:border-surface-700 p-2 text-center">{{ totalDelta !== null ? (totalDelta >= 0 ? '+' : '') + totalDelta.toFixed(2) : '—' }}</td>
-                    @for (loc of currentLocations; track loc.id; let i = $index) {
-                        <td class="border border-surface-200 dark:border-surface-700 p-2 text-center">
+                    @if (historicalLocations) {
+                        <td class="border border-surface-200 dark:border-surface-700 p-2 text-center text-surface-500">
                             @let delta = getDelta(i);
                             @if (delta !== null) {
                                 {{ delta >= 0 ? '+' : '' }}{{ delta.toFixed(2) }}
                             } @else { — }
                         </td>
-                        @if (loc.norm !== null) {
-                            <td class="border border-surface-200 dark:border-surface-700 p-2"></td>
-                            <td class="border border-surface-200 dark:border-surface-700 p-2"></td>
-                        }
                     }
-                </tr>
-
-                <!-- Historical row -->
-                <tr>
-                    <td class="sticky-col border border-surface-200 dark:border-surface-700 p-2 font-semibold">{{ historicalDate }}</td>
-                    <td class="border border-surface-200 dark:border-surface-700 p-2 text-center">{{ totalHistorical ?? '—' }}</td>
-                    @for (loc of historicalLocations!; track loc.id; let i = $index) {
-                        <td class="border border-surface-200 dark:border-surface-700 p-1 text-center"
-                            [ngClass]="{'bg-red-100 dark:bg-red-900/30': exceedsNorm(loc, historicalFormArray!, i)}">
-                            <p-inputNumber
-                                [formControl]="$any(historicalFormArray!.at(i).get('flow_rate'))"
-                                mode="decimal" [maxFractionDigits]="2" [minFractionDigits]="0"
-                                [inputStyle]="{'width': '5rem', 'text-align': 'center'}" />
-                        </td>
-                        @if (loc.norm !== null) {
-                            <td class="border border-surface-200 dark:border-surface-700 p-2 text-center text-surface-500">{{ loc.norm }}</td>
-                            <td class="border border-surface-200 dark:border-surface-700 p-2 text-center">{{ getDeviation(loc, historicalFormArray!, i) ?? '—' }}</td>
-                        }
-                    }
+                    <td class="border border-surface-200 dark:border-surface-700 p-2 text-center text-surface-500">{{ loc.norm ?? '—' }}</td>
+                    <td class="border border-surface-200 dark:border-surface-700 p-2 text-center"
+                        [ngClass]="{'text-red-600 dark:text-red-400': exceedsNorm(loc, currentFormArray, i)}">
+                        @let dev = getDeviation(loc, currentFormArray, i);
+                        @if (dev !== null) {
+                            {{ dev >= 0 ? '+' : '' }}{{ dev.toFixed(2) }}
+                        } @else { — }
+                    </td>
                 </tr>
             }
         </tbody>

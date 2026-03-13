@@ -43,6 +43,20 @@ export class FiltrationTableComponent {
         return c - h;
     }
 
+    get totalNorm(): number | null {
+        const norms = this.currentLocations
+            .map(loc => loc.norm)
+            .filter((n): n is number => n !== null && n !== undefined);
+        return norms.length ? norms.reduce((a, b) => a + b, 0) : null;
+    }
+
+    get totalDeviation(): number | null {
+        const c = this.totalCurrent;
+        const n = this.totalNorm;
+        if (c === null || n === null) return null;
+        return c - n;
+    }
+
     getDelta(index: number): number | null {
         const curr = this.currentFormArray?.at(index)?.get('flow_rate')?.value;
         const hist = this.historicalFormArray?.at(index)?.get('flow_rate')?.value;

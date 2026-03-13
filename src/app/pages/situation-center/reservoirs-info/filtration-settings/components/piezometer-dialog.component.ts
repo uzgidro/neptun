@@ -4,14 +4,13 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
-import { SelectModule } from 'primeng/select';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
 import { Piezometer } from '@/core/interfaces/filtration';
 
 @Component({
     selector: 'app-piezometer-dialog',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, DialogComponent, InputTextModule, InputNumberModule, SelectModule, TranslateModule],
+    imports: [CommonModule, ReactiveFormsModule, DialogComponent, InputTextModule, InputNumberModule, TranslateModule],
     templateUrl: './piezometer-dialog.component.html'
 })
 export class PiezometerDialogComponent implements OnChanges {
@@ -22,19 +21,9 @@ export class PiezometerDialogComponent implements OnChanges {
     @Output() save = new EventEmitter<any>();
 
     form!: FormGroup;
-    typeOptions: { label: string; value: string }[] = [];
 
-    constructor(private fb: FormBuilder, private translate: TranslateService) {
+    constructor(private fb: FormBuilder) {
         this.initForm();
-        this.buildTypeOptions();
-        this.translate.onLangChange.subscribe(() => this.buildTypeOptions());
-    }
-
-    private buildTypeOptions(): void {
-        this.typeOptions = [
-            { label: this.translate.instant('FILTRATION.PRESSURE'), value: 'pressure' },
-            { label: this.translate.instant('FILTRATION.NON_PRESSURE'), value: 'non_pressure' }
-        ];
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -48,9 +37,7 @@ export class PiezometerDialogComponent implements OnChanges {
     private initForm(): void {
         this.form = this.fb.group({
             name: ['', Validators.required],
-            type: ['pressure', Validators.required],
             norm: [null],
-            count: [null],
             sort_order: [0]
         });
     }
@@ -59,9 +46,7 @@ export class PiezometerDialogComponent implements OnChanges {
         if (!this.piezometer) return;
         this.form = this.fb.group({
             name: [this.piezometer.name, Validators.required],
-            type: [this.piezometer.type, Validators.required],
             norm: [this.piezometer.norm],
-            count: [this.piezometer.count],
             sort_order: [this.piezometer.sort_order]
         });
     }
