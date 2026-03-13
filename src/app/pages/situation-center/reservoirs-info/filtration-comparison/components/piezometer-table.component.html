@@ -1,0 +1,64 @@
+<div class="overflow-x-auto">
+    <table class="w-full border-collapse text-sm">
+        <thead>
+            <tr class="bg-surface-100 dark:bg-surface-800">
+                <th class="sticky-col border border-surface-200 dark:border-surface-700 p-2 text-left min-w-36">
+                    {{ 'FILTRATION.PIEZOMETERS' | translate }}, м
+                </th>
+                @if (historicalPiezometers) {
+                    <th class="border border-surface-200 dark:border-surface-700 p-2 text-center min-w-24">{{ historicalDate }}</th>
+                }
+                <th class="border border-surface-200 dark:border-surface-700 p-2 text-center min-w-24">{{ currentDate }}</th>
+                @if (historicalPiezometers) {
+                    <th class="border border-surface-200 dark:border-surface-700 p-2 text-center min-w-16">+,-</th>
+                }
+                <th class="border border-surface-200 dark:border-surface-700 p-2 text-center min-w-16">{{ 'FILTRATION.NORM' | translate }}</th>
+                <th class="border border-surface-200 dark:border-surface-700 p-2 text-center min-w-16">+,-</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (p of currentPiezometers; track p.id; let i = $index) {
+                <tr>
+                    <td class="sticky-col border border-surface-200 dark:border-surface-700 p-2">{{ p.name }}</td>
+                    @if (historicalPiezometers && historicalFormArray) {
+                        <td class="border border-surface-200 dark:border-surface-700 p-1 text-center">
+                            <p-inputNumber
+                                [formControl]="$any(historicalFormArray.at(i).get('level'))"
+                                mode="decimal" [maxFractionDigits]="2" [minFractionDigits]="0"
+                                [inputStyle]="{'width': '5rem', 'text-align': 'center'}" />
+                        </td>
+                    }
+                    <td class="border border-surface-200 dark:border-surface-700 p-1 text-center"
+                        [ngClass]="{'bg-red-100 dark:bg-red-900/30': exceedsNorm(p, currentFormArray, i)}">
+                        <p-inputNumber
+                            [formControl]="$any(currentFormArray.at(i).get('level'))"
+                            mode="decimal" [maxFractionDigits]="2" [minFractionDigits]="0"
+                            [inputStyle]="{'width': '5rem', 'text-align': 'center'}" />
+                    </td>
+                    @if (historicalPiezometers) {
+                        <td class="border border-surface-200 dark:border-surface-700 p-2 text-center text-surface-500">
+                            @let delta = getDelta(i);
+                            @if (delta !== null) {
+                                {{ delta >= 0 ? '+' : '' }}{{ delta.toFixed(2) }}
+                            } @else { — }
+                        </td>
+                    }
+                    <td class="border border-surface-200 dark:border-surface-700 p-2 text-center text-surface-500">{{ p.norm ?? '—' }}</td>
+                    <td class="border border-surface-200 dark:border-surface-700 p-2 text-center"
+                        [ngClass]="{'text-red-600 dark:text-red-400': exceedsNorm(p, currentFormArray, i)}">
+                        @let dev = getDeviation(p, currentFormArray, i);
+                        @if (dev !== null) {
+                            {{ dev >= 0 ? '+' : '' }}{{ dev.toFixed(2) }}
+                        } @else { — }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    @if (piezometerCounts) {
+        <div class="text-xs text-surface-500 mt-2">
+            {{ 'FILTRATION.PRESSURE' | translate }}: {{ piezometerCounts.pressure }},
+            {{ 'FILTRATION.NON_PRESSURE' | translate }}: {{ piezometerCounts.non_pressure }}
+        </div>
+    }
+</div>

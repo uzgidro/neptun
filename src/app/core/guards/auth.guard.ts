@@ -1,6 +1,11 @@
 import { inject } from '@angular/core';
-import { CanActivateFn, Router, UrlTree } from '@angular/router';
+import { CanActivateFn, CanDeactivateFn, Router, UrlTree } from '@angular/router';
+import { Observable } from 'rxjs';
 import { AuthService } from '@/core/services/auth.service';
+
+export interface HasUnsavedChanges {
+    canDeactivate(): boolean | Observable<boolean>;
+}
 
 export const authGuard: CanActivateFn = (): boolean | UrlTree => {
     const authService = inject(AuthService);
@@ -42,5 +47,16 @@ export const positionsGuard: CanActivateFn = (): boolean | UrlTree => {
     const router = inject(Router);
 
     return authService.hasRole(['admin', 'hrm_admin', 'hrm_manager', 'hrm_employee', 'rais']) ? true : router.createUrlTree(['/notfound']);
+}
+
+export const filtrationGuard: CanActivateFn = (): boolean | UrlTree => {
+    const authService = inject(AuthService);
+    const router = inject(Router);
+
+    return authService.hasRole(['sc', 'rais', 'reservoir']) ? true : router.createUrlTree(['/notfound']);
+}
+
+export const unsavedChangesGuard: CanDeactivateFn<HasUnsavedChanges> = (component) => {
+    return component.canDeactivate ? component.canDeactivate() : true;
 }
 
