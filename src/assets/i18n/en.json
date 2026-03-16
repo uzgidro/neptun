@@ -3324,5 +3324,13 @@
     "PUBLISHED": "Published",
     "LOAD_ERROR": "Failed to load news",
     "PAGE_REPORT": "Showing {first}-{last} of {totalRecords}"
+  },
+  "WEATHER": {
+    "LOADING": "Loading weather...",
+    "HUMIDITY": "Humidity",
+    "WIND": "Wind",
+    "WIND_UNIT": "m/s",
+    "LOCATION_ERROR": "Could not determine your location",
+    "LOAD_ERROR": "Failed to load weather forecast"
   }
 }
