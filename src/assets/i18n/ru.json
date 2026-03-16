@@ -75,7 +75,10 @@
     "CLEAR": "Очистить",
     "DOWNLOAD": "Скачать",
     "EMAIL": "Эл. почта",
-    "PHONE": "Телефон"
+    "PHONE": "Телефон",
+    "DOWNLOAD_ERROR": "Не удалось скачать файл",
+    "LOAD_ERROR": "Ошибка загрузки данных",
+    "RESET": "Сбросить"
   },
   "CATEGORIES": {
     "TITLE": "Роли",
@@ -85,7 +88,9 @@
     "PREFIX": "Префикс",
     "SELECT_PREFIX": "Выберите префикс",
     "CATEGORY": "Категория",
-    "NAME_REQUIRED": "Имя категории обязательно"
+    "NAME_REQUIRED": "Имя категории обязательно",
+    "CREATED_SUCCESS": "Категория успешно создана",
+    "CREATED_ERROR": "Не удалось создать категорию"
   },
   "FILES": {
     "TITLE": "Файлы",
@@ -98,7 +103,12 @@
     "DATE_REQUIRED": "Укажите дату",
     "CHOOSE_FILES": "Выберите файлы",
     "UPLOAD": "Загрузить",
-    "DRAG_DROP": "Перетащите файлы сюда для загрузки."
+    "DRAG_DROP": "Перетащите файлы сюда для загрузки.",
+    "SELECT_CATEGORY_AND_DATE": "Выберите категорию и дату",
+    "UPLOADED_SUCCESS": "{{count}} файлов загружено",
+    "UPLOAD_ERROR": "Не удалось загрузить файлы",
+    "DELETED_SUCCESS": "Файл успешно удалён",
+    "DELETE_ERROR": "Не удалось удалить файл"
   },
   "ERRORS": {
     "NO_CONNECTION": "Нет подключения к серверу",
@@ -1846,7 +1856,13 @@
       "EVENT_FILES": "Файлы события",
       "ALL_OBJECTS": "Все объекты",
       "APPLY_TO_ALL": "Применить ко всем объектам",
-      "EVENT_DATE": "Дата события"
+      "EVENT_DATE": "Дата события",
+      "EVENT_UPDATED": "Событие обновлено",
+      "EVENT_CREATED": "Событие добавлено",
+      "EVENT_DELETED": "Событие удалено",
+      "EVENT_UPDATE_ERROR": "Ошибка обновления события",
+      "EVENT_CREATE_ERROR": "Ошибка добавления события",
+      "EVENT_DELETE_ERROR": "Ошибка удаления события"
     },
     "DISCHARGE": {
       "TITLE": "Холостой водосброс",
@@ -1899,7 +1915,21 @@
       "NEW_VISIT": "Новый Визит",
       "SPECIFY_RESPONSIBLE": "Укажите ответственного",
       "SPECIFY_DESCRIPTION": "Укажите описание",
-      "VISIT_FILES": "Файлы визита"
+      "VISIT_FILES": "Файлы визита",
+      "UPDATED": "Визит обновлён",
+      "CREATED": "Визит добавлен",
+      "DELETED": "Визит удалён",
+      "UPDATE_ERROR": "Ошибка обновления визита",
+      "CREATE_ERROR": "Ошибка добавления визита",
+      "DELETE_ERROR": "Ошибка удаления визита"
+    },
+    "INCIDENT": {
+      "UPDATED": "Инцидент обновлён",
+      "CREATED": "Инцидент добавлен",
+      "DELETED": "Инцидент удалён",
+      "UPDATE_ERROR": "Ошибка обновления инцидента",
+      "CREATE_ERROR": "Ошибка добавления инцидента",
+      "DELETE_ERROR": "Ошибка удаления инцидента"
     },
     "RESERVOIR_DEVICE": {
       "TITLE": "Гидротехнические сооружения и устройства водохранилищ",
@@ -1912,7 +1942,10 @@
       "FAULTY": "Неисправные",
       "CRITERION_1": "Мезон 1",
       "CRITERION_2": "Мезон 2",
-      "NO_DATA": "Данные не найдены"
+      "NO_DATA": "Данные не найдены",
+      "CHANGES_SAVED": "Изменения сохранены",
+      "CHANGES_RESET": "Изменения отменены",
+      "SAVE_ERROR": "Ошибка сохранения"
     },
     "CONSTRUCTION": {
       "TITLE": "Строительство Каскада Оксув ГЭС",
@@ -2852,7 +2885,8 @@
       "UPDATE_ERROR": "Не удалось обновить приём",
       "CREATED": "Приём создан",
       "CREATE_ERROR": "Не удалось создать приём",
-      "DELETE_CONFIRM": "Вы уверены, что хотите удалить этот приём?"
+      "DELETE_CONFIRM": "Вы уверены, что хотите удалить этот приём?",
+      "INFORMED_SUCCESS": "Приём отмечен как уведомлённый"
     },
     "EVENTS": {
       "TITLE": "Все события",
@@ -3049,6 +3083,23 @@
       "CANCEL": "Отмена",
       "SAVE": "Сохранить",
       "ADD": "Добавить"
+    },
+    "MESSAGES": {
+      "PROJECT_UPDATED": "Проект успешно обновлён",
+      "SAVE_ERROR": "Ошибка сохранения",
+      "UPDATE_FAILED": "Не удалось обновить проект",
+      "PROJECT_ADDED": "Новый проект добавлен",
+      "ADD_FAILED": "Не удалось добавить проект",
+      "LOAD_ERROR": "Ошибка загрузки",
+      "LOAD_ACTIVE_FAILED": "Не удалось загрузить активные проекты",
+      "PROJECT_DELETED": "Проект успешно удалён",
+      "DELETE_ERROR": "Ошибка удаления",
+      "DELETE_FAILED": "Не удалось удалить проект",
+      "LOAD_STATUSES_FAILED": "Не удалось загрузить статусы",
+      "LOAD_INVESTMENTS_FAILED": "Не удалось загрузить инвестиционные проекты",
+      "UPDATE_ERROR": "Ошибка обновления",
+      "CREATE_ERROR": "Ошибка создания",
+      "CREATE_FAILED": "Не удалось создать проект"
     }
   },
   "NEWS": {
@@ -3126,6 +3177,9 @@
       "SOURCE": "Источник",
       "PUBLISHED": "Опубликовано",
       "CREATED": "Создано"
+    },
+    "MESSAGES": {
+      "LOAD_FAILED": "Не удалось загрузить новости"
     }
   },
   "LEX_SEARCH": {
@@ -3332,5 +3386,97 @@
     "WIND_UNIT": "м/с",
     "LOCATION_ERROR": "Не удалось определить ваше местоположение",
     "LOAD_ERROR": "Не удалось загрузить прогноз погоды"
+  },
+  "RESERVOIRS": {
+    "MESSAGES": {
+      "DATA_UPDATED": "Данные обновлены",
+      "ERROR_OCCURRED": "Произошла ошибка"
+    }
+  },
+  "DISCHARGE": {
+    "MESSAGES": {
+      "RECORD_UPDATED": "Запись о водосбросе обновлена",
+      "SAVE_ERROR": "Ошибка сохранения",
+      "SAVE_FAILED": "Не удалось сохранить данные",
+      "RECORD_ADDED": "Новая запись о водосбросе добавлена",
+      "DELETED": "Водосброс удалён",
+      "DELETE_ERROR": "Ошибка удаления водосброса",
+      "DOWNLOAD_FAILED": "Не удалось скачать файл"
+    }
+  },
+  "VACATION": {
+    "MESSAGES": {
+      "LOAD_FAILED": "Не удалось загрузить отпуска",
+      "EDIT_ONLY_DRAFTS": "Редактировать можно только черновики и заявки на рассмотрении",
+      "VALIDATION_ERROR": "Ошибка валидации",
+      "CHECK_REQUEST_DATA": "Проверьте данные заявки",
+      "SUBMITTED": "Отправлено",
+      "SENT_FOR_APPROVAL": "Заявка отправлена на утверждение руководителю",
+      "SUBMIT_FAILED": "Не удалось отправить заявку",
+      "REQUEST_CREATED": "Заявка на отпуск создана и отправлена на утверждение",
+      "CREATE_FAILED": "Не удалось создать заявку",
+      "REQUEST_UPDATED": "Заявка обновлена",
+      "UPDATE_FAILED": "Не удалось обновить заявку",
+      "APPROVED": "Утверждено",
+      "APPROVED_DETAIL": "Отпуск сотрудника {{name}} утверждён. Даты заблокированы в календаре.",
+      "APPROVE_FAILED": "Не удалось утвердить заявку",
+      "REJECTED": "Отклонено",
+      "REJECTED_DETAIL": "Заявка отклонена. Сотрудник {{name}} уведомлён.",
+      "REJECT_FAILED": "Не удалось отклонить заявку",
+      "CANCEL_ONLY_DRAFTS": "Отменить можно только черновики и заявки на рассмотрении",
+      "CANCELLED": "Отменено",
+      "REQUEST_CANCELLED": "Заявка на отпуск отменена",
+      "CANCEL_FAILED": "Не удалось отменить заявку",
+      "REQUEST_DELETED": "Заявка удалена",
+      "DELETE_FAILED": "Не удалось удалить заявку",
+      "INSUFFICIENT_DAYS": "Недостаточно дней отпуска. Запрошено: {{requested}}, доступно: {{available}}"
+    }
+  },
+  "SALARY": {
+    "MESSAGES": {
+      "LOAD_FAILED": "Не удалось загрузить данные",
+      "CALCULATION_COMPLETE": "Расчёт завершён",
+      "CALCULATED_COUNT": "Рассчитано {{successful}} из {{total}} зарплат",
+      "CALCULATION_FAILED": "Не удалось рассчитать зарплату",
+      "SUBMITTED": "Отправлено",
+      "SENT_FOR_APPROVAL": "Зарплата {{name}} отправлена на утверждение",
+      "BATCH_SENT_APPROVAL": "{{count}} записей отправлено на утверждение",
+      "APPROVED_TITLE": "Утверждено",
+      "SALARY_APPROVED": "Зарплата {{name}} утверждена",
+      "BATCH_APPROVED": "{{count}} записей утверждено",
+      "REJECTED_TITLE": "Отклонено",
+      "SALARY_REJECTED": "Зарплата {{name}} отклонена",
+      "PAID_TITLE": "Оплачено",
+      "MARKED_PAID": "Зарплата {{name}} отмечена как выплаченная",
+      "BATCH_PAID": "{{count}} записей отмечено как выплаченные",
+      "DELETED": "Удалено",
+      "RECORD_DELETED": "Запись удалена",
+      "GENERATING": "Формируется",
+      "PAYSLIP_GENERATING": "Формируется расчётный лист для {{name}}...",
+      "PAYROLL_REPORT_GENERATING": "Формируется зарплатная ведомость...",
+      "TAX_REPORT_GENERATING": "Формируется налоговый отчёт...",
+      "SOCIAL_FUND_REPORT_GENERATING": "Формируется отчёт по социальному фонду...",
+      "PAYSLIPS_EXPORTED": "Расчётные листы экспортированы",
+      "EXPORT_FAILED": "Не удалось экспортировать расчётные листы"
+    }
+  },
+  "COMPETENCY": {
+    "MESSAGES": {
+      "SESSION_UPDATED": "Сессия обновлена",
+      "SESSION_CREATED": "Сессия создана",
+      "INVITATIONS_SENT": "Приглашения отправлены",
+      "SESSION_STARTED": "Сессия начата",
+      "ASSESSMENT_CENTER_STARTED": "Центр оценки запущен",
+      "SESSION_COMPLETED": "Сессия завершена",
+      "BLOCK_ADDED": "Блок добавлен",
+      "BLOCK_COMPLETED": "Блок завершён",
+      "EVALUATION_SAVED": "Оценка сохранена",
+      "FINAL_ASSESSMENT_GENERATED": "Итоговая оценка сформирована",
+      "ASSESSMENT_APPROVED": "Оценка утверждена",
+      "PLAN_CREATED": "План развития создан",
+      "PLAN_ACTIVATED": "План активирован",
+      "PLAN_COMPLETED": "План завершён",
+      "SESSION_DELETED": "Сессия удалена"
+    }
   }
 }

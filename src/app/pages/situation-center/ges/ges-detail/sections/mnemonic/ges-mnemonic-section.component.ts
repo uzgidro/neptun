@@ -33,7 +33,7 @@ export class GesMnemonicSectionComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.loadData();
-        this.refreshSubscription = interval(120000)
+        this.refreshSubscription = interval(10000)
             .pipe(takeUntil(this.destroy$))
             .subscribe(() => this.loadData());
     }

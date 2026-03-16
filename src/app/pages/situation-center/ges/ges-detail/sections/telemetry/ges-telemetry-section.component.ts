@@ -60,8 +60,8 @@ export class GesTelemetrySectionComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.loadData();
-        // Auto-refresh every 2 minutes
-        this.refreshSubscription = interval(120000)
+        // Auto-refresh every 10 seconds
+        this.refreshSubscription = interval(10000)
             .pipe(takeUntil(this.destroy$))
             .subscribe(() => this.loadData());
     }
