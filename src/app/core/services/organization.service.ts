@@ -55,7 +55,7 @@ export class OrganizationService extends ApiService {
     }
 
     getCascades(): Observable<Organization[]> {
-        return this.getOrganizationsTree();
+        return this.getOrganizationsWithType('cascade');
     }
 
     getOrganizationsWithType(type: string): Observable<Organization[]> {
