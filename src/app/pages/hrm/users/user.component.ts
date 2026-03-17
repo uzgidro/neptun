@@ -353,6 +353,7 @@ export class User implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
+                    user.is_active = !willDeactivate;
                     this.messageService.add({
                         severity: 'success',
                         summary: this.translate.instant('COMMON.SUCCESS'),
@@ -360,7 +361,6 @@ export class User implements OnInit, OnDestroy {
                             willDeactivate ? 'HRM.USERS.SUCCESS_DEACTIVATED' : 'HRM.USERS.SUCCESS_ACTIVATED'
                         )
                     });
-                    this.loadUsers();
                 },
                 error: (err) => {
                     this.messageService.add({
