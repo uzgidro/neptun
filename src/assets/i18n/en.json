@@ -619,7 +619,15 @@
       "ERROR_CREATE": "Failed to create user",
       "ERROR_UPDATE": "Failed to update user",
       "ERROR_DELETE": "Failed to delete user",
-      "DELETE_CONFIRM": "Are you sure you want to delete the user"
+      "DELETE_CONFIRM": "Are you sure you want to delete the user",
+      "DEACTIVATE_CONFIRM": "Are you sure you want to deactivate the user",
+      "ACTIVATE_CONFIRM": "Are you sure you want to activate the user",
+      "SUCCESS_DEACTIVATED": "User deactivated",
+      "SUCCESS_ACTIVATED": "User activated",
+      "ERROR_TOGGLE_ACTIVE": "Failed to change user status",
+      "INACTIVE": "Inactive",
+      "DEACTIVATE": "Deactivate",
+      "ACTIVATE": "Activate"
     },
     "ROLES": {
       "TITLE": "Roles",

@@ -337,6 +337,42 @@ export class User implements OnInit, OnDestroy {
             });
     }
 
+    toggleActive(user: Users): void {
+        const willDeactivate = user.is_active;
+        const msg = this.translate.instant(
+            willDeactivate ? 'HRM.USERS.DEACTIVATE_CONFIRM' : 'HRM.USERS.ACTIVATE_CONFIRM'
+        ) + ` ${user.login}?`;
+
+        if (!confirm(msg)) return;
+
+        const formData = new FormData();
+        formData.append('is_active', String(!willDeactivate));
+
+        this.userService
+            .editUser(user.id, formData)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: () => {
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: this.translate.instant('COMMON.SUCCESS'),
+                        detail: this.translate.instant(
+                            willDeactivate ? 'HRM.USERS.SUCCESS_DEACTIVATED' : 'HRM.USERS.SUCCESS_ACTIVATED'
+                        )
+                    });
+                    this.loadUsers();
+                },
+                error: (err) => {
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: this.translate.instant('COMMON.ERROR'),
+                        detail: this.translate.instant('HRM.USERS.ERROR_TOGGLE_ACTIVE')
+                    });
+                    console.error(err);
+                }
+            });
+    }
+
     openDeleteDialog(user: Users): void {
         this.selectedUser = user;
         this.displayDeleteDialog = true;
