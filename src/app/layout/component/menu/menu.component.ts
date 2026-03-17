@@ -165,6 +165,8 @@ export class MenuComponent implements OnInit {
                             { label: this.t('HRM.MENU.HR_DOCUMENTS'), icon: 'pi pi-file', role: ['hrm_admin', 'hrm_manager', 'hrm_employee', 'rais'], routerLink: ['/hrm/documents'] },
                             { label: this.t('HRM.MENU.ACCESS_CONTROL'), icon: 'pi pi-lock', role: ['hrm_admin', 'hrm_manager'], routerLink: ['/hrm/access-control'] },
                             { label: this.t('HRM.MENU.ORG_STRUCTURE'), icon: 'pi pi-sitemap', role: ['hrm_admin', 'hrm_manager', 'hrm_employee', 'rais'], routerLink: ['/hrm/org-structure'] },
+                            { label: this.t('MENU.ORGANIZATIONS'), role: ['admin'], routerLink: ['/organizations'] },
+                            { label: this.t('MENU.ORGANIZATION_TYPES'), role: ['admin'], routerLink: ['/organization-types'] },
                             { label: this.t('MENU.EMPLOYEES'), role: ['hrm_admin', 'hrm_manager'], routerLink: ['/employees'] },
                             { label: this.t('MENU.POSITIONS'), role: ['hrm_admin', 'hrm_manager'], routerLink: ['/positions'] },
                             { label: this.t('MENU.DEPARTMENTS'), role: ['hrm_admin', 'hrm_manager'], routerLink: ['/departments'] },

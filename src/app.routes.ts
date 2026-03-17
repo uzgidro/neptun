@@ -25,6 +25,8 @@ export const appRoutes: Routes = [
             { path: 'files', loadComponent: () => import('./app/pages/files/files.component').then(m => m.FilesComponent), canActivate: [scGuard] },
             { path: 'positions', loadComponent: () => import('./app/pages/hrm/position/position.component').then(m => m.PositionComponent), canActivate: [positionsGuard] },
             { path: 'departments', loadComponent: () => import('./app/pages/hrm/department/department.component').then(m => m.DepartmentComponent), canActivate: [adminGuard] },
+            { path: 'organizations', loadComponent: () => import('./app/pages/hrm/organizations/organization.component').then(m => m.OrganizationComponent), canActivate: [adminGuard] },
+            { path: 'organization-types', loadComponent: () => import('./app/pages/hrm/organization-types/organization-type.component').then(m => m.OrganizationTypeComponent), canActivate: [adminGuard] },
             { path: 'employees', loadComponent: () => import('./app/pages/hrm/employee/employee.component').then(m => m.EmployeeComponent), canActivate: [adminGuard] },
             { path: 'hrm/dashboard', loadComponent: () => import('./app/pages/hrm/dashboard/dashboard.component').then(m => m.HRMDashboardComponent), canActivate: [hrmGuard] },
             { path: 'hrm/my-cabinet', loadComponent: () => import('./app/pages/hrm/employee-cabinet/employee-cabinet.component').then(m => m.EmployeeCabinetComponent), canActivate: [authGuard] },

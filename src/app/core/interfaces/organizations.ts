@@ -16,4 +16,5 @@ export interface Organization {
 export interface OrganizationPayload {
     name: string;
     parent_organization_id?: number | null;
+    type_ids: number[];
 }
