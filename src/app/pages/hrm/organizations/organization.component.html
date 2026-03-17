@@ -1,0 +1,132 @@
+<div class="card">
+    <div class="font-semibold text-xl mb-4">{{ 'HRM.ORGANIZATIONS.TITLE' | translate }}</div>
+    <p-treeTable
+        #tt
+        [value]="treeNodes"
+        [globalFilterFields]="['name']"
+        [loading]="loading"
+        [showGridlines]="true"
+    >
+        <ng-template #caption>
+            <div class="flex justify-between items-center flex-column sm:flex-row gap-2">
+                <div class="flex gap-2">
+                    <button pButton (click)="expandAll()" class="p-button-outlined p-button-sm">
+                        <i class="pi pi-plus-circle" pButtonIcon></i>
+                        <span pButtonLabel>{{ 'HRM.ORGANIZATIONS.EXPAND_ALL' | translate }}</span>
+                    </button>
+                    <button pButton (click)="collapseAll()" class="p-button-outlined p-button-sm">
+                        <i class="pi pi-minus-circle" pButtonIcon></i>
+                        <span pButtonLabel>{{ 'HRM.ORGANIZATIONS.COLLAPSE_ALL' | translate }}</span>
+                    </button>
+                </div>
+                <div class="flex gap-2 items-center">
+                    <p-iconfield>
+                        <p-inputicon>
+                            <i class="pi pi-search"></i>
+                        </p-inputicon>
+                        <input pInputText type="text" (input)="onGlobalFilter($event)" [placeholder]="'COMMON.SEARCH' | translate" />
+                    </p-iconfield>
+                    <button pButton (click)="openDialog()">
+                        <i class="pi pi-plus" pButtonIcon></i>
+                        <span pButtonLabel>{{ 'HRM.ORGANIZATIONS.NEW_ORGANIZATION' | translate }}</span>
+                    </button>
+                </div>
+            </div>
+        </ng-template>
+        <ng-template #header>
+            <tr>
+                <th style="min-width: 20rem">{{ 'HRM.ORGANIZATIONS.NAME' | translate }}</th>
+                <th style="min-width: 12rem">{{ 'HRM.ORGANIZATIONS.TYPES' | translate }}</th>
+                <th style="width: 10rem">{{ 'COMMON.ACTIONS' | translate }}</th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-rowNode let-rowData="rowData">
+            <tr>
+                <td>
+                    <p-treeTableToggler [rowNode]="rowNode" />
+                    {{ rowData.name }}
+                </td>
+                <td>
+                    <div class="flex gap-1 flex-wrap">
+                        @for (type of rowData.types; track type) {
+                            <p-chip [label]="type" />
+                        }
+                    </div>
+                </td>
+                <td>
+                    <div class="flex justify-center gap-2">
+                        <button pButton
+                                icon="pi pi-pencil"
+                                (click)="openEditDialog(rowData)"
+                                class="p-button-rounded p-button-text p-button-warning"
+                                [pTooltip]="'COMMON.EDIT' | translate"
+                                tooltipPosition="top">
+                        </button>
+                        <button pButton
+                                icon="pi pi-trash"
+                                (click)="openDeleteDialog(rowData)"
+                                class="p-button-rounded p-button-text p-button-danger"
+                                [pTooltip]="'COMMON.DELETE' | translate"
+                                tooltipPosition="top">
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template #emptymessage>
+            <tr>
+                <td colspan="3">{{ 'HRM.ORGANIZATIONS.NOTHING_FOUND' | translate }}</td>
+            </tr>
+        </ng-template>
+        <ng-template #loadingbody>
+            <tr>
+                <td colspan="3">{{ 'HRM.ORGANIZATIONS.LOADING' | translate }}</td>
+            </tr>
+        </ng-template>
+    </p-treeTable>
+</div>
+
+<app-dialog
+    [(visible)]="displayDialog"
+    [header]="isEditMode ? ('HRM.ORGANIZATIONS.EDIT_ORGANIZATION' | translate) : ('HRM.ORGANIZATIONS.NEW_ORGANIZATION' | translate)"
+    [form]="form"
+    [saveLabel]="isEditMode ? ('COMMON.UPDATE' | translate) : ('COMMON.SAVE' | translate)"
+    (save)="onSubmit()"
+    (cancel)="closeDialog()">
+    <form class="p-4" [formGroup]="form" (ngSubmit)="onSubmit()">
+        <app-input-text
+            formControlName="name"
+            [label]="'HRM.ORGANIZATIONS.NAME' | translate"
+            [submitted]="submitted"
+            [errorMessage]="'HRM.ORGANIZATIONS.NAME_REQUIRED' | translate"
+            [required]="true">
+        </app-input-text>
+
+        <app-select
+            formControlName="parent_organization_id"
+            [label]="'HRM.ORGANIZATIONS.PARENT_ORGANIZATION' | translate"
+            [items]="parentOrganizationOptions"
+            [submitted]="submitted"
+            [required]="false">
+        </app-select>
+
+        <div class="field mt-4">
+            <label class="font-medium mb-2 block">{{ 'HRM.ORGANIZATIONS.TYPES' | translate }}</label>
+            <p-multiSelect
+                formControlName="type_ids"
+                [options]="organizationTypes"
+                optionLabel="name"
+                [placeholder]="'HRM.ORGANIZATIONS.TYPES' | translate"
+                [filter]="true"
+                [showClear]="true"
+                styleClass="w-full">
+            </p-multiSelect>
+        </div>
+    </form>
+</app-dialog>
+
+<app-delete-confirmation
+    [(visible)]="displayDeleteDialog"
+    [message]="('HRM.ORGANIZATIONS.DELETE_CONFIRM' | translate) + ' ' + (selectedOrganization?.name || '') + '?'"
+    (onConfirm)="confirmDelete()">
+</app-delete-confirmation>

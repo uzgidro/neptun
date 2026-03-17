@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ApiService, FLAT } from '@/core/services/api.service';
 import { Organization, OrganizationPayload } from '@/core/interfaces/organizations';
-import { HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { shareReplay, tap } from 'rxjs/operators';
+import { map, shareReplay, tap } from 'rxjs/operators';
 
 const ORGANIZATIONS = '/organizations';
 
@@ -12,7 +11,7 @@ const ORGANIZATIONS = '/organizations';
 })
 export class OrganizationService extends ApiService {
     private organizationsFlat$: Observable<Organization[]> | null = null;
-    private cascades$: Observable<Organization[]> | null = null;
+    private organizationsTree$: Observable<Organization[]> | null = null;
 
     getOrganizationsFlat(): Observable<Organization[]> {
         if (!this.organizationsFlat$) {
@@ -23,19 +22,18 @@ export class OrganizationService extends ApiService {
         return this.organizationsFlat$;
     }
 
-    getCascades(): Observable<Organization[]> {
-        if (!this.cascades$) {
-            const params = new HttpParams().set('type', 'cascade');
-            this.cascades$ = this.http.get<Organization[]>(this.BASE_URL + ORGANIZATIONS, { params: params }).pipe(
+    getOrganizationsTree(): Observable<Organization[]> {
+        if (!this.organizationsTree$) {
+            this.organizationsTree$ = this.http.get<Organization[]>(`${this.BASE_URL}${ORGANIZATIONS}`).pipe(
                 shareReplay({ bufferSize: 1, refCount: true })
             );
         }
-        return this.cascades$;
+        return this.organizationsTree$;
     }
 
     invalidateOrganizationsCache(): void {
         this.organizationsFlat$ = null;
-        this.cascades$ = null;
+        this.organizationsTree$ = null;
     }
 
     createOrganization(payload: OrganizationPayload): Observable<Organization> {
@@ -45,7 +43,7 @@ export class OrganizationService extends ApiService {
     }
 
     updateOrganization(id: number, payload: OrganizationPayload): Observable<Organization> {
-        return this.http.put<Organization>(`${this.BASE_URL}${ORGANIZATIONS}/${id}`, payload).pipe(
+        return this.http.patch<Organization>(`${this.BASE_URL}${ORGANIZATIONS}/${id}`, payload).pipe(
             tap(() => this.invalidateOrganizationsCache())
         );
     }
@@ -53,6 +51,16 @@ export class OrganizationService extends ApiService {
     deleteOrganization(id: number): Observable<any> {
         return this.http.delete(`${this.BASE_URL}${ORGANIZATIONS}/${id}`).pipe(
             tap(() => this.invalidateOrganizationsCache())
+        );
+    }
+
+    getCascades(): Observable<Organization[]> {
+        return this.getOrganizationsTree();
+    }
+
+    getOrganizationsWithType(type: string): Observable<Organization[]> {
+        return this.getOrganizationsFlat().pipe(
+            map(orgs => orgs.filter(org => org.types?.includes(type)))
         );
     }
 }
