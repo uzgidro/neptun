@@ -144,8 +144,8 @@ export class GlobalErrorHandler implements ErrorHandler {
      * Show toast notification for error
      */
     private showErrorToast(error: Error | HttpErrorResponse, details: ErrorDetails): void {
-        // Skip 401 errors (handled by auth interceptor)
-        if (error instanceof HttpErrorResponse && error.status === 401) {
+        // Skip 401/403 errors (401 handled by auth interceptor, 403 logged only)
+        if (error instanceof HttpErrorResponse && (error.status === 401 || error.status === 403)) {
             return;
         }
 

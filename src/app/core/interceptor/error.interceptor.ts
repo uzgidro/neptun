@@ -18,8 +18,8 @@ export const errorInterceptor: HttpInterceptorFn = (
 
     return next(req).pipe(
         catchError((error: HttpErrorResponse) => {
-            // Skip 401 errors (handled by auth interceptor)
-            if (error.status === 401) {
+            // Skip 401/403 errors (401 handled by auth interceptor, 403 logged only)
+            if (error.status === 401 || error.status === 403) {
                 return throwError(() => error);
             }
 
