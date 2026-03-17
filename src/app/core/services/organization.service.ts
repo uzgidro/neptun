@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiService, FLAT } from '@/core/services/api.service';
 import { Organization, OrganizationPayload } from '@/core/interfaces/organizations';
+import { HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map, shareReplay, tap } from 'rxjs/operators';
 
@@ -12,6 +13,7 @@ const ORGANIZATIONS = '/organizations';
 export class OrganizationService extends ApiService {
     private organizationsFlat$: Observable<Organization[]> | null = null;
     private organizationsTree$: Observable<Organization[]> | null = null;
+    private cascades$: Observable<Organization[]> | null = null;
 
     getOrganizationsFlat(): Observable<Organization[]> {
         if (!this.organizationsFlat$) {
@@ -34,6 +36,7 @@ export class OrganizationService extends ApiService {
     invalidateOrganizationsCache(): void {
         this.organizationsFlat$ = null;
         this.organizationsTree$ = null;
+        this.cascades$ = null;
     }
 
     createOrganization(payload: OrganizationPayload): Observable<Organization> {
@@ -55,7 +58,13 @@ export class OrganizationService extends ApiService {
     }
 
     getCascades(): Observable<Organization[]> {
-        return this.getOrganizationsWithType('cascade');
+        if (!this.cascades$) {
+            const params = new HttpParams().set('type', 'cascade');
+            this.cascades$ = this.http.get<Organization[]>(`${this.BASE_URL}${ORGANIZATIONS}`, { params }).pipe(
+                shareReplay({ bufferSize: 1, refCount: true })
+            );
+        }
+        return this.cascades$;
     }
 
     getOrganizationsWithType(type: string): Observable<Organization[]> {
