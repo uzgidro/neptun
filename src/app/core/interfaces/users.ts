@@ -4,6 +4,7 @@ export interface Users {
     id: number;
     name: string;
     login: string;
+    is_active: boolean;
     roles: string[];
     role_ids: number[];
     contact?: Contact;

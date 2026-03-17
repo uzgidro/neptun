@@ -3,10 +3,12 @@ import { inject } from '@angular/core';
 import { catchError, Observable, switchMap, throwError } from 'rxjs';
 import { JwtService } from '@/core/services/jwt.service';
 import { TokenRefreshService } from '@/core/services/token-refresh.service';
+import { AuthService } from '@/core/services/auth.service';
 
 export const authInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> => {
     const jwtService = inject(JwtService);
     const tokenRefreshService = inject(TokenRefreshService);
+    const authService = inject(AuthService);
     const token = jwtService.getToken();
 
     if (token) {
@@ -15,8 +17,16 @@ export const authInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, ne
 
     return next(req).pipe(
         catchError((error) => {
-            if (error instanceof HttpErrorResponse && error.status === 401 && !req.url.includes('/refresh')) {
-                return handle401Error(req, next, tokenRefreshService);
+            if (error instanceof HttpErrorResponse) {
+                // 403 on refresh — session is over, no retry
+                if (error.status === 403 && req.url.includes('/refresh')) {
+                    authService.logout();
+                    return throwError(() => error);
+                }
+
+                if (error.status === 401 && !req.url.includes('/refresh')) {
+                    return handle401Error(req, next, tokenRefreshService);
+                }
             }
             return throwError(() => error);
         })

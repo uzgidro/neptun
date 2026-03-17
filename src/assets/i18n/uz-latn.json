@@ -619,7 +619,15 @@
       "ERROR_CREATE": "Foydalanuvchi yaratib bo'lmadi",
       "ERROR_UPDATE": "Foydalanuvchi yangilab bo'lmadi",
       "ERROR_DELETE": "Foydalanuvchi o'chirib bo'lmadi",
-      "DELETE_CONFIRM": "Foydalanuvchini o'chirishni xohlaysizmi"
+      "DELETE_CONFIRM": "Foydalanuvchini o'chirishni xohlaysizmi",
+      "DEACTIVATE_CONFIRM": "Foydalanuvchini o'chirishni xohlaysizmi",
+      "ACTIVATE_CONFIRM": "Foydalanuvchini faollashtirishni xohlaysizmi",
+      "SUCCESS_DEACTIVATED": "Foydalanuvchi o'chirildi",
+      "SUCCESS_ACTIVATED": "Foydalanuvchi faollashtirildi",
+      "ERROR_TOGGLE_ACTIVE": "Foydalanuvchi holatini o'zgartirib bo'lmadi",
+      "INACTIVE": "Faol emas",
+      "DEACTIVATE": "O'chirish",
+      "ACTIVATE": "Faollashtirish"
     },
     "ROLES": {
       "TITLE": "Rollar",

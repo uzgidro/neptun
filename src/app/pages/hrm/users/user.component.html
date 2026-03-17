@@ -9,7 +9,7 @@
         [rowHover]="true"
         [showGridlines]="true"
         [paginator]="true"
-        [globalFilterFields]="['name', 'role']"
+        [globalFilterFields]="['login', 'roles']"
     >
         <ng-template #caption>
             <div class="flex justify-between items-center flex-column sm:flex-row">
@@ -30,18 +30,18 @@
                 <th style="min-width: 12rem">
                     <div class="flex justify-between items-center">
                         {{ 'HRM.USERS.NAME' | translate }}
-                        <p-columnFilter type="text" field="name" display="menu"
+                        <p-columnFilter type="text" field="login" display="menu"
                                         [placeholder]="'COMMON.SEARCH' | translate"></p-columnFilter>
                     </div>
                 </th>
                 <th style="min-width: 12rem">
                     <div class="flex justify-between items-center">
                         {{ 'HRM.USERS.ROLES' | translate }}
-                        <p-columnFilter type="text" field="role" display="menu"
+                        <p-columnFilter type="text" field="roles" display="menu"
                                         [placeholder]="'COMMON.SEARCH' | translate"></p-columnFilter>
                     </div>
                 </th>
-                <th style="width: 10rem">
+                <th style="width: 12rem">
                     <div class="flex justify-center items-center">
                         {{ 'COMMON.ACTIONS' | translate }}
                     </div>
@@ -49,24 +49,34 @@
             </tr>
         </ng-template>
         <ng-template #body let-user>
-            <tr>
+            <tr [class.opacity-50]="!user.is_active">
                 <td>
                     {{ user.login }}
+                    @if (!user.is_active) {
+                        <p-chip [label]="'HRM.USERS.INACTIVE' | translate" styleClass="ml-2 p-chip-sm bg-red-100 text-red-700"></p-chip>
+                    }
                 </td>
                 <td>
-                    <div class="flex flex-row space-x-1">
+                    <div class="flex flex-wrap gap-1">
                         @for (role of user.roles; track role) {
-                            <p-chip [label]="role" class="m-1"></p-chip>
+                            <p-chip [label]="role"></p-chip>
                         }
                     </div>
                 </td>
-                <td>
+                <td class="white-space-nowrap">
                     <div class="flex justify-center gap-2">
                         <button pButton
                                 icon="pi pi-pencil"
                                 (click)="openEditDialog(user)"
                                 class="p-button-rounded p-button-text p-button-warning"
                                 [pTooltip]="'COMMON.EDIT' | translate"
+                                tooltipPosition="top">
+                        </button>
+                        <button pButton
+                                [icon]="user.is_active ? 'pi pi-lock' : 'pi pi-lock-open'"
+                                (click)="toggleActive(user)"
+                                [class]="'p-button-rounded p-button-text ' + (user.is_active ? 'p-button-secondary' : 'p-button-success')"
+                                [pTooltip]="(user.is_active ? ('HRM.USERS.DEACTIVATE' | translate) : ('HRM.USERS.ACTIVATE' | translate))"
                                 tooltipPosition="top">
                         </button>
                         <button pButton
