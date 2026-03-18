@@ -4,7 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, Observable, forkJoin, of } from 'rxjs';
-import { takeUntil, catchError } from 'rxjs/operators';
+import { takeUntil, catchError, finalize } from 'rxjs/operators';
+import { saveAs } from 'file-saver';
 import { DatePickerModule } from 'primeng/datepicker';
 import { ButtonModule } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
@@ -36,6 +37,7 @@ export class FiltrationComparisonComponent implements OnInit, OnDestroy {
     selectedDate!: Date;
     loading = false;
     saving = false;
+    downloading: 'excel' | 'pdf' | null = null;
 
     constructor(
         private route: ActivatedRoute,
@@ -212,6 +214,25 @@ export class FiltrationComparisonComponent implements OnInit, OnDestroy {
                 this.messageService.add({ severity: 'error', summary: this.translate.instant('FILTRATION.SAVE_ERROR') });
             }
         });
+    }
+
+    download(format: 'excel' | 'pdf'): void {
+        this.downloading = format;
+        const date = this.dateToYMD(this.selectedDate);
+        const ext = format === 'excel' ? 'xlsx' : 'pdf';
+        this.comparisonService.downloadExport(date, format)
+            .pipe(
+                takeUntil(this.destroy$),
+                finalize(() => this.downloading = null)
+            )
+            .subscribe({
+                next: (response) => {
+                    saveAs(response.body!, `Filter-${date}.${ext}`);
+                },
+                error: () => {
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('FILTRATION.EXPORT_ERROR') });
+                }
+            });
     }
 
     canDeactivate(): boolean | Observable<boolean> {

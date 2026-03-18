@@ -11,15 +11,17 @@
             <p-button
                 [label]="'FILTRATION.EXPORT_EXCEL' | translate"
                 icon="pi pi-file-excel"
-                [disabled]="true"
-                [pTooltip]="'FILTRATION.EXPORT_IN_DEVELOPMENT' | translate"
-                severity="secondary" />
+                [disabled]="loading || downloading !== null"
+                [loading]="downloading === 'excel'"
+                severity="success"
+                (onClick)="download('excel')" />
             <p-button
                 [label]="'FILTRATION.EXPORT_PDF' | translate"
                 icon="pi pi-file-pdf"
-                [disabled]="true"
-                [pTooltip]="'FILTRATION.EXPORT_IN_DEVELOPMENT' | translate"
-                severity="secondary" />
+                [disabled]="loading || downloading !== null"
+                [loading]="downloading === 'pdf'"
+                severity="danger"
+                (onClick)="download('pdf')" />
             <p-button
                 [label]="'COMMON.SAVE' | translate"
                 icon="pi pi-save"

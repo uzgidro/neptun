@@ -282,6 +282,7 @@
     "EXPORT_EXCEL": "Excel",
     "EXPORT_PDF": "PDF",
     "EXPORT_IN_DEVELOPMENT": "Ishlab chiqilmoqda",
+    "EXPORT_ERROR": "Hisobotni eksport qilib bo'lmadi",
     "NO_LOCATIONS": "Filtratsiya joylari yo'q",
     "NO_PIEZOMETERS": "Pezometrlar yo'q"
   },
