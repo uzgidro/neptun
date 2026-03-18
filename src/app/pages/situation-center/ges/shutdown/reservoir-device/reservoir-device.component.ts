@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { Button } from 'primeng/button';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -19,7 +19,7 @@ import { saveAs } from 'file-saver';
   templateUrl: './reservoir-device.component.html',
   styleUrl: './reservoir-device.component.scss'
 })
-export class ReservoirDeviceComponent implements OnInit, OnDestroy {
+export class ReservoirDeviceComponent implements OnInit, OnChanges, OnDestroy {
   devices: ReservoirDeviceSummaryResponse[] = [];
   loading = false;
   saving = false;
@@ -59,9 +59,16 @@ export class ReservoirDeviceComponent implements OnInit, OnDestroy {
     this.loadDevices();
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['date'] && !changes['date'].firstChange) {
+      this.loadDevices();
+    }
+  }
+
   loadDevices(): void {
     this.loading = true;
-    this.reservoirDeviceService.getReservoirDevices().pipe(takeUntil(this.destroy$)).subscribe({
+    const dateToUse = this.date || undefined;
+    this.reservoirDeviceService.getReservoirDevices(dateToUse).pipe(takeUntil(this.destroy$)).subscribe({
       next: (data) => {
         this.devices = data;
         this.originalDevices = JSON.parse(JSON.stringify(data));

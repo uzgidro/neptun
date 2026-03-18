@@ -1,5 +1,8 @@
 <div class="card">
+    <div class="flex justify-end mb-6">
+        <app-date [syncQueryParams]="true" (dateChange)="onDateChanged($event)"></app-date>
+    </div>
     <div class="mb-8">
-        <app-reservoir-device></app-reservoir-device>
+        <app-reservoir-device [date]="selectedDate"></app-reservoir-device>
     </div>
 </div>
