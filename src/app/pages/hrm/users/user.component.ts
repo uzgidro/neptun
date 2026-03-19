@@ -16,7 +16,7 @@ import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
 import { InputText } from 'primeng/inputtext';
 import { Chip } from 'primeng/chip';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { Roles } from '@/core/interfaces/roles';
 import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
@@ -95,8 +95,8 @@ export class User implements OnInit, OnDestroy {
     constructor() {
         this.userForm = this.fb.group({
             login: ['', Validators.required],
-            password: [''],
-            roles: [[]],
+            password: ['', [Validators.required, Validators.minLength(8)]],
+            roles: [[], [(c: AbstractControl): ValidationErrors | null => (!c.value || c.value.length === 0) ? { required: true } : null]],
             // Contact selection
             contact_id: [null],
             // NewContactRequest fields
@@ -148,7 +148,7 @@ export class User implements OnInit, OnDestroy {
         this.selectedFiles = [];
         this.userForm.reset({ roles: [], contact_id: null });
         this.userForm.get('login')?.enable();
-        this.userForm.get('password')?.setValidators([Validators.required]);
+        this.userForm.get('password')?.setValidators([Validators.required, Validators.minLength(8)]);
         this.userForm.get('password')?.updateValueAndValidity();
         this.updateContactValidators();
         this.displayDialog = true;

@@ -122,17 +122,27 @@
 
                 <div class="flex flex-col gap-2">
                     <label
-                        for="password">{{ 'HRM.USERS.PASSWORD' | translate }}{{ isEditMode ? (' ' + ('HRM.USERS.PASSWORD_HINT' | translate)) : '' }}</label>
+                        for="password">{{ 'HRM.USERS.PASSWORD' | translate }}{{ isEditMode ? (' ' + ('HRM.USERS.PASSWORD_HINT' | translate)) : '' }} @if (!isEditMode) { <span class="text-red-500">*</span> }</label>
                     <p-password id="password" formControlName="password" [toggleMask]="true"
-                                [feedback]="false"></p-password>
+                                [feedback]="false"
+                                [class.ng-invalid]="submitted && userForm.controls['password'].errors"
+                                [class.ng-dirty]="submitted && userForm.controls['password'].errors"></p-password>
                     @if (submitted && userForm.controls['password'].errors?.['required']) {
                         <small class="p-error">{{ 'HRM.USERS.PASSWORD_REQUIRED' | translate }}</small>
                     }
+                    @if (submitted && userForm.controls['password'].errors?.['minlength']) {
+                        <small class="p-error">{{ 'HRM.USERS.PASSWORD_MIN_LENGTH' | translate }}</small>
+                    }
                 </div>
                 <div class="flex flex-col gap-2">
-                    <label for="roles">{{ 'HRM.USERS.ROLES' | translate }}</label>
+                    <label for="roles">{{ 'HRM.USERS.ROLES' | translate }} <span class="text-red-500">*</span></label>
                     <p-multiSelect id="roles" [options]="allRoles" formControlName="roles" optionLabel="name"
-                                   [placeholder]="'HRM.USERS.SELECT_ROLES' | translate" [appendTo]="'body'"></p-multiSelect>
+                                   [placeholder]="'HRM.USERS.SELECT_ROLES' | translate" [appendTo]="'body'"
+                                   [class.ng-invalid]="submitted && userForm.controls['roles'].errors"
+                                   [class.ng-dirty]="submitted && userForm.controls['roles'].errors"></p-multiSelect>
+                    @if (submitted && userForm.controls['roles'].errors?.['required']) {
+                        <small class="p-error">{{ 'HRM.USERS.ROLES_REQUIRED' | translate }}</small>
+                    }
                 </div>
 
                 <!-- Contact Information -->
@@ -157,7 +167,7 @@
 
                 @if (!isEditMode && contactMode === 'existing') {
                     <div class="flex flex-col gap-2">
-                        <label for="contact_id">{{ 'HRM.USERS.SELECT_CONTACT' | translate }}</label>
+                        <label for="contact_id">{{ 'HRM.USERS.SELECT_CONTACT' | translate }} <span class="text-red-500">*</span></label>
                         <p-select
                             id="contact_id"
                             formControlName="contact_id"
@@ -233,7 +243,7 @@
                         [label]="'HRM.EMPLOYEES.ORGANIZATION' | translate"
                         [items]="organizations"
                         [submitted]="submitted"
-                        [errorMessage]="'HRM.EMPLOYEES.ORGANIZATION_REQUIRED' | translate">
+                        [required]="false">
                     </app-select>
 
                     <app-select
@@ -241,7 +251,7 @@
                         [label]="'HRM.EMPLOYEES.DEPARTMENT' | translate"
                         [items]="departments"
                         [submitted]="submitted"
-                        [errorMessage]="'HRM.EMPLOYEES.DEPARTMENT_REQUIRED' | translate">
+                        [required]="false">
                     </app-select>
 
                     <app-select
@@ -249,7 +259,7 @@
                         [label]="'HRM.EMPLOYEES.POSITION' | translate"
                         [items]="positions"
                         [submitted]="submitted"
-                        [errorMessage]="'HRM.EMPLOYEES.POSITION_REQUIRED' | translate">
+                        [required]="false">
                     </app-select>
 
                     <app-input-text

@@ -239,6 +239,7 @@ export class MenuComponent implements OnInit {
                             { label: this.t('MENU.LEGAL_LIBRARY_UHE_PROTOCOLS'), routerLink: ['/legal-documents'], queryParams: { type_id: 11 }, routerLinkActiveOptions: { queryParams: 'exact' } }
                         ]
                     },
+                    { label: this.t('MENU.FILTRATION'), role: ['reservoir'], routerLink: ['/filtration-comparison'] },
                     { label: this.t('MENU.CALLS'), role: ['rais'], routerLink: ['/calls'] },
                     { label: this.t('MENU.PRESS_SERVICE'), routerLink: ['/uzgidro-news'] }
                 ]
