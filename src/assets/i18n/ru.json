@@ -286,7 +286,8 @@
     "EXPORT_IN_DEVELOPMENT": "В разработке",
     "EXPORT_ERROR": "Не удалось экспортировать отчёт",
     "NO_LOCATIONS": "Нет мест фильтрации",
-    "NO_PIEZOMETERS": "Нет пьезометров"
+    "NO_PIEZOMETERS": "Нет пьезометров",
+    "PIEZOMETER_COUNTS": "Количество пьезометров"
   },
   "TOPBAR": {
     "CALL": "Звонок",

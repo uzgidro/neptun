@@ -285,7 +285,8 @@
     "EXPORT_IN_DEVELOPMENT": "In development",
     "EXPORT_ERROR": "Failed to export report",
     "NO_LOCATIONS": "No filtration locations",
-    "NO_PIEZOMETERS": "No piezometers"
+    "NO_PIEZOMETERS": "No piezometers",
+    "PIEZOMETER_COUNTS": "Piezometer Counts"
   },
   "TOPBAR": {
     "CALL": "Call",

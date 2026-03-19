@@ -285,7 +285,8 @@
     "EXPORT_IN_DEVELOPMENT": "Ishlab chiqilmoqda",
     "EXPORT_ERROR": "Hisobotni eksport qilib bo'lmadi",
     "NO_LOCATIONS": "Filtratsiya joylari yo'q",
-    "NO_PIEZOMETERS": "Pezometrlar yo'q"
+    "NO_PIEZOMETERS": "Pezometrlar yo'q",
+    "PIEZOMETER_COUNTS": "Pezometrlar soni"
   },
   "TOPBAR": {
     "CALL": "Qo'ng'iroq",

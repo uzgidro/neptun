@@ -285,7 +285,8 @@
     "EXPORT_IN_DEVELOPMENT": "Ишлаб чиқилмоқда",
     "EXPORT_ERROR": "Ҳисоботни экспорт қилиб бўлмади",
     "NO_LOCATIONS": "Филтрация жойлари йўқ",
-    "NO_PIEZOMETERS": "Пьезометрлар йўқ"
+    "NO_PIEZOMETERS": "Пьезометрлар йўқ",
+    "PIEZOMETER_COUNTS": "Пьезометрлар сони"
   },
   "TOPBAR": {
     "CALL": "Қўнғироқ",
