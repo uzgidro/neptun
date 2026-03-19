@@ -19,10 +19,6 @@ export class JwtService {
     }
 
     getToken(): string | null {
-        if (this.token && this.isTokenExpired()) {
-            this.destroyToken();
-            return null;
-        }
         return this.token;
     }
 
