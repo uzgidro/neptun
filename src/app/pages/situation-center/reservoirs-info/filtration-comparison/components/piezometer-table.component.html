@@ -14,11 +14,12 @@
                 }
                 <th class="border border-surface-200 dark:border-surface-700 p-2 text-center min-w-16">{{ 'FILTRATION.NORM' | translate }}</th>
                 <th class="border border-surface-200 dark:border-surface-700 p-2 text-center min-w-16">+,-</th>
+                <th class="border border-surface-200 dark:border-surface-700 p-2 text-center min-w-16">{{ 'FILTRATION.ANOMALY' | translate }}</th>
             </tr>
         </thead>
         <tbody>
             @for (p of currentPiezometers; track p.id; let i = $index) {
-                <tr>
+                <tr [ngClass]="{'bg-amber-50 dark:bg-amber-900/20': isAnomaly(i)}">
                     <td class="sticky-col border border-surface-200 dark:border-surface-700 p-2">{{ p.name }}</td>
                     @if (historicalPiezometers && historicalFormArray) {
                         <td class="border border-surface-200 dark:border-surface-700 p-1 text-center">
@@ -51,6 +52,11 @@
                             {{ dev >= 0 ? '+' : '' }}{{ dev.toFixed(2) }}
                         } @else { — }
                     </td>
+                    <td class="border border-surface-200 dark:border-surface-700 p-2 text-center">
+                        <p-checkbox
+                            [formControl]="$any(currentFormArray.at(i).get('anomaly'))"
+                            [binary]="true" />
+                    </td>
                 </tr>
             }
         </tbody>
@@ -61,4 +67,7 @@
             {{ 'FILTRATION.NON_PRESSURE' | translate }}: {{ piezometerCounts.non_pressure }}
         </div>
     }
+    <div class="text-xs font-medium mt-1" [ngClass]="hasAnyAnomaly() ? 'text-red-600 dark:text-red-400' : 'text-green-600 dark:text-green-400'">
+        {{ (hasAnyAnomaly() ? 'FILTRATION.HAS_ANOMALY' : 'FILTRATION.NO_ANOMALY') | translate }}
+    </div>
 </div>

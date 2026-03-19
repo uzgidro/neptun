@@ -2,13 +2,14 @@ import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormArray, ReactiveFormsModule } from '@angular/forms';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { CheckboxModule } from 'primeng/checkbox';
 import { TranslateModule } from '@ngx-translate/core';
 import { PiezoReading, PiezometerCounts } from '@/core/interfaces/filtration-comparison';
 
 @Component({
     selector: 'app-piezometer-table',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, InputNumberModule, TranslateModule],
+    imports: [CommonModule, ReactiveFormsModule, InputNumberModule, CheckboxModule, TranslateModule],
     templateUrl: './piezometer-table.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -33,6 +34,15 @@ export class PiezometerTableComponent {
         const val = formArray?.at(index)?.get('level')?.value;
         if (val === null || val === undefined) return null;
         return val - piezo.norm;
+    }
+
+    isAnomaly(index: number): boolean {
+        return this.currentFormArray?.at(index)?.get('anomaly')?.value === true;
+    }
+
+    hasAnyAnomaly(): boolean {
+        if (!this.currentFormArray) return false;
+        return this.currentFormArray.controls.some((c: any) => c.get('anomaly')?.value === true);
     }
 
     exceedsNorm(piezo: PiezoReading, formArray: FormArray, index: number): boolean {

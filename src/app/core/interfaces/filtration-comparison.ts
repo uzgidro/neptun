@@ -6,6 +6,7 @@ export interface LocationReading extends Location {
 
 export interface PiezoReading extends Piezometer {
     level: number | null;
+    anomaly: boolean;
 }
 
 export interface PiezometerCounts {
@@ -33,5 +34,5 @@ export interface UpsertRequest {
     organization_id: number;
     date: string;
     filtration_measurements?: { location_id: number; flow_rate: number | null }[];
-    piezometer_measurements?: { piezometer_id: number; level: number | null }[];
+    piezometer_measurements?: { piezometer_id: number; level: number | null; anomaly?: boolean }[];
 }

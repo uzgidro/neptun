@@ -286,7 +286,10 @@
     "EXPORT_ERROR": "Failed to export report",
     "NO_LOCATIONS": "No filtration locations",
     "NO_PIEZOMETERS": "No piezometers",
-    "PIEZOMETER_COUNTS": "Piezometer Counts"
+    "PIEZOMETER_COUNTS": "Piezometer Counts",
+    "ANOMALY": "Anomaly",
+    "NO_ANOMALY": "Within normal range, no anomalous readings detected",
+    "HAS_ANOMALY": "Anomalous readings detected within measurement range"
   },
   "TOPBAR": {
     "CALL": "Call",

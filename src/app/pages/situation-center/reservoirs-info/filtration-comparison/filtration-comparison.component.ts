@@ -126,7 +126,8 @@ export class FiltrationComparisonComponent implements OnInit, OnDestroy {
         const piezometers = new FormArray(
             snapshot.piezometers.map(p => new FormGroup({
                 piezometer_id: new FormControl(p.id),
-                level: new FormControl(p.level)
+                level: new FormControl(p.level),
+                anomaly: new FormControl(p.anomaly ?? false)
             }))
         );
         return new FormGroup({
@@ -154,7 +155,8 @@ export class FiltrationComparisonComponent implements OnInit, OnDestroy {
             })),
             piezometer_measurements: (fg.get('piezometers') as FormArray).controls.map((c: any) => ({
                 piezometer_id: c.get('piezometer_id').value,
-                level: c.get('level').value
+                level: c.get('level').value,
+                anomaly: c.get('anomaly').value
             }))
         };
     }

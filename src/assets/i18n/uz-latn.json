@@ -286,7 +286,10 @@
     "EXPORT_ERROR": "Hisobotni eksport qilib bo'lmadi",
     "NO_LOCATIONS": "Filtratsiya joylari yo'q",
     "NO_PIEZOMETERS": "Pezometrlar yo'q",
-    "PIEZOMETER_COUNTS": "Pezometrlar soni"
+    "PIEZOMETER_COUNTS": "Pezometrlar soni",
+    "ANOMALY": "Anomaliya",
+    "NO_ANOMALY": "Mezon ko'rsatkichlari doirasida, anomal ko'rsatkichlar mavjud emas",
+    "HAS_ANOMALY": "Mezon ko'rsatkichlari doirasida, anomal ko'rsatkichlar mavjud"
   },
   "TOPBAR": {
     "CALL": "Qo'ng'iroq",
