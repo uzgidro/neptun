@@ -218,7 +218,9 @@ export class FiltrationComparisonComponent implements OnInit, OnDestroy {
 
     download(format: 'excel' | 'pdf'): void {
         this.downloading = format;
-        const date = this.dateToYMD(this.selectedDate);
+        const nextDay = new Date(this.selectedDate);
+        nextDay.setDate(nextDay.getDate() + 1);
+        const date = this.dateToYMD(nextDay);
         const ext = format === 'excel' ? 'xlsx' : 'pdf';
         this.comparisonService.downloadExport(date, format)
             .pipe(
