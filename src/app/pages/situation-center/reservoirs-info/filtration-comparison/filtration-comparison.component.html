@@ -11,14 +11,14 @@
             <p-button
                 [label]="'FILTRATION.EXPORT_EXCEL' | translate"
                 icon="pi pi-file-excel"
-                [disabled]="loading || downloading !== null"
+                [disabled]="loadingSimilarDates || downloading !== null || !hasExportDates"
                 [loading]="downloading === 'excel'"
                 severity="success"
                 (onClick)="download('excel')" />
             <p-button
                 [label]="'FILTRATION.EXPORT_PDF' | translate"
                 icon="pi pi-file-pdf"
-                [disabled]="loading || downloading !== null"
+                [disabled]="loadingSimilarDates || downloading !== null || !hasExportDates"
                 [loading]="downloading === 'pdf'"
                 severity="danger"
                 (onClick)="download('pdf')" />
@@ -31,22 +31,33 @@
         </div>
     </div>
 
-    <!-- Loading -->
-    @if (loading) {
+    <!-- Loading similar dates -->
+    @if (loadingSimilarDates) {
         <div class="flex justify-center p-8">
             <i class="pi pi-spin pi-spinner text-2xl"></i>
         </div>
     }
 
     <!-- Empty state -->
-    @if (!loading && data.length === 0) {
+    @if (!loadingSimilarDates && similarDates.length === 0) {
         <p-message severity="info" [text]="'FILTRATION.NO_DATA' | translate" />
     }
 
     <!-- Organization cards -->
-    @if (!loading && data.length > 0) {
-        @for (org of data; track org.organization_id; let i = $index) {
-            <app-org-comparison-card [org]="org" [formGroup]="getOrgFormGroup(i)" />
+    @if (!loadingSimilarDates && similarDates.length > 0) {
+        @for (orgSimilar of similarDates; track orgSimilar.organization_id) {
+            <app-org-comparison-card
+                [org]="getOrgComparison(orgSimilar.organization_id) ?? null"
+                [similarDates]="orgSimilar.similar_dates"
+                [orgName]="orgSimilar.organization_name"
+                [referenceLevel]="orgSimilar.reference_level"
+                [referenceVolume]="orgSimilar.reference_volume"
+                [selectedFilterDate]="getOrgSelection(orgSimilar.organization_id).filterDate"
+                [selectedPiezoDate]="getOrgSelection(orgSimilar.organization_id).piezoDate"
+                [loadingData]="isOrgLoading(orgSimilar.organization_id)"
+                [orgFormGroup]="getOrgFormGroup(orgSimilar.organization_id)"
+                (filterDateChange)="onFilterDateChange(orgSimilar.organization_id, $event)"
+                (piezoDateChange)="onPiezoDateChange(orgSimilar.organization_id, $event)" />
         }
     }
 </div>

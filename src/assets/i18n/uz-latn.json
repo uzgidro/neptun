@@ -289,7 +289,11 @@
     "PIEZOMETER_COUNTS": "Pezometrlar soni",
     "ANOMALY": "Anomaliya",
     "NO_ANOMALY": "Mezon ko'rsatkichlari doirasida, anomal ko'rsatkichlar mavjud emas",
-    "HAS_ANOMALY": "Mezon ko'rsatkichlari doirasida, anomal ko'rsatkichlar mavjud"
+    "HAS_ANOMALY": "Mezon ko'rsatkichlari doirasida, anomal ko'rsatkichlar mavjud",
+    "FILTER_DATE": "Filtratsiya sanasi",
+    "PIEZO_DATE": "Pezometr sanasi",
+    "SELECT_DATE": "Sanani tanlang",
+    "NO_SIMILAR_DATES": "Mos tarixiy sanalar yo'q"
   },
   "TOPBAR": {
     "CALL": "Qo'ng'iroq",

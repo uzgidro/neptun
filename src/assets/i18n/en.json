@@ -289,7 +289,11 @@
     "PIEZOMETER_COUNTS": "Piezometer Counts",
     "ANOMALY": "Anomaly",
     "NO_ANOMALY": "Within normal range, no anomalous readings detected",
-    "HAS_ANOMALY": "Anomalous readings detected within measurement range"
+    "HAS_ANOMALY": "Anomalous readings detected within measurement range",
+    "FILTER_DATE": "Filtration date",
+    "PIEZO_DATE": "Piezometer date",
+    "SELECT_DATE": "Select date",
+    "NO_SIMILAR_DATES": "No matching historical dates"
   },
   "TOPBAR": {
     "CALL": "Call",

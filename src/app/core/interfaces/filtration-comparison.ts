@@ -27,7 +27,23 @@ export interface OrgComparison {
     organization_id: number;
     organization_name: string;
     current: ComparisonSnapshot;
-    historical: ComparisonSnapshot | null;
+    historical_filter: ComparisonSnapshot | null;
+    historical_piezo: ComparisonSnapshot | null;
+}
+
+export interface SimilarDate {
+    date: string;
+    level: number | null;
+    volume: number | null;
+}
+
+export interface OrgSimilarDates {
+    organization_id: number;
+    organization_name: string;
+    reference_date: string;
+    reference_level: number | null;
+    reference_volume: number | null;
+    similar_dates: SimilarDate[];
 }
 
 export interface UpsertRequest {
