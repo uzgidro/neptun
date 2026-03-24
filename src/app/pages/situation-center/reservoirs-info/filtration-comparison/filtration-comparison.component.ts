@@ -5,7 +5,7 @@ import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, Observable, forkJoin, of } from 'rxjs';
 import { takeUntil, catchError, finalize } from 'rxjs/operators';
-import { saveAs } from 'file-saver';
+import { downloadBlob } from '@/core/utils/download';
 import { DatePickerModule } from 'primeng/datepicker';
 import { ButtonModule } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
@@ -20,6 +20,8 @@ import { OrgComparisonCardComponent } from './components/org-comparison-card.com
 interface OrgSelection {
     filterDate: string | null;
     piezoDate: string | null;
+    clearFilterDate?: boolean;
+    clearPiezoDate?: boolean;
 }
 
 @Component({
@@ -139,6 +141,7 @@ export class FiltrationComparisonComponent implements OnInit, OnDestroy {
         const sel = this.orgSelections.get(orgId);
         if (sel) {
             sel.filterDate = date;
+            sel.clearFilterDate = false;
             this.tryLoadOrgData(orgId);
         }
     }
@@ -147,7 +150,46 @@ export class FiltrationComparisonComponent implements OnInit, OnDestroy {
         const sel = this.orgSelections.get(orgId);
         if (sel) {
             sel.piezoDate = date;
+            sel.clearPiezoDate = false;
             this.tryLoadOrgData(orgId);
+        }
+    }
+
+    onFilterDateClear(orgId: number): void {
+        const sel = this.orgSelections.get(orgId);
+        if (sel) {
+            sel.filterDate = null;
+            sel.clearFilterDate = true;
+            // Remove historical_filter from form
+            const orgFg = this.getOrgFormGroup(orgId);
+            if (orgFg) {
+                orgFg.setControl('historical_filter', new FormControl(null));
+                orgFg.markAsDirty();
+            }
+            // Remove historical_filter from orgData
+            const orgData = this.orgData.get(orgId);
+            if (orgData) {
+                orgData.historical_filter = null;
+            }
+        }
+    }
+
+    onPiezoDateClear(orgId: number): void {
+        const sel = this.orgSelections.get(orgId);
+        if (sel) {
+            sel.piezoDate = null;
+            sel.clearPiezoDate = true;
+            // Remove historical_piezo from form
+            const orgFg = this.getOrgFormGroup(orgId);
+            if (orgFg) {
+                orgFg.setControl('historical_piezo', new FormControl(null));
+                orgFg.markAsDirty();
+            }
+            // Remove historical_piezo from orgData
+            const orgData = this.orgData.get(orgId);
+            if (orgData) {
+                orgData.historical_piezo = null;
+            }
         }
     }
 
@@ -171,6 +213,14 @@ export class FiltrationComparisonComponent implements OnInit, OnDestroy {
                     if (orgComparison) {
                         this.orgData.set(orgId, orgComparison);
                         this.upsertOrgFormGroup(orgComparison);
+
+                        // Restore per-org dates from backend
+                        if (orgComparison.filter_comparison_date) {
+                            sel.filterDate = orgComparison.filter_comparison_date;
+                        }
+                        if (orgComparison.piezo_comparison_date) {
+                            sel.piezoDate = orgComparison.piezo_comparison_date;
+                        }
                     }
                     this.orgLoading.delete(orgId);
                 },
@@ -255,20 +305,65 @@ export class FiltrationComparisonComponent implements OnInit, OnDestroy {
         ) as FormGroup ?? null;
     }
 
-    private buildUpsertRequest(orgId: number, fg: FormGroup): UpsertRequest {
-        return {
+    private extractLocations(fg: FormGroup): { location_id: number; flow_rate: number | null }[] {
+        return (fg.get('locations') as FormArray).controls.map((c: any) => ({
+            location_id: c.get('location_id').value,
+            flow_rate: c.get('flow_rate').value
+        }));
+    }
+
+    private extractPiezometers(fg: FormGroup): { piezometer_id: number; level: number | null; anomaly?: boolean }[] {
+        return (fg.get('piezometers') as FormArray).controls.map((c: any) => ({
+            piezometer_id: c.get('piezometer_id').value,
+            level: c.get('level').value,
+            anomaly: c.get('anomaly').value
+        }));
+    }
+
+    private buildFullUpsertRequest(orgId: number): UpsertRequest {
+        const orgFg = this.getOrgFormGroup(orgId)!;
+        const sel = this.orgSelections.get(orgId);
+        const currentFg = orgFg.get('current') as FormGroup;
+
+        const payload: UpsertRequest = {
             organization_id: orgId,
-            date: fg.get('date')!.value,
-            filtration_measurements: (fg.get('locations') as FormArray).controls.map((c: any) => ({
-                location_id: c.get('location_id').value,
-                flow_rate: c.get('flow_rate').value
-            })),
-            piezometer_measurements: (fg.get('piezometers') as FormArray).controls.map((c: any) => ({
-                piezometer_id: c.get('piezometer_id').value,
-                level: c.get('level').value,
-                anomaly: c.get('anomaly').value
-            }))
+            date: currentFg.get('date')!.value
         };
+
+        // Historical filtration
+        const histFilterFg = orgFg.get('historical_filter');
+        const histFilterDirty = histFilterFg?.dirty && histFilterFg instanceof FormGroup;
+        if (histFilterDirty) {
+            payload.filter_comparison_date = sel?.filterDate ?? null;
+            payload.historical_filtration_measurements = this.extractLocations(histFilterFg as FormGroup);
+        }
+
+        // Historical piezometers
+        const histPiezoFg = orgFg.get('historical_piezo');
+        const histPiezoDirty = histPiezoFg?.dirty && histPiezoFg instanceof FormGroup;
+        if (histPiezoDirty) {
+            payload.piezo_comparison_date = sel?.piezoDate ?? null;
+            payload.historical_piezometer_measurements = this.extractPiezometers(histPiezoFg as FormGroup);
+        }
+
+        // Clear flags
+        if (sel?.clearFilterDate) {
+            payload.clear_filter_comparison_date = true;
+        }
+        if (sel?.clearPiezoDate) {
+            payload.clear_piezo_comparison_date = true;
+        }
+
+        // Always include current measurements — API requires at least one array non-empty,
+        // and clear flags require their respective current measurements
+        const needCurrent = currentFg.dirty || histFilterDirty || histPiezoDirty
+            || sel?.clearFilterDate || sel?.clearPiezoDate;
+        if (needCurrent) {
+            payload.filtration_measurements = this.extractLocations(currentFg);
+            payload.piezometer_measurements = this.extractPiezometers(currentFg);
+        }
+
+        return payload;
     }
 
     save(): void {
@@ -278,34 +373,18 @@ export class FiltrationComparisonComponent implements OnInit, OnDestroy {
 
         for (const [orgId, orgComparison] of this.orgData) {
             const orgFg = this.getOrgFormGroup(orgId);
-            if (!orgFg?.dirty) continue;
+            const sel = this.orgSelections.get(orgId);
+            const hasClear = sel?.clearFilterDate || sel?.clearPiezoDate;
+
+            if (!orgFg?.dirty && !hasClear) continue;
 
             const orgName = orgComparison.organization_name;
             savedOrgIds.push(orgId);
 
-            const currentFg = orgFg.get('current') as FormGroup;
-            if (currentFg?.dirty) {
-                requests.push(
-                    this.comparisonService.saveMeasurements(this.buildUpsertRequest(orgId, currentFg))
-                        .pipe(catchError(() => of({ error: true, org: orgName, orgId })))
-                );
-            }
-
-            const histFilterFg = orgFg.get('historical_filter');
-            if (histFilterFg?.dirty && histFilterFg instanceof FormGroup) {
-                requests.push(
-                    this.comparisonService.saveMeasurements(this.buildUpsertRequest(orgId, histFilterFg))
-                        .pipe(catchError(() => of({ error: true, org: orgName, orgId })))
-                );
-            }
-
-            const histPiezoFg = orgFg.get('historical_piezo');
-            if (histPiezoFg?.dirty && histPiezoFg instanceof FormGroup) {
-                requests.push(
-                    this.comparisonService.saveMeasurements(this.buildUpsertRequest(orgId, histPiezoFg))
-                        .pipe(catchError(() => of({ error: true, org: orgName, orgId })))
-                );
-            }
+            requests.push(
+                this.comparisonService.saveMeasurements(this.buildFullUpsertRequest(orgId))
+                    .pipe(catchError(() => of({ error: true, org: orgName, orgId })))
+            );
         }
 
         if (requests.length === 0) {
@@ -329,9 +408,14 @@ export class FiltrationComparisonComponent implements OnInit, OnDestroy {
                 }
                 this.saving = false;
 
-                // Reload only successfully saved orgs
+                // Reset clear flags and reload successfully saved orgs
                 for (const orgId of savedOrgIds) {
                     if (!failedOrgIds.has(orgId)) {
+                        const sel = this.orgSelections.get(orgId);
+                        if (sel) {
+                            sel.clearFilterDate = false;
+                            sel.clearPiezoDate = false;
+                        }
                         this.tryLoadOrgData(orgId);
                     }
                 }
@@ -354,6 +438,13 @@ export class FiltrationComparisonComponent implements OnInit, OnDestroy {
         return this.getFirstCompleteDates() !== null;
     }
 
+    get hasPendingClears(): boolean {
+        for (const [, sel] of this.orgSelections) {
+            if (sel.clearFilterDate || sel.clearPiezoDate) return true;
+        }
+        return false;
+    }
+
     download(format: 'excel' | 'pdf'): void {
         this.downloading = format;
         const nextDay = new Date(this.selectedDate);
@@ -372,7 +463,7 @@ export class FiltrationComparisonComponent implements OnInit, OnDestroy {
             )
             .subscribe({
                 next: (response) => {
-                    saveAs(response.body!, `Filter-${date}.${ext}`);
+                    downloadBlob(response.body!, `Filter-${date}.${ext}`);
                 },
                 error: () => {
                     this.messageService.add({ severity: 'error', summary: this.translate.instant('FILTRATION.EXPORT_ERROR') });

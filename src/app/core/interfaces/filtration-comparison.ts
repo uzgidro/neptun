@@ -29,6 +29,8 @@ export interface OrgComparison {
     current: ComparisonSnapshot;
     historical_filter: ComparisonSnapshot | null;
     historical_piezo: ComparisonSnapshot | null;
+    filter_comparison_date?: string | null;
+    piezo_comparison_date?: string | null;
 }
 
 export interface SimilarDate {
@@ -51,4 +53,10 @@ export interface UpsertRequest {
     date: string;
     filtration_measurements?: { location_id: number; flow_rate: number | null }[];
     piezometer_measurements?: { piezometer_id: number; level: number | null; anomaly?: boolean }[];
+    filter_comparison_date?: string | null;
+    historical_filtration_measurements?: { location_id: number; flow_rate: number | null }[];
+    piezo_comparison_date?: string | null;
+    historical_piezometer_measurements?: { piezometer_id: number; level: number | null; anomaly?: boolean }[];
+    clear_filter_comparison_date?: boolean;
+    clear_piezo_comparison_date?: boolean;
 }

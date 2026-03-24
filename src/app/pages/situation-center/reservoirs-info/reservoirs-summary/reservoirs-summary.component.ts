@@ -12,7 +12,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from '@/core/services/auth.service';
 import { finalize } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
-import { saveAs } from 'file-saver';
+import { downloadBlob } from '@/core/utils/download';
 import { LevelVolumeService } from '@/core/services/level-volume.service';
 import { LevelVolume } from '@/core/interfaces/level-volume';
 import { DateWidget } from '@/layout/component/widget/date/date.widget';
@@ -230,9 +230,7 @@ export class ReservoirsSummaryComponent implements OnInit {
                     const extension = format === 'excel' ? 'xlsx' : 'pdf';
                     const filename = `СВОД_${this.dateYMD}.${extension}`;
 
-                    // 2. Сохраняем файл с помощью file-saver
-                    // response.body! - это сам Blob (файл)
-                    saveAs(response.body!, filename);
+                    downloadBlob(response.body!, filename);
                 },
                 error: (err: any) => {
                     console.error('Ошибка при скачивании:', err);

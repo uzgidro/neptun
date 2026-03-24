@@ -11,7 +11,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ScService } from '@/core/services/sc.service';
 import { HttpResponse } from '@angular/common/http';
 import { finalize, Subject, takeUntil } from 'rxjs';
-import { saveAs } from 'file-saver';
+import { downloadBlob } from '@/core/utils/download';
 
 @Component({
   selector: 'app-reservoir-device',
@@ -180,7 +180,7 @@ export class ReservoirDeviceComponent implements OnInit, OnChanges, OnDestroy {
         next: (response: HttpResponse<Blob>) => {
           const extension = format === 'excel' ? 'xlsx' : 'pdf';
           const filename = `sc_${this.dateYMD}.${extension}`;
-          saveAs(response.body!, filename);
+          downloadBlob(response.body!, filename);
         },
         error: (err: any) => {
           console.error('Ошибка при скачивании:', err);

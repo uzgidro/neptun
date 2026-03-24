@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SelectModule } from 'primeng/select';
+import { ButtonModule } from 'primeng/button';
 import { TranslateModule } from '@ngx-translate/core';
 import { OrgComparison, SimilarDate } from '@/core/interfaces/filtration-comparison';
 import { FiltrationTableComponent } from './filtration-table.component';
@@ -11,7 +12,7 @@ import { PiezometerTableComponent } from './piezometer-table.component';
 @Component({
     selector: 'app-org-comparison-card',
     standalone: true,
-    imports: [CommonModule, FormsModule, ReactiveFormsModule, SelectModule, TranslateModule, FiltrationTableComponent, PiezometerTableComponent],
+    imports: [CommonModule, FormsModule, ReactiveFormsModule, SelectModule, TranslateModule, FiltrationTableComponent, PiezometerTableComponent, ButtonModule],
     templateUrl: './org-comparison-card.component.html'
 })
 export class OrgComparisonCardComponent {
@@ -27,6 +28,8 @@ export class OrgComparisonCardComponent {
 
     @Output() filterDateChange = new EventEmitter<string>();
     @Output() piezoDateChange = new EventEmitter<string>();
+    @Output() filterDateClear = new EventEmitter<void>();
+    @Output() piezoDateClear = new EventEmitter<void>();
 
     get dateOptions(): { label: string; value: string }[] {
         return this.similarDates.map(sd => ({

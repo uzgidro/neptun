@@ -25,6 +25,11 @@
                             optionValue="value"
                             [placeholder]="'FILTRATION.SELECT_DATE' | translate"
                             [style]="{'min-width': '10rem'}" />
+                        @if (selectedFilterDate) {
+                            <button pButton type="button" icon="pi pi-times"
+                                class="p-button-text p-button-sm p-button-danger"
+                                (click)="filterDateClear.emit()"></button>
+                        }
                     } @else {
                         <span class="text-sm text-surface-400 italic">{{ 'FILTRATION.NO_SIMILAR_DATES' | translate }}</span>
                     }
@@ -42,6 +47,11 @@
                             optionValue="value"
                             [placeholder]="'FILTRATION.SELECT_DATE' | translate"
                             [style]="{'min-width': '10rem'}" />
+                        @if (selectedPiezoDate) {
+                            <button pButton type="button" icon="pi pi-times"
+                                class="p-button-text p-button-sm p-button-danger"
+                                (click)="piezoDateClear.emit()"></button>
+                        }
                     } @else {
                         <span class="text-sm text-surface-400 italic">{{ 'FILTRATION.NO_SIMILAR_DATES' | translate }}</span>
                     }

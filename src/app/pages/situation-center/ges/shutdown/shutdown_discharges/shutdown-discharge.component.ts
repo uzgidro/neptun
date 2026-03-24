@@ -26,7 +26,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { DateWidget } from '@/layout/component/widget/date/date.widget';
 import { finalize, Subject, takeUntil } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
-import { saveAs } from 'file-saver';
+import { downloadBlob } from '@/core/utils/download';
 import { ScService } from '@/core/services/sc.service';
 
 @Component({
@@ -378,7 +378,7 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges, OnDestroy 
                 next: (response: HttpResponse<Blob>) => {
                     const extension = format === 'excel' ? 'xlsx' : 'pdf';
                     const filename = `Холостые_сбросы_${this.dateYMD}.${extension}`;
-                    saveAs(response.body!, filename);
+                    downloadBlob(response.body!, filename);
                 },
                 error: (err: any) => {
                     console.error('Ошибка при скачивании:', err);

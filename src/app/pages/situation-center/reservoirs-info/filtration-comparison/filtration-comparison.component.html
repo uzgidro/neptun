@@ -25,7 +25,7 @@
             <p-button
                 [label]="'COMMON.SAVE' | translate"
                 icon="pi pi-save"
-                [disabled]="!form?.dirty || saving"
+                [disabled]="(!form?.dirty && !hasPendingClears) || saving"
                 [loading]="saving"
                 (onClick)="save()" />
         </div>
@@ -57,7 +57,9 @@
                 [loadingData]="isOrgLoading(orgSimilar.organization_id)"
                 [orgFormGroup]="getOrgFormGroup(orgSimilar.organization_id)"
                 (filterDateChange)="onFilterDateChange(orgSimilar.organization_id, $event)"
-                (piezoDateChange)="onPiezoDateChange(orgSimilar.organization_id, $event)" />
+                (piezoDateChange)="onPiezoDateChange(orgSimilar.organization_id, $event)"
+                (filterDateClear)="onFilterDateClear(orgSimilar.organization_id)"
+                (piezoDateClear)="onPiezoDateClear(orgSimilar.organization_id)" />
         }
     }
 </div>
