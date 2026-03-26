@@ -18,7 +18,6 @@ import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.compone
 import { InputTextComponent } from '@/layout/component/dialog/input-text/input-text.component';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
 import { SelectComponent } from '@/layout/component/dialog/select/select.component';
-import { DeleteConfirmationComponent } from '@/layout/component/dialog/delete-confirmation/delete-confirmation.component';
 import { FileUploadComponent } from '@/layout/component/dialog/file-upload/file-upload.component';
 
 import { LegalDocument, LegalDocumentFilters, LegalDocumentPayload, LegalDocumentType } from '@/core/interfaces/chancellery';
@@ -45,7 +44,6 @@ import { AuthService } from '@/core/services/auth.service';
         InputTextComponent,
         DatePickerComponent,
         SelectComponent,
-        DeleteConfirmationComponent,
         FileUploadComponent,
         TranslateModule,
         ButtonIcon
@@ -61,7 +59,6 @@ export class LegalDocumentsComponent implements OnInit, OnDestroy {
     // UI State
     loading = true;
     displayDialog = false;
-    displayDeleteDialog = false;
     displayFilesDialog = false;
     submitted = false;
     isEditMode = false;
@@ -84,9 +81,6 @@ export class LegalDocumentsComponent implements OnInit, OnDestroy {
     startDate: Date | null = null;
     endDate: Date | null = null;
     today: Date = new Date();
-
-    // Delete confirmation
-    deleteConfirmMessage = '';
 
     // Services
     private legalDocumentService = inject(LegalDocumentService);
@@ -326,38 +320,31 @@ export class LegalDocumentsComponent implements OnInit, OnDestroy {
     }
 
     // Delete
-    openDeleteDialog(doc: LegalDocument): void {
-        this.selectedDocument = doc;
-        this.deleteConfirmMessage = `${this.translate.instant('LEGAL_DOCUMENTS.DELETE_CONFIRM')} "${doc.name}"?`;
-        this.displayDeleteDialog = true;
-    }
-
-    confirmDelete(): void {
-        if (!this.selectedDocument) return;
-
-        this.legalDocumentService
-            .delete(this.selectedDocument.id)
-            .pipe(takeUntil(this.destroy$))
-            .subscribe({
-                next: () => {
-                    this.messageService.add({
-                        severity: 'success',
-                        summary: this.translate.instant('COMMON.SUCCESS'),
-                        detail: this.translate.instant('LEGAL_DOCUMENTS.DELETED')
-                    });
-                    this.displayDeleteDialog = false;
-                    this.selectedDocument = null;
-                    this.loadDocuments();
-                },
-                error: (err) => {
-                    console.error('Error deleting document:', err);
-                    this.messageService.add({
-                        severity: 'error',
-                        summary: this.translate.instant('COMMON.ERROR'),
-                        detail: this.translate.instant('LEGAL_DOCUMENTS.DELETE_ERROR')
-                    });
-                }
-            });
+    deleteDocument(doc: LegalDocument): void {
+        const message = `${this.translate.instant('LEGAL_DOCUMENTS.DELETE_CONFIRM')} "${doc.name}"?`;
+        if (confirm(message)) {
+            this.legalDocumentService
+                .delete(doc.id)
+                .pipe(takeUntil(this.destroy$))
+                .subscribe({
+                    next: () => {
+                        this.messageService.add({
+                            severity: 'success',
+                            summary: this.translate.instant('COMMON.SUCCESS'),
+                            detail: this.translate.instant('LEGAL_DOCUMENTS.DELETED')
+                        });
+                        this.loadDocuments();
+                    },
+                    error: (err) => {
+                        console.error('Error deleting document:', err);
+                        this.messageService.add({
+                            severity: 'error',
+                            summary: this.translate.instant('COMMON.ERROR'),
+                            detail: this.translate.instant('LEGAL_DOCUMENTS.DELETE_ERROR')
+                        });
+                    }
+                });
+        }
     }
 
     // Files

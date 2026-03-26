@@ -8,7 +8,7 @@ import { InputIcon } from 'primeng/inputicon';
 import { InputText } from 'primeng/inputtext';
 import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InputTextComponent } from '@/layout/component/dialog/input-text/input-text.component';
-import { DeleteConfirmationComponent } from '@/layout/component/dialog/delete-confirmation/delete-confirmation.component';
+
 import { Tooltip } from 'primeng/tooltip';
 import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
 import { BaseCrudComponent } from '@/core/components/base-crud.component';
@@ -17,7 +17,7 @@ import { AuthService } from '@/core/services/auth.service';
 
 @Component({
     selector: 'app-position',
-    imports: [TableModule, ButtonDirective, IconField, InputIcon, InputText, ButtonLabel, ButtonIcon, ReactiveFormsModule, InputTextComponent, DeleteConfirmationComponent, Tooltip, DialogComponent, TranslateModule],
+    imports: [TableModule, ButtonDirective, IconField, InputIcon, InputText, ButtonLabel, ButtonIcon, ReactiveFormsModule, InputTextComponent, Tooltip, DialogComponent, TranslateModule],
     templateUrl: './position.component.html',
     styleUrl: './position.component.scss'
 })
@@ -73,5 +73,9 @@ export class PositionComponent extends BaseCrudComponent<Position, PositionPaylo
 
     get selectedPosition(): Position | null {
         return this.selectedItem;
+    }
+
+    protected getDeleteConfirmMessage(item: Position): string {
+        return this.translate.instant('HRM.POSITIONS.DELETE_CONFIRM') + ' ' + (item.name || '') + '?';
     }
 }

@@ -16,7 +16,6 @@ import { InputTextComponent } from '@/layout/component/dialog/input-text/input-t
 import { SelectComponent } from '@/layout/component/dialog/select/select.component';
 import { TextareaComponent } from '@/layout/component/dialog/textarea/textarea.component';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
-import { DeleteConfirmationComponent } from '@/layout/component/dialog/delete-confirmation/delete-confirmation.component';
 import { FileUploadComponent } from '@/layout/component/dialog/file-upload/file-upload.component';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
@@ -51,7 +50,6 @@ import { StatusChangeDialogComponent } from '@/pages/chancellery/shared';
         SelectComponent,
         TextareaComponent,
         DatePickerComponent,
-        DeleteConfirmationComponent,
         FileUploadComponent,
         TranslateModule,
         StatusHistoryDialogComponent,
@@ -68,7 +66,6 @@ export class ReportsComponent implements OnInit, OnDestroy {
 
     loading = true;
     displayDialog = false;
-    displayDeleteDialog = false;
     displayStatusDialog = false;
     displayHistoryDialog = false;
     submitted = false;
@@ -278,41 +275,32 @@ export class ReportsComponent implements OnInit, OnDestroy {
         }
     }
 
-    openDeleteDialog(document: Report): void {
-        this.selectedDocument = document;
-        this.displayDeleteDialog = true;
-    }
-
-    get deleteConfirmMessage(): string {
-        const name = this.selectedDocument?.name || '';
-        const number = this.selectedDocument?.number ? ` (${this.selectedDocument.number})` : '';
-        return `${this.translate.instant('CHANCELLERY.COMMON.DELETE_CONFIRM')} "${name}"${number}?`;
-    }
-
-    confirmDelete(): void {
-        if (!this.selectedDocument) return;
-        this.reportService
-            .delete(this.selectedDocument.id)
-            .pipe(takeUntil(this.destroy$))
-            .subscribe({
-                next: () => {
-                    this.messageService.add({
-                        severity: 'success',
-                        summary: this.translate.instant('COMMON.SUCCESS'),
-                        detail: this.translate.instant('CHANCELLERY.REPORTS.DELETED')
-                    });
-                    this.loadDocuments();
-                    this.displayDeleteDialog = false;
-                    this.selectedDocument = null;
-                },
-                error: () => {
-                    this.messageService.add({
-                        severity: 'error',
-                        summary: this.translate.instant('COMMON.ERROR'),
-                        detail: this.translate.instant('CHANCELLERY.REPORTS.DELETE_ERROR')
-                    });
-                }
-            });
+    deleteDocument(document: Report): void {
+        const name = document.name;
+        const number = document.number ? ` (${document.number})` : '';
+        const message = `${this.translate.instant('CHANCELLERY.COMMON.DELETE_CONFIRM')} "${name}"${number}?`;
+        if (confirm(message)) {
+            this.reportService
+                .delete(document.id)
+                .pipe(takeUntil(this.destroy$))
+                .subscribe({
+                    next: () => {
+                        this.messageService.add({
+                            severity: 'success',
+                            summary: this.translate.instant('COMMON.SUCCESS'),
+                            detail: this.translate.instant('CHANCELLERY.REPORTS.DELETED')
+                        });
+                        this.loadDocuments();
+                    },
+                    error: () => {
+                        this.messageService.add({
+                            severity: 'error',
+                            summary: this.translate.instant('COMMON.ERROR'),
+                            detail: this.translate.instant('CHANCELLERY.REPORTS.DELETE_ERROR')
+                        });
+                    }
+                });
+        }
     }
 
     openStatusDialog(document: Report): void {

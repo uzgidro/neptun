@@ -767,10 +767,3 @@
         <button pButton [label]="'COMMON.CLOSE' | translate" (click)="displayMonitoringDialog = false"></button>
     </ng-template>
 </p-dialog>
-
-<!-- Диалог подтверждения удаления -->
-<app-delete-confirmation
-    [(visible)]="displayDeleteDialog"
-    [message]="('HRM.COMPETENCY.DELETE_SESSION_CONFIRM' | translate) + ' ' + (selectedSession?.name || '') + '?'"
-    (onConfirm)="confirmDelete()">
-</app-delete-confirmation>

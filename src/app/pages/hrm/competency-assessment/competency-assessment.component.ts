@@ -24,7 +24,7 @@ import { AccordionModule } from 'primeng/accordion';
 import { Timeline } from 'primeng/timeline';
 import { KnobModule } from 'primeng/knob';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { DeleteConfirmationComponent } from '@/layout/component/dialog/delete-confirmation/delete-confirmation.component';
+
 import {
     AssessmentSession,
     AssessmentBlock,
@@ -61,7 +61,7 @@ import {
         InputText,
         ReactiveFormsModule,
         FormsModule,
-        DeleteConfirmationComponent,
+
         Tooltip,
         Tag,
         Rating,
@@ -100,7 +100,7 @@ export class CompetencyAssessmentComponent implements OnInit, OnDestroy {
     displayEvaluationDialog: boolean = false;
     displayReportDialog: boolean = false;
     displayPlanDialog: boolean = false;
-    displayDeleteDialog: boolean = false;
+
     displayCandidateDialog: boolean = false;
     displayMonitoringDialog: boolean = false;
 
@@ -698,16 +698,11 @@ export class CompetencyAssessmentComponent implements OnInit, OnDestroy {
     // =====================
 
     openDeleteSessionDialog(session: AssessmentSession): void {
-        this.selectedSession = session;
-        this.displayDeleteDialog = true;
-    }
+        const message = this.translate.instant('HRM.COMPETENCY.DELETE_SESSION_CONFIRM') + ' ' + (session.name || '') + '?';
+        if (!window.confirm(message)) return;
 
-    confirmDelete(): void {
-        if (this.selectedSession) {
-            this.sessions = this.sessions.filter(s => s.id !== this.selectedSession!.id);
-            this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('COMPETENCY.MESSAGES.SESSION_DELETED') });
-        }
-        this.displayDeleteDialog = false;
+        this.sessions = this.sessions.filter(s => s.id !== session.id);
+        this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('COMPETENCY.MESSAGES.SESSION_DELETED') });
         this.selectedSession = null;
     }
 

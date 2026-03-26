@@ -14,7 +14,7 @@ import { Card } from 'primeng/card';
 import { Dialog } from 'primeng/dialog';
 import { ProgressBar } from 'primeng/progressbar';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { DeleteConfirmationComponent } from '@/layout/component/dialog/delete-confirmation/delete-confirmation.component';
+
 import { SalaryService } from '@/core/services/salary.service';
 import {
     Salary,
@@ -38,7 +38,7 @@ import {
         InputText,
         ReactiveFormsModule,
         FormsModule,
-        DeleteConfirmationComponent,
+
         Tooltip,
         Tag,
         Card,
@@ -59,8 +59,6 @@ export class SalaryManagementComponent implements OnInit, OnDestroy {
     displayApprovalDialog: boolean = false;
     displayRejectionDialog: boolean = false;
     displayBatchDialog: boolean = false;
-    displayDeleteDialog: boolean = false;
-
     selectedSalary: Salary | null = null;
     rejectionForm: FormGroup;
 
@@ -355,20 +353,15 @@ export class SalaryManagementComponent implements OnInit, OnDestroy {
     // ==================== DELETE ====================
 
     openDeleteDialog(salary: Salary): void {
-        this.selectedSalary = salary;
-        this.displayDeleteDialog = true;
-    }
+        const message = this.translate.instant('HRM.SALARY.DELETE_CONFIRM');
+        if (!window.confirm(message)) return;
 
-    confirmDelete(): void {
-        if (!this.selectedSalary) return;
-
-        this.salaries = this.salaries.filter(s => s.id !== this.selectedSalary!.id);
+        this.salaries = this.salaries.filter(s => s.id !== salary.id);
         this.messageService.add({
             severity: 'success',
             summary: this.translate.instant('SALARY.MESSAGES.DELETED'),
             detail: this.translate.instant('SALARY.MESSAGES.RECORD_DELETED')
         });
-        this.displayDeleteDialog = false;
         this.selectedSalary = null;
     }
 

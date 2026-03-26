@@ -186,9 +186,3 @@
         </form>
     </app-dialog>
 }
-
-<app-delete-confirmation
-    [(visible)]="displayDeleteDialog"
-    [message]="('HRM.EMPLOYEES.DELETE_CONFIRM' | translate) + ' ' + (selectedContact?.name || '') + '?'"
-    (onConfirm)="confirmDelete()">
-</app-delete-confirmation>

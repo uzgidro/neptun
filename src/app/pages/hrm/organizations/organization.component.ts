@@ -18,7 +18,7 @@ import { OrganizationTypeService } from '@/core/services/organization-type.servi
 import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
 import { InputTextComponent } from '@/layout/component/dialog/input-text/input-text.component';
 import { SelectComponent } from '@/layout/component/dialog/select/select.component';
-import { DeleteConfirmationComponent } from '@/layout/component/dialog/delete-confirmation/delete-confirmation.component';
+
 
 @Component({
     selector: 'app-organization',
@@ -38,7 +38,6 @@ import { DeleteConfirmationComponent } from '@/layout/component/dialog/delete-co
         DialogComponent,
         InputTextComponent,
         SelectComponent,
-        DeleteConfirmationComponent
     ],
     templateUrl: './organization.component.html',
     styleUrl: './organization.component.scss'
@@ -49,7 +48,7 @@ export class OrganizationComponent implements OnInit, OnDestroy {
     organizationTypes: OrganizationType[] = [];
     loading = true;
     displayDialog = false;
-    displayDeleteDialog = false;
+
     submitted = false;
     isEditMode = false;
     selectedOrganization: Organization | null = null;
@@ -197,8 +196,32 @@ export class OrganizationComponent implements OnInit, OnDestroy {
     }
 
     openDeleteDialog(org: Organization): void {
+        const message = this.translate.instant('HRM.ORGANIZATIONS.DELETE_CONFIRM') + ' ' + (org.name || '') + '?';
+        if (!window.confirm(message)) return;
+
         this.selectedOrganization = org;
-        this.displayDeleteDialog = true;
+        this.organizationService.deleteOrganization(org.id)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: () => {
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: this.translate.instant('COMMON.SUCCESS'),
+                        detail: this.translate.instant('HRM.ORGANIZATIONS.SUCCESS_DELETED')
+                    });
+                    this.loadTreeData();
+                    this.loadFlatOrganizations();
+                    this.selectedOrganization = null;
+                },
+                error: (err) => {
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: this.translate.instant('COMMON.ERROR'),
+                        detail: this.translate.instant('HRM.ORGANIZATIONS.ERROR_DELETE')
+                    });
+                    console.error(err);
+                }
+            });
     }
 
     onSubmit(): void {
@@ -276,34 +299,6 @@ export class OrganizationComponent implements OnInit, OnDestroy {
                         severity: 'error',
                         summary: this.translate.instant('COMMON.ERROR'),
                         detail: this.translate.instant('HRM.ORGANIZATIONS.ERROR_UPDATE')
-                    });
-                    console.error(err);
-                }
-            });
-    }
-
-    confirmDelete(): void {
-        if (!this.selectedOrganization) return;
-
-        this.organizationService.deleteOrganization(this.selectedOrganization.id)
-            .pipe(takeUntil(this.destroy$))
-            .subscribe({
-                next: () => {
-                    this.messageService.add({
-                        severity: 'success',
-                        summary: this.translate.instant('COMMON.SUCCESS'),
-                        detail: this.translate.instant('HRM.ORGANIZATIONS.SUCCESS_DELETED')
-                    });
-                    this.loadTreeData();
-                    this.loadFlatOrganizations();
-                    this.displayDeleteDialog = false;
-                    this.selectedOrganization = null;
-                },
-                error: (err) => {
-                    this.messageService.add({
-                        severity: 'error',
-                        summary: this.translate.instant('COMMON.ERROR'),
-                        detail: this.translate.instant('HRM.ORGANIZATIONS.ERROR_DELETE')
                     });
                     console.error(err);
                 }

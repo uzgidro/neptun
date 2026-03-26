@@ -10,8 +10,7 @@ import { Dialog } from 'primeng/dialog';
 import { InputText } from 'primeng/inputtext';
 import { Textarea } from 'primeng/textarea';
 import { TabsModule } from 'primeng/tabs';
-import { ConfirmDialog } from 'primeng/confirmdialog';
-import { MessageService, ConfirmationService } from 'primeng/api';
+import { MessageService } from 'primeng/api';
 import { InputGroup } from 'primeng/inputgroup';
 import { InputGroupAddon } from 'primeng/inputgroupaddon';
 import { ProgressBar } from 'primeng/progressbar';
@@ -59,14 +58,13 @@ interface Employee {
         InputText,
         Textarea,
         TabsModule,
-        ConfirmDialog,
         InputGroup,
         InputGroupAddon,
         ProgressBar,
         Checkbox,
         TranslateModule
     ],
-    providers: [ConfirmationService],
+    providers: [],
     templateUrl: './access-control.component.html',
     styleUrl: './access-control.component.scss'
 })
@@ -127,7 +125,6 @@ export class AccessControlComponent implements OnInit, OnDestroy {
     blockReason: string = '';
 
     private messageService = inject(MessageService);
-    private confirmationService = inject(ConfirmationService);
     private accessControlService = inject(AccessControlService);
     private contactService = inject(ContactService);
     private translate = inject(TranslateService);
@@ -340,19 +337,13 @@ export class AccessControlComponent implements OnInit, OnDestroy {
     }
 
     unblockCard(card: AccessCard): void {
-        this.confirmationService.confirm({
-            message: this.translate.instant('HRM.ACCESS_CONTROL.CONFIRM_UNBLOCK', { number: card.card_number }),
-            header: this.translate.instant('COMMON.CONFIRM'),
-            icon: 'pi pi-question-circle',
-            acceptLabel: this.translate.instant('COMMON.YES'),
-            rejectLabel: this.translate.instant('COMMON.NO'),
-            accept: () => {
-                card.status = 'active';
-                card.notes = undefined;
-                this.messageService.add({ severity: 'success', summary: this.translate.instant('HRM.ACCESS_CONTROL.UNBLOCKED'), detail: this.translate.instant('HRM.ACCESS_CONTROL.CARD_UNBLOCKED') });
-                this.calculateStats();
-            }
-        });
+        const message = this.translate.instant('HRM.ACCESS_CONTROL.CONFIRM_UNBLOCK', { number: card.card_number });
+        if (confirm(message)) {
+            card.status = 'active';
+            card.notes = undefined;
+            this.messageService.add({ severity: 'success', summary: this.translate.instant('HRM.ACCESS_CONTROL.UNBLOCKED'), detail: this.translate.instant('HRM.ACCESS_CONTROL.CARD_UNBLOCKED') });
+            this.calculateStats();
+        }
     }
 
     // Requests

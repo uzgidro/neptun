@@ -7,7 +7,6 @@ import { forkJoin, Subject, takeUntil } from 'rxjs';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -26,7 +25,7 @@ import { FileViewerComponent } from '@/layout/component/dialog/file-viewer/file-
 import { EventManagementService } from '@/core/services/event-management.service';
 import { ContactService } from '@/core/services/contact.service';
 import { OrganizationService } from '@/core/services/organization.service';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { MessageService } from 'primeng/api';
 
 // Interfaces
 import { Event, EventFilters, EventStatus, EventType } from '@/core/interfaces/event-management';
@@ -43,7 +42,6 @@ import { Tooltip } from 'primeng/tooltip';
         TableModule,
         ButtonModule,
         TagModule,
-        ConfirmDialogModule,
         ToastModule,
         AutoCompleteModule,
         TranslateModule,
@@ -57,7 +55,7 @@ import { Tooltip } from 'primeng/tooltip';
         FileViewerComponent,
         Tooltip
     ],
-    providers: [MessageService, ConfirmationService],
+    providers: [MessageService],
     templateUrl: './events.component.html',
     styleUrl: './events.component.scss'
 })
@@ -68,7 +66,6 @@ export class EventsComponent implements OnInit, OnDestroy {
     private organizationService = inject(OrganizationService);
     private fb = inject(FormBuilder);
     private messageService = inject(MessageService);
-    private confirmationService = inject(ConfirmationService);
     private translate = inject(TranslateService);
     private destroy$ = new Subject<void>();
 
@@ -479,36 +476,30 @@ export class EventsComponent implements OnInit, OnDestroy {
      * Delete event
      */
     deleteEvent(event: Event) {
-        this.confirmationService.confirm({
-            message: `${this.translate.instant('PLANNING.EVENTS.DELETE_CONFIRM')} "${event.name}"?`,
-            header: this.translate.instant('PLANNING.EVENTS.DELETE_HEADER'),
-            icon: 'pi pi-exclamation-triangle',
-            acceptLabel: this.translate.instant('PLANNING.COMMON.YES'),
-            rejectLabel: this.translate.instant('PLANNING.COMMON.CANCEL'),
-            accept: () => {
-                this.eventService
-                    .deleteEvent(event.id)
-                    .pipe(takeUntil(this.destroy$))
-                    .subscribe({
-                        next: () => {
-                            this.messageService.add({
-                                severity: 'success',
-                                summary: this.translate.instant('PLANNING.COMMON.SUCCESS'),
-                                detail: this.translate.instant('PLANNING.EVENTS.DELETED')
-                            });
-                            this.loadEvents();
-                        },
-                        error: (error) => {
-                            console.error('Failed to delete event:', error);
-                            this.messageService.add({
-                                severity: 'error',
-                                summary: this.translate.instant('PLANNING.COMMON.ERROR'),
-                                detail: this.translate.instant('PLANNING.EVENTS.DELETE_ERROR')
-                            });
-                        }
-                    });
-            }
-        });
+        const message = `${this.translate.instant('PLANNING.EVENTS.DELETE_CONFIRM')} "${event.name}"?`;
+        if (confirm(message)) {
+            this.eventService
+                .deleteEvent(event.id)
+                .pipe(takeUntil(this.destroy$))
+                .subscribe({
+                    next: () => {
+                        this.messageService.add({
+                            severity: 'success',
+                            summary: this.translate.instant('PLANNING.COMMON.SUCCESS'),
+                            detail: this.translate.instant('PLANNING.EVENTS.DELETED')
+                        });
+                        this.loadEvents();
+                    },
+                    error: (error) => {
+                        console.error('Failed to delete event:', error);
+                        this.messageService.add({
+                            severity: 'error',
+                            summary: this.translate.instant('PLANNING.COMMON.ERROR'),
+                            detail: this.translate.instant('PLANNING.EVENTS.DELETE_ERROR')
+                        });
+                    }
+                });
+        }
     }
 
     /**

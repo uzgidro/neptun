@@ -90,9 +90,3 @@
         </app-input-text>
     </form>
 </app-dialog>
-
-<app-delete-confirmation
-    [(visible)]="displayDeleteDialog"
-    [message]="('HRM.ORGANIZATION_TYPES.DELETE_CONFIRM' | translate) + ' ' + (selectedType?.name || '') + '?'"
-    (onConfirm)="confirmDelete()">
-</app-delete-confirmation>

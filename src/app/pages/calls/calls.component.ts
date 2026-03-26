@@ -18,7 +18,6 @@ import { InputTextComponent } from '@/layout/component/dialog/input-text/input-t
 import { SelectComponent } from '@/layout/component/dialog/select/select.component';
 import { TextareaComponent } from '@/layout/component/dialog/textarea/textarea.component';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
-import { DeleteConfirmationComponent } from '@/layout/component/dialog/delete-confirmation/delete-confirmation.component';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -43,7 +42,6 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
         SelectComponent,
         TextareaComponent,
         DatePickerComponent,
-        DeleteConfirmationComponent,
         TranslateModule
     ],
     templateUrl: './calls.component.html',
@@ -54,7 +52,6 @@ export class CallsComponent implements OnInit, OnDestroy {
     filteredCalls: Call[] = [];
     loading = true;
     displayDialog = false;
-    displayDeleteDialog = false;
     submitted = false;
     isEditMode = false;
     selectedCall: Call | null = null;
@@ -241,28 +238,22 @@ export class CallsComponent implements OnInit, OnDestroy {
         }
     }
 
-    openDeleteDialog(call: Call) {
-        this.selectedCall = call;
-        this.displayDeleteDialog = true;
-    }
-
-    confirmDelete() {
-        if (!this.selectedCall) return;
-
-        this.callService
-            .delete(this.selectedCall.id)
-            .pipe(takeUntil(this.destroy$))
-            .subscribe({
-                next: () => {
-                    this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('CALLS.DELETED') });
-                    this.loadCalls();
-                    this.displayDeleteDialog = false;
-                    this.selectedCall = null;
-                },
-                error: () => {
-                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('CALLS.DELETE_ERROR') });
-                }
-            });
+    deleteCall(call: Call) {
+        const message = this.translate.instant('CALLS.DELETE_CONFIRM');
+        if (confirm(message)) {
+            this.callService
+                .delete(call.id)
+                .pipe(takeUntil(this.destroy$))
+                .subscribe({
+                    next: () => {
+                        this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('CALLS.DELETED') });
+                        this.loadCalls();
+                    },
+                    error: () => {
+                        this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('CALLS.DELETE_ERROR') });
+                    }
+                });
+        }
     }
 
     getTypeLabel(type: CallType): string {

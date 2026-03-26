@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { MessageService } from 'primeng/api';
 import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { SelectModule } from 'primeng/select';
@@ -388,7 +388,7 @@ interface expandedRows {
             font-weight: bold;
         }
     `,
-    providers: [ConfirmationService, MessageService, CustomerService, ProductService]
+    providers: [MessageService, CustomerService, ProductService]
 })
 export class TableDemo implements OnInit {
     customers1: Customer[] = [];

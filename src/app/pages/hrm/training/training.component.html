@@ -133,9 +133,3 @@
         </form>
     </app-dialog>
 }
-
-<app-delete-confirmation
-    [(visible)]="displayDeleteDialog"
-    [message]="('HRM.TRAINING.DELETE_CONFIRM' | translate) + ' ' + (selectedTraining?.title || '') + '?'"
-    (onConfirm)="confirmDelete()">
-</app-delete-confirmation>

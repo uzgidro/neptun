@@ -16,7 +16,7 @@ import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InputTextComponent } from '@/layout/component/dialog/input-text/input-text.component';
 import { SelectComponent } from '@/layout/component/dialog/select/select.component';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
-import { DeleteConfirmationComponent } from '@/layout/component/dialog/delete-confirmation/delete-confirmation.component';
+
 import { FileUploadComponent } from '@/layout/component/dialog/file-upload/file-upload.component';
 import { Tooltip } from 'primeng/tooltip';
 import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
@@ -38,7 +38,7 @@ import { TranslateModule } from '@ngx-translate/core';
         InputTextComponent,
         SelectComponent,
         DatePickerComponent,
-        DeleteConfirmationComponent,
+
         FileUploadComponent,
         Tooltip,
         DialogComponent,
@@ -192,5 +192,9 @@ export class EmployeeComponent extends BaseCrudComponent<Contact, FormData> impl
 
     get selectedContact(): Contact | null {
         return this.selectedItem;
+    }
+
+    protected getDeleteConfirmMessage(item: Contact): string {
+        return this.translate.instant('HRM.EMPLOYEES.DELETE_CONFIRM') + ' ' + (item.name || '') + '?';
     }
 }

@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { ToastModule } from 'primeng/toast';
 import { DrawerModule } from 'primeng/drawer';
 import { Popover, PopoverModule } from 'primeng/popover';
-import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
 import { TooltipModule } from 'primeng/tooltip';
@@ -15,7 +14,7 @@ import { Product, ProductService } from '../service/product.service';
 @Component({
     selector: 'app-overlay-demo',
     standalone: true,
-    imports: [ToastModule, DialogModule, ButtonModule, DrawerModule, PopoverModule, ConfirmPopupModule, InputTextModule, FormsModule, TooltipModule, TableModule, ToastModule],
+    imports: [ToastModule, DialogModule, ButtonModule, DrawerModule, PopoverModule, InputTextModule, FormsModule, TooltipModule, TableModule, ToastModule],
     template: ` <div class="flex flex-col md:flex-row gap-8">
         <div class="md:w-1/2">
             <div class="card">
@@ -113,8 +112,7 @@ import { Product, ProductService } from '../service/product.service';
 
             <div class="card">
                 <div class="font-semibold text-xl mb-4">ConfirmPopup</div>
-                <p-confirmpopup></p-confirmpopup>
-                <p-button #popup (click)="confirm($event)" icon="pi pi-check" label="Confirm" class="mr-2"></p-button>
+                <p-button (click)="confirmAction()" icon="pi pi-check" label="Confirm" class="mr-2"></p-button>
             </div>
 
             <div class="card">
@@ -133,7 +131,7 @@ import { Product, ProductService } from '../service/product.service';
             </div>
         </div>
     </div>`,
-    providers: [ConfirmationService, MessageService, ProductService]
+    providers: [MessageService, ProductService]
 })
 export class OverlayDemo implements OnInit {
     images: any[] = [];
@@ -158,7 +156,6 @@ export class OverlayDemo implements OnInit {
 
     constructor(
         private productService: ProductService,
-        private confirmationService: ConfirmationService,
         private messageService: MessageService
     ) {}
 
@@ -188,19 +185,12 @@ export class OverlayDemo implements OnInit {
         });
     }
 
-    confirm(event: Event) {
-        this.confirmationService.confirm({
-            key: 'confirm2',
-            target: event.target || new EventTarget(),
-            message: 'Are you sure that you want to proceed?',
-            icon: 'pi pi-exclamation-triangle',
-            accept: () => {
-                this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted' });
-            },
-            reject: () => {
-                this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected' });
-            }
-        });
+    confirmAction() {
+        if (confirm('Are you sure that you want to proceed?')) {
+            this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted' });
+        } else {
+            this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected' });
+        }
     }
 
     open() {

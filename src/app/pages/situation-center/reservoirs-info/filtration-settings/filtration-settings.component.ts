@@ -15,7 +15,6 @@ import { OrganizationService } from '@/core/services/organization.service';
 import { Location, Piezometer, PiezometerCountsRecord } from '@/core/interfaces/filtration';
 import { LocationDialogComponent } from './components/location-dialog.component';
 import { PiezometerDialogComponent } from './components/piezometer-dialog.component';
-import { DeleteConfirmationComponent } from '@/layout/component/dialog/delete-confirmation/delete-confirmation.component';
 
 @Component({
     selector: 'app-filtration-settings',
@@ -23,7 +22,7 @@ import { DeleteConfirmationComponent } from '@/layout/component/dialog/delete-co
     imports: [
         CommonModule, FormsModule, ReactiveFormsModule, TableModule, ButtonModule, SelectModule,
         MessageModule, InputNumberModule, TranslateModule, LocationDialogComponent,
-        PiezometerDialogComponent, DeleteConfirmationComponent
+        PiezometerDialogComponent
     ],
     templateUrl: './filtration-settings.component.html',
     styleUrl: './filtration-settings.component.scss'
@@ -52,11 +51,6 @@ export class FiltrationSettingsComponent implements OnInit, OnDestroy {
     piezometerDialogVisible = false;
     editingPiezometer: Piezometer | null = null;
     piezometerSubmitting = false;
-
-    // Delete confirmation
-    deleteDialogVisible = false;
-    deleteMessage = '';
-    private pendingDelete: (() => void) | null = null;
 
     constructor(
         private fb: FormBuilder,
@@ -175,8 +169,9 @@ export class FiltrationSettingsComponent implements OnInit, OnDestroy {
     }
 
     confirmDeleteLocation(loc: Location): void {
-        this.confirmDelete('FILTRATION.DELETE_LOCATION_CONFIRM', () =>
-            this.filtrationService.deleteLocation(loc.id));
+        if (confirm(this.translate.instant('FILTRATION.DELETE_LOCATION_CONFIRM'))) {
+            this.performDelete(() => this.filtrationService.deleteLocation(loc.id));
+        }
     }
 
     // Piezometer CRUD
@@ -211,14 +206,9 @@ export class FiltrationSettingsComponent implements OnInit, OnDestroy {
     }
 
     confirmDeletePiezometer(p: Piezometer): void {
-        this.confirmDelete('FILTRATION.DELETE_PIEZOMETER_CONFIRM', () =>
-            this.filtrationService.deletePiezometer(p.id));
-    }
-
-    onDeleteConfirm(): void {
-        this.pendingDelete?.();
-        this.deleteDialogVisible = false;
-        this.pendingDelete = null;
+        if (confirm(this.translate.instant('FILTRATION.DELETE_PIEZOMETER_CONFIRM'))) {
+            this.performDelete(() => this.filtrationService.deletePiezometer(p.id));
+        }
     }
 
     private showSaveError(err: any): void {
@@ -228,17 +218,13 @@ export class FiltrationSettingsComponent implements OnInit, OnDestroy {
         this.messageService.add({ severity: 'error', summary: msg });
     }
 
-    private confirmDelete(messageKey: string, deleteFn: () => Observable<any>): void {
-        this.deleteMessage = this.translate.instant(messageKey);
-        this.deleteDialogVisible = true;
-        this.pendingDelete = () => {
-            deleteFn().pipe(takeUntil(this.destroy$)).subscribe({
-                next: () => {
-                    this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.DELETE') });
-                    this.loadData();
-                },
-                error: () => this.messageService.add({ severity: 'error', summary: this.translate.instant('FILTRATION.SAVE_ERROR') })
-            });
-        };
+    private performDelete(deleteFn: () => Observable<any>): void {
+        deleteFn().pipe(takeUntil(this.destroy$)).subscribe({
+            next: () => {
+                this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.DELETE') });
+                this.loadData();
+            },
+            error: () => this.messageService.add({ severity: 'error', summary: this.translate.instant('FILTRATION.SAVE_ERROR') })
+        });
     }
 }

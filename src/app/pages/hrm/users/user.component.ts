@@ -25,7 +25,7 @@ import { MultiSelect } from 'primeng/multiselect';
 import { InputTextComponent } from '@/layout/component/dialog/input-text/input-text.component';
 import { SelectComponent } from '@/layout/component/dialog/select/select.component';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
-import { DeleteConfirmationComponent } from '@/layout/component/dialog/delete-confirmation/delete-confirmation.component';
+
 import { FileUploadComponent } from '@/layout/component/dialog/file-upload/file-upload.component';
 import { Tooltip } from 'primeng/tooltip';
 import { SelectButton } from 'primeng/selectbutton';
@@ -52,7 +52,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
         InputTextComponent,
         SelectComponent,
         DatePickerComponent,
-        DeleteConfirmationComponent,
+
         FileUploadComponent,
         Tooltip,
         SelectButton,
@@ -72,7 +72,7 @@ export class User implements OnInit, OnDestroy {
     positions: Position[] = [];
     loading: boolean = true;
     displayDialog: boolean = false;
-    displayDeleteDialog: boolean = false;
+
     submitted: boolean = false;
     isEditMode: boolean = false;
     selectedUser: Users | null = null;
@@ -374,21 +374,17 @@ export class User implements OnInit, OnDestroy {
     }
 
     openDeleteDialog(user: Users): void {
+        const message = this.translate.instant('HRM.USERS.DELETE_CONFIRM') + ' ' + (user.name || '') + '?';
+        if (!window.confirm(message)) return;
+
         this.selectedUser = user;
-        this.displayDeleteDialog = true;
-    }
-
-    confirmDelete(): void {
-        if (!this.selectedUser) return;
-
         this.userService
-            .deleteUser(this.selectedUser.id)
+            .deleteUser(user.id)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
                     this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('HRM.USERS.SUCCESS_DELETED') });
                     this.loadUsers();
-                    this.displayDeleteDialog = false;
                     this.selectedUser = null;
                 },
                 error: (err) => {

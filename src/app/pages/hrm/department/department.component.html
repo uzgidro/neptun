@@ -109,9 +109,3 @@
         </app-select>
     </form>
 </app-dialog>
-
-<app-delete-confirmation
-    [(visible)]="displayDeleteDialog"
-    [message]="('HRM.DEPARTMENTS.DELETE_CONFIRM' | translate) + ' ' + (selectedDepartment?.name || '') + '?'"
-    (onConfirm)="confirmDelete()">
-</app-delete-confirmation>

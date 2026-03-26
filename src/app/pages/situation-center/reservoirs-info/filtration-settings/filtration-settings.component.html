@@ -121,8 +121,3 @@
     [piezometer]="editingPiezometer"
     [submitting]="piezometerSubmitting"
     (save)="onSavePiezometer($event)" />
-
-<app-delete-confirmation
-    [(visible)]="deleteDialogVisible"
-    [message]="deleteMessage"
-    (onConfirm)="onDeleteConfirm()" />

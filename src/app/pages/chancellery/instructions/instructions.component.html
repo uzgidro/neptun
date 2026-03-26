@@ -115,7 +115,7 @@
                             <i pButtonIcon class="pi pi-pencil"></i>
                         </button>
                         <button pButton
-                                (click)="openDeleteDialog(doc)"
+                                (click)="deleteDocument(doc)"
                                 class="p-button-rounded p-button-text p-button-danger"
                                 [pTooltip]="'COMMON.DELETE' | translate"
                                 tooltipPosition="top">
@@ -256,13 +256,6 @@
         </div>
     </form>
 </app-dialog>
-
-<!-- Delete Confirmation -->
-<app-delete-confirmation
-    [(visible)]="displayDeleteDialog"
-    [message]="deleteConfirmMessage"
-    (onConfirm)="confirmDelete()">
-</app-delete-confirmation>
 
 <!-- Status Change Dialog -->
 <app-status-change-dialog

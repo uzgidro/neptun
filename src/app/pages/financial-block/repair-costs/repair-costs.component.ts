@@ -10,9 +10,8 @@ import { SelectModule } from 'primeng/select';
 import { DatePickerModule } from 'primeng/datepicker';
 import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { MessageService } from 'primeng/api';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { ChartModule } from 'primeng/chart';
@@ -59,7 +58,6 @@ interface RepairRecord {
         DatePickerModule,
         TagModule,
         TooltipModule,
-        ConfirmDialogModule,
         ToastModule,
         InputGroupModule,
         InputGroupAddonModule,
@@ -67,7 +65,7 @@ interface RepairRecord {
         TextareaModule,
         TranslateModule
     ],
-    providers: [ConfirmationService, MessageService],
+    providers: [MessageService],
     templateUrl: './repair-costs.component.html',
     styleUrl: './repair-costs.component.scss'
 })
@@ -104,7 +102,6 @@ export class RepairCostsComponent implements OnInit {
     private translate = inject(TranslateService);
 
     constructor(
-        private confirmationService: ConfirmationService,
         private messageService: MessageService
     ) {}
 
@@ -329,23 +326,17 @@ export class RepairCostsComponent implements OnInit {
     }
 
     deleteRepair(repair: RepairRecord) {
-        this.confirmationService.confirm({
-            message: `${this.translate.instant('FINANCIAL_BLOCK.REPAIR_COSTS.DELETE_CONFIRM')} "${repair.objectName}"?`,
-            header: this.translate.instant('FINANCIAL_BLOCK.COMMON.CONFIRM_DELETE'),
-            icon: 'pi pi-exclamation-triangle',
-            acceptLabel: this.translate.instant('FINANCIAL_BLOCK.COMMON.YES'),
-            rejectLabel: this.translate.instant('FINANCIAL_BLOCK.COMMON.NO'),
-            accept: () => {
-                this.repairs = this.repairs.filter(r => r.id !== repair.id);
-                this.applyFilters();
-                this.updateDashboardData();
-                this.messageService.add({
-                    severity: 'success',
-                    summary: this.translate.instant('FINANCIAL_BLOCK.COMMON.SUCCESS'),
-                    detail: this.translate.instant('FINANCIAL_BLOCK.REPAIR_COSTS.REPAIR_DELETED')
-                });
-            }
-        });
+        const message = `${this.translate.instant('FINANCIAL_BLOCK.REPAIR_COSTS.DELETE_CONFIRM')} "${repair.objectName}"?`;
+        if (confirm(message)) {
+            this.repairs = this.repairs.filter(r => r.id !== repair.id);
+            this.applyFilters();
+            this.updateDashboardData();
+            this.messageService.add({
+                severity: 'success',
+                summary: this.translate.instant('FINANCIAL_BLOCK.COMMON.SUCCESS'),
+                detail: this.translate.instant('FINANCIAL_BLOCK.REPAIR_COSTS.REPAIR_DELETED')
+            });
+        }
     }
 
     // Helpers

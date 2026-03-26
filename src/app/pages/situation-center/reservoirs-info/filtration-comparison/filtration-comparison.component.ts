@@ -9,9 +9,8 @@ import { downloadBlob } from '@/core/utils/download';
 import { DatePickerModule } from 'primeng/datepicker';
 import { ButtonModule } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { MessageService, ConfirmationService } from 'primeng/api';
+import { MessageService } from 'primeng/api';
 import { FiltrationComparisonService } from '@/core/services/filtration-comparison.service';
 import { TimeService } from '@/core/services/time.service';
 import { OrgComparison, ComparisonSnapshot, OrgSimilarDates, UpsertRequest } from '@/core/interfaces/filtration-comparison';
@@ -29,12 +28,12 @@ interface OrgSelection {
     standalone: true,
     imports: [
         CommonModule, FormsModule, ReactiveFormsModule, DatePickerModule, ButtonModule,
-        MessageModule, ConfirmDialogModule, TranslateModule,
+        MessageModule, TranslateModule,
         OrgComparisonCardComponent
     ],
     templateUrl: './filtration-comparison.component.html',
     styleUrl: './filtration-comparison.component.scss',
-    providers: [ConfirmationService]
+    providers: []
 })
 export class FiltrationComparisonComponent implements OnInit, OnDestroy {
     private destroy$ = new Subject<void>();
@@ -57,7 +56,6 @@ export class FiltrationComparisonComponent implements OnInit, OnDestroy {
         private comparisonService: FiltrationComparisonService,
         private timeService: TimeService,
         private messageService: MessageService,
-        private confirmationService: ConfirmationService,
         private translate: TranslateService
     ) {}
 
@@ -82,17 +80,13 @@ export class FiltrationComparisonComponent implements OnInit, OnDestroy {
 
     onDateChange(date: Date): void {
         if (this.form?.dirty) {
-            this.confirmationService.confirm({
-                message: this.translate.instant('FILTRATION.UNSAVED_CHANGES'),
-                accept: () => {
-                    this.selectedDate = date;
-                    this.resetState();
-                    this.loadSimilarDates(this.timeService.dateToYMD(date));
-                },
-                reject: () => {
-                    this.selectedDate = new Date(this.selectedDate);
-                }
-            });
+            if (confirm(this.translate.instant('FILTRATION.UNSAVED_CHANGES'))) {
+                this.selectedDate = date;
+                this.resetState();
+                this.loadSimilarDates(this.timeService.dateToYMD(date));
+            } else {
+                this.selectedDate = new Date(this.selectedDate);
+            }
         } else {
             this.selectedDate = date;
             this.resetState();
@@ -565,14 +559,8 @@ export class FiltrationComparisonComponent implements OnInit, OnDestroy {
             });
     }
 
-    canDeactivate(): boolean | Observable<boolean> {
+    canDeactivate(): boolean {
         if (!this.form?.dirty) return true;
-        return new Observable<boolean>(observer => {
-            this.confirmationService.confirm({
-                message: this.translate.instant('FILTRATION.UNSAVED_CHANGES'),
-                accept: () => { observer.next(true); observer.complete(); },
-                reject: () => { observer.next(false); observer.complete(); }
-            });
-        });
+        return confirm(this.translate.instant('FILTRATION.UNSAVED_CHANGES'));
     }
 }

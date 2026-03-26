@@ -108,9 +108,3 @@
         </form>
     </app-dialog>
 }
-
-<app-delete-confirmation
-    [(visible)]="displayDeleteDialog"
-    [message]="('HRM.PERFORMANCE.DELETE_CONFIRM' | translate) + ' ' + (selectedGoal?.title || '') + '?'"
-    (onConfirm)="confirmDelete()">
-</app-delete-confirmation>

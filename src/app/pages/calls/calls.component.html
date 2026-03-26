@@ -119,7 +119,7 @@
                         </button>
                         <button pButton
                                 icon="pi pi-trash"
-                                (click)="openDeleteDialog(call)"
+                                (click)="deleteCall(call)"
                                 class="p-button-rounded p-button-text p-button-danger"
                                 [pTooltip]="'COMMON.DELETE' | translate"
                                 tooltipPosition="top">
@@ -238,9 +238,3 @@
         </app-textarea>
     </form>
 </app-dialog>
-
-<app-delete-confirmation
-    [(visible)]="displayDeleteDialog"
-    [message]="'CALLS.DELETE_CONFIRM' | translate"
-    (onConfirm)="confirmDelete()">
-</app-delete-confirmation>

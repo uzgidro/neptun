@@ -1,5 +1,5 @@
 import { Component, OnInit, signal, ViewChild } from '@angular/core';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { MessageService } from 'primeng/api';
 import { Table, TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -17,7 +17,6 @@ import { DialogModule } from 'primeng/dialog';
 import { TagModule } from 'primeng/tag';
 import { InputIconModule } from 'primeng/inputicon';
 import { IconFieldModule } from 'primeng/iconfield';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { Product, ProductService } from '../service/product.service';
 
 interface Column {
@@ -51,8 +50,7 @@ interface ExportColumn {
         DialogModule,
         TagModule,
         InputIconModule,
-        IconFieldModule,
-        ConfirmDialogModule
+        IconFieldModule
     ],
     template: `
         <p-toolbar styleClass="mb-6">
@@ -206,9 +204,8 @@ interface ExportColumn {
             </ng-template>
         </p-dialog>
 
-        <p-confirmdialog [style]="{ width: '450px' }" />
     `,
-    providers: [MessageService, ProductService, ConfirmationService]
+    providers: [MessageService, ProductService]
 })
 export class Crud implements OnInit {
     productDialog: boolean = false;
@@ -231,8 +228,7 @@ export class Crud implements OnInit {
 
     constructor(
         private productService: ProductService,
-        private messageService: MessageService,
-        private confirmationService: ConfirmationService
+        private messageService: MessageService
     ) {}
 
     exportCSV() {
@@ -281,21 +277,16 @@ export class Crud implements OnInit {
     }
 
     deleteSelectedProducts() {
-        this.confirmationService.confirm({
-            message: 'Are you sure you want to delete the selected products?',
-            header: 'Confirm',
-            icon: 'pi pi-exclamation-triangle',
-            accept: () => {
-                this.products.set(this.products().filter((val) => !this.selectedProducts?.includes(val)));
-                this.selectedProducts = null;
-                this.messageService.add({
-                    severity: 'success',
-                    summary: 'Successful',
-                    detail: 'Products Deleted',
-                    life: 3000
-                });
-            }
-        });
+        if (confirm('Are you sure you want to delete the selected products?')) {
+            this.products.set(this.products().filter((val) => !this.selectedProducts?.includes(val)));
+            this.selectedProducts = null;
+            this.messageService.add({
+                severity: 'success',
+                summary: 'Successful',
+                detail: 'Products Deleted',
+                life: 3000
+            });
+        }
     }
 
     hideDialog() {
@@ -304,21 +295,16 @@ export class Crud implements OnInit {
     }
 
     deleteProduct(product: Product) {
-        this.confirmationService.confirm({
-            message: 'Are you sure you want to delete ' + product.name + '?',
-            header: 'Confirm',
-            icon: 'pi pi-exclamation-triangle',
-            accept: () => {
-                this.products.set(this.products().filter((val) => val.id !== product.id));
-                this.product = {};
-                this.messageService.add({
-                    severity: 'success',
-                    summary: 'Successful',
-                    detail: 'Product Deleted',
-                    life: 3000
-                });
-            }
-        });
+        if (confirm('Are you sure you want to delete ' + product.name + '?')) {
+            this.products.set(this.products().filter((val) => val.id !== product.id));
+            this.product = {};
+            this.messageService.add({
+                severity: 'success',
+                summary: 'Successful',
+                detail: 'Product Deleted',
+                life: 3000
+            });
+        }
     }
 
     findIndexById(id: string): number {

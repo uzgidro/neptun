@@ -15,7 +15,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { InputTextComponent } from '@/layout/component/dialog/input-text/input-text.component';
 import { SelectComponent } from '@/layout/component/dialog/select/select.component';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
-import { DeleteConfirmationComponent } from '@/layout/component/dialog/delete-confirmation/delete-confirmation.component';
+
 import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
 import { GOAL_STATUSES, GoalPayload, PerformanceGoal, REVIEW_TYPES } from '@/core/interfaces/hrm/performance';
 import { PerformanceService } from '@/core/services/hrm/performance.service';
@@ -38,7 +38,7 @@ import { Contact } from '@/core/interfaces/contact';
         InputTextComponent,
         SelectComponent,
         DatePickerComponent,
-        DeleteConfirmationComponent,
+
         Tooltip,
         Tag,
         ProgressBarModule,
@@ -52,7 +52,7 @@ export class PerformanceManagementComponent implements OnInit, OnDestroy {
     goals: PerformanceGoal[] = [];
     loading: boolean = true;
     displayDialog: boolean = false;
-    displayDeleteDialog: boolean = false;
+
     submitted: boolean = false;
     isEditMode: boolean = false;
     selectedGoal: PerformanceGoal | null = null;
@@ -218,21 +218,17 @@ export class PerformanceManagementComponent implements OnInit, OnDestroy {
     }
 
     openDeleteDialog(goal: PerformanceGoal): void {
+        const message = this.translate.instant('HRM.PERFORMANCE.DELETE_CONFIRM') + ' ' + (goal.title || '') + '?';
+        if (!window.confirm(message)) return;
+
         this.selectedGoal = goal;
-        this.displayDeleteDialog = true;
-    }
-
-    confirmDelete(): void {
-        if (!this.selectedGoal) return;
-
         this.performanceService
-            .deleteGoal(this.selectedGoal.id)
+            .deleteGoal(goal.id)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
                     this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('HRM.PERFORMANCE.DELETE_SUCCESS') });
                     this.loadGoals();
-                    this.displayDeleteDialog = false;
                     this.selectedGoal = null;
                 },
                 error: (err) => {

@@ -10,8 +10,7 @@ import { Dialog } from 'primeng/dialog';
 import { InputText } from 'primeng/inputtext';
 import { Textarea } from 'primeng/textarea';
 import { TabsModule } from 'primeng/tabs';
-import { ConfirmDialog } from 'primeng/confirmdialog';
-import { MessageService, ConfirmationService } from 'primeng/api';
+import { MessageService } from 'primeng/api';
 import { InputGroup } from 'primeng/inputgroup';
 import { InputGroupAddon } from 'primeng/inputgroupaddon';
 import { Subject, takeUntil, forkJoin } from 'rxjs';
@@ -59,12 +58,11 @@ interface Employee {
         InputText,
         Textarea,
         TabsModule,
-        ConfirmDialog,
         InputGroup,
         InputGroupAddon,
         TranslateModule
     ],
-    providers: [ConfirmationService],
+    providers: [],
     templateUrl: './hr-documents.component.html',
     styleUrl: './hr-documents.component.scss'
 })
@@ -123,7 +121,6 @@ export class HRDocumentsComponent implements OnInit, OnDestroy {
     signComment: string = '';
 
     private messageService = inject(MessageService);
-    private confirmationService = inject(ConfirmationService);
     private hrDocumentsService = inject(HRDocumentsService);
     private departmentService = inject(DepartmentService);
     private contactService = inject(ContactService);
@@ -317,22 +314,16 @@ export class HRDocumentsComponent implements OnInit, OnDestroy {
     }
 
     deleteDocument(doc: HRDocument): void {
-        this.confirmationService.confirm({
-            message: `${this.translate.instant('HRM.DOCUMENTS.DELETE_CONFIRM')} "${doc.title}"?`,
-            header: this.translate.instant('COMMON.CONFIRM_DELETE'),
-            icon: 'pi pi-exclamation-triangle',
-            acceptLabel: this.translate.instant('COMMON.DELETE'),
-            rejectLabel: this.translate.instant('COMMON.CANCEL'),
-            accept: () => {
-                this.documents = this.documents.filter(d => d.id !== doc.id);
-                this.messageService.add({
-                    severity: 'success',
-                    summary: this.translate.instant('COMMON.SUCCESS'),
-                    detail: this.translate.instant('HRM.DOCUMENTS.DOCUMENT_DELETED')
-                });
-                this.calculateStats();
-            }
-        });
+        const message = `${this.translate.instant('HRM.DOCUMENTS.DELETE_CONFIRM')} "${doc.title}"?`;
+        if (confirm(message)) {
+            this.documents = this.documents.filter(d => d.id !== doc.id);
+            this.messageService.add({
+                severity: 'success',
+                summary: this.translate.instant('COMMON.SUCCESS'),
+                detail: this.translate.instant('HRM.DOCUMENTS.DOCUMENT_DELETED')
+            });
+            this.calculateStats();
+        }
     }
 
     // View document

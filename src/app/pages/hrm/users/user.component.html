@@ -287,9 +287,3 @@
         </ng-template>
     </app-dialog>
 }
-
-<app-delete-confirmation
-    [(visible)]="displayDeleteDialog"
-    [message]="('HRM.USERS.DELETE_CONFIRM' | translate) + ' ' + (selectedUser?.name || '') + '?'"
-    (onConfirm)="confirmDelete()">
-</app-delete-confirmation>

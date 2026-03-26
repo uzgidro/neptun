@@ -168,9 +168,3 @@
         </form>
     </app-dialog>
 }
-
-<app-delete-confirmation
-    [(visible)]="displayDeleteDialog"
-    [message]="('HRM.PERSONNEL_RECORDS.DELETE_CONFIRM' | translate) + ' ' + (selectedRecord?.employee_name || '') + '?'"
-    (onConfirm)="confirmDelete()">
-</app-delete-confirmation>

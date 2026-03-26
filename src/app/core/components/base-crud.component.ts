@@ -36,7 +36,6 @@ export abstract class BaseCrudComponent<T extends BaseEntity, TPayload = Partial
     items: T[] = [];
     loading = true;
     displayDialog = false;
-    displayDeleteDialog = false;
     submitted = false;
     isEditMode = false;
     selectedItem: T | null = null;
@@ -72,6 +71,12 @@ export abstract class BaseCrudComponent<T extends BaseEntity, TPayload = Partial
      * Override in child class.
      */
     protected abstract patchFormForEdit(item: T): void;
+
+    /**
+     * Build the confirmation message for deleting an item.
+     * Override in child class to provide entity-specific messages.
+     */
+    protected abstract getDeleteConfirmMessage(item: T): string;
 
     /**
      * Filter table globally
@@ -130,20 +135,14 @@ export abstract class BaseCrudComponent<T extends BaseEntity, TPayload = Partial
     }
 
     /**
-     * Open delete confirmation dialog
+     * Show native confirm dialog and execute deletion if confirmed
      */
     openDeleteDialog(item: T): void {
+        const message = this.getDeleteConfirmMessage(item);
+        if (!window.confirm(message)) return;
+
         this.selectedItem = item;
-        this.displayDeleteDialog = true;
-    }
-
-    /**
-     * Confirm and execute deletion
-     */
-    confirmDelete(): void {
-        if (!this.selectedItem) return;
-
-        this.service.delete(this.selectedItem.id)
+        this.service.delete(item.id)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
@@ -153,7 +152,6 @@ export abstract class BaseCrudComponent<T extends BaseEntity, TPayload = Partial
                         detail: this.translate.instant(this.messages.deleteSuccess)
                     });
                     this.loadItems();
-                    this.displayDeleteDialog = false;
                     this.selectedItem = null;
                 },
                 error: (err) => {

@@ -15,7 +15,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { InputTextComponent } from '@/layout/component/dialog/input-text/input-text.component';
 import { SelectComponent } from '@/layout/component/dialog/select/select.component';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
-import { DeleteConfirmationComponent } from '@/layout/component/dialog/delete-confirmation/delete-confirmation.component';
+
 import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
 import { TextareaComponent } from '@/layout/component/dialog/textarea/textarea.component';
 import { Training, TrainingPayload, TRAINING_TYPES, TRAINING_STATUSES } from '@/core/interfaces/hrm/training';
@@ -37,7 +37,7 @@ import { TrainingService } from '@/core/services/training.service';
         InputTextComponent,
         SelectComponent,
         DatePickerComponent,
-        DeleteConfirmationComponent,
+
         Tooltip,
         Tag,
         Checkbox,
@@ -52,7 +52,7 @@ export class TrainingComponent implements OnInit, OnDestroy {
     trainings: Training[] = [];
     loading: boolean = true;
     displayDialog: boolean = false;
-    displayDeleteDialog: boolean = false;
+
     submitted: boolean = false;
     isEditMode: boolean = false;
     selectedTraining: Training | null = null;
@@ -226,20 +226,16 @@ export class TrainingComponent implements OnInit, OnDestroy {
     }
 
     openDeleteDialog(training: Training): void {
+        const message = this.translate.instant('HRM.TRAINING.DELETE_CONFIRM') + ' ' + (training.title || '') + '?';
+        if (!window.confirm(message)) return;
+
         this.selectedTraining = training;
-        this.displayDeleteDialog = true;
-    }
-
-    confirmDelete(): void {
-        if (!this.selectedTraining) return;
-
-        this.trainingService.deleteTraining(this.selectedTraining.id)
+        this.trainingService.deleteTraining(training.id)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
                     this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('COMMON.SUCCESS') });
                     this.loadTrainings();
-                    this.displayDeleteDialog = false;
                     this.selectedTraining = null;
                 },
                 error: (err) => {

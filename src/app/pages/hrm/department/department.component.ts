@@ -11,7 +11,7 @@ import { InputText } from 'primeng/inputtext';
 import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InputTextComponent } from '@/layout/component/dialog/input-text/input-text.component';
 import { SelectComponent } from '@/layout/component/dialog/select/select.component';
-import { DeleteConfirmationComponent } from '@/layout/component/dialog/delete-confirmation/delete-confirmation.component';
+
 import { Tooltip } from 'primeng/tooltip';
 import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
 import { BaseCrudComponent } from '@/core/components/base-crud.component';
@@ -20,7 +20,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-department',
-    imports: [TableModule, ButtonDirective, IconField, InputIcon, InputText, ButtonLabel, ButtonIcon, ReactiveFormsModule, InputTextComponent, SelectComponent, DeleteConfirmationComponent, Tooltip, DialogComponent, TranslateModule],
+    imports: [TableModule, ButtonDirective, IconField, InputIcon, InputText, ButtonLabel, ButtonIcon, ReactiveFormsModule, InputTextComponent, SelectComponent, Tooltip, DialogComponent, TranslateModule],
     templateUrl: './department.component.html',
     styleUrl: './department.component.scss'
 })
@@ -93,5 +93,9 @@ export class DepartmentComponent extends BaseCrudComponent<Department, Departmen
 
     get selectedDepartment(): Department | null {
         return this.selectedItem;
+    }
+
+    protected getDeleteConfirmMessage(item: Department): string {
+        return this.translate.instant('HRM.DEPARTMENTS.DELETE_CONFIRM') + ' ' + (item.name || '') + '?';
     }
 }

@@ -12,7 +12,7 @@ import { Tooltip } from 'primeng/tooltip';
 import { Tag } from 'primeng/tag';
 import { SelectComponent } from '@/layout/component/dialog/select/select.component';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
-import { DeleteConfirmationComponent } from '@/layout/component/dialog/delete-confirmation/delete-confirmation.component';
+
 import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
 import { TextareaComponent } from '@/layout/component/dialog/textarea/textarea.component';
 import { Card } from 'primeng/card';
@@ -56,7 +56,7 @@ interface Employee {
         ReactiveFormsModule,
         SelectComponent,
         DatePickerComponent,
-        DeleteConfirmationComponent,
+
         Tooltip,
         Tag,
         DialogComponent,
@@ -73,7 +73,7 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
     leaveBalances: VacationBalance[] = [];
     loading: boolean = true;
     displayDialog: boolean = false;
-    displayDeleteDialog: boolean = false;
+
     displayApprovalDialog: boolean = false;
     displayRejectionDialog: boolean = false;
     submitted: boolean = false;
@@ -574,21 +574,17 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
     }
 
     openDeleteDialog(vacation: Vacation): void {
+        const message = this.translate.instant('HRM.VACATION.DELETE_CONFIRM');
+        if (!window.confirm(message)) return;
+
         this.selectedVacation = vacation;
-        this.displayDeleteDialog = true;
-    }
-
-    confirmDelete(): void {
-        if (!this.selectedVacation) return;
-
-        this.vacationService.deleteVacation(this.selectedVacation.id)
+        this.vacationService.deleteVacation(vacation.id)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
                     this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('VACATION.MESSAGES.REQUEST_DELETED') });
                     this.loadVacations();
                     this.loadVacationBalances();
-                    this.displayDeleteDialog = false;
                     this.selectedVacation = null;
                 },
                 error: (err) => {

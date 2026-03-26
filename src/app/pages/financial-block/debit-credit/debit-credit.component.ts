@@ -10,9 +10,8 @@ import { SelectModule } from 'primeng/select';
 import { DatePickerModule } from 'primeng/datepicker';
 import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { MessageService } from 'primeng/api';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { ChartModule } from 'primeng/chart';
@@ -52,14 +51,13 @@ interface Transaction {
         DatePickerModule,
         TagModule,
         TooltipModule,
-        ConfirmDialogModule,
         ToastModule,
         InputGroupModule,
         InputGroupAddonModule,
         ChartModule,
         TranslateModule
     ],
-    providers: [ConfirmationService, MessageService],
+    providers: [MessageService],
     templateUrl: './debit-credit.component.html',
     styleUrl: './debit-credit.component.scss'
 })
@@ -96,7 +94,6 @@ export class DebitCreditComponent implements OnInit {
     private translate = inject(TranslateService);
 
     constructor(
-        private confirmationService: ConfirmationService,
         private messageService: MessageService
     ) {}
 
@@ -318,24 +315,18 @@ export class DebitCreditComponent implements OnInit {
     }
 
     deleteTransaction(transaction: Transaction) {
-        this.confirmationService.confirm({
-            message: `${this.translate.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.DELETE_CONFIRM')} "${transaction.description}"?`,
-            header: this.translate.instant('FINANCIAL_BLOCK.COMMON.CONFIRM_DELETE'),
-            icon: 'pi pi-exclamation-triangle',
-            acceptLabel: this.translate.instant('FINANCIAL_BLOCK.COMMON.YES'),
-            rejectLabel: this.translate.instant('FINANCIAL_BLOCK.COMMON.NO'),
-            accept: () => {
-                this.transactions = this.transactions.filter(t => t.id !== transaction.id);
-                this.calculateBalances();
-                this.applyFilters();
-                this.updateDashboardData();
-                this.messageService.add({
-                    severity: 'success',
-                    summary: this.translate.instant('FINANCIAL_BLOCK.COMMON.SUCCESS'),
-                    detail: this.translate.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.TRANSACTION_DELETED')
-                });
-            }
-        });
+        const message = `${this.translate.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.DELETE_CONFIRM')} "${transaction.description}"?`;
+        if (confirm(message)) {
+            this.transactions = this.transactions.filter(t => t.id !== transaction.id);
+            this.calculateBalances();
+            this.applyFilters();
+            this.updateDashboardData();
+            this.messageService.add({
+                severity: 'success',
+                summary: this.translate.instant('FINANCIAL_BLOCK.COMMON.SUCCESS'),
+                detail: this.translate.instant('FINANCIAL_BLOCK.DEBIT_CREDIT.TRANSACTION_DELETED')
+            });
+        }
     }
 
     duplicateTransaction(transaction: Transaction) {

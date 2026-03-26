@@ -13,11 +13,11 @@ import { OrganizationType, OrganizationTypePayload } from '@/core/interfaces/org
 import { OrganizationTypeService } from '@/core/services/organization-type.service';
 import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
 import { InputTextComponent } from '@/layout/component/dialog/input-text/input-text.component';
-import { DeleteConfirmationComponent } from '@/layout/component/dialog/delete-confirmation/delete-confirmation.component';
+
 
 @Component({
     selector: 'app-organization-type',
-    imports: [TableModule, ButtonDirective, IconField, InputIcon, InputText, ButtonLabel, ButtonIcon, ReactiveFormsModule, InputTextComponent, DeleteConfirmationComponent, Tooltip, DialogComponent, TranslateModule],
+    imports: [TableModule, ButtonDirective, IconField, InputIcon, InputText, ButtonLabel, ButtonIcon, ReactiveFormsModule, InputTextComponent, Tooltip, DialogComponent, TranslateModule],
     templateUrl: './organization-type.component.html',
     styleUrl: './organization-type.component.scss'
 })
@@ -26,7 +26,7 @@ export class OrganizationTypeComponent implements OnInit, OnDestroy {
     organizationTypes: OrganizationType[] = [];
     loading = true;
     displayDialog = false;
-    displayDeleteDialog = false;
+
     submitted = false;
     selectedType: OrganizationType | null = null;
     form!: FormGroup;
@@ -82,14 +82,11 @@ export class OrganizationTypeComponent implements OnInit, OnDestroy {
     }
 
     openDeleteDialog(item: OrganizationType): void {
+        const message = this.translate.instant('HRM.ORGANIZATION_TYPES.DELETE_CONFIRM') + ' ' + (item.name || '') + '?';
+        if (!window.confirm(message)) return;
+
         this.selectedType = item;
-        this.displayDeleteDialog = true;
-    }
-
-    confirmDelete(): void {
-        if (!this.selectedType) return;
-
-        this.organizationTypeService.delete(this.selectedType.id)
+        this.organizationTypeService.delete(item.id)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
@@ -99,7 +96,6 @@ export class OrganizationTypeComponent implements OnInit, OnDestroy {
                         detail: this.translate.instant('HRM.ORGANIZATION_TYPES.SUCCESS_DELETED')
                     });
                     this.loadItems();
-                    this.displayDeleteDialog = false;
                     this.selectedType = null;
                 },
                 error: (err) => {

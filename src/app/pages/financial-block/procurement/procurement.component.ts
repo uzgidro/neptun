@@ -10,9 +10,8 @@ import { SelectModule } from 'primeng/select';
 import { DatePickerModule } from 'primeng/datepicker';
 import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { MessageService } from 'primeng/api';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { ChartModule } from 'primeng/chart';
@@ -76,7 +75,6 @@ interface ProcurementRecord {
         DatePickerModule,
         TagModule,
         TooltipModule,
-        ConfirmDialogModule,
         ToastModule,
         InputGroupModule,
         InputGroupAddonModule,
@@ -84,7 +82,7 @@ interface ProcurementRecord {
         TextareaModule,
         TranslateModule
     ],
-    providers: [ConfirmationService, MessageService],
+    providers: [MessageService],
     templateUrl: './procurement.component.html',
     styleUrl: './procurement.component.scss'
 })
@@ -126,7 +124,6 @@ export class ProcurementComponent implements OnInit {
     private translate = inject(TranslateService);
 
     constructor(
-        private confirmationService: ConfirmationService,
         private messageService: MessageService
     ) {}
 
@@ -406,23 +403,17 @@ export class ProcurementComponent implements OnInit {
     }
 
     deleteProcurement(procurement: ProcurementRecord) {
-        this.confirmationService.confirm({
-            message: `${this.translate.instant('FINANCIAL_BLOCK.PROCUREMENT.DELETE_CONFIRM')} "${procurement.requestNumber}"?`,
-            header: this.translate.instant('COMMON.CONFIRM_DELETE'),
-            icon: 'pi pi-exclamation-triangle',
-            acceptLabel: this.translate.instant('COMMON.YES'),
-            rejectLabel: this.translate.instant('COMMON.NO'),
-            accept: () => {
-                this.procurements = this.procurements.filter(p => p.id !== procurement.id);
-                this.updateDashboardData();
-                this.applyFilters();
-                this.messageService.add({
-                    severity: 'success',
-                    summary: this.translate.instant('COMMON.SUCCESS'),
-                    detail: this.translate.instant('FINANCIAL_BLOCK.PROCUREMENT.PROCUREMENT_DELETED')
-                });
-            }
-        });
+        const message = `${this.translate.instant('FINANCIAL_BLOCK.PROCUREMENT.DELETE_CONFIRM')} "${procurement.requestNumber}"?`;
+        if (confirm(message)) {
+            this.procurements = this.procurements.filter(p => p.id !== procurement.id);
+            this.updateDashboardData();
+            this.applyFilters();
+            this.messageService.add({
+                severity: 'success',
+                summary: this.translate.instant('COMMON.SUCCESS'),
+                detail: this.translate.instant('FINANCIAL_BLOCK.PROCUREMENT.PROCUREMENT_DELETED')
+            });
+        }
     }
 
     // Helpers

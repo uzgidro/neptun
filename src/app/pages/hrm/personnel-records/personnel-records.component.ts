@@ -14,7 +14,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { InputTextComponent } from '@/layout/component/dialog/input-text/input-text.component';
 import { SelectComponent } from '@/layout/component/dialog/select/select.component';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
-import { DeleteConfirmationComponent } from '@/layout/component/dialog/delete-confirmation/delete-confirmation.component';
+
 import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
 import { PersonnelRecord, PersonnelRecordPayload } from '@/core/interfaces/hrm/personnel-record';
 import { PersonnelRecordService } from '@/core/services/personnel-record.service';
@@ -41,7 +41,7 @@ import { Contact } from '@/core/interfaces/contact';
         InputTextComponent,
         SelectComponent,
         DatePickerComponent,
-        DeleteConfirmationComponent,
+
         Tooltip,
         Tag,
         DialogComponent,
@@ -54,7 +54,7 @@ export class PersonnelRecordsComponent implements OnInit, OnDestroy {
     records: PersonnelRecord[] = [];
     loading: boolean = true;
     displayDialog: boolean = false;
-    displayDeleteDialog: boolean = false;
+
     submitted: boolean = false;
     isEditMode: boolean = false;
     selectedRecord: PersonnelRecord | null = null;
@@ -269,20 +269,16 @@ export class PersonnelRecordsComponent implements OnInit, OnDestroy {
     }
 
     openDeleteDialog(record: PersonnelRecord): void {
+        const message = this.translate.instant('HRM.PERSONNEL_RECORDS.DELETE_CONFIRM') + ' ' + (record.employee_name || '') + '?';
+        if (!window.confirm(message)) return;
+
         this.selectedRecord = record;
-        this.displayDeleteDialog = true;
-    }
-
-    confirmDelete(): void {
-        if (!this.selectedRecord) return;
-
-        this.personnelRecordService.deletePersonnelRecord(this.selectedRecord.id)
+        this.personnelRecordService.deletePersonnelRecord(record.id)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
                     this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('HRM.PERSONNEL_RECORDS.DELETE_SUCCESS') });
                     this.loadRecords();
-                    this.displayDeleteDialog = false;
                     this.selectedRecord = null;
                 },
                 error: (err) => {

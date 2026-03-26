@@ -10,9 +10,8 @@ import { SelectModule } from 'primeng/select';
 import { DatePickerModule } from 'primeng/datepicker';
 import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { MessageService } from 'primeng/api';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { ChartModule } from 'primeng/chart';
@@ -70,7 +69,6 @@ interface KpiRecord {
         DatePickerModule,
         TagModule,
         TooltipModule,
-        ConfirmDialogModule,
         ToastModule,
         InputGroupModule,
         InputGroupAddonModule,
@@ -80,7 +78,7 @@ interface KpiRecord {
         KnobModule,
         TranslateModule
     ],
-    providers: [ConfirmationService, MessageService],
+    providers: [MessageService],
     templateUrl: './kpi.component.html',
     styleUrl: './kpi.component.scss'
 })
@@ -125,7 +123,6 @@ export class KpiComponent implements OnInit {
     private translate = inject(TranslateService);
 
     constructor(
-        private confirmationService: ConfirmationService,
         private messageService: MessageService
     ) {}
 
@@ -417,23 +414,17 @@ export class KpiComponent implements OnInit {
     }
 
     deleteKpi(kpi: KpiRecord) {
-        this.confirmationService.confirm({
-            message: `${this.translate.instant('FINANCIAL_BLOCK.KPI.DELETE_CONFIRM')} "${kpi.name}"?`,
-            header: this.translate.instant('COMMON.CONFIRM_DELETE'),
-            icon: 'pi pi-exclamation-triangle',
-            acceptLabel: this.translate.instant('COMMON.YES'),
-            rejectLabel: this.translate.instant('COMMON.NO'),
-            accept: () => {
-                this.kpis = this.kpis.filter(k => k.id !== kpi.id);
-                this.applyFilters();
-                this.updateDashboardData();
-                this.messageService.add({
-                    severity: 'success',
-                    summary: this.translate.instant('COMMON.SUCCESS'),
-                    detail: this.translate.instant('FINANCIAL_BLOCK.KPI.KPI_DELETED')
-                });
-            }
-        });
+        const message = `${this.translate.instant('FINANCIAL_BLOCK.KPI.DELETE_CONFIRM')} "${kpi.name}"?`;
+        if (confirm(message)) {
+            this.kpis = this.kpis.filter(k => k.id !== kpi.id);
+            this.applyFilters();
+            this.updateDashboardData();
+            this.messageService.add({
+                severity: 'success',
+                summary: this.translate.instant('COMMON.SUCCESS'),
+                detail: this.translate.instant('FINANCIAL_BLOCK.KPI.KPI_DELETED')
+            });
+        }
     }
 
     // Helpers

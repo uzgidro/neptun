@@ -5,7 +5,7 @@ import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { ActivatedRoute } from '@angular/router';
 import { of, Subject, throwError } from 'rxjs';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { MessageService, ConfirmationService } from 'primeng/api';
+import { MessageService } from 'primeng/api';
 import { FiltrationComparisonComponent } from './filtration-comparison.component';
 import { FiltrationComparisonService } from '@/core/services/filtration-comparison.service';
 import { TimeService } from '@/core/services/time.service';
@@ -68,8 +68,7 @@ describe('FiltrationComparisonComponent', () => {
                 provideNoopAnimations(),
                 { provide: FiltrationComparisonService, useValue: compSpy },
                 { provide: ActivatedRoute, useValue: { snapshot: { queryParamMap: { get: () => '2026-03-20' } } } },
-                MessageService,
-                ConfirmationService
+                MessageService
             ]
         }).compileComponents();
 
