@@ -5,9 +5,28 @@
                 <th class="sticky-col border border-surface-200 dark:border-surface-700 p-2 text-left min-w-36">
                     {{ 'FILTRATION.PIEZOMETERS' | translate }}, м
                 </th>
-                @if (historicalPiezometers) {
-                    <th class="border border-surface-200 dark:border-surface-700 p-2 text-center min-w-24">{{ historicalDate }}</th>
-                }
+                <th class="border border-surface-200 dark:border-surface-700 p-2 text-center min-w-40">
+                    <div class="flex items-center justify-center gap-1">
+                        @if (dateOptions.length > 0) {
+                            <p-select
+                                [options]="dateOptions"
+                                [ngModel]="selectedHistoricalDate"
+                                (ngModelChange)="historicalDateChange.emit($event)"
+                                optionLabel="label"
+                                optionValue="value"
+                                [placeholder]="'FILTRATION.SELECT_DATE' | translate"
+                                [style]="{'min-width': '8rem'}"
+                                size="small" />
+                            @if (selectedHistoricalDate) {
+                                <button pButton type="button" icon="pi pi-times"
+                                    class="p-button-text p-button-sm p-button-danger"
+                                    (click)="historicalDateClear.emit()"></button>
+                            }
+                        } @else {
+                            <span class="text-surface-400 italic text-xs">{{ 'FILTRATION.NO_SIMILAR_DATES' | translate }}</span>
+                        }
+                    </div>
+                </th>
                 <th class="border border-surface-200 dark:border-surface-700 p-2 text-center min-w-24">{{ currentDate }}</th>
                 @if (historicalPiezometers) {
                     <th class="border border-surface-200 dark:border-surface-700 p-2 text-center min-w-16">+,-</th>
@@ -21,14 +40,16 @@
             @for (p of currentPiezometers; track p.id; let i = $index) {
                 <tr [ngClass]="{'bg-amber-50 dark:bg-amber-900/20': isAnomaly(i)}">
                     <td class="sticky-col border border-surface-200 dark:border-surface-700 p-2">{{ p.name }}</td>
-                    @if (historicalPiezometers && historicalFormArray) {
-                        <td class="border border-surface-200 dark:border-surface-700 p-1 text-center">
+                    <td class="border border-surface-200 dark:border-surface-700 p-1 text-center">
+                        @if (historicalPiezometers && historicalFormArray) {
                             <p-inputNumber
                                 [formControl]="$any(historicalFormArray.at(i).get('level'))"
                                 mode="decimal" [maxFractionDigits]="2" [minFractionDigits]="0"
                                 [inputStyle]="{'width': '5rem', 'text-align': 'center'}" />
-                        </td>
-                    }
+                        } @else {
+                            —
+                        }
+                    </td>
                     <td class="border border-surface-200 dark:border-surface-700 p-1 text-center"
                         [ngClass]="{'bg-red-100 dark:bg-red-900/30': exceedsNorm(p, currentFormArray, i)}">
                         <p-inputNumber

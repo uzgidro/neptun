@@ -48,7 +48,7 @@
         @for (orgSimilar of similarDates; track orgSimilar.organization_id) {
             <app-org-comparison-card
                 [org]="getOrgComparison(orgSimilar.organization_id) ?? null"
-                [similarDates]="orgSimilar.similar_dates"
+                [dateOptions]="getDateOptions(orgSimilar.organization_id)"
                 [orgName]="orgSimilar.organization_name"
                 [referenceLevel]="orgSimilar.reference_level"
                 [referenceVolume]="orgSimilar.reference_volume"

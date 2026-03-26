@@ -1,14 +1,17 @@
-import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { FormArray, ReactiveFormsModule } from '@angular/forms';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { SelectModule } from 'primeng/select';
+import { ButtonModule } from 'primeng/button';
 import { TranslateModule } from '@ngx-translate/core';
 import { LocationReading } from '@/core/interfaces/filtration-comparison';
 
 @Component({
     selector: 'app-filtration-table',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, InputNumberModule, TranslateModule],
+    imports: [CommonModule, FormsModule, ReactiveFormsModule, InputNumberModule, SelectModule, ButtonModule, TranslateModule],
     templateUrl: './filtration-table.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -19,6 +22,11 @@ export class FiltrationTableComponent {
     @Input() historicalDate: string | null = null;
     @Input() currentFormArray!: FormArray;
     @Input() historicalFormArray: FormArray | null = null;
+    @Input() dateOptions: { label: string; value: string }[] = [];
+    @Input() selectedHistoricalDate: string | null = null;
+
+    @Output() historicalDateChange = new EventEmitter<string>();
+    @Output() historicalDateClear = new EventEmitter<void>();
 
     private sumFromFormArray(formArray: FormArray | null): number | null {
         if (!formArray) return null;

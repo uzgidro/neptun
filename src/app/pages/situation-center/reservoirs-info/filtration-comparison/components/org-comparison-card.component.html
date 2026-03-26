@@ -1,63 +1,13 @@
 <div class="border border-surface rounded-lg mb-6">
     <!-- Header -->
     <div class="bg-surface-100 dark:bg-surface-800 p-4 rounded-t-lg">
-        <div class="flex flex-col gap-3">
-            <h3 class="text-lg font-bold m-0">
-                {{ orgName }}
-                <span class="font-normal text-sm text-surface-500 ml-2">
-                    {{ 'FILTRATION.LEVEL' | translate }}: {{ referenceLevel ?? '—' }},
-                    {{ 'FILTRATION.VOLUME' | translate }}: {{ referenceVolume ?? '—' }}
-                </span>
-            </h3>
-
-            <!-- Date selectors -->
-            <div class="flex flex-wrap gap-4">
-                <div class="flex items-center gap-2">
-                    <label class="text-sm font-medium text-surface-600 dark:text-surface-400">
-                        {{ 'FILTRATION.FILTER_DATE' | translate }}:
-                    </label>
-                    @if (dateOptions.length > 0) {
-                        <p-select
-                            [options]="dateOptions"
-                            [ngModel]="selectedFilterDate"
-                            (ngModelChange)="onFilterDateSelect($event)"
-                            optionLabel="label"
-                            optionValue="value"
-                            [placeholder]="'FILTRATION.SELECT_DATE' | translate"
-                            [style]="{'min-width': '10rem'}" />
-                        @if (selectedFilterDate) {
-                            <button pButton type="button" icon="pi pi-times"
-                                class="p-button-text p-button-sm p-button-danger"
-                                (click)="filterDateClear.emit()"></button>
-                        }
-                    } @else {
-                        <span class="text-sm text-surface-400 italic">{{ 'FILTRATION.NO_SIMILAR_DATES' | translate }}</span>
-                    }
-                </div>
-                <div class="flex items-center gap-2">
-                    <label class="text-sm font-medium text-surface-600 dark:text-surface-400">
-                        {{ 'FILTRATION.PIEZO_DATE' | translate }}:
-                    </label>
-                    @if (dateOptions.length > 0) {
-                        <p-select
-                            [options]="dateOptions"
-                            [ngModel]="selectedPiezoDate"
-                            (ngModelChange)="onPiezoDateSelect($event)"
-                            optionLabel="label"
-                            optionValue="value"
-                            [placeholder]="'FILTRATION.SELECT_DATE' | translate"
-                            [style]="{'min-width': '10rem'}" />
-                        @if (selectedPiezoDate) {
-                            <button pButton type="button" icon="pi pi-times"
-                                class="p-button-text p-button-sm p-button-danger"
-                                (click)="piezoDateClear.emit()"></button>
-                        }
-                    } @else {
-                        <span class="text-sm text-surface-400 italic">{{ 'FILTRATION.NO_SIMILAR_DATES' | translate }}</span>
-                    }
-                </div>
-            </div>
-        </div>
+        <h3 class="text-lg font-bold m-0">
+            {{ orgName }}
+            <span class="font-normal text-sm text-surface-500 ml-2">
+                {{ 'FILTRATION.LEVEL' | translate }}: {{ referenceLevel ?? '—' }},
+                {{ 'FILTRATION.VOLUME' | translate }}: {{ referenceVolume ?? '—' }}
+            </span>
+        </h3>
     </div>
 
     <!-- Loading -->
@@ -77,7 +27,11 @@
                 [currentDate]="org.current.date"
                 [historicalDate]="org.historical_filter?.date ?? null"
                 [currentFormArray]="$any(orgFormGroup.get('current.locations'))"
-                [historicalFormArray]="org.historical_filter ? $any(orgFormGroup.get('historical_filter.locations')) : null" />
+                [historicalFormArray]="org.historical_filter ? $any(orgFormGroup.get('historical_filter.locations')) : null"
+                [dateOptions]="dateOptions"
+                [selectedHistoricalDate]="selectedFilterDate"
+                (historicalDateChange)="filterDateChange.emit($event)"
+                (historicalDateClear)="filterDateClear.emit()" />
 
             <!-- Piezometer table -->
             <app-piezometer-table
@@ -87,14 +41,11 @@
                 [currentDate]="org.current.date"
                 [historicalDate]="org.historical_piezo?.date ?? null"
                 [currentFormArray]="$any(orgFormGroup.get('current.piezometers'))"
-                [historicalFormArray]="org.historical_piezo ? $any(orgFormGroup.get('historical_piezo.piezometers')) : null" />
-        </div>
-    }
-
-    <!-- No data yet (dates not selected) -->
-    @if (!loadingData && !org && selectedFilterDate && selectedPiezoDate) {
-        <div class="p-4 text-center text-surface-400">
-            {{ 'FILTRATION.NO_DATA' | translate }}
+                [historicalFormArray]="org.historical_piezo ? $any(orgFormGroup.get('historical_piezo.piezometers')) : null"
+                [dateOptions]="dateOptions"
+                [selectedHistoricalDate]="selectedPiezoDate"
+                (historicalDateChange)="piezoDateChange.emit($event)"
+                (historicalDateClear)="piezoDateClear.emit()" />
         </div>
     }
 </div>

@@ -129,6 +129,7 @@ export class FiltrationComparisonComponent implements OnInit, OnDestroy {
                         this.orgSelections.set(org.organization_id, { filterDate: null, piezoDate: null });
                     }
                     this.loadingSimilarDates = false;
+                    this.loadAllCurrentData();
                 },
                 error: () => {
                     this.loadingSimilarDates = false;
@@ -193,9 +194,46 @@ export class FiltrationComparisonComponent implements OnInit, OnDestroy {
         }
     }
 
+    private loadAllCurrentData(): void {
+        const date = this.timeService.dateToYMD(this.selectedDate);
+        for (const org of this.similarDates) {
+            this.orgLoading.add(org.organization_id);
+        }
+        this.comparisonService.getComparisonData(date)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: (data) => {
+                    for (const orgComparison of data) {
+                        this.orgData.set(orgComparison.organization_id, orgComparison);
+                        this.upsertOrgFormGroup(orgComparison);
+
+                        const sel = this.orgSelections.get(orgComparison.organization_id);
+                        if (sel) {
+                            if (orgComparison.filter_comparison_date) {
+                                sel.filterDate = orgComparison.filter_comparison_date;
+                            }
+                            if (orgComparison.piezo_comparison_date) {
+                                sel.piezoDate = orgComparison.piezo_comparison_date;
+                            }
+                        }
+                        this.orgLoading.delete(orgComparison.organization_id);
+                    }
+                    // Clear loading for orgs not in response
+                    for (const org of this.similarDates) {
+                        this.orgLoading.delete(org.organization_id);
+                    }
+                },
+                error: () => {
+                    for (const org of this.similarDates) {
+                        this.orgLoading.delete(org.organization_id);
+                    }
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.LOAD_ERROR') });
+                }
+            });
+    }
+
     private tryLoadOrgData(orgId: number): void {
         const sel = this.orgSelections.get(orgId);
-        if (!sel?.filterDate || !sel?.piezoDate) return;
 
         // Cancel previous in-flight request for this org
         this.orgCancellers.get(orgId)?.next();
@@ -205,7 +243,7 @@ export class FiltrationComparisonComponent implements OnInit, OnDestroy {
         this.orgLoading.add(orgId);
         const date = this.timeService.dateToYMD(this.selectedDate);
 
-        this.comparisonService.getComparisonData(date, sel.filterDate, sel.piezoDate)
+        this.comparisonService.getComparisonData(date, sel?.filterDate ?? undefined, sel?.piezoDate ?? undefined)
             .pipe(takeUntil(canceller$), takeUntil(this.destroy$))
             .subscribe({
                 next: (data) => {
@@ -215,11 +253,13 @@ export class FiltrationComparisonComponent implements OnInit, OnDestroy {
                         this.upsertOrgFormGroup(orgComparison);
 
                         // Restore per-org dates from backend
-                        if (orgComparison.filter_comparison_date) {
-                            sel.filterDate = orgComparison.filter_comparison_date;
-                        }
-                        if (orgComparison.piezo_comparison_date) {
-                            sel.piezoDate = orgComparison.piezo_comparison_date;
+                        if (sel) {
+                            if (orgComparison.filter_comparison_date) {
+                                sel.filterDate = orgComparison.filter_comparison_date;
+                            }
+                            if (orgComparison.piezo_comparison_date) {
+                                sel.piezoDate = orgComparison.piezo_comparison_date;
+                            }
                         }
                     }
                     this.orgLoading.delete(orgId);
@@ -241,6 +281,11 @@ export class FiltrationComparisonComponent implements OnInit, OnDestroy {
 
     getOrgSelection(orgId: number): OrgSelection {
         return this.orgSelections.get(orgId) ?? { filterDate: null, piezoDate: null };
+    }
+
+    getDateOptions(orgId: number): { label: string; value: string }[] {
+        const orgSimilar = this.similarDates.find(s => s.organization_id === orgId);
+        return orgSimilar?.similar_dates.map(sd => ({ label: sd.date, value: sd.date })) ?? [];
     }
 
     private upsertOrgFormGroup(org: OrgComparison): void {
@@ -427,15 +472,20 @@ export class FiltrationComparisonComponent implements OnInit, OnDestroy {
         });
     }
 
-    private getFirstCompleteDates(): OrgSelection | null {
+    private getFirstAvailableDates(): { filterDate?: string; piezoDate?: string } {
         for (const [, sel] of this.orgSelections) {
-            if (sel.filterDate && sel.piezoDate) return sel;
+            if (sel.filterDate || sel.piezoDate) {
+                return {
+                    filterDate: sel.filterDate ?? undefined,
+                    piezoDate: sel.piezoDate ?? undefined
+                };
+            }
         }
-        return null;
+        return {};
     }
 
     get hasExportDates(): boolean {
-        return this.getFirstCompleteDates() !== null;
+        return this.orgData.size > 0;
     }
 
     get hasPendingClears(): boolean {
@@ -452,9 +502,9 @@ export class FiltrationComparisonComponent implements OnInit, OnDestroy {
         const date = this.timeService.dateToYMD(nextDay);
         const ext = format === 'excel' ? 'xlsx' : 'pdf';
 
-        const dates = this.getFirstCompleteDates();
-        const filterDate = dates?.filterDate ?? undefined;
-        const piezoDate = dates?.piezoDate ?? undefined;
+        const dates = this.getFirstAvailableDates();
+        const filterDate = dates.filterDate;
+        const piezoDate = dates.piezoDate;
 
         this.comparisonService.downloadExport(date, format, filterDate, piezoDate)
             .pipe(

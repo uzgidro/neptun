@@ -19,11 +19,10 @@ export class FiltrationComparisonService extends ApiService {
         return this.http.get<OrgSimilarDates[]>(`${this.BASE_URL}${FILTRATION}${COMPARISON}/similar-dates`, { params });
     }
 
-    getComparisonData(date: string, filterDate: string, piezoDate: string): Observable<OrgComparison[]> {
-        const params = new HttpParams()
-            .set('date', date)
-            .set('filter_date', filterDate)
-            .set('piezo_date', piezoDate);
+    getComparisonData(date: string, filterDate?: string, piezoDate?: string): Observable<OrgComparison[]> {
+        let params = new HttpParams().set('date', date);
+        if (filterDate) params = params.set('filter_date', filterDate);
+        if (piezoDate) params = params.set('piezo_date', piezoDate);
         return this.http.get<OrgComparison[]>(`${this.BASE_URL}${FILTRATION}${COMPARISON}/data`, { params });
     }
 

@@ -1,15 +1,18 @@
-import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { FormArray, ReactiveFormsModule } from '@angular/forms';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { CheckboxModule } from 'primeng/checkbox';
+import { SelectModule } from 'primeng/select';
+import { ButtonModule } from 'primeng/button';
 import { TranslateModule } from '@ngx-translate/core';
 import { PiezoReading, PiezometerCounts } from '@/core/interfaces/filtration-comparison';
 
 @Component({
     selector: 'app-piezometer-table',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, InputNumberModule, CheckboxModule, TranslateModule],
+    imports: [CommonModule, FormsModule, ReactiveFormsModule, InputNumberModule, CheckboxModule, SelectModule, ButtonModule, TranslateModule],
     templateUrl: './piezometer-table.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -21,6 +24,11 @@ export class PiezometerTableComponent {
     @Input() historicalDate: string | null = null;
     @Input() currentFormArray!: FormArray;
     @Input() historicalFormArray: FormArray | null = null;
+    @Input() dateOptions: { label: string; value: string }[] = [];
+    @Input() selectedHistoricalDate: string | null = null;
+
+    @Output() historicalDateChange = new EventEmitter<string>();
+    @Output() historicalDateClear = new EventEmitter<void>();
 
     getDelta(index: number): number | null {
         const curr = this.currentFormArray?.at(index)?.get('level')?.value;
