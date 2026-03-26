@@ -57,6 +57,8 @@ describe('FiltrationComparisonComponent', () => {
             'getSimilarDates', 'getComparisonData', 'saveMeasurements', 'downloadExport'
         ]);
         compSpy.getSimilarDates.and.returnValue(of([]));
+        // Default: return current-only data (no historical) for initial load
+        compSpy.getComparisonData.and.returnValue(of([]));
 
         await TestBed.configureTestingModule({
             imports: [FiltrationComparisonComponent, TranslateModule.forRoot()],
@@ -77,19 +79,46 @@ describe('FiltrationComparisonComponent', () => {
         timeService = TestBed.inject(TimeService);
     });
 
+    /** Helper: initialize component with similar dates and current data loaded */
+    function initWithOrgs(...orgIds: number[]): void {
+        const mockSimilar = orgIds.map(id => makeSimilarDates(id));
+        const currentData = orgIds.map(id => makeOrgComparison(id, '2026-03-20', null, null));
+        comparisonService.getSimilarDates.and.returnValue(of(mockSimilar));
+        comparisonService.getComparisonData.and.returnValue(of(currentData));
+        fixture.detectChanges();
+        // Reset calls after init so tests only see explicit calls
+        comparisonService.getComparisonData.calls.reset();
+    }
+
     it('should create', () => {
         expect(component).toBeTruthy();
     });
 
     it('should load similar dates on init', () => {
         const mockData = [makeSimilarDates(1), makeSimilarDates(2)];
+        const currentData = [makeOrgComparison(1, '2026-03-20', null, null), makeOrgComparison(2, '2026-03-20', null, null)];
         comparisonService.getSimilarDates.and.returnValue(of(mockData));
+        comparisonService.getComparisonData.and.returnValue(of(currentData));
 
         fixture.detectChanges();
 
         expect(comparisonService.getSimilarDates).toHaveBeenCalledWith('2026-03-20');
         expect(component.similarDates.length).toBe(2);
         expect(component.orgSelections.size).toBe(2);
+    });
+
+    it('should load current data immediately after similar dates', () => {
+        const mockSimilar = [makeSimilarDates(1)];
+        const currentData = [makeOrgComparison(1, '2026-03-20', null, null)];
+        comparisonService.getSimilarDates.and.returnValue(of(mockSimilar));
+        comparisonService.getComparisonData.and.returnValue(of(currentData));
+
+        fixture.detectChanges();
+
+        // getComparisonData called without historical dates
+        expect(comparisonService.getComparisonData).toHaveBeenCalledWith('2026-03-20');
+        expect(component.orgData.size).toBe(1);
+        expect(component.getOrgFormGroup(1)).not.toBeNull();
     });
 
     it('should set loadingSimilarDates to false on error', () => {
@@ -100,45 +129,57 @@ describe('FiltrationComparisonComponent', () => {
         expect(component.loadingSimilarDates).toBeFalse();
     });
 
-    it('should load org data when both dates are selected', () => {
-        const mockSimilar = [makeSimilarDates(1)];
-        comparisonService.getSimilarDates.and.returnValue(of(mockSimilar));
-        const mockComparison = [makeOrgComparison(1, '2026-03-20', '2025-11-15', '2025-09-03')];
-        comparisonService.getComparisonData.and.returnValue(of(mockComparison));
+    it('should load historical filter data independently on filter date change', () => {
+        initWithOrgs(1);
 
-        fixture.detectChanges();
+        const historicalData = [makeOrgComparison(1, '2026-03-20', '2025-11-15', null)];
+        comparisonService.getComparisonData.and.returnValue(of(historicalData));
 
         component.onFilterDateChange(1, '2025-11-15');
-        // Should not load yet — piezoDate is null
-        expect(comparisonService.getComparisonData).not.toHaveBeenCalled();
 
-        component.onPiezoDateChange(1, '2025-09-03');
-        // Now both are set — should load
-        expect(comparisonService.getComparisonData).toHaveBeenCalledWith('2026-03-20', '2025-11-15', '2025-09-03');
+        expect(comparisonService.getComparisonData).toHaveBeenCalledWith('2026-03-20', '2025-11-15', undefined);
+        const orgData = component.getOrgComparison(1);
+        expect(orgData!.historical_filter).not.toBeNull();
+        expect(orgData!.historical_filter!.date).toBe('2025-11-15');
     });
 
-    it('should not load org data when only one date is selected', () => {
-        const mockSimilar = [makeSimilarDates(1)];
-        comparisonService.getSimilarDates.and.returnValue(of(mockSimilar));
+    it('should load historical piezo data independently on piezo date change', () => {
+        initWithOrgs(1);
 
-        fixture.detectChanges();
+        const historicalData = [makeOrgComparison(1, '2026-03-20', null, '2025-09-03')];
+        comparisonService.getComparisonData.and.returnValue(of(historicalData));
 
+        component.onPiezoDateChange(1, '2025-09-03');
+
+        expect(comparisonService.getComparisonData).toHaveBeenCalledWith('2026-03-20', undefined, '2025-09-03');
+        const orgData = component.getOrgComparison(1);
+        expect(orgData!.historical_piezo).not.toBeNull();
+        expect(orgData!.historical_piezo!.date).toBe('2025-09-03');
+    });
+
+    it('should preserve current form values when loading historical data', () => {
+        initWithOrgs(1);
+
+        // Edit current flow_rate
+        const orgFg = component.getOrgFormGroup(1)!;
+        const locationsArr = orgFg.get('current.locations') as any;
+        locationsArr.at(0).get('flow_rate').setValue(99.99);
+        locationsArr.at(0).get('flow_rate').markAsDirty();
+
+        // Load historical filter
+        const historicalData = [makeOrgComparison(1, '2026-03-20', '2025-11-15', null)];
+        comparisonService.getComparisonData.and.returnValue(of(historicalData));
         component.onFilterDateChange(1, '2025-11-15');
-        expect(comparisonService.getComparisonData).not.toHaveBeenCalled();
+
+        // Current form value should be preserved
+        const orgFgAfter = component.getOrgFormGroup(1)!;
+        const locAfter = orgFgAfter.get('current.locations') as any;
+        expect(locAfter.at(0).get('flow_rate').value).toBe(99.99);
+        expect(locAfter.at(0).get('flow_rate').dirty).toBeTrue();
     });
 
     it('should build form with upsertOrgFormGroup without destroying other orgs', () => {
-        const mockSimilar = [makeSimilarDates(1), makeSimilarDates(2)];
-        comparisonService.getSimilarDates.and.returnValue(of(mockSimilar));
-        const org1Data = [makeOrgComparison(1, '2026-03-20', '2025-11-15', '2025-09-03')];
-        const org2Data = [makeOrgComparison(2, '2026-03-20', '2025-11-15', '2025-09-03')];
-
-        fixture.detectChanges();
-
-        // Load org 1
-        comparisonService.getComparisonData.and.returnValue(of(org1Data));
-        component.onFilterDateChange(1, '2025-11-15');
-        component.onPiezoDateChange(1, '2025-09-03');
+        initWithOrgs(1, 2);
 
         const org1Fg = component.getOrgFormGroup(1);
         expect(org1Fg).not.toBeNull();
@@ -146,10 +187,10 @@ describe('FiltrationComparisonComponent', () => {
         // Mark org 1 form as dirty
         org1Fg!.get('current.locations')!.markAsDirty();
 
-        // Load org 2
-        comparisonService.getComparisonData.and.returnValue(of(org2Data));
+        // Load historical for org 2
+        const org2Historical = [makeOrgComparison(2, '2026-03-20', '2025-11-15', null)];
+        comparisonService.getComparisonData.and.returnValue(of(org2Historical));
         component.onFilterDateChange(2, '2025-11-15');
-        component.onPiezoDateChange(2, '2025-09-03');
 
         // Org 1 form group should still exist and be dirty
         const org1FgAfter = component.getOrgFormGroup(1);
@@ -161,59 +202,37 @@ describe('FiltrationComparisonComponent', () => {
     });
 
     it('should reset state on date change', () => {
-        const mockSimilar = [makeSimilarDates(1)];
-        comparisonService.getSimilarDates.and.returnValue(of(mockSimilar));
-
-        fixture.detectChanges();
+        initWithOrgs(1);
         expect(component.similarDates.length).toBe(1);
 
         // Change date — should reset
         const newSimilar = [makeSimilarDates(1), makeSimilarDates(2)];
+        const newCurrentData = [makeOrgComparison(1, '2026-03-21', null, null), makeOrgComparison(2, '2026-03-21', null, null)];
         comparisonService.getSimilarDates.and.returnValue(of(newSimilar));
+        comparisonService.getComparisonData.and.returnValue(of(newCurrentData));
 
         component.onDateChange(new Date(2026, 2, 21));
 
         expect(component.similarDates.length).toBe(2);
     });
 
-    it('hasExportDates should be false when no org has both dates', () => {
-        const mockSimilar = [makeSimilarDates(1)];
-        comparisonService.getSimilarDates.and.returnValue(of(mockSimilar));
+    it('hasExportDates should be false when no org data loaded', () => {
+        comparisonService.getSimilarDates.and.returnValue(of([makeSimilarDates(1)]));
+        comparisonService.getComparisonData.and.returnValue(of([]));
 
         fixture.detectChanges();
 
         expect(component.hasExportDates).toBeFalse();
     });
 
-    it('hasExportDates should be true when an org has both dates', () => {
-        const mockSimilar = [makeSimilarDates(1)];
-        comparisonService.getSimilarDates.and.returnValue(of(mockSimilar));
-        comparisonService.getComparisonData.and.returnValue(of([makeOrgComparison(1, '2026-03-20', '2025-11-15', '2025-09-03')]));
-
-        fixture.detectChanges();
-        component.onFilterDateChange(1, '2025-11-15');
-        component.onPiezoDateChange(1, '2025-09-03');
+    it('hasExportDates should be true when org data is loaded', () => {
+        initWithOrgs(1);
 
         expect(component.hasExportDates).toBeTrue();
     });
 
     it('save should only reload successfully saved orgs', fakeAsync(() => {
-        const mockSimilar = [makeSimilarDates(1), makeSimilarDates(2)];
-        comparisonService.getSimilarDates.and.returnValue(of(mockSimilar));
-
-        // Load both orgs
-        const org1Data = [makeOrgComparison(1, '2026-03-20', '2025-11-15', '2025-09-03')];
-        const org2Data = [makeOrgComparison(2, '2026-03-20', '2025-11-15', '2025-09-03')];
-
-        fixture.detectChanges();
-
-        comparisonService.getComparisonData.and.returnValue(of(org1Data));
-        component.onFilterDateChange(1, '2025-11-15');
-        component.onPiezoDateChange(1, '2025-09-03');
-
-        comparisonService.getComparisonData.and.returnValue(of(org2Data));
-        component.onFilterDateChange(2, '2025-11-15');
-        component.onPiezoDateChange(2, '2025-09-03');
+        initWithOrgs(1, 2);
 
         // Mark both as dirty
         component.getOrgFormGroup(1)!.get('current.locations')!.markAsDirty();
@@ -227,9 +246,8 @@ describe('FiltrationComparisonComponent', () => {
             return throwError(() => new Error('fail'));
         });
 
-        // Reset getComparisonData calls to track reload
-        comparisonService.getComparisonData.calls.reset();
-        comparisonService.getComparisonData.and.returnValue(of(org1Data));
+        // Mock reload response
+        comparisonService.getComparisonData.and.returnValue(of([makeOrgComparison(1, '2026-03-20', null, null)]));
 
         component.save();
         tick();
@@ -238,10 +256,8 @@ describe('FiltrationComparisonComponent', () => {
         expect(comparisonService.saveMeasurements).toHaveBeenCalledTimes(2);
     }));
 
-    it('should cancel previous request when org dates change rapidly', fakeAsync(() => {
-        const mockSimilar = [makeSimilarDates(1)];
-        comparisonService.getSimilarDates.and.returnValue(of(mockSimilar));
-        fixture.detectChanges();
+    it('should cancel previous request when historical date changes rapidly', fakeAsync(() => {
+        initWithOrgs(1);
 
         const subject1 = new Subject<OrgComparison[]>();
         const subject2 = new Subject<OrgComparison[]>();
@@ -252,22 +268,19 @@ describe('FiltrationComparisonComponent', () => {
             return callIndex === 1 ? subject1.asObservable() : subject2.asObservable();
         });
 
-        // First selection
+        // First filter date selection
         component.onFilterDateChange(1, '2025-11-15');
-        component.onPiezoDateChange(1, '2025-09-03');
 
         // Quickly change to new date before first request completes
-        component.onPiezoDateChange(1, '2025-08-01');
+        component.onFilterDateChange(1, '2025-09-03');
 
         // First request completes — should be ignored due to cancellation
-        const staleData = [makeOrgComparison(1, '2026-03-20', '2025-11-15', '2025-09-03')];
+        const staleData = [makeOrgComparison(1, '2026-03-20', '2025-11-15', null)];
         subject1.next(staleData);
         subject1.complete();
 
-        // Org data should NOT be set from stale response
-        // (it was cancelled, so subscribe callback doesn't fire)
         // Second request completes with fresh data
-        const freshData = [makeOrgComparison(1, '2026-03-20', '2025-11-15', '2025-08-01')];
+        const freshData = [makeOrgComparison(1, '2026-03-20', '2025-09-03', null)];
         subject2.next(freshData);
         subject2.complete();
 
@@ -275,6 +288,6 @@ describe('FiltrationComparisonComponent', () => {
 
         const orgData = component.getOrgComparison(1);
         expect(orgData).toBeTruthy();
-        expect(orgData!.historical_piezo?.date).toBe('2025-08-01');
+        expect(orgData!.historical_filter?.date).toBe('2025-09-03');
     }));
 });
