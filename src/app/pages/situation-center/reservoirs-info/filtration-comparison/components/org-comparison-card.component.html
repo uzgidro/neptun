@@ -10,42 +10,56 @@
         </h3>
     </div>
 
-    <!-- Loading -->
-    @if (loadingData) {
+    <!-- Initial loading (no data yet) -->
+    @if (loadingData && !org) {
         <div class="flex justify-center p-8">
             <i class="pi pi-spin pi-spinner text-xl"></i>
         </div>
     }
 
     <!-- Data tables -->
-    @if (!loadingData && org && orgFormGroup) {
+    @if (org && orgFormGroup) {
         <div class="p-4 grid grid-cols-1 xl:grid-cols-2 gap-6">
             <!-- Filtration table -->
-            <app-filtration-table
-                [currentLocations]="org.current.locations"
-                [historicalLocations]="org.historical_filter?.locations ?? null"
-                [currentDate]="org.current.date"
-                [historicalDate]="org.historical_filter?.date ?? null"
-                [currentFormArray]="$any(orgFormGroup.get('current.locations'))"
-                [historicalFormArray]="org.historical_filter ? $any(orgFormGroup.get('historical_filter.locations')) : null"
-                [dateOptions]="dateOptions"
-                [selectedHistoricalDate]="selectedFilterDate"
-                (historicalDateChange)="filterDateChange.emit($event)"
-                (historicalDateClear)="filterDateClear.emit()" />
+            <div class="relative">
+                @if (loadingData) {
+                    <div class="absolute inset-0 bg-surface-0/60 dark:bg-surface-900/60 z-10 flex items-center justify-center rounded">
+                        <i class="pi pi-spin pi-spinner text-xl"></i>
+                    </div>
+                }
+                <app-filtration-table
+                    [currentLocations]="org.current.locations"
+                    [historicalLocations]="org.historical_filter?.locations ?? null"
+                    [currentDate]="org.current.date"
+                    [historicalDate]="org.historical_filter?.date ?? null"
+                    [currentFormArray]="$any(orgFormGroup.get('current.locations'))"
+                    [historicalFormArray]="org.historical_filter ? $any(orgFormGroup.get('historical_filter.locations')) : null"
+                    [dateOptions]="dateOptions"
+                    [selectedHistoricalDate]="selectedFilterDate"
+                    (historicalDateChange)="filterDateChange.emit($event)"
+                    (historicalDateClear)="filterDateClear.emit()" />
+            </div>
 
             <!-- Piezometer table -->
-            <app-piezometer-table
-                [currentPiezometers]="org.current.piezometers"
-                [historicalPiezometers]="org.historical_piezo?.piezometers ?? null"
-                [piezometerCounts]="org.current.piezometer_counts"
-                [currentDate]="org.current.date"
-                [historicalDate]="org.historical_piezo?.date ?? null"
-                [currentFormArray]="$any(orgFormGroup.get('current.piezometers'))"
-                [historicalFormArray]="org.historical_piezo ? $any(orgFormGroup.get('historical_piezo.piezometers')) : null"
-                [dateOptions]="dateOptions"
-                [selectedHistoricalDate]="selectedPiezoDate"
-                (historicalDateChange)="piezoDateChange.emit($event)"
-                (historicalDateClear)="piezoDateClear.emit()" />
+            <div class="relative">
+                @if (loadingData) {
+                    <div class="absolute inset-0 bg-surface-0/60 dark:bg-surface-900/60 z-10 flex items-center justify-center rounded">
+                        <i class="pi pi-spin pi-spinner text-xl"></i>
+                    </div>
+                }
+                <app-piezometer-table
+                    [currentPiezometers]="org.current.piezometers"
+                    [historicalPiezometers]="org.historical_piezo?.piezometers ?? null"
+                    [piezometerCounts]="org.current.piezometer_counts"
+                    [currentDate]="org.current.date"
+                    [historicalDate]="org.historical_piezo?.date ?? null"
+                    [currentFormArray]="$any(orgFormGroup.get('current.piezometers'))"
+                    [historicalFormArray]="org.historical_piezo ? $any(orgFormGroup.get('historical_piezo.piezometers')) : null"
+                    [dateOptions]="dateOptions"
+                    [selectedHistoricalDate]="selectedPiezoDate"
+                    (historicalDateChange)="piezoDateChange.emit($event)"
+                    (historicalDateClear)="piezoDateClear.emit()" />
+            </div>
         </div>
     }
 </div>

@@ -143,7 +143,7 @@ export class FiltrationComparisonComponent implements OnInit, OnDestroy {
         if (sel) {
             sel.filterDate = date;
             sel.clearFilterDate = false;
-            this.tryLoadOrgData(orgId);
+            this.loadHistoricalData(orgId, 'filter');
         }
     }
 
@@ -152,7 +152,7 @@ export class FiltrationComparisonComponent implements OnInit, OnDestroy {
         if (sel) {
             sel.piezoDate = date;
             sel.clearPiezoDate = false;
-            this.tryLoadOrgData(orgId);
+            this.loadHistoricalData(orgId, 'piezo');
         }
     }
 
@@ -232,10 +232,40 @@ export class FiltrationComparisonComponent implements OnInit, OnDestroy {
             });
     }
 
-    private tryLoadOrgData(orgId: number): void {
+    private loadHistoricalData(orgId: number, target: 'filter' | 'piezo'): void {
         const sel = this.orgSelections.get(orgId);
 
         // Cancel previous in-flight request for this org
+        this.orgCancellers.get(orgId)?.next();
+        const canceller$ = new Subject<void>();
+        this.orgCancellers.set(orgId, canceller$);
+
+        this.orgLoading.add(orgId);
+        const date = this.timeService.dateToYMD(this.selectedDate);
+
+        const filterDate = target === 'filter' ? (sel?.filterDate ?? undefined) : undefined;
+        const piezoDate = target === 'piezo' ? (sel?.piezoDate ?? undefined) : undefined;
+
+        this.comparisonService.getComparisonData(date, filterDate, piezoDate)
+            .pipe(takeUntil(canceller$), takeUntil(this.destroy$))
+            .subscribe({
+                next: (data) => {
+                    const orgComparison = data.find(d => d.organization_id === orgId);
+                    if (orgComparison) {
+                        this.patchHistorical(orgId, orgComparison, target);
+                    }
+                    this.orgLoading.delete(orgId);
+                },
+                error: () => {
+                    this.orgLoading.delete(orgId);
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.LOAD_ERROR') });
+                }
+            });
+    }
+
+    private reloadOrgData(orgId: number): void {
+        const sel = this.orgSelections.get(orgId);
+
         this.orgCancellers.get(orgId)?.next();
         const canceller$ = new Subject<void>();
         this.orgCancellers.set(orgId, canceller$);
@@ -251,16 +281,6 @@ export class FiltrationComparisonComponent implements OnInit, OnDestroy {
                     if (orgComparison) {
                         this.orgData.set(orgId, orgComparison);
                         this.upsertOrgFormGroup(orgComparison);
-
-                        // Restore per-org dates from backend
-                        if (sel) {
-                            if (orgComparison.filter_comparison_date) {
-                                sel.filterDate = orgComparison.filter_comparison_date;
-                            }
-                            if (orgComparison.piezo_comparison_date) {
-                                sel.piezoDate = orgComparison.piezo_comparison_date;
-                            }
-                        }
                     }
                     this.orgLoading.delete(orgId);
                 },
@@ -269,6 +289,30 @@ export class FiltrationComparisonComponent implements OnInit, OnDestroy {
                     this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.LOAD_ERROR') });
                 }
             });
+    }
+
+    private patchHistorical(orgId: number, response: OrgComparison, target: 'filter' | 'piezo'): void {
+        const existingData = this.orgData.get(orgId);
+        if (!existingData) return;
+
+        const orgFg = this.getOrgFormGroup(orgId);
+        if (!orgFg) return;
+
+        if (target === 'filter') {
+            existingData.historical_filter = response.historical_filter;
+            if (response.historical_filter) {
+                orgFg.setControl('historical_filter', this.buildSnapshotFormGroup(response.historical_filter));
+            } else {
+                orgFg.setControl('historical_filter', new FormControl(null));
+            }
+        } else {
+            existingData.historical_piezo = response.historical_piezo;
+            if (response.historical_piezo) {
+                orgFg.setControl('historical_piezo', this.buildSnapshotFormGroup(response.historical_piezo));
+            } else {
+                orgFg.setControl('historical_piezo', new FormControl(null));
+            }
+        }
     }
 
     isOrgLoading(orgId: number): boolean {
@@ -461,7 +505,7 @@ export class FiltrationComparisonComponent implements OnInit, OnDestroy {
                             sel.clearFilterDate = false;
                             sel.clearPiezoDate = false;
                         }
-                        this.tryLoadOrgData(orgId);
+                        this.reloadOrgData(orgId);
                     }
                 }
             },
