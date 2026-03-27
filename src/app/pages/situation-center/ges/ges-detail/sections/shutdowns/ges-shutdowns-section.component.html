@@ -6,7 +6,6 @@
             <p-datepicker
                 [(ngModel)]="startDate"
                 [showIcon]="true"
-                dateFormat="dd.mm.yy"
                 [placeholder]="'GES_DETAIL.FILTERS.SELECT_DATE' | translate"
                 (onSelect)="onDateRangeChange()"
                 (onClear)="onDateRangeChange()"
@@ -18,7 +17,6 @@
             <p-datepicker
                 [(ngModel)]="endDate"
                 [showIcon]="true"
-                dateFormat="dd.mm.yy"
                 [placeholder]="'GES_DETAIL.FILTERS.SELECT_DATE' | translate"
                 (onSelect)="onDateRangeChange()"
                 (onClear)="onDateRangeChange()"
@@ -112,10 +110,10 @@
 
     <ng-template pTemplate="body" let-item>
         <tr>
-            <td>{{ item.started_at | date:'HH:mm dd.MM.yyyy' }}</td>
+            <td>{{ item.started_at | date:'yyyy-MM-dd HH:mm' }}</td>
             <td>
                 @if (item.ended_at) {
-                    {{ item.ended_at | date:'HH:mm dd.MM.yyyy' }}
+                    {{ item.ended_at | date:'yyyy-MM-dd HH:mm' }}
                 } @else {
                     <span class="text-surface-400">—</span>
                 }

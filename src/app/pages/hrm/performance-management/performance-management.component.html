@@ -45,7 +45,7 @@
                     <p-progressbar [value]="goal.progress" [showValue]="true"
                                    [style]="{ height: '1.5rem' }"></p-progressbar>
                 </td>
-                <td>{{ goal.due_date | date:'dd.MM.yyyy' }}</td>
+                <td>{{ goal.due_date | date:'yyyy-MM-dd' }}</td>
                 <td>
                     <p-tag [value]="getStatusLabel(goal.status)" [severity]="getStatusSeverity(goal.status)"></p-tag>
                 </td>

@@ -378,7 +378,7 @@ export class ReportsComponent implements OnInit, OnDestroy {
         return this.statusService.getStatusSeverity(code);
     }
     formatDate(dateStr: string | null | undefined): string {
-        return dateStr ? new Date(dateStr).toLocaleDateString('ru-RU') : '—';
+        return dateStr ? new Date(dateStr).toISOString().split('T')[0] : '—';
     }
     private formatDateForApi(date: Date | string): string {
         if (typeof date === 'string') return date;

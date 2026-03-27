@@ -373,12 +373,7 @@ export class LegalDocumentsComponent implements OnInit, OnDestroy {
     // Helpers
     formatDate(dateStr: string | null | undefined): string {
         if (!dateStr) return '—';
-        const date = new Date(dateStr);
-        return date.toLocaleDateString('ru-RU', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric'
-        });
+        return new Date(dateStr).toISOString().split('T')[0];
     }
 
     formatDateForApi(date: Date | null): string {

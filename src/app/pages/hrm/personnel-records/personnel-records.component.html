@@ -41,7 +41,7 @@
             <tr>
                 <td>{{ record.tab_number }}</td>
                 <td>{{ record.employee_name }}</td>
-                <td>{{ record.hire_date | date:'dd.MM.yyyy' }}</td>
+                <td>{{ record.hire_date | date:'yyyy-MM-dd' }}</td>
                 <td>{{ record.department_name || '—' }}</td>
                 <td>{{ record.position_name || '—' }}</td>
                 <td>{{ getContractTypeLabel(record.contract_type) }}</td>

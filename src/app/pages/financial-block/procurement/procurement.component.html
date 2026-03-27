@@ -155,7 +155,6 @@
                 (ngModelChange)="applyFilters()"
                 selectionMode="range"
                 [showIcon]="true"
-                dateFormat="dd.mm.yy"
                 [placeholder]="'FINANCIAL_BLOCK.KPI.PERIOD' | translate"
                 class="date-picker"
             ></p-datepicker>
@@ -278,7 +277,7 @@
                     <td>
                         <span class="font-semibold text-primary">{{ procurement.requestNumber }}</span>
                     </td>
-                    <td>{{ procurement.requestDate | date: 'dd.MM.yyyy' }}</td>
+                    <td>{{ procurement.requestDate | date: 'yyyy-MM-dd' }}</td>
                     <td>
                         <div class="flex flex-column">
                             <span class="font-semibold">{{ procurement.itemName }}</span>
@@ -316,7 +315,7 @@
                     <td>
                         @if (procurement.plannedDeliveryDate) {
                         <span [ngClass]="{'text-red-500': isOverdue(procurement)}">
-                            {{ procurement.plannedDeliveryDate | date: 'dd.MM.yyyy' }}
+                            {{ procurement.plannedDeliveryDate | date: 'yyyy-MM-dd' }}
                         </span>
                         } @else {
                         <span class="text-400">-</span>
@@ -394,7 +393,6 @@
                     id="requestDate"
                     [(ngModel)]="currentProcurement.requestDate"
                     [showIcon]="true"
-                    dateFormat="dd.mm.yy"
                     appendTo="body"
                 ></p-datepicker>
             </div>
@@ -530,7 +528,6 @@
                     id="plannedDeliveryDate"
                     [(ngModel)]="currentProcurement.plannedDeliveryDate"
                     [showIcon]="true"
-                    dateFormat="dd.mm.yy"
                     appendTo="body"
                 ></p-datepicker>
             </div>
@@ -542,7 +539,6 @@
                     id="actualDeliveryDate"
                     [(ngModel)]="currentProcurement.actualDeliveryDate"
                     [showIcon]="true"
-                    dateFormat="dd.mm.yy"
                     appendTo="body"
                 ></p-datepicker>
             </div>

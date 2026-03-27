@@ -128,7 +128,6 @@
                 (ngModelChange)="applyFilters()"
                 selectionMode="range"
                 [showIcon]="true"
-                dateFormat="dd.mm.yy"
                 [placeholder]="'FINANCIAL_BLOCK.KPI.PERIOD' | translate"
                 class="date-picker"
             ></p-datepicker>
@@ -235,7 +234,7 @@
             </ng-template>
             <ng-template pTemplate="body" let-repair>
                 <tr>
-                    <td>{{ repair.date | date: 'dd.MM.yyyy' }}</td>
+                    <td>{{ repair.date | date: 'yyyy-MM-dd' }}</td>
                     <td>
                         <div class="flex flex-column">
                             <span class="font-semibold">{{ repair.objectName }}</span>
@@ -351,7 +350,6 @@
                 id="date"
                 [(ngModel)]="currentRepair.date"
                 [showIcon]="true"
-                dateFormat="dd.mm.yy"
                 appendTo="body"
             ></p-datepicker>
         </div>

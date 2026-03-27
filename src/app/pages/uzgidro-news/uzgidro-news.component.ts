@@ -135,28 +135,15 @@ export class UzgidroNewsComponent implements OnInit {
     }
 
     formatDate(dateStr: string): string {
-        return new Date(dateStr).toLocaleDateString(this.getDateLocale(), {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric'
-        });
+        return new Date(dateStr).toISOString().split('T')[0];
     }
 
     formatDateTime(dateStr: string): string {
-        return new Date(dateStr).toLocaleString(this.getDateLocale(), {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        });
-    }
-
-    private getDateLocale(): string {
-        const lang = this.currentLang();
-        if (lang.startsWith('uz')) return 'uz-UZ';
-        if (lang === 'en') return 'en-US';
-        return 'ru-RU';
+        const date = new Date(dateStr);
+        const d = date.toISOString().split('T')[0];
+        const h = String(date.getUTCHours()).padStart(2, '0');
+        const m = String(date.getUTCMinutes()).padStart(2, '0');
+        return `${d} ${h}:${m}`;
     }
 
     formatViews(views: number): string {

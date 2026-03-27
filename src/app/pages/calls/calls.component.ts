@@ -284,7 +284,7 @@ export class CallsComponent implements OnInit, OnDestroy {
 
     formatDate(dateStr: string | null | undefined): string {
         if (!dateStr) return '—';
-        return new Date(dateStr).toLocaleDateString('ru-RU');
+        return new Date(dateStr).toISOString().split('T')[0];
     }
 
     ngOnDestroy() {

@@ -303,7 +303,7 @@ export class TopbarCalendarWidget implements OnInit {
             visits: this.translate.instant('TOPBAR.VISITS_TITLE')
         };
 
-        this.statisticsDialogHeader = `${headerMap[type]} - ${this.selectedDate.toLocaleDateString()}`;
+        this.statisticsDialogHeader = `${headerMap[type]} - ${this.selectedDate.toISOString().split('T')[0]}`;
         this.statisticsDialogVisible = true;
         this.loadingStatistics = true;
 

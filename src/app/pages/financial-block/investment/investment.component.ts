@@ -147,8 +147,8 @@ export class InvestmentComponent implements OnInit {
     onDateRangeChange(): void {
         if (this.dateRange && this.dateRange.length === 2 && this.dateRange[0] && this.dateRange[1]) {
             this.applyFilter();
-            const startFormatted = this.dateRange[0].toLocaleDateString('ru-RU');
-            const endFormatted = this.dateRange[1].toLocaleDateString('ru-RU');
+            const startFormatted = this.dateRange[0].toISOString().split('T')[0];
+            const endFormatted = this.dateRange[1].toISOString().split('T')[0];
             this.messageService.add({
                 severity: 'info',
                 summary: this.translate.instant('FINANCIAL_BLOCK.COMMON.SELECT_DATE_RANGE'),

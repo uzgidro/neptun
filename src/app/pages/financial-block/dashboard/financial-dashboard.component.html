@@ -7,7 +7,7 @@
         @if (dashboardData?.lastUpdated) {
         <div class="last-updated">
             <i class="pi pi-clock"></i>
-            <span>{{ 'DASHBOARD.LAST_UPDATED' | translate }}: {{ dashboardData!.lastUpdated | date:'dd.MM.yyyy HH:mm' }}</span>
+            <span>{{ 'DASHBOARD.LAST_UPDATED' | translate }}: {{ dashboardData!.lastUpdated | date:'yyyy-MM-dd HH:mm' }}</span>
         </div>
         }
     </div>

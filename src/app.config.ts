@@ -21,7 +21,10 @@ export const appConfig: ApplicationConfig = {
         provideRouter(appRoutes, withInMemoryScrolling({ anchorScrolling: 'enabled', scrollPositionRestoration: 'enabled' }), withEnabledBlockingInitialNavigation()),
         provideHttpClient(withFetch(), withInterceptors([authInterceptor, errorInterceptor])),
         provideAnimationsAsync(),
-        providePrimeNG({ theme: { preset: Aura, options: { darkModeSelector: '.app-dark' } } }),
+        providePrimeNG({
+            theme: { preset: Aura, options: { darkModeSelector: '.app-dark' } },
+            translation: { dateFormat: 'yy-mm-dd', firstDayOfWeek: 1 }
+        }),
         importProvidersFrom(ReactiveFormsModule),
         provideTranslateService({
             defaultLanguage: 'ru',

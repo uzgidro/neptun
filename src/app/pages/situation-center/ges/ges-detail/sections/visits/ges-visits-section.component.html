@@ -6,7 +6,6 @@
             <p-datepicker
                 [(ngModel)]="startDate"
                 [showIcon]="true"
-                dateFormat="dd.mm.yy"
                 [placeholder]="'GES_DETAIL.FILTERS.SELECT_DATE' | translate"
                 (onSelect)="onDateRangeChange()"
                 (onClear)="onDateRangeChange()"
@@ -18,7 +17,6 @@
             <p-datepicker
                 [(ngModel)]="endDate"
                 [showIcon]="true"
-                dateFormat="dd.mm.yy"
                 [placeholder]="'GES_DETAIL.FILTERS.SELECT_DATE' | translate"
                 (onSelect)="onDateRangeChange()"
                 (onClear)="onDateRangeChange()"
@@ -108,7 +106,7 @@
 
     <ng-template pTemplate="body" let-item>
         <tr>
-            <td>{{ item.visit_date | date:'dd.MM.yyyy' }}</td>
+            <td>{{ item.visit_date | date:'yyyy-MM-dd' }}</td>
             <td>{{ item.description }}</td>
             <td>{{ item.responsible_name }}</td>
             <td>{{ item.organization_name || '—' }}</td>

@@ -520,7 +520,7 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
     }
 
     formatDate(dateStr: string): string {
-        return new Date(dateStr).toLocaleDateString('ru-RU');
+        return new Date(dateStr).toISOString().split('T')[0];
     }
 
     getInitials(name: string): string {

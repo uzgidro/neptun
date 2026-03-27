@@ -364,7 +364,7 @@
                                 <div class="font-medium">{{ onboarding.employee_name }}</div>
                                 <div class="text-xs text-gray-500">ID: {{ onboarding.employee_id }}</div>
                             </td>
-                            <td>{{ onboarding.start_date | date:'dd.MM.yyyy' }}</td>
+                            <td>{{ onboarding.start_date | date:'yyyy-MM-dd' }}</td>
                             <td>
                                 @if (onboarding.mentor_name) {
                                     {{ onboarding.mentor_name }}
@@ -664,7 +664,7 @@
                                             }
                                         </div>
                                         <div class="text-sm text-gray-500">{{ interview.interviewer_name }}</div>
-                                        <div class="text-sm text-gray-500">{{ interview.scheduled_at | date:'dd.MM.yyyy HH:mm' }}</div>
+                                        <div class="text-sm text-gray-500">{{ interview.scheduled_at | date:'yyyy-MM-dd HH:mm' }}</div>
                                     </div>
                                     <div class="flex items-center gap-2">
                                         @if (interview.status === 'completed') {
@@ -746,7 +746,7 @@
                             </div>
                             <div>
                                 <div class="text-sm text-gray-500">{{ 'HRM.RECRUITING.OFFER.START_DATE' | translate }}</div>
-                                <div class="font-medium">{{ selectedCandidate.offer.start_date | date:'dd.MM.yyyy' }}</div>
+                                <div class="font-medium">{{ selectedCandidate.offer.start_date | date:'yyyy-MM-dd' }}</div>
                             </div>
                             <div>
                                 <div class="text-sm text-gray-500">{{ 'HRM.RECRUITING.OFFER.PROBATION_PERIOD' | translate }}</div>

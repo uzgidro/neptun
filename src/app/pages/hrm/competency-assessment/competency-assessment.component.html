@@ -73,7 +73,7 @@
                                     <i class="pi pi-calendar text-xl"></i>
                                     <div>
                                         <div class="font-semibold">{{ session.name }}</div>
-                                        <div class="text-sm text-gray-500">{{ session.session_date | date:'dd.MM.yyyy' }} | {{ session.location }}</div>
+                                        <div class="text-sm text-gray-500">{{ session.session_date | date:'yyyy-MM-dd' }} | {{ session.location }}</div>
                                     </div>
                                 </div>
                                 <p-tag [value]="getSessionStatusLabel(session.status)" [severity]="getSessionStatusSeverity(session.status)"></p-tag>
@@ -281,7 +281,7 @@
                         </td>
                         <td>{{ assessment.position_name }}</td>
                         <td>{{ assessment.department_name }}</td>
-                        <td>{{ assessment.assessment_date | date:'dd.MM.yyyy' }}</td>
+                        <td>{{ assessment.assessment_date | date:'yyyy-MM-dd' }}</td>
                         <td>
                             @if (assessment.overall_score) {
                                 <span [class]="'font-bold ' + getScoreColor(assessment.overall_score)">
@@ -352,8 +352,8 @@
                             <div class="font-medium">{{ plan.employee_name }}</div>
                         </td>
                         <td>
-                            <div>{{ plan.start_date | date:'dd.MM.yyyy' }}</div>
-                            <div class="text-sm text-gray-500">{{ plan.end_date | date:'dd.MM.yyyy' }}</div>
+                            <div>{{ plan.start_date | date:'yyyy-MM-dd' }}</div>
+                            <div class="text-sm text-gray-500">{{ plan.end_date | date:'yyyy-MM-dd' }}</div>
                         </td>
                         <td>
                             <div class="flex flex-wrap gap-1">
@@ -419,7 +419,7 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
             <div>
                 <label class="block font-medium mb-2">{{ 'HRM.COMPETENCY.DATE' | translate }} *</label>
-                <p-datepicker formControlName="session_date" [showIcon]="true" dateFormat="dd.mm.yy" class="w-full"></p-datepicker>
+                <p-datepicker formControlName="session_date" [showIcon]="true" class="w-full"></p-datepicker>
             </div>
             <div>
                 <label class="block font-medium mb-2">{{ 'HRM.COMPETENCY.START_TIME' | translate }} *</label>
@@ -549,7 +549,7 @@
             <div class="text-center mb-6">
                 <h2 class="text-xl font-bold mb-2">{{ currentReport.employee_name }}</h2>
                 <div class="text-gray-500">{{ currentReport.position_name }} | {{ currentReport.department_name }}</div>
-                <div class="text-sm text-gray-400">{{ 'HRM.COMPETENCY.ASSESSMENT_DATE' | translate }}: {{ currentReport.assessment_date | date:'dd.MM.yyyy' }}</div>
+                <div class="text-sm text-gray-400">{{ 'HRM.COMPETENCY.ASSESSMENT_DATE' | translate }}: {{ currentReport.assessment_date | date:'yyyy-MM-dd' }}</div>
             </div>
 
             <!-- Общий балл -->
@@ -637,11 +637,11 @@
         <div class="grid grid-cols-2 gap-4 mb-4">
             <div>
                 <label class="block font-medium mb-2">{{ 'HRM.COMPETENCY.START_DATE' | translate }} *</label>
-                <p-datepicker formControlName="start_date" [showIcon]="true" dateFormat="dd.mm.yy" class="w-full"></p-datepicker>
+                <p-datepicker formControlName="start_date" [showIcon]="true" class="w-full"></p-datepicker>
             </div>
             <div>
                 <label class="block font-medium mb-2">{{ 'HRM.COMPETENCY.END_DATE' | translate }} *</label>
-                <p-datepicker formControlName="end_date" [showIcon]="true" dateFormat="dd.mm.yy" class="w-full"></p-datepicker>
+                <p-datepicker formControlName="end_date" [showIcon]="true" class="w-full"></p-datepicker>
             </div>
         </div>
 
@@ -666,7 +666,7 @@
             <div class="flex items-center justify-between mb-6">
                 <div>
                     <h2 class="text-xl font-bold">{{ selectedPlan.employee_name }}</h2>
-                    <div class="text-gray-500">{{ selectedPlan.start_date | date:'dd.MM.yyyy' }} - {{ selectedPlan.end_date | date:'dd.MM.yyyy' }}</div>
+                    <div class="text-gray-500">{{ selectedPlan.start_date | date:'yyyy-MM-dd' }} - {{ selectedPlan.end_date | date:'yyyy-MM-dd' }}</div>
                 </div>
                 <div class="text-center">
                     <p-knob [(ngModel)]="selectedPlan.overall_progress" [readonly]="true" [min]="0" [max]="100"
@@ -748,7 +748,7 @@
                     @for (interim of selectedPlan.interim_assessments; track interim.id) {
                         <div class="p-3 border rounded-lg mb-2">
                             <div class="flex items-center justify-between mb-2">
-                                <span class="font-medium">{{ interim.assessment_date | date:'dd.MM.yyyy' }}</span>
+                                <span class="font-medium">{{ interim.assessment_date | date:'yyyy-MM-dd' }}</span>
                                 <span class="text-sm">{{ 'HRM.COMPETENCY.PROGRESS' | translate }}: {{ interim.overall_progress }}%</span>
                             </div>
                             <div class="text-sm mb-2">{{ interim.feedback }}</div>

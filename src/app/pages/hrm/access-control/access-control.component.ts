@@ -433,15 +433,16 @@ export class AccessControlComponent implements OnInit, OnDestroy {
     }
 
     formatDateTime(dateStr: string): string {
-        const lang = this.translate.currentLang || 'ru';
-        const locale = lang === 'uz-latn' ? 'uz' : lang === 'uz-cyrl' ? 'uz' : lang;
-        return new Date(dateStr).toLocaleString(locale);
+        const date = new Date(dateStr);
+        const d = date.toISOString().split('T')[0];
+        const h = String(date.getUTCHours()).padStart(2, '0');
+        const m = String(date.getUTCMinutes()).padStart(2, '0');
+        const s = String(date.getUTCSeconds()).padStart(2, '0');
+        return `${d} ${h}:${m}:${s}`;
     }
 
     formatDate(dateStr: string): string {
-        const lang = this.translate.currentLang || 'ru';
-        const locale = lang === 'uz-latn' ? 'uz' : lang === 'uz-cyrl' ? 'uz' : lang;
-        return new Date(dateStr).toLocaleDateString(locale);
+        return new Date(dateStr).toISOString().split('T')[0];
     }
 
     formatTime(dateStr: string): string {

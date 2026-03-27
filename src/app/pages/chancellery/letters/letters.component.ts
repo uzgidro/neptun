@@ -363,7 +363,7 @@ export class LettersComponent implements OnInit, OnDestroy {
     getExistingFiles(): FileResponse[] { return this.selectedDocument?.files.filter(f => this.existingFileIds.includes(f.id)) || []; }
 
     getStatusSeverity(code: string): StatusSeverity { return this.statusService.getStatusSeverity(code); }
-    formatDate(dateStr: string | null | undefined): string { return dateStr ? new Date(dateStr).toLocaleDateString('ru-RU') : '—'; }
+    formatDate(dateStr: string | null | undefined): string { return dateStr ? new Date(dateStr).toISOString().split('T')[0] : '—'; }
     private formatDateForApi(date: Date | string): string {
         if (typeof date === 'string') return date;
         return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;

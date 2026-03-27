@@ -50,7 +50,7 @@
                 </td>
                 <td>{{ getTypeLabel(training.training_type) }}</td>
                 <td>{{ training.provider || '—' }}</td>
-                <td>{{ training.start_date | date:'dd.MM' }} - {{ training.end_date | date:'dd.MM.yyyy' }}</td>
+                <td>{{ training.start_date | date:'dd.MM' }} - {{ training.end_date | date:'yyyy-MM-dd' }}</td>
                 <td>{{ training.duration_hours }}</td>
                 <td>{{ training.current_participants || 0 }} / {{ training.max_participants || '∞' }}</td>
                 <td>

@@ -153,9 +153,7 @@ export class HRMDashboardComponent implements OnInit, OnDestroy {
         if (diffHours < 24) return `${diffHours} ${this.translate.instant('HRM.DASHBOARD.HOURS_AGO')}`;
         if (diffDays === 1) return this.translate.instant('HRM.DASHBOARD.YESTERDAY');
         if (diffDays < 7) return `${diffDays} ${this.translate.instant('HRM.DASHBOARD.DAYS_AGO')}`;
-        const lang = this.translate.currentLang || 'ru';
-        const locale = lang === 'uz-latn' ? 'uz' : lang === 'uz-cyrl' ? 'uz' : lang;
-        return date.toLocaleDateString(locale);
+        return date.toISOString().split('T')[0];
     }
 
     getUnreadNotificationsCount(): number {

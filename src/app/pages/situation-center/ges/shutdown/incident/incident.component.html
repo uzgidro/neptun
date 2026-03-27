@@ -71,7 +71,7 @@
     <ng-template pTemplate="body" let-incident>
         <tr>
             <td>
-                {{ incident.incident_date | date: 'HH:mm dd.MM.yyyy' }}
+                {{ incident.incident_date | date: 'yyyy-MM-dd HH:mm' }}
             </td>
             <td>
                 {{ incident.organization || ('SITUATION_CENTER.SHUTDOWN.ALL_OBJECTS' | translate) }}

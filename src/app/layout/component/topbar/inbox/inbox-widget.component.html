@@ -42,7 +42,7 @@
                                 }
                                 <div class="flex items-center gap-2 text-xs text-surface-500">
                                     <i class="pi pi-calendar"></i>
-                                    <span>{{ reception.date | date: 'dd.MM.yyyy' }}</span>
+                                    <span>{{ reception.date | date: 'yyyy-MM-dd' }}</span>
                                 </div>
                             </div>
                             <div class="flex-shrink-0">
@@ -93,7 +93,7 @@
                     <div class="font-semibold text-surface-500 mb-1">{{ 'TOPBAR.DATE' | translate }}</div>
                     <div class="flex items-center gap-2">
                         <i class="pi pi-calendar text-surface-500"></i>
-                        <span>{{ selectedReceptionDetails.date | date: 'dd.MM.yyyy' }}</span>
+                        <span>{{ selectedReceptionDetails.date | date: 'yyyy-MM-dd' }}</span>
                     </div>
                 </div>
 
@@ -146,7 +146,7 @@
                 <div>
                     <div class="font-semibold text-surface-500 mb-1">{{ 'TOPBAR.CREATED' | translate }}</div>
                     <div class="text-surface-600">
-                        {{ selectedReceptionDetails.created_at | date: 'dd.MM.yyyy HH:mm' }}
+                        {{ selectedReceptionDetails.created_at | date: 'yyyy-MM-dd HH:mm' }}
                     </div>
                     @if (selectedReceptionDetails.created_by) {
                         <div class="text-surface-500 text-xs mt-1">
@@ -159,7 +159,7 @@
                     <div>
                         <div class="font-semibold text-surface-500 mb-1">{{ 'TOPBAR.UPDATED' | translate }}</div>
                         <div class="text-surface-600">
-                            {{ selectedReceptionDetails.updated_at | date: 'dd.MM.yyyy HH:mm' }}
+                            {{ selectedReceptionDetails.updated_at | date: 'yyyy-MM-dd HH:mm' }}
                         </div>
                         @if (selectedReceptionDetails.updated_by) {
                             <div class="text-surface-500 text-xs mt-1">
@@ -221,7 +221,7 @@
                         </div>
                     }
                     <div class="text-sm text-surface-500">
-                        {{ 'TOPBAR.DATE_LABEL' | translate }} {{ selectedReceptionForReject.date | date: 'dd.MM.yyyy HH:mm' }}
+                        {{ 'TOPBAR.DATE_LABEL' | translate }} {{ selectedReceptionForReject.date | date: 'yyyy-MM-dd HH:mm' }}
                     </div>
                 </div>
             }
@@ -278,7 +278,7 @@
                         </div>
                     }
                     <div class="text-sm text-surface-500">
-                        {{ 'TOPBAR.CURRENT_DATE' | translate }} {{ selectedReceptionForReschedule.date | date: 'dd.MM.yyyy HH:mm' }}
+                        {{ 'TOPBAR.CURRENT_DATE' | translate }} {{ selectedReceptionForReschedule.date | date: 'yyyy-MM-dd HH:mm' }}
                     </div>
                 </div>
             }

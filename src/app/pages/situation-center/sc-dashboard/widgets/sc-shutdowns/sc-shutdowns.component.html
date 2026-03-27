@@ -121,12 +121,12 @@
             </div>
             <div class="detail-row">
                 <span class="detail-label">{{ 'SITUATION_CENTER.COMMON.START' | translate }}</span>
-                <span class="detail-value">{{ selectedShutdown.startTime | date:'dd.MM.yyyy HH:mm' }}</span>
+                <span class="detail-value">{{ selectedShutdown.startTime | date:'yyyy-MM-dd HH:mm' }}</span>
             </div>
             @if (selectedShutdown.endTime) {
                 <div class="detail-row">
                     <span class="detail-label">{{ 'SITUATION_CENTER.COMMON.END' | translate }}</span>
-                    <span class="detail-value">{{ selectedShutdown.endTime | date:'dd.MM.yyyy HH:mm' }}</span>
+                    <span class="detail-value">{{ selectedShutdown.endTime | date:'yyyy-MM-dd HH:mm' }}</span>
                 </div>
             }
             @if (selectedShutdown.lostGeneration) {
