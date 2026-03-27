@@ -1,18 +1,33 @@
-<div class="flex flex-col gap-4">
+<div class="flex flex-col gap-4 px-4">
     <!-- Toolbar -->
-    <div class="flex items-center justify-between gap-4 sticky top-0 z-10 bg-surface-0 dark:bg-surface-900 py-3">
+    <div class="flex items-center justify-between gap-4 sticky top-0 z-10 bg-surface-0 dark:bg-surface-900 py-3 px-4">
         <p-datePicker
             [(ngModel)]="selectedDate"
             (onSelect)="onDateChange($event)"
-
             [showIcon]="true" />
 
-        <p-button
-            [label]="'COMMON.SAVE' | translate"
-            icon="pi pi-save"
-            [disabled]="isSaveDisabled"
-            [loading]="saving"
-            (onClick)="save()" />
+        <div class="flex gap-2">
+            <p-button
+                [label]="'FILTRATION.EXPORT_EXCEL' | translate"
+                icon="pi pi-file-excel"
+                [disabled]="loading || downloading !== null || orgStates.length === 0"
+                [loading]="downloading === 'excel'"
+                severity="success"
+                (onClick)="download('excel')" />
+            <p-button
+                [label]="'FILTRATION.EXPORT_PDF' | translate"
+                icon="pi pi-file-pdf"
+                [disabled]="loading || downloading !== null || orgStates.length === 0"
+                [loading]="downloading === 'pdf'"
+                severity="danger"
+                (onClick)="download('pdf')" />
+            <p-button
+                [label]="'COMMON.SAVE' | translate"
+                icon="pi pi-save"
+                [disabled]="isSaveDisabled"
+                [loading]="saving"
+                (onClick)="save()" />
+        </div>
     </div>
 
     <!-- Loading -->

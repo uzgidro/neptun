@@ -17,6 +17,7 @@ import { OrganizationService } from '@/core/services/organization.service';
 import { TimeService } from '@/core/services/time.service';
 import { ManualMeasurementsResponse, ManualMeasurementsRequest, ManualFilterEntry, ManualPiezoEntry } from '@/core/interfaces/manual-comparison';
 import { HasUnsavedChanges } from '@/core/guards/auth.guard';
+import { downloadBlob } from '@/core/utils/download';
 
 interface OrgState {
     orgId: number;
@@ -50,6 +51,7 @@ export class ManualComparisonEntryComponent implements OnInit, OnDestroy, HasUns
 
     loading = false;
     saving = false;
+    downloading: 'excel' | 'pdf' | null = null;
 
     constructor(
         private route: ActivatedRoute,
@@ -321,6 +323,30 @@ export class ManualComparisonEntryComponent implements OnInit, OnDestroy, HasUns
                     }
                     // Reload all data
                     this.loadOrganizations();
+                }
+            });
+    }
+
+    // --- Export ---
+
+    download(format: 'excel' | 'pdf'): void {
+        this.downloading = format;
+        const nextDay = new Date(this.selectedDate);
+        nextDay.setDate(nextDay.getDate() + 1);
+        const date = this.timeService.dateToYMD(nextDay);
+        const ext = format === 'excel' ? 'xlsx' : 'pdf';
+
+        this.manualComparisonService.downloadExport(date, format)
+            .pipe(
+                takeUntil(this.destroy$),
+                finalize(() => { this.downloading = null; this.cdr.markForCheck(); })
+            )
+            .subscribe({
+                next: (response) => {
+                    downloadBlob(response.body!, `ManualComparison-${this.timeService.dateToYMD(this.selectedDate)}.${ext}`);
+                },
+                error: () => {
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('FILTRATION.EXPORT_ERROR') });
                 }
             });
     }
