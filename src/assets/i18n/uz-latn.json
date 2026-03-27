@@ -165,6 +165,8 @@
     "FILTRATION_SETTINGS": "Filtratsiya sozlamalari",
     "FILTRATION": "Filtratsiya",
     "FILTRATION_COMPARISON": "Solishtirma jadval",
+    "MANUAL_COMPARISON_ENTRY": "Qo'lda ma'lumot kiritish",
+    "MANUAL_COMPARISON_VIEW": "Qo'lda solishtirish",
     "OTHER_INFO": "Boshqa ma'lumotlar",
     "EVENTS": "Voqealar",
     "EARTHQUAKE": "Zilzila",
@@ -247,6 +249,7 @@
   },
   "FILTRATION": {
     "TITLE": "Filtratsiya",
+    "TOTAL_FILTRATION": "Umumiy filtratsiya, m3/s",
     "SETTINGS": "Filtratsiya sozlamalari",
     "COMPARISON": "Solishtirma jadval",
     "LOCATIONS": "Filtratsiya joylari",
@@ -294,6 +297,11 @@
     "PIEZO_DATE": "Pezometr sanasi",
     "SELECT_DATE": "Sanani tanlang",
     "NO_SIMILAR_DATES": "Mos tarixiy sanalar yo'q"
+  },
+  "MANUAL_COMPARISON": {
+    "NO_DATA": "Qo'lda solishtirish ma'lumotlari yo'q",
+    "HIST_FILTER_DATE": "Tarixiy filtratsiya sanasi",
+    "HIST_PIEZO_DATE": "Tarixiy pezometr sanasi"
   },
   "TOPBAR": {
     "CALL": "Qo'ng'iroq",

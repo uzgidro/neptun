@@ -166,6 +166,8 @@
     "FILTRATION_SETTINGS": "Филтрация созламалари",
     "FILTRATION": "Филтрация",
     "FILTRATION_COMPARISON": "Солиштирма жадвал",
+    "MANUAL_COMPARISON_ENTRY": "Қўлда маълумот киритиш",
+    "MANUAL_COMPARISON_VIEW": "Қўлда солиштириш",
     "OTHER_INFO": "Бошқа маълумотлар",
     "EVENTS": "Воқеалар",
     "EARTHQUAKE": "Зилзила",
@@ -247,6 +249,7 @@
   },
   "FILTRATION": {
     "TITLE": "Филтрация",
+    "TOTAL_FILTRATION": "Умумий филтрация, м3/с",
     "SETTINGS": "Филтрация созламалари",
     "COMPARISON": "Солиштирма жадвал",
     "LOCATIONS": "Филтрация жойлари",
@@ -294,6 +297,11 @@
     "PIEZO_DATE": "Пьезометр санаси",
     "SELECT_DATE": "Санани танланг",
     "NO_SIMILAR_DATES": "Мос тарихий саналар йўқ"
+  },
+  "MANUAL_COMPARISON": {
+    "NO_DATA": "Қўлда солиштириш маълумотлари йўқ",
+    "HIST_FILTER_DATE": "Тарихий филтрация санаси",
+    "HIST_PIEZO_DATE": "Тарихий пьезометр санаси"
   },
   "TOPBAR": {
     "CALL": "Қўнғироқ",

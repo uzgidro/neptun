@@ -166,6 +166,8 @@
     "FILTRATION_SETTINGS": "Filtration Settings",
     "FILTRATION": "Filtration",
     "FILTRATION_COMPARISON": "Comparison Table",
+    "MANUAL_COMPARISON_ENTRY": "Manual Data Entry",
+    "MANUAL_COMPARISON_VIEW": "Manual Comparison",
     "OTHER_INFO": "Other Information",
     "EVENTS": "Events",
     "EARTHQUAKE": "Earthquake",
@@ -247,6 +249,7 @@
   },
   "FILTRATION": {
     "TITLE": "Filtration",
+    "TOTAL_FILTRATION": "Total filtration, m3/s",
     "SETTINGS": "Filtration Settings",
     "COMPARISON": "Comparison Table",
     "LOCATIONS": "Filtration Locations",
@@ -294,6 +297,11 @@
     "PIEZO_DATE": "Piezometer date",
     "SELECT_DATE": "Select date",
     "NO_SIMILAR_DATES": "No matching historical dates"
+  },
+  "MANUAL_COMPARISON": {
+    "NO_DATA": "No manual comparison data",
+    "HIST_FILTER_DATE": "Hist. filtration date",
+    "HIST_PIEZO_DATE": "Hist. piezometer date"
   },
   "TOPBAR": {
     "CALL": "Call",

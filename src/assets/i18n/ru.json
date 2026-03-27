@@ -167,6 +167,8 @@
     "FILTRATION_SETTINGS": "Настройка фильтрации",
     "FILTRATION": "Фильтрация",
     "FILTRATION_COMPARISON": "Сравнительная таблица",
+    "MANUAL_COMPARISON_ENTRY": "Ручной ввод данных",
+    "MANUAL_COMPARISON_VIEW": "Ручное сравнение",
     "OTHER_INFO": "Прочая информация",
     "EVENTS": "События",
     "EARTHQUAKE": "Землетрясение",
@@ -248,6 +250,7 @@
   },
   "FILTRATION": {
     "TITLE": "Фильтрация",
+    "TOTAL_FILTRATION": "Общая фильтрация, м3/с",
     "SETTINGS": "Настройка фильтрации",
     "COMPARISON": "Сравнительная таблица",
     "LOCATIONS": "Места фильтрации",
@@ -295,6 +298,11 @@
     "PIEZO_DATE": "Дата пьезометров",
     "SELECT_DATE": "Выберите дату",
     "NO_SIMILAR_DATES": "Нет подходящих исторических дат"
+  },
+  "MANUAL_COMPARISON": {
+    "NO_DATA": "Нет данных для ручного сравнения",
+    "HIST_FILTER_DATE": "Историч. дата фильтрации",
+    "HIST_PIEZO_DATE": "Историч. дата пьезометров"
   },
   "TOPBAR": {
     "CALL": "Звонок",

@@ -1,0 +1,10 @@
+:host {
+    display: block;
+}
+
+.sticky-col {
+    position: sticky;
+    left: 0;
+    background: inherit;
+    z-index: 1;
+}

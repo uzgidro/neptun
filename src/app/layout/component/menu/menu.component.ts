@@ -115,6 +115,16 @@ export class MenuComponent implements OnInit {
                                         routerLink: ['/filtration-comparison']
                                     },
                                     {
+                                        label: this.t('MENU.MANUAL_COMPARISON_ENTRY'),
+                                        role: ['sc', 'rais', 'reservoir'],
+                                        routerLink: ['/manual-comparison-entry']
+                                    },
+                                    {
+                                        label: this.t('MENU.MANUAL_COMPARISON_VIEW'),
+                                        role: ['sc', 'rais', 'reservoir'],
+                                        routerLink: ['/manual-comparison-view']
+                                    },
+                                    {
                                         label: this.t('MENU.FILTRATION_SETTINGS'),
                                         role: ['sc'],
                                         routerLink: ['/filtration-settings']
