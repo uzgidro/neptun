@@ -1,0 +1,59 @@
+<div class="flex align-items-center gap-3 mb-3">
+    <p-inputNumber
+        [(ngModel)]="selectedYear"
+        [showButtons]="true"
+        [min]="2000"
+        [max]="2100"
+        [useGrouping]="false"
+        (onInput)="onYearChange()"
+        (onBlur)="onYearChange()"
+    />
+    <p-button
+        [label]="'COMMON.SAVE' | translate"
+        icon="pi pi-save"
+        [loading]="saving"
+        [disabled]="!hasChanges || saving"
+        (onClick)="savePlans()"
+    />
+</div>
+
+<p-table
+    [value]="planRows"
+    [loading]="loading"
+    styleClass="p-datatable-sm p-datatable-gridlines"
+    [scrollable]="true"
+    scrollHeight="flex"
+>
+    <ng-template pTemplate="header">
+        <tr>
+            <th style="min-width: 160px">{{ 'GES.STATION' | translate }}</th>
+            <th *ngFor="let key of monthKeys" style="min-width: 100px; text-align: center">
+                {{ ('MONTHS.' + key) | translate }}
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-row>
+        <tr>
+            <td>{{ row.config.organization_name }}</td>
+            <td *ngFor="let key of monthKeys; let i = index" style="padding: 4px 8px">
+                <p-inputNumber
+                    [(ngModel)]="row.months[i]"
+                    [minFractionDigits]="0"
+                    [maxFractionDigits]="3"
+                    [useGrouping]="false"
+                    [style]="{ width: '100%' }"
+                    [inputStyle]="{ width: '100%', background: row.dirty[i] ? 'var(--yellow-100)' : '' }"
+                    (onInput)="onMonthChange(row, i)"
+                    (onBlur)="onMonthChange(row, i)"
+                />
+            </td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+        <tr>
+            <td [attr.colspan]="13" class="text-center">
+                {{ 'COMMON.NO_DATA' | translate }}
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
