@@ -1,0 +1,126 @@
+<div class="flex flex-col gap-4">
+    <div class="flex justify-between items-center">
+        <h3 class="text-lg font-semibold m-0">{{ 'GES_REPORT.CONFIG.TITLE' | translate }}</h3>
+        <p-button
+            [label]="'COMMON.ADD' | translate"
+            icon="pi pi-plus"
+            (onClick)="openNew()" />
+    </div>
+
+    <p-table
+        [value]="configs"
+        [loading]="loading"
+        [scrollable]="true"
+        scrollHeight="500px">
+        <ng-template #header>
+            <tr>
+                <th style="width: 60px">№</th>
+                <th>{{ 'GES_REPORT.CONFIG.ORGANIZATION' | translate }}</th>
+                <th>{{ 'GES_REPORT.CONFIG.CASCADE' | translate }}</th>
+                <th>{{ 'GES_REPORT.CONFIG.INSTALLED_CAPACITY' | translate }}</th>
+                <th>{{ 'GES_REPORT.CONFIG.TOTAL_AGGREGATES' | translate }}</th>
+                <th>{{ 'GES_REPORT.CONFIG.HAS_RESERVOIR' | translate }}</th>
+                <th>{{ 'GES_REPORT.CONFIG.SORT_ORDER' | translate }}</th>
+                <th style="width: 100px">{{ 'COMMON.ACTIONS' | translate }}</th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-config let-i="rowIndex">
+            <tr>
+                <td>{{ i + 1 }}</td>
+                <td>{{ config.organization_name }}</td>
+                <td>{{ config.cascade_name }}</td>
+                <td>{{ config.installed_capacity_mwt }}</td>
+                <td>{{ config.total_aggregates }}</td>
+                <td>
+                    <i [class]="config.has_reservoir ? 'pi pi-check text-green-500' : 'pi pi-times text-red-500'"></i>
+                </td>
+                <td>{{ config.sort_order }}</td>
+                <td>
+                    <div class="flex gap-2">
+                        <p-button
+                            icon="pi pi-pencil"
+                            [rounded]="true"
+                            [text]="true"
+                            (onClick)="editConfig(config)" />
+                        <p-button
+                            icon="pi pi-trash"
+                            [rounded]="true"
+                            [text]="true"
+                            severity="danger"
+                            (onClick)="deleteConfig(config.organization_id)" />
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template #emptymessage>
+            <tr>
+                <td colspan="8" class="text-center p-4">{{ 'GES_REPORT.CONFIG.NO_CONFIGS' | translate }}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog
+    [(visible)]="dialogVisible"
+    [header]="(isEditMode ? 'GES_REPORT.CONFIG.EDIT_TITLE' : 'GES_REPORT.CONFIG.ADD_TITLE') | translate"
+    [modal]="true"
+    [style]="{ width: '500px' }"
+    (onHide)="hideDialog()">
+    <form [formGroup]="form" class="flex flex-col gap-4 pt-2">
+        <div class="flex flex-col gap-1">
+            <label class="font-medium">{{ 'GES_REPORT.CONFIG.ORGANIZATION' | translate }}</label>
+            <p-select
+                formControlName="organization_id"
+                [options]="organizations"
+                optionLabel="name"
+                optionValue="id"
+                [placeholder]="'GES_REPORT.CONFIG.SELECT_ORGANIZATION' | translate"
+                class="w-full" />
+        </div>
+
+        <div class="flex flex-col gap-1">
+            <label class="font-medium">{{ 'GES_REPORT.CONFIG.INSTALLED_CAPACITY' | translate }}</label>
+            <p-inputNumber
+                formControlName="installed_capacity_mwt"
+                [minFractionDigits]="0"
+                [maxFractionDigits]="2"
+                class="w-full" />
+        </div>
+
+        <div class="flex flex-col gap-1">
+            <label class="font-medium">{{ 'GES_REPORT.CONFIG.TOTAL_AGGREGATES' | translate }}</label>
+            <p-inputNumber
+                formControlName="total_aggregates"
+                [min]="0"
+                class="w-full" />
+        </div>
+
+        <div class="flex items-center gap-2">
+            <p-checkbox
+                formControlName="has_reservoir"
+                [binary]="true"
+                inputId="has_reservoir" />
+            <label for="has_reservoir" class="font-medium">{{ 'GES_REPORT.CONFIG.HAS_RESERVOIR' | translate }}</label>
+        </div>
+
+        <div class="flex flex-col gap-1">
+            <label class="font-medium">{{ 'GES_REPORT.CONFIG.SORT_ORDER' | translate }}</label>
+            <p-inputNumber
+                formControlName="sort_order"
+                [min]="0"
+                class="w-full" />
+        </div>
+    </form>
+
+    <ng-template #footer>
+        <p-button
+            [label]="'COMMON.CANCEL' | translate"
+            severity="secondary"
+            (onClick)="hideDialog()" />
+        <p-button
+            [label]="'COMMON.SAVE' | translate"
+            [loading]="saving"
+            [disabled]="form.invalid"
+            (onClick)="saveConfig()" />
+    </ng-template>
+</p-dialog>
