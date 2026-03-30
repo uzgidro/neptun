@@ -1,0 +1,55 @@
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { HttpParams } from '@angular/common/http';
+import { ApiService } from './api.service';
+import {
+    GesConfigPayload, GesConfigResponse,
+    GesDailyData, GesDailyDataPayload,
+    GesProductionPlan, GesProductionPlanPayload,
+    GesDailyReport
+} from '@/core/interfaces/ges-report';
+
+const GES_REPORT = '/ges-report';
+const CONFIG = '/config';
+const DAILY_DATA = '/daily-data';
+const PLANS = '/plans';
+
+@Injectable({ providedIn: 'root' })
+export class GesReportService extends ApiService {
+
+    upsertConfig(payload: GesConfigPayload): Observable<{ status: string }> {
+        return this.http.post<{ status: string }>(`${this.BASE_URL}${GES_REPORT}${CONFIG}`, payload);
+    }
+
+    getConfigs(): Observable<GesConfigResponse[]> {
+        return this.http.get<GesConfigResponse[]>(`${this.BASE_URL}${GES_REPORT}${CONFIG}`);
+    }
+
+    deleteConfig(organizationId: number): Observable<void> {
+        const params = new HttpParams().set('organization_id', organizationId);
+        return this.http.delete<void>(`${this.BASE_URL}${GES_REPORT}${CONFIG}`, { params });
+    }
+
+    upsertDailyData(payload: GesDailyDataPayload): Observable<{ status: string }> {
+        return this.http.post<{ status: string }>(`${this.BASE_URL}${GES_REPORT}${DAILY_DATA}`, payload);
+    }
+
+    getDailyData(organizationId: number, date: string): Observable<GesDailyData> {
+        const params = new HttpParams().set('organization_id', organizationId).set('date', date);
+        return this.http.get<GesDailyData>(`${this.BASE_URL}${GES_REPORT}${DAILY_DATA}`, { params });
+    }
+
+    bulkUpsertPlans(plans: GesProductionPlanPayload[]): Observable<{ status: string }> {
+        return this.http.post<{ status: string }>(`${this.BASE_URL}${GES_REPORT}${PLANS}`, { plans });
+    }
+
+    getPlans(year: number): Observable<GesProductionPlan[]> {
+        const params = new HttpParams().set('year', year);
+        return this.http.get<GesProductionPlan[]>(`${this.BASE_URL}${GES_REPORT}${PLANS}`, { params });
+    }
+
+    getReport(date: string): Observable<GesDailyReport> {
+        const params = new HttpParams().set('date', date);
+        return this.http.get<GesDailyReport>(`${this.BASE_URL}${GES_REPORT}`, { params });
+    }
+}
