@@ -1,0 +1,26 @@
+<div class="card">
+    <h2>{{ 'GES_REPORT.TITLE' | translate }}</h2>
+
+    <p-tabs value="0">
+        <p-tablist>
+            <p-tab value="0">{{ 'GES_REPORT.CONFIG' | translate }}</p-tab>
+            <p-tab value="1">{{ 'GES_REPORT.DATA_ENTRY' | translate }}</p-tab>
+            <p-tab value="2">{{ 'GES_REPORT.PLANS' | translate }}</p-tab>
+            <p-tab value="3">{{ 'GES_REPORT.REPORT' | translate }}</p-tab>
+        </p-tablist>
+        <p-tabpanels>
+            <p-tabpanel value="0">
+                <app-ges-config-tab />
+            </p-tabpanel>
+            <p-tabpanel value="1">
+                <app-ges-data-entry-tab />
+            </p-tabpanel>
+            <p-tabpanel value="2">
+                <app-ges-plans-tab />
+            </p-tabpanel>
+            <p-tabpanel value="3">
+                <app-ges-report-tab />
+            </p-tabpanel>
+        </p-tabpanels>
+    </p-tabs>
+</div>

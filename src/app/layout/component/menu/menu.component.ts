@@ -77,6 +77,11 @@ export class MenuComponent implements OnInit {
                                         label: this.t('MENU.DISCHARGE'),
                                         role: ['rais', 'sc'],
                                         routerLink: ['/discharges']
+                                    },
+                                    {
+                                        label: this.t('MENU.GES_DAILY_REPORT'),
+                                        role: ['rais', 'sc'],
+                                        routerLink: ['/ges-daily-report']
                                     }
                                 ]
                             },
