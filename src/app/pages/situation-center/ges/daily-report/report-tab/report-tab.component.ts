@@ -8,6 +8,7 @@ import { MessageService } from 'primeng/api';
 import { DatePicker } from 'primeng/datepicker';
 import { ButtonModule } from 'primeng/button';
 import { GesReportService } from '@/core/services/ges-report.service';
+import { TimeService } from '@/core/services/time.service';
 import { GesDailyReport } from '@/core/interfaces/ges-report';
 import { exportReportToExcel } from './excel-export';
 
@@ -25,6 +26,7 @@ import { exportReportToExcel } from './excel-export';
 })
 export class ReportTabComponent implements OnInit, OnDestroy {
     private gesReportService = inject(GesReportService);
+    private timeService = inject(TimeService);
     private messageService = inject(MessageService);
     private translate = inject(TranslateService);
     private destroy$ = new Subject<void>();
@@ -44,7 +46,7 @@ export class ReportTabComponent implements OnInit, OnDestroy {
 
     loadReport(): void {
         this.loading = true;
-        const dateStr = this.formatDate(this.selectedDate);
+        const dateStr = this.timeService.dateToYMD(this.selectedDate);
         this.gesReportService.getReport(dateStr)
             .pipe(
                 takeUntil(this.destroy$),
@@ -89,12 +91,5 @@ export class ReportTabComponent implements OnInit, OnDestroy {
     isNegative(value: number | null | undefined): boolean {
         if (value == null) return false;
         return value < 0;
-    }
-
-    private formatDate(date: Date): string {
-        const y = date.getFullYear();
-        const m = String(date.getMonth() + 1).padStart(2, '0');
-        const d = String(date.getDate()).padStart(2, '0');
-        return `${y}-${m}-${d}`;
     }
 }

@@ -13,6 +13,7 @@ import { TagModule } from 'primeng/tag';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
 import { GesReportService } from '@/core/services/ges-report.service';
+import { TimeService } from '@/core/services/time.service';
 import { GesConfigResponse, GesDailyData } from '@/core/interfaces/ges-report';
 import { HasUnsavedChanges } from '@/core/guards/auth.guard';
 
@@ -59,6 +60,7 @@ export class DataEntryRow {
 })
 export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChanges {
     private gesReportService = inject(GesReportService);
+    private timeService = inject(TimeService);
     private fb = inject(FormBuilder);
     private messageService = inject(MessageService);
     private translate = inject(TranslateService);
@@ -89,7 +91,7 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
                     return;
                 }
 
-                const dateStr = this.formatDate(this.selectedDate);
+                const dateStr = this.timeService.dateToYMD(this.selectedDate);
                 const requests = configs.map(config =>
                     this.gesReportService.getDailyData(config.organization_id, dateStr).pipe(
                         catchError(err => {
@@ -224,15 +226,9 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
         const val = row.form.getRawValue();
         return {
             organization_id: row.config.organization_id,
-            date: this.formatDate(this.selectedDate),
+            date: this.timeService.dateToYMD(this.selectedDate),
             ...val
         };
     }
 
-    private formatDate(date: Date): string {
-        const y = date.getFullYear();
-        const m = String(date.getMonth() + 1).padStart(2, '0');
-        const d = String(date.getDate()).padStart(2, '0');
-        return `${y}-${m}-${d}`;
-    }
 }

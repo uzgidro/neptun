@@ -175,6 +175,15 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
             });
     }
 
+    get availableOrgs(): Organization[] {
+        const usedIds = new Set(this.configs.map(c => c.organization_id));
+        if (this.isEditMode) {
+            const editingId = this.form.get('organization_id')?.value;
+            return this.organizations.filter(o => !usedIds.has(o.id) || o.id === editingId);
+        }
+        return this.organizations.filter(o => !usedIds.has(o.id));
+    }
+
     hideDialog(): void {
         this.dialogVisible = false;
         this.editingConfig = null;

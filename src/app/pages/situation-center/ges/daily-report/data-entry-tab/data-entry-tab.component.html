@@ -66,13 +66,17 @@
                     </p-inputNumber>
                 </td>
                 <td>
-                    <p-inputNumber
-                        formControlName="water_level_m"
-                        [minFractionDigits]="0"
-                        [maxFractionDigits]="2"
-                        [useGrouping]="false"
-                        styleClass="w-full">
-                    </p-inputNumber>
+                    @if (row.config.has_reservoir) {
+                        <p-inputNumber
+                            formControlName="water_level_m"
+                            [minFractionDigits]="0"
+                            [maxFractionDigits]="2"
+                            [useGrouping]="false"
+                            styleClass="w-full">
+                        </p-inputNumber>
+                    } @else {
+                        <span class="text-color-secondary">—</span>
+                    }
                 </td>
                 <td>
                     <p-inputNumber

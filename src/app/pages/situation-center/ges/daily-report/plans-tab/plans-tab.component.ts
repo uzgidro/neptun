@@ -1,7 +1,8 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { forkJoin, Subject, takeUntil } from 'rxjs';
+import { forkJoin, Subject } from 'rxjs';
+import { finalize, takeUntil } from 'rxjs/operators';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MessageService } from 'primeng/api';
 import { TableModule } from 'primeng/table';
@@ -53,7 +54,7 @@ export class PlansTabComponent implements OnInit, OnDestroy {
             configs: this.gesReportService.getConfigs(),
             plans: this.gesReportService.getPlans(this.selectedYear)
         })
-            .pipe(takeUntil(this.destroy$))
+            .pipe(takeUntil(this.destroy$), finalize(() => this.loading = false))
             .subscribe({
                 next: ({ configs, plans }) => {
                     this.planRows = configs.map((config) => {
@@ -78,9 +79,6 @@ export class PlansTabComponent implements OnInit, OnDestroy {
                         summary: this.translate.instant('COMMON.ERROR'),
                         detail: err.message
                     });
-                },
-                complete: () => {
-                    this.loading = false;
                 }
             });
     }
@@ -118,7 +116,7 @@ export class PlansTabComponent implements OnInit, OnDestroy {
         this.saving = true;
         this.gesReportService
             .bulkUpsertPlans(payload)
-            .pipe(takeUntil(this.destroy$))
+            .pipe(takeUntil(this.destroy$), finalize(() => this.saving = false))
             .subscribe({
                 next: () => {
                     this.messageService.add({
@@ -141,9 +139,6 @@ export class PlansTabComponent implements OnInit, OnDestroy {
                         summary: this.translate.instant('COMMON.ERROR'),
                         detail: err.message
                     });
-                },
-                complete: () => {
-                    this.saving = false;
                 }
             });
     }

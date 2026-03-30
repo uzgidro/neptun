@@ -71,7 +71,7 @@
             <label class="font-medium">{{ 'GES_REPORT.CONFIG.ORGANIZATION' | translate }}</label>
             <p-select
                 formControlName="organization_id"
-                [options]="organizations"
+                [options]="availableOrgs"
                 optionLabel="name"
                 optionValue="id"
                 [placeholder]="'GES_REPORT.CONFIG.SELECT_ORGANIZATION' | translate"
