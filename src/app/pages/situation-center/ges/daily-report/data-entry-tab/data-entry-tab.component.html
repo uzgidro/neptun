@@ -10,7 +10,7 @@
         </p-datepicker>
 
         <p-button
-            [label]="'COMMON.SAVE_ALL' | translate"
+            [label]="'GES_REPORT.SAVE_ALL' | translate"
             icon="pi pi-save"
             [loading]="savingAll"
             [disabled]="savingAll || !rows.length"
@@ -28,17 +28,17 @@
 
         <ng-template pTemplate="header">
             <tr>
-                <th style="min-width:160px">{{ 'GES.ORGANIZATION' | translate }}</th>
-                <th style="min-width:130px">{{ 'GES.DAILY_PRODUCTION' | translate }}</th>
-                <th style="min-width:110px">{{ 'GES.WORKING_AGGREGATES' | translate }}</th>
-                <th style="min-width:120px">{{ 'GES.WATER_LEVEL' | translate }}</th>
-                <th style="min-width:120px">{{ 'GES.WATER_VOLUME' | translate }}</th>
-                <th style="min-width:110px">{{ 'GES.WATER_HEAD' | translate }}</th>
-                <th style="min-width:130px">{{ 'GES.RESERVOIR_INCOME' | translate }}</th>
-                <th style="min-width:120px">{{ 'GES.TOTAL_OUTFLOW' | translate }}</th>
-                <th style="min-width:110px">{{ 'GES.GES_FLOW' | translate }}</th>
-                <th style="min-width:100px">{{ 'GES.TEMPERATURE' | translate }}</th>
-                <th style="min-width:140px">{{ 'GES.WEATHER_CONDITION' | translate }}</th>
+                <th style="min-width:160px">{{ 'GES_REPORT.STATION_NAME' | translate }}</th>
+                <th style="min-width:130px">{{ 'GES_REPORT.PRODUCTION' | translate }}</th>
+                <th style="min-width:110px">{{ 'GES_REPORT.WORKING_AGGREGATES' | translate }}</th>
+                <th style="min-width:120px">{{ 'GES_REPORT.WATER_LEVEL' | translate }}</th>
+                <th style="min-width:120px">{{ 'GES_REPORT.WATER_VOLUME' | translate }}</th>
+                <th style="min-width:110px">{{ 'GES_REPORT.WATER_HEAD' | translate }}</th>
+                <th style="min-width:130px">{{ 'GES_REPORT.RESERVOIR_INCOME' | translate }}</th>
+                <th style="min-width:120px">{{ 'GES_REPORT.TOTAL_OUTFLOW' | translate }}</th>
+                <th style="min-width:110px">{{ 'GES_REPORT.GES_FLOW' | translate }}</th>
+                <th style="min-width:100px">{{ 'GES_REPORT.TEMPERATURE' | translate }}</th>
+                <th style="min-width:140px">{{ 'GES_REPORT.WEATHER' | translate }}</th>
                 <th style="min-width:100px">{{ 'COMMON.STATUS' | translate }}</th>
                 <th style="min-width:80px"></th>
             </tr>
@@ -140,7 +140,7 @@
                 </td>
                 <td>
                     <p-tag
-                        [value]="'GES.STATUS.' + getStatus(row).toUpperCase() | translate"
+                        [value]="'GES_REPORT.STATUS_' + getStatus(row).toUpperCase() | translate"
                         [severity]="getStatusSeverity(row)">
                     </p-tag>
                 </td>
@@ -160,7 +160,7 @@
         <ng-template pTemplate="emptymessage">
             <tr>
                 <td colspan="13" class="text-center py-6 text-color-secondary">
-                    {{ 'GES.NO_CONFIGS' | translate }}
+                    {{ 'GES_REPORT.NO_DATA' | translate }}
                 </td>
             </tr>
         </ng-template>

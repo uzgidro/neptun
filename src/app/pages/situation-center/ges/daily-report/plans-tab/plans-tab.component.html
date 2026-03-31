@@ -8,7 +8,7 @@
         (ngModelChange)="onYearChange()"
     />
     <p-button
-        [label]="'COMMON.SAVE' | translate"
+        [label]="'GES_REPORT.SAVE' | translate"
         icon="pi pi-save"
         [loading]="saving"
         [disabled]="!hasChanges || saving"
@@ -25,9 +25,9 @@
 >
     <ng-template pTemplate="header">
         <tr>
-            <th style="min-width: 160px">{{ 'GES.STATION' | translate }}</th>
+            <th style="min-width: 160px">{{ 'GES_REPORT.STATION_NAME' | translate }}</th>
             <th *ngFor="let key of monthKeys" style="min-width: 100px; text-align: center">
-                {{ ('MONTHS.' + key) | translate }}
+                {{ ('COMMON.MONTHS.' + key) | translate }}
             </th>
         </tr>
     </ng-template>
@@ -51,7 +51,7 @@
     <ng-template pTemplate="emptymessage">
         <tr>
             <td [attr.colspan]="13" class="text-center">
-                {{ 'COMMON.NO_DATA' | translate }}
+                {{ 'GES_REPORT.NO_DATA' | translate }}
             </td>
         </tr>
     </ng-template>

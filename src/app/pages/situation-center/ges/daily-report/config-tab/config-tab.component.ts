@@ -134,7 +134,7 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
                     this.messageService.add({
                         severity: 'success',
                         summary: this.translate.instant('COMMON.SUCCESS'),
-                        detail: this.translate.instant('COMMON.SAVE_SUCCESS')
+                        detail: this.translate.instant('GES_REPORT.SAVED')
                     });
                     this.dialogVisible = false;
                     this.loadConfigs();
@@ -144,14 +144,14 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
                     this.messageService.add({
                         severity: 'error',
                         summary: this.translate.instant('COMMON.ERROR'),
-                        detail: this.translate.instant('COMMON.SAVE_ERROR')
+                        detail: this.translate.instant('GES_REPORT.SAVE_ERROR')
                     });
                 }
             });
     }
 
     deleteConfig(orgId: number): void {
-        if (!confirm(this.translate.instant('COMMON.DELETE_CONFIRM'))) return;
+        if (!confirm(this.translate.instant('GES_REPORT.DELETE_CONFIRM'))) return;
 
         this.gesReportService.deleteConfig(orgId)
             .pipe(takeUntil(this.destroy$))
@@ -160,7 +160,7 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
                     this.messageService.add({
                         severity: 'success',
                         summary: this.translate.instant('COMMON.SUCCESS'),
-                        detail: this.translate.instant('COMMON.DELETE_SUCCESS')
+                        detail: this.translate.instant('GES_REPORT.DELETED')
                     });
                     this.loadConfigs();
                 },
@@ -169,7 +169,7 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
                     this.messageService.add({
                         severity: 'error',
                         summary: this.translate.instant('COMMON.ERROR'),
-                        detail: this.translate.instant('COMMON.DELETE_ERROR')
+                        detail: this.translate.instant('GES_REPORT.DELETE_ERROR')
                     });
                 }
             });

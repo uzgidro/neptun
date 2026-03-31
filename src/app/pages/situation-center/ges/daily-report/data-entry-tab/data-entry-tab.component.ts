@@ -204,7 +204,7 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
     canDeactivate(): boolean {
         const hasDirty = this.rows.some(r => r.dirty);
         if (!hasDirty) return true;
-        return confirm(this.translate.instant('COMMON.UNSAVED_CHANGES'));
+        return confirm(this.translate.instant('GES_REPORT.UNSAVED_CHANGES'));
     }
 
     private createForm(data: GesDailyData | null): FormGroup {
