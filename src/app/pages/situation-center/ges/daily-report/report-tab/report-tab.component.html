@@ -14,11 +14,14 @@
             [disabled]="!report || loading"
             (onClick)="downloadExcel()"
         />
-        <i *ngIf="loading" class="pi pi-spin pi-spinner text-xl"></i>
+        @if (loading) {
+            <i class="pi pi-spin pi-spinner text-xl"></i>
+        }
     </div>
 
     <!-- Report table -->
-    <div *ngIf="report && !loading" class="report-table-wrapper">
+    @if (report && !loading) {
+    <div class="report-table-wrapper">
         <table class="report-table">
             <thead>
                 <tr>
@@ -67,13 +70,14 @@
             </thead>
             <tbody>
                 <!-- Cascades -->
-                <ng-container *ngFor="let cascade of report.cascades">
+                @for (cascade of report.cascades; track cascade.cascade_id) {
                     <!-- Cascade header -->
                     <tr class="cascade-header-row">
                         <td class="sticky-col cascade-name" colspan="33">{{ cascade.cascade_name }}</td>
                     </tr>
                     <!-- Station rows -->
-                    <tr *ngFor="let station of cascade.stations" class="station-row">
+                    @for (station of cascade.stations; track station.organization_id) {
+                    <tr class="station-row">
                         <td class="sticky-col station-name">{{ station.name }}</td>
                         <td>{{ formatNum(station.config.installed_capacity_mwt) }}</td>
                         <td>{{ station.config.total_aggregates }}</td>
@@ -141,6 +145,7 @@
                             {{ formatNum(station.yoy.difference_mln_kwh) }}
                         </td>
                     </tr>
+                    }
                     <!-- Cascade summary row -->
                     <tr class="cascade-summary-row">
                         <td class="sticky-col summary-label">{{ 'GES_REPORT.CASCADE_TOTAL' | translate }}</td>
@@ -172,7 +177,7 @@
                             {{ formatNum(cascade.summary.yoy_difference_mln_kwh) }}
                         </td>
                     </tr>
-                </ng-container>
+                }
 
                 <!-- Grand total row -->
                 <tr class="grand-total-row">
@@ -208,11 +213,14 @@
             </tbody>
         </table>
     </div>
+    }
 
     <!-- Empty state -->
-    <div *ngIf="!report && !loading" class="empty-state">
+    @if (!report && !loading) {
+    <div class="empty-state">
         <p>{{ 'GES_REPORT.NO_DATA' | translate }}</p>
     </div>
+    }
 </div>
 
 <style>
