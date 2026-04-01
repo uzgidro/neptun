@@ -32,9 +32,15 @@
             <div class="border border-surface rounded-lg p-4" [formGroup]="row.form">
                 <!-- Card header -->
                 <div class="flex justify-between items-center mb-3">
-                    <div class="flex items-center gap-2">
+                    <div class="flex items-center gap-3">
                         <span class="font-semibold text-lg">{{ row.config.organization_name }}</span>
                         <span class="text-color-secondary text-sm">({{ row.config.cascade_name }})</span>
+                        <span class="text-color-secondary text-sm">|</span>
+                        <span class="text-sm">{{ 'GES_REPORT.INSTALLED_CAPACITY' | translate }}: <strong>{{ row.config.installed_capacity_mwt }}</strong></span>
+                        <span class="text-sm">{{ 'GES_REPORT.TOTAL_AGGREGATES' | translate }}: <strong>{{ row.config.total_aggregates }}</strong></span>
+                        @if (row.config.has_reservoir) {
+                            <span class="text-sm"><i class="pi pi-check-circle text-green-500 text-xs"></i> {{ 'GES_REPORT.HAS_RESERVOIR' | translate }}</span>
+                        }
                     </div>
                     <div class="flex items-center gap-2">
                         <p-tag
@@ -55,7 +61,7 @@
 
                 <!-- Fields grid: 3 columns -->
                 <div class="grid grid-cols-3 gap-3">
-                    <!-- Row 1: Production, Aggregates, Head -->
+                    <!-- Row 1: Production, Aggregates, Power -->
                     <div class="flex flex-col gap-1">
                         <label class="text-sm text-color-secondary">{{ 'GES_REPORT.PRODUCTION' | translate }}</label>
                         <p-inputNumber
@@ -67,15 +73,29 @@
                         </p-inputNumber>
                     </div>
                     <div class="flex flex-col gap-1">
-                        <label class="text-sm text-color-secondary">{{ 'GES_REPORT.WORKING_AGGREGATES' | translate }}</label>
+                        <label class="text-sm text-color-secondary">{{ 'GES_REPORT.WORKING_AGGREGATES' | translate }} ({{ 'GES_REPORT.TOTAL_AGGREGATES' | translate }}: {{ row.config.total_aggregates }})</label>
                         <p-inputNumber
                             formControlName="working_aggregates"
+                            [min]="0"
+                            [max]="row.config.total_aggregates"
                             [minFractionDigits]="0"
                             [maxFractionDigits]="0"
                             [useGrouping]="false"
                             styleClass="w-full">
                         </p-inputNumber>
                     </div>
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-color-secondary">{{ 'GES_REPORT.POWER' | translate }}</label>
+                        <p-inputNumber
+                            formControlName="power_mwt"
+                            [minFractionDigits]="0"
+                            [maxFractionDigits]="2"
+                            [useGrouping]="false"
+                            styleClass="w-full">
+                        </p-inputNumber>
+                    </div>
+
+                    <!-- Row 2: Head, Income, Outflow -->
                     <div class="flex flex-col gap-1">
                         <label class="text-sm text-color-secondary">{{ 'GES_REPORT.WATER_HEAD' | translate }}</label>
                         <p-inputNumber
@@ -86,8 +106,6 @@
                             styleClass="w-full">
                         </p-inputNumber>
                     </div>
-
-                    <!-- Row 2: Income, Outflow -->
                     <div class="flex flex-col gap-1">
                         <label class="text-sm text-color-secondary">{{ 'GES_REPORT.RESERVOIR_INCOME' | translate }}</label>
                         <p-inputNumber
@@ -108,7 +126,6 @@
                             styleClass="w-full">
                         </p-inputNumber>
                     </div>
-                    <div></div>
 
                     <!-- Row 3: Water level, Volume -->
                     <div class="flex flex-col gap-1">
