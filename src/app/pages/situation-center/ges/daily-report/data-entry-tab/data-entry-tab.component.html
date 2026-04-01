@@ -55,7 +55,7 @@
 
                 <!-- Fields grid: 3 columns -->
                 <div class="grid grid-cols-3 gap-3">
-                    <!-- Row 1: Production, Aggregates -->
+                    <!-- Row 1: Production, Aggregates, Head -->
                     <div class="flex flex-col gap-1">
                         <label class="text-sm text-color-secondary">{{ 'GES_REPORT.PRODUCTION' | translate }}</label>
                         <p-inputNumber
@@ -76,9 +76,18 @@
                             styleClass="w-full">
                         </p-inputNumber>
                     </div>
-                    <div></div>
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-color-secondary">{{ 'GES_REPORT.WATER_HEAD' | translate }}</label>
+                        <p-inputNumber
+                            formControlName="water_head_m"
+                            [minFractionDigits]="0"
+                            [maxFractionDigits]="2"
+                            [useGrouping]="false"
+                            styleClass="w-full">
+                        </p-inputNumber>
+                    </div>
 
-                    <!-- Row 2: Water level, Volume, Head -->
+                    <!-- Row 2: Water level, Volume, Income -->
                     <div class="flex flex-col gap-1">
                         <label class="text-sm text-color-secondary">{{ 'GES_REPORT.WATER_LEVEL' | translate }}</label>
                         @if (row.config.has_reservoir) {
@@ -107,18 +116,8 @@
                             <span class="text-color-secondary p-2">—</span>
                         }
                     </div>
-                    <div class="flex flex-col gap-1">
-                        <label class="text-sm text-color-secondary">{{ 'GES_REPORT.WATER_HEAD' | translate }}</label>
-                        <p-inputNumber
-                            formControlName="water_head_m"
-                            [minFractionDigits]="0"
-                            [maxFractionDigits]="2"
-                            [useGrouping]="false"
-                            styleClass="w-full">
-                        </p-inputNumber>
-                    </div>
 
-                    <!-- Row 3: Income, Outflow, GES flow -->
+                    <!-- Row 3: Income, Outflow -->
                     <div class="flex flex-col gap-1">
                         <label class="text-sm text-color-secondary">{{ 'GES_REPORT.RESERVOIR_INCOME' | translate }}</label>
                         <p-inputNumber
