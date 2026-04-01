@@ -8,19 +8,52 @@
     </div>
 
     <p-table
+        #dt
         [value]="configs"
         [loading]="loading"
         [scrollable]="true"
-        scrollHeight="500px">
+        scrollHeight="500px"
+        [globalFilterFields]="['organization_name', 'cascade_name']"
+        [sortField]="'sort_order'"
+        [sortOrder]="1">
+
+        <ng-template #caption>
+            <div class="flex justify-end">
+                <p-iconfield>
+                    <p-inputicon styleClass="pi pi-search" />
+                    <input
+                        pInputText
+                        type="text"
+                        [placeholder]="'COMMON.SEARCH' | translate"
+                        (input)="dt.filterGlobal($any($event.target).value, 'contains')" />
+                </p-iconfield>
+            </div>
+        </ng-template>
+
         <ng-template #header>
             <tr>
                 <th style="width: 60px">№</th>
-                <th>{{ 'GES_REPORT.STATION_NAME' | translate }}</th>
-                <th>{{ 'GES_REPORT.CASCADE_NAME' | translate }}</th>
-                <th>{{ 'GES_REPORT.INSTALLED_CAPACITY' | translate }}</th>
-                <th>{{ 'GES_REPORT.TOTAL_AGGREGATES' | translate }}</th>
+                <th [pSortableColumn]="'organization_name'">
+                    {{ 'GES_REPORT.STATION_NAME' | translate }}
+                    <p-sortIcon [field]="'organization_name'" />
+                </th>
+                <th [pSortableColumn]="'cascade_name'">
+                    {{ 'GES_REPORT.CASCADE_NAME' | translate }}
+                    <p-sortIcon [field]="'cascade_name'" />
+                </th>
+                <th [pSortableColumn]="'installed_capacity_mwt'">
+                    {{ 'GES_REPORT.INSTALLED_CAPACITY' | translate }}
+                    <p-sortIcon [field]="'installed_capacity_mwt'" />
+                </th>
+                <th [pSortableColumn]="'total_aggregates'">
+                    {{ 'GES_REPORT.TOTAL_AGGREGATES' | translate }}
+                    <p-sortIcon [field]="'total_aggregates'" />
+                </th>
                 <th>{{ 'GES_REPORT.HAS_RESERVOIR' | translate }}</th>
-                <th>{{ 'GES_REPORT.SORT_ORDER' | translate }}</th>
+                <th [pSortableColumn]="'sort_order'">
+                    {{ 'GES_REPORT.SORT_ORDER' | translate }}
+                    <p-sortIcon [field]="'sort_order'" />
+                </th>
                 <th style="width: 100px">{{ 'COMMON.ACTIONS' | translate }}</th>
             </tr>
         </ng-template>

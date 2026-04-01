@@ -8,7 +8,10 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { InputTextModule } from 'primeng/inputtext';
 import { CheckboxModule } from 'primeng/checkbox';
+import { IconField } from 'primeng/iconfield';
+import { InputIcon } from 'primeng/inputicon';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MessageService } from 'primeng/api';
 import { GesReportService } from '@/core/services/ges-report.service';
@@ -28,7 +31,10 @@ import { GroupSelectComponent } from '@/layout/component/dialog/group-select/gro
         ButtonModule,
         DialogModule,
         InputNumberModule,
+        InputTextModule,
         CheckboxModule,
+        IconField,
+        InputIcon,
         TranslateModule,
         GroupSelectComponent
     ],
