@@ -29,10 +29,11 @@ describe('ConfigTabComponent', () => {
         const gesReportSpy = jasmine.createSpyObj('GesReportService', [
             'getConfigs', 'upsertConfig', 'deleteConfig'
         ]);
-        const orgSpy = jasmine.createSpyObj('OrganizationService', ['getOrganizationsFlat']);
+        const orgSpy = jasmine.createSpyObj('OrganizationService', ['getOrganizationsFlat', 'getCascades']);
 
         gesReportSpy.getConfigs.and.returnValue(of([]));
         orgSpy.getOrganizationsFlat.and.returnValue(of([]));
+        orgSpy.getCascades.and.returnValue(of([]));
 
         await TestBed.configureTestingModule({
             imports: [ConfigTabComponent, TranslateModule.forRoot()],

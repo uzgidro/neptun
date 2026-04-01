@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
@@ -21,6 +22,7 @@ import { Organization } from '@/core/interfaces/organizations';
     standalone: true,
     imports: [
         CommonModule,
+        FormsModule,
         ReactiveFormsModule,
         TableModule,
         ButtonModule,
@@ -41,7 +43,9 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
     private fb = inject(FormBuilder);
 
     configs: GesConfigResponse[] = [];
+    cascades: Organization[] = [];
     organizations: Organization[] = [];
+    selectedCascadeId: number | null = null;
     loading = false;
     saving = false;
 
@@ -58,6 +62,7 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
     });
 
     ngOnInit(): void {
+        this.loadCascades();
         this.loadOrganizations();
         this.loadConfigs();
     }
@@ -67,12 +72,21 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
         this.destroy$.complete();
     }
 
+    private loadCascades(): void {
+        this.organizationService.getCascades()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(cascades => this.cascades = cascades);
+    }
+
     private loadOrganizations(): void {
         this.organizationService.getOrganizationsFlat()
             .pipe(takeUntil(this.destroy$))
-            .subscribe(orgs => {
-                this.organizations = orgs;
-            });
+            .subscribe(orgs => this.organizations = orgs);
+    }
+
+    onCascadeChange(cascadeId: number | null | undefined): void {
+        this.selectedCascadeId = cascadeId ?? null;
+        this.form.get('organization_id')?.reset();
     }
 
     loadConfigs(): void {
@@ -100,6 +114,7 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
     openNew(): void {
         this.isEditMode = false;
         this.editingConfig = null;
+        this.selectedCascadeId = null;
         this.form.reset({ has_reservoir: false });
         this.dialogVisible = true;
     }
@@ -107,6 +122,7 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
     editConfig(config: GesConfigResponse): void {
         this.isEditMode = true;
         this.editingConfig = config;
+        this.selectedCascadeId = config.cascade_id;
         this.form.reset();
         this.form.patchValue({
             organization_id: config.organization_id,
@@ -177,11 +193,17 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
 
     get availableOrgs(): Organization[] {
         const usedIds = new Set(this.configs.map(c => c.organization_id));
+        let orgs = this.organizations;
+
+        if (this.selectedCascadeId) {
+            orgs = orgs.filter(o => o.parent_organization_id === this.selectedCascadeId);
+        }
+
         if (this.isEditMode) {
             const editingId = this.form.get('organization_id')?.value;
-            return this.organizations.filter(o => !usedIds.has(o.id) || o.id === editingId);
+            return orgs.filter(o => !usedIds.has(o.id) || o.id === editingId);
         }
-        return this.organizations.filter(o => !usedIds.has(o.id));
+        return orgs.filter(o => !usedIds.has(o.id));
     }
 
     hideDialog(): void {

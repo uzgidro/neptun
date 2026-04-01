@@ -68,6 +68,19 @@
     (onHide)="hideDialog()">
     <form [formGroup]="form" class="flex flex-col gap-4 pt-2">
         <div class="flex flex-col gap-1">
+            <label class="font-medium">{{ 'GES_REPORT.CASCADE_NAME' | translate }}</label>
+            <p-select
+                [(ngModel)]="selectedCascadeId"
+                [ngModelOptions]="{ standalone: true }"
+                [options]="cascades"
+                optionLabel="name"
+                optionValue="id"
+                [placeholder]="'GES_REPORT.CASCADE_NAME' | translate"
+                [showClear]="true"
+                (ngModelChange)="onCascadeChange($event)"
+                class="w-full" />
+        </div>
+        <div class="flex flex-col gap-1">
             <label class="font-medium">{{ 'GES_REPORT.STATION_NAME' | translate }}</label>
             <p-select
                 formControlName="organization_id"
