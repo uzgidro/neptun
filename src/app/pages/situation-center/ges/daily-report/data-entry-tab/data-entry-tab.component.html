@@ -61,7 +61,7 @@
 
                 <!-- Fields grid: 3 columns -->
                 <div class="grid grid-cols-3 gap-3">
-                    <!-- Row 1: Production, Aggregates, Power -->
+                    <!-- Row 1: Production, Aggregates, Head -->
                     <div class="flex flex-col gap-1">
                         <label class="text-sm text-color-secondary">{{ 'GES_REPORT.PRODUCTION' | translate }}</label>
                         <p-inputNumber
@@ -85,18 +85,6 @@
                         </p-inputNumber>
                     </div>
                     <div class="flex flex-col gap-1">
-                        <label class="text-sm text-color-secondary">{{ 'GES_REPORT.POWER' | translate }}</label>
-                        <p-inputNumber
-                            formControlName="power_mwt"
-                            [minFractionDigits]="0"
-                            [maxFractionDigits]="2"
-                            [useGrouping]="false"
-                            styleClass="w-full">
-                        </p-inputNumber>
-                    </div>
-
-                    <!-- Row 2: Head, Income, Outflow -->
-                    <div class="flex flex-col gap-1">
                         <label class="text-sm text-color-secondary">{{ 'GES_REPORT.WATER_HEAD' | translate }}</label>
                         <p-inputNumber
                             formControlName="water_head_m"
@@ -106,6 +94,8 @@
                             styleClass="w-full">
                         </p-inputNumber>
                     </div>
+
+                    <!-- Row 2: Income, Outflow -->
                     <div class="flex flex-col gap-1">
                         <label class="text-sm text-color-secondary">{{ 'GES_REPORT.RESERVOIR_INCOME' | translate }}</label>
                         <p-inputNumber

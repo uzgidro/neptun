@@ -208,11 +208,8 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
     }
 
     private createForm(data: GesDailyData | null): FormGroup {
-        const production = data?.daily_production_mln_kwh ?? null;
-        const power = production != null ? +(production * 1000 / 24).toFixed(2) : null;
         return this.fb.group({
-            daily_production_mln_kwh: [production],
-            power_mwt: [power],
+            daily_production_mln_kwh: [data?.daily_production_mln_kwh ?? null],
             working_aggregates: [data?.working_aggregates ?? null],
             water_level_m: [data?.water_level_m ?? null],
             water_volume_mln_m3: [data?.water_volume_mln_m3 ?? null],
@@ -226,7 +223,7 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
     }
 
     private buildPayload(row: DataEntryRow) {
-        const { power_mwt, ...val } = row.form.getRawValue();
+        const val = row.form.getRawValue();
         return {
             organization_id: row.config.organization_id,
             date: this.timeService.dateToYMD(this.selectedDate),
