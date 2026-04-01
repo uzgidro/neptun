@@ -104,13 +104,17 @@
                     </div>
                     <div class="flex flex-col gap-1">
                         <label class="text-sm text-color-secondary">{{ 'GES_REPORT.WATER_VOLUME' | translate }}</label>
-                        <p-inputNumber
-                            formControlName="water_volume_mln_m3"
-                            [minFractionDigits]="0"
-                            [maxFractionDigits]="2"
-                            [useGrouping]="false"
-                            styleClass="w-full">
-                        </p-inputNumber>
+                        @if (row.config.has_reservoir) {
+                            <p-inputNumber
+                                formControlName="water_volume_mln_m3"
+                                [minFractionDigits]="0"
+                                [maxFractionDigits]="2"
+                                [useGrouping]="false"
+                                styleClass="w-full">
+                            </p-inputNumber>
+                        } @else {
+                            <span class="text-color-secondary p-2">—</span>
+                        }
                     </div>
                     <div class="flex flex-col gap-1">
                         <label class="text-sm text-color-secondary">{{ 'GES_REPORT.WATER_HEAD' | translate }}</label>
