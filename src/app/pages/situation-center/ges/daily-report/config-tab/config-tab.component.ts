@@ -196,6 +196,20 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
             });
     }
 
+    get availableCascades(): Organization[] {
+        const usedIds = new Set(this.configs.map(c => c.organization_id));
+        const editingId = this.isEditMode ? this.editingConfig?.organization_id : null;
+
+        return this.cascades
+            .map(cascade => {
+                const filtered = (cascade.items || []).filter(
+                    org => !usedIds.has(org.id) || org.id === editingId
+                );
+                return filtered.length ? { ...cascade, items: filtered } : null;
+            })
+            .filter((c): c is Organization & { items: Organization[] } => c !== null);
+    }
+
     hideDialog(): void {
         this.dialogVisible = false;
         this.editingConfig = null;
