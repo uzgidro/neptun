@@ -78,7 +78,7 @@ describe('ConfigTabComponent', () => {
         component.editConfig(config);
         expect(component.dialogVisible).toBeTrue();
         expect(component.isEditMode).toBeTrue();
-        expect(component.form.get('organization_id')?.value).toBe(10);
+        expect(component.form.get('organization')?.value).toBeNull(); // no cascades loaded, org not found
     });
 
     it('should save config and reload', () => {
@@ -87,7 +87,8 @@ describe('ConfigTabComponent', () => {
         fixture.detectChanges();
         component.openNew();
         component.form.patchValue({
-            organization_id: 10, installed_capacity_mwt: 50,
+            organization: { id: 10, name: 'ГЭС-1', contacts: [] },
+            installed_capacity_mwt: 50,
             total_aggregates: 4, has_reservoir: true, sort_order: 1
         });
         component.saveConfig();

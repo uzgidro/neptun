@@ -7,7 +7,6 @@ import { finalize, takeUntil } from 'rxjs/operators';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
-import { SelectModule } from 'primeng/select';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { CheckboxModule } from 'primeng/checkbox';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -16,6 +15,7 @@ import { GesReportService } from '@/core/services/ges-report.service';
 import { OrganizationService } from '@/core/services/organization.service';
 import { GesConfigPayload, GesConfigResponse } from '@/core/interfaces/ges-report';
 import { Organization } from '@/core/interfaces/organizations';
+import { GroupSelectComponent } from '@/layout/component/dialog/group-select/group-select.component';
 
 @Component({
     selector: 'app-ges-config-tab',
@@ -27,10 +27,10 @@ import { Organization } from '@/core/interfaces/organizations';
         TableModule,
         ButtonModule,
         DialogModule,
-        SelectModule,
         InputNumberModule,
         CheckboxModule,
-        TranslateModule
+        TranslateModule,
+        GroupSelectComponent
     ],
     templateUrl: './config-tab.component.html'
 })
@@ -44,17 +44,17 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
 
     configs: GesConfigResponse[] = [];
     cascades: Organization[] = [];
-    organizations: Organization[] = [];
-    selectedCascadeId: number | null = null;
+    orgsLoading = false;
     loading = false;
     saving = false;
+    submitted = false;
 
     dialogVisible = false;
     isEditMode = false;
     editingConfig: GesConfigResponse | null = null;
 
     form: FormGroup = this.fb.group({
-        organization_id: [null, Validators.required],
+        organization: [null as Organization | null, Validators.required],
         installed_capacity_mwt: [null],
         total_aggregates: [null],
         has_reservoir: [false],
@@ -63,7 +63,6 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.loadCascades();
-        this.loadOrganizations();
         this.loadConfigs();
     }
 
@@ -73,20 +72,10 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
     }
 
     private loadCascades(): void {
+        this.orgsLoading = true;
         this.organizationService.getCascades()
-            .pipe(takeUntil(this.destroy$))
+            .pipe(takeUntil(this.destroy$), finalize(() => this.orgsLoading = false))
             .subscribe(cascades => this.cascades = cascades);
-    }
-
-    private loadOrganizations(): void {
-        this.organizationService.getOrganizationsFlat()
-            .pipe(takeUntil(this.destroy$))
-            .subscribe(orgs => this.organizations = orgs);
-    }
-
-    onCascadeChange(cascadeId: number | null | undefined): void {
-        this.selectedCascadeId = cascadeId ?? null;
-        this.form.get('organization_id')?.reset();
     }
 
     loadConfigs(): void {
@@ -114,7 +103,7 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
     openNew(): void {
         this.isEditMode = false;
         this.editingConfig = null;
-        this.selectedCascadeId = null;
+        this.submitted = false;
         this.form.reset({ has_reservoir: false });
         this.dialogVisible = true;
     }
@@ -122,10 +111,18 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
     editConfig(config: GesConfigResponse): void {
         this.isEditMode = true;
         this.editingConfig = config;
-        this.selectedCascadeId = config.cascade_id;
+        this.submitted = false;
         this.form.reset();
+
+        // Find the org object in cascades to set GroupSelect value
+        let foundOrg: Organization | null = null;
+        for (const cascade of this.cascades) {
+            foundOrg = cascade.items?.find(o => o.id === config.organization_id) ?? null;
+            if (foundOrg) break;
+        }
+
         this.form.patchValue({
-            organization_id: config.organization_id,
+            organization: foundOrg,
             installed_capacity_mwt: config.installed_capacity_mwt,
             total_aggregates: config.total_aggregates,
             has_reservoir: config.has_reservoir,
@@ -135,9 +132,17 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
     }
 
     saveConfig(): void {
+        this.submitted = true;
         if (this.form.invalid) return;
 
-        const payload: GesConfigPayload = this.form.value;
+        const formVal = this.form.value;
+        const payload: GesConfigPayload = {
+            organization_id: formVal.organization.id,
+            installed_capacity_mwt: formVal.installed_capacity_mwt,
+            total_aggregates: formVal.total_aggregates,
+            has_reservoir: formVal.has_reservoir,
+            sort_order: formVal.sort_order
+        };
         this.saving = true;
 
         this.gesReportService.upsertConfig(payload)
@@ -189,21 +194,6 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
                     });
                 }
             });
-    }
-
-    get availableOrgs(): Organization[] {
-        const usedIds = new Set(this.configs.map(c => c.organization_id));
-        let orgs = this.organizations;
-
-        if (this.selectedCascadeId) {
-            orgs = orgs.filter(o => o.parent_organization_id === this.selectedCascadeId);
-        }
-
-        if (this.isEditMode) {
-            const editingId = this.form.get('organization_id')?.value;
-            return orgs.filter(o => !usedIds.has(o.id) || o.id === editingId);
-        }
-        return orgs.filter(o => !usedIds.has(o.id));
     }
 
     hideDialog(): void {
