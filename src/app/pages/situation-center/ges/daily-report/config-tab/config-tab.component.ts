@@ -44,6 +44,7 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
 
     configs: GesConfigResponse[] = [];
     cascades: Organization[] = [];
+    availableCascades: Organization[] = [];
     orgsLoading = false;
     loading = false;
     saving = false;
@@ -75,7 +76,7 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
         this.orgsLoading = true;
         this.organizationService.getCascades()
             .pipe(takeUntil(this.destroy$), finalize(() => this.orgsLoading = false))
-            .subscribe(cascades => this.cascades = cascades);
+            .subscribe(cascades => { this.cascades = cascades; this.updateAvailableCascades(); });
     }
 
     loadConfigs(): void {
@@ -88,6 +89,7 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
             .subscribe({
                 next: (configs) => {
                     this.configs = configs;
+                    this.updateAvailableCascades();
                 },
                 error: (err) => {
                     console.error(err);
@@ -105,6 +107,7 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
         this.editingConfig = null;
         this.submitted = false;
         this.form.reset({ has_reservoir: false });
+        this.updateAvailableCascades();
         this.dialogVisible = true;
     }
 
@@ -128,6 +131,7 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
             has_reservoir: config.has_reservoir,
             sort_order: config.sort_order
         });
+        this.updateAvailableCascades();
         this.dialogVisible = true;
     }
 
@@ -196,11 +200,11 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
             });
     }
 
-    get availableCascades(): Organization[] {
+    private updateAvailableCascades(): void {
         const usedIds = new Set(this.configs.map(c => c.organization_id));
         const editingId = this.isEditMode ? this.editingConfig?.organization_id : null;
 
-        return this.cascades
+        this.availableCascades = this.cascades
             .map(cascade => {
                 const filtered = (cascade.items || []).filter(
                     org => !usedIds.has(org.id) || org.id === editingId
