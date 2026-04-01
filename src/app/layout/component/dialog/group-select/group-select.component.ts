@@ -49,7 +49,14 @@ export class GroupSelectComponent implements ControlValueAccessor, OnChanges {
 
     constructor() {
         this.uniqueId = 'group_select_' + nextId++;
-        this.emptyFilterMessage = this.translate.instant('COMMON.NO_RESULTS');
+        this.updateEmptyMessage();
+        this.translate.onLangChange.subscribe(() => this.updateEmptyMessage());
+        this.translate.onTranslationChange.subscribe(() => this.updateEmptyMessage());
+    }
+
+    private updateEmptyMessage(): void {
+        const msg = this.translate.instant('COMMON.NO_RESULTS');
+        this.emptyFilterMessage = msg !== 'COMMON.NO_RESULTS' ? msg : 'Ничего не найдено';
     }
 
     writeValue(value: any): void {
