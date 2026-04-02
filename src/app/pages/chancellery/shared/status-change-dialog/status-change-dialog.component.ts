@@ -2,7 +2,7 @@ import { Component, EventEmitter, inject, Input, OnChanges, Output, SimpleChange
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Dialog } from 'primeng/dialog';
-import { Select } from 'primeng/select';
+import { SelectComponent } from '@/layout/component/dialog/select/select.component';
 import { Textarea } from 'primeng/textarea';
 import { ButtonDirective, ButtonLabel } from 'primeng/button';
 import { Tag } from 'primeng/tag';
@@ -13,7 +13,7 @@ import { TranslateModule } from '@ngx-translate/core';
 @Component({
     selector: 'app-status-change-dialog',
     standalone: true,
-    imports: [CommonModule, FormsModule, ReactiveFormsModule, Dialog, Select, Textarea, ButtonDirective, Tag, TranslateModule, ButtonLabel],
+    imports: [CommonModule, FormsModule, ReactiveFormsModule, Dialog, SelectComponent, Textarea, ButtonDirective, Tag, TranslateModule, ButtonLabel],
     template: `
         <p-dialog [header]="'CHANCELLERY.STATUS_CHANGE.TITLE' | translate" [(visible)]="visible" [modal]="true" [style]="{ width: '450px' }" [dismissableMask]="true" (onHide)="onCancel()">
             <form [formGroup]="form" class="flex flex-col gap-4">
@@ -30,27 +30,17 @@ import { TranslateModule } from '@ngx-translate/core';
                 <!-- New Status -->
                 <div class="flex flex-col gap-2">
                     <label class="font-medium text-sm" for="newStatus"> {{ 'CHANCELLERY.STATUS_CHANGE.NEW_STATUS' | translate }} * </label>
-                    <p-select
-                        id="newStatus"
+                    <app-select
                         formControlName="status_id"
-                        [options]="availableStatuses"
+                        [items]="availableStatuses"
                         optionLabel="name"
                         optionValue="id"
                         [placeholder]="'CHANCELLERY.STATUS_CHANGE.SELECT_STATUS' | translate"
-                        [style]="{ width: '100%' }"
+                        [filter]="true"
                         [showClear]="false"
-                    >
-                        <ng-template #item let-status>
-                            <div class="flex items-center gap-2">
-                                <p-tag [value]="status.name" [severity]="statusService.getStatusSeverity(status.code)" [rounded]="true" size="small" />
-                            </div>
-                        </ng-template>
-                    </p-select>
-                    @if (submitted && form.get('status_id')?.errors?.['required']) {
-                        <small class="text-red-500">
-                            {{ 'CHANCELLERY.STATUS_CHANGE.STATUS_REQUIRED' | translate }}
-                        </small>
-                    }
+                        [submitted]="submitted"
+                        [required]="true"
+                    ></app-select>
                 </div>
 
                 <!-- Comment -->

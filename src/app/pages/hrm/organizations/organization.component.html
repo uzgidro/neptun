@@ -112,15 +112,16 @@
 
         <div class="field mt-4">
             <label class="font-medium mb-2 block">{{ 'HRM.ORGANIZATIONS.TYPES' | translate }}</label>
-            <p-multiSelect
+            <app-multi-select
                 formControlName="type_ids"
-                [options]="organizationTypes"
+                [items]="organizationTypes"
                 optionLabel="name"
                 [placeholder]="'HRM.ORGANIZATIONS.TYPES' | translate"
                 [filter]="true"
                 [showClear]="true"
-                styleClass="w-full">
-            </p-multiSelect>
+                styleClass="w-full"
+                [required]="false">
+            </app-multi-select>
         </div>
     </form>
 </app-dialog>

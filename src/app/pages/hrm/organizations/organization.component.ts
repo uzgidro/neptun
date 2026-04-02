@@ -6,7 +6,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TreeTable, TreeTableModule } from 'primeng/treetable';
 import { ButtonDirective, ButtonIcon, ButtonLabel } from 'primeng/button';
 import { Chip } from 'primeng/chip';
-import { MultiSelect } from 'primeng/multiselect';
+import { MultiSelectComponent } from '@/layout/component/dialog/multi-select/multi-select.component';
 import { Tooltip } from 'primeng/tooltip';
 import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
@@ -28,7 +28,7 @@ import { SelectComponent } from '@/layout/component/dialog/select/select.compone
         ButtonIcon,
         ButtonLabel,
         Chip,
-        MultiSelect,
+        MultiSelectComponent,
         Tooltip,
         IconField,
         InputIcon,

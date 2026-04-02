@@ -6,7 +6,7 @@ import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
-import { SelectModule } from 'primeng/select';
+import { SelectComponent } from '../../../layout/component/dialog/select/select.component';
 import { DatePickerModule } from 'primeng/datepicker';
 import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
@@ -47,7 +47,7 @@ interface Transaction {
         DialogModule,
         InputTextModule,
         InputNumberModule,
-        SelectModule,
+        SelectComponent,
         DatePickerModule,
         TagModule,
         TooltipModule,

@@ -10,12 +10,12 @@ import { ApiService } from '@/core/services/api.service';
 import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
 import { Categories } from '@/core/interfaces/categories';
-import { Select } from 'primeng/select';
+import { SelectComponent } from '@/layout/component/dialog/select/select.component';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-categories',
-    imports: [Button, ButtonDirective, ButtonIcon, ButtonLabel, Dialog, IconField, InputIcon, InputText, ReactiveFormsModule, TableModule, Select, TranslateModule],
+    imports: [Button, ButtonDirective, ButtonIcon, ButtonLabel, Dialog, IconField, InputIcon, InputText, ReactiveFormsModule, TableModule, SelectComponent, TranslateModule],
     templateUrl: './categories.component.html',
     styleUrl: './categories.component.scss'
 })
@@ -70,7 +70,7 @@ export class CategoriesComponent implements OnInit, OnDestroy {
         const payload = {
             name: formValue.name,
             description: formValue.description,
-            parent_id: formValue.parent_id ? formValue.parent_id.id : null
+            parent_id: formValue.parent_id || null
         };
 
         this.apiService

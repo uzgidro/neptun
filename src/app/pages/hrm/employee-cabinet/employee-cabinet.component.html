@@ -441,13 +441,14 @@
         <div class="space-y-4">
             <div class="field">
                 <label class="font-medium">{{ 'HRM.EMPLOYEE_CABINET.VACATION_TYPE' | translate }} *</label>
-                <p-select
+                <app-select
                     formControlName="type"
-                    [options]="vacationTypes"
+                    [items]="vacationTypes"
                     optionLabel="label"
                     [placeholder]="'HRM.EMPLOYEE_CABINET.SELECT_TYPE' | translate"
-                    class="w-full">
-                </p-select>
+                    styleClass="w-full"
+                    [filter]="false">
+                </app-select>
             </div>
 
             <div class="grid grid-cols-2 gap-4">

@@ -10,7 +10,7 @@ import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
 import { InputText } from 'primeng/inputtext';
 import { Tooltip } from 'primeng/tooltip';
-import { Select } from 'primeng/select';
+
 import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
 import { InputTextComponent } from '@/layout/component/dialog/input-text/input-text.component';
 import { SelectComponent } from '@/layout/component/dialog/select/select.component';
@@ -44,7 +44,6 @@ import { StatusChangeDialogComponent } from '@/pages/chancellery/shared';
         InputIcon,
         InputText,
         Tooltip,
-        Select,
         DialogComponent,
         InputTextComponent,
         SelectComponent,

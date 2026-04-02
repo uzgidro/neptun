@@ -20,15 +20,17 @@
                         <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" [placeholder]="'COMMON.SEARCH' | translate" />
                     </p-iconfield>
 
-                    <p-select
+                    <app-select
                         [(ngModel)]="selectedDocType"
-                        [options]="documentTypeOptions"
+                        [items]="documentTypeOptions"
                         optionLabel="name"
                         optionValue="value"
                         [placeholder]="'CHANCELLERY.SIGNATURE.DOC_TYPE' | translate"
-                        (onChange)="applyFilters()"
-                        [style]="{ minWidth: '180px' }">
-                    </p-select>
+                        (ngModelChange)="applyFilters()"
+                        [style]="{ minWidth: '180px' }"
+                        [required]="false"
+                        [filter]="false">
+                    </app-select>
                 </div>
 
                 <div class="flex items-center gap-2">

@@ -8,15 +8,16 @@
                 <th class="border border-surface-200 dark:border-surface-700 p-2 text-center min-w-40">
                     <div class="flex items-center justify-center gap-1">
                         @if (dateOptions.length > 0) {
-                            <p-select
-                                [options]="dateOptions"
+                            <app-select
+                                [items]="dateOptions"
                                 [ngModel]="selectedHistoricalDate"
                                 (ngModelChange)="historicalDateChange.emit($event)"
                                 optionLabel="label"
                                 optionValue="value"
                                 [placeholder]="'FILTRATION.SELECT_DATE' | translate"
                                 [style]="{'min-width': '8rem'}"
-                                size="small" />
+                                [filter]="false"
+                                [required]="false" />
                             @if (selectedHistoricalDate) {
                                 <button pButton type="button" icon="pi pi-times"
                                     class="p-button-text p-button-sm p-button-danger"

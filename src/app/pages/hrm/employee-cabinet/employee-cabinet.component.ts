@@ -12,7 +12,7 @@ import { ProgressBar } from 'primeng/progressbar';
 import { Dialog } from 'primeng/dialog';
 import { TabsModule } from 'primeng/tabs';
 import { TableModule } from 'primeng/table';
-import { Select } from 'primeng/select';
+import { SelectComponent } from '@/layout/component/dialog/select/select.component';
 import { DatePicker } from 'primeng/datepicker';
 import { Textarea } from 'primeng/textarea';
 import { MessageService } from 'primeng/api';
@@ -52,7 +52,7 @@ import {
         Dialog,
         TabsModule,
         TableModule,
-        Select,
+        SelectComponent,
         DatePicker,
         Textarea,
         TranslateModule

@@ -438,20 +438,23 @@
 
         <div class="mb-4">
             <label class="block font-medium mb-2">{{ 'HRM.COMPETENCY.COMPETENCIES_TO_ASSESS' | translate }} *</label>
-            <p-multiselect formControlName="competencies" [options]="standardCompetencies" optionLabel="name"
-                           [placeholder]="'HRM.COMPETENCY.SELECT_COMPETENCIES' | translate" class="w-full" [showClear]="true"></p-multiselect>
+            <app-multi-select formControlName="competencies" [items]="standardCompetencies" optionLabel="name"
+                           [placeholder]="'HRM.COMPETENCY.SELECT_COMPETENCIES' | translate" styleClass="w-full" [showClear]="true"
+                           [required]="true" [submitted]="submitted" [errorMessage]="'HRM.COMPETENCY.COMPETENCIES_REQUIRED' | translate"></app-multi-select>
         </div>
 
         <div class="mb-4">
             <label class="block font-medium mb-2">{{ 'HRM.COMPETENCY.CANDIDATES_EMPLOYEES' | translate }} *</label>
-            <p-multiselect formControlName="candidates" [options]="employees" optionLabel="name"
-                           [placeholder]="'HRM.COMPETENCY.SELECT_EMPLOYEES' | translate" class="w-full" [showClear]="true"></p-multiselect>
+            <app-multi-select formControlName="candidates" [items]="employees" optionLabel="name"
+                           [placeholder]="'HRM.COMPETENCY.SELECT_EMPLOYEES' | translate" styleClass="w-full" [showClear]="true"
+                           [required]="true" [submitted]="submitted" [errorMessage]="'HRM.COMPETENCY.CANDIDATES_REQUIRED' | translate"></app-multi-select>
         </div>
 
         <div class="mb-4">
             <label class="block font-medium mb-2">{{ 'HRM.COMPETENCY.ASSESSORS_EVALUATORS' | translate }} *</label>
-            <p-multiselect formControlName="assessors" [options]="assessors" optionLabel="name"
-                           [placeholder]="'HRM.COMPETENCY.SELECT_ASSESSORS' | translate" class="w-full" [showClear]="true"></p-multiselect>
+            <app-multi-select formControlName="assessors" [items]="assessors" optionLabel="name"
+                           [placeholder]="'HRM.COMPETENCY.SELECT_ASSESSORS' | translate" styleClass="w-full" [showClear]="true"
+                           [required]="true" [submitted]="submitted" [errorMessage]="'HRM.COMPETENCY.ASSESSORS_REQUIRED' | translate"></app-multi-select>
         </div>
     </form>
     <ng-template #footer>
@@ -466,8 +469,15 @@
     <form [formGroup]="blockForm" class="p-4">
         <div class="mb-4">
             <label class="block font-medium mb-2">{{ 'HRM.COMPETENCY.BLOCK_TYPE' | translate }} *</label>
-            <p-select formControlName="block_type" [options]="blockTypes" optionLabel="label"
-                        [placeholder]="'HRM.COMPETENCY.SELECT_TYPE' | translate" class="w-full"></p-select>
+            <app-select
+                formControlName="block_type"
+                [items]="blockTypes"
+                optionLabel="label"
+                [placeholder]="'HRM.COMPETENCY.SELECT_TYPE' | translate"
+                styleClass="w-full"
+                [filter]="false"
+                [submitted]="submitted">
+            </app-select>
         </div>
 
         <div class="mb-4">
@@ -487,8 +497,9 @@
 
         <div class="mb-4">
             <label class="block font-medium mb-2">{{ 'HRM.COMPETENCY.ASSESSED_COMPETENCIES' | translate }} *</label>
-            <p-multiselect formControlName="competencies" [options]="standardCompetencies" optionLabel="name"
-                           [placeholder]="'HRM.COMPETENCY.SELECT_COMPETENCIES' | translate" class="w-full"></p-multiselect>
+            <app-multi-select formControlName="competencies" [items]="standardCompetencies" optionLabel="name"
+                           [placeholder]="'HRM.COMPETENCY.SELECT_COMPETENCIES' | translate" styleClass="w-full"
+                           [required]="true" [submitted]="submitted" [errorMessage]="'HRM.COMPETENCY.COMPETENCIES_REQUIRED' | translate"></app-multi-select>
         </div>
     </form>
     <ng-template #footer>
@@ -630,8 +641,15 @@
     <form [formGroup]="planForm" class="p-4">
         <div class="mb-4">
             <label class="block font-medium mb-2">{{ 'HRM.COMPETENCY.EMPLOYEE' | translate }} *</label>
-            <p-select formControlName="employee_id" [options]="employees" optionLabel="name"
-                        [placeholder]="'HRM.COMPETENCY.SELECT_EMPLOYEE' | translate" class="w-full"></p-select>
+            <app-select
+                formControlName="employee_id"
+                [items]="employees"
+                optionLabel="name"
+                [placeholder]="'HRM.COMPETENCY.SELECT_EMPLOYEE' | translate"
+                styleClass="w-full"
+                [filter]="false"
+                [submitted]="submitted">
+            </app-select>
         </div>
 
         <div class="grid grid-cols-2 gap-4 mb-4">

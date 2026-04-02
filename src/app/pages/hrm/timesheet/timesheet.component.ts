@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ButtonDirective } from 'primeng/button';
 import { Card } from 'primeng/card';
-import { Select } from 'primeng/select';
+import { SelectComponent } from '@/layout/component/dialog/select/select.component';
 import { TableModule } from 'primeng/table';
 import { Tooltip } from 'primeng/tooltip';
 import { Dialog } from 'primeng/dialog';
@@ -34,7 +34,7 @@ import { Department } from '@/core/interfaces/department';
         FormsModule,
         ButtonDirective,
         Card,
-        Select,
+        SelectComponent,
         TableModule,
         Tooltip,
         Dialog,
@@ -58,7 +58,7 @@ export class TimesheetComponent implements OnInit, OnDestroy {
 
     // Options
     months = MONTHS;
-    years: number[] = [];
+    years: { label: string; value: number }[] = [];
     attendanceStatuses = ATTENDANCE_STATUSES;
     daysOfWeek = DAYS_OF_WEEK;
 
@@ -110,7 +110,7 @@ export class TimesheetComponent implements OnInit, OnDestroy {
     private initYears(): void {
         const currentYear = new Date().getFullYear();
         for (let y = currentYear - 2; y <= currentYear + 1; y++) {
-            this.years.push(y);
+            this.years.push({ label: String(y), value: y });
         }
     }
 

@@ -70,8 +70,8 @@
         <div class="flex flex-col gap-4 p-fluid">
             <div class="flex flex-col gap-2">
                 <label for="parent">{{ 'CATEGORIES.PREFIX' | translate }}</label>
-                <p-select id="parent" [options]="categories" formControlName="parent_id" optionLabel="name"
-                               [placeholder]="'CATEGORIES.SELECT_PREFIX' | translate" [appendTo]="'body'"></p-select>
+                <app-select id="parent" [items]="categories" formControlName="parent_id" optionLabel="name" optionValue="id"
+                               [placeholder]="'CATEGORIES.SELECT_PREFIX' | translate" [filter]="false" [required]="false"></app-select>
             </div>
             <div class="flex flex-col gap-2">
                 <label for="name">{{ 'CATEGORIES.CATEGORY' | translate }}</label>

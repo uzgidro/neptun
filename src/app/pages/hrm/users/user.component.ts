@@ -21,7 +21,7 @@ import { Roles } from '@/core/interfaces/roles';
 import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
 import { Password } from 'primeng/password';
-import { MultiSelect } from 'primeng/multiselect';
+import { MultiSelectComponent } from '@/layout/component/dialog/multi-select/multi-select.component';
 import { InputTextComponent } from '@/layout/component/dialog/input-text/input-text.component';
 import { SelectComponent } from '@/layout/component/dialog/select/select.component';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
@@ -48,7 +48,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
         ReactiveFormsModule,
         FormsModule,
         Password,
-        MultiSelect,
+        MultiSelectComponent,
         InputTextComponent,
         SelectComponent,
         DatePickerComponent,

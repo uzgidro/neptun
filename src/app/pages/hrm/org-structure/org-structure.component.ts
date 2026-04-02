@@ -2,7 +2,7 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ButtonDirective } from 'primeng/button';
-import { Select } from 'primeng/select';
+import { SelectComponent } from '@/layout/component/dialog/select/select.component';
 import { TreeModule } from 'primeng/tree';
 import { OrganizationChartModule } from 'primeng/organizationchart';
 import { Dialog } from 'primeng/dialog';
@@ -63,7 +63,7 @@ export interface EmployeeForm {
         CommonModule,
         FormsModule,
         ButtonDirective,
-        Select,
+        SelectComponent,
         TreeModule,
         OrganizationChartModule,
         Dialog,

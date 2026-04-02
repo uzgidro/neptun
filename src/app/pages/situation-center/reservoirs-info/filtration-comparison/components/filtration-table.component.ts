@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FormArray, ReactiveFormsModule } from '@angular/forms';
 import { InputNumberModule } from 'primeng/inputnumber';
-import { SelectModule } from 'primeng/select';
+import { SelectComponent } from '@/layout/component/dialog/select/select.component';
 import { ButtonModule } from 'primeng/button';
 import { TranslateModule } from '@ngx-translate/core';
 import { LocationReading } from '@/core/interfaces/filtration-comparison';
@@ -11,7 +11,7 @@ import { LocationReading } from '@/core/interfaces/filtration-comparison';
 @Component({
     selector: 'app-filtration-table',
     standalone: true,
-    imports: [CommonModule, FormsModule, ReactiveFormsModule, InputNumberModule, SelectModule, ButtonModule, TranslateModule],
+    imports: [CommonModule, FormsModule, ReactiveFormsModule, InputNumberModule, SelectComponent, ButtonModule, TranslateModule],
     templateUrl: './filtration-table.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })

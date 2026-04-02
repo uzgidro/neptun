@@ -143,52 +143,60 @@
             </p-inputGroup>
 
             <!-- Category Filter -->
-            <p-select
-                [options]="categories"
+            <app-select
+                [items]="categories"
                 [(ngModel)]="selectedCategory"
                 (ngModelChange)="applyFilters()"
                 optionLabel="label"
                 optionValue="value"
                 [placeholder]="'FINANCIAL_BLOCK.DEBIT_CREDIT.CATEGORY' | translate"
                 [showClear]="true"
-                class="filter-select"
-            ></p-select>
+                styleClass="filter-select"
+                [required]="false"
+                [filter]="false"
+            ></app-select>
 
             <!-- Department Filter -->
-            <p-select
-                [options]="departments"
+            <app-select
+                [items]="departments"
                 [(ngModel)]="selectedDepartment"
                 (ngModelChange)="applyFilters()"
                 optionLabel="label"
                 optionValue="value"
                 [placeholder]="'FINANCIAL_BLOCK.SALARY.DEPARTMENT' | translate"
                 [showClear]="true"
-                class="filter-select"
-            ></p-select>
+                styleClass="filter-select"
+                [required]="false"
+                [filter]="false"
+            ></app-select>
 
             <!-- Period Filter -->
-            <p-select
-                [options]="periods"
+            <app-select
+                [items]="periods"
                 [(ngModel)]="selectedPeriod"
                 (ngModelChange)="applyFilters()"
                 optionLabel="label"
                 optionValue="value"
                 [placeholder]="'FINANCIAL_BLOCK.KPI.PERIOD' | translate"
                 [showClear]="true"
-                class="filter-select"
-            ></p-select>
+                styleClass="filter-select"
+                [required]="false"
+                [filter]="false"
+            ></app-select>
 
             <!-- Status Filter -->
-            <p-select
-                [options]="statuses"
+            <app-select
+                [items]="statuses"
                 [(ngModel)]="selectedStatus"
                 (ngModelChange)="applyFilters()"
                 optionLabel="label"
                 optionValue="value"
                 [placeholder]="'FINANCIAL_BLOCK.COMMON.STATUS' | translate"
                 [showClear]="true"
-                class="filter-select"
-            ></p-select>
+                styleClass="filter-select"
+                [required]="false"
+                [filter]="false"
+            ></app-select>
 
             <!-- Clear Filters -->
             <p-button
@@ -379,25 +387,29 @@
         <div class="form-row">
             <div class="form-field">
                 <label for="category">{{ 'FINANCIAL_BLOCK.DEBIT_CREDIT.CATEGORY' | translate }}</label>
-                <p-select
+                <app-select
                     id="category"
-                    [options]="categories"
+                    [items]="categories"
                     [(ngModel)]="currentKpi.category"
                     optionLabel="label"
                     optionValue="value"
-                    appendTo="body"
-                ></p-select>
+                    [label]="'FINANCIAL_BLOCK.DEBIT_CREDIT.CATEGORY' | translate"
+                    [required]="false"
+                    [filter]="false"
+                ></app-select>
             </div>
             <div class="form-field">
                 <label for="department">{{ 'FINANCIAL_BLOCK.SALARY.DEPARTMENT' | translate }}</label>
-                <p-select
+                <app-select
                     id="department"
-                    [options]="departments"
+                    [items]="departments"
                     [(ngModel)]="currentKpi.department"
                     optionLabel="label"
                     optionValue="value"
-                    appendTo="body"
-                ></p-select>
+                    [label]="'FINANCIAL_BLOCK.SALARY.DEPARTMENT' | translate"
+                    [required]="false"
+                    [filter]="false"
+                ></app-select>
             </div>
         </div>
 
@@ -405,14 +417,16 @@
         <div class="form-row">
             <div class="form-field">
                 <label for="period">{{ 'FINANCIAL_BLOCK.KPI.PERIOD' | translate }}</label>
-                <p-select
+                <app-select
                     id="period"
-                    [options]="periods"
+                    [items]="periods"
                     [(ngModel)]="currentKpi.period"
                     optionLabel="label"
                     optionValue="value"
-                    appendTo="body"
-                ></p-select>
+                    [label]="'FINANCIAL_BLOCK.KPI.PERIOD' | translate"
+                    [required]="false"
+                    [filter]="false"
+                ></app-select>
             </div>
             <div class="form-field">
                 <label for="periodDate">{{ 'FINANCIAL_BLOCK.COMMON.DATE' | translate }}</label>
@@ -429,14 +443,16 @@
         <div class="form-row">
             <div class="form-field">
                 <label for="unit">{{ 'FINANCIAL_BLOCK.KPI.UNIT' | translate }}</label>
-                <p-select
+                <app-select
                     id="unit"
-                    [options]="units"
+                    [items]="units"
                     [(ngModel)]="currentKpi.unit"
                     optionLabel="label"
                     optionValue="value"
-                    appendTo="body"
-                ></p-select>
+                    [label]="'FINANCIAL_BLOCK.KPI.UNIT' | translate"
+                    [required]="false"
+                    [filter]="false"
+                ></app-select>
             </div>
             <div class="form-field">
                 <label for="weight">{{ 'FINANCIAL_BLOCK.KPI.WEIGHT_PERCENT' | translate }}</label>
@@ -494,14 +510,16 @@
         <div class="form-row">
             <div class="form-field">
                 <label for="trend">{{ 'FINANCIAL_BLOCK.KPI.TREND' | translate }}</label>
-                <p-select
+                <app-select
                     id="trend"
-                    [options]="trends"
+                    [items]="trends"
                     [(ngModel)]="currentKpi.trend"
                     optionLabel="label"
                     optionValue="value"
-                    appendTo="body"
-                ></p-select>
+                    [label]="'FINANCIAL_BLOCK.KPI.TREND' | translate"
+                    [required]="false"
+                    [filter]="false"
+                ></app-select>
             </div>
             <div class="form-field">
                 <label for="responsiblePerson">{{ 'FINANCIAL_BLOCK.KPI.RESPONSIBLE' | translate }}</label>

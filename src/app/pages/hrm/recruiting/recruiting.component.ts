@@ -15,7 +15,7 @@ import { Dialog } from 'primeng/dialog';
 import { ProgressBar } from 'primeng/progressbar';
 import { Rating } from 'primeng/rating';
 import { Textarea } from 'primeng/textarea';
-import { Select } from 'primeng/select';
+import { SelectComponent } from '@/layout/component/dialog/select/select.component';
 import { DatePicker } from 'primeng/datepicker';
 import { InputNumber } from 'primeng/inputnumber';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -63,7 +63,7 @@ import {
         ProgressBar,
         Rating,
         Textarea,
-        Select,
+        SelectComponent,
         DatePicker,
         InputNumber,
         TranslateModule

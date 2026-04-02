@@ -12,7 +12,7 @@ import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
 import { InputText } from 'primeng/inputtext';
 import { Tooltip } from 'primeng/tooltip';
-import { Select } from 'primeng/select';
+
 import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
 import { InputTextComponent } from '@/layout/component/dialog/input-text/input-text.component';
 import { SelectComponent } from '@/layout/component/dialog/select/select.component';
@@ -36,7 +36,6 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
         InputIcon,
         InputText,
         Tooltip,
-        Select,
         DialogComponent,
         InputTextComponent,
         SelectComponent,
@@ -159,19 +158,16 @@ export class CallsComponent implements OnInit, OnDestroy {
         this.selectedCall = call;
         this.submitted = false;
 
-        const typeOption = this.typeFormOptions.find(t => t.value === call.type);
-        const statusOption = this.statusFormOptions.find(s => s.value === call.status);
-
         this.callForm.patchValue({
             date: call.date ? new Date(call.date) : null,
             time: call.time || '',
-            type: typeOption || null,
+            type: call.type || null,
             callerName: call.callerName,
             callerPhone: call.callerPhone,
             receiverName: call.receiverName || '',
             receiverPhone: call.receiverPhone || '',
             duration: call.duration || null,
-            status: statusOption || null,
+            status: call.status || null,
             notes: call.notes || ''
         });
 
@@ -197,13 +193,13 @@ export class CallsComponent implements OnInit, OnDestroy {
                 ? formValue.date.toISOString().split('T')[0]
                 : formValue.date,
             time: formValue.time,
-            type: formValue.type?.value || formValue.type,
+            type: formValue.type,
             callerName: formValue.callerName,
             callerPhone: formValue.callerPhone,
             receiverName: formValue.receiverName || undefined,
             receiverPhone: formValue.receiverPhone || undefined,
             duration: formValue.duration || undefined,
-            status: formValue.status?.value || formValue.status,
+            status: formValue.status,
             notes: formValue.notes || undefined
         };
 

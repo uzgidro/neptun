@@ -20,25 +20,29 @@
                         <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" [placeholder]="'COMMON.SEARCH' | translate" />
                     </p-iconfield>
 
-                    <p-select
+                    <app-select
                         [(ngModel)]="selectedType"
-                        [options]="typeOptions"
+                        [items]="typeOptions"
                         optionLabel="name"
                         optionValue="value"
                         [placeholder]="'CALLS.TYPE' | translate"
-                        (onChange)="applyFilters()"
-                        [style]="{ minWidth: '150px' }">
-                    </p-select>
+                        (ngModelChange)="applyFilters()"
+                        [style]="{ minWidth: '150px' }"
+                        [required]="false"
+                        [filter]="false">
+                    </app-select>
 
-                    <p-select
+                    <app-select
                         [(ngModel)]="selectedStatus"
-                        [options]="statusOptions"
+                        [items]="statusOptions"
                         optionLabel="name"
                         optionValue="value"
                         [placeholder]="'CALLS.STATUS' | translate"
-                        (onChange)="applyFilters()"
-                        [style]="{ minWidth: '150px' }">
-                    </p-select>
+                        (ngModelChange)="applyFilters()"
+                        [style]="{ minWidth: '150px' }"
+                        [required]="false"
+                        [filter]="false">
+                    </app-select>
                 </div>
 
                 <button pButton (click)="openDialog()">
@@ -178,6 +182,7 @@
             formControlName="type"
             [label]="'CALLS.CALL_TYPE' | translate"
             [items]="typeFormOptions"
+            optionValue="value"
             [submitted]="submitted"
             [errorMessage]="'CALLS.TYPE_REQUIRED' | translate"
             [required]="true">
@@ -224,6 +229,7 @@
             formControlName="status"
             [label]="'CALLS.STATUS' | translate"
             [items]="statusFormOptions"
+            optionValue="value"
             [submitted]="submitted"
             [errorMessage]="'CALLS.STATUS_REQUIRED' | translate"
             [required]="true">

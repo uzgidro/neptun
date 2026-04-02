@@ -15,38 +15,46 @@
         <div class="flex flex-wrap gap-4 items-end">
             <div class="flex flex-col gap-2">
                 <label class="font-medium text-surface-700 dark:text-surface-300">{{ 'HRM.TIMESHEET.MONTH' | translate }}</label>
-                <p-select
-                    [options]="months"
+                <app-select
+                    [items]="months"
                     [(ngModel)]="selectedMonth"
                     optionLabel="label"
                     optionValue="value"
                     [placeholder]="'HRM.TIMESHEET.SELECT_MONTH' | translate"
-                    class="w-48"
-                    (onChange)="onFilterChange()">
-                </p-select>
+                    styleClass="w-48"
+                    [required]="false"
+                    [filter]="false"
+                    (ngModelChange)="onFilterChange()">
+                </app-select>
             </div>
             <div class="flex flex-col gap-2">
                 <label class="font-medium text-surface-700 dark:text-surface-300">{{ 'HRM.TIMESHEET.YEAR' | translate }}</label>
-                <p-select
-                    [options]="years"
+                <app-select
+                    [items]="years"
                     [(ngModel)]="selectedYear"
+                    optionLabel="label"
+                    optionValue="value"
                     [placeholder]="'HRM.TIMESHEET.SELECT_YEAR' | translate"
-                    class="w-32"
-                    (onChange)="onFilterChange()">
-                </p-select>
+                    styleClass="w-32"
+                    [required]="false"
+                    [filter]="false"
+                    (ngModelChange)="onFilterChange()">
+                </app-select>
             </div>
             <div class="flex flex-col gap-2">
                 <label class="font-medium text-surface-700 dark:text-surface-300">{{ 'HRM.TIMESHEET.DEPARTMENT' | translate }}</label>
-                <p-select
-                    [options]="departments"
+                <app-select
+                    [items]="departments"
                     [(ngModel)]="selectedDepartment"
                     optionLabel="name"
                     optionValue="id"
                     [placeholder]="'HRM.TIMESHEET.ALL_DEPARTMENTS' | translate"
                     [showClear]="true"
-                    class="w-56"
-                    (onChange)="onFilterChange()">
-                </p-select>
+                    styleClass="w-56"
+                    [required]="false"
+                    [filter]="false"
+                    (ngModelChange)="onFilterChange()">
+                </app-select>
             </div>
         </div>
     </p-card>
@@ -231,14 +239,15 @@
 
         <div class="flex flex-col gap-2">
             <label class="font-medium text-surface-700 dark:text-surface-300">{{ 'HRM.TIMESHEET.STATUS' | translate }}</label>
-            <p-select
-                [options]="attendanceStatuses"
+            <app-select
+                [items]="attendanceStatuses"
                 [(ngModel)]="editForm.status"
                 optionLabel="label"
                 optionValue="value"
                 [placeholder]="'HRM.TIMESHEET.SELECT_STATUS' | translate"
-                class="w-full">
-            </p-select>
+                styleClass="w-full"
+                [filter]="false">
+            </app-select>
         </div>
 
         <div class="grid grid-cols-2 gap-4">

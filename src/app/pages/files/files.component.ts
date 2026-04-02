@@ -5,7 +5,7 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
 import { InputText } from 'primeng/inputtext';
-import { Select } from 'primeng/select';
+import { SelectComponent } from '@/layout/component/dialog/select/select.component';
 import { Table, TableModule } from 'primeng/table';
 import { ApiService } from '@/core/services/api.service';
 import { MessageService } from 'primeng/api';
@@ -18,7 +18,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-files',
-    imports: [Button, ButtonDirective, ButtonIcon, ButtonLabel, Dialog, FormsModule, IconField, InputIcon, InputText, ReactiveFormsModule, Select, TableModule, FileUpload, DatePickerComponent, TranslateModule],
+    imports: [Button, ButtonDirective, ButtonIcon, ButtonLabel, Dialog, FormsModule, IconField, InputIcon, InputText, ReactiveFormsModule, SelectComponent, TableModule, FileUpload, DatePickerComponent, TranslateModule],
     templateUrl: './files.component.html',
     styleUrl: './files.component.scss'
 })
@@ -75,7 +75,7 @@ export class FilesComponent implements OnInit, OnDestroy {
         const day = String(date.getDate()).padStart(2, '0');
         const dateStr = `${year}-${month}-${day}`;
 
-        const uploadObservables = event.files.map((file) => this.apiService.uploadFile(file, category_id.id, dateStr));
+        const uploadObservables = event.files.map((file) => this.apiService.uploadFile(file, category_id, dateStr));
 
         forkJoin(uploadObservables)
             .pipe(

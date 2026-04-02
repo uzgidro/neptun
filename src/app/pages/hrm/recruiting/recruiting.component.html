@@ -432,50 +432,54 @@
             <div class="grid grid-cols-2 gap-4">
                 <div class="field">
                     <label for="department" class="font-medium">{{ 'HRM.RECRUITING.VACANCY.DEPARTMENT' | translate }} *</label>
-                    <p-select
-                        id="department"
+                    <app-select
                         formControlName="department_id"
-                        [options]="departments"
+                        [items]="departments"
                         optionLabel="name"
                         [placeholder]="'HRM.RECRUITING.VACANCY.SELECT_DEPARTMENT' | translate"
-                        class="w-full">
-                    </p-select>
+                        styleClass="w-full"
+                        [filter]="false"
+                        [submitted]="submitted">
+                    </app-select>
                 </div>
                 <div class="field">
                     <label for="position" class="font-medium">{{ 'HRM.RECRUITING.VACANCY.POSITION' | translate }} *</label>
-                    <p-select
-                        id="position"
+                    <app-select
                         formControlName="position_id"
-                        [options]="positions"
+                        [items]="positions"
                         optionLabel="name"
                         [placeholder]="'HRM.RECRUITING.VACANCY.SELECT_POSITION' | translate"
-                        class="w-full">
-                    </p-select>
+                        styleClass="w-full"
+                        [filter]="false"
+                        [submitted]="submitted">
+                    </app-select>
                 </div>
             </div>
 
             <div class="grid grid-cols-2 gap-4">
                 <div class="field">
                     <label for="employment_type" class="font-medium">{{ 'HRM.RECRUITING.VACANCY.EMPLOYMENT_TYPE' | translate }} *</label>
-                    <p-select
-                        id="employment_type"
+                    <app-select
                         formControlName="employment_type"
-                        [options]="employmentTypes"
+                        [items]="employmentTypes"
                         optionLabel="label"
                         [placeholder]="'HRM.RECRUITING.VACANCY.SELECT_TYPE' | translate"
-                        class="w-full">
-                    </p-select>
+                        styleClass="w-full"
+                        [filter]="false"
+                        [submitted]="submitted">
+                    </app-select>
                 </div>
                 <div class="field">
                     <label for="priority" class="font-medium">{{ 'HRM.RECRUITING.VACANCY.PRIORITY' | translate }}</label>
-                    <p-select
-                        id="priority"
+                    <app-select
                         formControlName="priority"
-                        [options]="vacancyPriorities"
+                        [items]="vacancyPriorities"
                         optionLabel="label"
                         [placeholder]="'HRM.RECRUITING.VACANCY.PRIORITY_NORMAL' | translate"
-                        class="w-full">
-                    </p-select>
+                        styleClass="w-full"
+                        [required]="false"
+                        [filter]="false">
+                    </app-select>
                 </div>
             </div>
 
@@ -538,14 +542,15 @@
         <div class="grid grid-cols-1 gap-4">
             <div class="field">
                 <label for="vacancy" class="font-medium">{{ 'HRM.RECRUITING.CANDIDATE.VACANCY' | translate }} *</label>
-                <p-select
-                    id="vacancy"
+                <app-select
                     formControlName="vacancy_id"
-                    [options]="vacanciesForSelect"
+                    [items]="vacanciesForSelect"
                     optionLabel="name"
                     [placeholder]="'HRM.RECRUITING.CANDIDATE.SELECT_VACANCY' | translate"
-                    class="w-full">
-                </p-select>
+                    styleClass="w-full"
+                    [filter]="false"
+                    [submitted]="submitted">
+                </app-select>
             </div>
 
             <div class="field">
@@ -565,14 +570,15 @@
 
             <div class="field">
                 <label for="source" class="font-medium">{{ 'HRM.RECRUITING.CANDIDATE.SOURCE' | translate }} *</label>
-                <p-select
-                    id="source"
+                <app-select
                     formControlName="source"
-                    [options]="candidateSources"
+                    [items]="candidateSources"
                     optionLabel="label"
                     [placeholder]="'HRM.RECRUITING.CANDIDATE.SELECT_SOURCE' | translate"
-                    class="w-full">
-                </p-select>
+                    styleClass="w-full"
+                    [filter]="false"
+                    [submitted]="submitted">
+                </app-select>
             </div>
 
             <div class="field">
@@ -779,26 +785,26 @@
         <div class="grid grid-cols-1 gap-4">
             <div class="field">
                 <label for="interview_type" class="font-medium">{{ 'HRM.RECRUITING.INTERVIEW.TYPE' | translate }} *</label>
-                <p-select
-                    id="interview_type"
+                <app-select
                     formControlName="interview_type"
-                    [options]="interviewTypes"
+                    [items]="interviewTypes"
                     optionLabel="label"
                     [placeholder]="'HRM.RECRUITING.INTERVIEW.SELECT_TYPE' | translate"
-                    class="w-full">
-                </p-select>
+                    styleClass="w-full"
+                    [filter]="false">
+                </app-select>
             </div>
 
             <div class="field">
                 <label for="interviewer" class="font-medium">{{ 'HRM.RECRUITING.INTERVIEW.INTERVIEWER' | translate }} *</label>
-                <p-select
-                    id="interviewer"
+                <app-select
                     formControlName="interviewer_id"
-                    [options]="interviewers"
+                    [items]="interviewers"
                     optionLabel="name"
                     [placeholder]="'HRM.RECRUITING.INTERVIEW.SELECT_INTERVIEWER' | translate"
-                    class="w-full">
-                </p-select>
+                    styleClass="w-full"
+                    [filter]="false">
+                </app-select>
             </div>
 
             <div class="field">
@@ -852,14 +858,14 @@
 
             <div class="field">
                 <label for="recommendation" class="font-medium">{{ 'HRM.RECRUITING.INTERVIEW.RECOMMENDATION' | translate }} *</label>
-                <p-select
-                    id="recommendation"
+                <app-select
                     formControlName="recommendation"
-                    [options]="interviewRecommendations"
+                    [items]="interviewRecommendations"
                     optionLabel="label"
                     [placeholder]="'HRM.RECRUITING.INTERVIEW.SELECT_RECOMMENDATION' | translate"
-                    class="w-full">
-                </p-select>
+                    styleClass="w-full"
+                    [filter]="false">
+                </app-select>
             </div>
 
             <div class="field">

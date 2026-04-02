@@ -101,42 +101,50 @@
                             </p-inputgroup>
                         </div>
                         <div class="flex flex-wrap gap-2">
-                            <p-select
-                                [options]="documentTypes"
+                            <app-select
+                                [items]="documentTypes"
                                 [(ngModel)]="selectedType"
                                 optionLabel="label"
                                 optionValue="value"
                                 [placeholder]="'HRM.DOCUMENTS.TYPE' | translate"
                                 [showClear]="true"
-                                class="w-40">
-                            </p-select>
-                            <p-select
-                                [options]="documentCategories"
+                                styleClass="w-40"
+                                [required]="false"
+                                [filter]="false">
+                            </app-select>
+                            <app-select
+                                [items]="documentCategories"
                                 [(ngModel)]="selectedCategory"
                                 optionLabel="label"
                                 optionValue="value"
                                 [placeholder]="'HRM.DOCUMENTS.CATEGORY' | translate"
                                 [showClear]="true"
-                                class="w-44">
-                            </p-select>
-                            <p-select
-                                [options]="documentStatuses"
+                                styleClass="w-44"
+                                [required]="false"
+                                [filter]="false">
+                            </app-select>
+                            <app-select
+                                [items]="documentStatuses"
                                 [(ngModel)]="selectedStatus"
                                 optionLabel="label"
                                 optionValue="value"
                                 [placeholder]="'HRM.DOCUMENTS.STATUS' | translate"
                                 [showClear]="true"
-                                class="w-40">
-                            </p-select>
-                            <p-select
-                                [options]="departments"
+                                styleClass="w-40"
+                                [required]="false"
+                                [filter]="false">
+                            </app-select>
+                            <app-select
+                                [items]="departments"
                                 [(ngModel)]="selectedDepartment"
                                 optionLabel="name"
                                 optionValue="id"
                                 [placeholder]="'HRM.DOCUMENTS.DEPARTMENT' | translate"
                                 [showClear]="true"
-                                class="w-44">
-                            </p-select>
+                                styleClass="w-44"
+                                [required]="false"
+                                [filter]="false">
+                            </app-select>
                             <button pButton icon="pi pi-filter-slash" class="p-button-outlined" [pTooltip]="'HRM.DOCUMENTS.CLEAR_FILTERS' | translate" (click)="clearFilters()"></button>
                         </div>
                     </div>
@@ -297,25 +305,27 @@
         <div class="grid grid-cols-2 gap-4">
             <div class="flex flex-col gap-2">
                 <label class="font-medium text-surface-700 dark:text-surface-300">{{ 'HRM.DOCUMENTS.DOCUMENT_TYPE_LABEL' | translate }}</label>
-                <p-select
-                    [options]="documentTypes"
+                <app-select
+                    [items]="documentTypes"
                     [(ngModel)]="documentForm.type"
                     optionLabel="label"
                     optionValue="value"
                     [placeholder]="'HRM.DOCUMENTS.SELECT_TYPE' | translate"
-                    class="w-full">
-                </p-select>
+                    styleClass="w-full"
+                    [filter]="false">
+                </app-select>
             </div>
             <div class="flex flex-col gap-2">
                 <label class="font-medium text-surface-700 dark:text-surface-300">{{ 'HRM.DOCUMENTS.CATEGORY_LABEL' | translate }}</label>
-                <p-select
-                    [options]="documentCategories"
+                <app-select
+                    [items]="documentCategories"
                     [(ngModel)]="documentForm.category"
                     optionLabel="label"
                     optionValue="value"
                     [placeholder]="'HRM.DOCUMENTS.SELECT_CATEGORY' | translate"
-                    class="w-full">
-                </p-select>
+                    styleClass="w-full"
+                    [filter]="false">
+                </app-select>
             </div>
         </div>
 
@@ -326,30 +336,30 @@
 
         <div class="flex flex-col gap-2">
             <label class="font-medium text-surface-700 dark:text-surface-300">{{ 'HRM.DOCUMENTS.EMPLOYEE_LABEL' | translate }}</label>
-            <p-select
-                [options]="employees"
+            <app-select
+                [items]="employees"
                 [(ngModel)]="documentForm.employee_id"
                 optionLabel="name"
                 optionValue="id"
                 [placeholder]="'HRM.DOCUMENTS.SELECT_EMPLOYEE' | translate"
                 [showClear]="true"
                 [filter]="true"
-                [filterPlaceholder]="'HRM.DOCUMENTS.SEARCH_DOTS' | translate"
-                class="w-full">
-            </p-select>
+                styleClass="w-full">
+            </app-select>
         </div>
 
         <div class="flex flex-col gap-2">
             <label class="font-medium text-surface-700 dark:text-surface-300">{{ 'HRM.DOCUMENTS.DEPARTMENT_LABEL' | translate }}</label>
-            <p-select
-                [options]="departments"
+            <app-select
+                [items]="departments"
                 [(ngModel)]="documentForm.department_id"
                 optionLabel="name"
                 optionValue="id"
                 [placeholder]="'HRM.DOCUMENTS.SELECT_DEPARTMENT' | translate"
                 [showClear]="true"
-                class="w-full">
-            </p-select>
+                styleClass="w-full"
+                [filter]="false">
+            </app-select>
         </div>
 
         <div class="flex flex-col gap-2">
@@ -566,14 +576,15 @@
     <div class="flex flex-col gap-4">
         <div class="flex flex-col gap-2">
             <label class="font-medium text-surface-700 dark:text-surface-300">{{ 'HRM.DOCUMENTS.DOCUMENT_TYPE_LABEL' | translate }}</label>
-            <p-select
-                [options]="documentTypes"
+            <app-select
+                [items]="documentTypes"
                 [(ngModel)]="requestForm.document_type"
                 optionLabel="label"
                 optionValue="value"
                 [placeholder]="'HRM.DOCUMENTS.SELECT_TYPE' | translate"
-                class="w-full">
-            </p-select>
+                styleClass="w-full"
+                [filter]="false">
+            </app-select>
         </div>
 
         <div class="flex flex-col gap-2">

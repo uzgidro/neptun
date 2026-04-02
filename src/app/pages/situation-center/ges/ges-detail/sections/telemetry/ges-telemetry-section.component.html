@@ -3,25 +3,29 @@
     <div class="flex flex-wrap items-center gap-3">
         <div class="flex items-center gap-2">
             <label class="text-sm text-surface-500">{{ 'GES_DETAIL.TELEMETRY.DEVICE_GROUP' | translate }}:</label>
-            <p-select
+            <app-select
                 [(ngModel)]="selectedDeviceGroup"
-                [options]="deviceGroups"
+                [items]="deviceGroups"
                 optionLabel="label"
                 optionValue="value"
                 [placeholder]="'GES_DETAIL.TELEMETRY.ALL_GROUPS' | translate"
-                [style]="{ 'min-width': '180px' }">
-            </p-select>
+                [style]="{ 'min-width': '180px' }"
+                [filter]="false"
+                [required]="false">
+            </app-select>
         </div>
         <div class="flex items-center gap-2">
             <label class="text-sm text-surface-500">{{ 'GES_DETAIL.TELEMETRY.DEVICE' | translate }}:</label>
-            <p-select
+            <app-select
                 [(ngModel)]="selectedDevice"
-                [options]="devices"
+                [items]="devices"
                 optionLabel="label"
                 optionValue="value"
                 [placeholder]="'GES_DETAIL.TELEMETRY.ALL_DEVICES' | translate"
-                [style]="{ 'min-width': '180px' }">
-            </p-select>
+                [style]="{ 'min-width': '180px' }"
+                [filter]="false"
+                [required]="false">
+            </app-select>
         </div>
     </div>
     <div class="flex items-center gap-2">

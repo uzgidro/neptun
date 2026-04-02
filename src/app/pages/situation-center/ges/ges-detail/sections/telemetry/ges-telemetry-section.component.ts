@@ -10,7 +10,7 @@ import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
 import { TooltipModule } from 'primeng/tooltip';
 import { TagModule } from 'primeng/tag';
-import { SelectModule } from 'primeng/select';
+import { SelectComponent } from '@/layout/component/dialog/select/select.component';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MessageService } from 'primeng/api';
 
@@ -32,7 +32,7 @@ interface FlatTelemetryRow {
 @Component({
     selector: 'app-ges-telemetry-section',
     standalone: true,
-    imports: [CommonModule, FormsModule, TableModule, ButtonDirective, ButtonIcon, InputText, IconField, InputIcon, TooltipModule, TagModule, SelectModule, TranslateModule, DatePipe, DecimalPipe],
+    imports: [CommonModule, FormsModule, TableModule, ButtonDirective, ButtonIcon, InputText, IconField, InputIcon, TooltipModule, TagModule, SelectComponent, TranslateModule, DatePipe, DecimalPipe],
     templateUrl: './ges-telemetry-section.component.html',
     styleUrl: './ges-telemetry-section.component.scss'
 })

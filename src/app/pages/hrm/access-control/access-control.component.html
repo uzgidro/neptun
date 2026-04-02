@@ -112,10 +112,28 @@
                             <input pInputText [(ngModel)]="searchQuery" [placeholder]="'HRM.ACCESS_CONTROL.SEARCH_PLACEHOLDER' | translate" class="w-full" />
                         </p-inputgroup>
                     </div>
-                    <p-select [options]="cardStatuses" [(ngModel)]="selectedCardStatus" optionLabel="label" optionValue="value"
-                        [placeholder]="'HRM.ACCESS_CONTROL.STATUS' | translate" [showClear]="true" class="w-40"></p-select>
-                    <p-select [options]="zones" [(ngModel)]="selectedZone" optionLabel="name" optionValue="id"
-                        [placeholder]="'HRM.ACCESS_CONTROL.ZONE' | translate" [showClear]="true" class="w-48"></p-select>
+                    <app-select
+                        [items]="cardStatuses"
+                        [(ngModel)]="selectedCardStatus"
+                        optionLabel="label"
+                        optionValue="value"
+                        [placeholder]="'HRM.ACCESS_CONTROL.STATUS' | translate"
+                        [showClear]="true"
+                        styleClass="w-40"
+                        [required]="false"
+                        [filter]="false">
+                    </app-select>
+                    <app-select
+                        [items]="zones"
+                        [(ngModel)]="selectedZone"
+                        optionLabel="name"
+                        optionValue="id"
+                        [placeholder]="'HRM.ACCESS_CONTROL.ZONE' | translate"
+                        [showClear]="true"
+                        styleClass="w-48"
+                        [required]="false"
+                        [filter]="false">
+                    </app-select>
                     <button pButton icon="pi pi-filter-slash" class="p-button-outlined" [pTooltip]="'HRM.ACCESS_CONTROL.RESET' | translate" (click)="clearFilters()"></button>
                 </div>
 
@@ -184,10 +202,28 @@
             <!-- Logs Tab -->
             <p-tabpanel [value]="1">
                 <div class="flex flex-wrap gap-4 items-end mb-4">
-                    <p-select [options]="accessEventStatuses" [(ngModel)]="selectedLogStatus" optionLabel="label" optionValue="value"
-                        [placeholder]="'HRM.ACCESS_CONTROL.STATUS' | translate" [showClear]="true" class="w-40"></p-select>
-                    <p-select [options]="zones" [(ngModel)]="selectedZone" optionLabel="name" optionValue="id"
-                        [placeholder]="'HRM.ACCESS_CONTROL.ZONE' | translate" [showClear]="true" class="w-48"></p-select>
+                    <app-select
+                        [items]="accessEventStatuses"
+                        [(ngModel)]="selectedLogStatus"
+                        optionLabel="label"
+                        optionValue="value"
+                        [placeholder]="'HRM.ACCESS_CONTROL.STATUS' | translate"
+                        [showClear]="true"
+                        styleClass="w-40"
+                        [required]="false"
+                        [filter]="false">
+                    </app-select>
+                    <app-select
+                        [items]="zones"
+                        [(ngModel)]="selectedZone"
+                        optionLabel="name"
+                        optionValue="id"
+                        [placeholder]="'HRM.ACCESS_CONTROL.ZONE' | translate"
+                        [showClear]="true"
+                        styleClass="w-48"
+                        [required]="false"
+                        [filter]="false">
+                    </app-select>
                     <button pButton icon="pi pi-refresh" class="p-button-outlined" [pTooltip]="'HRM.ACCESS_CONTROL.REFRESH' | translate" (click)="loadLogs()"></button>
                 </div>
 
@@ -339,9 +375,16 @@
     <div class="flex flex-col gap-4">
         <div class="flex flex-col gap-2">
             <label class="font-medium text-surface-700 dark:text-surface-300">{{ 'HRM.ACCESS_CONTROL.EMPLOYEE' | translate }} *</label>
-            <p-select [options]="employees" [(ngModel)]="cardForm.employee_id" optionLabel="name" optionValue="id"
-                [placeholder]="'HRM.ACCESS_CONTROL.SELECT_EMPLOYEE' | translate" [filter]="true" [filterPlaceholder]="'COMMON.SEARCH' | translate" class="w-full"
-                [disabled]="isEditMode"></p-select>
+            <app-select
+                [items]="employees"
+                [(ngModel)]="cardForm.employee_id"
+                optionLabel="name"
+                optionValue="id"
+                [placeholder]="'HRM.ACCESS_CONTROL.SELECT_EMPLOYEE' | translate"
+                [filter]="true"
+                styleClass="w-full"
+                [disable]="isEditMode">
+            </app-select>
         </div>
 
         <div class="grid grid-cols-2 gap-4">

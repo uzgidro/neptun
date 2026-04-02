@@ -2,7 +2,7 @@ import { Component, EventEmitter, inject, Input, OnChanges, Output, SimpleChange
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Dialog } from 'primeng/dialog';
-import { Select } from 'primeng/select';
+import { SelectComponent } from '@/layout/component/dialog/select/select.component';
 import { Textarea } from 'primeng/textarea';
 import { ButtonDirective, ButtonLabel } from 'primeng/button';
 import { SignDocumentRequest } from '@/core/interfaces/chancellery/signature';
@@ -18,7 +18,7 @@ import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-
         FormsModule,
         ReactiveFormsModule,
         Dialog,
-        Select,
+        SelectComponent,
         Textarea,
         ButtonDirective,
         ButtonLabel,
@@ -65,18 +65,17 @@ import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-
                     <label class="font-medium text-sm" for="executor">
                         {{ 'CHANCELLERY.SIGNATURE.ASSIGNED_EXECUTOR' | translate }}
                     </label>
-                    <p-select
-                        id="executor"
+                    <app-select
                         formControlName="assigned_executor_id"
-                        [options]="contacts"
+                        [items]="contacts"
                         optionLabel="name"
                         optionValue="id"
                         [placeholder]="'CHANCELLERY.SIGNATURE.SELECT_EXECUTOR' | translate"
-                        [style]="{ width: '100%' }"
-                        [showClear]="true"
                         [filter]="true"
-                        filterBy="name">
-                    </p-select>
+                        [showClear]="true"
+                        [submitted]="false"
+                        [required]="false"
+                    ></app-select>
                 </div>
 
                 <!-- Assigned Due Date -->

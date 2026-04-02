@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { FormArray, ReactiveFormsModule } from '@angular/forms';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { CheckboxModule } from 'primeng/checkbox';
-import { SelectModule } from 'primeng/select';
+import { SelectComponent } from '@/layout/component/dialog/select/select.component';
 import { ButtonModule } from 'primeng/button';
 import { TranslateModule } from '@ngx-translate/core';
 import { PiezoReading, PiezometerCounts } from '@/core/interfaces/filtration-comparison';
@@ -12,7 +12,7 @@ import { PiezoReading, PiezometerCounts } from '@/core/interfaces/filtration-com
 @Component({
     selector: 'app-piezometer-table',
     standalone: true,
-    imports: [CommonModule, FormsModule, ReactiveFormsModule, InputNumberModule, CheckboxModule, SelectModule, ButtonModule, TranslateModule],
+    imports: [CommonModule, FormsModule, ReactiveFormsModule, InputNumberModule, CheckboxModule, SelectComponent, ButtonModule, TranslateModule],
     templateUrl: './piezometer-table.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })

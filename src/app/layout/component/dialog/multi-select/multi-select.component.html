@@ -1,6 +1,6 @@
 @if (placeholder !== undefined) {
     @if (optionValue) {
-        <p-select
+        <p-multiSelect
             [inputId]="uniqueId"
             [options]="items"
 
@@ -20,12 +20,15 @@
             [placeholder]="placeholder"
             [styleClass]="styleClass"
             [style]="style ?? {}"
+            [display]="display"
+            [maxSelectedLabels]="maxSelectedLabels"
+            [selectionLimit]="selectionLimit"
 
-            [ngClass]="{ 'ng-invalid ng-dirty': submitted && required && !internalValue }"
+            [ngClass]="{ 'ng-invalid ng-dirty': submitted && required && isEmpty }"
         >
-        </p-select>
+        </p-multiSelect>
     } @else {
-        <p-select
+        <p-multiSelect
             [inputId]="uniqueId"
             [options]="items"
 
@@ -44,16 +47,19 @@
             [placeholder]="placeholder"
             [styleClass]="styleClass"
             [style]="style ?? {}"
+            [display]="display"
+            [maxSelectedLabels]="maxSelectedLabels"
+            [selectionLimit]="selectionLimit"
 
-            [ngClass]="{ 'ng-invalid ng-dirty': submitted && required && !internalValue }"
+            [ngClass]="{ 'ng-invalid ng-dirty': submitted && required && isEmpty }"
         >
-        </p-select>
+        </p-multiSelect>
     }
 } @else {
     <div class="mb-4">
         <p-floatlabel>
             @if (optionValue) {
-                <p-select
+                <p-multiSelect
                     [inputId]="uniqueId"
                     [options]="items"
 
@@ -73,12 +79,15 @@
                     [styleClass]="styleClass"
                     [style]="style ?? { width: '100%' }"
                     [required]="required"
+                    [display]="display"
+                    [maxSelectedLabels]="maxSelectedLabels"
+                    [selectionLimit]="selectionLimit"
 
-                    [ngClass]="{ 'ng-invalid ng-dirty': submitted && required && !internalValue }"
+                    [ngClass]="{ 'ng-invalid ng-dirty': submitted && required && isEmpty }"
                 >
-                </p-select>
+                </p-multiSelect>
             } @else {
-                <p-select
+                <p-multiSelect
                     [inputId]="uniqueId"
                     [options]="items"
 
@@ -97,16 +106,19 @@
                     [styleClass]="styleClass"
                     [style]="style ?? { width: '100%' }"
                     [required]="required"
+                    [display]="display"
+                    [maxSelectedLabels]="maxSelectedLabels"
+                    [selectionLimit]="selectionLimit"
 
-                    [ngClass]="{ 'ng-invalid ng-dirty': submitted && required && !internalValue }"
+                    [ngClass]="{ 'ng-invalid ng-dirty': submitted && required && isEmpty }"
                 >
-                </p-select>
+                </p-multiSelect>
             }
 
             <label [for]="uniqueId">{{ label }}</label>
         </p-floatlabel>
 
-        @if (submitted && required && !internalValue) {
+        @if (submitted && required && isEmpty) {
             <p-message class="mt-2" severity="error" variant="simple" size="small">{{ errorMessage }}</p-message>
         }
     </div>

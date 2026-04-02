@@ -20,25 +20,29 @@
                         <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" [placeholder]="'COMMON.SEARCH' | translate" />
                     </p-iconfield>
 
-                    <p-select
+                    <app-select
                         [(ngModel)]="selectedTypeId"
-                        [options]="typeOptions"
+                        [items]="typeOptions"
                         optionLabel="name"
                         optionValue="value"
                         [placeholder]="'CHANCELLERY.FILTERS.TYPE' | translate"
-                        (onChange)="applyFilters()"
-                        [style]="{ minWidth: '180px' }">
-                    </p-select>
+                        (ngModelChange)="applyFilters()"
+                        [style]="{ minWidth: '180px' }"
+                        [required]="false"
+                        [filter]="false">
+                    </app-select>
 
-                    <p-select
+                    <app-select
                         [(ngModel)]="selectedStatusId"
-                        [options]="statusOptions"
+                        [items]="statusOptions"
                         optionLabel="name"
                         optionValue="value"
                         [placeholder]="'CHANCELLERY.FILTERS.STATUS' | translate"
-                        (onChange)="applyFilters()"
-                        [style]="{ minWidth: '180px' }">
-                    </p-select>
+                        (ngModelChange)="applyFilters()"
+                        [style]="{ minWidth: '180px' }"
+                        [required]="false"
+                        [filter]="false">
+                    </app-select>
                 </div>
 
                 <button pButton (click)="openDialog()">

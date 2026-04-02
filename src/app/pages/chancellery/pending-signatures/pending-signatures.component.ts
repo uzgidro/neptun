@@ -10,8 +10,8 @@ import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
 import { InputText } from 'primeng/inputtext';
 import { Tooltip } from 'primeng/tooltip';
-import { Select } from 'primeng/select';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { SelectComponent } from '@/layout/component/dialog/select/select.component';
 
 import {
     PendingDocument,
@@ -38,7 +38,7 @@ interface DocumentTypeOption {
 @Component({
     selector: 'app-pending-signatures',
     standalone: true,
-    imports: [CommonModule, FormsModule, TableModule, Tag, ButtonDirective, IconField, InputIcon, InputText, Tooltip, Select, TranslateModule, SignDocumentDialogComponent, RejectSignatureDialogComponent, SignatureHistoryDialogComponent, ButtonIcon],
+    imports: [CommonModule, FormsModule, TableModule, Tag, ButtonDirective, IconField, InputIcon, InputText, Tooltip, SelectComponent, TranslateModule, SignDocumentDialogComponent, RejectSignatureDialogComponent, SignatureHistoryDialogComponent, ButtonIcon],
     templateUrl: './pending-signatures.component.html',
     styleUrl: './pending-signatures.component.scss'
 })

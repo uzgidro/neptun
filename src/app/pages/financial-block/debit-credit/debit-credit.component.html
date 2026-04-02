@@ -121,38 +121,46 @@
             ></p-datepicker>
 
             <!-- Category Filter -->
-            <p-select
-                [options]="categories"
+            <app-select
+                [items]="categories"
                 [(ngModel)]="selectedCategory"
                 (ngModelChange)="applyFilters()"
                 optionLabel="label"
                 optionValue="value"
                 [placeholder]="'FINANCIAL_BLOCK.DEBIT_CREDIT.CATEGORY' | translate"
                 [showClear]="true"
-                class="filter-select"
-            ></p-select>
+                styleClass="filter-select"
+                [required]="false"
+                [filter]="false"
+            ></app-select>
 
             <!-- Status Filter -->
-            <p-select
-                [options]="statuses"
+            <app-select
+                [items]="statuses"
                 [(ngModel)]="selectedStatus"
                 (ngModelChange)="applyFilters()"
                 optionLabel="label"
                 optionValue="value"
                 [placeholder]="'FINANCIAL_BLOCK.COMMON.STATUS' | translate"
                 [showClear]="true"
-                class="filter-select"
-            ></p-select>
+                styleClass="filter-select"
+                [required]="false"
+                [filter]="false"
+            ></app-select>
 
             <!-- Transaction Type Filter -->
-            <p-select
-                [options]="transactionTypes"
+            <app-select
+                [items]="transactionTypes"
                 [(ngModel)]="transactionTypeFilter"
                 (ngModelChange)="applyFilters()"
                 optionLabel="label"
                 optionValue="value"
-                class="filter-select"
-            ></p-select>
+                [placeholder]="'FINANCIAL_BLOCK.DEBIT_CREDIT.TRANSACTION_TYPE' | translate"
+                [showClear]="true"
+                styleClass="filter-select"
+                [required]="false"
+                [filter]="false"
+            ></app-select>
 
             <!-- Clear Filters -->
             <p-button
@@ -358,14 +366,16 @@
         <!-- Category -->
         <div class="form-field">
             <label for="category">{{ 'FINANCIAL_BLOCK.DEBIT_CREDIT.CATEGORY' | translate }}</label>
-            <p-select
+            <app-select
                 id="category"
-                [options]="categories"
+                [items]="categories"
                 [(ngModel)]="currentTransaction.category"
                 optionLabel="label"
                 optionValue="value"
-                appendTo="body"
-            ></p-select>
+                [label]="'FINANCIAL_BLOCK.DEBIT_CREDIT.CATEGORY' | translate"
+                [required]="false"
+                [filter]="false"
+            ></app-select>
         </div>
 
         <!-- Debit / Credit Row -->
@@ -403,14 +413,16 @@
         <!-- Status -->
         <div class="form-field">
             <label for="status">{{ 'FINANCIAL_BLOCK.COMMON.STATUS' | translate }}</label>
-            <p-select
+            <app-select
                 id="status"
-                [options]="statuses"
+                [items]="statuses"
                 [(ngModel)]="currentTransaction.status"
                 optionLabel="label"
                 optionValue="value"
-                appendTo="body"
-            ></p-select>
+                [label]="'FINANCIAL_BLOCK.COMMON.STATUS' | translate"
+                [required]="false"
+                [filter]="false"
+            ></app-select>
         </div>
     </div>
 

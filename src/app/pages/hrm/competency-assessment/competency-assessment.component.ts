@@ -15,8 +15,8 @@ import { Card } from 'primeng/card';
 import { Dialog } from 'primeng/dialog';
 import { TabsModule } from 'primeng/tabs';
 import { ProgressBar } from 'primeng/progressbar';
-import { MultiSelect } from 'primeng/multiselect';
-import { Select } from 'primeng/select';
+import { MultiSelectComponent } from '@/layout/component/dialog/multi-select/multi-select.component';
+import { SelectComponent } from '@/layout/component/dialog/select/select.component';
 import { DatePicker } from 'primeng/datepicker';
 import { InputNumber } from 'primeng/inputnumber';
 import { Textarea } from 'primeng/textarea';
@@ -69,8 +69,8 @@ import {
         Dialog,
         TabsModule,
         ProgressBar,
-        MultiSelect,
-        Select,
+        MultiSelectComponent,
+        SelectComponent,
         DatePicker,
         InputNumber,
         Textarea,

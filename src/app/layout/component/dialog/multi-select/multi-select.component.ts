@@ -1,26 +1,26 @@
 import { Component, forwardRef, Input } from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 import { FloatLabel } from 'primeng/floatlabel';
-import { Select } from 'primeng/select';
+import { MultiSelect } from 'primeng/multiselect';
 import { NgClass } from '@angular/common';
 import { Message } from 'primeng/message';
 
 let nextId = 0;
 
 @Component({
-    selector: 'app-select',
-    imports: [FloatLabel, Select, FormsModule, NgClass, Message, ReactiveFormsModule],
+    selector: 'app-multi-select',
+    imports: [FloatLabel, MultiSelect, FormsModule, NgClass, Message, ReactiveFormsModule],
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => SelectComponent),
+            useExisting: forwardRef(() => MultiSelectComponent),
             multi: true
         }
     ],
-    templateUrl: './select.component.html',
-    styleUrl: './select.component.scss'
+    templateUrl: './multi-select.component.html',
+    styleUrl: './multi-select.component.scss'
 })
-export class SelectComponent implements ControlValueAccessor {
+export class MultiSelectComponent implements ControlValueAccessor {
     @Input() label: string = 'Выбор';
     @Input() loading: boolean = false;
     @Input() disable: boolean = false;
@@ -39,7 +39,11 @@ export class SelectComponent implements ControlValueAccessor {
     @Input() style: Record<string, string> | undefined;
     @Input() appendTo: string = 'body';
 
-    internalValue: any = null;
+    @Input() maxSelectedLabels: number = 3;
+    @Input() selectionLimit: number = 0;
+    @Input() display: string = 'comma';
+
+    internalValue: any[] = [];
     isDisabled: boolean = false;
     uniqueId: string;
 
@@ -47,11 +51,11 @@ export class SelectComponent implements ControlValueAccessor {
     protected onTouched = () => {};
 
     constructor() {
-        this.uniqueId = 'select_' + nextId++;
+        this.uniqueId = 'multi_select_' + nextId++;
     }
 
     writeValue(value: any): void {
-        this.internalValue = value;
+        this.internalValue = value ?? [];
     }
 
     registerOnChange(fn: any): void {
@@ -69,5 +73,9 @@ export class SelectComponent implements ControlValueAccessor {
     onValueChange(newValue: any) {
         this.internalValue = newValue;
         this.onChange(newValue);
+    }
+
+    get isEmpty(): boolean {
+        return !this.internalValue || this.internalValue.length === 0;
     }
 }

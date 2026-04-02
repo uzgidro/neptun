@@ -78,8 +78,8 @@
     <form [formGroup]="uploadForm" class="flex flex-col gap-4">
         <div class="flex flex-col gap-2 p-fluid">
             <label for="category">{{ 'FILES.CATEGORY' | translate }}</label>
-            <p-select id="category" [options]="categories" formControlName="category_id" filter optionLabel="display_name"
-                      [placeholder]="'FILES.SELECT_CATEGORY' | translate" [appendTo]="'body'"></p-select>
+            <app-select id="category" [items]="categories" formControlName="category_id" [filter]="true" optionLabel="display_name" optionValue="id"
+                      [placeholder]="'FILES.SELECT_CATEGORY' | translate" [required]="false"></app-select>
         </div>
 
         <div class="flex flex-col gap-2 p-fluid">

@@ -262,14 +262,31 @@
             </div>
             <div class="flex flex-col gap-2">
                 <label class="font-medium text-surface-700 dark:text-surface-300">{{ 'HRM.ORG_STRUCTURE.TYPE' | translate }}</label>
-                <p-select [options]="orgUnitTypes" [(ngModel)]="unitForm.type" optionLabel="label" optionValue="value" class="w-full"></p-select>
+                <app-select
+                    [items]="orgUnitTypes"
+                    [(ngModel)]="unitForm.type"
+                    optionLabel="label"
+                    optionValue="value"
+                    [placeholder]="'HRM.ORG_STRUCTURE.TYPE' | translate"
+                    styleClass="w-full"
+                    [filter]="false">
+                </app-select>
             </div>
         </div>
 
         <div class="flex flex-col gap-2">
             <label class="font-medium text-surface-700 dark:text-surface-300">{{ 'HRM.ORG_STRUCTURE.PARENT_DEPARTMENT' | translate }}</label>
-            <p-select [options]="orgUnits" [(ngModel)]="unitForm.parent_id" optionLabel="name" optionValue="id"
-                [placeholder]="'HRM.ORG_STRUCTURE.SELECT_PARENT' | translate" [showClear]="true" class="w-full"></p-select>
+            <app-select
+                [items]="orgUnits"
+                [(ngModel)]="unitForm.parent_id"
+                optionLabel="name"
+                optionValue="id"
+                [placeholder]="'HRM.ORG_STRUCTURE.SELECT_PARENT' | translate"
+                [showClear]="true"
+                styleClass="w-full"
+                [required]="false"
+                [filter]="false">
+            </app-select>
         </div>
 
         <div class="flex flex-col gap-2">
@@ -383,20 +400,30 @@
             @if (useCustomPosition) {
                 <input pInputText [(ngModel)]="employeeForm.position_custom" [placeholder]="'HRM.ORG_STRUCTURE.ENTER_POSITION' | translate" class="w-full p-3" />
             } @else {
-                <p-select [options]="positionTitles" [(ngModel)]="employeeForm.position"
-                    optionLabel="label" optionValue="value" [placeholder]="'HRM.ORG_STRUCTURE.SELECT_POSITION' | translate"
-                    [filter]="true" [filterPlaceholder]="'HRM.ORG_STRUCTURE.SEARCH' | translate" class="w-full"
-                    appendTo="body" [scrollHeight]="'300px'"></p-select>
+                <app-select
+                    [items]="positionTitles"
+                    [(ngModel)]="employeeForm.position"
+                    optionLabel="label"
+                    optionValue="value"
+                    [placeholder]="'HRM.ORG_STRUCTURE.SELECT_POSITION' | translate"
+                    [filter]="true"
+                    styleClass="w-full">
+                </app-select>
             }
         </div>
 
         <!-- Department -->
         <div class="flex flex-col gap-2">
             <label class="font-semibold text-surface-700 dark:text-surface-300">{{ 'HRM.ORG_STRUCTURE.DEPARTMENT' | translate }} <span class="text-red-500">*</span></label>
-            <p-select [options]="orgUnits" [(ngModel)]="employeeForm.department_id"
-                optionLabel="name" optionValue="id" [placeholder]="'HRM.ORG_STRUCTURE.SELECT_DEPARTMENT' | translate"
-                [filter]="true" [filterPlaceholder]="'HRM.ORG_STRUCTURE.SEARCH' | translate" class="w-full"
-                appendTo="body" [scrollHeight]="'300px'"></p-select>
+            <app-select
+                [items]="orgUnits"
+                [(ngModel)]="employeeForm.department_id"
+                optionLabel="name"
+                optionValue="id"
+                [placeholder]="'HRM.ORG_STRUCTURE.SELECT_DEPARTMENT' | translate"
+                [filter]="true"
+                styleClass="w-full">
+            </app-select>
         </div>
 
         <div class="grid grid-cols-2 gap-5">

@@ -133,51 +133,59 @@
             </p-inputGroup>
 
             <!-- Month Filter -->
-            <p-select
-                [options]="months"
+            <app-select
+                [items]="months"
                 [(ngModel)]="selectedMonth"
                 (ngModelChange)="applyFilters()"
                 optionLabel="label"
                 optionValue="value"
                 [placeholder]="'FINANCIAL_BLOCK.SALARY.MONTH' | translate"
                 [showClear]="true"
-                class="filter-select"
-            ></p-select>
+                styleClass="filter-select"
+                [required]="false"
+                [filter]="false"
+            ></app-select>
 
             <!-- Year Filter -->
-            <p-select
-                [options]="years"
+            <app-select
+                [items]="years"
                 [(ngModel)]="selectedYear"
                 (ngModelChange)="applyFilters()"
                 optionLabel="label"
                 optionValue="value"
                 [placeholder]="'FINANCIAL_BLOCK.SALARY.YEAR' | translate"
-                class="filter-select-sm"
-            ></p-select>
+                styleClass="filter-select-sm"
+                [required]="false"
+                [filter]="false"
+            ></app-select>
 
             <!-- Department Filter -->
-            <p-select
-                [options]="departments"
+            <app-select
+                [items]="departments"
                 [(ngModel)]="selectedDepartment"
                 (ngModelChange)="applyFilters()"
                 optionLabel="label"
                 optionValue="value"
                 [placeholder]="'FINANCIAL_BLOCK.SALARY.DEPARTMENT' | translate"
                 [showClear]="true"
-                class="filter-select"
-            ></p-select>
+                styleClass="filter-select"
+                [required]="false"
+                [filter]="false"
+            ></app-select>
 
             <!-- Status Filter -->
-            <p-select
-                [options]="statuses"
+            <app-select
+                [items]="statuses"
                 [(ngModel)]="selectedStatus"
                 (ngModelChange)="applyFilters()"
                 optionLabel="label"
                 optionValue="value"
                 [placeholder]="'FINANCIAL_BLOCK.COMMON.STATUS' | translate"
                 [showClear]="true"
-                class="filter-select-sm"
-            ></p-select>
+                styleClass="filter-select-sm"
+                [required]="false"
+                [filter]="false"
+            ></app-select>
 
             <!-- Clear Filters -->
             <p-button
@@ -388,25 +396,29 @@
             <div class="form-row">
                 <div class="form-field">
                     <label for="department">{{ 'FINANCIAL_BLOCK.SALARY.DEPARTMENT' | translate }}</label>
-                    <p-select
+                    <app-select
                         id="department"
-                        [options]="departments"
+                        [items]="departments"
                         [(ngModel)]="currentSalary.department"
                         optionLabel="label"
                         optionValue="value"
-                        appendTo="body"
-                    ></p-select>
+                        [label]="'FINANCIAL_BLOCK.SALARY.DEPARTMENT' | translate"
+                        [required]="false"
+                        [filter]="false"
+                    ></app-select>
                 </div>
                 <div class="form-field">
                     <label for="position">{{ 'FINANCIAL_BLOCK.SALARY.POSITION' | translate }}</label>
-                    <p-select
+                    <app-select
                         id="position"
-                        [options]="positions"
+                        [items]="positions"
                         [(ngModel)]="currentSalary.position"
                         optionLabel="label"
                         optionValue="value"
-                        appendTo="body"
-                    ></p-select>
+                        [label]="'FINANCIAL_BLOCK.SALARY.POSITION' | translate"
+                        [required]="false"
+                        [filter]="false"
+                    ></app-select>
                 </div>
             </div>
         </div>
@@ -419,25 +431,29 @@
             <div class="form-row-3">
                 <div class="form-field">
                     <label for="periodMonth">{{ 'FINANCIAL_BLOCK.SALARY.MONTH' | translate }}</label>
-                    <p-select
+                    <app-select
                         id="periodMonth"
-                        [options]="months"
+                        [items]="months"
                         [(ngModel)]="currentSalary.periodMonth"
                         optionLabel="label"
                         optionValue="value"
-                        appendTo="body"
-                    ></p-select>
+                        [label]="'FINANCIAL_BLOCK.SALARY.MONTH' | translate"
+                        [required]="false"
+                        [filter]="false"
+                    ></app-select>
                 </div>
                 <div class="form-field">
                     <label for="periodYear">{{ 'FINANCIAL_BLOCK.SALARY.YEAR' | translate }}</label>
-                    <p-select
+                    <app-select
                         id="periodYear"
-                        [options]="years"
+                        [items]="years"
                         [(ngModel)]="currentSalary.periodYear"
                         optionLabel="label"
                         optionValue="value"
-                        appendTo="body"
-                    ></p-select>
+                        [label]="'FINANCIAL_BLOCK.SALARY.YEAR' | translate"
+                        [required]="false"
+                        [filter]="false"
+                    ></app-select>
                 </div>
                 <div class="form-field">
                     <label for="workedDays">{{ 'FINANCIAL_BLOCK.SALARY.DAYS' | translate }}</label>
@@ -617,14 +633,16 @@
         <div class="form-row">
             <div class="form-field">
                 <label for="status">{{ 'FINANCIAL_BLOCK.COMMON.STATUS' | translate }}</label>
-                <p-select
+                <app-select
                     id="status"
-                    [options]="statuses"
+                    [items]="statuses"
                     [(ngModel)]="currentSalary.status"
                     optionLabel="label"
                     optionValue="value"
-                    appendTo="body"
-                ></p-select>
+                    [label]="'FINANCIAL_BLOCK.COMMON.STATUS' | translate"
+                    [required]="false"
+                    [filter]="false"
+                ></app-select>
             </div>
             <div class="form-field">
                 <label for="notes">{{ 'FINANCIAL_BLOCK.COMMON.COMMENT' | translate }}</label>

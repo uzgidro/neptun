@@ -5,7 +5,7 @@ import { Observable, Subject, forkJoin, of } from 'rxjs';
 import { catchError, takeUntil } from 'rxjs/operators';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
-import { SelectModule } from 'primeng/select';
+import { SelectComponent } from '@/layout/component/dialog/select/select.component';
 import { MessageModule } from 'primeng/message';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -20,7 +20,7 @@ import { PiezometerDialogComponent } from './components/piezometer-dialog.compon
     selector: 'app-filtration-settings',
     standalone: true,
     imports: [
-        CommonModule, FormsModule, ReactiveFormsModule, TableModule, ButtonModule, SelectModule,
+        CommonModule, FormsModule, ReactiveFormsModule, TableModule, ButtonModule, SelectComponent,
         MessageModule, InputNumberModule, TranslateModule, LocationDialogComponent,
         PiezometerDialogComponent
     ],

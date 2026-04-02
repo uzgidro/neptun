@@ -2,14 +2,16 @@
     <!-- Organization selector -->
     <div class="flex items-center gap-4">
         <label class="font-semibold">{{ 'FILTRATION.SELECT_ORGANIZATION' | translate }}</label>
-        <p-select
+        <app-select
             [(ngModel)]="selectedOrganizationId"
-            [options]="organizations"
+            (ngModelChange)="onOrganizationChange()"
+            [items]="organizations"
             optionLabel="label"
             optionValue="value"
             [placeholder]="'FILTRATION.SELECT_ORGANIZATION' | translate"
-            (onChange)="onOrganizationChange()"
-            class="w-80" />
+            styleClass="w-80"
+            [filter]="false"
+            [required]="false" />
     </div>
 
     @if (selectedOrganizationId) {

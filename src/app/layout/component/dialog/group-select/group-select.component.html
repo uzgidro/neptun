@@ -1,30 +1,32 @@
-<div class="mb-4">
-    <p-floatlabel>
+@if (placeholder !== undefined) {
+    @if (optionValue) {
         <p-select
             [inputId]="uniqueId"
             [options]="filteredItems"
 
-            [(ngModel)]="internalValue"
-            (onChange)="onValueChange($event.value)"
+            [ngModel]="internalValue"
+            (ngModelChange)="onValueChange($event)"
             (onBlur)="onTouched()"
             (onShow)="onDropdownShow()"
+            (onHide)="onDropdownHide()"
 
-            optionLabel="name"
+            [optionLabel]="optionLabel"
+            [optionValue]="optionValue"
             [loading]="loading"
 
             [disabled]="isDisabled || disable"
 
-            [showClear]="true"
+            [showClear]="showClear"
             [group]="true"
             [filter]="true"
-            filterBy="name"
-            [appendTo]="'body'"
-            [style]="{ width: '100%' }"
-            [required]="true"
+            [appendTo]="appendTo"
+            [placeholder]="placeholder"
+            [styleClass]="styleClass"
+            [style]="style ?? {}"
 
             [emptyMessage]="emptyFilterMessage"
             [emptyFilterMessage]="emptyFilterMessage"
-            [ngClass]="{ 'ng-invalid ng-dirty': submitted && !internalValue }"
+            [ngClass]="{ 'ng-invalid ng-dirty': submitted && required && !internalValue }"
         >
             <ng-template pTemplate="filter">
                 <div class="p-1">
@@ -40,11 +42,144 @@
                 </div>
             </ng-template>
         </p-select>
+    } @else {
+        <p-select
+            [inputId]="uniqueId"
+            [options]="filteredItems"
 
-        <label [for]="uniqueId">{{ label }}</label>
-    </p-floatlabel>
+            [ngModel]="internalValue"
+            (ngModelChange)="onValueChange($event)"
+            (onBlur)="onTouched()"
+            (onShow)="onDropdownShow()"
+            (onHide)="onDropdownHide()"
 
-    @if (submitted && !internalValue) {
-        <p-message class="mt-2" severity="error" variant="simple" size="small">{{ errorMessage }}</p-message>
+            [optionLabel]="optionLabel"
+            [loading]="loading"
+
+            [disabled]="isDisabled || disable"
+
+            [showClear]="showClear"
+            [group]="true"
+            [filter]="true"
+            [appendTo]="appendTo"
+            [placeholder]="placeholder"
+            [styleClass]="styleClass"
+            [style]="style ?? {}"
+
+            [emptyMessage]="emptyFilterMessage"
+            [emptyFilterMessage]="emptyFilterMessage"
+            [ngClass]="{ 'ng-invalid ng-dirty': submitted && required && !internalValue }"
+        >
+            <ng-template pTemplate="filter">
+                <div class="p-1">
+                    <p-iconfield class="w-full">
+                        <p-inputicon class="pi pi-search" />
+                        <input #filterInput type="text" pInputText class="w-full" (input)="onFilterInput($event)" (keydown)="onFilterKeyDown($event)" placeholder="Поиск..." role="searchbox" autocomplete="off" />
+                    </p-iconfield>
+                </div>
+            </ng-template>
+            <ng-template let-group pTemplate="group">
+                <div class="flex items-center">
+                    <span>{{ group.name }}</span>
+                </div>
+            </ng-template>
+        </p-select>
     }
-</div>
+} @else {
+    <div class="mb-4">
+        <p-floatlabel>
+            @if (optionValue) {
+                <p-select
+                    [inputId]="uniqueId"
+                    [options]="filteredItems"
+
+                    [ngModel]="internalValue"
+                    (ngModelChange)="onValueChange($event)"
+                    (onBlur)="onTouched()"
+                    (onShow)="onDropdownShow()"
+                    (onHide)="onDropdownHide()"
+
+                    [optionLabel]="optionLabel"
+                    [optionValue]="optionValue"
+                    [loading]="loading"
+
+                    [disabled]="isDisabled || disable"
+
+                    [showClear]="showClear"
+                    [group]="true"
+                    [filter]="true"
+                    [appendTo]="appendTo"
+                    [styleClass]="styleClass"
+                    [style]="style ?? { width: '100%' }"
+                    [required]="required"
+
+                    [emptyMessage]="emptyFilterMessage"
+                    [emptyFilterMessage]="emptyFilterMessage"
+                    [ngClass]="{ 'ng-invalid ng-dirty': submitted && required && !internalValue }"
+                >
+                    <ng-template pTemplate="filter">
+                        <div class="p-1">
+                            <p-iconfield class="w-full">
+                                <p-inputicon class="pi pi-search" />
+                                <input #filterInput type="text" pInputText class="w-full" (input)="onFilterInput($event)" (keydown)="onFilterKeyDown($event)" placeholder="Поиск..." role="searchbox" autocomplete="off" />
+                            </p-iconfield>
+                        </div>
+                    </ng-template>
+                    <ng-template let-group pTemplate="group">
+                        <div class="flex items-center">
+                            <span>{{ group.name }}</span>
+                        </div>
+                    </ng-template>
+                </p-select>
+            } @else {
+                <p-select
+                    [inputId]="uniqueId"
+                    [options]="filteredItems"
+
+                    [ngModel]="internalValue"
+                    (ngModelChange)="onValueChange($event)"
+                    (onBlur)="onTouched()"
+                    (onShow)="onDropdownShow()"
+                    (onHide)="onDropdownHide()"
+
+                    [optionLabel]="optionLabel"
+                    [loading]="loading"
+
+                    [disabled]="isDisabled || disable"
+
+                    [showClear]="showClear"
+                    [group]="true"
+                    [filter]="true"
+                    [appendTo]="appendTo"
+                    [styleClass]="styleClass"
+                    [style]="style ?? { width: '100%' }"
+                    [required]="required"
+
+                    [emptyMessage]="emptyFilterMessage"
+                    [emptyFilterMessage]="emptyFilterMessage"
+                    [ngClass]="{ 'ng-invalid ng-dirty': submitted && required && !internalValue }"
+                >
+                    <ng-template pTemplate="filter">
+                        <div class="p-1">
+                            <p-iconfield class="w-full">
+                                <p-inputicon class="pi pi-search" />
+                                <input #filterInput type="text" pInputText class="w-full" (input)="onFilterInput($event)" (keydown)="onFilterKeyDown($event)" placeholder="Поиск..." role="searchbox" autocomplete="off" />
+                            </p-iconfield>
+                        </div>
+                    </ng-template>
+                    <ng-template let-group pTemplate="group">
+                        <div class="flex items-center">
+                            <span>{{ group.name }}</span>
+                        </div>
+                    </ng-template>
+                </p-select>
+            }
+
+            <label [for]="uniqueId">{{ label }}</label>
+        </p-floatlabel>
+
+        @if (submitted && required && !internalValue) {
+            <p-message class="mt-2" severity="error" variant="simple" size="small">{{ errorMessage }}</p-message>
+        }
+    </div>
+}
