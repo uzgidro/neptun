@@ -62,6 +62,9 @@ export class PlansTabComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroy$), finalize(() => this.loading = false))
             .subscribe({
                 next: ({ configs, plans }) => {
+                    configs.sort((a, b) =>
+                        a.cascade_name.localeCompare(b.cascade_name) || (a.sort_order ?? 0) - (b.sort_order ?? 0)
+                    );
                     this.planRows = configs.map((config) => {
                         const months: (number | null)[] = Array(12).fill(null);
                         const original: (number | null)[] = Array(12).fill(null);

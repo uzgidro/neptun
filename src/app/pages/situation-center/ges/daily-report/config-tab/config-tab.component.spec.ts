@@ -27,11 +27,13 @@ describe('ConfigTabComponent', () => {
 
     beforeEach(async () => {
         const gesReportSpy = jasmine.createSpyObj('GesReportService', [
-            'getConfigs', 'upsertConfig', 'deleteConfig'
+            'getConfigs', 'upsertConfig', 'deleteConfig',
+            'getCascadeConfigs', 'upsertCascadeConfig', 'deleteCascadeConfig'
         ]);
         const orgSpy = jasmine.createSpyObj('OrganizationService', ['getOrganizationsFlat', 'getCascades']);
 
         gesReportSpy.getConfigs.and.returnValue(of([]));
+        gesReportSpy.getCascadeConfigs.and.returnValue(of([]));
         orgSpy.getOrganizationsFlat.and.returnValue(of([]));
         orgSpy.getCascades.and.returnValue(of([]));
 

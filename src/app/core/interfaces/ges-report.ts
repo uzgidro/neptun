@@ -20,6 +20,23 @@ export interface GesConfigResponse {
     sort_order: number;
 }
 
+// --- Cascade Config ---
+
+export interface GesCascadeConfigPayload {
+    organization_id: number;
+    latitude: number;
+    longitude: number;
+    sort_order?: number;
+}
+
+export interface GesCascadeConfig {
+    id: number;
+    organization_id: number;
+    latitude: number;
+    longitude: number;
+    sort_order: number;
+}
+
 // --- Daily Data ---
 
 export interface GesDailyDataPayload {

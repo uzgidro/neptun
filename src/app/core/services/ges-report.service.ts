@@ -4,6 +4,7 @@ import { HttpParams } from '@angular/common/http';
 import { ApiService } from './api.service';
 import {
     GesConfigPayload, GesConfigResponse,
+    GesCascadeConfig, GesCascadeConfigPayload,
     GesDailyData, GesDailyDataPayload,
     GesProductionPlan, GesProductionPlanPayload,
     GesDailyReport
@@ -13,6 +14,7 @@ const GES_REPORT = '/ges-report';
 const CONFIG = '/config';
 const DAILY_DATA = '/daily-data';
 const PLANS = '/plans';
+const CASCADE_CONFIG = '/cascade-config';
 
 @Injectable({ providedIn: 'root' })
 export class GesReportService extends ApiService {
@@ -28,6 +30,19 @@ export class GesReportService extends ApiService {
     deleteConfig(organizationId: number): Observable<void> {
         const params = new HttpParams().set('organization_id', organizationId);
         return this.http.delete<void>(`${this.BASE_URL}${GES_REPORT}${CONFIG}`, { params });
+    }
+
+    getCascadeConfigs(): Observable<GesCascadeConfig[]> {
+        return this.http.get<GesCascadeConfig[]>(`${this.BASE_URL}${GES_REPORT}${CASCADE_CONFIG}`);
+    }
+
+    upsertCascadeConfig(payload: GesCascadeConfigPayload): Observable<{ status: string }> {
+        return this.http.post<{ status: string }>(`${this.BASE_URL}${GES_REPORT}${CASCADE_CONFIG}`, payload);
+    }
+
+    deleteCascadeConfig(organizationId: number): Observable<void> {
+        const params = new HttpParams().set('organization_id', organizationId);
+        return this.http.delete<void>(`${this.BASE_URL}${GES_REPORT}${CASCADE_CONFIG}`, { params });
     }
 
     upsertDailyData(payload: GesDailyDataPayload): Observable<{ status: string }> {

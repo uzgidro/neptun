@@ -44,7 +44,25 @@
         <ng-template #groupheader let-config>
             <tr>
                 <td colspan="7" class="font-bold" style="background-color: var(--p-primary-100); color: var(--p-primary-700)">
-                    {{ config.cascade_name }}
+                    <div class="flex items-center gap-2">
+                        <span>{{ config.cascade_name }}</span>
+                        @if (cascadeConfigMap.get(config.cascade_id); as cc) {
+                            <span class="text-sm font-normal" style="color: var(--p-text-muted-color)">
+                                {{ cc.latitude }}, {{ cc.longitude }}
+                            </span>
+                            @if (weatherMap.get(config.cascade_id); as w) {
+                                <span class="text-sm font-normal" style="color: var(--p-text-muted-color)">
+                                    | {{ w.temperature }}°C{{ w.condition ? ', ' + w.condition : '' }}
+                                </span>
+                            }
+                        }
+                        <p-button
+                            icon="pi pi-cog"
+                            [rounded]="true"
+                            [text]="true"
+                            size="small"
+                            (onClick)="editCascadeConfig(config.cascade_id)" />
+                    </div>
                 </td>
             </tr>
         </ng-template>
@@ -143,5 +161,63 @@
             [loading]="saving"
             [disabled]="form.invalid"
             (onClick)="saveConfig()" />
+    </ng-template>
+</p-dialog>
+
+<!-- Cascade Config Dialog -->
+<p-dialog
+    [(visible)]="cascadeDialogVisible"
+    [header]="'GES_REPORT.CASCADE_CONFIG' | translate"
+    [modal]="true"
+    [style]="{ width: '400px' }"
+    (onHide)="hideCascadeDialog()">
+    <form [formGroup]="cascadeForm" class="flex flex-col gap-4 pt-2">
+        <div class="flex flex-col gap-1">
+            <label class="font-medium">{{ 'GES_REPORT.LATITUDE' | translate }}</label>
+            <p-inputNumber
+                formControlName="latitude"
+                [minFractionDigits]="0"
+                [maxFractionDigits]="6"
+                [useGrouping]="false"
+                class="w-full" />
+        </div>
+
+        <div class="flex flex-col gap-1">
+            <label class="font-medium">{{ 'GES_REPORT.LONGITUDE' | translate }}</label>
+            <p-inputNumber
+                formControlName="longitude"
+                [minFractionDigits]="0"
+                [maxFractionDigits]="6"
+                [useGrouping]="false"
+                class="w-full" />
+        </div>
+
+        <div class="flex flex-col gap-1">
+            <label class="font-medium">{{ 'GES_REPORT.SORT_ORDER' | translate }}</label>
+            <p-inputNumber
+                formControlName="sort_order"
+                [min]="0"
+                class="w-full" />
+        </div>
+    </form>
+
+    <ng-template #footer>
+        @if (cascadeConfigMap.has(editingCascadeId!)) {
+            <p-button
+                [label]="'COMMON.DELETE' | translate"
+                severity="danger"
+                [outlined]="true"
+                icon="pi pi-trash"
+                (onClick)="deleteCascadeConfig(editingCascadeId!)" />
+        }
+        <p-button
+            [label]="'COMMON.CANCEL' | translate"
+            severity="secondary"
+            (onClick)="hideCascadeDialog()" />
+        <p-button
+            [label]="'COMMON.SAVE' | translate"
+            [loading]="cascadeSaving"
+            [disabled]="cascadeForm.invalid"
+            (onClick)="saveCascadeConfig()" />
     </ng-template>
 </p-dialog>

@@ -314,6 +314,9 @@
     "STATUS_SAVED": "Сохранено",
     "STATUS_MODIFIED": "Изменено",
     "STATUS_EMPTY": "Пусто",
+    "CASCADE_CONFIG": "Настройки каскада",
+    "LATITUDE": "Широта",
+    "LONGITUDE": "Долгота",
     "JAN": "Янв", "FEB": "Фев", "MAR": "Мар", "APR": "Апр",
     "MAY": "Май", "JUN": "Июн", "JUL": "Июл", "AUG": "Авг",
     "SEP": "Сен", "OCT": "Окт", "NOV": "Ноя", "DEC": "Дек"

@@ -2,8 +2,8 @@ import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Subject } from 'rxjs';
-import { finalize, takeUntil } from 'rxjs/operators';
+import { forkJoin, Subject } from 'rxjs';
+import { catchError, finalize, takeUntil } from 'rxjs/operators';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
@@ -15,8 +15,9 @@ import { InputIcon } from 'primeng/inputicon';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MessageService } from 'primeng/api';
 import { GesReportService } from '@/core/services/ges-report.service';
+import { WeatherService } from '@/core/services/weather.service';
 import { OrganizationService } from '@/core/services/organization.service';
-import { GesConfigPayload, GesConfigResponse } from '@/core/interfaces/ges-report';
+import { GesConfigPayload, GesConfigResponse, GesCascadeConfig, GesCascadeConfigPayload } from '@/core/interfaces/ges-report';
 import { Organization } from '@/core/interfaces/organizations';
 import { GroupSelectComponent } from '@/layout/component/dialog/group-select/group-select.component';
 
@@ -43,6 +44,7 @@ import { GroupSelectComponent } from '@/layout/component/dialog/group-select/gro
 export class ConfigTabComponent implements OnInit, OnDestroy {
     private destroy$ = new Subject<void>();
     private gesReportService = inject(GesReportService);
+    private weatherService = inject(WeatherService);
     private organizationService = inject(OrganizationService);
     private messageService = inject(MessageService);
     private translate = inject(TranslateService);
@@ -56,6 +58,9 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
     saving = false;
     submitted = false;
 
+    cascadeConfigMap = new Map<number, GesCascadeConfig>();
+    weatherMap = new Map<number, { temperature: number; condition: string | null }>();
+
     dialogVisible = false;
     isEditMode = false;
     editingConfig: GesConfigResponse | null = null;
@@ -68,9 +73,19 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
         sort_order: [null]
     });
 
+    cascadeDialogVisible = false;
+    editingCascadeId: number | null = null;
+    cascadeSaving = false;
+    cascadeForm: FormGroup = this.fb.group({
+        latitude: [null, Validators.required],
+        longitude: [null, Validators.required],
+        sort_order: [null]
+    });
+
     ngOnInit(): void {
         this.loadCascades();
         this.loadConfigs();
+        this.loadCascadeConfigs();
     }
 
     ngOnDestroy(): void {
@@ -225,5 +240,121 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
     hideDialog(): void {
         this.dialogVisible = false;
         this.editingConfig = null;
+    }
+
+    // --- Cascade Config ---
+
+    private loadCascadeConfigs(): void {
+        this.gesReportService.getCascadeConfigs()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: (configs) => {
+                    this.cascadeConfigMap = new Map(configs.map(c => [c.organization_id, c]));
+                    this.loadAllWeather();
+                },
+                error: () => {
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: this.translate.instant('COMMON.ERROR'),
+                        detail: this.translate.instant('COMMON.LOAD_ERROR')
+                    });
+                }
+            });
+    }
+
+    editCascadeConfig(cascadeId: number): void {
+        this.editingCascadeId = cascadeId;
+        const existing = this.cascadeConfigMap.get(cascadeId);
+        this.cascadeForm.reset({
+            latitude: existing?.latitude ?? null,
+            longitude: existing?.longitude ?? null,
+            sort_order: existing?.sort_order ?? null
+        });
+        this.cascadeDialogVisible = true;
+    }
+
+    saveCascadeConfig(): void {
+        if (this.cascadeForm.invalid || !this.editingCascadeId) return;
+
+        const val = this.cascadeForm.value;
+        const payload: GesCascadeConfigPayload = {
+            organization_id: this.editingCascadeId,
+            latitude: val.latitude,
+            longitude: val.longitude,
+            sort_order: val.sort_order
+        };
+
+        this.cascadeSaving = true;
+        this.gesReportService.upsertCascadeConfig(payload)
+            .pipe(takeUntil(this.destroy$), finalize(() => this.cascadeSaving = false))
+            .subscribe({
+                next: () => {
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: this.translate.instant('COMMON.SUCCESS')
+                    });
+                    this.cascadeDialogVisible = false;
+                    this.loadCascadeConfigs();
+                },
+                error: () => {
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: this.translate.instant('COMMON.ERROR')
+                    });
+                }
+            });
+    }
+
+    deleteCascadeConfig(cascadeId: number): void {
+        if (!confirm(this.translate.instant('GES_REPORT.DELETE_CONFIRM'))) return;
+
+        this.gesReportService.deleteCascadeConfig(cascadeId)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: () => {
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: this.translate.instant('COMMON.SUCCESS')
+                    });
+                    this.hideCascadeDialog();
+                    this.loadCascadeConfigs();
+                },
+                error: () => {
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: this.translate.instant('COMMON.ERROR')
+                    });
+                }
+            });
+    }
+
+    hideCascadeDialog(): void {
+        this.cascadeDialogVisible = false;
+        this.editingCascadeId = null;
+    }
+
+    // --- Weather ---
+
+    private loadAllWeather(): void {
+        const entries = Array.from(this.cascadeConfigMap.entries());
+        if (!entries.length) return;
+
+        const requests = entries.map(([id, cc]) =>
+            this.weatherService.getWeatherByCoords(cc.latitude, cc.longitude).pipe(
+                catchError(() => [null])
+            )
+        );
+
+        forkJoin(requests).pipe(takeUntil(this.destroy$)).subscribe(results => {
+            this.weatherMap = new Map();
+            results.forEach((weather: any, i) => {
+                if (weather?.main) {
+                    this.weatherMap.set(entries[i][0], {
+                        temperature: Math.round(weather.main.temp),
+                        condition: weather.weather?.[0]?.description ?? null
+                    });
+                }
+            });
+        });
     }
 }
