@@ -25,9 +25,10 @@ describe('DataEntryTabComponent', () => {
 
     beforeEach(async () => {
         const spy = jasmine.createSpyObj('GesReportService', [
-            'getConfigs', 'getDailyData', 'upsertDailyData'
+            'getConfigs', 'getDailyData', 'upsertDailyData', 'getCascadeConfigs'
         ]);
         spy.getConfigs.and.returnValue(of([]));
+        spy.getCascadeConfigs.and.returnValue(of([]));
 
         await TestBed.configureTestingModule({
             imports: [DataEntryTabComponent, TranslateModule.forRoot()],

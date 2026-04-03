@@ -33,13 +33,18 @@
     </ng-template>
     <ng-template pTemplate="body" let-item>
         @if (item.type === 'header') {
-            <tr>
+            <tr class="cursor-pointer" (click)="toggleCascade(item.cascade_name)">
                 <td [attr.colspan]="13" class="font-bold" style="background-color: var(--p-primary-100); color: var(--p-primary-700)">
-                    {{ item.cascade_name }}
+                    <div class="flex items-center gap-2">
+                        <i class="pi text-sm"
+                           [class.pi-chevron-down]="!collapsedCascades.has(item.cascade_name)"
+                           [class.pi-chevron-right]="collapsedCascades.has(item.cascade_name)"></i>
+                        {{ item.cascade_name }}
+                    </div>
                 </td>
             </tr>
         } @else {
-            <tr>
+            <tr [style.display]="collapsedCascades.has(item.row.config.cascade_name) ? 'none' : ''">
                 <td>{{ item.row.config.organization_name }}</td>
                 <td *ngFor="let key of monthKeys; let i = index" style="padding: 4px 8px">
                     <p-inputNumber

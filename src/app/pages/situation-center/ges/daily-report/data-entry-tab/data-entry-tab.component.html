@@ -30,12 +30,18 @@
         <!-- Station cards grouped by cascade -->
         @for (group of cascadeGroups; track group.cascade_id) {
             <!-- Cascade header -->
-            <div class="flex items-center gap-3 mt-2">
+            <div class="flex items-center gap-3 mt-2 cursor-pointer" (click)="toggleCascade(group.cascade_id)">
                 <div class="h-px flex-1" style="background-color: var(--p-primary-200)"></div>
-                <span class="font-bold text-lg whitespace-nowrap" style="color: var(--p-primary-500)">{{ group.cascade_name }}</span>
+                <div class="flex items-center gap-2">
+                    <i class="pi text-sm" style="color: var(--p-primary-500)"
+                       [class.pi-chevron-down]="!collapsedCascades.has(group.cascade_id)"
+                       [class.pi-chevron-right]="collapsedCascades.has(group.cascade_id)"></i>
+                    <span class="font-bold text-lg whitespace-nowrap" style="color: var(--p-primary-500)">{{ group.cascade_name }}</span>
+                </div>
                 <div class="h-px flex-1" style="background-color: var(--p-primary-200)"></div>
             </div>
 
+            @if (!collapsedCascades.has(group.cascade_id)) {
             @for (row of group.rows; track row.config.organization_id) {
                 <div class="border border-surface rounded-lg p-4" [formGroup]="row.form">
                     <!-- Card header -->
@@ -156,6 +162,7 @@
                         <div></div>
                     </div>
                 </div>
+            }
             }
         }
     }

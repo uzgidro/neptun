@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { forkJoin, Subject } from 'rxjs';
+import { forkJoin, of, Subject } from 'rxjs';
 import { catchError, finalize, takeUntil } from 'rxjs/operators';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
@@ -10,8 +10,6 @@ import { DialogModule } from 'primeng/dialog';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { CheckboxModule } from 'primeng/checkbox';
-import { IconField } from 'primeng/iconfield';
-import { InputIcon } from 'primeng/inputicon';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MessageService } from 'primeng/api';
 import { GesReportService } from '@/core/services/ges-report.service';
@@ -34,8 +32,6 @@ import { GroupSelectComponent } from '@/layout/component/dialog/group-select/gro
         InputNumberModule,
         InputTextModule,
         CheckboxModule,
-        IconField,
-        InputIcon,
         TranslateModule,
         GroupSelectComponent
     ],
@@ -51,6 +47,7 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
     private fb = inject(FormBuilder);
 
     configs: GesConfigResponse[] = [];
+    configItems: ({ type: 'header'; cascade_id: number; cascade_name: string } | { type: 'row'; config: GesConfigResponse })[] = [];
     cascades: Organization[] = [];
     availableCascades: Organization[] = [];
     orgsLoading = false;
@@ -60,6 +57,8 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
 
     cascadeConfigMap = new Map<number, GesCascadeConfig>();
     weatherMap = new Map<number, { temperature: number; condition: string | null }>();
+
+    collapsedCascades = new Set<string>();
 
     dialogVisible = false;
     isEditMode = false;
@@ -84,8 +83,7 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.loadCascades();
-        this.loadConfigs();
-        this.loadCascadeConfigs();
+        this.loadAllData();
     }
 
     ngOnDestroy(): void {
@@ -100,19 +98,23 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
             .subscribe(cascades => { this.cascades = cascades; this.updateAvailableCascades(); });
     }
 
-    loadConfigs(): void {
+    loadAllData(): void {
         this.loading = true;
-        this.gesReportService.getConfigs()
+        forkJoin({
+            configs: this.gesReportService.getConfigs(),
+            cascadeConfigs: this.gesReportService.getCascadeConfigs().pipe(catchError(() => of([] as GesCascadeConfig[])))
+        })
             .pipe(
                 takeUntil(this.destroy$),
                 finalize(() => this.loading = false)
             )
             .subscribe({
-                next: (configs) => {
-                    this.configs = configs.sort((a, b) =>
-                        a.cascade_name.localeCompare(b.cascade_name) || (a.sort_order ?? 0) - (b.sort_order ?? 0)
-                    );
+                next: ({ configs, cascadeConfigs }) => {
+                    this.cascadeConfigMap = new Map(cascadeConfigs.map(c => [c.organization_id, c]));
+                    this.configs = this.sortByCascade(configs);
+                    this.buildConfigItems();
                     this.updateAvailableCascades();
+                    this.loadAllWeather();
                 },
                 error: (err) => {
                     console.error(err);
@@ -123,6 +125,27 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
                     });
                 }
             });
+    }
+
+    private buildConfigItems(): void {
+        const items: typeof this.configItems = [];
+        let currentCascade = -1;
+        for (const config of this.configs) {
+            if (config.cascade_id !== currentCascade) {
+                currentCascade = config.cascade_id;
+                items.push({ type: 'header', cascade_id: config.cascade_id, cascade_name: config.cascade_name });
+            }
+            items.push({ type: 'row', config });
+        }
+        this.configItems = items;
+    }
+
+    private sortByCascade(configs: GesConfigResponse[]): GesConfigResponse[] {
+        return configs.sort((a, b) => {
+            const aCascadeOrder = this.cascadeConfigMap.get(a.cascade_id)?.sort_order ?? 999;
+            const bCascadeOrder = this.cascadeConfigMap.get(b.cascade_id)?.sort_order ?? 999;
+            return aCascadeOrder - bCascadeOrder || (a.sort_order ?? 0) - (b.sort_order ?? 0);
+        });
     }
 
     openNew(): void {
@@ -185,7 +208,7 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
                         detail: this.translate.instant('GES_REPORT.SAVED')
                     });
                     this.dialogVisible = false;
-                    this.loadConfigs();
+                    this.loadAllData();
                 },
                 error: (err) => {
                     console.error(err);
@@ -210,7 +233,7 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
                         summary: this.translate.instant('COMMON.SUCCESS'),
                         detail: this.translate.instant('GES_REPORT.DELETED')
                     });
-                    this.loadConfigs();
+                    this.loadAllData();
                 },
                 error: (err) => {
                     console.error(err);
@@ -237,30 +260,20 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
             .filter((c): c is Organization & { items: Organization[] } => c !== null);
     }
 
+    toggleCascade(cascadeName: string): void {
+        if (this.collapsedCascades.has(cascadeName)) {
+            this.collapsedCascades.delete(cascadeName);
+        } else {
+            this.collapsedCascades.add(cascadeName);
+        }
+    }
+
     hideDialog(): void {
         this.dialogVisible = false;
         this.editingConfig = null;
     }
 
     // --- Cascade Config ---
-
-    private loadCascadeConfigs(): void {
-        this.gesReportService.getCascadeConfigs()
-            .pipe(takeUntil(this.destroy$))
-            .subscribe({
-                next: (configs) => {
-                    this.cascadeConfigMap = new Map(configs.map(c => [c.organization_id, c]));
-                    this.loadAllWeather();
-                },
-                error: () => {
-                    this.messageService.add({
-                        severity: 'error',
-                        summary: this.translate.instant('COMMON.ERROR'),
-                        detail: this.translate.instant('COMMON.LOAD_ERROR')
-                    });
-                }
-            });
-    }
 
     editCascadeConfig(cascadeId: number): void {
         this.editingCascadeId = cascadeId;
@@ -293,8 +306,8 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
                         severity: 'success',
                         summary: this.translate.instant('COMMON.SUCCESS')
                     });
-                    this.cascadeDialogVisible = false;
-                    this.loadCascadeConfigs();
+                    this.hideCascadeDialog();
+                    this.loadAllData();
                 },
                 error: () => {
                     this.messageService.add({
@@ -317,7 +330,7 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
                         summary: this.translate.instant('COMMON.SUCCESS')
                     });
                     this.hideCascadeDialog();
-                    this.loadCascadeConfigs();
+                    this.loadAllData();
                 },
                 error: () => {
                     this.messageService.add({

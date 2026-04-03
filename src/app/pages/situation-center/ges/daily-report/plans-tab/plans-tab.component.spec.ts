@@ -25,10 +25,11 @@ describe('PlansTabComponent', () => {
 
     beforeEach(async () => {
         const spy = jasmine.createSpyObj('GesReportService', [
-            'getConfigs', 'getPlans', 'bulkUpsertPlans'
+            'getConfigs', 'getPlans', 'bulkUpsertPlans', 'getCascadeConfigs'
         ]);
         spy.getConfigs.and.returnValue(of([]));
         spy.getPlans.and.returnValue(of([]));
+        spy.getCascadeConfigs.and.returnValue(of([]));
 
         await TestBed.configureTestingModule({
             imports: [PlansTabComponent, TranslateModule.forRoot()],

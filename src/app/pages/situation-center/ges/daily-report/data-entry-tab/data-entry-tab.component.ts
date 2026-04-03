@@ -14,7 +14,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
 import { GesReportService } from '@/core/services/ges-report.service';
 import { TimeService } from '@/core/services/time.service';
-import { GesConfigResponse, GesDailyData } from '@/core/interfaces/ges-report';
+import { GesConfigResponse, GesCascadeConfig, GesDailyData } from '@/core/interfaces/ges-report';
 import { HasUnsavedChanges } from '@/core/guards/auth.guard';
 
 export class DataEntryRow {
@@ -69,6 +69,7 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
     selectedDate: Date = new Date();
     rows: DataEntryRow[] = [];
     cascadeGroups: { cascade_id: number; cascade_name: string; rows: DataEntryRow[] }[] = [];
+    collapsedCascades = new Set<number>();
     loading = false;
     savingAll = false;
 
@@ -85,12 +86,22 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
         this.loading = true;
         this.rows = [];
 
-        this.gesReportService.getConfigs().pipe(takeUntil(this.destroy$)).subscribe({
-            next: (configs) => {
+        forkJoin({
+            configs: this.gesReportService.getConfigs(),
+            cascadeConfigs: this.gesReportService.getCascadeConfigs().pipe(catchError(() => of([] as GesCascadeConfig[])))
+        }).pipe(takeUntil(this.destroy$)).subscribe({
+            next: ({ configs, cascadeConfigs }) => {
                 if (!configs.length) {
                     this.loading = false;
                     return;
                 }
+
+                const cascadeMap = new Map(cascadeConfigs.map(c => [c.organization_id, c]));
+                configs.sort((a, b) => {
+                    const aCO = cascadeMap.get(a.cascade_id)?.sort_order ?? 999;
+                    const bCO = cascadeMap.get(b.cascade_id)?.sort_order ?? 999;
+                    return aCO - bCO || (a.sort_order ?? 0) - (b.sort_order ?? 0);
+                });
 
                 const dateStr = this.timeService.dateToYMD(this.selectedDate);
                 const requests = configs.map(config =>
@@ -204,6 +215,14 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
         const hasDirty = this.rows.some(r => r.dirty);
         if (!hasDirty) return true;
         return confirm(this.translate.instant('GES_REPORT.UNSAVED_CHANGES'));
+    }
+
+    toggleCascade(cascadeId: number): void {
+        if (this.collapsedCascades.has(cascadeId)) {
+            this.collapsedCascades.delete(cascadeId);
+        } else {
+            this.collapsedCascades.add(cascadeId);
+        }
     }
 
     private buildCascadeGroups(): void {

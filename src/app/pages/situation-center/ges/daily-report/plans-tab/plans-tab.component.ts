@@ -1,15 +1,15 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { forkJoin, Subject } from 'rxjs';
-import { finalize, takeUntil } from 'rxjs/operators';
+import { forkJoin, of, Subject } from 'rxjs';
+import { catchError, finalize, takeUntil } from 'rxjs/operators';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MessageService } from 'primeng/api';
 import { TableModule } from 'primeng/table';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { ButtonModule } from 'primeng/button';
 import { GesReportService } from '@/core/services/ges-report.service';
-import { GesConfigResponse, GesProductionPlanPayload } from '@/core/interfaces/ges-report';
+import { GesConfigResponse, GesCascadeConfig, GesProductionPlanPayload } from '@/core/interfaces/ges-report';
 
 export interface PlanRow {
     config: GesConfigResponse;
@@ -44,6 +44,7 @@ export class PlansTabComponent implements OnInit, OnDestroy {
     selectedYear: number = new Date().getFullYear();
     planRows: PlanRow[] = [];
     planItems: PlanItem[] = [];
+    collapsedCascades = new Set<string>();
     loading = false;
     saving = false;
 
@@ -57,14 +58,18 @@ export class PlansTabComponent implements OnInit, OnDestroy {
         this.loading = true;
         forkJoin({
             configs: this.gesReportService.getConfigs(),
+            cascadeConfigs: this.gesReportService.getCascadeConfigs().pipe(catchError(() => of([] as GesCascadeConfig[]))),
             plans: this.gesReportService.getPlans(this.selectedYear)
         })
             .pipe(takeUntil(this.destroy$), finalize(() => this.loading = false))
             .subscribe({
-                next: ({ configs, plans }) => {
-                    configs.sort((a, b) =>
-                        a.cascade_name.localeCompare(b.cascade_name) || (a.sort_order ?? 0) - (b.sort_order ?? 0)
-                    );
+                next: ({ configs, cascadeConfigs, plans }) => {
+                    const cascadeMap = new Map(cascadeConfigs.map(c => [c.organization_id, c]));
+                    configs.sort((a, b) => {
+                        const aCO = cascadeMap.get(a.cascade_id)?.sort_order ?? 999;
+                        const bCO = cascadeMap.get(b.cascade_id)?.sort_order ?? 999;
+                        return aCO - bCO || (a.sort_order ?? 0) - (b.sort_order ?? 0);
+                    });
                     this.planRows = configs.map((config) => {
                         const months: (number | null)[] = Array(12).fill(null);
                         const original: (number | null)[] = Array(12).fill(null);
@@ -150,6 +155,14 @@ export class PlansTabComponent implements OnInit, OnDestroy {
                     });
                 }
             });
+    }
+
+    toggleCascade(cascadeName: string): void {
+        if (this.collapsedCascades.has(cascadeName)) {
+            this.collapsedCascades.delete(cascadeName);
+        } else {
+            this.collapsedCascades.add(cascadeName);
+        }
     }
 
     private buildPlanItems(): void {
