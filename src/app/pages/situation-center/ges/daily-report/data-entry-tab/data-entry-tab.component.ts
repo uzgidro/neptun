@@ -68,6 +68,7 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
 
     selectedDate: Date = new Date();
     rows: DataEntryRow[] = [];
+    cascadeGroups: { cascade_id: number; cascade_name: string; rows: DataEntryRow[] }[] = [];
     loading = false;
     savingAll = false;
 
@@ -105,6 +106,7 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
                             const form = this.createForm(data);
                             return new DataEntryRow(config, form, data !== null);
                         });
+                        this.buildCascadeGroups();
                         this.loading = false;
                     },
                     error: () => {
@@ -202,6 +204,18 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
         const hasDirty = this.rows.some(r => r.dirty);
         if (!hasDirty) return true;
         return confirm(this.translate.instant('GES_REPORT.UNSAVED_CHANGES'));
+    }
+
+    private buildCascadeGroups(): void {
+        const map = new Map<number, { cascade_id: number; cascade_name: string; rows: DataEntryRow[] }>();
+        for (const row of this.rows) {
+            const id = row.config.cascade_id;
+            if (!map.has(id)) {
+                map.set(id, { cascade_id: id, cascade_name: row.config.cascade_name, rows: [] });
+            }
+            map.get(id)!.rows.push(row);
+        }
+        this.cascadeGroups = Array.from(map.values());
     }
 
     private createForm(data: GesDailyData | null): FormGroup {

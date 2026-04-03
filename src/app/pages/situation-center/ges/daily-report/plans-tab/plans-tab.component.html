@@ -17,7 +17,7 @@
 </div>
 
 <p-table
-    [value]="planRows"
+    [value]="planItems"
     [loading]="loading"
     styleClass="p-datatable-sm p-datatable-gridlines"
     [scrollable]="true"
@@ -31,22 +31,30 @@
             </th>
         </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-row>
-        <tr>
-            <td>{{ row.config.organization_name }}</td>
-            <td *ngFor="let key of monthKeys; let i = index" style="padding: 4px 8px">
-                <p-inputNumber
-                    [(ngModel)]="row.months[i]"
-                    [minFractionDigits]="0"
-                    [maxFractionDigits]="3"
-                    [useGrouping]="false"
-                    [style]="{ width: '100%' }"
-                    [inputStyle]="{ width: '100%', background: row.dirty[i] ? 'var(--yellow-100)' : '' }"
-                    (onInput)="onMonthChange(row, i)"
-                    (onBlur)="onMonthChange(row, i)"
-                />
-            </td>
-        </tr>
+    <ng-template pTemplate="body" let-item>
+        @if (item.type === 'header') {
+            <tr>
+                <td [attr.colspan]="13" class="font-bold" style="background-color: var(--p-primary-100); color: var(--p-primary-700)">
+                    {{ item.cascade_name }}
+                </td>
+            </tr>
+        } @else {
+            <tr>
+                <td>{{ item.row.config.organization_name }}</td>
+                <td *ngFor="let key of monthKeys; let i = index" style="padding: 4px 8px">
+                    <p-inputNumber
+                        [(ngModel)]="item.row.months[i]"
+                        [minFractionDigits]="0"
+                        [maxFractionDigits]="3"
+                        [useGrouping]="false"
+                        [style]="{ width: '100%' }"
+                        [inputStyle]="{ width: '100%', background: item.row.dirty[i] ? 'var(--yellow-100)' : '' }"
+                        (onInput)="onMonthChange(item.row, i)"
+                        (onBlur)="onMonthChange(item.row, i)"
+                    />
+                </td>
+            </tr>
+        }
     </ng-template>
     <ng-template pTemplate="emptymessage">
         <tr>

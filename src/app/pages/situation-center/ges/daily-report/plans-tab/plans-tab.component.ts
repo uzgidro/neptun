@@ -18,6 +18,10 @@ export interface PlanRow {
     dirty: boolean[];
 }
 
+export type PlanItem =
+    | { type: 'header'; cascade_name: string }
+    | { type: 'row'; row: PlanRow };
+
 @Component({
     selector: 'app-ges-plans-tab',
     standalone: true,
@@ -39,6 +43,7 @@ export class PlansTabComponent implements OnInit, OnDestroy {
 
     selectedYear: number = new Date().getFullYear();
     planRows: PlanRow[] = [];
+    planItems: PlanItem[] = [];
     loading = false;
     saving = false;
 
@@ -72,6 +77,7 @@ export class PlansTabComponent implements OnInit, OnDestroy {
 
                         return { config, months, original, dirty };
                     });
+                    this.buildPlanItems();
                 },
                 error: (err) => {
                     this.messageService.add({
@@ -141,6 +147,19 @@ export class PlansTabComponent implements OnInit, OnDestroy {
                     });
                 }
             });
+    }
+
+    private buildPlanItems(): void {
+        const items: PlanItem[] = [];
+        let currentCascade = '';
+        for (const row of this.planRows) {
+            if (row.config.cascade_name !== currentCascade) {
+                currentCascade = row.config.cascade_name;
+                items.push({ type: 'header', cascade_name: currentCascade });
+            }
+            items.push({ type: 'row', row });
+        }
+        this.planItems = items;
     }
 
     ngOnDestroy(): void {

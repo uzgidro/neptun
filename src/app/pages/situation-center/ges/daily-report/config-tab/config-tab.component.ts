@@ -94,7 +94,9 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
             )
             .subscribe({
                 next: (configs) => {
-                    this.configs = configs;
+                    this.configs = configs.sort((a, b) =>
+                        a.cascade_name.localeCompare(b.cascade_name) || (a.sort_order ?? 0) - (b.sort_order ?? 0)
+                    );
                     this.updateAvailableCascades();
                 },
                 error: (err) => {
