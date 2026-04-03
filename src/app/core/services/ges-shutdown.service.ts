@@ -26,7 +26,7 @@ export class GesShutdownService extends ApiService {
     }
 
     addShutdown(formData: FormData, force = false): Observable<any> {
-        if (force) formData.append('force', 'true');
+        if (force) formData.set('force', 'true');
         return this.http.post(this.BASE_URL + SHUTDOWNS, formData);
     }
 

@@ -12,7 +12,7 @@ const FLAT = '/flat';
 })
 export class DischargeService extends ApiService {
     addDischarge(formData: FormData, force = false): Observable<any> {
-        if (force) formData.append('force', 'true');
+        if (force) formData.set('force', 'true');
         return this.http.post(this.BASE_URL + DISCHARGES, formData);
     }
 

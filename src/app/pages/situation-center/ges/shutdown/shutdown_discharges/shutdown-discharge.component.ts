@@ -256,6 +256,7 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges, OnDestroy 
                             });
                         } else {
                             this.isLoading = false;
+                            this.submitted = false;
                         }
                     } else {
                         this.messageService.add({ severity: 'error', summary: this.translate.instant('DISCHARGE.MESSAGES.SAVE_ERROR'), detail: err.error?.message || this.translate.instant('DISCHARGE.MESSAGES.SAVE_FAILED') });

@@ -196,15 +196,16 @@ export class GesShutdownComponent implements OnInit, OnChanges, OnDestroy {
                                     this.shutdownSaved.emit();
                                 },
                                 error: (retryErr) => {
-                                    this.messageService.add({ severity: 'error', summary: this.translate.instant('SITUATION_CENTER.SHUTDOWN.EVENT_CREATE_ERROR'), detail: retryErr.message });
+                                    this.messageService.add({ severity: 'error', summary: this.translate.instant('SITUATION_CENTER.SHUTDOWN.EVENT_CREATE_ERROR'), detail: retryErr.error?.message || this.translate.instant('SITUATION_CENTER.SHUTDOWN.EVENT_CREATE_ERROR') });
                                     this.isLoading = false;
                                 }
                             });
                         } else {
                             this.isLoading = false;
+                            this.submitted = false;
                         }
                     } else {
-                        this.messageService.add({ severity: 'error', summary: this.translate.instant('SITUATION_CENTER.SHUTDOWN.EVENT_CREATE_ERROR'), detail: err.message });
+                        this.messageService.add({ severity: 'error', summary: this.translate.instant('SITUATION_CENTER.SHUTDOWN.EVENT_CREATE_ERROR'), detail: err.error?.message || this.translate.instant('SITUATION_CENTER.SHUTDOWN.EVENT_CREATE_ERROR') });
                         this.isLoading = false;
                     }
                 },

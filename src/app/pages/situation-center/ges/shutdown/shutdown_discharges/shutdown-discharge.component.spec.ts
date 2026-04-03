@@ -129,6 +129,7 @@ describe('ShutdownDischargeComponent - 409 Conflict handling', () => {
         expect(dischargeService.addDischarge).toHaveBeenCalledTimes(1);
         expect(component.isLoading).toBeFalse();
         expect(component.isFormOpen).toBeTrue();
+        expect(component.submitted).toBeFalse();
     });
 
     it('should show error toast on non-409 error without confirm dialog', () => {
