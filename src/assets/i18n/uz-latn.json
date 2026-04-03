@@ -8,6 +8,7 @@
     "CLOSE": "Yopish",
     "CONFIRM": "Tasdiqlash",
     "CONFIRM_DELETE": "Oʻchirishni xohlaysizmi?",
+    "FORCE_CONFIRM": "Joriyni tugatib, yangisini yaratasizmi?",
     "CONGRATULATIONS": "Tabriklaymiz",
     "CREATE": "Yaratish",
     "CURRENT_VALUE": "Joriy qiymat",
@@ -1892,7 +1893,8 @@
       "EVENT_DELETED": "Voqea o'chirildi",
       "EVENT_UPDATE_ERROR": "Voqeani yangilashda xatolik",
       "EVENT_CREATE_ERROR": "Voqeani qo'shishda xatolik",
-      "EVENT_DELETE_ERROR": "Voqeani o'chirishda xatolik"
+      "EVENT_DELETE_ERROR": "Voqeani o'chirishda xatolik",
+      "CONFLICT_EXISTS": "Ushbu tashkilot uchun tugallanmagan favqulodda o'chirish mavjud."
     },
     "DISCHARGE": {
       "TITLE": "Bo'sh suv tashlab yuborish",
@@ -3431,7 +3433,8 @@
       "RECORD_ADDED": "Yangi suv tashlab yuborish yozuvi qo'shildi",
       "DELETED": "Suv tashlab yuborish o'chirildi",
       "DELETE_ERROR": "Suv tashlab yuborishni o'chirish xatosi",
-      "DOWNLOAD_FAILED": "Faylni yuklab bo'lmadi"
+      "DOWNLOAD_FAILED": "Faylni yuklab bo'lmadi",
+      "CONFLICT_EXISTS": "Ushbu tashkilot uchun tugallanmagan salt tashlama mavjud."
     }
   },
   "VACATION": {

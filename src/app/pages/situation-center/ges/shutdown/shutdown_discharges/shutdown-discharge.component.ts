@@ -241,8 +241,26 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges, OnDestroy 
                     this.closeDialog();
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: this.translate.instant('DISCHARGE.MESSAGES.SAVE_ERROR'), detail: err.error?.message || this.translate.instant('DISCHARGE.MESSAGES.SAVE_FAILED') });
-                    this.isLoading = false;
+                    if (err.status === 409) {
+                        const msg = err.error?.error || this.translate.instant('DISCHARGE.MESSAGES.CONFLICT_EXISTS');
+                        if (confirm(msg + '\n' + this.translate.instant('COMMON.FORCE_CONFIRM'))) {
+                            this.dischargeService.addDischarge(formData, true).pipe(takeUntil(this.destroy$)).subscribe({
+                                next: () => {
+                                    this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('DISCHARGE.MESSAGES.RECORD_ADDED') });
+                                    this.closeDialog();
+                                },
+                                error: (retryErr) => {
+                                    this.messageService.add({ severity: 'error', summary: this.translate.instant('DISCHARGE.MESSAGES.SAVE_ERROR'), detail: retryErr.error?.message || this.translate.instant('DISCHARGE.MESSAGES.SAVE_FAILED') });
+                                    this.isLoading = false;
+                                }
+                            });
+                        } else {
+                            this.isLoading = false;
+                        }
+                    } else {
+                        this.messageService.add({ severity: 'error', summary: this.translate.instant('DISCHARGE.MESSAGES.SAVE_ERROR'), detail: err.error?.message || this.translate.instant('DISCHARGE.MESSAGES.SAVE_FAILED') });
+                        this.isLoading = false;
+                    }
                 },
                 complete: () => {
                     this.isLoading = false;

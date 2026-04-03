@@ -39,6 +39,7 @@
     "EXPORT_SUCCESS": "File exported successfully",
     "FILL_REQUIRED": "Fill in required fields",
     "CONFIRM_DELETE": "Confirm deletion",
+    "FORCE_CONFIRM": "Close current and create new?",
     "MONTHS": {
       "JAN": "Jan",
       "FEB": "Feb",
@@ -1892,7 +1893,8 @@
       "EVENT_DELETED": "Event deleted",
       "EVENT_UPDATE_ERROR": "Error updating event",
       "EVENT_CREATE_ERROR": "Error creating event",
-      "EVENT_DELETE_ERROR": "Error deleting event"
+      "EVENT_DELETE_ERROR": "Error deleting event",
+      "CONFLICT_EXISTS": "An unfinished emergency shutdown already exists for this organization."
     },
     "DISCHARGE": {
       "TITLE": "Spillway Discharge",
@@ -3431,7 +3433,8 @@
       "RECORD_ADDED": "New discharge record added",
       "DELETED": "Discharge deleted",
       "DELETE_ERROR": "Discharge deletion error",
-      "DOWNLOAD_FAILED": "Failed to download file"
+      "DOWNLOAD_FAILED": "Failed to download file",
+      "CONFLICT_EXISTS": "An unfinished idle discharge already exists for this organization."
     }
   },
   "VACATION": {

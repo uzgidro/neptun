@@ -184,8 +184,29 @@ export class GesShutdownComponent implements OnInit, OnChanges, OnDestroy {
                     this.shutdownSaved.emit();
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: this.translate.instant('SITUATION_CENTER.SHUTDOWN.EVENT_CREATE_ERROR'), detail: err.message });
-                    this.isLoading = false;
+                    if (err.status === 409) {
+                        const msg = err.error?.error || this.translate.instant('SITUATION_CENTER.SHUTDOWN.CONFLICT_EXISTS');
+                        if (confirm(msg + '\n' + this.translate.instant('COMMON.FORCE_CONFIRM'))) {
+                            this.gesShutdownService.addShutdown(formData, true).pipe(takeUntil(this.destroy$)).subscribe({
+                                next: () => {
+                                    this.isFormOpen = false;
+                                    this.form.reset();
+                                    this.messageService.add({ severity: 'success', summary: this.translate.instant('SITUATION_CENTER.SHUTDOWN.EVENT_CREATED') });
+                                    this.closeDialog();
+                                    this.shutdownSaved.emit();
+                                },
+                                error: (retryErr) => {
+                                    this.messageService.add({ severity: 'error', summary: this.translate.instant('SITUATION_CENTER.SHUTDOWN.EVENT_CREATE_ERROR'), detail: retryErr.message });
+                                    this.isLoading = false;
+                                }
+                            });
+                        } else {
+                            this.isLoading = false;
+                        }
+                    } else {
+                        this.messageService.add({ severity: 'error', summary: this.translate.instant('SITUATION_CENTER.SHUTDOWN.EVENT_CREATE_ERROR'), detail: err.message });
+                        this.isLoading = false;
+                    }
                 },
                 complete: () => {
                     this.submitted = false;
