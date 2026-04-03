@@ -34,7 +34,7 @@ export class GesReportService extends ApiService {
         return this.http.post<{ status: string }>(`${this.BASE_URL}${GES_REPORT}${DAILY_DATA}`, payload);
     }
 
-    getDailyData(organizationId: number, date: string): Observable<GesDailyData> {
+    getDailyData(organizationId: number, date: string): Observable<GesDailyData | null> {
         const params = new HttpParams().set('organization_id', organizationId).set('date', date);
         return this.http.get<GesDailyData>(`${this.BASE_URL}${GES_REPORT}${DAILY_DATA}`, { params });
     }

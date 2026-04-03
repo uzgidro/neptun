@@ -94,17 +94,14 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
                 const dateStr = this.timeService.dateToYMD(this.selectedDate);
                 const requests = configs.map(config =>
                     this.gesReportService.getDailyData(config.organization_id, dateStr).pipe(
-                        catchError(err => {
-                            if (err.status === 404) return of(null);
-                            return of(null);
-                        })
+                        catchError(() => of(null))
                     )
                 );
 
                 forkJoin(requests).pipe(takeUntil(this.destroy$)).subscribe({
                     next: (results) => {
                         this.rows = configs.map((config, i) => {
-                            const data = results[i] as GesDailyData | null;
+                            const data = results[i];
                             const form = this.createForm(data);
                             return new DataEntryRow(config, form, data !== null);
                         });
