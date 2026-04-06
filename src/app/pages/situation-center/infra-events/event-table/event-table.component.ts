@@ -18,6 +18,7 @@ import { GroupSelectComponent } from '@/layout/component/dialog/group-select/gro
 import { FileUploadComponent } from '@/layout/component/dialog/file-upload/file-upload.component';
 import { FileViewerComponent } from '@/layout/component/dialog/file-viewer/file-viewer.component';
 import { FileListComponent } from '@/layout/component/dialog/file-list/file-list.component';
+import { SelectComponent } from '@/layout/component/dialog/select/select.component';
 import { InfraEventService } from '@/core/services/infra-event.service';
 import { ApiService } from '@/core/services/api.service';
 import { OrganizationService } from '@/core/services/organization.service';
@@ -46,12 +47,14 @@ import { Organization } from '@/core/interfaces/organizations';
         GroupSelectComponent,
         FileUploadComponent,
         FileViewerComponent,
-        FileListComponent
+        FileListComponent,
+        SelectComponent
     ],
     templateUrl: './event-table.component.html'
 })
 export class EventTableComponent implements OnInit, OnChanges, OnDestroy {
     @Input() category!: InfraEventCategory;
+    @Input() categories: InfraEventCategory[] = [];
     @Input() date: Date = new Date();
 
     events: InfraEvent[] = [];
@@ -85,6 +88,7 @@ export class EventTableComponent implements OnInit, OnChanges, OnDestroy {
 
     ngOnInit(): void {
         this.form = this.fb.group({
+            category: this.fb.control<InfraEventCategory | null>(null, [Validators.required]),
             organization: this.fb.control<Organization | null>(null, [Validators.required]),
             occurred_at: this.fb.control<Date | null>(null, [Validators.required]),
             restored_at: this.fb.control<Date | null>(null),
@@ -132,7 +136,7 @@ export class EventTableComponent implements OnInit, OnChanges, OnDestroy {
         this.isEditMode = false;
         this.currentEventId = null;
         this.currentEvent = null;
-        this.form.reset({ clear_restored_at: false });
+        this.form.reset({ clear_restored_at: false, category: this.category });
         this.selectedFiles = [];
         this.existingFilesToKeep = [];
         this.filesDirty = false;
@@ -160,8 +164,11 @@ export class EventTableComponent implements OnInit, OnChanges, OnDestroy {
             }
         }
 
+        const categoryToSet = this.categories.find((c) => c.id === event.category_id) || this.category;
+
         this.form.reset({ clear_restored_at: false });
         this.form.patchValue({
+            category: categoryToSet,
             organization: organizationToSet,
             occurred_at: new Date(event.occurred_at),
             restored_at: event.restored_at ? new Date(event.restored_at) : null,
@@ -218,6 +225,7 @@ export class EventTableComponent implements OnInit, OnChanges, OnDestroy {
     private submitPayload(raw: any, fileIds?: number[]): void {
         if (this.isEditMode && this.currentEventId) {
             const payload: InfraEventUpdatePayload = {};
+            if (raw.category) payload.category_id = raw.category.id;
             if (raw.organization) payload.organization_id = raw.organization.id;
             if (raw.occurred_at) payload.occurred_at = raw.occurred_at.toISOString();
             if (raw.clear_restored_at) {
@@ -242,7 +250,7 @@ export class EventTableComponent implements OnInit, OnChanges, OnDestroy {
                 });
         } else {
             const payload: InfraEventCreatePayload = {
-                category_id: this.category.id,
+                category_id: raw.category.id,
                 organization_id: raw.organization.id,
                 occurred_at: raw.occurred_at.toISOString(),
                 description: raw.description

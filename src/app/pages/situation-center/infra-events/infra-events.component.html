@@ -2,6 +2,20 @@
     <div class="flex flex-wrap justify-between items-center gap-4 mb-4">
         <h2 class="m-0">{{ 'SITUATION_CENTER.INFRA_EVENTS.TITLE' | translate }}</h2>
         <div class="flex items-center gap-2">
+            <p-button
+                label="Excel"
+                icon="pi pi-file-excel"
+                severity="success"
+                [loading]="isExcelLoading"
+                (onClick)="download('excel')">
+            </p-button>
+            <p-button
+                label="PDF"
+                icon="pi pi-file-pdf"
+                severity="danger"
+                [loading]="isPdfLoading"
+                (onClick)="download('pdf')">
+            </p-button>
             @if (authService.isSc()) {
                 <p-button
                     [label]="'SITUATION_CENTER.INFRA_EVENTS.MANAGE_CATEGORIES' | translate"
@@ -31,7 +45,7 @@
             <p-tabpanels>
                 @for (cat of categories; track cat.id; let i = $index) {
                     <p-tabpanel [value]="'' + i">
-                        <app-event-table [category]="cat" [date]="selectedDate"></app-event-table>
+                        <app-event-table [category]="cat" [categories]="categories" [date]="selectedDate"></app-event-table>
                     </p-tabpanel>
                 }
             </p-tabpanels>

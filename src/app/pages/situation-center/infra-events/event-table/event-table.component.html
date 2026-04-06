@@ -141,6 +141,15 @@
     (cancel)="closeDialog()"
 >
     <form class="p-4" [formGroup]="form" (ngSubmit)="onSubmit()">
+        <app-select
+            [label]="'SITUATION_CENTER.INFRA_EVENTS.CATEGORY.DISPLAY_NAME' | translate"
+            formControlName="category"
+            [items]="categories"
+            optionLabel="display_name"
+            [submitted]="submitted"
+            [errorMessage]="'SITUATION_CENTER.INFRA_EVENTS.CATEGORY.DISPLAY_NAME' | translate">
+        </app-select>
+
         <app-group-select
             [label]="'SITUATION_CENTER.COMMON.OBJECT' | translate"
             formControlName="organization"
