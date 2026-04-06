@@ -1,0 +1,101 @@
+<p-dialog
+    [header]="'SITUATION_CENTER.INFRA_EVENTS.CATEGORY.TITLE' | translate"
+    [(visible)]="visible"
+    (onHide)="onDialogHide()"
+    [modal]="true"
+    [style]="{ width: '700px' }"
+    [draggable]="false"
+>
+    <div class="flex justify-end mb-4">
+        <p-button [label]="'SITUATION_CENTER.INFRA_EVENTS.CATEGORY.ADD' | translate" icon="pi pi-plus" (click)="openNew()" />
+    </div>
+
+    <p-table [value]="categories" [scrollable]="true" scrollHeight="400px">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>{{ 'SITUATION_CENTER.INFRA_EVENTS.CATEGORY.SLUG' | translate }}</th>
+                <th>{{ 'SITUATION_CENTER.INFRA_EVENTS.CATEGORY.DISPLAY_NAME' | translate }}</th>
+                <th>{{ 'SITUATION_CENTER.INFRA_EVENTS.CATEGORY.LABEL' | translate }}</th>
+                <th>{{ 'SITUATION_CENTER.INFRA_EVENTS.CATEGORY.SORT_ORDER' | translate }}</th>
+                <th style="width: 10%">{{ 'SITUATION_CENTER.COMMON.ACTIONS' | translate }}</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-cat>
+            <tr>
+                <td>{{ cat.slug }}</td>
+                <td>{{ cat.display_name }}</td>
+                <td class="max-w-48 truncate" [pTooltip]="cat.label">{{ cat.label }}</td>
+                <td>{{ cat.sort_order }}</td>
+                <td>
+                    <p-button
+                        icon="pi pi-pencil"
+                        severity="info"
+                        [text]="true"
+                        [rounded]="true"
+                        (click)="editCategory(cat)"
+                    />
+                    <p-button
+                        icon="pi pi-trash"
+                        severity="danger"
+                        [text]="true"
+                        [rounded]="true"
+                        (click)="deleteCategory(cat)"
+                    />
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="5" class="text-center">
+                    {{ 'SITUATION_CENTER.INFRA_EVENTS.CATEGORY.NO_CATEGORIES' | translate }}
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+    @if (isFormOpen) {
+        <p-dialog
+            [header]="isEditMode ? ('SITUATION_CENTER.INFRA_EVENTS.CATEGORY.EDIT' | translate) : ('SITUATION_CENTER.INFRA_EVENTS.CATEGORY.ADD' | translate)"
+            [(visible)]="isFormOpen"
+            [modal]="true"
+            [style]="{ width: '450px' }"
+            [draggable]="false"
+        >
+            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+                <div class="flex flex-col gap-2 mb-4">
+                    <label for="slug">{{ 'SITUATION_CENTER.INFRA_EVENTS.CATEGORY.SLUG' | translate }}</label>
+                    <input id="slug" pInputText formControlName="slug" />
+                    @if (submitted && form.get('slug')?.hasError('required')) {
+                        <small class="text-red-500">{{ 'SITUATION_CENTER.INFRA_EVENTS.CATEGORY.SLUG' | translate }}</small>
+                    }
+                </div>
+
+                <div class="flex flex-col gap-2 mb-4">
+                    <label for="display_name">{{ 'SITUATION_CENTER.INFRA_EVENTS.CATEGORY.DISPLAY_NAME' | translate }}</label>
+                    <input id="display_name" pInputText formControlName="display_name" />
+                    @if (submitted && form.get('display_name')?.hasError('required')) {
+                        <small class="text-red-500">{{ 'SITUATION_CENTER.INFRA_EVENTS.CATEGORY.DISPLAY_NAME' | translate }}</small>
+                    }
+                </div>
+
+                <div class="flex flex-col gap-2 mb-4">
+                    <label for="label">{{ 'SITUATION_CENTER.INFRA_EVENTS.CATEGORY.LABEL' | translate }}</label>
+                    <input id="label" pInputText formControlName="label" />
+                    @if (submitted && form.get('label')?.hasError('required')) {
+                        <small class="text-red-500">{{ 'SITUATION_CENTER.INFRA_EVENTS.CATEGORY.LABEL' | translate }}</small>
+                    }
+                </div>
+
+                <div class="flex flex-col gap-2 mb-4">
+                    <label for="sort_order">{{ 'SITUATION_CENTER.INFRA_EVENTS.CATEGORY.SORT_ORDER' | translate }}</label>
+                    <p-inputnumber id="sort_order" formControlName="sort_order" [showButtons]="true" [min]="0"></p-inputnumber>
+                </div>
+
+                <div class="flex justify-end gap-2">
+                    <p-button [label]="'COMMON.CANCEL' | translate" severity="secondary" (click)="isFormOpen = false" />
+                    <p-button [label]="'COMMON.SAVE' | translate" type="submit" [loading]="isLoading" />
+                </div>
+            </form>
+        </p-dialog>
+    }
+</p-dialog>

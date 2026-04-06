@@ -245,7 +245,8 @@
     "HYDRAULIC_STRUCTURES": "Hydraulic Structures",
     "INCIDENTS": "Incidents",
     "VISITS": "Visits",
-    "SNOW_COVER": "MODSNOW"
+    "SNOW_COVER": "MODSNOW",
+    "INFRA_EVENTS": "Infrastructure"
   },
   "FILTRATION": {
     "TITLE": "Filtration",
@@ -2104,6 +2105,40 @@
         "KHOREZM": "Khorezm Region",
         "BUKHARA": "Bukhara Region",
         "TASHKENT_CITY": "Tashkent City"
+      }
+    },
+    "INFRA_EVENTS": {
+      "TITLE": "Infrastructure Status",
+      "ADD_EVENT": "Add Event",
+      "EDIT_EVENT": "Edit Event",
+      "MANAGE_CATEGORIES": "Manage Categories",
+      "OCCURRED_AT": "Occurred At",
+      "RESTORED_AT": "Restored At",
+      "DESCRIPTION": "Description",
+      "REMEDIATION": "Remediation",
+      "NOTES": "Notes",
+      "STATUS": "Status",
+      "UNRESOLVED": "Unresolved",
+      "RESOLVED": "Resolved",
+      "CLEAR_RESTORED": "Reopen (clear restoration time)",
+      "NO_EVENTS": "No events for selected date",
+      "EVENT_CREATED": "Event created",
+      "EVENT_UPDATED": "Event updated",
+      "EVENT_DELETED": "Event deleted",
+      "FILES": "Files",
+      "CATEGORY": {
+        "TITLE": "Event Categories",
+        "ADD": "Add Category",
+        "EDIT": "Edit Category",
+        "SLUG": "Identifier (slug)",
+        "DISPLAY_NAME": "Display Name",
+        "LABEL": "Report Header",
+        "SORT_ORDER": "Sort Order",
+        "CREATED": "Category created",
+        "UPDATED": "Category updated",
+        "DELETED": "Category deleted",
+        "HAS_EVENTS_ERROR": "Cannot delete: category has events",
+        "NO_CATEGORIES": "No categories"
       }
     }
   },

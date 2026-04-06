@@ -245,7 +245,8 @@
     "MINISTRY_ORDERS": "Vazirlik va idoralarning buyruqlari",
     "JOINT_AGREEMENTS": "Qo'shma kelishuvlar (NDA)",
     "OTHER_DOCS": "Boshqa hujjatlar",
-    "SNOW_COVER": "MODSNOW"
+    "SNOW_COVER": "MODSNOW",
+    "INFRA_EVENTS": "Infratuzilma"
   },
   "FILTRATION": {
     "TITLE": "Filtratsiya",
@@ -2104,6 +2105,40 @@
         "KHOREZM": "Xorazm viloyati",
         "BUKHARA": "Buxoro viloyati",
         "TASHKENT_CITY": "Toshkent shahri"
+      }
+    },
+    "INFRA_EVENTS": {
+      "TITLE": "Infratuzilma holati",
+      "ADD_EVENT": "Hodisa qo'shish",
+      "EDIT_EVENT": "Hodisani tahrirlash",
+      "MANAGE_CATEGORIES": "Kategoriyalarni boshqarish",
+      "OCCURRED_AT": "Yuzaga kelgan vaqt",
+      "RESTORED_AT": "Tiklangan vaqt",
+      "DESCRIPTION": "Tavsif",
+      "REMEDIATION": "Ko'rilgan choralar",
+      "NOTES": "Izohlar",
+      "STATUS": "Holat",
+      "UNRESOLVED": "Bartaraf etilmagan",
+      "RESOLVED": "Bartaraf etilgan",
+      "CLEAR_RESTORED": "Qayta ochish (tiklash vaqtini bekor qilish)",
+      "NO_EVENTS": "Tanlangan sana uchun hodisalar yo'q",
+      "EVENT_CREATED": "Hodisa yaratildi",
+      "EVENT_UPDATED": "Hodisa yangilandi",
+      "EVENT_DELETED": "Hodisa o'chirildi",
+      "FILES": "Fayllar",
+      "CATEGORY": {
+        "TITLE": "Hodisa kategoriyalari",
+        "ADD": "Kategoriya qo'shish",
+        "EDIT": "Kategoriyani tahrirlash",
+        "SLUG": "Identifikator (slug)",
+        "DISPLAY_NAME": "Qisqa nomi",
+        "LABEL": "Hisobotdagi sarlavha",
+        "SORT_ORDER": "Tartiblash tartibi",
+        "CREATED": "Kategoriya yaratildi",
+        "UPDATED": "Kategoriya yangilandi",
+        "DELETED": "Kategoriya o'chirildi",
+        "HAS_EVENTS_ERROR": "O'chirib bo'lmaydi: kategoriyada hodisalar mavjud",
+        "NO_CATEGORIES": "Kategoriyalar yo'q"
       }
     }
   },

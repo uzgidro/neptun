@@ -1,0 +1,215 @@
+@if (authService.isSc()) {
+    <div class="mb-4">
+        <p-button [label]="'SITUATION_CENTER.INFRA_EVENTS.ADD_EVENT' | translate" icon="pi pi-plus" (click)="openNew()" />
+    </div>
+}
+
+<p-table
+    #dt
+    [value]="events"
+    dataKey="id"
+    [loading]="loading"
+    [scrollable]="true"
+    scrollHeight="60rem"
+    [tableStyle]="{ 'min-width': '70rem' }"
+    rowGroupMode="subheader"
+    groupRowsBy="organization_name"
+    [sortField]="'organization_name'"
+    [globalFilterFields]="['organization_name', 'description', 'remediation', 'created_by.name']"
+>
+    <ng-template #caption>
+        <div class="flex justify-end items-center gap-3">
+            <p-iconfield>
+                <p-inputicon>
+                    <i class="pi pi-search"></i>
+                </p-inputicon>
+                <input
+                    #searchInput
+                    pInputText
+                    type="text"
+                    (input)="dt.filterGlobal(searchInput.value, 'contains')"
+                    [placeholder]="'COMMON.SEARCH' | translate"
+                    class="w-full"
+                />
+            </p-iconfield>
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="header">
+        <tr>
+            <th style="width: 3rem">№</th>
+            <th pSortableColumn="occurred_at" style="min-width: 10rem">
+                <div class="flex items-center gap-2">
+                    {{ 'SITUATION_CENTER.INFRA_EVENTS.OCCURRED_AT' | translate }}
+                    <p-sortIcon field="occurred_at" />
+                </div>
+            </th>
+            <th pSortableColumn="restored_at" style="min-width: 10rem">
+                <div class="flex items-center gap-2">
+                    {{ 'SITUATION_CENTER.INFRA_EVENTS.RESTORED_AT' | translate }}
+                    <p-sortIcon field="restored_at" />
+                </div>
+            </th>
+            <th style="min-width: 5rem">{{ 'SITUATION_CENTER.INFRA_EVENTS.STATUS' | translate }}</th>
+            <th style="min-width: 14rem">{{ 'SITUATION_CENTER.INFRA_EVENTS.DESCRIPTION' | translate }}</th>
+            <th style="min-width: 12rem">{{ 'SITUATION_CENTER.INFRA_EVENTS.REMEDIATION' | translate }}</th>
+            <th style="min-width: 8rem">{{ 'SITUATION_CENTER.INFRA_EVENTS.NOTES' | translate }}</th>
+            <th style="min-width: 8rem">{{ 'SITUATION_CENTER.COMMON.CREATED_BY' | translate }}</th>
+            <th style="width: 6%">{{ 'SITUATION_CENTER.INFRA_EVENTS.FILES' | translate }}</th>
+            @if (authService.isSc()) {
+                <th style="width: 8%">{{ 'SITUATION_CENTER.COMMON.ACTIONS' | translate }}</th>
+            }
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="groupheader" let-event>
+        <tr>
+            <td class="bg-gray-200 dark:bg-gray-900" [attr.colspan]="authService.isSc() ? 10 : 9">
+                <span class="font-bold text-lg">{{ event.organization_name }}</span>
+            </td>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-event>
+        <tr>
+            <td>{{ getRowIndex(event) }}</td>
+            <td>{{ event.occurred_at | date:'yyyy-MM-dd HH:mm' }}</td>
+            <td>{{ event.restored_at ? (event.restored_at | date:'yyyy-MM-dd HH:mm') : '-' }}</td>
+            <td>
+                @if (event.restored_at) {
+                    <span class="text-green-600 font-semibold">{{ 'SITUATION_CENTER.INFRA_EVENTS.RESOLVED' | translate }}</span>
+                } @else {
+                    <span class="text-red-600 font-semibold">{{ 'SITUATION_CENTER.INFRA_EVENTS.UNRESOLVED' | translate }}</span>
+                }
+            </td>
+            <td>{{ event.description }}</td>
+            <td>{{ event.remediation || '-' }}</td>
+            <td>{{ event.notes || '-' }}</td>
+            <td>{{ event.created_by?.name }}</td>
+            <td>
+                @if (event.files && event.files.length > 0) {
+                    <p-button
+                        [label]="event.files.length.toString()"
+                        icon="pi pi-paperclip"
+                        severity="secondary"
+                        [text]="true"
+                        (click)="showFiles(event)"
+                        [pTooltip]="'SITUATION_CENTER.COMMON.VIEW_FILES' | translate"
+                    />
+                } @else {
+                    <span class="text-color-secondary">—</span>
+                }
+            </td>
+            @if (authService.isSc()) {
+                <td>
+                    <p-button
+                        icon="pi pi-pencil"
+                        severity="info"
+                        [text]="true"
+                        [rounded]="true"
+                        (click)="editEvent(event)"
+                        [pTooltip]="'SITUATION_CENTER.COMMON.EDIT' | translate"
+                    />
+                    <p-button
+                        icon="pi pi-trash"
+                        severity="danger"
+                        [text]="true"
+                        [rounded]="true"
+                        (click)="deleteEvent(event)"
+                        [pTooltip]="'SITUATION_CENTER.COMMON.DELETE' | translate"
+                    />
+                </td>
+            }
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+        <tr>
+            <td [attr.colspan]="authService.isSc() ? 10 : 9" class="text-center">
+                {{ 'SITUATION_CENTER.INFRA_EVENTS.NO_EVENTS' | translate }}
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+
+<app-dialog
+    [(visible)]="isFormOpen"
+    [header]="isEditMode ? ('SITUATION_CENTER.INFRA_EVENTS.EDIT_EVENT' | translate) : ('SITUATION_CENTER.INFRA_EVENTS.ADD_EVENT' | translate)"
+    [form]="form"
+    [submitting]="isLoading"
+    (save)="onSubmit()"
+    (cancel)="closeDialog()"
+>
+    <form class="p-4" [formGroup]="form" (ngSubmit)="onSubmit()">
+        <app-group-select
+            [label]="'SITUATION_CENTER.COMMON.OBJECT' | translate"
+            formControlName="organization"
+            [items]="organizations"
+            [loading]="orgsLoading"
+            [submitted]="submitted"
+            [errorMessage]="'SITUATION_CENTER.COMMON.SELECT_ORGANIZATION' | translate">
+        </app-group-select>
+
+        <app-date-picker
+            [label]="'SITUATION_CENTER.INFRA_EVENTS.OCCURRED_AT' | translate"
+            formControlName="occurred_at"
+            [submitted]="submitted"
+            [errorMessage]="'SITUATION_CENTER.INFRA_EVENTS.OCCURRED_AT' | translate">
+        </app-date-picker>
+
+        <app-date-picker
+            [label]="'SITUATION_CENTER.INFRA_EVENTS.RESTORED_AT' | translate"
+            formControlName="restored_at"
+            [submitted]="submitted"
+            [required]="false">
+        </app-date-picker>
+
+        @if (isEditMode && currentEvent?.restored_at) {
+            <div class="flex items-center gap-2 mb-4">
+                <p-checkbox formControlName="clear_restored_at" [binary]="true" inputId="clear_restored"></p-checkbox>
+                <label for="clear_restored">{{ 'SITUATION_CENTER.INFRA_EVENTS.CLEAR_RESTORED' | translate }}</label>
+            </div>
+        }
+
+        <app-textarea
+            [label]="'SITUATION_CENTER.INFRA_EVENTS.DESCRIPTION' | translate"
+            formControlName="description"
+            [submitted]="submitted"
+            [errorMessage]="'SITUATION_CENTER.INFRA_EVENTS.DESCRIPTION' | translate">
+        </app-textarea>
+
+        <app-textarea
+            [label]="'SITUATION_CENTER.INFRA_EVENTS.REMEDIATION' | translate"
+            formControlName="remediation"
+            [submitted]="submitted"
+            [required]="false">
+        </app-textarea>
+
+        <app-textarea
+            [label]="'SITUATION_CENTER.INFRA_EVENTS.NOTES' | translate"
+            formControlName="notes"
+            [submitted]="submitted"
+            [required]="false">
+        </app-textarea>
+
+        @if (isEditMode && currentEvent?.files && (currentEvent?.files?.length ?? 0) > 0) {
+            <app-file-list
+                [files]="currentEvent?.files || []"
+                (removeFile)="removeExistingFile($event)">
+            </app-file-list>
+        }
+
+        <app-file-upload
+            [label]="isEditMode ? ('SITUATION_CENTER.COMMON.ADD_NEW_FILES' | translate) : ('SITUATION_CENTER.COMMON.ATTACH_FILES' | translate)"
+            [files]="selectedFiles"
+            (filesChange)="onFileSelect($event)"
+            (removeFile)="removeFile($event)">
+        </app-file-upload>
+    </form>
+</app-dialog>
+
+<app-file-viewer
+    [(visible)]="showFilesDialog"
+    [header]="'SITUATION_CENTER.INFRA_EVENTS.FILES' | translate"
+    [files]="selectedEventForFiles?.files || []">
+</app-file-viewer>

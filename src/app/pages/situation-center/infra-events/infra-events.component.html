@@ -1,0 +1,48 @@
+<div class="card">
+    <div class="flex flex-wrap justify-between items-center gap-4 mb-4">
+        <h2 class="m-0">{{ 'SITUATION_CENTER.INFRA_EVENTS.TITLE' | translate }}</h2>
+        <div class="flex items-center gap-2">
+            @if (authService.isSc()) {
+                <p-button
+                    [label]="'SITUATION_CENTER.INFRA_EVENTS.MANAGE_CATEGORIES' | translate"
+                    icon="pi pi-cog"
+                    severity="secondary"
+                    [outlined]="true"
+                    (onClick)="showCategoryAdmin = true">
+                </p-button>
+            }
+            <app-date [syncQueryParams]="true" (dateChange)="onDateChanged($event)"></app-date>
+        </div>
+    </div>
+
+    @if (categoriesLoading) {
+        <div class="flex justify-center p-4">
+            <i class="pi pi-spin pi-spinner text-2xl"></i>
+        </div>
+    } @else if (categories.length === 0) {
+        <p>{{ 'SITUATION_CENTER.INFRA_EVENTS.CATEGORY.NO_CATEGORIES' | translate }}</p>
+    } @else {
+        <p-tabs [value]="activeTab">
+            <p-tablist>
+                @for (cat of categories; track cat.id; let i = $index) {
+                    <p-tab [value]="'' + i">{{ cat.display_name }}</p-tab>
+                }
+            </p-tablist>
+            <p-tabpanels>
+                @for (cat of categories; track cat.id; let i = $index) {
+                    <p-tabpanel [value]="'' + i">
+                        <app-event-table [category]="cat" [date]="selectedDate"></app-event-table>
+                    </p-tabpanel>
+                }
+            </p-tabpanels>
+        </p-tabs>
+    }
+
+    @if (showCategoryAdmin) {
+        <app-category-admin
+            [(visible)]="showCategoryAdmin"
+            [categories]="categories"
+            (categoriesChanged)="onCategoriesChanged()">
+        </app-category-admin>
+    }
+</div>

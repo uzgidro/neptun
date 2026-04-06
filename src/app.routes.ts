@@ -62,6 +62,7 @@ export const appRoutes: Routes = [
             { path: 'reservoir-summary-hourly', loadComponent: () => import('./app/pages/situation-center/reservoirs-info/reservoir-summary-hourly/reservoir-summary-hourly.component').then(m => m.ReservoirSummaryHourlyComponent), canActivate: [raisGuard] },
             { path: 'visits', loadComponent: () => import('./app/pages/situation-center/other/visits/visits.component').then(m => m.VisitsComponent), canActivate: [raisGuard] },
             { path: 'incidents', loadComponent: () => import('./app/pages/situation-center/other/incidents/incidents.component').then(m => m.IncidentsComponent), canActivate: [raisGuard] },
+            { path: 'infra-events', loadComponent: () => import('./app/pages/situation-center/infra-events/infra-events.component').then(m => m.InfraEventsComponent), canActivate: [raisGuard] },
             { path: 'reservoir-device', loadComponent: () => import('./app/pages/situation-center/reservoirs-info/reservoirs-device/reservoirs-device.component').then(m => m.ReservoirsDeviceComponent), canActivate: [raisGuard] },
             { path: 'snow-cover', loadComponent: () => import('./app/pages/situation-center/reservoirs-info/snow-cover/snow-cover.component').then(m => m.SnowCoverComponent), canActivate: [raisGuard] },
             { path: 'filtration-settings', loadComponent: () => import('./app/pages/situation-center/reservoirs-info/filtration-settings/filtration-settings.component').then(m => m.FiltrationSettingsComponent), canActivate: [scGuard] },
