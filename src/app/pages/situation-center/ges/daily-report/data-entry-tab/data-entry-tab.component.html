@@ -27,7 +27,6 @@
             {{ 'GES_REPORT.NO_DATA' | translate }}
         </div>
     } @else {
-        <!-- Station cards grouped by cascade -->
         @for (group of cascadeGroups; track group.cascade_id) {
             <!-- Cascade header -->
             <div class="flex items-center gap-3 mt-2 cursor-pointer" (click)="toggleCascade(group.cascade_id)">
@@ -42,127 +41,132 @@
             </div>
 
             @if (!collapsedCascades.has(group.cascade_id)) {
-            @for (row of group.rows; track row.config.organization_id) {
-                <div class="border border-surface rounded-lg p-4" [formGroup]="row.form">
-                    <!-- Card header -->
-                    <div class="flex justify-between items-center mb-3">
-                        <div class="flex items-center gap-3">
-                            <span class="font-semibold text-lg">{{ row.config.organization_name }}</span>
-                            <span class="text-color-secondary text-sm">|</span>
-                            <span class="text-sm">{{ 'GES_REPORT.INSTALLED_CAPACITY' | translate }}: <strong>{{ row.config.installed_capacity_mwt }}</strong></span>
-                            <span class="text-sm">{{ 'GES_REPORT.TOTAL_AGGREGATES' | translate }}: <strong>{{ row.config.total_aggregates }}</strong></span>
-                            @if (row.config.has_reservoir) {
-                                <span class="text-sm"><i class="pi pi-check-circle text-green-500 text-xs"></i> {{ 'GES_REPORT.HAS_RESERVOIR' | translate }}</span>
-                            }
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <p-tag
-                                [value]="'GES_REPORT.STATUS_' + getStatus(row).toUpperCase() | translate"
-                                [severity]="getStatusSeverity(row)">
-                            </p-tag>
-                            <p-button
-                                icon="pi pi-save"
-                                [label]="'COMMON.SAVE' | translate"
-                                [loading]="row.saving"
-                                [disabled]="row.saving || !row.dirty"
-                                size="small"
-                                [outlined]="true"
-                                (onClick)="saveRow(row)">
-                            </p-button>
-                        </div>
-                    </div>
-
-                    <!-- Fields grid: 3 columns -->
-                    <div class="grid grid-cols-3 gap-3">
-                        <!-- Row 1: Production, Aggregates, Head -->
-                        <div class="flex flex-col gap-1">
-                            <label class="text-sm text-color-secondary">{{ 'GES_REPORT.PRODUCTION' | translate }}</label>
-                            <p-inputNumber
-                                formControlName="daily_production_mln_kwh"
-                                [minFractionDigits]="0"
-                                [maxFractionDigits]="4"
-                                [useGrouping]="false"
-                                styleClass="w-full">
-                            </p-inputNumber>
-                        </div>
-                        <div class="flex flex-col gap-1">
-                            <label class="text-sm text-color-secondary">{{ 'GES_REPORT.WORKING_AGGREGATES' | translate }} ({{ 'GES_REPORT.TOTAL_AGGREGATES' | translate }}: {{ row.config.total_aggregates }})</label>
-                            <p-inputNumber
-                                formControlName="working_aggregates"
-                                [min]="0"
-                                [max]="row.config.total_aggregates"
-                                [minFractionDigits]="0"
-                                [maxFractionDigits]="0"
-                                [useGrouping]="false"
-                                styleClass="w-full">
-                            </p-inputNumber>
-                        </div>
-                        <div class="flex flex-col gap-1">
-                            <label class="text-sm text-color-secondary">{{ 'GES_REPORT.WATER_HEAD' | translate }}</label>
-                            <p-inputNumber
-                                formControlName="water_head_m"
-                                [minFractionDigits]="0"
-                                [maxFractionDigits]="2"
-                                [useGrouping]="false"
-                                styleClass="w-full">
-                            </p-inputNumber>
-                        </div>
-
-                        <!-- Row 2: Income, Outflow -->
-                        <div class="flex flex-col gap-1">
-                            <label class="text-sm text-color-secondary">{{ 'GES_REPORT.RESERVOIR_INCOME' | translate }}</label>
-                            <p-inputNumber
-                                formControlName="reservoir_income_m3s"
-                                [minFractionDigits]="0"
-                                [maxFractionDigits]="1"
-                                [useGrouping]="false"
-                                styleClass="w-full">
-                            </p-inputNumber>
-                        </div>
-                        <div class="flex flex-col gap-1">
-                            <label class="text-sm text-color-secondary">{{ 'GES_REPORT.TOTAL_OUTFLOW' | translate }}</label>
-                            <p-inputNumber
-                                formControlName="total_outflow_m3s"
-                                [minFractionDigits]="0"
-                                [maxFractionDigits]="1"
-                                [useGrouping]="false"
-                                styleClass="w-full">
-                            </p-inputNumber>
-                        </div>
-
-                        <!-- Row 3: Water level, Volume -->
-                        <div class="flex flex-col gap-1">
-                            <label class="text-sm text-color-secondary">{{ 'GES_REPORT.WATER_LEVEL' | translate }}</label>
-                            @if (row.config.has_reservoir) {
+            <div class="overflow-x-auto">
+                <table class="w-full border-collapse">
+                    <thead>
+                        <tr>
+                            <th class="text-left text-xs text-color-secondary font-normal px-2 pb-1 whitespace-nowrap">{{ 'GES_REPORT.STATION' | translate }}</th>
+                            <th class="text-left text-xs text-color-secondary font-normal px-2 pb-1">{{ 'GES_REPORT.PRODUCTION' | translate }}</th>
+                            <th class="text-left text-xs text-color-secondary font-normal px-2 pb-1">{{ 'GES_REPORT.WORKING_AGGREGATES' | translate }}</th>
+                            <th class="text-left text-xs text-color-secondary font-normal px-2 pb-1">{{ 'GES_REPORT.WATER_HEAD' | translate }}</th>
+                            <th class="text-left text-xs text-color-secondary font-normal px-2 pb-1">{{ 'GES_REPORT.RESERVOIR_INCOME' | translate }}</th>
+                            <th class="text-left text-xs text-color-secondary font-normal px-2 pb-1">{{ 'GES_REPORT.TOTAL_OUTFLOW' | translate }}</th>
+                            <th class="text-left text-xs text-color-secondary font-normal px-2 pb-1">{{ 'GES_REPORT.WATER_LEVEL' | translate }}</th>
+                            <th class="text-left text-xs text-color-secondary font-normal px-2 pb-1">{{ 'GES_REPORT.WATER_VOLUME' | translate }}</th>
+                            <th class="px-2 pb-1"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (row of group.rows; track row.config.organization_id) {
+                        <tr [formGroup]="row.form" class="border-t border-surface">
+                            <td class="px-2 py-2 whitespace-nowrap align-middle">
+                                <div class="flex flex-col">
+                                    <span class="font-semibold text-sm">{{ row.config.organization_name }}</span>
+                                    <span class="text-xs text-color-secondary">{{ row.config.installed_capacity_mwt }} МВт, {{ row.config.total_aggregates }} агр.</span>
+                                </div>
+                            </td>
+                            <td class="px-2 py-2 align-middle">
                                 <p-inputNumber
-                                    formControlName="water_level_m"
+                                    formControlName="daily_production_mln_kwh"
+                                    [minFractionDigits]="0"
+                                    [maxFractionDigits]="4"
+                                    [useGrouping]="false"
+                                    styleClass="w-full"
+                                    inputStyleClass="w-full">
+                                </p-inputNumber>
+                            </td>
+                            <td class="px-2 py-2 align-middle">
+                                <p-inputNumber
+                                    formControlName="working_aggregates"
+                                    [min]="0"
+                                    [max]="row.config.total_aggregates"
+                                    [minFractionDigits]="0"
+                                    [maxFractionDigits]="0"
+                                    [useGrouping]="false"
+                                    styleClass="w-full"
+                                    inputStyleClass="w-full">
+                                </p-inputNumber>
+                            </td>
+                            <td class="px-2 py-2 align-middle">
+                                <p-inputNumber
+                                    formControlName="water_head_m"
                                     [minFractionDigits]="0"
                                     [maxFractionDigits]="2"
                                     [useGrouping]="false"
-                                    styleClass="w-full">
+                                    styleClass="w-full"
+                                    inputStyleClass="w-full">
                                 </p-inputNumber>
-                            } @else {
-                                <span class="text-color-secondary p-2">—</span>
-                            }
-                        </div>
-                        <div class="flex flex-col gap-1">
-                            <label class="text-sm text-color-secondary">{{ 'GES_REPORT.WATER_VOLUME' | translate }}</label>
-                            @if (row.config.has_reservoir) {
+                            </td>
+                            <td class="px-2 py-2 align-middle">
                                 <p-inputNumber
-                                    formControlName="water_volume_mln_m3"
+                                    formControlName="reservoir_income_m3s"
                                     [minFractionDigits]="0"
-                                    [maxFractionDigits]="2"
+                                    [maxFractionDigits]="1"
                                     [useGrouping]="false"
-                                    styleClass="w-full">
+                                    styleClass="w-full"
+                                    inputStyleClass="w-full">
                                 </p-inputNumber>
-                            } @else {
-                                <span class="text-color-secondary p-2">—</span>
-                            }
-                        </div>
-                        <div></div>
-                    </div>
-                </div>
-            }
+                            </td>
+                            <td class="px-2 py-2 align-middle">
+                                <p-inputNumber
+                                    formControlName="total_outflow_m3s"
+                                    [minFractionDigits]="0"
+                                    [maxFractionDigits]="1"
+                                    [useGrouping]="false"
+                                    styleClass="w-full"
+                                    inputStyleClass="w-full">
+                                </p-inputNumber>
+                            </td>
+                            <td class="px-2 py-2 align-middle">
+                                @if (row.config.has_reservoir) {
+                                    <p-inputNumber
+                                        formControlName="water_level_m"
+                                        [minFractionDigits]="0"
+                                        [maxFractionDigits]="2"
+                                        [useGrouping]="false"
+                                        styleClass="w-full"
+                                        inputStyleClass="w-full">
+                                    </p-inputNumber>
+                                } @else {
+                                    <span class="text-color-secondary">—</span>
+                                }
+                            </td>
+                            <td class="px-2 py-2 align-middle">
+                                @if (row.config.has_reservoir) {
+                                    <p-inputNumber
+                                        formControlName="water_volume_mln_m3"
+                                        [minFractionDigits]="0"
+                                        [maxFractionDigits]="2"
+                                        [useGrouping]="false"
+                                        styleClass="w-full"
+                                        inputStyleClass="w-full">
+                                    </p-inputNumber>
+                                } @else {
+                                    <span class="text-color-secondary">—</span>
+                                }
+                            </td>
+                            <td class="px-2 py-2 align-middle whitespace-nowrap">
+                                <div class="flex items-center gap-2">
+                                    <p-tag
+                                        [value]="'GES_REPORT.STATUS_' + getStatus(row).toUpperCase() | translate"
+                                        [severity]="getStatusSeverity(row)">
+                                    </p-tag>
+                                    <p-button
+                                        icon="pi pi-save"
+                                        [loading]="row.saving"
+                                        [disabled]="row.saving || !row.dirty"
+                                        size="small"
+                                        [rounded]="true"
+                                        [text]="true"
+                                        (onClick)="saveRow(row)">
+                                    </p-button>
+                                </div>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
             }
         }
     }
