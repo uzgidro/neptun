@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthResponse } from '@/core/interfaces/auth';
 import { Observable } from 'rxjs';
-import { shareReplay, tap } from 'rxjs/operators';
+import { map, shareReplay, tap } from 'rxjs/operators';
 import { Roles } from '@/core/interfaces/roles';
 import { Users } from '@/core/interfaces/users';
 import { Categories } from '@/core/interfaces/categories';
@@ -118,7 +118,9 @@ export class ApiService {
             formData.append('files', file, file.name);
         }
         formData.append('category_id', categoryId.toString());
-        return this.http.post<{ ids: number[] }>(this.BASE_URL + UPLOAD + FILES, formData);
+        return this.http.post<any>(this.BASE_URL + UPLOAD + FILES, formData).pipe(
+            map((res) => ({ ids: res.ids ?? [res.id] }))
+        );
     }
 
     getLatestFiles(): Observable<LatestFiles[]> {
