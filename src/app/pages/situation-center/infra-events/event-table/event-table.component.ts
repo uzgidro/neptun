@@ -148,7 +148,7 @@ export class EventTableComponent implements OnInit, OnChanges, OnDestroy {
     editEvent(event: InfraEvent): void {
         this.isEditMode = true;
         this.currentEventId = event.id;
-        this.currentEvent = { ...event, files: [...event.files] };
+        this.currentEvent = { ...event, files: [...(event.files || [])] };
         this.submitted = false;
         this.isLoading = false;
         this.selectedFiles = [];
