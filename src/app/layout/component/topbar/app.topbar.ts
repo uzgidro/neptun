@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { RouterModule } from '@angular/router';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
@@ -67,6 +67,10 @@ import { TranslateModule } from '@ngx-translate/core';
         </div>
 
         <div class="layout-topbar-actions">
+            @if (authService.isSc() && userName) {
+                <span class="font-semibold text-lg flex items-center">{{ userName }}</span>
+            }
+
             <!-- Emergency SOS Button -->
             <a href="tel:112" class="layout-topbar-action-emergency">
                 <i class="pi pi-phone"></i>
@@ -116,10 +120,19 @@ import { TranslateModule } from '@ngx-translate/core';
         </div>
     </div>`
 })
-export class AppTopbar {
+export class AppTopbar implements OnInit {
     layoutService = inject(LayoutService);
-    authService: AuthService = inject(AuthService);
+    authService = inject(AuthService);
     configurator = new AppConfigurator();
+    userName: string | null = null;
+
+    ngOnInit(): void {
+        if (this.authService.isSc()) {
+            this.authService.getCurrentContact()?.subscribe({
+                next: (contact) => (this.userName = contact.name)
+            });
+        }
+    }
 
     toggleDarkMode() {
         this.layoutService.layoutConfig.update((state) => {

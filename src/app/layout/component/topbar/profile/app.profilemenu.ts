@@ -3,9 +3,7 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '@/core/services/auth.service';
 import { Popover } from 'primeng/popover';
 import { RouterModule } from '@angular/router';
-import { JwtService } from '@/core/services/jwt.service';
 import { Contact } from '@/core/interfaces/contact';
-import { ContactService } from '@/core/services/contact.service';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
@@ -50,22 +48,14 @@ import { TranslateModule } from '@ngx-translate/core';
     `
 })
 export class ProfileMenu implements OnInit {
-    private authService: AuthService = inject(AuthService);
-    private jwtService: JwtService = inject(JwtService);
-    private contactService: ContactService = inject(ContactService);
+    private authService = inject(AuthService);
 
     contact?: Contact;
 
     ngOnInit(): void {
-        const decoded = this.jwtService.getDecodedToken();
-        const id = decoded?.['contact_id'];
-        if (typeof id === 'number') {
-            this.contactService.getById(id).subscribe({
-                next: (data) => {
-                    this.contact = data;
-                }
-            });
-        }
+        this.authService.getCurrentContact()?.subscribe({
+            next: (contact) => (this.contact = contact)
+        });
     }
 
     logout(): void {

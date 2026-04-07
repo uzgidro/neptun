@@ -1,8 +1,10 @@
 import { inject, Injectable } from '@angular/core';
-import { finalize, Observable, tap } from 'rxjs';
+import { finalize, Observable, of, shareReplay, tap } from 'rxjs';
 import { ApiService } from '@/core/services/api.service';
 import { JwtService } from '@/core/services/jwt.service';
+import { ContactService } from '@/core/services/contact.service';
 import { AuthResponse } from '@/core/interfaces/auth';
+import { Contact } from '@/core/interfaces/contact';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -11,7 +13,9 @@ import { Router } from '@angular/router';
 export class AuthService {
     private apiService = inject(ApiService);
     private jwtService = inject(JwtService);
+    private contactService = inject(ContactService);
     private router = inject(Router);
+    private currentContact$: Observable<Contact> | null = null;
 
     signIn(name: string, password: string): Observable<AuthResponse> {
         return this.apiService.signIn(name, password).pipe(tap((response) => this.jwtService.saveToken(response.access_token)));
@@ -48,6 +52,16 @@ export class AuthService {
         return this.hasRole('admin');
     }
 
+    getCurrentContact(): Observable<Contact> | null {
+        const decoded = this.jwtService.getDecodedToken();
+        const id = decoded?.['contact_id'];
+        if (typeof id !== 'number') return null;
+        if (!this.currentContact$) {
+            this.currentContact$ = this.contactService.getById(id).pipe(shareReplay(1));
+        }
+        return this.currentContact$;
+    }
+
     hasRole(expectedRole: string | string[]): boolean {
         const decodedToken = this.jwtService.getDecodedToken();
 
@@ -65,6 +79,7 @@ export class AuthService {
     }
 
     logout(): void {
+        this.currentContact$ = null;
         this.jwtService.destroyToken();
         this.router.navigate(['/auth/login']);
     }
