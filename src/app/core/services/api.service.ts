@@ -112,6 +112,15 @@ export class ApiService {
         return this.http.post(this.BASE_URL + UPLOAD + FILES, formData);
     }
 
+    uploadFiles(files: File[], categoryId: number): Observable<{ ids: number[] }> {
+        const formData = new FormData();
+        for (const file of files) {
+            formData.append('files', file, file.name);
+        }
+        formData.append('category_id', categoryId.toString());
+        return this.http.post<{ ids: number[] }>(this.BASE_URL + UPLOAD + FILES, formData);
+    }
+
     getLatestFiles(): Observable<LatestFiles[]> {
         return this.http.get<LatestFiles[]>(this.BASE_URL + FILES + LATEST);
     }

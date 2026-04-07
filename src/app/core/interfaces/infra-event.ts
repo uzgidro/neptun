@@ -54,8 +54,7 @@ export interface InfraEventUpdatePayload {
     category_id?: number;
     organization_id?: number;
     occurred_at?: string;
-    restored_at?: string;
-    clear_restored_at?: boolean;
+    restored_at?: string | null;
     description?: string;
     remediation?: string;
     notes?: string;

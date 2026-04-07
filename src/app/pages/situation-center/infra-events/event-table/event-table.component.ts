@@ -1,7 +1,7 @@
 import { Component, inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { forkJoin, Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { MessageService, PrimeTemplate } from 'primeng/api';
 import { TableModule } from 'primeng/table';
 import { Button } from 'primeng/button';
@@ -202,14 +202,11 @@ export class EventTableComponent implements OnInit, OnChanges, OnDestroy {
         const raw = this.form.getRawValue();
 
         if (this.selectedFiles.length > 0) {
-            const dateStr = this.date.toISOString().split('T')[0];
-            const uploads$ = this.selectedFiles.map((file) => this.apiService.uploadFile(file, 1, dateStr));
-            forkJoin(uploads$)
+            this.apiService.uploadFiles(this.selectedFiles, 1)
                 .pipe(takeUntil(this.destroy$))
                 .subscribe({
-                    next: (results: any[]) => {
-                        const newFileIds = results.map((r) => r.id);
-                        this.submitPayload(raw, [...this.existingFilesToKeep, ...newFileIds]);
+                    next: (result) => {
+                        this.submitPayload(raw, [...this.existingFilesToKeep, ...result.ids]);
                     },
                     error: () => {
                         this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR') });
@@ -217,7 +214,7 @@ export class EventTableComponent implements OnInit, OnChanges, OnDestroy {
                     }
                 });
         } else {
-            const fileIds = this.isEditMode && this.filesDirty ? this.existingFilesToKeep : undefined;
+            const fileIds = this.filesDirty ? this.existingFilesToKeep : undefined;
             this.submitPayload(raw, fileIds);
         }
     }
@@ -229,7 +226,7 @@ export class EventTableComponent implements OnInit, OnChanges, OnDestroy {
             if (raw.organization) payload.organization_id = raw.organization.id;
             if (raw.occurred_at) payload.occurred_at = raw.occurred_at.toISOString();
             if (raw.clear_restored_at) {
-                payload.clear_restored_at = true;
+                payload.restored_at = null;
             } else if (raw.restored_at) {
                 payload.restored_at = raw.restored_at.toISOString();
             }
