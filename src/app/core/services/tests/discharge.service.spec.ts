@@ -27,36 +27,35 @@ describe('DischargeService', () => {
     });
 
     describe('addDischarge', () => {
-        it('should POST JSON to /discharges without force by default', () => {
+        it('should POST JSON to /discharges with force=false in body by default', () => {
             const payload: DischargeCreatePayload = { organization_id: 1, started_at: '2024-01-01T00:00:00Z' };
 
             service.addDischarge(payload).subscribe();
 
             const req = httpMock.expectOne(`${BASE_URL}/discharges`);
             expect(req.request.method).toBe('POST');
-            expect(req.request.body).toEqual(payload);
-            expect(req.request.params.has('force')).toBeFalse();
+            expect(req.request.body).toEqual({ ...payload, force: false });
             req.flush({}, { status: 201, statusText: 'Created' });
         });
 
-        it('should POST JSON to /discharges with force=true query param when force is true', () => {
+        it('should POST JSON to /discharges with force=true in body when force is true', () => {
             const payload: DischargeCreatePayload = { organization_id: 1 };
 
             service.addDischarge(payload, true).subscribe();
 
-            const req = httpMock.expectOne(r => r.url === `${BASE_URL}/discharges` && r.params.get('force') === 'true');
+            const req = httpMock.expectOne(`${BASE_URL}/discharges`);
             expect(req.request.method).toBe('POST');
-            expect(req.request.body).toEqual(payload);
+            expect(req.request.body).toEqual({ ...payload, force: true });
             req.flush({}, { status: 201, statusText: 'Created' });
         });
 
-        it('should not add force query param when force is false', () => {
+        it('should send force=false in body when force is explicitly false', () => {
             const payload: DischargeCreatePayload = { organization_id: 1 };
 
             service.addDischarge(payload, false).subscribe();
 
             const req = httpMock.expectOne(`${BASE_URL}/discharges`);
-            expect(req.request.params.has('force')).toBeFalse();
+            expect(req.request.body.force).toBeFalse();
             req.flush({}, { status: 201, statusText: 'Created' });
         });
 
