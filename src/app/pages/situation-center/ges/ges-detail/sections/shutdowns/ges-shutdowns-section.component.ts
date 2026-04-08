@@ -219,7 +219,7 @@ export class GesShutdownsSectionComponent implements OnInit, OnDestroy {
                     this.loadData();
                 },
                 error: (err) => {
-                    if (!this.isEditMode && err.status === 409) {
+                    if (!this.isEditMode && !force && err.status === 409) {
                         const msg = err.error?.error || this.translate.instant('GES_DETAIL.ERROR_SAVE');
                         if (confirm(msg + '\n' + this.translate.instant('COMMON.FORCE_CONFIRM'))) {
                             submitWithPayload(p, true);

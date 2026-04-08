@@ -95,8 +95,7 @@ export class GesService extends ApiService {
 
     // CRUD операции для остановов
     addShutdown(gesId: number, payload: ShutdownCreatePayload, force = false): Observable<any> {
-        const params = force ? { params: { force: 'true' } } : {};
-        return this.http.post(`${this.BASE_URL}${GES}/${gesId}/shutdowns`, payload, params);
+        return this.http.post(`${this.BASE_URL}${GES}/${gesId}/shutdowns`, { ...payload, force });
     }
 
     editShutdown(gesId: number, shutdownId: number, payload: ShutdownUpdatePayload): Observable<any> {
@@ -109,8 +108,7 @@ export class GesService extends ApiService {
 
     // CRUD операции для сбросов
     addDischarge(gesId: number, payload: DischargeCreatePayload, force = false): Observable<any> {
-        const params = force ? { params: { force: 'true' } } : {};
-        return this.http.post(`${this.BASE_URL}${GES}/${gesId}/discharges`, payload, params);
+        return this.http.post(`${this.BASE_URL}${GES}/${gesId}/discharges`, { ...payload, force });
     }
 
     editDischarge(gesId: number, dischargeId: number, payload: DischargeUpdatePayload): Observable<any> {

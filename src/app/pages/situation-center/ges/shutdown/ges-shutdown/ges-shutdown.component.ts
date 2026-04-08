@@ -179,7 +179,7 @@ export class GesShutdownComponent implements OnInit, OnChanges, OnDestroy {
                         this.shutdownSaved.emit();
                     },
                     error: (err) => {
-                        if (err.status === 409) {
+                        if (err.status === 409 && !force) {
                             const msg = err.error?.error || this.translate.instant('SITUATION_CENTER.SHUTDOWN.CONFLICT_EXISTS');
                             if (confirm(msg + '\n' + this.translate.instant('COMMON.FORCE_CONFIRM'))) {
                                 submitWithPayload(p, true);

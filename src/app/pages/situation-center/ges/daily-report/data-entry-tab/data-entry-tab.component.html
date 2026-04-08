@@ -121,7 +121,7 @@
                             </td>
                             <td class="px-2 py-2 align-middle">
                                 @if (row.form.value.total_outflow_m3s != null && row.idleDischarge) {
-                                    <span class="text-sm">{{ row.form.value.total_outflow_m3s - row.idleDischarge.flow_rate_m3s | number:'1.0-2' }}</span>
+                                    <span class="text-sm">{{ (row.form.value.total_outflow_m3s - row.idleDischarge.flow_rate_m3s) | number:'1.0-2' }}</span>
                                 } @else {
                                     <span class="text-color-secondary">—</span>
                                 }

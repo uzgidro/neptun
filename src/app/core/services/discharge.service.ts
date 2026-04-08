@@ -12,8 +12,7 @@ const FLAT = '/flat';
 })
 export class DischargeService extends ApiService {
     addDischarge(payload: DischargeCreatePayload, force = false): Observable<any> {
-        const params = force ? { params: { force: 'true' } } : {};
-        return this.http.post(this.BASE_URL + DISCHARGES, payload, params);
+        return this.http.post(this.BASE_URL + DISCHARGES, { ...payload, force });
     }
 
     getDischarges(): Observable<Cascade[]> {

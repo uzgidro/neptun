@@ -238,7 +238,7 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges, OnDestroy 
                         this.closeDialog();
                     },
                     error: (err) => {
-                        if (err.status === 409) {
+                        if (err.status === 409 && !force) {
                             const msg = err.error?.error || this.translate.instant('DISCHARGE.MESSAGES.CONFLICT_EXISTS');
                             if (confirm(msg + '\n' + this.translate.instant('COMMON.FORCE_CONFIRM'))) {
                                 submitWithPayload(p, true);

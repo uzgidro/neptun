@@ -26,8 +26,7 @@ export class GesShutdownService extends ApiService {
     }
 
     addShutdown(payload: ShutdownCreatePayload, force = false): Observable<any> {
-        const params = force ? { params: { force: 'true' } } : {};
-        return this.http.post(this.BASE_URL + SHUTDOWNS, payload, params);
+        return this.http.post(this.BASE_URL + SHUTDOWNS, { ...payload, force });
     }
 
     editShutdown(id: number, payload: ShutdownUpdatePayload): Observable<any> {
