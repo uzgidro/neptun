@@ -1,7 +1,7 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { forkJoin, Subject, takeUntil } from 'rxjs';
+import { forkJoin, of, Subject, switchMap, takeUntil } from 'rxjs';
 import { MessageService } from 'primeng/api';
 import { Table, TableModule } from 'primeng/table';
 import { Tag } from 'primeng/tag';
@@ -24,6 +24,7 @@ import { DocumentType, FileResponse } from '@/core/interfaces/chancellery/docume
 import { ChangeStatusRequest, DocumentStatus, StatusHistoryEntry, StatusSeverity } from '@/core/interfaces/chancellery/document-status';
 import { InstructionService } from '@/core/services/chancellery/instruction.service';
 import { DocumentStatusService } from '@/core/services/chancellery/document-status.service';
+import { ApiService } from '@/core/services/api.service';
 
 import { StatusHistoryDialogComponent } from '@/pages/chancellery/shared';
 import { StatusChangeDialogComponent } from '@/pages/chancellery/shared';
@@ -74,6 +75,7 @@ export class InstructionsComponent implements OnInit, OnDestroy {
     selectedDocument: Instruction | null = null;
     selectedFiles: File[] = [];
     existingFileIds: number[] = [];
+    initialExistingFileIds: number[] = [];
     statusHistory: StatusHistoryEntry[] = [];
     historyLoading = false;
 
@@ -88,6 +90,7 @@ export class InstructionsComponent implements OnInit, OnDestroy {
 
     private instructionService = inject(InstructionService);
     private statusService = inject(DocumentStatusService);
+    private apiService = inject(ApiService);
     private messageService = inject(MessageService);
     private fb = inject(FormBuilder);
     private translate = inject(TranslateService);
@@ -175,6 +178,7 @@ export class InstructionsComponent implements OnInit, OnDestroy {
         this.submitted = false;
         this.selectedFiles = [];
         this.existingFileIds = [];
+        this.initialExistingFileIds = [];
         this.documentForm.reset();
         const draftStatus = this.statuses.find((s) => s.code === 'draft');
         if (draftStatus) this.documentForm.patchValue({ status_id: draftStatus.id });
@@ -187,6 +191,7 @@ export class InstructionsComponent implements OnInit, OnDestroy {
         this.submitted = false;
         this.selectedFiles = [];
         this.existingFileIds = document.files.map((f) => f.id);
+        this.initialExistingFileIds = [...this.existingFileIds];
         this.documentForm.patchValue({
             name: document.name,
             number: document.number || '',
@@ -222,56 +227,52 @@ export class InstructionsComponent implements OnInit, OnDestroy {
             due_date: formValue.due_date ? this.formatDateForApi(formValue.due_date) : undefined
         };
 
-        const hasFiles = this.selectedFiles.length > 0 || this.existingFileIds.length > 0;
-        const requestData = hasFiles ? this.instructionService.buildFormData(payload, this.selectedFiles, this.existingFileIds) : payload;
+        const filesChanged = JSON.stringify(this.existingFileIds) !== JSON.stringify(this.initialExistingFileIds);
+        const upload$ = this.selectedFiles.length > 0
+            ? this.apiService.uploadFiles(this.selectedFiles, 1)
+            : of(null as { ids: number[] } | null);
 
-        if (this.isEditMode && this.selectedDocument) {
-            this.instructionService
-                .update(this.selectedDocument.id, requestData)
-                .pipe(takeUntil(this.destroy$))
-                .subscribe({
-                    next: () => {
-                        this.messageService.add({
-                            severity: 'success',
-                            summary: this.translate.instant('COMMON.SUCCESS'),
-                            detail: this.translate.instant('CHANCELLERY.INSTRUCTIONS.UPDATED')
-                        });
-                        this.loadDocuments();
-                        this.closeDialog();
-                    },
-                    error: () => {
-                        this.messageService.add({
-                            severity: 'error',
-                            summary: this.translate.instant('COMMON.ERROR'),
-                            detail: this.translate.instant('CHANCELLERY.INSTRUCTIONS.UPDATE_ERROR')
-                        });
-                    },
-                    complete: () => (this.saving = false)
+        upload$.pipe(
+            switchMap((uploadResult) => {
+                if (uploadResult) {
+                    payload.file_ids = [...this.existingFileIds, ...uploadResult.ids];
+                } else if (filesChanged) {
+                    payload.file_ids = this.existingFileIds;
+                }
+
+                if (this.isEditMode && this.selectedDocument) {
+                    return this.instructionService.update(this.selectedDocument.id, payload);
+                } else {
+                    return this.instructionService.create(payload);
+                }
+            }),
+            takeUntil(this.destroy$)
+        ).subscribe({
+            next: () => {
+                const detail = this.isEditMode
+                    ? this.translate.instant('CHANCELLERY.INSTRUCTIONS.UPDATED')
+                    : this.translate.instant('CHANCELLERY.INSTRUCTIONS.CREATED');
+                this.messageService.add({
+                    severity: 'success',
+                    summary: this.translate.instant('COMMON.SUCCESS'),
+                    detail
                 });
-        } else {
-            this.instructionService
-                .create(requestData)
-                .pipe(takeUntil(this.destroy$))
-                .subscribe({
-                    next: () => {
-                        this.messageService.add({
-                            severity: 'success',
-                            summary: this.translate.instant('COMMON.SUCCESS'),
-                            detail: this.translate.instant('CHANCELLERY.INSTRUCTIONS.CREATED')
-                        });
-                        this.loadDocuments();
-                        this.closeDialog();
-                    },
-                    error: () => {
-                        this.messageService.add({
-                            severity: 'error',
-                            summary: this.translate.instant('COMMON.ERROR'),
-                            detail: this.translate.instant('CHANCELLERY.INSTRUCTIONS.CREATE_ERROR')
-                        });
-                    },
-                    complete: () => (this.saving = false)
+                this.loadDocuments();
+                this.closeDialog();
+            },
+            error: () => {
+                const detail = this.isEditMode
+                    ? this.translate.instant('CHANCELLERY.INSTRUCTIONS.UPDATE_ERROR')
+                    : this.translate.instant('CHANCELLERY.INSTRUCTIONS.CREATE_ERROR');
+                this.messageService.add({
+                    severity: 'error',
+                    summary: this.translate.instant('COMMON.ERROR'),
+                    detail
                 });
-        }
+                this.saving = false;
+            },
+            complete: () => (this.saving = false)
+        });
     }
 
     deleteDocument(document: Instruction): void {

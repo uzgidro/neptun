@@ -1,7 +1,7 @@
 import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { forkJoin, Subject, takeUntil } from 'rxjs';
+import { forkJoin, Subject, switchMap, takeUntil } from 'rxjs';
 
 // PrimeNG Components
 import { TableModule } from 'primeng/table';
@@ -28,7 +28,8 @@ import { OrganizationService } from '@/core/services/organization.service';
 import { MessageService } from 'primeng/api';
 
 // Interfaces
-import { Event, EventFilters, EventStatus, EventType } from '@/core/interfaces/event-management';
+import { Event, EventCreatePayload, EventFilters, EventStatus, EventType, EventUpdatePayload } from '@/core/interfaces/event-management';
+import { ApiService } from '@/core/services/api.service';
 import { Contact } from '@/core/interfaces/contact';
 import { Organization } from '@/core/interfaces/organizations';
 import { Tooltip } from 'primeng/tooltip';
@@ -62,6 +63,7 @@ import { Tooltip } from 'primeng/tooltip';
 export class EventsComponent implements OnInit, OnDestroy {
     // Services
     private eventService = inject(EventManagementService);
+    private apiService = inject(ApiService);
     private contactService = inject(ContactService);
     private organizationService = inject(OrganizationService);
     private fb = inject(FormBuilder);
@@ -364,33 +366,70 @@ export class EventsComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Build JSON payload from form values
+     */
+    private buildPayload(): EventCreatePayload {
+        const formValue = this.eventForm.value;
+
+        const payload: EventCreatePayload = {
+            name: formValue.name,
+            event_date: formValue.event_date.toISOString(),
+            event_type_id: formValue.event_type_id.id
+        };
+
+        if (formValue.description) {
+            payload.description = formValue.description;
+        }
+        if (formValue.location) {
+            payload.location = formValue.location;
+        }
+        if (formValue.organization_id) {
+            payload.organization_id = formValue.organization_id.id;
+        }
+        if (this.isEditMode() && formValue.event_status_id) {
+            payload.event_status_id = formValue.event_status_id.id;
+        }
+
+        // Contact - either existing or new
+        if (!this.showCreateContact) {
+            payload.responsible_contact_id = formValue.responsible_contact?.id;
+        } else {
+            payload.responsible_fio = formValue.responsible_fio;
+            payload.responsible_phone = formValue.responsible_phone;
+        }
+
+        return payload;
+    }
+
+    /**
      * Create new event
      */
     createEvent() {
-        const formData = this.buildFormData();
+        const payload = this.buildPayload();
 
-        this.eventService
-            .createEvent(formData)
-            .pipe(takeUntil(this.destroy$))
-            .subscribe({
-                next: () => {
-                    this.messageService.add({
-                        severity: 'success',
-                        summary: this.translate.instant('PLANNING.COMMON.SUCCESS'),
-                        detail: this.translate.instant('PLANNING.EVENTS.CREATED')
-                    });
-                    this.displayDialog.set(false);
-                    this.loadEvents();
-                },
-                error: (error) => {
-                    console.error('Failed to create event:', error);
-                    this.messageService.add({
-                        severity: 'error',
-                        summary: this.translate.instant('PLANNING.COMMON.ERROR'),
-                        detail: error.error?.error || this.translate.instant('PLANNING.EVENTS.CREATE_ERROR')
-                    });
-                }
-            });
+        if (this.selectedFiles.length > 0) {
+            this.apiService
+                .uploadFiles(this.selectedFiles, 1)
+                .pipe(
+                    switchMap((res) => {
+                        payload.file_ids = res.ids;
+                        return this.eventService.createEvent(payload);
+                    }),
+                    takeUntil(this.destroy$)
+                )
+                .subscribe({
+                    next: () => this.onEventSaveSuccess(false),
+                    error: (error) => this.onEventSaveError(error, false)
+                });
+        } else {
+            this.eventService
+                .createEvent(payload)
+                .pipe(takeUntil(this.destroy$))
+                .subscribe({
+                    next: () => this.onEventSaveSuccess(false),
+                    error: (error) => this.onEventSaveError(error, false)
+                });
+        }
     }
 
     /**
@@ -399,77 +438,58 @@ export class EventsComponent implements OnInit, OnDestroy {
     updateEvent() {
         if (!this.selectedEvent) return;
 
-        const formData = this.buildFormData();
+        const payload: EventUpdatePayload = this.buildPayload();
 
-        this.eventService
-            .updateEvent(this.selectedEvent.id, formData)
-            .pipe(takeUntil(this.destroy$))
-            .subscribe({
-                next: () => {
-                    this.messageService.add({
-                        severity: 'success',
-                        summary: this.translate.instant('PLANNING.COMMON.SUCCESS'),
-                        detail: this.translate.instant('PLANNING.EVENTS.UPDATED')
-                    });
-                    this.displayDialog.set(false);
-                    this.loadEvents();
-                },
-                error: (error) => {
-                    console.error('Failed to update event:', error);
-                    this.messageService.add({
-                        severity: 'error',
-                        summary: this.translate.instant('PLANNING.COMMON.ERROR'),
-                        detail: error.error?.error || this.translate.instant('PLANNING.EVENTS.UPDATE_ERROR')
-                    });
-                }
-            });
+        const originalFileIds = this.selectedEvent.files?.map((f) => f.id) || [];
+        const filesModified =
+            this.existingFilesToKeep.length !== originalFileIds.length ||
+            !this.existingFilesToKeep.every((id) => originalFileIds.includes(id));
+
+        if (this.selectedFiles.length > 0) {
+            this.apiService
+                .uploadFiles(this.selectedFiles, 1)
+                .pipe(
+                    switchMap((res) => {
+                        payload.file_ids = [...this.existingFilesToKeep, ...res.ids];
+                        return this.eventService.updateEvent(this.selectedEvent!.id, payload);
+                    }),
+                    takeUntil(this.destroy$)
+                )
+                .subscribe({
+                    next: () => this.onEventSaveSuccess(true),
+                    error: (error) => this.onEventSaveError(error, true)
+                });
+        } else {
+            if (filesModified) {
+                payload.file_ids = this.existingFilesToKeep;
+            }
+            this.eventService
+                .updateEvent(this.selectedEvent.id, payload)
+                .pipe(takeUntil(this.destroy$))
+                .subscribe({
+                    next: () => this.onEventSaveSuccess(true),
+                    error: (error) => this.onEventSaveError(error, true)
+                });
+        }
     }
 
-    /**
-     * Build FormData for API submission
-     */
-    buildFormData(): FormData {
-        const formData = new FormData();
-        const formValue = this.eventForm.value;
-
-        // Required fields
-        formData.append('name', formValue.name);
-        formData.append('event_date', formValue.event_date.toISOString());
-        formData.append('event_type_id', formValue.event_type_id.id.toString());
-
-        // Optional fields
-        if (formValue.description) {
-            formData.append('description', formValue.description);
-        }
-        if (formValue.location) {
-            formData.append('location', formValue.location);
-        }
-        if (formValue.organization_id) {
-            formData.append('organization_id', formValue.organization_id.id.toString());
-        }
-        if (this.isEditMode() && formValue.event_status_id) {
-            formData.append('event_status_id', formValue.event_status_id.id.toString());
-        }
-
-        // Contact - either existing or new
-        if (!this.showCreateContact) {
-            formData.append('responsible_contact_id', formValue.responsible_contact.id);
-        } else if (this.showCreateContact) {
-            formData.append('responsible_fio', formValue.responsible_fio);
-            formData.append('responsible_phone', formValue.responsible_phone);
-        }
-
-        // Files - only for new files
-        this.selectedFiles.forEach((file) => {
-            formData.append('files', file, file.name);
+    private onEventSaveSuccess(isEdit: boolean): void {
+        this.messageService.add({
+            severity: 'success',
+            summary: this.translate.instant('PLANNING.COMMON.SUCCESS'),
+            detail: this.translate.instant(isEdit ? 'PLANNING.EVENTS.UPDATED' : 'PLANNING.EVENTS.CREATED')
         });
+        this.displayDialog.set(false);
+        this.loadEvents();
+    }
 
-        // Existing files to keep (only in edit mode)
-        if (this.isEditMode()) {
-            formData.append('file_ids', this.existingFilesToKeep.join(','));
-        }
-
-        return formData;
+    private onEventSaveError(error: any, isEdit: boolean): void {
+        console.error(isEdit ? 'Failed to update event:' : 'Failed to create event:', error);
+        this.messageService.add({
+            severity: 'error',
+            summary: this.translate.instant('PLANNING.COMMON.ERROR'),
+            detail: error.error?.error || this.translate.instant(isEdit ? 'PLANNING.EVENTS.UPDATE_ERROR' : 'PLANNING.EVENTS.CREATE_ERROR')
+        });
     }
 
     /**

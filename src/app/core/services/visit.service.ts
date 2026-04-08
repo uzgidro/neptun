@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ApiService } from '@/core/services/api.service';
 import { Observable } from 'rxjs';
 import { HttpParams } from '@angular/common/http';
-import { AddVisitRequest, EditVisitRequest, VisitDto, VisitResponse } from '@/core/interfaces/visits';
+import { AddVisitRequest, EditVisitRequest, VisitCreatePayload, VisitDto, VisitResponse, VisitUpdatePayload } from '@/core/interfaces/visits';
 import { map } from 'rxjs/operators';
 
 const VISITS = '/visits';
@@ -33,12 +33,12 @@ export class VisitService extends ApiService {
     );
   }
 
-  addVisit(formData: FormData): Observable<any> {
-    return this.http.post(this.BASE_URL + VISITS, formData);
+  addVisit(payload: VisitCreatePayload): Observable<any> {
+    return this.http.post(this.BASE_URL + VISITS, payload);
   }
 
-  editVisit(id: number, formData: FormData): Observable<any> {
-    return this.http.patch(`${this.BASE_URL}${VISITS}/${id}`, formData);
+  editVisit(id: number, payload: VisitUpdatePayload): Observable<any> {
+    return this.http.patch(`${this.BASE_URL}${VISITS}/${id}`, payload);
   }
 
   deleteVisit(id: number): Observable<any> {

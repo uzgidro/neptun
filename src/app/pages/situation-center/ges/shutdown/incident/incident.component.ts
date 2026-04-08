@@ -7,8 +7,9 @@ import { MessageService, PrimeTemplate } from 'primeng/api';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { TextareaComponent } from '@/layout/component/dialog/textarea/textarea.component';
-import { IncidentDto } from '@/core/interfaces/incidents';
+import { IncidentCreatePayload, IncidentDto, IncidentUpdatePayload } from '@/core/interfaces/incidents';
 import { IncidentService } from '@/core/services/incident.service';
+import { ApiService } from '@/core/services/api.service';
 import { Organization } from '@/core/interfaces/organizations';
 import { AuthService } from '@/core/services/auth.service';
 import { TooltipModule } from 'primeng/tooltip';
@@ -66,6 +67,7 @@ export class IncidentComponent implements OnInit, OnChanges, OnDestroy {
     private fb: FormBuilder = inject(FormBuilder);
     private organizationService: OrganizationService = inject(OrganizationService);
     private incidentService: IncidentService = inject(IncidentService);
+    private apiService: ApiService = inject(ApiService);
     private scService: ScService = inject(ScService);
     private messageService: MessageService = inject(MessageService);
     private translate = inject(TranslateService);
@@ -81,6 +83,7 @@ export class IncidentComponent implements OnInit, OnChanges, OnDestroy {
     showFilesDialog: boolean = false;
     selectedIncidentForFiles: IncidentDto | null = null;
     existingFilesToKeep: number[] = [];
+    filesDirty = false;
 
     ngOnInit(): void {
         this.form = this.fb.group({
@@ -124,6 +127,7 @@ export class IncidentComponent implements OnInit, OnChanges, OnDestroy {
             },
             error: (err) => {
                 this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: err.message });
+                this.loading = false;
             },
             complete: () => (this.loading = false)
         });
@@ -138,62 +142,72 @@ export class IncidentComponent implements OnInit, OnChanges, OnDestroy {
 
         this.isLoading = true;
         const rawPayload = this.form.getRawValue();
-        const formData = new FormData();
+        const payload: IncidentCreatePayload & IncidentUpdatePayload = {};
 
         if (rawPayload.organization) {
-            formData.append('organization_id', rawPayload.organization.id.toString());
+            payload.organization_id = rawPayload.organization.id;
         }
         if (rawPayload.incident_time) {
-            formData.append('incident_time', rawPayload.incident_time.toISOString());
+            payload.incident_time = rawPayload.incident_time.toISOString();
         }
         if (rawPayload.description) {
-            formData.append('description', rawPayload.description);
+            payload.description = rawPayload.description;
         }
 
-        // Add new files
-        this.selectedFiles.forEach((file) => {
-            formData.append('files', file, file.name);
-        });
+        const submitWithPayload = (p: typeof payload) => {
+            if (this.isEditMode && this.currentIncidentId) {
+                this.incidentService.editIncident(this.currentIncidentId, p).pipe(takeUntil(this.destroy$)).subscribe({
+                    next: () => {
+                        this.messageService.add({ severity: 'success', summary: this.translate.instant('SITUATION_CENTER.INCIDENT.UPDATED') });
+                        this.incidentSaved.emit();
+                        this.closeDialog();
+                    },
+                    error: (err) => {
+                        this.messageService.add({ severity: 'error', summary: this.translate.instant('SITUATION_CENTER.INCIDENT.UPDATE_ERROR'), detail: err.message });
+                        this.isLoading = false;
+                    },
+                    complete: () => {
+                        this.isLoading = false;
+                        this.submitted = false;
+                    }
+                });
+            } else {
+                this.incidentService.addIncident(p).pipe(takeUntil(this.destroy$)).subscribe({
+                    next: () => {
+                        this.isFormOpen = false;
+                        this.form.reset();
+                        this.messageService.add({ severity: 'success', summary: this.translate.instant('SITUATION_CENTER.INCIDENT.CREATED') });
+                        this.incidentSaved.emit();
+                        this.closeDialog();
+                    },
+                    error: (err) => {
+                        this.messageService.add({ severity: 'error', summary: this.translate.instant('SITUATION_CENTER.INCIDENT.CREATE_ERROR'), detail: err.message });
+                        this.isLoading = false;
+                    },
+                    complete: () => {
+                        this.isLoading = false;
+                        this.submitted = false;
+                    }
+                });
+            }
+        };
 
-        // Add existing file IDs to keep (in edit mode)
-        if (this.isEditMode) {
-            formData.append('file_ids', this.existingFilesToKeep.join(','));
-        }
-
-        if (this.isEditMode && this.currentIncidentId) {
-            this.incidentService.editIncident(this.currentIncidentId, formData).pipe(takeUntil(this.destroy$)).subscribe({
-                next: () => {
-                    this.messageService.add({ severity: 'success', summary: this.translate.instant('SITUATION_CENTER.INCIDENT.UPDATED') });
-                    this.incidentSaved.emit();
-                    this.closeDialog();
+        if (this.selectedFiles.length > 0) {
+            this.apiService.uploadFiles(this.selectedFiles, 1).pipe(takeUntil(this.destroy$)).subscribe({
+                next: (res) => {
+                    payload.file_ids = [...this.existingFilesToKeep, ...res.ids];
+                    submitWithPayload(payload);
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: this.translate.instant('SITUATION_CENTER.INCIDENT.UPDATE_ERROR'), detail: err.message });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('SITUATION_CENTER.INCIDENT.CREATE_ERROR'), detail: err.error?.message || this.translate.instant('SITUATION_CENTER.INCIDENT.CREATE_ERROR') });
                     this.isLoading = false;
-                },
-                complete: () => {
-                    this.isLoading = false;
-                    this.submitted = false;
                 }
             });
+        } else if (this.filesDirty) {
+            payload.file_ids = this.existingFilesToKeep;
+            submitWithPayload(payload);
         } else {
-            this.incidentService.addIncident(formData).pipe(takeUntil(this.destroy$)).subscribe({
-                next: () => {
-                    this.isFormOpen = false;
-                    this.form.reset();
-                    this.messageService.add({ severity: 'success', summary: this.translate.instant('SITUATION_CENTER.INCIDENT.CREATED') });
-                    this.incidentSaved.emit();
-                    this.closeDialog();
-                },
-                error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: this.translate.instant('SITUATION_CENTER.INCIDENT.CREATE_ERROR'), detail: err.message });
-                    this.isLoading = false;
-                },
-                complete: () => {
-                    this.isLoading = false;
-                    this.submitted = false;
-                }
-            });
+            submitWithPayload(payload);
         }
     }
 
@@ -206,6 +220,7 @@ export class IncidentComponent implements OnInit, OnChanges, OnDestroy {
         this.currentIncident = null;
         this.selectedFiles = [];
         this.existingFilesToKeep = [];
+        this.filesDirty = false;
         this.form.reset();
         this.loadIncidents();
     }
@@ -217,6 +232,7 @@ export class IncidentComponent implements OnInit, OnChanges, OnDestroy {
         this.form.reset();
         this.selectedFiles = [];
         this.existingFilesToKeep = [];
+        this.filesDirty = false;
         this.submitted = false;
         this.isLoading = false;
         this.isFormOpen = true;
@@ -263,6 +279,7 @@ export class IncidentComponent implements OnInit, OnChanges, OnDestroy {
 
     removeExistingFile(fileId: number) {
         this.existingFilesToKeep = this.existingFilesToKeep.filter((id) => id !== fileId);
+        this.filesDirty = true;
         // Also remove from current incident's files for UI update
         if (this.currentIncident?.files) {
             this.currentIncident.files = this.currentIncident.files.filter((f) => f.id !== fileId);

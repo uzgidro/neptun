@@ -9,8 +9,9 @@ import { TableModule } from 'primeng/table';
 import { TextareaComponent } from '@/layout/component/dialog/textarea/textarea.component';
 import { Organization } from '@/core/interfaces/organizations';
 import { GesShutdownService } from '@/core/services/ges-shutdown.service';
+import { ApiService } from '@/core/services/api.service';
 import { InputNumberdComponent } from '@/layout/component/dialog/input-number/input-number.component';
-import { GesShutdownDto, ShutdownDto } from '@/core/interfaces/ges-shutdown';
+import { GesShutdownDto, ShutdownCreatePayload, ShutdownDto, ShutdownUpdatePayload } from '@/core/interfaces/ges-shutdown';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { AuthService } from '@/core/services/auth.service';
 import { TooltipModule } from 'primeng/tooltip';
@@ -67,6 +68,7 @@ export class GesShutdownComponent implements OnInit, OnChanges, OnDestroy {
     private fb: FormBuilder = inject(FormBuilder);
     private organizationService: OrganizationService = inject(OrganizationService);
     private gesShutdownService: GesShutdownService = inject(GesShutdownService);
+    private apiService: ApiService = inject(ApiService);
     private scService: ScService = inject(ScService);
     private messageService: MessageService = inject(MessageService);
     private translate = inject(TranslateService);
@@ -82,6 +84,7 @@ export class GesShutdownComponent implements OnInit, OnChanges, OnDestroy {
     showFilesDialog: boolean = false;
     selectedShutdownForFiles: ShutdownDto | null = null;
     existingFilesToKeep: number[] = [];
+    filesDirty = false;
 
     ngOnInit(): void {
         this.form = this.fb.group({
@@ -113,6 +116,7 @@ export class GesShutdownComponent implements OnInit, OnChanges, OnDestroy {
             },
             error: (err) => {
                 this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: err.message });
+                this.loading = false;
             },
             complete: () => (this.loading = false)
         });
@@ -127,93 +131,91 @@ export class GesShutdownComponent implements OnInit, OnChanges, OnDestroy {
 
         this.isLoading = true;
         const rawPayload = this.form.getRawValue();
-        const formData = new FormData();
+        const payload: ShutdownCreatePayload & ShutdownUpdatePayload = {};
 
         if (rawPayload.organization) {
-            formData.append('organization_id', rawPayload.organization.id.toString());
+            payload.organization_id = rawPayload.organization.id;
         }
         if (rawPayload.start_time) {
-            formData.append('start_time', rawPayload.start_time.toISOString());
+            payload.start_time = rawPayload.start_time.toISOString();
         }
         if (rawPayload.end_time) {
-            formData.append('end_time', rawPayload.end_time.toISOString());
+            payload.end_time = rawPayload.end_time.toISOString();
         }
         if (rawPayload.reason) {
-            formData.append('reason', rawPayload.reason);
+            payload.reason = rawPayload.reason;
         }
         if (rawPayload.generation_loss) {
-            formData.append('generation_loss', rawPayload.generation_loss.toString());
+            payload.generation_loss = rawPayload.generation_loss;
         }
         if (rawPayload.idle_discharge_volume) {
-            formData.append('idle_discharge_volume', rawPayload.idle_discharge_volume.toString());
+            payload.idle_discharge_volume = rawPayload.idle_discharge_volume;
         }
 
-        // Add new files
-        this.selectedFiles.forEach((file) => {
-            formData.append('files', file, file.name);
-        });
-
-        // Add existing file IDs to keep (in edit mode)
-        if (this.isEditMode) {
-            formData.append('file_ids', this.existingFilesToKeep.join(','));
-        }
-
-        if (this.isEditMode && this.currentShutdownId) {
-            this.gesShutdownService.editShutdown(this.currentShutdownId, formData).pipe(takeUntil(this.destroy$)).subscribe({
-                next: () => {
-                    this.messageService.add({ severity: 'success', summary: this.translate.instant('SITUATION_CENTER.SHUTDOWN.EVENT_UPDATED') });
-                    this.closeDialog();
-                    this.shutdownSaved.emit();
-                },
-                error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: this.translate.instant('SITUATION_CENTER.SHUTDOWN.EVENT_UPDATE_ERROR'), detail: err.message });
-                    this.isLoading = false;
-                },
-                complete: () => {
-                    this.isLoading = false;
-                    this.submitted = false;
-                }
-            });
-        } else {
-            this.gesShutdownService.addShutdown(formData).pipe(takeUntil(this.destroy$)).subscribe({
-                next: () => {
-                    this.isFormOpen = false;
-                    this.form.reset();
-                    this.messageService.add({ severity: 'success', summary: this.translate.instant('SITUATION_CENTER.SHUTDOWN.EVENT_CREATED') });
-                    this.closeDialog();
-                    this.shutdownSaved.emit();
-                },
-                error: (err) => {
-                    if (err.status === 409) {
-                        const msg = err.error?.error || this.translate.instant('SITUATION_CENTER.SHUTDOWN.CONFLICT_EXISTS');
-                        if (confirm(msg + '\n' + this.translate.instant('COMMON.FORCE_CONFIRM'))) {
-                            this.gesShutdownService.addShutdown(formData, true).pipe(takeUntil(this.destroy$)).subscribe({
-                                next: () => {
-                                    this.isFormOpen = false;
-                                    this.form.reset();
-                                    this.messageService.add({ severity: 'success', summary: this.translate.instant('SITUATION_CENTER.SHUTDOWN.EVENT_CREATED') });
-                                    this.closeDialog();
-                                    this.shutdownSaved.emit();
-                                },
-                                error: (retryErr) => {
-                                    this.messageService.add({ severity: 'error', summary: this.translate.instant('SITUATION_CENTER.SHUTDOWN.EVENT_CREATE_ERROR'), detail: retryErr.error?.message || this.translate.instant('SITUATION_CENTER.SHUTDOWN.EVENT_CREATE_ERROR') });
-                                    this.isLoading = false;
-                                }
-                            });
+        const submitWithPayload = (p: typeof payload, force = false) => {
+            if (this.isEditMode && this.currentShutdownId) {
+                this.gesShutdownService.editShutdown(this.currentShutdownId, p).pipe(takeUntil(this.destroy$)).subscribe({
+                    next: () => {
+                        this.messageService.add({ severity: 'success', summary: this.translate.instant('SITUATION_CENTER.SHUTDOWN.EVENT_UPDATED') });
+                        this.closeDialog();
+                        this.shutdownSaved.emit();
+                    },
+                    error: (err) => {
+                        this.messageService.add({ severity: 'error', summary: this.translate.instant('SITUATION_CENTER.SHUTDOWN.EVENT_UPDATE_ERROR'), detail: err.message });
+                        this.isLoading = false;
+                    },
+                    complete: () => {
+                        this.isLoading = false;
+                        this.submitted = false;
+                    }
+                });
+            } else {
+                this.gesShutdownService.addShutdown(p, force).pipe(takeUntil(this.destroy$)).subscribe({
+                    next: () => {
+                        this.isFormOpen = false;
+                        this.form.reset();
+                        this.messageService.add({ severity: 'success', summary: this.translate.instant('SITUATION_CENTER.SHUTDOWN.EVENT_CREATED') });
+                        this.closeDialog();
+                        this.shutdownSaved.emit();
+                    },
+                    error: (err) => {
+                        if (err.status === 409) {
+                            const msg = err.error?.error || this.translate.instant('SITUATION_CENTER.SHUTDOWN.CONFLICT_EXISTS');
+                            if (confirm(msg + '\n' + this.translate.instant('COMMON.FORCE_CONFIRM'))) {
+                                submitWithPayload(p, true);
+                            } else {
+                                this.isLoading = false;
+                                this.submitted = false;
+                            }
                         } else {
+                            this.messageService.add({ severity: 'error', summary: this.translate.instant('SITUATION_CENTER.SHUTDOWN.EVENT_CREATE_ERROR'), detail: err.error?.message || this.translate.instant('SITUATION_CENTER.SHUTDOWN.EVENT_CREATE_ERROR') });
                             this.isLoading = false;
-                            this.submitted = false;
                         }
-                    } else {
-                        this.messageService.add({ severity: 'error', summary: this.translate.instant('SITUATION_CENTER.SHUTDOWN.EVENT_CREATE_ERROR'), detail: err.error?.message || this.translate.instant('SITUATION_CENTER.SHUTDOWN.EVENT_CREATE_ERROR') });
+                    },
+                    complete: () => {
+                        this.submitted = false;
                         this.isLoading = false;
                     }
+                });
+            }
+        };
+
+        if (this.selectedFiles.length > 0) {
+            this.apiService.uploadFiles(this.selectedFiles, 1).pipe(takeUntil(this.destroy$)).subscribe({
+                next: (res) => {
+                    payload.file_ids = [...this.existingFilesToKeep, ...res.ids];
+                    submitWithPayload(payload);
                 },
-                complete: () => {
-                    this.submitted = false;
+                error: (err) => {
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('SITUATION_CENTER.SHUTDOWN.EVENT_CREATE_ERROR'), detail: err.error?.message || this.translate.instant('SITUATION_CENTER.SHUTDOWN.EVENT_CREATE_ERROR') });
                     this.isLoading = false;
                 }
             });
+        } else if (this.filesDirty) {
+            payload.file_ids = this.existingFilesToKeep;
+            submitWithPayload(payload);
+        } else {
+            submitWithPayload(payload);
         }
     }
 
@@ -226,6 +228,7 @@ export class GesShutdownComponent implements OnInit, OnChanges, OnDestroy {
         this.currentShutdown = null;
         this.selectedFiles = [];
         this.existingFilesToKeep = [];
+        this.filesDirty = false;
         this.form.reset();
         this.loadShutdowns();
     }
@@ -237,6 +240,7 @@ export class GesShutdownComponent implements OnInit, OnChanges, OnDestroy {
         this.form.reset();
         this.selectedFiles = [];
         this.existingFilesToKeep = [];
+        this.filesDirty = false;
         this.submitted = false;
         this.isLoading = false;
         this.isFormOpen = true;
@@ -286,6 +290,7 @@ export class GesShutdownComponent implements OnInit, OnChanges, OnDestroy {
 
     removeExistingFile(fileId: number) {
         this.existingFilesToKeep = this.existingFilesToKeep.filter((id) => id !== fileId);
+        this.filesDirty = true;
         // Also remove from current shutdown's files for UI update
         if (this.currentShutdown?.files) {
             this.currentShutdown.files = this.currentShutdown.files.filter((f) => f.id !== fileId);

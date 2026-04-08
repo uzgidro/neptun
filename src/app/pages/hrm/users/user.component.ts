@@ -1,6 +1,6 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Table, TableModule } from 'primeng/table';
-import { Users } from '@/core/interfaces/users';
+import { Users, UserCreatePayload, UserUpdatePayload } from '@/core/interfaces/users';
 import { ApiService } from '@/core/services/api.service';
 import { UserService } from '@/core/services/user.service';
 import { ContactService } from '@/core/services/contact.service';
@@ -19,7 +19,7 @@ import { Chip } from 'primeng/chip';
 import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { Roles } from '@/core/interfaces/roles';
 import { MessageService } from 'primeng/api';
-import { Subject, takeUntil } from 'rxjs';
+import { of, Subject, switchMap, takeUntil } from 'rxjs';
 import { Password } from 'primeng/password';
 import { MultiSelectComponent } from '@/layout/component/dialog/multi-select/multi-select.component';
 import { InputTextComponent } from '@/layout/component/dialog/input-text/input-text.component';
@@ -242,99 +242,90 @@ export class User implements OnInit, OnDestroy {
 
     private createUser() {
         const formValue = this.userForm.value;
-        const formData = new FormData();
-
-        formData.append('login', formValue.login);
-        formData.append('password', formValue.password);
-        formData.append('role_ids', formValue.roles.map((role: Roles) => role.id).join(','));
+        const payload: UserCreatePayload = {
+            login: formValue.login,
+            password: formValue.password,
+            role_ids: formValue.roles.map((role: Roles) => role.id)
+        };
 
         if (this.contactMode === 'existing') {
-            formData.append('contact_id', formValue.contact_id.toString());
+            payload.contact_id = formValue.contact_id;
         } else {
-            // Append contact fields
-            if (formValue.name) {
-                formData.append('contact.name', formValue.name);
-            }
-            if (formValue.email) {
-                formData.append('contact.email', formValue.email);
-            }
-            if (formValue.phone) {
-                formData.append('contact.phone', formValue.phone);
-            }
-            if (formValue.ip_phone) {
-                formData.append('contact.ip_phone', formValue.ip_phone);
-            }
-            if (formValue.dob) {
-                formData.append('contact.dob', this.apiService['dateToYMD'](formValue.dob));
-            }
-            if (formValue.external_organization_name) {
-                formData.append('contact.external_organization_name', formValue.external_organization_name);
-            }
-            if (formValue.organization_id?.id) {
-                formData.append('contact.organization_id', formValue.organization_id.id.toString());
-            }
-            if (formValue.department_id?.id) {
-                formData.append('contact.department_id', formValue.department_id.id.toString());
-            }
-            if (formValue.position_id?.id) {
-                formData.append('contact.position_id', formValue.position_id.id.toString());
-            }
+            const contact: any = {};
+            if (formValue.name) contact.name = formValue.name;
+            if (formValue.email) contact.email = formValue.email;
+            if (formValue.phone) contact.phone = formValue.phone;
+            if (formValue.ip_phone) contact.ip_phone = formValue.ip_phone;
+            if (formValue.dob) contact.dob = this.dateToYMD(formValue.dob);
+            if (formValue.external_organization_name) contact.external_organization_name = formValue.external_organization_name;
+            if (formValue.organization_id?.id) contact.organization_id = formValue.organization_id.id;
+            if (formValue.department_id?.id) contact.department_id = formValue.department_id.id;
+            if (formValue.position_id?.id) contact.position_id = formValue.position_id.id;
+            payload.contact = contact;
         }
 
-        // Append icon file if selected
-        if (this.selectedFiles.length > 0) {
-            formData.append('icon', this.selectedFiles[0], this.selectedFiles[0].name);
-        }
+        const upload$ = this.selectedFiles.length > 0
+            ? this.apiService.uploadFiles(this.selectedFiles, 1)
+            : of(null as { ids: number[] } | null);
 
-        this.userService
-            .createUser(formData)
-            .pipe(takeUntil(this.destroy$))
-            .subscribe({
-                next: () => {
-                    this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('HRM.USERS.SUCCESS_CREATED') });
-                    this.loadUsers();
-                    this.closeDialog();
-                },
-                error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('HRM.USERS.ERROR_CREATE') });
-                    console.error(err);
+        upload$.pipe(
+            switchMap((result: { ids: number[] } | null) => {
+                if (result && payload.contact) {
+                    payload.contact.icon_id = result.ids[0];
                 }
-            });
+                return this.userService.createUser(payload);
+            }),
+            takeUntil(this.destroy$)
+        ).subscribe({
+            next: () => {
+                this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('HRM.USERS.SUCCESS_CREATED') });
+                this.loadUsers();
+                this.closeDialog();
+            },
+            error: (err: any) => {
+                this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('HRM.USERS.ERROR_CREATE') });
+                console.error(err);
+            }
+        });
     }
 
     private updateUser() {
         if (!this.selectedUser) return;
 
         const formValue = this.userForm.getRawValue();
-        const formData = new FormData();
-
-        formData.append('login', formValue.login);
-        formData.append('role_ids', formValue.roles.map((role: Roles) => role.id).join(','));
+        const payload: UserUpdatePayload = {
+            login: formValue.login,
+            role_ids: formValue.roles.map((role: Roles) => role.id)
+        };
 
         // Only include password if it was changed
         if (formValue.password) {
-            formData.append('password', formValue.password);
+            payload.password = formValue.password;
         }
 
-        // Append icon file if selected
-        if (this.selectedFiles.length > 0) {
-            formData.append('icon', this.selectedFiles[0], this.selectedFiles[0].name);
-        }
+        const upload$ = this.selectedFiles.length > 0
+            ? this.apiService.uploadFiles(this.selectedFiles, 1)
+            : of(null as { ids: number[] } | null);
 
-        this.userService
-            .editUser(this.selectedUser.id, formData)
-            .pipe(takeUntil(this.destroy$))
-            .subscribe({
-                next: () => {
-                    this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('HRM.USERS.SUCCESS_UPDATED') });
-                    this.loadUsers();
-                    this.closeDialog();
-                },
-                error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('HRM.USERS.ERROR_UPDATE') });
-                    console.error(err);
+        upload$.pipe(
+            switchMap((result: { ids: number[] } | null) => {
+                if (result) {
+                    payload.icon_id = result.ids[0];
                 }
-            });
+                return this.userService.editUser(this.selectedUser!.id, payload);
+            }),
+            takeUntil(this.destroy$)
+        ).subscribe({
+            next: () => {
+                this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('HRM.USERS.SUCCESS_UPDATED') });
+                this.loadUsers();
+                this.closeDialog();
+            },
+            error: (err: any) => {
+                this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('HRM.USERS.ERROR_UPDATE') });
+                console.error(err);
+            }
+        });
     }
 
     toggleActive(user: Users): void {
@@ -345,11 +336,10 @@ export class User implements OnInit, OnDestroy {
 
         if (!confirm(msg)) return;
 
-        const formData = new FormData();
-        formData.append('is_active', String(!willDeactivate));
+        const payload: UserUpdatePayload = { is_active: !willDeactivate };
 
         this.userService
-            .editUser(user.id, formData)
+            .editUser(user.id, payload)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
@@ -410,6 +400,13 @@ export class User implements OnInit, OnDestroy {
             },
             complete: () => (this.loading = false)
         });
+    }
+
+    private dateToYMD(date: Date): string {
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        return `${year}-${month}-${day}`;
     }
 
     ngOnDestroy() {

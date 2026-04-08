@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '@/core/services/api.service';
 import { Observable } from 'rxjs';
-import { GesShutdownDto, GesShutdownPayload, GesShutdownResponse, ShutdownDto, ShutdownResponse } from '@/core/interfaces/ges-shutdown';
+import { GesShutdownDto, GesShutdownPayload, GesShutdownResponse, ShutdownCreatePayload, ShutdownDto, ShutdownResponse, ShutdownUpdatePayload } from '@/core/interfaces/ges-shutdown';
 import { map } from 'rxjs/operators';
 import { HttpParams } from '@angular/common/http';
 
@@ -25,13 +25,13 @@ export class GesShutdownService extends ApiService {
         );
     }
 
-    addShutdown(formData: FormData, force = false): Observable<any> {
-        if (force) formData.set('force', 'true');
-        return this.http.post(this.BASE_URL + SHUTDOWNS, formData);
+    addShutdown(payload: ShutdownCreatePayload, force = false): Observable<any> {
+        const params = force ? { params: { force: 'true' } } : {};
+        return this.http.post(this.BASE_URL + SHUTDOWNS, payload, params);
     }
 
-    editShutdown(id: number, formData: FormData): Observable<any> {
-        return this.http.patch(`${this.BASE_URL}${SHUTDOWNS}/${id}`, formData);
+    editShutdown(id: number, payload: ShutdownUpdatePayload): Observable<any> {
+        return this.http.patch(`${this.BASE_URL}${SHUTDOWNS}/${id}`, payload);
     }
 
     deleteShutdown(id: number): Observable<any> {

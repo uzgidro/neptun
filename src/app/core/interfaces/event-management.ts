@@ -81,3 +81,37 @@ export interface EventFilters {
     dateFrom?: string;
     dateTo?: string;
 }
+
+/**
+ * Payload for creating a new event (JSON)
+ */
+export interface EventCreatePayload {
+    name: string;
+    description?: string;
+    location?: string;
+    event_date: string;
+    event_type_id: number;
+    event_status_id?: number;
+    organization_id?: number;
+    responsible_contact_id?: number;
+    responsible_fio?: string;
+    responsible_phone?: string;
+    file_ids?: number[];
+}
+
+/**
+ * Payload for updating an existing event (JSON)
+ */
+export interface EventUpdatePayload {
+    name?: string;
+    description?: string;
+    location?: string;
+    event_date?: string;
+    event_type_id?: number;
+    event_status_id?: number;
+    organization_id?: number;
+    responsible_contact_id?: number;
+    responsible_fio?: string;
+    responsible_phone?: string;
+    file_ids?: number[];
+}

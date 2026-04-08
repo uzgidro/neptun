@@ -20,6 +20,24 @@ export interface InvestmentDto {
     files?: FileResponse[];
 }
 
+export interface InvestmentCreatePayload {
+    name: string;
+    status_id: number;
+    type_id: number;
+    cost: number;
+    comments?: string;
+    file_ids?: number[];
+}
+
+export interface InvestmentUpdatePayload {
+    name?: string;
+    status_id?: number;
+    type_id?: number;
+    cost?: number;
+    comments?: string;
+    file_ids?: number[];
+}
+
 export interface InvestmentStatus {
     id: number;
     name: string;

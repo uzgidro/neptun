@@ -50,3 +50,29 @@ export interface EditContactRequest {
     department_id?: number | null;
     position_id?: number | null;
 }
+
+export interface ContactCreatePayload {
+    name: string;
+    email?: string | null;
+    phone?: string | null;
+    ip_phone?: string | null;
+    dob?: string | null;
+    external_organization_name?: string | null;
+    organization_id?: number | null;
+    department_id?: number | null;
+    position_id?: number | null;
+    icon_id?: number;
+}
+
+export interface ContactUpdatePayload {
+    name?: string | null;
+    email?: string | null;
+    phone?: string | null;
+    ip_phone?: string | null;
+    dob?: string | null;
+    external_organization_name?: string | null;
+    organization_id?: number | null;
+    department_id?: number | null;
+    position_id?: number | null;
+    icon_id?: number;
+}

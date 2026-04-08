@@ -23,6 +23,7 @@ import { FileUploadComponent } from '@/layout/component/dialog/file-upload/file-
 import { LegalDocument, LegalDocumentFilters, LegalDocumentPayload, LegalDocumentType } from '@/core/interfaces/chancellery';
 import { FileResponse } from '@/core/interfaces/chancellery/document-base';
 import { LegalDocumentService } from '@/core/services/legal-document.service';
+import { ApiService } from '@/core/services/api.service';
 import { AuthService } from '@/core/services/auth.service';
 
 @Component({
@@ -84,6 +85,7 @@ export class LegalDocumentsComponent implements OnInit, OnDestroy {
 
     // Services
     private legalDocumentService = inject(LegalDocumentService);
+    private apiService = inject(ApiService);
     private messageService = inject(MessageService);
     private fb = inject(FormBuilder);
     private translate = inject(TranslateService);
@@ -265,58 +267,69 @@ export class LegalDocumentsComponent implements OnInit, OnDestroy {
             type_id: rawValue.type_id || this.typeId || 1
         };
 
-        const hasFiles = this.selectedFiles.length > 0 || this.existingFileIds.length > 0;
-        const requestData = hasFiles ? this.legalDocumentService.buildFormData(payload, this.selectedFiles, this.existingFileIds) : payload;
+        const originalFileIds = this.selectedDocument?.files?.map((f) => f.id) || [];
+        const filesModified = this.isEditMode && (
+            this.existingFileIds.length !== originalFileIds.length ||
+            !this.existingFileIds.every((id) => originalFileIds.includes(id))
+        );
 
-        if (this.isEditMode && this.selectedDocument) {
-            this.legalDocumentService
-                .update(this.selectedDocument.id, requestData)
+        if (this.selectedFiles.length > 0) {
+            this.apiService
+                .uploadFiles(this.selectedFiles, 1)
                 .pipe(takeUntil(this.destroy$))
                 .subscribe({
-                    next: () => {
-                        this.messageService.add({
-                            severity: 'success',
-                            summary: this.translate.instant('COMMON.SUCCESS'),
-                            detail: this.translate.instant('LEGAL_DOCUMENTS.UPDATED')
-                        });
-                        this.closeDialog();
-                        this.loadDocuments();
+                    next: (res) => {
+                        payload.file_ids = [...this.existingFileIds, ...res.ids];
+                        this.saveDocument(payload);
                     },
-                    error: (err) => {
-                        console.error('Error updating document:', err);
-                        this.messageService.add({
-                            severity: 'error',
-                            summary: this.translate.instant('COMMON.ERROR'),
-                            detail: this.translate.instant('LEGAL_DOCUMENTS.UPDATE_ERROR')
-                        });
-                    },
+                    error: (err: any) => this.onSaveError(err)
+                });
+        } else {
+            if (filesModified) {
+                payload.file_ids = this.existingFileIds;
+            }
+            this.saveDocument(payload);
+        }
+    }
+
+    private saveDocument(payload: LegalDocumentPayload): void {
+        if (this.isEditMode && this.selectedDocument) {
+            this.legalDocumentService.update(this.selectedDocument.id, payload)
+                .pipe(takeUntil(this.destroy$))
+                .subscribe({
+                    next: () => this.onSaveSuccess(),
+                    error: (err: any) => this.onSaveError(err),
                     complete: () => (this.saving = false)
                 });
         } else {
-            this.legalDocumentService
-                .create(requestData)
+            this.legalDocumentService.create(payload)
                 .pipe(takeUntil(this.destroy$))
                 .subscribe({
-                    next: () => {
-                        this.messageService.add({
-                            severity: 'success',
-                            summary: this.translate.instant('COMMON.SUCCESS'),
-                            detail: this.translate.instant('LEGAL_DOCUMENTS.CREATED')
-                        });
-                        this.closeDialog();
-                        this.loadDocuments();
-                    },
-                    error: (err) => {
-                        console.error('Error creating document:', err);
-                        this.messageService.add({
-                            severity: 'error',
-                            summary: this.translate.instant('COMMON.ERROR'),
-                            detail: this.translate.instant('LEGAL_DOCUMENTS.CREATE_ERROR')
-                        });
-                    },
+                    next: () => this.onSaveSuccess(),
+                    error: (err: any) => this.onSaveError(err),
                     complete: () => (this.saving = false)
                 });
         }
+    }
+
+    private onSaveSuccess(): void {
+        this.messageService.add({
+            severity: 'success',
+            summary: this.translate.instant('COMMON.SUCCESS'),
+            detail: this.translate.instant(this.isEditMode ? 'LEGAL_DOCUMENTS.UPDATED' : 'LEGAL_DOCUMENTS.CREATED')
+        });
+        this.closeDialog();
+        this.loadDocuments();
+    }
+
+    private onSaveError(err: any): void {
+        console.error(this.isEditMode ? 'Error updating document:' : 'Error creating document:', err);
+        this.messageService.add({
+            severity: 'error',
+            summary: this.translate.instant('COMMON.ERROR'),
+            detail: this.translate.instant(this.isEditMode ? 'LEGAL_DOCUMENTS.UPDATE_ERROR' : 'LEGAL_DOCUMENTS.CREATE_ERROR')
+        });
+        this.saving = false;
     }
 
     // Delete

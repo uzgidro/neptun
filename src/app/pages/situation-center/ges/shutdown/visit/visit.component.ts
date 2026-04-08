@@ -7,8 +7,9 @@ import { MessageService, PrimeTemplate } from 'primeng/api';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { TextareaComponent } from '@/layout/component/dialog/textarea/textarea.component';
-import { VisitDto } from '@/core/interfaces/visits';
+import { VisitCreatePayload, VisitDto, VisitUpdatePayload } from '@/core/interfaces/visits';
 import { VisitService } from '@/core/services/visit.service';
+import { ApiService } from '@/core/services/api.service';
 import { Organization } from '@/core/interfaces/organizations';
 import { TooltipModule } from 'primeng/tooltip';
 import { InputTextComponent } from '@/layout/component/dialog/input-text/input-text.component';
@@ -65,6 +66,7 @@ export class VisitComponent implements OnInit, OnChanges, OnDestroy {
     private fb: FormBuilder = inject(FormBuilder);
     private organizationService: OrganizationService = inject(OrganizationService);
     private visitService: VisitService = inject(VisitService);
+    private apiService: ApiService = inject(ApiService);
     private scService: ScService = inject(ScService);
     private messageService: MessageService = inject(MessageService);
     private translate = inject(TranslateService);
@@ -80,6 +82,7 @@ export class VisitComponent implements OnInit, OnChanges, OnDestroy {
     showFilesDialog: boolean = false;
     selectedVisitForFiles: VisitDto | null = null;
     existingFilesToKeep: number[] = [];
+    filesDirty = false;
 
     ngOnInit(): void {
         this.form = this.fb.group({
@@ -109,6 +112,7 @@ export class VisitComponent implements OnInit, OnChanges, OnDestroy {
             },
             error: (err) => {
                 this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: err.message });
+                this.loading = false;
             },
             complete: () => (this.loading = false)
         });
@@ -123,61 +127,71 @@ export class VisitComponent implements OnInit, OnChanges, OnDestroy {
 
         this.isLoading = true;
         const rawPayload = this.form.getRawValue();
-        const formData = new FormData();
+        const payload: VisitCreatePayload & VisitUpdatePayload = {} as any;
 
         if (rawPayload.organization) {
-            formData.append('organization_id', rawPayload.organization.id.toString());
+            payload.organization_id = rawPayload.organization.id;
         }
         if (rawPayload.visit_date) {
-            formData.append('visit_date', rawPayload.visit_date.toISOString());
+            payload.visit_date = rawPayload.visit_date.toISOString();
         }
         if (rawPayload.description) {
-            formData.append('description', rawPayload.description);
+            payload.description = rawPayload.description;
         }
         if (rawPayload.responsible_name) {
-            formData.append('responsible_name', rawPayload.responsible_name);
+            payload.responsible_name = rawPayload.responsible_name;
         }
 
-        // Add new files
-        this.selectedFiles.forEach((file) => {
-            formData.append('files', file, file.name);
-        });
+        const submitWithPayload = (p: typeof payload) => {
+            if (this.isEditMode && this.currentVisitId) {
+                this.visitService.editVisit(this.currentVisitId, p).pipe(takeUntil(this.destroy$)).subscribe({
+                    next: () => {
+                        this.messageService.add({ severity: 'success', summary: this.translate.instant('SITUATION_CENTER.VISIT.UPDATED') });
+                        this.closeDialog();
+                    },
+                    error: (err) => {
+                        this.messageService.add({ severity: 'error', summary: this.translate.instant('SITUATION_CENTER.VISIT.UPDATE_ERROR'), detail: err.message });
+                        this.isLoading = false;
+                    },
+                    complete: () => {
+                        this.isLoading = false;
+                        this.submitted = false;
+                    }
+                });
+            } else {
+                this.visitService.addVisit(p).pipe(takeUntil(this.destroy$)).subscribe({
+                    next: () => {
+                        this.messageService.add({ severity: 'success', summary: this.translate.instant('SITUATION_CENTER.VISIT.CREATED') });
+                        this.closeDialog();
+                    },
+                    error: (err) => {
+                        this.messageService.add({ severity: 'error', summary: this.translate.instant('SITUATION_CENTER.VISIT.CREATE_ERROR'), detail: err.message });
+                        this.isLoading = false;
+                    },
+                    complete: () => {
+                        this.isLoading = false;
+                        this.submitted = false;
+                    }
+                });
+            }
+        };
 
-        // Add existing file IDs to keep (in edit mode)
-        if (this.isEditMode) {
-            formData.append('file_ids', this.existingFilesToKeep.join(','));
-        }
-
-        if (this.isEditMode && this.currentVisitId) {
-            this.visitService.editVisit(this.currentVisitId, formData).pipe(takeUntil(this.destroy$)).subscribe({
-                next: () => {
-                    this.messageService.add({ severity: 'success', summary: this.translate.instant('SITUATION_CENTER.VISIT.UPDATED') });
-                    this.closeDialog();
+        if (this.selectedFiles.length > 0) {
+            this.apiService.uploadFiles(this.selectedFiles, 1).pipe(takeUntil(this.destroy$)).subscribe({
+                next: (res) => {
+                    payload.file_ids = [...this.existingFilesToKeep, ...res.ids];
+                    submitWithPayload(payload);
                 },
                 error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: this.translate.instant('SITUATION_CENTER.VISIT.UPDATE_ERROR'), detail: err.message });
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('SITUATION_CENTER.VISIT.CREATE_ERROR'), detail: err.error?.message || this.translate.instant('SITUATION_CENTER.VISIT.CREATE_ERROR') });
                     this.isLoading = false;
-                },
-                complete: () => {
-                    this.isLoading = false;
-                    this.submitted = false;
                 }
             });
+        } else if (this.filesDirty) {
+            payload.file_ids = this.existingFilesToKeep;
+            submitWithPayload(payload);
         } else {
-            this.visitService.addVisit(formData).pipe(takeUntil(this.destroy$)).subscribe({
-                next: () => {
-                    this.messageService.add({ severity: 'success', summary: this.translate.instant('SITUATION_CENTER.VISIT.CREATED') });
-                    this.closeDialog();
-                },
-                error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: this.translate.instant('SITUATION_CENTER.VISIT.CREATE_ERROR'), detail: err.message });
-                    this.isLoading = false;
-                },
-                complete: () => {
-                    this.isLoading = false;
-                    this.submitted = false;
-                }
-            });
+            submitWithPayload(payload);
         }
     }
 
@@ -190,6 +204,7 @@ export class VisitComponent implements OnInit, OnChanges, OnDestroy {
         this.currentVisit = null;
         this.selectedFiles = [];
         this.existingFilesToKeep = [];
+        this.filesDirty = false;
         this.form.reset();
         this.loadVisits();
     }
@@ -201,6 +216,7 @@ export class VisitComponent implements OnInit, OnChanges, OnDestroy {
         this.form.reset();
         this.selectedFiles = [];
         this.existingFilesToKeep = [];
+        this.filesDirty = false;
         this.submitted = false;
         this.isLoading = false;
         this.isFormOpen = true;
@@ -245,6 +261,7 @@ export class VisitComponent implements OnInit, OnChanges, OnDestroy {
 
     removeExistingFile(fileId: number) {
         this.existingFilesToKeep = this.existingFilesToKeep.filter((id) => id !== fileId);
+        this.filesDirty = true;
         // Also remove from current visit's files for UI update
         if (this.currentVisit?.files) {
             this.currentVisit.files = this.currentVisit.files.filter((f) => f.id !== fileId);

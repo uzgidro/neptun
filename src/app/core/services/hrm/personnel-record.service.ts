@@ -43,10 +43,6 @@ export class PersonnelRecordService {
         return this.http.get<PersonnelDocument[]>(`${this.API_URL}/${recordId}/documents`);
     }
 
-    uploadDocument(recordId: number, formData: FormData): Observable<PersonnelDocument> {
-        return this.http.post<PersonnelDocument>(`${this.API_URL}/${recordId}/documents`, formData);
-    }
-
     deleteDocument(recordId: number, documentId: number): Observable<void> {
         return this.http.delete<void>(`${this.API_URL}/${recordId}/documents/${documentId}`);
     }

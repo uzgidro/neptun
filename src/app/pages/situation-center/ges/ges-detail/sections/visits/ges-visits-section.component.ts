@@ -2,7 +2,7 @@ import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { switchMap, takeUntil } from 'rxjs/operators';
 import { TableModule } from 'primeng/table';
 import { ButtonDirective, ButtonIcon } from 'primeng/button';
 import { InputText } from 'primeng/inputtext';
@@ -14,7 +14,9 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MessageService } from 'primeng/api';
 
 import { GesService } from '@/core/services/ges.service';
+import { ApiService } from '@/core/services/api.service';
 import { GesVisit, DateRangeParams } from '@/core/interfaces/ges';
+import { VisitCreatePayload, VisitUpdatePayload } from '@/core/interfaces/visits';
 import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
 import { TextareaComponent } from '@/layout/component/dialog/textarea/textarea.component';
@@ -56,6 +58,7 @@ export class GesVisitsSectionComponent implements OnInit, OnDestroy {
     @Input() canEdit = false;
 
     private gesService = inject(GesService);
+    private apiService = inject(ApiService);
     private messageService = inject(MessageService);
     private fb = inject(FormBuilder);
     private translate = inject(TranslateService);
@@ -77,6 +80,7 @@ export class GesVisitsSectionComponent implements OnInit, OnDestroy {
 
     selectedFiles: File[] = [];
     existingFilesToKeep: number[] = [];
+    filesDirty = false;
     showFilesDialog = false;
     selectedItemForFiles: GesVisit | null = null;
 
@@ -144,6 +148,7 @@ export class GesVisitsSectionComponent implements OnInit, OnDestroy {
         this.form.reset();
         this.selectedFiles = [];
         this.existingFilesToKeep = [];
+        this.filesDirty = false;
         this.submitted = false;
         this.isFormOpen = true;
     }
@@ -173,49 +178,67 @@ export class GesVisitsSectionComponent implements OnInit, OnDestroy {
 
         this.isLoading = true;
         const rawPayload = this.form.getRawValue();
-        const formData = new FormData();
+        const payload: VisitCreatePayload & VisitUpdatePayload = {} as VisitCreatePayload & VisitUpdatePayload;
 
         if (rawPayload.visit_date) {
-            formData.append('visit_date', rawPayload.visit_date.toISOString());
+            payload.visit_date = rawPayload.visit_date.toISOString();
         }
         if (rawPayload.description) {
-            formData.append('description', rawPayload.description);
+            payload.description = rawPayload.description;
         }
         if (rawPayload.responsible_name) {
-            formData.append('responsible_name', rawPayload.responsible_name);
+            payload.responsible_name = rawPayload.responsible_name;
         }
 
-        this.selectedFiles.forEach((file) => {
-            formData.append('files', file, file.name);
-        });
+        const submitWithPayload = (p: typeof payload) => {
+            const request$ = this.isEditMode && this.currentItemId
+                ? this.gesService.editVisit(this.gesId, this.currentItemId, p)
+                : this.gesService.addVisit(this.gesId, p);
 
-        if (this.isEditMode) {
-            formData.append('file_ids', this.existingFilesToKeep.join(','));
+            request$.subscribe({
+                next: () => {
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: this.isEditMode ? 'GES_DETAIL.UPDATED' : 'GES_DETAIL.CREATED'
+                    });
+                    this.closeDialog();
+                    this.loadData();
+                },
+                error: (err) => {
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'GES_DETAIL.ERROR_SAVE',
+                        detail: err.message
+                    });
+                    this.isLoading = false;
+                },
+                complete: () => {
+                    this.isLoading = false;
+                }
+            });
+        };
+
+        if (this.selectedFiles.length > 0) {
+            this.apiService.uploadFiles(this.selectedFiles, 1).pipe(takeUntil(this.destroy$)).subscribe({
+                next: (res) => {
+                    payload.file_ids = [...this.existingFilesToKeep, ...res.ids];
+                    submitWithPayload(payload);
+                },
+                error: (err) => {
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'GES_DETAIL.ERROR_SAVE',
+                        detail: err.message
+                    });
+                    this.isLoading = false;
+                }
+            });
+        } else if (this.filesDirty) {
+            payload.file_ids = this.existingFilesToKeep;
+            submitWithPayload(payload);
+        } else {
+            submitWithPayload(payload);
         }
-
-        const request$ = this.isEditMode && this.currentItemId ? this.gesService.editVisit(this.gesId, this.currentItemId, formData) : this.gesService.addVisit(this.gesId, formData);
-
-        request$.subscribe({
-            next: () => {
-                this.messageService.add({
-                    severity: 'success',
-                    summary: this.isEditMode ? 'GES_DETAIL.UPDATED' : 'GES_DETAIL.CREATED'
-                });
-                this.closeDialog();
-                this.loadData();
-            },
-            error: (err) => {
-                this.messageService.add({
-                    severity: 'error',
-                    summary: 'GES_DETAIL.ERROR_SAVE',
-                    detail: err.message
-                });
-                this.isLoading = false;
-            },
-            complete: () => {
-                this.isLoading = false;
-            }
-        });
     }
 
     deleteItem(id: number): void {
@@ -248,11 +271,13 @@ export class GesVisitsSectionComponent implements OnInit, OnDestroy {
         this.currentItem = null;
         this.selectedFiles = [];
         this.existingFilesToKeep = [];
+        this.filesDirty = false;
         this.form.reset();
     }
 
     onFileSelect(files: File[]): void {
         this.selectedFiles = files;
+        this.filesDirty = true;
     }
 
     removeFile(index: number): void {
@@ -261,6 +286,7 @@ export class GesVisitsSectionComponent implements OnInit, OnDestroy {
 
     removeExistingFile(fileId: number): void {
         this.existingFilesToKeep = this.existingFilesToKeep.filter((id) => id !== fileId);
+        this.filesDirty = true;
         if (this.currentItem?.files) {
             this.currentItem.files = this.currentItem.files.filter((f) => f.id !== fileId);
         }

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -15,10 +15,12 @@ import { FileListComponent } from '@/layout/component/dialog/file-list/file-list
 import { InputTextComponent } from '@/layout/component/dialog/input-text/input-text.component';
 import { FinancialDashboardService } from '../../financial-block/dashboard/services/financial-dashboard.service';
 import { InvestmentService } from '@/core/services/investment.service';
-import { InvestmentDto, InvestmentStatus } from '@/core/interfaces/investment';
+import { ApiService } from '@/core/services/api.service';
+import { InvestmentCreatePayload, InvestmentDto, InvestmentStatus, InvestmentUpdatePayload } from '@/core/interfaces/investment';
 import { ActivatedRoute } from '@angular/router';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { Subject, switchMap, takeUntil } from 'rxjs';
 
 @Component({
     selector: 'app-invest-perspective-projects',
@@ -45,7 +47,7 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
     templateUrl: './invest-perspective-projects.component.html',
     styleUrl: './invest-perspective-projects.component.scss'
 })
-export class InvestPerspectiveProjectsComponent implements OnInit {
+export class InvestPerspectiveProjectsComponent implements OnInit, OnDestroy {
     investments: InvestmentDto[] = [];
     filteredInvestments: InvestmentDto[] = [];
 
@@ -71,8 +73,10 @@ export class InvestPerspectiveProjectsComponent implements OnInit {
     private messageService: MessageService = inject(MessageService);
     private dashboardService = inject(FinancialDashboardService);
     private investmentService = inject(InvestmentService);
+    private apiService = inject(ApiService);
     private route = inject(ActivatedRoute);
     private translate = inject(TranslateService);
+    private destroy$ = new Subject<void>();
 
     statusOptions: InvestmentStatus[] = [];
     typeId: number | undefined;
@@ -228,74 +232,143 @@ export class InvestPerspectiveProjectsComponent implements OnInit {
         this.isLoading = true;
         const rawPayload = this.form.getRawValue();
 
-        // Build FormData
-        const formData = new FormData();
-        formData.append('name', rawPayload.project_name || '');
-        if (rawPayload.status?.id) {
-            formData.append('status_id', rawPayload.status.id.toString());
-        }
-        formData.append('cost', (rawPayload.amount || 0).toString());
-
-        if (this.typeId) {
-            formData.append('type_id', this.typeId.toString());
-        }
-
-        if (rawPayload.comment) {
-            formData.append('comments', rawPayload.comment);
-        }
-
-        // Add new files
-        this.selectedFiles.forEach((file) => {
-            formData.append('files', file, file.name);
-        });
-
-        // In edit mode, specify which files to keep
-        if (this.isEditMode && this.existingFilesToKeep.length > 0) {
-            formData.append('file_ids', this.existingFilesToKeep.join(','));
-        }
+        const originalFileIds = this.currentInvestment?.files?.map((f) => f.id) || [];
+        const filesModified = this.isEditMode && (
+            this.existingFilesToKeep.length !== originalFileIds.length ||
+            !this.existingFilesToKeep.every((id) => originalFileIds.includes(id))
+        );
 
         if (this.isEditMode && this.currentInvestmentId) {
-            this.investmentService.updateInvestment(this.currentInvestmentId, formData).subscribe({
-                next: () => {
-                    this.messageService.add({
-                        severity: 'success',
-                        summary: this.translate.instant('INVEST.MESSAGES.PROJECT_UPDATED')
+            const payload: InvestmentUpdatePayload = {
+                name: rawPayload.project_name || '',
+                status_id: rawPayload.status?.id,
+                cost: rawPayload.amount || 0,
+                comments: rawPayload.comment || undefined
+            };
+            if (this.typeId) {
+                payload.type_id = this.typeId;
+            }
+
+            if (this.selectedFiles.length > 0) {
+                this.apiService
+                    .uploadFiles(this.selectedFiles, 1)
+                    .pipe(
+                        switchMap((res) => {
+                            payload.file_ids = [...this.existingFilesToKeep, ...res.ids];
+                            return this.investmentService.updateInvestment(this.currentInvestmentId!, payload);
+                        }),
+                        takeUntil(this.destroy$)
+                    )
+                    .subscribe({
+                        next: () => {
+                            this.messageService.add({
+                                severity: 'success',
+                                summary: this.translate.instant('INVEST.MESSAGES.PROJECT_UPDATED')
+                            });
+                            this.closeDialog();
+                        },
+                        error: (err) => {
+                            this.messageService.add({
+                                severity: 'error',
+                                summary: this.translate.instant('INVEST.MESSAGES.UPDATE_ERROR'),
+                                detail: err.message || this.translate.instant('INVEST.MESSAGES.UPDATE_FAILED')
+                            });
+                            this.isLoading = false;
+                        },
+                        complete: () => {
+                            this.isLoading = false;
+                        }
                     });
-                    this.closeDialog();
-                },
-                error: (err) => {
-                    this.messageService.add({
-                        severity: 'error',
-                        summary: this.translate.instant('INVEST.MESSAGES.UPDATE_ERROR'),
-                        detail: err.message || this.translate.instant('INVEST.MESSAGES.UPDATE_FAILED')
-                    });
-                    this.isLoading = false;
-                },
-                complete: () => {
-                    this.isLoading = false;
+            } else {
+                if (filesModified) {
+                    payload.file_ids = this.existingFilesToKeep;
                 }
-            });
+                this.investmentService.updateInvestment(this.currentInvestmentId, payload)
+                    .pipe(takeUntil(this.destroy$))
+                    .subscribe({
+                        next: () => {
+                            this.messageService.add({
+                                severity: 'success',
+                                summary: this.translate.instant('INVEST.MESSAGES.PROJECT_UPDATED')
+                            });
+                            this.closeDialog();
+                        },
+                        error: (err) => {
+                            this.messageService.add({
+                                severity: 'error',
+                                summary: this.translate.instant('INVEST.MESSAGES.UPDATE_ERROR'),
+                                detail: err.message || this.translate.instant('INVEST.MESSAGES.UPDATE_FAILED')
+                            });
+                            this.isLoading = false;
+                        },
+                        complete: () => {
+                            this.isLoading = false;
+                        }
+                    });
+            }
         } else {
-            this.investmentService.createInvestment(formData).subscribe({
-                next: () => {
-                    this.messageService.add({
-                        severity: 'success',
-                        summary: this.translate.instant('INVEST.MESSAGES.PROJECT_ADDED')
+            const payload: InvestmentCreatePayload = {
+                name: rawPayload.project_name || '',
+                status_id: rawPayload.status?.id || 1,
+                type_id: this.typeId || 1,
+                cost: rawPayload.amount || 0,
+                comments: rawPayload.comment || undefined
+            };
+
+            if (this.selectedFiles.length > 0) {
+                this.apiService
+                    .uploadFiles(this.selectedFiles, 1)
+                    .pipe(
+                        switchMap((res) => {
+                            payload.file_ids = res.ids;
+                            return this.investmentService.createInvestment(payload);
+                        }),
+                        takeUntil(this.destroy$)
+                    )
+                    .subscribe({
+                        next: () => {
+                            this.messageService.add({
+                                severity: 'success',
+                                summary: this.translate.instant('INVEST.MESSAGES.PROJECT_ADDED')
+                            });
+                            this.closeDialog();
+                        },
+                        error: (err) => {
+                            this.messageService.add({
+                                severity: 'error',
+                                summary: this.translate.instant('INVEST.MESSAGES.CREATE_ERROR'),
+                                detail: err.message || this.translate.instant('INVEST.MESSAGES.CREATE_FAILED')
+                            });
+                            this.isLoading = false;
+                        },
+                        complete: () => {
+                            this.isLoading = false;
+                        }
                     });
-                    this.closeDialog();
-                },
-                error: (err) => {
-                    this.messageService.add({
-                        severity: 'error',
-                        summary: this.translate.instant('INVEST.MESSAGES.CREATE_ERROR'),
-                        detail: err.message || this.translate.instant('INVEST.MESSAGES.CREATE_FAILED')
+            } else {
+                this.investmentService.createInvestment(payload)
+                    .pipe(takeUntil(this.destroy$))
+                    .subscribe({
+                        next: () => {
+                            this.messageService.add({
+                                severity: 'success',
+                                summary: this.translate.instant('INVEST.MESSAGES.PROJECT_ADDED')
+                            });
+                            this.closeDialog();
+                        },
+                        error: (err) => {
+                            this.messageService.add({
+                                severity: 'error',
+                                summary: this.translate.instant('INVEST.MESSAGES.CREATE_ERROR'),
+                                detail: err.message || this.translate.instant('INVEST.MESSAGES.CREATE_FAILED')
+                            });
+                            this.isLoading = false;
+                        },
+                        complete: () => {
+                            this.isLoading = false;
+                        }
                     });
-                    this.isLoading = false;
-                },
-                complete: () => {
-                    this.isLoading = false;
-                }
-            });
+            }
         }
     }
 
@@ -358,5 +431,10 @@ export class InvestPerspectiveProjectsComponent implements OnInit {
     showFiles(investment: InvestmentDto) {
         this.selectedInvestmentForFiles = investment;
         this.showFilesDialog = true;
+    }
+
+    ngOnDestroy(): void {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

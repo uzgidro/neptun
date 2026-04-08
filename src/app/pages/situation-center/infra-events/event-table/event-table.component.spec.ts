@@ -52,7 +52,7 @@ describe('EventTableComponent', () => {
         ]);
         infraEventService.getEvents.and.returnValue(of([mockEvent]));
 
-        apiService = jasmine.createSpyObj('ApiService', ['uploadFile']);
+        apiService = jasmine.createSpyObj('ApiService', ['uploadFiles']);
 
         const orgSpy = jasmine.createSpyObj('OrganizationService', ['getCascades']);
         orgSpy.getCascades.and.returnValue(of(mockOrganizations));
@@ -182,7 +182,7 @@ describe('EventTableComponent', () => {
     it('should upload files before creating event and pass file_ids', () => {
         fixture.detectChanges();
         const mockFile = new File(['content'], 'test.png', { type: 'image/png' });
-        apiService.uploadFile.and.returnValue(of({ id: 10 }));
+        apiService.uploadFiles.and.returnValue(of({ ids: [10] }));
         infraEventService.createEvent.and.returnValue(of({ id: 2 }));
 
         component.openNew();
@@ -194,7 +194,7 @@ describe('EventTableComponent', () => {
         component.selectedFiles = [mockFile];
         component.onSubmit();
 
-        expect(apiService.uploadFile).toHaveBeenCalled();
+        expect(apiService.uploadFiles).toHaveBeenCalled();
         expect(infraEventService.createEvent).toHaveBeenCalledWith(
             jasmine.objectContaining({ file_ids: [10] })
         );

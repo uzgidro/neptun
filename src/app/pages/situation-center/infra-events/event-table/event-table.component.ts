@@ -226,7 +226,7 @@ export class EventTableComponent implements OnInit, OnChanges, OnDestroy {
             if (raw.organization) payload.organization_id = raw.organization.id;
             if (raw.occurred_at) payload.occurred_at = raw.occurred_at.toISOString();
             if (raw.clear_restored_at) {
-                payload.restored_at = null;
+                payload.clear_restored_at = true;
             } else if (raw.restored_at) {
                 payload.restored_at = raw.restored_at.toISOString();
             }

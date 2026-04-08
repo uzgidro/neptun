@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
-import { Event, EventStatus, EventType } from '../interfaces/event-management';
+import { Event, EventCreatePayload, EventStatus, EventType, EventUpdatePayload } from '../interfaces/event-management';
 
 @Injectable({
     providedIn: 'root'
@@ -58,21 +58,21 @@ export class EventManagementService extends ApiService {
     }
 
     /**
-     * Create new event with files
-     * @param formData FormData containing event fields and files
+     * Create new event with JSON payload
+     * @param payload Event creation payload
      * @returns Observable with created event ID
      */
-    createEvent(formData: FormData): Observable<{ id: number; error: string }> {
-        return this.http.post<{ id: number; error: string }>(`${this.BASE_URL}/events`, formData);
+    createEvent(payload: EventCreatePayload): Observable<{ id: number; error: string }> {
+        return this.http.post<{ id: number; error: string }>(`${this.BASE_URL}/events`, payload);
     }
 
     /**
-     * Update existing event
+     * Update existing event with JSON payload
      * @param id Event ID
-     * @param formData FormData containing updated fields and files
+     * @param payload Event update payload
      */
-    updateEvent(id: number, formData: FormData): Observable<any> {
-        return this.http.patch(`${this.BASE_URL}/events/${id}`, formData);
+    updateEvent(id: number, payload: EventUpdatePayload): Observable<any> {
+        return this.http.patch(`${this.BASE_URL}/events/${id}`, payload);
     }
 
     /**

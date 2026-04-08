@@ -1,7 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { TableModule } from 'primeng/table';
-import { Contact } from '@/core/interfaces/contact';
+import { Contact, ContactCreatePayload, ContactUpdatePayload } from '@/core/interfaces/contact';
 import { ContactService } from '@/core/services/contact.service';
+import { ApiService } from '@/core/services/api.service';
 import { OrganizationService } from '@/core/services/organization.service';
 import { DepartmentService } from '@/core/services/department.service';
 import { PositionService } from '@/core/services/position.service';
@@ -21,7 +22,7 @@ import { FileUploadComponent } from '@/layout/component/dialog/file-upload/file-
 import { Tooltip } from 'primeng/tooltip';
 import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
 import { BaseCrudComponent } from '@/core/components/base-crud.component';
-import { takeUntil } from 'rxjs';
+import { switchMap, takeUntil, of } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
@@ -47,12 +48,13 @@ import { TranslateModule } from '@ngx-translate/core';
     templateUrl: './employee.component.html',
     styleUrl: './employee.component.scss'
 })
-export class EmployeeComponent extends BaseCrudComponent<Contact, FormData> implements OnInit {
+export class EmployeeComponent extends BaseCrudComponent<Contact, ContactCreatePayload | ContactUpdatePayload> implements OnInit {
     organizations: Organization[] = [];
     departments: Department[] = [];
     positions: Position[] = [];
     selectedFiles: File[] = [];
 
+    private apiService = inject(ApiService);
     private organizationService = inject(OrganizationService);
     private departmentService = inject(DepartmentService);
     private positionService = inject(PositionService);
@@ -89,26 +91,96 @@ export class EmployeeComponent extends BaseCrudComponent<Contact, FormData> impl
         });
     }
 
-    protected buildPayload(): FormData {
+    protected buildPayload(): ContactCreatePayload | ContactUpdatePayload {
         const formValue = this.form.value;
-        const formData = new FormData();
+        const payload: ContactCreatePayload | ContactUpdatePayload = {
+            name: formValue.name
+        };
 
-        formData.append('name', formValue.name);
+        if (formValue.email) payload.email = formValue.email;
+        if (formValue.phone) payload.phone = formValue.phone;
+        if (formValue.ip_phone) payload.ip_phone = formValue.ip_phone;
+        if (formValue.dob) payload.dob = this.dateToYMD(formValue.dob);
+        if (formValue.external_organization_name) payload.external_organization_name = formValue.external_organization_name;
+        if (formValue.organization_id?.id) payload.organization_id = formValue.organization_id.id;
+        if (formValue.department_id?.id) payload.department_id = formValue.department_id.id;
+        if (formValue.position_id?.id) payload.position_id = formValue.position_id.id;
 
-        if (formValue.email) formData.append('email', formValue.email);
-        if (formValue.phone) formData.append('phone', formValue.phone);
-        if (formValue.ip_phone) formData.append('ip_phone', formValue.ip_phone);
-        if (formValue.dob) formData.append('dob', this.dateToYMD(formValue.dob));
-        if (formValue.external_organization_name) formData.append('external_organization_name', formValue.external_organization_name);
-        if (formValue.organization_id?.id) formData.append('organization_id', formValue.organization_id.id.toString());
-        if (formValue.department_id?.id) formData.append('department_id', formValue.department_id.id.toString());
-        if (formValue.position_id?.id) formData.append('position_id', formValue.position_id.id.toString());
+        return payload;
+    }
 
-        if (this.selectedFiles.length > 0) {
-            formData.append('icon', this.selectedFiles[0], this.selectedFiles[0].name);
-        }
+    protected override createItem(): void {
+        const payload = this.buildPayload();
 
-        return formData;
+        const upload$ = this.selectedFiles.length > 0
+            ? this.apiService.uploadFiles(this.selectedFiles, 1)
+            : of(null as { ids: number[] } | null);
+
+        upload$.pipe(
+            switchMap((result: { ids: number[] } | null) => {
+                if (result) {
+                    payload.icon_id = result.ids[0];
+                }
+                return this.service.create(payload);
+            }),
+            takeUntil(this.destroy$)
+        ).subscribe({
+            next: () => {
+                this.messageService.add({
+                    severity: 'success',
+                    summary: this.translate.instant('COMMON.SUCCESS'),
+                    detail: this.translate.instant(this.messages.createSuccess)
+                });
+                this.loadItems();
+                this.closeDialog();
+            },
+            error: (err: any) => {
+                this.messageService.add({
+                    severity: 'error',
+                    summary: this.translate.instant('COMMON.ERROR'),
+                    detail: this.translate.instant(this.messages.createError)
+                });
+                console.error(err);
+            }
+        });
+    }
+
+    protected override updateItem(): void {
+        if (!this.selectedItem) return;
+
+        const payload = this.buildPayload();
+
+        const upload$ = this.selectedFiles.length > 0
+            ? this.apiService.uploadFiles(this.selectedFiles, 1)
+            : of(null as { ids: number[] } | null);
+
+        upload$.pipe(
+            switchMap((result: { ids: number[] } | null) => {
+                if (result) {
+                    payload.icon_id = result.ids[0];
+                }
+                return this.service.update(this.selectedItem!.id, payload);
+            }),
+            takeUntil(this.destroy$)
+        ).subscribe({
+            next: () => {
+                this.messageService.add({
+                    severity: 'success',
+                    summary: this.translate.instant('COMMON.SUCCESS'),
+                    detail: this.translate.instant(this.messages.updateSuccess)
+                });
+                this.loadItems();
+                this.closeDialog();
+            },
+            error: (err: any) => {
+                this.messageService.add({
+                    severity: 'error',
+                    summary: this.translate.instant('COMMON.ERROR'),
+                    detail: this.translate.instant(this.messages.updateError)
+                });
+                console.error(err);
+            }
+        });
     }
 
     protected patchFormForEdit(contact: Contact): void {

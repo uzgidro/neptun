@@ -4,7 +4,8 @@ import { MessageService, PrimeTemplate } from 'primeng/api';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { DischargeService } from '@/core/services/discharge.service';
-import { IdleDischargeResponse } from '@/core/interfaces/discharge';
+import { ApiService } from '@/core/services/api.service';
+import { DischargeCreatePayload, DischargeUpdatePayload, IdleDischargeResponse } from '@/core/interfaces/discharge';
 import { Button } from 'primeng/button';
 import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
@@ -78,6 +79,7 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges, OnDestroy 
     private fb: FormBuilder = inject(FormBuilder);
     private organizationService: OrganizationService = inject(OrganizationService);
     private dischargeService: DischargeService = inject(DischargeService);
+    private apiService: ApiService = inject(ApiService);
     private scService: ScService = inject(ScService);
     private messageService: MessageService = inject(MessageService);
     private translate: TranslateService = inject(TranslateService);
@@ -89,6 +91,7 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges, OnDestroy 
     showFilesDialog: boolean = false;
     selectedDischargeForFiles: IdleDischargeResponse | null = null;
     existingFilesToKeep: number[] = [];
+    filesDirty = false;
 
     // Export
     isExcelLoading = false;
@@ -135,6 +138,7 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges, OnDestroy 
             },
             error: (err) => {
                 this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: err.message });
+                this.loading = false;
             },
             complete: () => (this.loading = false)
         });
@@ -157,6 +161,7 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges, OnDestroy 
         this.form.reset();
         this.selectedFiles = [];
         this.existingFilesToKeep = [];
+        this.filesDirty = false;
         // Re-enable all fields
         this.form.get('organization')?.enable();
         this.form.get('started_at')?.enable();
@@ -174,6 +179,7 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges, OnDestroy 
         this.currentDischarge = null;
         this.selectedFiles = [];
         this.existingFilesToKeep = [];
+        this.filesDirty = false;
         // Re-enable all fields
         this.form.get('organization')?.enable();
         this.form.get('started_at')?.enable();
@@ -189,85 +195,86 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges, OnDestroy 
         }
 
         const rawValue = this.form.getRawValue();
-        const formData = new FormData();
+        const payload: DischargeCreatePayload & DischargeUpdatePayload = {};
 
         if (rawValue.organization) {
-            formData.append('organization_id', rawValue.organization.id.toString());
+            payload.organization_id = rawValue.organization.id;
         }
         if (rawValue.started_at) {
-            formData.append('started_at', rawValue.started_at.toISOString());
+            payload.started_at = rawValue.started_at.toISOString();
         }
         if (rawValue.ended_at) {
-            formData.append('ended_at', rawValue.ended_at.toISOString());
+            payload.ended_at = rawValue.ended_at.toISOString();
         }
         if (rawValue.flow_rate) {
-            formData.append('flow_rate', rawValue.flow_rate.toString());
+            payload.flow_rate = rawValue.flow_rate;
         }
         if (rawValue.reason) {
-            formData.append('reason', rawValue.reason);
-        }
-
-        // Add new files
-        this.selectedFiles.forEach((file) => {
-            formData.append('files', file, file.name);
-        });
-
-        // Add existing file IDs to keep (in edit mode)
-        if (this.isEditMode) {
-            formData.append('file_ids', this.existingFilesToKeep.join(','));
+            payload.reason = rawValue.reason;
         }
 
         this.isLoading = true;
 
-        if (this.isEditMode && this.currentDischargeId) {
-            this.dischargeService.editDischarge(this.currentDischargeId, formData).pipe(takeUntil(this.destroy$)).subscribe({
-                next: () => {
-                    this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('DISCHARGE.MESSAGES.RECORD_UPDATED') });
-                    this.closeDialog();
+        const submitWithPayload = (p: typeof payload, force = false) => {
+            if (this.isEditMode && this.currentDischargeId) {
+                this.dischargeService.editDischarge(this.currentDischargeId, p).pipe(takeUntil(this.destroy$)).subscribe({
+                    next: () => {
+                        this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('DISCHARGE.MESSAGES.RECORD_UPDATED') });
+                        this.closeDialog();
+                    },
+                    error: (err) => {
+                        this.messageService.add({ severity: 'error', summary: this.translate.instant('DISCHARGE.MESSAGES.SAVE_ERROR'), detail: err.error?.message || this.translate.instant('DISCHARGE.MESSAGES.SAVE_FAILED') });
+                        this.isLoading = false;
+                    },
+                    complete: () => {
+                        this.isLoading = false;
+                        this.submitted = false;
+                    }
+                });
+            } else {
+                this.dischargeService.addDischarge(p, force).pipe(takeUntil(this.destroy$)).subscribe({
+                    next: () => {
+                        this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('DISCHARGE.MESSAGES.RECORD_ADDED') });
+                        this.closeDialog();
+                    },
+                    error: (err) => {
+                        if (err.status === 409) {
+                            const msg = err.error?.error || this.translate.instant('DISCHARGE.MESSAGES.CONFLICT_EXISTS');
+                            if (confirm(msg + '\n' + this.translate.instant('COMMON.FORCE_CONFIRM'))) {
+                                submitWithPayload(p, true);
+                            } else {
+                                this.isLoading = false;
+                                this.submitted = false;
+                            }
+                        } else {
+                            this.messageService.add({ severity: 'error', summary: this.translate.instant('DISCHARGE.MESSAGES.SAVE_ERROR'), detail: err.error?.message || this.translate.instant('DISCHARGE.MESSAGES.SAVE_FAILED') });
+                            this.isLoading = false;
+                        }
+                    },
+                    complete: () => {
+                        this.isLoading = false;
+                        this.submitted = false;
+                    }
+                });
+            }
+        };
+
+        if (this.selectedFiles.length > 0) {
+            this.apiService.uploadFiles(this.selectedFiles, 1).pipe(takeUntil(this.destroy$)).subscribe({
+                next: (res) => {
+                    payload.file_ids = [...this.existingFilesToKeep, ...res.ids];
+                    submitWithPayload(payload);
                 },
                 error: (err) => {
                     this.messageService.add({ severity: 'error', summary: this.translate.instant('DISCHARGE.MESSAGES.SAVE_ERROR'), detail: err.error?.message || this.translate.instant('DISCHARGE.MESSAGES.SAVE_FAILED') });
                     this.isLoading = false;
-                },
-                complete: () => {
-                    this.isLoading = false;
-                    this.submitted = false;
                 }
             });
+        } else if (this.filesDirty) {
+            payload.file_ids = this.existingFilesToKeep;
+            submitWithPayload(payload);
         } else {
-            this.dischargeService.addDischarge(formData).pipe(takeUntil(this.destroy$)).subscribe({
-                next: () => {
-                    this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('DISCHARGE.MESSAGES.RECORD_ADDED') });
-                    this.closeDialog();
-                },
-                error: (err) => {
-                    if (err.status === 409) {
-                        const msg = err.error?.error || this.translate.instant('DISCHARGE.MESSAGES.CONFLICT_EXISTS');
-                        if (confirm(msg + '\n' + this.translate.instant('COMMON.FORCE_CONFIRM'))) {
-                            this.dischargeService.addDischarge(formData, true).pipe(takeUntil(this.destroy$)).subscribe({
-                                next: () => {
-                                    this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('DISCHARGE.MESSAGES.RECORD_ADDED') });
-                                    this.closeDialog();
-                                },
-                                error: (retryErr) => {
-                                    this.messageService.add({ severity: 'error', summary: this.translate.instant('DISCHARGE.MESSAGES.SAVE_ERROR'), detail: retryErr.error?.message || this.translate.instant('DISCHARGE.MESSAGES.SAVE_FAILED') });
-                                    this.isLoading = false;
-                                }
-                            });
-                        } else {
-                            this.isLoading = false;
-                            this.submitted = false;
-                        }
-                    } else {
-                        this.messageService.add({ severity: 'error', summary: this.translate.instant('DISCHARGE.MESSAGES.SAVE_ERROR'), detail: err.error?.message || this.translate.instant('DISCHARGE.MESSAGES.SAVE_FAILED') });
-                        this.isLoading = false;
-                    }
-                },
-                complete: () => {
-                    this.isLoading = false;
-                    this.submitted = false;
-                }
-            });
+            submitWithPayload(payload);
         }
     }
 
@@ -321,6 +328,7 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges, OnDestroy 
 
     removeExistingFile(fileId: number) {
         this.existingFilesToKeep = this.existingFilesToKeep.filter((id) => id !== fileId);
+        this.filesDirty = true;
         // Also remove from current discharge's files for UI update
         if (this.currentDischarge?.files) {
             this.currentDischarge.files = this.currentDischarge.files.filter((f) => f.id !== fileId);

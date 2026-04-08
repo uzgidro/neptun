@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -17,6 +17,10 @@ import { InputTextComponent } from '@/layout/component/dialog/input-text/input-t
 import { DatePicker } from 'primeng/datepicker';
 import { FinancialDashboardService } from '../dashboard/services/financial-dashboard.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { Subject, switchMap, takeUntil } from 'rxjs';
+import { InvestmentService } from '@/core/services/investment.service';
+import { ApiService } from '@/core/services/api.service';
+import { InvestmentCreatePayload, InvestmentUpdatePayload } from '@/core/interfaces/investment';
 
 type Status = 'Активная фаза' | 'В разработке';
 
@@ -64,7 +68,7 @@ interface InvestmentData {
     templateUrl: './investment.component.html',
     styleUrl: './investment.component.scss'
 })
-export class InvestmentComponent implements OnInit {
+export class InvestmentComponent implements OnInit, OnDestroy {
     investments: InvestmentData[] = [];
     filteredInvestments: InvestmentData[] = [];
 
@@ -90,6 +94,9 @@ export class InvestmentComponent implements OnInit {
     private messageService: MessageService = inject(MessageService);
     private dashboardService = inject(FinancialDashboardService);
     private translate = inject(TranslateService);
+    private investmentService = inject(InvestmentService);
+    private apiService = inject(ApiService);
+    private destroy$ = new Subject<void>();
 
     statusOptions: { name: string; value: string }[] = [];
 
@@ -233,53 +240,98 @@ export class InvestmentComponent implements OnInit {
         this.isLoading = true;
         const rawPayload = this.form.getRawValue();
 
-        const investmentData: InvestmentData = {
-            id: this.isEditMode && this.currentInvestmentId ? this.currentInvestmentId : Date.now(),
-            project_name: rawPayload.project_name || '',
-            status: rawPayload.status?.value || 'Активная фаза',
-            amount: rawPayload.amount || 0,
-            date: rawPayload.date || new Date(),
-            comment: rawPayload.comment || '',
-            files: []
-        };
-
-        // Handle files
-        if (this.isEditMode && this.currentInvestment) {
-            const existingFiles = this.currentInvestment.files?.filter((f) => this.existingFilesToKeep.includes(f.id)) || [];
-            investmentData.files = [...existingFiles];
-        }
-
-        // Add new files
-        const newFiles: FileData[] = this.selectedFiles.map((file, index) => ({
-            id: Date.now() + index,
-            file_name: file.name,
-            size_bytes: file.size,
-            url: URL.createObjectURL(file),
-            file: file
-        }));
-
-        investmentData.files = [...(investmentData.files || []), ...newFiles];
+        const originalFileIds = this.currentInvestment?.files?.map((f) => f.id) || [];
+        const filesModified = this.isEditMode && (
+            this.existingFilesToKeep.length !== originalFileIds.length ||
+            !this.existingFilesToKeep.every((id) => originalFileIds.includes(id))
+        );
 
         if (this.isEditMode && this.currentInvestmentId) {
-            const index = this.investments.findIndex((inv) => inv.id === this.currentInvestmentId);
-            if (index !== -1) {
-                this.investments[index] = investmentData;
-            }
-            this.messageService.add({
-                severity: 'success',
-                summary: this.translate.instant('FINANCIAL_BLOCK.COMMON.SUCCESS'),
-                detail: this.translate.instant('FINANCIAL_BLOCK.INVESTMENT.PROJECT_UPDATED')
-            });
-        } else {
-            this.investments.push(investmentData);
-            this.messageService.add({
-                severity: 'success',
-                summary: this.translate.instant('FINANCIAL_BLOCK.COMMON.SUCCESS'),
-                detail: this.translate.instant('FINANCIAL_BLOCK.INVESTMENT.PROJECT_ADDED')
-            });
-        }
+            const payload: InvestmentUpdatePayload = {
+                name: rawPayload.project_name || '',
+                status_id: rawPayload.status?.value ? undefined : undefined,
+                cost: rawPayload.amount || 0,
+                comments: rawPayload.comment || ''
+            };
 
+            if (this.selectedFiles.length > 0) {
+                this.apiService
+                    .uploadFiles(this.selectedFiles, 1)
+                    .pipe(
+                        switchMap((res) => {
+                            payload.file_ids = [...this.existingFilesToKeep, ...res.ids];
+                            return this.investmentService.updateInvestment(this.currentInvestmentId!, payload);
+                        }),
+                        takeUntil(this.destroy$)
+                    )
+                    .subscribe({
+                        next: () => this.onSaveSuccess(true),
+                        error: (err) => this.onSaveError(err)
+                    });
+            } else {
+                if (filesModified) {
+                    payload.file_ids = this.existingFilesToKeep;
+                }
+                this.investmentService
+                    .updateInvestment(this.currentInvestmentId, payload)
+                    .pipe(takeUntil(this.destroy$))
+                    .subscribe({
+                        next: () => this.onSaveSuccess(true),
+                        error: (err) => this.onSaveError(err)
+                    });
+            }
+        } else {
+            const payload: InvestmentCreatePayload = {
+                name: rawPayload.project_name || '',
+                status_id: 1,
+                type_id: 1,
+                cost: rawPayload.amount || 0,
+                comments: rawPayload.comment || ''
+            };
+
+            if (this.selectedFiles.length > 0) {
+                this.apiService
+                    .uploadFiles(this.selectedFiles, 1)
+                    .pipe(
+                        switchMap((res) => {
+                            payload.file_ids = res.ids;
+                            return this.investmentService.createInvestment(payload);
+                        }),
+                        takeUntil(this.destroy$)
+                    )
+                    .subscribe({
+                        next: () => this.onSaveSuccess(false),
+                        error: (err) => this.onSaveError(err)
+                    });
+            } else {
+                this.investmentService
+                    .createInvestment(payload)
+                    .pipe(takeUntil(this.destroy$))
+                    .subscribe({
+                        next: () => this.onSaveSuccess(false),
+                        error: (err) => this.onSaveError(err)
+                    });
+            }
+        }
+    }
+
+    private onSaveSuccess(isEdit: boolean): void {
+        this.messageService.add({
+            severity: 'success',
+            summary: this.translate.instant('FINANCIAL_BLOCK.COMMON.SUCCESS'),
+            detail: this.translate.instant(isEdit ? 'FINANCIAL_BLOCK.INVESTMENT.PROJECT_UPDATED' : 'FINANCIAL_BLOCK.INVESTMENT.PROJECT_ADDED')
+        });
         this.closeDialog();
+    }
+
+    private onSaveError(err: any): void {
+        console.error('Error saving investment:', err);
+        this.messageService.add({
+            severity: 'error',
+            summary: this.translate.instant('FINANCIAL_BLOCK.COMMON.ERROR'),
+            detail: err.error?.error || this.translate.instant('FINANCIAL_BLOCK.COMMON.SAVE_ERROR')
+        });
+        this.isLoading = false;
     }
 
     closeDialog() {
@@ -332,5 +384,10 @@ export class InvestmentComponent implements OnInit {
 
     isActivePhase(status: Status): boolean {
         return status === 'Активная фаза';
+    }
+
+    ngOnDestroy(): void {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

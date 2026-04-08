@@ -59,14 +59,8 @@ export class RecruitingService {
         return this.http.get<Candidate>(`${this.API_URL}/candidates/${id}`);
     }
 
-    createCandidate(payload: CandidatePayload, resume?: File): Observable<Candidate> {
-        const formData = new FormData();
-        Object.keys(payload).forEach((key) => {
-            const value = (payload as any)[key];
-            if (value !== undefined && value !== null) formData.append(key, value);
-        });
-        if (resume) formData.append('resume', resume);
-        return this.http.post<Candidate>(`${this.API_URL}/candidates`, formData);
+    createCandidate(payload: CandidatePayload): Observable<Candidate> {
+        return this.http.post<Candidate>(`${this.API_URL}/candidates`, payload);
     }
 
     updateCandidate(id: number, payload: Partial<CandidatePayload>): Observable<Candidate> {

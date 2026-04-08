@@ -10,6 +10,24 @@ export interface WaterDischargePayload {
     reason?: string;
 }
 
+export interface DischargeCreatePayload {
+    organization_id?: number;
+    started_at?: string;
+    ended_at?: string;
+    flow_rate?: number;
+    reason?: string;
+    file_ids?: number[];
+}
+
+export interface DischargeUpdatePayload {
+    organization_id?: number;
+    started_at?: string;
+    ended_at?: string;
+    flow_rate?: number;
+    reason?: string;
+    file_ids?: number[];
+}
+
 export interface Cascade {
     id: number;
     name: string;

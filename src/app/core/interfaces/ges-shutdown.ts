@@ -10,6 +10,26 @@ export interface GesShutdownPayload {
     idle_discharge_volume?: number;
 }
 
+export interface ShutdownCreatePayload {
+    organization_id?: number;
+    start_time?: string;
+    end_time?: string;
+    reason?: string;
+    generation_loss?: number;
+    idle_discharge_volume?: number;
+    file_ids?: number[];
+}
+
+export interface ShutdownUpdatePayload {
+    organization_id?: number;
+    start_time?: string;
+    end_time?: string;
+    reason?: string;
+    generation_loss?: number;
+    idle_discharge_volume?: number;
+    file_ids?: number[];
+}
+
 export interface ShutdownResponse {
     id: number;
     organization_id: number;

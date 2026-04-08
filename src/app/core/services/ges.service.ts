@@ -4,6 +4,10 @@ import { Observable } from 'rxjs';
 import { HttpParams } from '@angular/common/http';
 import { GesResponse, GesContact, GesShutdown, GesDischarge, GesIncident, GesVisit, TelemetryEnvelope, DateRangeParams, ASCUEMetrics } from '@/core/interfaces/ges';
 import { Department } from '@/core/interfaces/department';
+import { DischargeCreatePayload, DischargeUpdatePayload } from '@/core/interfaces/discharge';
+import { ShutdownCreatePayload, ShutdownUpdatePayload } from '@/core/interfaces/ges-shutdown';
+import { IncidentCreatePayload, IncidentUpdatePayload } from '@/core/interfaces/incidents';
+import { VisitCreatePayload, VisitUpdatePayload } from '@/core/interfaces/visits';
 
 const GES = '/ges';
 
@@ -90,12 +94,13 @@ export class GesService extends ApiService {
     }
 
     // CRUD операции для остановов
-    addShutdown(gesId: number, formData: FormData): Observable<any> {
-        return this.http.post(`${this.BASE_URL}${GES}/${gesId}/shutdowns`, formData);
+    addShutdown(gesId: number, payload: ShutdownCreatePayload, force = false): Observable<any> {
+        const params = force ? { params: { force: 'true' } } : {};
+        return this.http.post(`${this.BASE_URL}${GES}/${gesId}/shutdowns`, payload, params);
     }
 
-    editShutdown(gesId: number, shutdownId: number, formData: FormData): Observable<any> {
-        return this.http.patch(`${this.BASE_URL}${GES}/${gesId}/shutdowns/${shutdownId}`, formData);
+    editShutdown(gesId: number, shutdownId: number, payload: ShutdownUpdatePayload): Observable<any> {
+        return this.http.patch(`${this.BASE_URL}${GES}/${gesId}/shutdowns/${shutdownId}`, payload);
     }
 
     deleteShutdown(gesId: number, shutdownId: number): Observable<any> {
@@ -103,12 +108,13 @@ export class GesService extends ApiService {
     }
 
     // CRUD операции для сбросов
-    addDischarge(gesId: number, formData: FormData): Observable<any> {
-        return this.http.post(`${this.BASE_URL}${GES}/${gesId}/discharges`, formData);
+    addDischarge(gesId: number, payload: DischargeCreatePayload, force = false): Observable<any> {
+        const params = force ? { params: { force: 'true' } } : {};
+        return this.http.post(`${this.BASE_URL}${GES}/${gesId}/discharges`, payload, params);
     }
 
-    editDischarge(gesId: number, dischargeId: number, formData: FormData): Observable<any> {
-        return this.http.patch(`${this.BASE_URL}${GES}/${gesId}/discharges/${dischargeId}`, formData);
+    editDischarge(gesId: number, dischargeId: number, payload: DischargeUpdatePayload): Observable<any> {
+        return this.http.patch(`${this.BASE_URL}${GES}/${gesId}/discharges/${dischargeId}`, payload);
     }
 
     deleteDischarge(gesId: number, dischargeId: number): Observable<any> {
@@ -116,12 +122,12 @@ export class GesService extends ApiService {
     }
 
     // CRUD операции для инцидентов
-    addIncident(gesId: number, formData: FormData): Observable<any> {
-        return this.http.post(`${this.BASE_URL}${GES}/${gesId}/incidents`, formData);
+    addIncident(gesId: number, payload: IncidentCreatePayload): Observable<any> {
+        return this.http.post(`${this.BASE_URL}${GES}/${gesId}/incidents`, payload);
     }
 
-    editIncident(gesId: number, incidentId: number, formData: FormData): Observable<any> {
-        return this.http.patch(`${this.BASE_URL}${GES}/${gesId}/incidents/${incidentId}`, formData);
+    editIncident(gesId: number, incidentId: number, payload: IncidentUpdatePayload): Observable<any> {
+        return this.http.patch(`${this.BASE_URL}${GES}/${gesId}/incidents/${incidentId}`, payload);
     }
 
     deleteIncident(gesId: number, incidentId: number): Observable<any> {
@@ -129,12 +135,12 @@ export class GesService extends ApiService {
     }
 
     // CRUD операции для посещений
-    addVisit(gesId: number, formData: FormData): Observable<any> {
-        return this.http.post(`${this.BASE_URL}${GES}/${gesId}/visits`, formData);
+    addVisit(gesId: number, payload: VisitCreatePayload): Observable<any> {
+        return this.http.post(`${this.BASE_URL}${GES}/${gesId}/visits`, payload);
     }
 
-    editVisit(gesId: number, visitId: number, formData: FormData): Observable<any> {
-        return this.http.patch(`${this.BASE_URL}${GES}/${gesId}/visits/${visitId}`, formData);
+    editVisit(gesId: number, visitId: number, payload: VisitUpdatePayload): Observable<any> {
+        return this.http.patch(`${this.BASE_URL}${GES}/${gesId}/visits/${visitId}`, payload);
     }
 
     deleteVisit(gesId: number, visitId: number): Observable<any> {

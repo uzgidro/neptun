@@ -80,6 +80,22 @@ export interface DocumentRequest {
     copies_count: number;
 }
 
+export interface DocumentCreatePayload {
+    title: string;
+    type: DocumentType;
+    category: DocumentCategory;
+    description?: string;
+    employee_id?: number;
+    department_id?: number;
+    valid_from?: string;
+    valid_until?: string;
+    requires_signature: boolean;
+    is_template: boolean;
+    template_id?: number;
+    tags?: string[];
+    file_id?: number;
+}
+
 export interface DocumentFilter {
     search?: string;
     type?: DocumentType;

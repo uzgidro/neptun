@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '@/core/services/api.service';
-import { Cascade, IdleDischargeResponse } from '@/core/interfaces/discharge';
+import { Cascade, DischargeCreatePayload, DischargeUpdatePayload, IdleDischargeResponse } from '@/core/interfaces/discharge';
 import { Observable } from 'rxjs';
 import { HttpParams, HttpResponse } from '@angular/common/http';
 
@@ -11,9 +11,9 @@ const FLAT = '/flat';
     providedIn: 'root'
 })
 export class DischargeService extends ApiService {
-    addDischarge(formData: FormData, force = false): Observable<any> {
-        if (force) formData.set('force', 'true');
-        return this.http.post(this.BASE_URL + DISCHARGES, formData);
+    addDischarge(payload: DischargeCreatePayload, force = false): Observable<any> {
+        const params = force ? { params: { force: 'true' } } : {};
+        return this.http.post(this.BASE_URL + DISCHARGES, payload, params);
     }
 
     getDischarges(): Observable<Cascade[]> {
@@ -29,8 +29,8 @@ export class DischargeService extends ApiService {
         return this.http.get<IdleDischargeResponse[]>(this.BASE_URL + DISCHARGES + FLAT, { params: params });
     }
 
-    editDischarge(id: number, formData: FormData): Observable<any> {
-        return this.http.patch(this.BASE_URL + DISCHARGES + '/' + id.toString(), formData);
+    editDischarge(id: number, payload: DischargeUpdatePayload): Observable<any> {
+        return this.http.patch(this.BASE_URL + DISCHARGES + '/' + id.toString(), payload);
     }
 
     approveDischarge(id: number): Observable<any> {

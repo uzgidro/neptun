@@ -42,3 +42,19 @@ export interface EditUserRequest {
     password?: string | null;
     role_ids?: number[] | null;
 }
+
+export interface UserCreatePayload {
+    login: string;
+    password: string;
+    role_ids: number[];
+    contact_id?: number | null;
+    contact?: NewContactRequest & { icon_id?: number } | null;
+}
+
+export interface UserUpdatePayload {
+    login?: string | null;
+    password?: string | null;
+    role_ids?: number[] | null;
+    is_active?: boolean;
+    icon_id?: number;
+}

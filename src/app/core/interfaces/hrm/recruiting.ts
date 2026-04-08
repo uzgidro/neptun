@@ -523,6 +523,7 @@ export interface CandidatePayload {
     phone: string;
     cover_letter?: string;
     source: CandidateSource;
+    file_id?: number;
 }
 
 // Screening criteria

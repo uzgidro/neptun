@@ -76,18 +76,16 @@ export abstract class BaseDocumentService<
     }
 
     /**
-     * Create new document
-     * Supports both JSON payload and FormData (for file uploads)
+     * Create new document (JSON payload)
      */
-    create(payload: P | FormData): Observable<CreateDocumentResponse> {
+    create(payload: P): Observable<CreateDocumentResponse> {
         return this.http.post<CreateDocumentResponse>(this.apiUrl, payload);
     }
 
     /**
-     * Update existing document
-     * Supports both JSON payload and FormData (for file uploads)
+     * Update existing document (JSON payload)
      */
-    update(id: number, payload: Partial<P> | FormData): Observable<void> {
+    update(id: number, payload: Partial<P>): Observable<void> {
         return this.http.patch<void>(`${this.apiUrl}/${id}`, payload);
     }
 
@@ -170,53 +168,6 @@ export abstract class BaseDocumentService<
     getStatusIcon(code: string): string {
         const config = STATUS_DISPLAY_CONFIG[code as StatusCode];
         return config?.icon ?? 'pi pi-file';
-    }
-
-    // =========================================================================
-    // FormData Builder
-    // =========================================================================
-
-    /**
-     * Build FormData from payload and files for multipart upload
-     *
-     * @param payload - Document payload
-     * @param files - Files to upload (optional)
-     * @param existingFileIds - IDs of existing files to keep (optional)
-     */
-    buildFormData(payload: Partial<P>, files?: File[], existingFileIds?: number[]): FormData {
-        const formData = new FormData();
-
-        // Add payload fields
-        Object.entries(payload).forEach(([key, value]) => {
-            if (value === undefined || value === null) {
-                return;
-            }
-
-            if (key === 'linked_documents' && Array.isArray(value)) {
-                // Serialize linked documents as JSON
-                formData.append(key, JSON.stringify(value));
-            } else if (key === 'file_ids') {
-                // Skip - handled separately below
-            } else if (value instanceof Date) {
-                formData.append(key, this.formatDate(value));
-            } else {
-                formData.append(key, String(value));
-            }
-        });
-
-        // Add existing file IDs
-        if (existingFileIds !== undefined) {
-            formData.append('file_ids', existingFileIds.join(','));
-        }
-
-        // Add new files
-        if (files && files.length > 0) {
-            files.forEach(file => {
-                formData.append('files', file, file.name);
-            });
-        }
-
-        return formData;
     }
 
     /**

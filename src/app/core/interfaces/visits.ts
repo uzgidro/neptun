@@ -15,6 +15,22 @@ export interface EditVisitRequest {
     responsible_name?: string | null;
 }
 
+export interface VisitCreatePayload {
+    organization_id: number;
+    visit_date: string;
+    description: string;
+    responsible_name: string;
+    file_ids?: number[];
+}
+
+export interface VisitUpdatePayload {
+    organization_id?: number | null;
+    visit_date?: string | null;
+    description?: string | null;
+    responsible_name?: string | null;
+    file_ids?: number[];
+}
+
 export interface VisitResponse {
     id: number;
     organization_id: number;

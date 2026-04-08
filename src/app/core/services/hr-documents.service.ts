@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '@/core/services/api.service';
 import { Observable } from 'rxjs';
-import { HRDocument, DocumentRequest } from '@/core/interfaces/hrm/hr-documents';
+import { HRDocument, DocumentCreatePayload, DocumentRequest } from '@/core/interfaces/hrm/hr-documents';
 import { HttpParams } from '@angular/common/http';
 
 const HR_DOCUMENTS = '/hrm/hr-documents';
@@ -24,8 +24,8 @@ export class HRDocumentsService extends ApiService {
         return this.http.get<HRDocument>(this.BASE_URL + HR_DOCUMENTS + '/' + id);
     }
 
-    createDocument(formData: FormData): Observable<HRDocument> {
-        return this.http.post<HRDocument>(this.BASE_URL + HR_DOCUMENTS, formData);
+    createDocument(payload: DocumentCreatePayload): Observable<HRDocument> {
+        return this.http.post<HRDocument>(this.BASE_URL + HR_DOCUMENTS, payload);
     }
 
     updateDocument(id: number, data: Partial<HRDocument>): Observable<HRDocument> {

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '@/core/services/api.service';
 import { Observable } from 'rxjs';
-import { Contact } from '@/core/interfaces/contact';
+import { Contact, ContactCreatePayload, ContactUpdatePayload } from '@/core/interfaces/contact';
 import { CrudService } from '@/core/interfaces/crud-service.interface';
 
 const CONTACTS = '/contacts';
@@ -9,7 +9,7 @@ const CONTACTS = '/contacts';
 @Injectable({
     providedIn: 'root'
 })
-export class ContactService extends ApiService implements CrudService<Contact, FormData> {
+export class ContactService extends ApiService implements CrudService<Contact, ContactCreatePayload | ContactUpdatePayload> {
     getAll(): Observable<Contact[]> {
         return this.http.get<Contact[]>(this.BASE_URL + CONTACTS);
     }
@@ -18,12 +18,12 @@ export class ContactService extends ApiService implements CrudService<Contact, F
         return this.http.get<Contact>(this.BASE_URL + CONTACTS + '/' + id);
     }
 
-    create(formData: FormData): Observable<Contact> {
-        return this.http.post<Contact>(this.BASE_URL + CONTACTS, formData);
+    create(payload: ContactCreatePayload): Observable<Contact> {
+        return this.http.post<Contact>(this.BASE_URL + CONTACTS, payload);
     }
 
-    update(id: number, formData: FormData): Observable<Contact> {
-        return this.http.patch<Contact>(this.BASE_URL + CONTACTS + '/' + id, formData);
+    update(id: number, payload: ContactUpdatePayload): Observable<Contact> {
+        return this.http.patch<Contact>(this.BASE_URL + CONTACTS + '/' + id, payload);
     }
 
     delete(id: number): Observable<void> {

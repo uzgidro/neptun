@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ApiService } from '@/core/services/api.service';
 import { Observable } from 'rxjs';
 import { HttpParams } from '@angular/common/http';
-import { IncidentDto, IncidentPayload, IncidentResponse } from '@/core/interfaces/incidents';
+import { IncidentCreatePayload, IncidentDto, IncidentPayload, IncidentResponse, IncidentUpdatePayload } from '@/core/interfaces/incidents';
 import { map } from 'rxjs/operators';
 
 const INCIDENTS = '/incidents';
@@ -33,12 +33,12 @@ export class IncidentService extends ApiService {
         );
     }
 
-    addIncident(formData: FormData): Observable<any> {
-        return this.http.post(this.BASE_URL + INCIDENTS, formData);
+    addIncident(payload: IncidentCreatePayload): Observable<any> {
+        return this.http.post(this.BASE_URL + INCIDENTS, payload);
     }
 
-    editIncident(id: number, formData: FormData): Observable<any> {
-        return this.http.patch(`${this.BASE_URL}${INCIDENTS}/${id}`, formData);
+    editIncident(id: number, payload: IncidentUpdatePayload): Observable<any> {
+        return this.http.patch(`${this.BASE_URL}${INCIDENTS}/${id}`, payload);
     }
 
     deleteIncident(id: number): Observable<any> {

@@ -7,6 +7,20 @@ export interface IncidentPayload {
     description?: string;
 }
 
+export interface IncidentCreatePayload {
+    organization_id?: number;
+    incident_time?: string;
+    description?: string;
+    file_ids?: number[];
+}
+
+export interface IncidentUpdatePayload {
+    organization_id?: number;
+    incident_time?: string;
+    description?: string;
+    file_ids?: number[];
+}
+
 export interface IncidentResponse {
     id: number;
     incident_date: string;
