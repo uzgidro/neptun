@@ -14,7 +14,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
 import { GesReportService } from '@/core/services/ges-report.service';
 import { TimeService } from '@/core/services/time.service';
-import { GesConfigResponse, GesCascadeConfig, GesDailyData } from '@/core/interfaces/ges-report';
+import { GesConfigResponse, GesCascadeConfig, GesDailyData, ReportIdleDischarge } from '@/core/interfaces/ges-report';
 import { HasUnsavedChanges } from '@/core/guards/auth.guard';
 
 export class DataEntryRow {
@@ -22,6 +22,7 @@ export class DataEntryRow {
     form: FormGroup;
     saved: boolean;
     saving: boolean;
+    idleDischarge: ReportIdleDischarge | null = null;
 
     constructor(config: GesConfigResponse, form: FormGroup, saved: boolean) {
         this.config = config;
@@ -86,11 +87,14 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
         this.loading = true;
         this.rows = [];
 
+        const dateStr = this.timeService.dateToYMD(this.selectedDate);
+
         forkJoin({
             configs: this.gesReportService.getConfigs(),
-            cascadeConfigs: this.gesReportService.getCascadeConfigs().pipe(catchError(() => of([] as GesCascadeConfig[])))
+            cascadeConfigs: this.gesReportService.getCascadeConfigs().pipe(catchError(() => of([] as GesCascadeConfig[]))),
+            report: this.gesReportService.getReport(dateStr).pipe(catchError(() => of(null)))
         }).pipe(takeUntil(this.destroy$)).subscribe({
-            next: ({ configs, cascadeConfigs }) => {
+            next: ({ configs, cascadeConfigs, report }) => {
                 if (!configs.length) {
                     this.loading = false;
                     return;
@@ -103,7 +107,15 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
                     return aCO - bCO || (a.sort_order ?? 0) - (b.sort_order ?? 0);
                 });
 
-                const dateStr = this.timeService.dateToYMD(this.selectedDate);
+                const idleDischargeMap = new Map<number, ReportIdleDischarge | null>();
+                if (report) {
+                    for (const cascade of report.cascades) {
+                        for (const station of cascade.stations) {
+                            idleDischargeMap.set(station.organization_id, station.idle_discharge);
+                        }
+                    }
+                }
+
                 const requests = configs.map(config =>
                     this.gesReportService.getDailyData(config.organization_id, dateStr).pipe(
                         catchError(() => of(null))
@@ -115,7 +127,9 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
                         this.rows = configs.map((config, i) => {
                             const data = results[i];
                             const form = this.createForm(data);
-                            return new DataEntryRow(config, form, data !== null);
+                            const row = new DataEntryRow(config, form, data !== null);
+                            row.idleDischarge = idleDischargeMap.get(config.organization_id) ?? null;
+                            return row;
                         });
                         this.buildCascadeGroups();
                         this.loading = false;

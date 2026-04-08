@@ -51,6 +51,8 @@
                             <th class="text-left text-xs text-color-secondary font-normal px-2 pb-1">{{ 'GES_REPORT.WATER_HEAD' | translate }}</th>
                             <th class="text-left text-xs text-color-secondary font-normal px-2 pb-1">{{ 'GES_REPORT.RESERVOIR_INCOME' | translate }}</th>
                             <th class="text-left text-xs text-color-secondary font-normal px-2 pb-1">{{ 'GES_REPORT.TOTAL_OUTFLOW' | translate }}</th>
+                            <th class="text-left text-xs text-color-secondary font-normal px-2 pb-1">{{ 'GES_REPORT.GES_FLOW' | translate }}</th>
+                            <th class="text-left text-xs text-color-secondary font-normal px-2 pb-1">{{ 'GES_REPORT.IDLE_DISCHARGE' | translate }}</th>
                             <th class="text-left text-xs text-color-secondary font-normal px-2 pb-1">{{ 'GES_REPORT.WATER_LEVEL' | translate }}</th>
                             <th class="text-left text-xs text-color-secondary font-normal px-2 pb-1">{{ 'GES_REPORT.WATER_VOLUME' | translate }}</th>
                             <th class="px-2 pb-1"></th>
@@ -116,6 +118,20 @@
                                     styleClass="w-full"
                                     inputStyleClass="w-full">
                                 </p-inputNumber>
+                            </td>
+                            <td class="px-2 py-2 align-middle">
+                                @if (row.form.value.total_outflow_m3s != null && row.idleDischarge) {
+                                    <span class="text-sm">{{ row.form.value.total_outflow_m3s - row.idleDischarge.flow_rate_m3s | number:'1.0-2' }}</span>
+                                } @else {
+                                    <span class="text-color-secondary">—</span>
+                                }
+                            </td>
+                            <td class="px-2 py-2 align-middle">
+                                @if (row.idleDischarge) {
+                                    <span class="text-sm">{{ row.idleDischarge.flow_rate_m3s | number:'1.0-2' }}</span>
+                                } @else {
+                                    <span class="text-color-secondary">—</span>
+                                }
                             </td>
                             <td class="px-2 py-2 align-middle">
                                 @if (row.config.has_reservoir) {
