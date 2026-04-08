@@ -36,20 +36,22 @@
     } @else if (categories.length === 0) {
         <p>{{ 'SITUATION_CENTER.INFRA_EVENTS.CATEGORY.NO_CATEGORIES' | translate }}</p>
     } @else {
-        <p-tabs [value]="activeTab">
-            <p-tablist>
-                @for (cat of categories; track cat.id; let i = $index) {
-                    <p-tab [value]="'' + i">{{ cat.display_name }}</p-tab>
-                }
-            </p-tablist>
-            <p-tabpanels>
-                @for (cat of categories; track cat.id; let i = $index) {
-                    <p-tabpanel [value]="'' + i">
-                        <app-event-table [category]="cat" [categories]="categories" [date]="selectedDate"></app-event-table>
-                    </p-tabpanel>
-                }
-            </p-tabpanels>
-        </p-tabs>
+        @for (cat of categories; track cat.id) {
+            <div class="flex items-center gap-3 mt-4 cursor-pointer" (click)="toggleCategory(cat.id)">
+                <div class="h-px flex-1" style="background-color: var(--p-primary-200)"></div>
+                <div class="flex items-center gap-2">
+                    <i class="pi text-sm" style="color: var(--p-primary-500)"
+                       [class.pi-chevron-down]="!collapsedCategories.has(cat.id)"
+                       [class.pi-chevron-right]="collapsedCategories.has(cat.id)"></i>
+                    <span class="font-bold text-lg whitespace-nowrap" style="color: var(--p-primary-500)">{{ cat.display_name }}</span>
+                </div>
+                <div class="h-px flex-1" style="background-color: var(--p-primary-200)"></div>
+            </div>
+
+            <div [hidden]="collapsedCategories.has(cat.id)">
+                <app-event-table [category]="cat" [categories]="categories" [date]="selectedDate"></app-event-table>
+            </div>
+        }
     }
 
     @if (showCategoryAdmin) {

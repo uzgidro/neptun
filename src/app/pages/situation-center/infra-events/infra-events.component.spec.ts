@@ -68,9 +68,17 @@ describe('InfraEventsComponent', () => {
         expect(component.categories[0].slug).toBe('video');
     });
 
-    it('should set activeTab to 0 when categories are loaded', () => {
+    it('should start with all categories expanded', () => {
         fixture.detectChanges();
-        expect(component.activeTab).toBe('0');
+        expect(component.collapsedCategories.size).toBe(0);
+    });
+
+    it('should toggle category collapse state', () => {
+        fixture.detectChanges();
+        component.toggleCategory(1);
+        expect(component.collapsedCategories.has(1)).toBeTrue();
+        component.toggleCategory(1);
+        expect(component.collapsedCategories.has(1)).toBeFalse();
     });
 
     it('should update selectedDate on date change', () => {

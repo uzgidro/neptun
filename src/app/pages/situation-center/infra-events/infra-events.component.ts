@@ -1,6 +1,5 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { finalize, Subject, takeUntil } from 'rxjs';
-import { Tabs, TabList, Tab, TabPanels, TabPanel } from 'primeng/tabs';
 import { Button } from 'primeng/button';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MessageService } from 'primeng/api';
@@ -20,7 +19,6 @@ import { CategoryAdminComponent } from './category-admin/category-admin.componen
     standalone: true,
     imports: [
         TranslateModule,
-        Tabs, TabList, Tab, TabPanels, TabPanel,
         Button,
         DateWidget,
         EventTableComponent,
@@ -39,7 +37,7 @@ export class InfraEventsComponent implements OnInit, OnDestroy {
     categories: InfraEventCategory[] = [];
     categoriesLoading = false;
     selectedDate: Date = new Date();
-    activeTab = '0';
+    collapsedCategories = new Set<number>();
     showCategoryAdmin = false;
     isExcelLoading = false;
     isPdfLoading = false;
@@ -58,7 +56,6 @@ export class InfraEventsComponent implements OnInit, OnDestroy {
             .subscribe({
                 next: (cats) => {
                     this.categories = cats;
-                    this.activeTab = '0';
                 },
                 error: () => (this.categoriesLoading = false),
                 complete: () => (this.categoriesLoading = false)
@@ -67,6 +64,14 @@ export class InfraEventsComponent implements OnInit, OnDestroy {
 
     onDateChanged(date: Date): void {
         this.selectedDate = date;
+    }
+
+    toggleCategory(id: number): void {
+        if (this.collapsedCategories.has(id)) {
+            this.collapsedCategories.delete(id);
+        } else {
+            this.collapsedCategories.add(id);
+        }
     }
 
     onCategoriesChanged(): void {
