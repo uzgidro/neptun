@@ -229,8 +229,8 @@ export class GesShutdownsSectionComponent implements OnInit, OnDestroy {
                     } else {
                         this.messageService.add({
                             severity: 'error',
-                            summary: 'GES_DETAIL.ERROR_SAVE',
-                            detail: err.message
+                            summary: this.translate.instant('GES_DETAIL.ERROR_SAVE'),
+                            detail: err.error?.message || err.message
                         });
                         this.isLoading = false;
                     }
