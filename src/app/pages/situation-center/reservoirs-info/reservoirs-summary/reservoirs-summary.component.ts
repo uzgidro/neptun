@@ -82,7 +82,6 @@ export class ReservoirsSummaryComponent implements OnInit {
     }
 
     onAccept() {
-        // Extract only the required fields for saving
         const dataToSave: ReservoirSummaryRequest[] = this.data
             .filter((value) => value.organization_id !== null)
             .map((reservoir) => {
@@ -90,13 +89,16 @@ export class ReservoirsSummaryComponent implements OnInit {
                 const request: ReservoirSummaryRequest = {
                     organization_id: reservoir.organization_id!,
                     date: this.dateYMD,
-                    income: reservoir.income.current,
-                    level: reservoir.level.current,
-                    volume: reservoir.volume.current,
-                    release: reservoir.release.current,
-                    modsnow_current: reservoir.modsnow.current,
-                    modsnow_year_ago: reservoir.modsnow.year_ago
                 };
+
+                if (reservoir.income.is_edited) request.income = reservoir.income.current;
+                if (reservoir.level.is_edited) request.level = reservoir.level.current;
+                if (reservoir.volume.is_edited) request.volume = reservoir.volume.current;
+                if (reservoir.release.is_edited) request.release = reservoir.release.current;
+                if (reservoir.modsnow.is_edited) {
+                    request.modsnow_current = reservoir.modsnow.current;
+                    request.modsnow_year_ago = reservoir.modsnow.year_ago;
+                }
 
                 if (original && original.incoming_volume !== reservoir.incoming_volume) {
                     request.total_income_volume = reservoir.incoming_volume;
@@ -107,10 +109,20 @@ export class ReservoirsSummaryComponent implements OnInit {
                 }
 
                 return request;
-            });
+            })
+            .filter(r => Object.keys(r).length > 2);
+
+        if (!dataToSave.length) return;
 
         this.reservoirService.upsetReservoirData(dataToSave).subscribe({
             next: () => {
+                this.data.forEach(r => {
+                    r.income.is_edited = false;
+                    r.level.is_edited = false;
+                    r.volume.is_edited = false;
+                    r.release.is_edited = false;
+                    r.modsnow.is_edited = false;
+                });
                 this.messageService.add({ severity: 'success', summary: this.translate.instant('RESERVOIRS.MESSAGES.DATA_UPDATED') });
                 if (this.selectedDate) {
                     this.loadData(this.selectedDate);
@@ -120,7 +132,6 @@ export class ReservoirsSummaryComponent implements OnInit {
                 this.messageService.add({ severity: 'warn', summary: this.translate.instant('RESERVOIRS.MESSAGES.ERROR_OCCURRED'), detail: err });
             }
         });
-        this.originalData = JSON.parse(JSON.stringify(this.data));
     }
 
     onReset() {
