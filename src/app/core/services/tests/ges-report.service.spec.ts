@@ -71,17 +71,34 @@ describe('GesReportService', () => {
     });
 
     describe('upsertDailyData', () => {
-        it('should POST to /ges-report/daily-data', () => {
+        it('should POST an array to /ges-report/daily-data', () => {
             const payload: GesDailyDataPayload = {
                 organization_id: 10, date: '2026-03-13',
                 daily_production_mln_kwh: 3.389, working_aggregates: 3, water_level_m: 846.05
             };
-            service.upsertDailyData(payload).subscribe(result => {
+            service.upsertDailyData([payload]).subscribe(result => {
                 expect(result.status).toBe('OK');
             });
             const req = httpMock.expectOne(`${BASE_URL}/ges-report/daily-data`);
             expect(req.request.method).toBe('POST');
-            expect(req.request.body).toEqual(payload);
+            expect(Array.isArray(req.request.body)).toBeTrue();
+            expect(req.request.body).toEqual([payload]);
+            req.flush({ status: 'OK' });
+        });
+
+        it('should POST multiple items in a single request', () => {
+            const payloads: GesDailyDataPayload[] = [
+                { organization_id: 10, date: '2026-03-13', daily_production_mln_kwh: 3.389 },
+                { organization_id: 20, date: '2026-03-13', water_level_m: 846.05 }
+            ];
+            service.upsertDailyData(payloads).subscribe(result => {
+                expect(result.status).toBe('OK');
+            });
+            const req = httpMock.expectOne(`${BASE_URL}/ges-report/daily-data`);
+            expect(req.request.method).toBe('POST');
+            expect(Array.isArray(req.request.body)).toBeTrue();
+            expect((req.request.body as GesDailyDataPayload[]).length).toBe(2);
+            expect(req.request.body).toEqual(payloads);
             req.flush({ status: 'OK' });
         });
     });

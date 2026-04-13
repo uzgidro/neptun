@@ -248,6 +248,9 @@
     "SNOW_COVER": "MODSNOW",
     "INFRA_EVENTS": "Инфратузилма"
   },
+  "GES_REPORT": {
+    "BATCH_FAILED_AT": "{{station}} станциясида хатолик"
+  },
   "FILTRATION": {
     "TITLE": "Филтрация",
     "TOTAL_FILTRATION": "Умумий филтрация, м3/с",

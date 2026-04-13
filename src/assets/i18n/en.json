@@ -248,6 +248,9 @@
     "SNOW_COVER": "MODSNOW",
     "INFRA_EVENTS": "Infrastructure"
   },
+  "GES_REPORT": {
+    "BATCH_FAILED_AT": "Batch failed at station {{station}}"
+  },
   "FILTRATION": {
     "TITLE": "Filtration",
     "TOTAL_FILTRATION": "Total filtration, m3/s",

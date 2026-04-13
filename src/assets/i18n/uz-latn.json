@@ -248,6 +248,9 @@
     "SNOW_COVER": "MODSNOW",
     "INFRA_EVENTS": "Infratuzilma"
   },
+  "GES_REPORT": {
+    "BATCH_FAILED_AT": "{{station}} stantsiyasida xatolik"
+  },
   "FILTRATION": {
     "TITLE": "Filtratsiya",
     "TOTAL_FILTRATION": "Umumiy filtratsiya, m3/s",
