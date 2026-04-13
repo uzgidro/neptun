@@ -3,7 +3,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { of, throwError } from 'rxjs';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MessageService } from 'primeng/api';
 import { DataEntryTabComponent } from './data-entry-tab.component';
 import { GesReportService } from '@/core/services/ges-report.service';
@@ -123,6 +123,131 @@ describe('DataEntryTabComponent', () => {
         component.saveAll();
         tick();
         expect(gesReportService.upsertDailyData).toHaveBeenCalledTimes(1);
+        const arg = gesReportService.upsertDailyData.calls.mostRecent().args[0];
+        expect(Array.isArray(arg)).toBeTrue();
+    }));
+
+    it('saveAll: no POST when no rows are dirty', fakeAsync(() => {
+        const configs = [makeConfig(10, 'ГЭС-1')];
+        gesReportService.getConfigs.and.returnValue(of(configs));
+        gesReportService.getDailyData.and.returnValue(throwError(() => ({ status: 404 })));
+        gesReportService.upsertDailyData.and.returnValue(of({ status: 'OK' }));
+        fixture.detectChanges();
+        tick();
+        component.saveAll();
+        tick();
+        expect(gesReportService.upsertDailyData).not.toHaveBeenCalled();
+    }));
+
+    it('saveRow: sends only dirty fields + organization_id + date', fakeAsync(() => {
+        const configs = [makeConfig(10, 'ГЭС-1')];
+        gesReportService.getConfigs.and.returnValue(of(configs));
+        gesReportService.getDailyData.and.returnValue(throwError(() => ({ status: 404 })));
+        gesReportService.upsertDailyData.and.returnValue(of({ status: 'OK' }));
+        fixture.detectChanges();
+        tick();
+        const row = component.rows[0];
+        row.form.get('daily_production_mln_kwh')?.setValue(5.0);
+        row.form.get('daily_production_mln_kwh')?.markAsDirty();
+        row.form.get('water_level_m')?.setValue(846.1);
+        row.form.get('water_level_m')?.markAsDirty();
+        component.saveRow(row);
+        tick();
+        expect(gesReportService.upsertDailyData).toHaveBeenCalledTimes(1);
+        const arg = gesReportService.upsertDailyData.calls.mostRecent().args[0];
+        expect(Array.isArray(arg)).toBeTrue();
+        expect(arg.length).toBe(1);
+        const item = arg[0] as unknown as Record<string, unknown>;
+        expect(Object.keys(item).sort()).toEqual(
+            ['daily_production_mln_kwh', 'date', 'organization_id', 'water_level_m'].sort()
+        );
+        expect(item['daily_production_mln_kwh']).toBe(5.0);
+        expect(item['water_level_m']).toBe(846.1);
+    }));
+
+    it('saveAll: bulk 3 rows single POST with array of length 3', fakeAsync(() => {
+        const configs = [makeConfig(10, 'ГЭС-1'), makeConfig(20, 'ГЭС-2'), makeConfig(30, 'ГЭС-3')];
+        gesReportService.getConfigs.and.returnValue(of(configs));
+        gesReportService.getDailyData.and.returnValue(throwError(() => ({ status: 404 })));
+        gesReportService.upsertDailyData.and.returnValue(of({ status: 'OK' }));
+        fixture.detectChanges();
+        tick();
+        component.rows[0].form.get('daily_production_mln_kwh')?.setValue(1.1);
+        component.rows[0].form.get('daily_production_mln_kwh')?.markAsDirty();
+        component.rows[1].form.get('working_aggregates')?.setValue(2);
+        component.rows[1].form.get('working_aggregates')?.markAsDirty();
+        component.rows[2].form.get('water_level_m')?.setValue(800);
+        component.rows[2].form.get('water_level_m')?.markAsDirty();
+        component.saveAll();
+        tick();
+        expect(gesReportService.upsertDailyData).toHaveBeenCalledTimes(1);
+        const arg = gesReportService.upsertDailyData.calls.mostRecent().args[0];
+        expect(Array.isArray(arg)).toBeTrue();
+        expect(arg.length).toBe(3);
+        const items = arg as unknown as Record<string, unknown>[];
+        expect(Object.keys(items[0]).sort()).toEqual(
+            ['daily_production_mln_kwh', 'date', 'organization_id'].sort()
+        );
+        expect(items[0]['daily_production_mln_kwh']).toBe(1.1);
+        expect(items[0]['organization_id']).toBe(10);
+        expect(Object.keys(items[1]).sort()).toEqual(
+            ['date', 'organization_id', 'working_aggregates'].sort()
+        );
+        expect(items[1]['working_aggregates']).toBe(2);
+        expect(items[1]['organization_id']).toBe(20);
+        expect(Object.keys(items[2]).sort()).toEqual(
+            ['date', 'organization_id', 'water_level_m'].sort()
+        );
+        expect(items[2]['water_level_m']).toBe(800);
+        expect(items[2]['organization_id']).toBe(30);
+    }));
+
+    it('saveAll: item_index error shows failing station name in toast', fakeAsync(() => {
+        const configs = [makeConfig(10, 'ГЭС-1'), makeConfig(20, 'ГЭС-2')];
+        gesReportService.getConfigs.and.returnValue(of(configs));
+        gesReportService.getDailyData.and.returnValue(throwError(() => ({ status: 404 })));
+        gesReportService.upsertDailyData.and.returnValue(
+            throwError(() => ({ error: { item_index: 1, message: 'bad value' } }))
+        );
+        const translate = TestBed.inject(TranslateService);
+        spyOn(translate, 'instant').and.callFake((key: string | string[], params?: Record<string, unknown>) => {
+            if (key === 'GES_REPORT.BATCH_FAILED_AT' && params) {
+                return `Batch failed at station ${params['station']}`;
+            }
+            return key as string;
+        });
+        fixture.detectChanges();
+        tick();
+        component.rows[0].form.get('daily_production_mln_kwh')?.setValue(5.0);
+        component.rows[0].form.get('daily_production_mln_kwh')?.markAsDirty();
+        component.rows[1].form.get('water_level_m')?.setValue(846.1);
+        component.rows[1].form.get('water_level_m')?.markAsDirty();
+        const messageService = TestBed.inject(MessageService);
+        const addSpy = spyOn(messageService, 'add');
+        component.saveAll();
+        tick();
+        expect(addSpy).toHaveBeenCalled();
+        const lastCallArg = addSpy.calls.mostRecent().args[0];
+        expect(String(lastCallArg.detail)).toContain('ГЭС-2');
+        expect(component.rows[0].form.dirty).toBeTrue();
+        expect(component.rows[1].form.dirty).toBeTrue();
+    }));
+
+    it('saveAll: mixed dirty — pristine rows are filtered out', fakeAsync(() => {
+        const configs = [makeConfig(10, 'ГЭС-1'), makeConfig(20, 'ГЭС-2')];
+        gesReportService.getConfigs.and.returnValue(of(configs));
+        gesReportService.getDailyData.and.returnValue(throwError(() => ({ status: 404 })));
+        gesReportService.upsertDailyData.and.returnValue(of({ status: 'OK' }));
+        fixture.detectChanges();
+        tick();
+        component.rows[0].form.get('daily_production_mln_kwh')?.setValue(5.0);
+        component.rows[0].form.get('daily_production_mln_kwh')?.markAsDirty();
+        component.saveAll();
+        tick();
+        expect(gesReportService.upsertDailyData).toHaveBeenCalledTimes(1);
+        const arg = gesReportService.upsertDailyData.calls.mostRecent().args[0];
+        expect(Array.isArray(arg)).toBeTrue();
+        expect(arg.length).toBe(1);
     }));
 
     it('should implement canDeactivate', fakeAsync(() => {

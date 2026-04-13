@@ -45,7 +45,7 @@ export class GesReportService extends ApiService {
         return this.http.delete<void>(`${this.BASE_URL}${GES_REPORT}${CASCADE_CONFIG}`, { params });
     }
 
-    upsertDailyData(payload: GesDailyDataPayload): Observable<{ status: string }> {
+    upsertDailyData(payload: GesDailyDataPayload[]): Observable<{ status: string }> {
         return this.http.post<{ status: string }>(`${this.BASE_URL}${GES_REPORT}${DAILY_DATA}`, payload);
     }
 

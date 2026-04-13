@@ -14,7 +14,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
 import { GesReportService } from '@/core/services/ges-report.service';
 import { TimeService } from '@/core/services/time.service';
-import { GesConfigResponse, GesCascadeConfig, GesDailyData, ReportIdleDischarge, ReportWeather } from '@/core/interfaces/ges-report';
+import { GesConfigResponse, GesCascadeConfig, GesDailyData, GesDailyDataPayload, ReportIdleDischarge, ReportWeather } from '@/core/interfaces/ges-report';
 import { HasUnsavedChanges } from '@/core/guards/auth.guard';
 import { CascadeWeatherComponent } from '../shared/cascade-weather.component';
 
@@ -159,27 +159,23 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
         const dirtyRows = this.rows.filter(r => r.dirty);
         if (!dirtyRows.length) return;
 
-        this.savingAll = true;
-        const requests = dirtyRows.map(row =>
-            this.gesReportService.upsertDailyData(this.buildPayload(row)).pipe(
-                catchError(err => {
-                    this.messageService.add({
-                        severity: 'error',
-                        summary: this.translate.instant('COMMON.ERROR'),
-                        detail: err.message
-                    });
-                    return of(null);
-                })
-            )
-        );
+        const pairs = dirtyRows
+            .map(row => ({ row, payload: this.buildPayload(row) }))
+            .filter(p => Object.keys(p.payload).length > 2);
 
-        forkJoin(requests).pipe(takeUntil(this.destroy$)).subscribe({
-            next: (results) => {
-                results.forEach((result, i) => {
-                    if (result !== null) {
-                        dirtyRows[i].saved = true;
-                        dirtyRows[i].form.markAsPristine();
-                    }
+        if (!pairs.length) {
+            dirtyRows.forEach(r => r.form.markAsPristine());
+            return;
+        }
+
+        this.savingAll = true;
+        this.gesReportService.upsertDailyData(pairs.map(p => p.payload)).pipe(
+            takeUntil(this.destroy$)
+        ).subscribe({
+            next: () => {
+                pairs.forEach(p => {
+                    p.row.saved = true;
+                    p.row.form.markAsPristine();
                 });
                 this.savingAll = false;
                 this.messageService.add({
@@ -187,15 +183,35 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
                     summary: this.translate.instant('COMMON.SUCCESS')
                 });
             },
-            error: () => {
+            // atomic rollback: do NOT mark any row pristine on error
+            error: (err) => {
                 this.savingAll = false;
+                const idx = err?.error?.item_index;
+                let detail: string;
+                if (typeof idx === 'number' && pairs[idx]) {
+                    detail = this.translate.instant('GES_REPORT.BATCH_FAILED_AT', {
+                        station: pairs[idx].row.config.organization_name
+                    });
+                } else {
+                    detail = err?.error?.message ?? err?.message ?? '';
+                }
+                this.messageService.add({
+                    severity: 'error',
+                    summary: this.translate.instant('COMMON.ERROR'),
+                    detail
+                });
             }
         });
     }
 
     saveRow(row: DataEntryRow): void {
+        const payload = this.buildPayload(row);
+        if (Object.keys(payload).length <= 2) {
+            row.form.markAsPristine();
+            return;
+        }
         row.saving = true;
-        this.gesReportService.upsertDailyData(this.buildPayload(row)).pipe(
+        this.gesReportService.upsertDailyData([payload]).pipe(
             takeUntil(this.destroy$)
         ).subscribe({
             next: () => {
@@ -212,7 +228,7 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
                 this.messageService.add({
                     severity: 'error',
                     summary: this.translate.instant('COMMON.ERROR'),
-                    detail: err.message
+                    detail: err?.error?.message ?? err?.message ?? ''
                 });
             }
         });
@@ -274,13 +290,28 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
         });
     }
 
-    private buildPayload(row: DataEntryRow) {
-        const val = row.form.getRawValue();
-        return {
+    private buildPayload(row: DataEntryRow): GesDailyDataPayload {
+        const payload: GesDailyDataPayload = {
             organization_id: row.config.organization_id,
-            date: this.timeService.dateToYMD(this.selectedDate),
-            ...val
+            date: this.timeService.dateToYMD(this.selectedDate)
         };
+        const fields: (keyof GesDailyDataPayload)[] = [
+            'daily_production_mln_kwh',
+            'working_aggregates',
+            'water_level_m',
+            'water_volume_mln_m3',
+            'water_head_m',
+            'reservoir_income_m3s',
+            'total_outflow_m3s',
+            'ges_flow_m3s'
+        ];
+        for (const f of fields) {
+            const ctrl = row.form.get(f);
+            if (ctrl?.dirty) {
+                (payload as unknown as Record<string, unknown>)[f] = ctrl.value;
+            }
+        }
+        return payload;
     }
 
 }

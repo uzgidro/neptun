@@ -311,6 +311,7 @@
     "DELETED": "Конфигурация удалена",
     "DELETE_ERROR": "Ошибка удаления",
     "UNSAVED_CHANGES": "Есть несохранённые изменения. Продолжить?",
+    "BATCH_FAILED_AT": "Ошибка в строке станции {{station}}",
     "NO_DATA": "Нет данных",
     "STATUS_SAVED": "Сохранено",
     "STATUS_MODIFIED": "Изменено",
