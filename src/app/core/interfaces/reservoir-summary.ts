@@ -29,12 +29,12 @@ export interface ReservoirSummaryResponse {
 export interface ReservoirSummaryRequest {
     organization_id: number;
     date: string;
-    income: number;
-    volume: number;
-    release: number;
-    level: number;
-    modsnow_current: number;
-    modsnow_year_ago: number;
+    income?: number | null;
+    volume?: number | null;
+    release?: number | null;
+    level?: number | null;
+    modsnow_current?: number | null;
+    modsnow_year_ago?: number | null;
     total_income_volume?: number | null;
     total_income_volume_prev_year?: number | null;
 }
