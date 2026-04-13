@@ -7,7 +7,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { MessageService } from 'primeng/api';
 import { ReportTabComponent } from './report-tab.component';
 import { GesReportService } from '@/core/services/ges-report.service';
-import { GesDailyReport, ReportStation, ReportGrandTotal } from '@/core/interfaces/ges-report';
+import { GesDailyReport, ReportStation, ReportGrandTotal, ReportWeather } from '@/core/interfaces/ges-report';
 
 function makeGrandTotal(): ReportGrandTotal {
     return {
@@ -29,7 +29,7 @@ function makeStation(orgId: number, name: string): ReportStation {
             daily_production_mln_kwh: 3.389, power_mwt: 141.208, working_aggregates: 3,
             water_level_m: 846.05, water_volume_mln_m3: 634, water_head_m: 104,
             reservoir_income_m3s: 85.5, total_outflow_m3s: 95, ges_flow_m3s: 85,
-            idle_discharge_m3s: 10, temperature: 1.2, weather_condition: 'Облачно'
+            idle_discharge_m3s: 10
         },
         diffs: {
             level_change_cm: 8, volume_change_mln_m3: -1.5, income_change_m3s: 5,
@@ -38,7 +38,7 @@ function makeStation(orgId: number, name: string): ReportStation {
         aggregations: { mtd_production_mln_kwh: 42.5, ytd_production_mln_kwh: 280 },
         plan: { monthly_plan_mln_kwh: 120, quarterly_plan_mln_kwh: 330, fulfillment_pct: 0.8485, difference_mln_kwh: -50 },
         previous_year: {
-            temperature: 3.5, water_level_m: 840.2, water_volume_mln_m3: 580,
+            water_level_m: 840.2, water_volume_mln_m3: 580,
             water_head_m: 100, reservoir_income_m3s: 70, ges_flow_m3s: 75,
             power_mwt: 130, daily_production_mln_kwh: 3.12,
             mtd_production_mln_kwh: 40, ytd_production_mln_kwh: 310
@@ -48,11 +48,22 @@ function makeStation(orgId: number, name: string): ReportStation {
     };
 }
 
-function makeReport(): GesDailyReport {
+function makeWeather(overrides: Partial<ReportWeather> = {}): ReportWeather {
+    return {
+        temperature: 22.5,
+        weather_condition: '01d',
+        prev_year_temperature: 18.0,
+        prev_year_condition: '02d',
+        ...overrides
+    };
+}
+
+function makeReport(weather: ReportWeather | null = makeWeather()): GesDailyReport {
     return {
         date: '2026-03-13',
         cascades: [{
             cascade_id: 5, cascade_name: 'Ўрта Чирчиқ каскади',
+            weather,
             summary: makeGrandTotal(),
             stations: [makeStation(10, 'ГЭС-1'), makeStation(20, 'ГЭС-2')]
         }],
@@ -118,4 +129,48 @@ describe('ReportTabComponent', () => {
         expect(component.isNegative(5)).toBeFalse();
         expect(component.isNegative(null)).toBeFalse();
     });
+
+    it('should render OWM icon with correct URL in cascade header when weather is present', fakeAsync(() => {
+        fixture.detectChanges();
+        tick();
+        fixture.detectChanges();
+        const imgs = fixture.nativeElement.querySelectorAll('.cascade-header-row img') as NodeListOf<HTMLImageElement>;
+        expect(imgs.length).toBeGreaterThan(0);
+        const currentImg = Array.from(imgs).find(img => img.src.includes('01d'));
+        expect(currentImg).toBeDefined();
+        expect(currentImg!.src).toContain('openweathermap.org/img/wn/01d');
+    }));
+
+    it('should render both current and prev_year weather icons', fakeAsync(() => {
+        fixture.detectChanges();
+        tick();
+        fixture.detectChanges();
+        const imgs = fixture.nativeElement.querySelectorAll('.cascade-header-row img') as NodeListOf<HTMLImageElement>;
+        const srcs = Array.from(imgs).map(img => img.src);
+        expect(srcs.some(s => s.includes('01d'))).toBeTrue();
+        expect(srcs.some(s => s.includes('02d'))).toBeTrue();
+    }));
+
+    it('should not render weather block when cascade.weather is null', fakeAsync(() => {
+        gesReportService.getReport.and.returnValue(of(makeReport(null)));
+        fixture.detectChanges();
+        tick();
+        fixture.detectChanges();
+        const imgs = fixture.nativeElement.querySelectorAll('.cascade-header-row img');
+        expect(imgs.length).toBe(0);
+    }));
+
+    it('should render only prev_year when current weather fields are null', fakeAsync(() => {
+        gesReportService.getReport.and.returnValue(of(makeReport(makeWeather({
+            temperature: null,
+            weather_condition: null
+        }))));
+        fixture.detectChanges();
+        tick();
+        fixture.detectChanges();
+        const imgs = fixture.nativeElement.querySelectorAll('.cascade-header-row img') as NodeListOf<HTMLImageElement>;
+        const srcs = Array.from(imgs).map(img => img.src);
+        expect(srcs.some(s => s.includes('02d'))).toBeTrue();
+        expect(srcs.some(s => s.includes('01d'))).toBeFalse();
+    }));
 });

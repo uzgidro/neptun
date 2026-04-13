@@ -21,7 +21,7 @@ function makeStation(orgId: number, name: string): ReportStation {
             daily_production_mln_kwh: 3.389, power_mwt: 141.208, working_aggregates: 3,
             water_level_m: 846.05, water_volume_mln_m3: 634, water_head_m: 104,
             reservoir_income_m3s: 85.5, total_outflow_m3s: 95, ges_flow_m3s: 85,
-            idle_discharge_m3s: 10, temperature: 1.2, weather_condition: 'Облачно'
+            idle_discharge_m3s: 10
         },
         diffs: {
             level_change_cm: 8, volume_change_mln_m3: -1.5, income_change_m3s: 5,
@@ -30,7 +30,7 @@ function makeStation(orgId: number, name: string): ReportStation {
         aggregations: { mtd_production_mln_kwh: 42.5, ytd_production_mln_kwh: 280 },
         plan: { monthly_plan_mln_kwh: 120, quarterly_plan_mln_kwh: 330, fulfillment_pct: 0.8485, difference_mln_kwh: -50 },
         previous_year: {
-            temperature: 3.5, water_level_m: 840.2, water_volume_mln_m3: 580,
+            water_level_m: 840.2, water_volume_mln_m3: 580,
             water_head_m: 100, reservoir_income_m3s: 70, ges_flow_m3s: 75,
             power_mwt: 130, daily_production_mln_kwh: 3.12,
             mtd_production_mln_kwh: 40, ytd_production_mln_kwh: 310
@@ -46,6 +46,7 @@ describe('buildExcelData', () => {
             date: '2026-03-13',
             cascades: [{
                 cascade_id: 5, cascade_name: 'Каскад-1',
+                weather: null,
                 summary: makeGrandTotal(),
                 stations: [makeStation(10, 'ГЭС-1'), makeStation(20, 'ГЭС-2')]
             }],
@@ -61,6 +62,7 @@ describe('buildExcelData', () => {
             date: '2026-03-13',
             cascades: [{
                 cascade_id: 5, cascade_name: 'Каскад-1',
+                weather: null,
                 summary: makeGrandTotal(),
                 stations: [makeStation(10, 'ГЭС-1')]
             }],
@@ -72,11 +74,12 @@ describe('buildExcelData', () => {
         expect(stationRows[0].values[0]).toBe('ГЭС-1');
     });
 
-    it('should include all 28 data columns for station rows', () => {
+    it('should include all 27 data columns for station rows', () => {
         const report: GesDailyReport = {
             date: '2026-03-13',
             cascades: [{
                 cascade_id: 5, cascade_name: 'Каскад-1',
+                weather: null,
                 summary: makeGrandTotal(),
                 stations: [makeStation(10, 'ГЭС-1')]
             }],
@@ -84,15 +87,17 @@ describe('buildExcelData', () => {
         };
         const rows = buildExcelData(report);
         const station = rows.find(r => r.type === 'station')!;
-        expect(station.values.length).toBe(28);
+        expect(station.values.length).toBe(27);
+        // temperature column must not appear
+        expect(station.values).not.toContain(1.2);
     });
 
     it('should handle multiple cascades', () => {
         const report: GesDailyReport = {
             date: '2026-03-13',
             cascades: [
-                { cascade_id: 1, cascade_name: 'K1', summary: makeGrandTotal(), stations: [makeStation(10, 'A')] },
-                { cascade_id: 2, cascade_name: 'K2', summary: makeGrandTotal(), stations: [makeStation(20, 'B')] }
+                { cascade_id: 1, cascade_name: 'K1', weather: null, summary: makeGrandTotal(), stations: [makeStation(10, 'A')] },
+                { cascade_id: 2, cascade_name: 'K2', weather: null, summary: makeGrandTotal(), stations: [makeStation(20, 'B')] }
             ],
             grand_total: makeGrandTotal()
         };

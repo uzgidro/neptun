@@ -37,8 +37,6 @@
                     <th colspan="3">{{ 'GES_REPORT.INCOME' | translate }}<br/><small>м³/с</small></th>
                     <th colspan="3">{{ 'GES_REPORT.GES_FLOW' | translate }}<br/><small>м³/с</small></th>
                     <th rowspan="2">{{ 'GES_REPORT.IDLE_DISCHARGE' | translate }}<br/><small>м³/с</small></th>
-                    <th rowspan="2">{{ 'GES_REPORT.TEMPERATURE' | translate }}<br/><small>°C</small></th>
-                    <th rowspan="2">{{ 'GES_REPORT.WEATHER' | translate }}</th>
                     <th rowspan="2">{{ 'GES_REPORT.MTD_PRODUCTION' | translate }}<br/><small>млн кВт·ч</small></th>
                     <th rowspan="2">{{ 'GES_REPORT.YTD_PRODUCTION' | translate }}<br/><small>млн кВт·ч</small></th>
                     <th rowspan="2">{{ 'GES_REPORT.MONTHLY_PLAN' | translate }}<br/><small>млн кВт·ч</small></th>
@@ -73,7 +71,12 @@
                 @for (cascade of report.cascades; track cascade.cascade_id) {
                     <!-- Cascade header -->
                     <tr class="cascade-header-row">
-                        <td class="sticky-col cascade-name" colspan="33">{{ cascade.cascade_name }}</td>
+                        <td class="sticky-col cascade-name" colspan="33">
+                            <div class="flex items-center justify-between gap-4">
+                                <span>{{ cascade.cascade_name }}</span>
+                                <app-cascade-weather [weather]="cascade.weather" />
+                            </div>
+                        </td>
                     </tr>
                     <!-- Station rows -->
                     @for (station of cascade.stations; track station.organization_id) {
@@ -122,10 +125,6 @@
                         <td>{{ formatNum(station.previous_year.ges_flow_m3s) }}</td>
                         <!-- Idle discharge -->
                         <td>{{ formatNum(station.current.idle_discharge_m3s) }}</td>
-                        <!-- Temperature -->
-                        <td>{{ formatNum(station.current.temperature, 1) }}</td>
-                        <!-- Weather -->
-                        <td>{{ station.current.weather_condition ?? '—' }}</td>
                         <!-- MTD / YTD production -->
                         <td>{{ formatNum(station.aggregations.mtd_production_mln_kwh, 3) }}</td>
                         <td>{{ formatNum(station.aggregations.ytd_production_mln_kwh, 3) }}</td>
@@ -160,7 +159,6 @@
                         </td>
                         <td colspan="9">—</td>
                         <td>{{ formatNum(cascade.summary.idle_discharge_total_m3s) }}</td>
-                        <td colspan="2">—</td>
                         <td>{{ formatNum(cascade.summary.mtd_production_mln_kwh, 3) }}</td>
                         <td>{{ formatNum(cascade.summary.ytd_production_mln_kwh, 3) }}</td>
                         <td>{{ formatNum(cascade.summary.monthly_plan_mln_kwh) }}</td>
@@ -193,7 +191,6 @@
                     </td>
                     <td colspan="9">—</td>
                     <td>{{ formatNum(report.grand_total.idle_discharge_total_m3s) }}</td>
-                    <td colspan="2">—</td>
                     <td>{{ formatNum(report.grand_total.mtd_production_mln_kwh, 3) }}</td>
                     <td>{{ formatNum(report.grand_total.ytd_production_mln_kwh, 3) }}</td>
                     <td>{{ formatNum(report.grand_total.monthly_plan_mln_kwh) }}</td>

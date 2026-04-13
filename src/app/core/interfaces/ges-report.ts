@@ -50,8 +50,6 @@ export interface GesDailyDataPayload {
     reservoir_income_m3s?: number | null;
     total_outflow_m3s?: number | null;
     ges_flow_m3s?: number | null;
-    temperature?: number | null;
-    weather_condition?: string | null;
 }
 
 export interface GesDailyData extends GesDailyDataPayload {
@@ -79,9 +77,17 @@ export interface GesDailyReport {
     grand_total: ReportGrandTotal;
 }
 
+export interface ReportWeather {
+    temperature: number | null;
+    weather_condition: string | null;
+    prev_year_temperature: number | null;
+    prev_year_condition: string | null;
+}
+
 export interface ReportCascade {
     cascade_id: number;
     cascade_name: string;
+    weather: ReportWeather | null;
     summary: ReportGrandTotal;
     stations: ReportStation[];
 }
@@ -114,8 +120,6 @@ export interface ReportCurrent {
     total_outflow_m3s: number | null;
     ges_flow_m3s: number | null;
     idle_discharge_m3s: number | null;
-    temperature: number | null;
-    weather_condition: string | null;
 }
 
 export interface ReportDiffs {
@@ -140,7 +144,6 @@ export interface ReportPlan {
 }
 
 export interface ReportPreviousYear {
-    temperature: number | null;
     water_level_m: number | null;
     water_volume_mln_m3: number | null;
     water_head_m: number | null;

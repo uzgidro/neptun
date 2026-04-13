@@ -7,7 +7,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { MessageService } from 'primeng/api';
 import { DataEntryTabComponent } from './data-entry-tab.component';
 import { GesReportService } from '@/core/services/ges-report.service';
-import { GesConfigResponse } from '@/core/interfaces/ges-report';
+import { GesConfigResponse, GesDailyReport, ReportGrandTotal, ReportWeather } from '@/core/interfaces/ges-report';
 
 function makeConfig(orgId: number, name: string, hasReservoir = true): GesConfigResponse {
     return {
@@ -15,6 +15,31 @@ function makeConfig(orgId: number, name: string, hasReservoir = true): GesConfig
         cascade_id: 1, cascade_name: 'Каскад',
         installed_capacity_mwt: 50, total_aggregates: 4,
         has_reservoir: hasReservoir, sort_order: orgId
+    };
+}
+
+function makeGrandTotal(): ReportGrandTotal {
+    return {
+        installed_capacity_mwt: 100, total_aggregates: 10, working_aggregates: 8,
+        power_mwt: 50, daily_production_mln_kwh: 1.2, production_change_mln_kwh: 0.1,
+        mtd_production_mln_kwh: 15, ytd_production_mln_kwh: 150,
+        monthly_plan_mln_kwh: 50, quarterly_plan_mln_kwh: 150,
+        fulfillment_pct: 1.0, difference_mln_kwh: 0,
+        prev_year_ytd_mln_kwh: 140, yoy_growth_rate: 0.07,
+        yoy_difference_mln_kwh: 10, idle_discharge_total_m3s: 0
+    };
+}
+
+function makeReportWithWeather(weather: ReportWeather | null): GesDailyReport {
+    return {
+        date: '2026-03-30',
+        cascades: [{
+            cascade_id: 1, cascade_name: 'Каскад',
+            weather,
+            summary: makeGrandTotal(),
+            stations: []
+        }],
+        grand_total: makeGrandTotal()
     };
 }
 
@@ -111,5 +136,72 @@ describe('DataEntryTabComponent', () => {
         component.rows[0].form.get('daily_production_mln_kwh')?.markAsDirty();
         spyOn(window, 'confirm').and.returnValue(true);
         expect(component.canDeactivate()).toBeTrue();
+    }));
+
+    it('should not have temperature or weather_condition in form', fakeAsync(() => {
+        const configs = [makeConfig(10, 'ГЭС-1')];
+        gesReportService.getConfigs.and.returnValue(of(configs));
+        gesReportService.getDailyData.and.returnValue(throwError(() => ({ status: 404 })));
+        fixture.detectChanges();
+        tick();
+        expect(component.rows[0].form.get('temperature')).toBeNull();
+        expect(component.rows[0].form.get('weather_condition')).toBeNull();
+    }));
+
+    it('should populate cascade group with weather from report API', fakeAsync(() => {
+        const configs = [makeConfig(10, 'ГЭС-1')];
+        const weather: ReportWeather = {
+            temperature: 22.5, weather_condition: '01d',
+            prev_year_temperature: 18, prev_year_condition: '02d'
+        };
+        gesReportService.getConfigs.and.returnValue(of(configs));
+        gesReportService.getDailyData.and.returnValue(throwError(() => ({ status: 404 })));
+        gesReportService.getReport.and.returnValue(of(makeReportWithWeather(weather)));
+        fixture.detectChanges();
+        tick();
+        expect(component.cascadeGroups[0].weather).toBeTruthy();
+        expect(component.cascadeGroups[0].weather?.temperature).toBe(22.5);
+        expect(component.cascadeGroups[0].weather?.weather_condition).toBe('01d');
+    }));
+
+    it('should set cascade group weather to null when report weather is null', fakeAsync(() => {
+        const configs = [makeConfig(10, 'ГЭС-1')];
+        gesReportService.getConfigs.and.returnValue(of(configs));
+        gesReportService.getDailyData.and.returnValue(throwError(() => ({ status: 404 })));
+        gesReportService.getReport.and.returnValue(of(makeReportWithWeather(null)));
+        fixture.detectChanges();
+        tick();
+        expect(component.cascadeGroups[0].weather).toBeNull();
+    }));
+
+    it('should render OWM icon in cascade header when weather is present', fakeAsync(() => {
+        const configs = [makeConfig(10, 'ГЭС-1')];
+        const weather: ReportWeather = {
+            temperature: 22.5, weather_condition: '01d',
+            prev_year_temperature: 18, prev_year_condition: '02d'
+        };
+        gesReportService.getConfigs.and.returnValue(of(configs));
+        gesReportService.getDailyData.and.returnValue(throwError(() => ({ status: 404 })));
+        gesReportService.getReport.and.returnValue(of(makeReportWithWeather(weather)));
+        fixture.detectChanges();
+        tick();
+        fixture.detectChanges();
+        const imgs = fixture.nativeElement.querySelectorAll('img') as NodeListOf<HTMLImageElement>;
+        const srcs = Array.from(imgs).map(img => img.src);
+        expect(srcs.some(s => s.includes('openweathermap.org/img/wn/01d'))).toBeTrue();
+        expect(srcs.some(s => s.includes('openweathermap.org/img/wn/02d'))).toBeTrue();
+    }));
+
+    it('should not render any weather icons when cascade weather is null', fakeAsync(() => {
+        const configs = [makeConfig(10, 'ГЭС-1')];
+        gesReportService.getConfigs.and.returnValue(of(configs));
+        gesReportService.getDailyData.and.returnValue(throwError(() => ({ status: 404 })));
+        gesReportService.getReport.and.returnValue(of(makeReportWithWeather(null)));
+        fixture.detectChanges();
+        tick();
+        fixture.detectChanges();
+        const imgs = fixture.nativeElement.querySelectorAll('img') as NodeListOf<HTMLImageElement>;
+        const owmImgs = Array.from(imgs).filter(img => img.src.includes('openweathermap.org'));
+        expect(owmImgs.length).toBe(0);
     }));
 });

@@ -14,8 +14,9 @@ import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
 import { GesReportService } from '@/core/services/ges-report.service';
 import { TimeService } from '@/core/services/time.service';
-import { GesConfigResponse, GesCascadeConfig, GesDailyData, ReportIdleDischarge } from '@/core/interfaces/ges-report';
+import { GesConfigResponse, GesCascadeConfig, GesDailyData, ReportIdleDischarge, ReportWeather } from '@/core/interfaces/ges-report';
 import { HasUnsavedChanges } from '@/core/guards/auth.guard';
+import { CascadeWeatherComponent } from '../shared/cascade-weather.component';
 
 export class DataEntryRow {
     config: GesConfigResponse;
@@ -55,7 +56,8 @@ export class DataEntryRow {
         InputNumberModule,
         ButtonModule,
         TagModule,
-        InputTextModule
+        InputTextModule,
+        CascadeWeatherComponent
     ],
     templateUrl: './data-entry-tab.component.html'
 })
@@ -69,7 +71,8 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
 
     selectedDate: Date = new Date();
     rows: DataEntryRow[] = [];
-    cascadeGroups: { cascade_id: number; cascade_name: string; rows: DataEntryRow[] }[] = [];
+    cascadeGroups: { cascade_id: number; cascade_name: string; weather: ReportWeather | null; rows: DataEntryRow[] }[] = [];
+    private cascadeWeatherMap = new Map<number, ReportWeather | null>();
     collapsedCascades = new Set<number>();
     loading = false;
     savingAll = false;
@@ -108,8 +111,10 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
                 });
 
                 const idleDischargeMap = new Map<number, ReportIdleDischarge | null>();
+                this.cascadeWeatherMap.clear();
                 if (report) {
                     for (const cascade of report.cascades) {
+                        this.cascadeWeatherMap.set(cascade.cascade_id, cascade.weather);
                         for (const station of cascade.stations) {
                             idleDischargeMap.set(station.organization_id, station.idle_discharge);
                         }
@@ -240,11 +245,16 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
     }
 
     private buildCascadeGroups(): void {
-        const map = new Map<number, { cascade_id: number; cascade_name: string; rows: DataEntryRow[] }>();
+        const map = new Map<number, { cascade_id: number; cascade_name: string; weather: ReportWeather | null; rows: DataEntryRow[] }>();
         for (const row of this.rows) {
             const id = row.config.cascade_id;
             if (!map.has(id)) {
-                map.set(id, { cascade_id: id, cascade_name: row.config.cascade_name, rows: [] });
+                map.set(id, {
+                    cascade_id: id,
+                    cascade_name: row.config.cascade_name,
+                    weather: this.cascadeWeatherMap.get(id) ?? null,
+                    rows: []
+                });
             }
             map.get(id)!.rows.push(row);
         }
@@ -260,9 +270,7 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
             water_head_m: [data?.water_head_m ?? null],
             reservoir_income_m3s: [data?.reservoir_income_m3s ?? null],
             total_outflow_m3s: [data?.total_outflow_m3s ?? null],
-            ges_flow_m3s: [data?.ges_flow_m3s ?? null],
-            temperature: [data?.temperature ?? null],
-            weather_condition: [data?.weather_condition ?? null]
+            ges_flow_m3s: [data?.ges_flow_m3s ?? null]
         });
     }
 

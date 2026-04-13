@@ -8,7 +8,7 @@ export interface ExcelRow {
 
 const HEADERS = [
     'ГЭС номи', 'Ўрн. қуввати, МВт', 'Ойлик режа', 'Режа Янв-Март',
-    'Ҳарорат', 'Сув сатҳи, м', '+/- см', 'Сув ҳажми, млн.м³', '+/- млн.м³',
+    'Сув сатҳи, м', '+/- см', 'Сув ҳажми, млн.м³', '+/- млн.м³',
     'Сув босими, м', 'Келаётган сув, м³/с', '+/- м³/с', 'Чиқаётган сув, м³/с',
     'ГЭС орқали, м³/с', '+/- м³/с', 'Салт ташлама, м³/с',
     'Агрегатлар сони', 'Ишлаётган', 'Қуввати, МВт', '+/- МВт',
@@ -22,7 +22,6 @@ function stationToRow(s: ReportStation): (string | number | null)[] {
         s.config.installed_capacity_mwt,
         s.plan.monthly_plan_mln_kwh,
         s.plan.quarterly_plan_mln_kwh,
-        s.current.temperature,
         s.current.water_level_m,
         s.diffs.level_change_cm,
         s.current.water_volume_mln_m3,
@@ -55,7 +54,7 @@ function summaryToRow(label: string, t: ReportGrandTotal): (string | number | nu
         t.installed_capacity_mwt,
         t.monthly_plan_mln_kwh,
         t.quarterly_plan_mln_kwh,
-        null, null, null, null, null, null, null, null, null, null, null, null,
+        null, null, null, null, null, null, null, null, null, null, null,
         t.total_aggregates,
         t.working_aggregates,
         t.power_mwt,
@@ -74,7 +73,7 @@ function summaryToRow(label: string, t: ReportGrandTotal): (string | number | nu
 export function buildExcelData(report: GesDailyReport): ExcelRow[] {
     const rows: ExcelRow[] = [];
     for (const cascade of report.cascades) {
-        rows.push({ type: 'cascade-header', values: [cascade.cascade_name, ...new Array(27).fill(null)] });
+        rows.push({ type: 'cascade-header', values: [cascade.cascade_name, ...new Array(26).fill(null)] });
         for (const station of cascade.stations) {
             rows.push({ type: 'station', values: stationToRow(station) });
         }

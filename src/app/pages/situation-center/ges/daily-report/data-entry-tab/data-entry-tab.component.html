@@ -37,6 +37,7 @@
                        [class.pi-chevron-right]="collapsedCascades.has(group.cascade_id)"></i>
                     <span class="font-bold text-lg whitespace-nowrap" style="color: var(--p-primary-500)">{{ group.cascade_name }}</span>
                 </div>
+                <app-cascade-weather [weather]="group.weather" (click)="$event.stopPropagation()" />
                 <div class="h-px flex-1" style="background-color: var(--p-primary-200)"></div>
             </div>
 

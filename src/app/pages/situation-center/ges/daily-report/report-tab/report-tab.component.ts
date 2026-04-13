@@ -11,6 +11,7 @@ import { GesReportService } from '@/core/services/ges-report.service';
 import { TimeService } from '@/core/services/time.service';
 import { GesDailyReport } from '@/core/interfaces/ges-report';
 import { exportReportToExcel } from './excel-export';
+import { CascadeWeatherComponent } from '../shared/cascade-weather.component';
 
 @Component({
     selector: 'app-ges-report-tab',
@@ -20,7 +21,8 @@ import { exportReportToExcel } from './excel-export';
         FormsModule,
         TranslateModule,
         DatePicker,
-        ButtonModule
+        ButtonModule,
+        CascadeWeatherComponent
     ],
     templateUrl: './report-tab.component.html'
 })
