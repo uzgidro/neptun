@@ -42,8 +42,8 @@ export interface GesCascadeConfig {
 export interface GesDailyDataPayload {
     organization_id: number;
     date: string;
-    daily_production_mln_kwh?: number;
-    working_aggregates?: number;
+    daily_production_mln_kwh?: number | null;
+    working_aggregates?: number | null;
     water_level_m?: number | null;
     water_volume_mln_m3?: number | null;
     water_head_m?: number | null;
