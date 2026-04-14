@@ -308,7 +308,7 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
         for (const f of fields) {
             const ctrl = row.form.get(f);
             if (ctrl?.dirty) {
-                (payload as unknown as Record<string, unknown>)[f] = ctrl.value;
+                Object.assign(payload, { [f]: ctrl.value });
             }
         }
         return payload;
