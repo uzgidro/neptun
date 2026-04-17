@@ -250,7 +250,11 @@
     "INFRA_EVENTS": "Infratuzilma"
   },
   "GES_REPORT": {
-    "BATCH_FAILED_AT": "{{station}} stantsiyasida xatolik"
+    "BATCH_FAILED_AT": "{{station}} stantsiyasida xatolik",
+    "DOWNLOAD_PDF": "PDF yuklab olish",
+    "MODERNIZATION": "Modernizatsiya",
+    "REPAIR": "Ta'mirlash",
+    "NEGATIVE_RESERVE_ERROR": "Zahiradagi agregatlar soni manfiy bo'lishi mumkin emas. «Modernizatsiya» va «Ta'mirlash» maydonlarini tekshiring."
   },
   "FILTRATION": {
     "TITLE": "Filtratsiya",
