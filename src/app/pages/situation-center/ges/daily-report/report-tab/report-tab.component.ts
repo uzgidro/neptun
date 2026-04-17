@@ -1,17 +1,19 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MessageService } from 'primeng/api';
 import { DatePicker } from 'primeng/datepicker';
 import { ButtonModule } from 'primeng/button';
+import { InputNumberModule } from 'primeng/inputnumber';
 import { GesReportService } from '@/core/services/ges-report.service';
 import { TimeService } from '@/core/services/time.service';
 import { AuthService } from '@/core/services/auth.service';
 import { GesDailyReport } from '@/core/interfaces/ges-report';
-import { exportReportToExcel } from './excel-export';
+import { downloadBlob } from '@/core/utils/download';
 import { CascadeWeatherComponent } from '../shared/cascade-weather.component';
 
 @Component({
@@ -20,9 +22,11 @@ import { CascadeWeatherComponent } from '../shared/cascade-weather.component';
     imports: [
         CommonModule,
         FormsModule,
+        ReactiveFormsModule,
         TranslateModule,
         DatePicker,
         ButtonModule,
+        InputNumberModule,
         CascadeWeatherComponent
     ],
     templateUrl: './report-tab.component.html'
@@ -39,6 +43,10 @@ export class ReportTabComponent implements OnInit, OnDestroy {
     report: GesDailyReport | null = null;
     loading = false;
     canExport = this.authService.isScOrRais();
+
+    modernization = new FormControl<number>(0, { nonNullable: true });
+    repair = new FormControl<number>(0, { nonNullable: true });
+    downloading: 'excel' | 'pdf' | null = null;
 
     ngOnInit(): void {
         this.loadReport();
@@ -77,10 +85,50 @@ export class ReportTabComponent implements OnInit, OnDestroy {
         this.loadReport();
     }
 
-    downloadExcel(): void {
-        if (this.report) {
-            exportReportToExcel(this.report);
+    download(format: 'excel' | 'pdf'): void {
+        if (!this.report || this.downloading) return;
+        const date = this.timeService.dateToYMD(this.selectedDate);
+        this.downloading = format;
+        this.gesReportService.exportReport({
+            date, format,
+            modernization: this.modernization.value ?? 0,
+            repair: this.repair.value ?? 0
+        }).pipe(takeUntil(this.destroy$)).subscribe({
+            next: (response) => {
+                const ext = format === 'pdf' ? 'pdf' : 'xlsx';
+                const filename = this.parseFilename(response) ?? `GES-${date}.${ext}`;
+                downloadBlob(response.body!, filename);
+                this.downloading = null;
+            },
+            error: (err) => { this.downloading = null; this.handleExportError(err); }
+        });
+    }
+
+    private async handleExportError(err: HttpErrorResponse): Promise<void> {
+        let detail = this.translate.instant('ERRORS.BAD_REQUEST');
+        if (err.status === 400 && err.error instanceof Blob) {
+            try {
+                const body = JSON.parse(await err.error.text()) as { message?: string };
+                if (body.message?.includes('reserve')) {
+                    detail = this.translate.instant('GES_REPORT.NEGATIVE_RESERVE_ERROR');
+                } else if (body.message) {
+                    detail = body.message;
+                }
+            } catch {
+                /* keep fallback */
+            }
         }
+        this.messageService.add({
+            severity: 'error',
+            summary: this.translate.instant('COMMON.ERROR'),
+            detail
+        });
+    }
+
+    private parseFilename(response: HttpResponse<Blob>): string | null {
+        const cd = response.headers.get('Content-Disposition');
+        const m = cd?.match(/filename="([^"]+)"/);
+        return m ? m[1] : null;
     }
 
     formatPct(value: number | null | undefined): string {
