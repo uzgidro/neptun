@@ -9,6 +9,7 @@ import { DatePicker } from 'primeng/datepicker';
 import { ButtonModule } from 'primeng/button';
 import { GesReportService } from '@/core/services/ges-report.service';
 import { TimeService } from '@/core/services/time.service';
+import { AuthService } from '@/core/services/auth.service';
 import { GesDailyReport } from '@/core/interfaces/ges-report';
 import { exportReportToExcel } from './excel-export';
 import { CascadeWeatherComponent } from '../shared/cascade-weather.component';
@@ -31,11 +32,13 @@ export class ReportTabComponent implements OnInit, OnDestroy {
     private timeService = inject(TimeService);
     private messageService = inject(MessageService);
     private translate = inject(TranslateService);
+    private authService = inject(AuthService);
     private destroy$ = new Subject<void>();
 
     selectedDate: Date = new Date();
     report: GesDailyReport | null = null;
     loading = false;
+    canExport = this.authService.isScOrRais();
 
     ngOnInit(): void {
         this.loadReport();

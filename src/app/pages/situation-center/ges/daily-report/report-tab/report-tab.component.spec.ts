@@ -7,6 +7,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { MessageService } from 'primeng/api';
 import { ReportTabComponent } from './report-tab.component';
 import { GesReportService } from '@/core/services/ges-report.service';
+import { AuthService } from '@/core/services/auth.service';
 import { GesDailyReport, ReportStation, ReportGrandTotal, ReportWeather } from '@/core/interfaces/ges-report';
 
 function makeGrandTotal(): ReportGrandTotal {
@@ -75,10 +76,13 @@ describe('ReportTabComponent', () => {
     let component: ReportTabComponent;
     let fixture: ComponentFixture<ReportTabComponent>;
     let gesReportService: jasmine.SpyObj<GesReportService>;
+    let authSpy: jasmine.SpyObj<AuthService>;
 
     beforeEach(async () => {
         const spy = jasmine.createSpyObj('GesReportService', ['getReport']);
         spy.getReport.and.returnValue(of(makeReport()));
+        authSpy = jasmine.createSpyObj('AuthService', ['isScOrRais']);
+        authSpy.isScOrRais.and.returnValue(true);
 
         await TestBed.configureTestingModule({
             imports: [ReportTabComponent, TranslateModule.forRoot()],
@@ -87,6 +91,7 @@ describe('ReportTabComponent', () => {
                 provideHttpClientTesting(),
                 provideNoopAnimations(),
                 { provide: GesReportService, useValue: spy },
+                { provide: AuthService, useValue: authSpy },
                 MessageService
             ]
         }).compileComponents();
@@ -159,6 +164,22 @@ describe('ReportTabComponent', () => {
         const imgs = fixture.nativeElement.querySelectorAll('.cascade-header-row img');
         expect(imgs.length).toBe(0);
     }));
+
+    it('hides export button for cascade user', () => {
+        authSpy.isScOrRais.and.returnValue(false);
+        const localFixture = TestBed.createComponent(ReportTabComponent);
+        localFixture.detectChanges();
+        const btn = localFixture.nativeElement.querySelector('p-button[icon="pi pi-file-excel"]');
+        expect(btn).toBeNull();
+    });
+
+    it('shows export button for sc/rais user', () => {
+        authSpy.isScOrRais.and.returnValue(true);
+        const localFixture = TestBed.createComponent(ReportTabComponent);
+        localFixture.detectChanges();
+        const btn = localFixture.nativeElement.querySelector('p-button[icon="pi pi-file-excel"]');
+        expect(btn).not.toBeNull();
+    });
 
     it('should render only prev_year when current weather fields are null', fakeAsync(() => {
         gesReportService.getReport.and.returnValue(of(makeReport(makeWeather({
