@@ -14,7 +14,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
 import { GesReportService } from '@/core/services/ges-report.service';
 import { TimeService } from '@/core/services/time.service';
-import { GesConfigResponse, GesCascadeConfig, GesDailyData, GesDailyDataPayload, ReportIdleDischarge, ReportWeather } from '@/core/interfaces/ges-report';
+import { AuthService } from '@/core/services/auth.service';
+import { GesConfigResponse, GesCascadeConfig, GesDailyData, GesDailyDataPayload, GesDailyReport, ReportIdleDischarge, ReportWeather } from '@/core/interfaces/ges-report';
 import { HasUnsavedChanges } from '@/core/guards/auth.guard';
 import { CascadeWeatherComponent } from '../shared/cascade-weather.component';
 
@@ -64,6 +65,7 @@ export class DataEntryRow {
 export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChanges {
     private gesReportService = inject(GesReportService);
     private timeService = inject(TimeService);
+    private authService = inject(AuthService);
     private fb = inject(FormBuilder);
     private messageService = inject(MessageService);
     private translate = inject(TranslateService);
@@ -92,6 +94,13 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
 
         const dateStr = this.timeService.dateToYMD(this.selectedDate);
 
+        // Cascade-only users cannot read /ges-report/config (Tier 2 → 403),
+        // so derive the station list from /ges-report instead.
+        if (!this.authService.isScOrRais()) {
+            this.loadFromReport(dateStr);
+            return;
+        }
+
         forkJoin({
             configs: this.gesReportService.getConfigs(),
             cascadeConfigs: this.gesReportService.getCascadeConfigs().pipe(catchError(() => of([] as GesCascadeConfig[]))),
@@ -119,6 +128,68 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
                             idleDischargeMap.set(station.organization_id, station.idle_discharge);
                         }
                     }
+                }
+
+                const requests = configs.map(config =>
+                    this.gesReportService.getDailyData(config.organization_id, dateStr).pipe(
+                        catchError(() => of(null))
+                    )
+                );
+
+                forkJoin(requests).pipe(takeUntil(this.destroy$)).subscribe({
+                    next: (results) => {
+                        this.rows = configs.map((config, i) => {
+                            const data = results[i];
+                            const form = this.createForm(data);
+                            const row = new DataEntryRow(config, form, data !== null);
+                            row.idleDischarge = idleDischargeMap.get(config.organization_id) ?? null;
+                            return row;
+                        });
+                        this.buildCascadeGroups();
+                        this.loading = false;
+                    },
+                    error: () => {
+                        this.loading = false;
+                    }
+                });
+            },
+            error: () => {
+                this.loading = false;
+            }
+        });
+    }
+
+    private loadFromReport(dateStr: string): void {
+        this.gesReportService.getReport(dateStr).pipe(
+            catchError(() => of(null as GesDailyReport | null)),
+            takeUntil(this.destroy$)
+        ).subscribe({
+            next: (report) => {
+                if (!report || !report.cascades.length) {
+                    this.loading = false;
+                    return;
+                }
+
+                this.cascadeWeatherMap.clear();
+                const configs: GesConfigResponse[] = [];
+                const idleDischargeMap = new Map<number, ReportIdleDischarge | null>();
+
+                for (const cascade of report.cascades) {
+                    this.cascadeWeatherMap.set(cascade.cascade_id, cascade.weather);
+                    cascade.stations.forEach((station, idx) => {
+                        configs.push({
+                            id: station.organization_id,
+                            organization_id: station.organization_id,
+                            organization_name: station.name,
+                            cascade_id: cascade.cascade_id,
+                            cascade_name: cascade.cascade_name,
+                            installed_capacity_mwt: station.config.installed_capacity_mwt,
+                            total_aggregates: station.config.total_aggregates,
+                            has_reservoir: station.config.has_reservoir,
+                            sort_order: idx
+                        });
+                        idleDischargeMap.set(station.organization_id, station.idle_discharge);
+                    });
                 }
 
                 const requests = configs.map(config =>
