@@ -8,13 +8,22 @@
             (onSelect)="onDateChange($event)"
         />
         @if (canExport) {
-            <p-button
-                icon="pi pi-file-excel"
-                [label]="'GES_REPORT.DOWNLOAD_EXCEL' | translate"
-                severity="success"
-                [disabled]="!report || loading"
-                (onClick)="downloadExcel()"
-            />
+            <div class="flex items-center gap-2 flex-wrap">
+                <label class="text-sm">{{ 'GES_REPORT.MODERNIZATION' | translate }}</label>
+                <p-inputNumber data-testid="modernization-input" [formControl]="modernization"
+                    [min]="0" [step]="1" [showButtons]="false" inputStyleClass="w-20" />
+                <label class="text-sm">{{ 'GES_REPORT.REPAIR' | translate }}</label>
+                <p-inputNumber data-testid="repair-input" [formControl]="repair"
+                    [min]="0" [step]="1" [showButtons]="false" inputStyleClass="w-20" />
+                <p-button data-testid="export-excel" [label]="'GES_REPORT.DOWNLOAD_EXCEL' | translate"
+                    icon="pi pi-file-excel" severity="success"
+                    [disabled]="!report || loading || downloading !== null"
+                    [loading]="downloading === 'excel'" (onClick)="download('excel')" />
+                <p-button data-testid="export-pdf" [label]="'GES_REPORT.DOWNLOAD_PDF' | translate"
+                    icon="pi pi-file-pdf" severity="danger"
+                    [disabled]="!report || loading || downloading !== null"
+                    [loading]="downloading === 'pdf'" (onClick)="download('pdf')" />
+            </div>
         }
         @if (loading) {
             <i class="pi pi-spin pi-spinner text-xl"></i>
