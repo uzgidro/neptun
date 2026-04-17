@@ -12,7 +12,7 @@ import { HasUnsavedChanges } from '@/core/guards/auth.guard';
 interface TabDef {
     key: string;
     label: string;
-    adminOnly?: boolean;
+    requiresScRais?: boolean;
 }
 
 @Component({
@@ -35,17 +35,17 @@ export class DailyReportComponent implements HasUnsavedChanges, OnInit {
 
     @ViewChild(DataEntryTabComponent) dataEntryTab?: DataEntryTabComponent;
 
-    isAdmin = this.authService.isAdmin();
+    isScOrRais = this.authService.isScOrRais();
 
     allTabs: TabDef[] = [
-        { key: 'config', label: 'GES_REPORT.CONFIG', adminOnly: true },
+        { key: 'config', label: 'GES_REPORT.CONFIG', requiresScRais: true },
         { key: 'data-entry', label: 'GES_REPORT.DATA_ENTRY' },
-        { key: 'plans', label: 'GES_REPORT.PLANS' },
+        { key: 'plans', label: 'GES_REPORT.PLANS', requiresScRais: true },
         { key: 'report', label: 'GES_REPORT.REPORT' }
     ];
 
     get tabs(): TabDef[] {
-        return this.allTabs.filter(t => !t.adminOnly || this.isAdmin);
+        return this.allTabs.filter(t => !t.requiresScRais || this.isScOrRais);
     }
 
     activeTab = '';
