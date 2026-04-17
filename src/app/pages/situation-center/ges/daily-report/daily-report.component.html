@@ -8,7 +8,7 @@
             }
         </p-tablist>
         <p-tabpanels>
-            @if (isAdmin) {
+            @if (isScOrRais) {
                 <p-tabpanel value="config">
                     <app-ges-config-tab />
                 </p-tabpanel>
@@ -16,9 +16,11 @@
             <p-tabpanel value="data-entry">
                 <app-ges-data-entry-tab />
             </p-tabpanel>
-            <p-tabpanel value="plans">
-                <app-ges-plans-tab />
-            </p-tabpanel>
+            @if (isScOrRais) {
+                <p-tabpanel value="plans">
+                    <app-ges-plans-tab />
+                </p-tabpanel>
+            }
             <p-tabpanel value="report">
                 <app-ges-report-tab />
             </p-tabpanel>
