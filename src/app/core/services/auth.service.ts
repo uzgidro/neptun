@@ -44,6 +44,14 @@ export class AuthService {
         return this.hasRole('sc');
     }
 
+    isCascade(): boolean {
+        return this.hasRole('cascade');
+    }
+
+    isScOrRais(): boolean {
+        return this.hasRole(['sc', 'rais']);
+    }
+
     isAssistant(): boolean {
         return this.hasRole('assistant');
     }

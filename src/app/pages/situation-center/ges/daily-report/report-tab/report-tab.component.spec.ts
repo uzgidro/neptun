@@ -1,12 +1,13 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, HttpResponse, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
 import { MessageService } from 'primeng/api';
 import { ReportTabComponent } from './report-tab.component';
 import { GesReportService } from '@/core/services/ges-report.service';
+import { AuthService } from '@/core/services/auth.service';
 import { GesDailyReport, ReportStation, ReportGrandTotal, ReportWeather } from '@/core/interfaces/ges-report';
 
 function makeGrandTotal(): ReportGrandTotal {
@@ -74,11 +75,16 @@ function makeReport(weather: ReportWeather | null = makeWeather()): GesDailyRepo
 describe('ReportTabComponent', () => {
     let component: ReportTabComponent;
     let fixture: ComponentFixture<ReportTabComponent>;
-    let gesReportService: jasmine.SpyObj<GesReportService>;
+    let gesReportServiceSpy: jasmine.SpyObj<GesReportService>;
+    let authSpy: jasmine.SpyObj<AuthService>;
+    let messageServiceSpy: jasmine.SpyObj<MessageService>;
 
     beforeEach(async () => {
-        const spy = jasmine.createSpyObj('GesReportService', ['getReport']);
-        spy.getReport.and.returnValue(of(makeReport()));
+        gesReportServiceSpy = jasmine.createSpyObj('GesReportService', ['getReport', 'exportReport']);
+        gesReportServiceSpy.getReport.and.returnValue(of(makeReport()));
+        authSpy = jasmine.createSpyObj('AuthService', ['isScOrRais']);
+        authSpy.isScOrRais.and.returnValue(true);
+        messageServiceSpy = jasmine.createSpyObj('MessageService', ['add']);
 
         await TestBed.configureTestingModule({
             imports: [ReportTabComponent, TranslateModule.forRoot()],
@@ -86,14 +92,14 @@ describe('ReportTabComponent', () => {
                 provideHttpClient(),
                 provideHttpClientTesting(),
                 provideNoopAnimations(),
-                { provide: GesReportService, useValue: spy },
-                MessageService
+                { provide: GesReportService, useValue: gesReportServiceSpy },
+                { provide: AuthService, useValue: authSpy },
+                { provide: MessageService, useValue: messageServiceSpy }
             ]
         }).compileComponents();
 
         fixture = TestBed.createComponent(ReportTabComponent);
         component = fixture.componentInstance;
-        gesReportService = TestBed.inject(GesReportService) as jasmine.SpyObj<GesReportService>;
     });
 
     it('should create', () => {
@@ -103,7 +109,7 @@ describe('ReportTabComponent', () => {
     it('should load report on init', fakeAsync(() => {
         fixture.detectChanges();
         tick();
-        expect(gesReportService.getReport).toHaveBeenCalled();
+        expect(gesReportServiceSpy.getReport).toHaveBeenCalled();
         expect(component.report).toBeTruthy();
         expect(component.report!.cascades.length).toBe(1);
         expect(component.report!.cascades[0].stations.length).toBe(2);
@@ -112,10 +118,10 @@ describe('ReportTabComponent', () => {
     it('should reload on date change', fakeAsync(() => {
         fixture.detectChanges();
         tick();
-        gesReportService.getReport.calls.reset();
+        gesReportServiceSpy.getReport.calls.reset();
         component.onDateChange(new Date(2026, 2, 14));
         tick();
-        expect(gesReportService.getReport).toHaveBeenCalledWith('2026-03-14');
+        expect(gesReportServiceSpy.getReport).toHaveBeenCalledWith('2026-03-14');
     }));
 
     it('should format percentage correctly', () => {
@@ -152,7 +158,7 @@ describe('ReportTabComponent', () => {
     }));
 
     it('should not render weather block when cascade.weather is null', fakeAsync(() => {
-        gesReportService.getReport.and.returnValue(of(makeReport(null)));
+        gesReportServiceSpy.getReport.and.returnValue(of(makeReport(null)));
         fixture.detectChanges();
         tick();
         fixture.detectChanges();
@@ -160,8 +166,24 @@ describe('ReportTabComponent', () => {
         expect(imgs.length).toBe(0);
     }));
 
+    it('hides export button for cascade user', () => {
+        authSpy.isScOrRais.and.returnValue(false);
+        const localFixture = TestBed.createComponent(ReportTabComponent);
+        localFixture.detectChanges();
+        const btn = localFixture.nativeElement.querySelector('p-button[icon="pi pi-file-excel"]');
+        expect(btn).toBeNull();
+    });
+
+    it('shows export button for sc/rais user', () => {
+        authSpy.isScOrRais.and.returnValue(true);
+        const localFixture = TestBed.createComponent(ReportTabComponent);
+        localFixture.detectChanges();
+        const btn = localFixture.nativeElement.querySelector('p-button[icon="pi pi-file-excel"]');
+        expect(btn).not.toBeNull();
+    });
+
     it('should render only prev_year when current weather fields are null', fakeAsync(() => {
-        gesReportService.getReport.and.returnValue(of(makeReport(makeWeather({
+        gesReportServiceSpy.getReport.and.returnValue(of(makeReport(makeWeather({
             temperature: null,
             weather_condition: null
         }))));
@@ -173,4 +195,48 @@ describe('ReportTabComponent', () => {
         expect(srcs.some(s => s.includes('02d'))).toBeTrue();
         expect(srcs.some(s => s.includes('01d'))).toBeFalse();
     }));
+
+    it('renders modernization/repair inputs and two export buttons for sc/rais', () => {
+        authSpy.isScOrRais.and.returnValue(true);
+        const localFixture = TestBed.createComponent(ReportTabComponent);
+        localFixture.detectChanges();
+        expect(localFixture.nativeElement.querySelector('[data-testid="modernization-input"]')).not.toBeNull();
+        expect(localFixture.nativeElement.querySelector('[data-testid="repair-input"]')).not.toBeNull();
+        expect(localFixture.nativeElement.querySelector('[data-testid="export-excel"]')).not.toBeNull();
+        expect(localFixture.nativeElement.querySelector('[data-testid="export-pdf"]')).not.toBeNull();
+    });
+
+    it('download("excel") calls exportReport with current date/modernization/repair', () => {
+        authSpy.isScOrRais.and.returnValue(true);
+        const response = new HttpResponse({ body: new Blob(['xlsx']), headers: new HttpHeaders() });
+        gesReportServiceSpy.exportReport = jasmine.createSpy().and.returnValue(of(response));
+        // Also stub report getter so the button isn't disabled:
+        gesReportServiceSpy.getReport.and.returnValue(of({ date: '2026-04-17', cascades: [], grand_total: {} as any }));
+        const localFixture = TestBed.createComponent(ReportTabComponent);
+        const c = localFixture.componentInstance;
+        c.selectedDate = new Date('2026-04-17T00:00:00Z');
+        localFixture.detectChanges();
+        // Wait for report to arrive (ngOnInit subscribes), then set form values and trigger:
+        c.modernization.setValue(4);
+        c.repair.setValue(14);
+        c.download('excel');
+        expect(gesReportServiceSpy.exportReport).toHaveBeenCalledWith({
+            date: '2026-04-17', format: 'excel', modernization: 4, repair: 14
+        });
+    });
+
+    it('toasts translated error when backend returns 400 reserve-negative', (done) => {
+        authSpy.isScOrRais.and.returnValue(true);
+        const errBody = new Blob([JSON.stringify({ message: 'reserve aggregates cannot be negative' })], { type: 'application/json' });
+        gesReportServiceSpy.exportReport.and.returnValue(throwError(() => new HttpErrorResponse({ status: 400, error: errBody })));
+        gesReportServiceSpy.getReport.and.returnValue(of({ date: '2026-04-17', cascades: [], grand_total: {} as any }));
+        const fixture = TestBed.createComponent(ReportTabComponent);
+        fixture.detectChanges();
+        fixture.componentInstance.download('excel');
+        // Wait for the async Blob.text() microtask chain to settle.
+        setTimeout(() => {
+            expect(messageServiceSpy.add).toHaveBeenCalledWith(jasmine.objectContaining({ severity: 'error' }));
+            done();
+        }, 50);
+    });
 });

@@ -2,7 +2,7 @@
     <p-inputNumber
         [(ngModel)]="selectedYear"
         [showButtons]="true"
-        [min]="2000"
+        [min]="2020"
         [max]="2100"
         [useGrouping]="false"
         (ngModelChange)="onYearChange()"
@@ -49,6 +49,7 @@
                 <td *ngFor="let key of monthKeys; let i = index" style="padding: 4px 8px">
                     <p-inputNumber
                         [(ngModel)]="item.row.months[i]"
+                        [min]="0"
                         [minFractionDigits]="0"
                         [maxFractionDigits]="3"
                         [useGrouping]="false"

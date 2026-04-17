@@ -166,6 +166,7 @@
     "MODSNOW": "MODSNOW",
     "FILTRATION_SETTINGS": "Филтрация созламалари",
     "FILTRATION": "Филтрация",
+    "CASCADE_REPORT": "ГЭС каскад ҳисоботи",
     "FILTRATION_COMPARISON": "Солиштирма жадвал",
     "MANUAL_COMPARISON_ENTRY": "Қўлда маълумот киритиш",
     "OTHER_INFO": "Бошқа маълумотлар",
@@ -249,7 +250,11 @@
     "INFRA_EVENTS": "Инфратузилма"
   },
   "GES_REPORT": {
-    "BATCH_FAILED_AT": "{{station}} станциясида хатолик"
+    "BATCH_FAILED_AT": "{{station}} станциясида хатолик",
+    "DOWNLOAD_PDF": "PDF юклаб олиш",
+    "MODERNIZATION": "Модернизация",
+    "REPAIR": "Таъмирлаш",
+    "NEGATIVE_RESERVE_ERROR": "Захирадаги агрегатлар сони манфий бўлиши мумкин эмас. «Модернизация» ва «Таъмирлаш» майдонларини текширинг."
   },
   "FILTRATION": {
     "TITLE": "Филтрация",

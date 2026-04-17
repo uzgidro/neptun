@@ -166,6 +166,7 @@
     "MODSNOW": "MODSNOW",
     "FILTRATION_SETTINGS": "Filtration Settings",
     "FILTRATION": "Filtration",
+    "CASCADE_REPORT": "Cascade GES report",
     "FILTRATION_COMPARISON": "Comparison Table",
     "MANUAL_COMPARISON_ENTRY": "Manual Data Entry",
     "OTHER_INFO": "Other Information",
@@ -249,7 +250,11 @@
     "INFRA_EVENTS": "Infrastructure"
   },
   "GES_REPORT": {
-    "BATCH_FAILED_AT": "Batch failed at station {{station}}"
+    "BATCH_FAILED_AT": "Batch failed at station {{station}}",
+    "DOWNLOAD_PDF": "Download PDF",
+    "MODERNIZATION": "Modernization",
+    "REPAIR": "Repair",
+    "NEGATIVE_RESERVE_ERROR": "Reserve aggregates cannot be negative. Check the Modernization and Repair fields."
   },
   "FILTRATION": {
     "TITLE": "Filtration",
