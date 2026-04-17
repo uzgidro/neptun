@@ -35,6 +35,13 @@ export const raisGuard: CanActivateFn = (): boolean | UrlTree => {
     return authService.hasRole(['sc', 'assistant', 'rais', 'investment', 'chancellery']) ? true : router.createUrlTree(['/notfound']);
 }
 
+export const gesReportGuard: CanActivateFn = (): boolean | UrlTree => {
+    const authService = inject(AuthService);
+    const router = inject(Router);
+
+    return authService.hasRole(['sc', 'rais', 'cascade']) ? true : router.createUrlTree(['/notfound']);
+}
+
 export const hrmGuard: CanActivateFn = (): boolean | UrlTree => {
     const authService = inject(AuthService);
     const router = inject(Router);
