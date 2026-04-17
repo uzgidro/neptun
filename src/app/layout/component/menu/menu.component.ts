@@ -250,6 +250,7 @@ export class MenuComponent implements OnInit {
                         ]
                     },
                     { label: this.t('MENU.FILTRATION'), role: ['reservoir'], routerLink: ['/manual-comparison-entry'] },
+                    { label: this.t('MENU.CASCADE_REPORT'), role: ['cascade'], routerLink: ['/ges-daily-report'] },
                     { label: this.t('MENU.CALLS'), role: ['rais'], routerLink: ['/calls'] },
                     { label: this.t('MENU.PRESS_SERVICE'), routerLink: ['/uzgidro-news'] }
                 ]
