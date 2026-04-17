@@ -7,13 +7,15 @@
             [showIcon]="true"
             (onSelect)="onDateChange($event)"
         />
-        <p-button
-            icon="pi pi-file-excel"
-            [label]="'GES_REPORT.DOWNLOAD_EXCEL' | translate"
-            severity="success"
-            [disabled]="!report || loading"
-            (onClick)="downloadExcel()"
-        />
+        @if (canExport) {
+            <p-button
+                icon="pi pi-file-excel"
+                [label]="'GES_REPORT.DOWNLOAD_EXCEL' | translate"
+                severity="success"
+                [disabled]="!report || loading"
+                (onClick)="downloadExcel()"
+            />
+        }
         @if (loading) {
             <i class="pi pi-spin pi-spinner text-xl"></i>
         }
