@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { HttpParams } from '@angular/common/http';
+import { HttpParams, HttpResponse } from '@angular/common/http';
 import { ApiService } from './api.service';
 import {
     GesConfigPayload, GesConfigResponse,
@@ -66,5 +66,21 @@ export class GesReportService extends ApiService {
     getReport(date: string): Observable<GesDailyReport> {
         const params = new HttpParams().set('date', date);
         return this.http.get<GesDailyReport>(`${this.BASE_URL}${GES_REPORT}`, { params });
+    }
+
+    exportReport(opts: {
+        date: string;
+        format: 'excel' | 'pdf';
+        modernization: number;
+        repair: number;
+    }): Observable<HttpResponse<Blob>> {
+        const params = new HttpParams()
+            .set('date', opts.date)
+            .set('format', opts.format)
+            .set('modernization', opts.modernization)
+            .set('repair', opts.repair);
+        return this.http.get(`${this.BASE_URL}${GES_REPORT}/export`, {
+            params, responseType: 'blob', observe: 'response'
+        });
     }
 }
