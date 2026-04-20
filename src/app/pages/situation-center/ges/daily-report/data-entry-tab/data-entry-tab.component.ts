@@ -155,9 +155,27 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
         this.loadData();
     }
 
+    sumAggregates(row: DataEntryRow): number {
+        const v = (name: string) => Number(row.form.get(name)?.value ?? 0) || 0;
+        return v('working_aggregates') + v('repair_aggregates') + v('modernization_aggregates');
+    }
+
+    sumExceedsTotal(row: DataEntryRow): boolean {
+        return this.sumAggregates(row) > row.config.total_aggregates;
+    }
+
     saveAll(): void {
         const dirtyRows = this.rows.filter(r => r.dirty);
         if (!dirtyRows.length) return;
+
+        if (dirtyRows.some(r => this.sumExceedsTotal(r))) {
+            this.messageService.add({
+                severity: 'error',
+                summary: this.translate.instant('COMMON.ERROR'),
+                detail: this.translate.instant('GES_REPORT.AGGREGATES_SUM_EXCEEDS_TOTAL')
+            });
+            return;
+        }
 
         const pairs = dirtyRows
             .map(row => ({ row, payload: this.buildPayload(row) }))
@@ -187,13 +205,16 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
             error: (err) => {
                 this.savingAll = false;
                 const idx = err?.error?.item_index;
+                const msg = err?.error?.message ?? '';
                 let detail: string;
                 if (typeof idx === 'number' && pairs[idx]) {
                     detail = this.translate.instant('GES_REPORT.BATCH_FAILED_AT', {
                         station: pairs[idx].row.config.organization_name
                     });
+                } else if (msg.includes('aggregates sum exceeds total')) {
+                    detail = this.translate.instant('GES_REPORT.AGGREGATES_SUM_EXCEEDS_TOTAL');
                 } else {
-                    detail = err?.error?.message ?? err?.message ?? '';
+                    detail = msg || err?.message || '';
                 }
                 this.messageService.add({
                     severity: 'error',
@@ -205,6 +226,14 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
     }
 
     saveRow(row: DataEntryRow): void {
+        if (this.sumExceedsTotal(row)) {
+            this.messageService.add({
+                severity: 'error',
+                summary: this.translate.instant('COMMON.ERROR'),
+                detail: this.translate.instant('GES_REPORT.AGGREGATES_SUM_EXCEEDS_TOTAL')
+            });
+            return;
+        }
         const payload = this.buildPayload(row);
         if (Object.keys(payload).length <= 2) {
             row.form.markAsPristine();
@@ -225,10 +254,14 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
             },
             error: (err) => {
                 row.saving = false;
+                const msg = err?.error?.message ?? '';
+                const detail = msg.includes('aggregates sum exceeds total')
+                    ? this.translate.instant('GES_REPORT.AGGREGATES_SUM_EXCEEDS_TOTAL')
+                    : (msg || err?.message || '');
                 this.messageService.add({
                     severity: 'error',
                     summary: this.translate.instant('COMMON.ERROR'),
-                    detail: err?.error?.message ?? err?.message ?? ''
+                    detail
                 });
             }
         });
@@ -281,6 +314,8 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
         return this.fb.group({
             daily_production_mln_kwh: [data?.daily_production_mln_kwh ?? null],
             working_aggregates: [data?.working_aggregates ?? null],
+            repair_aggregates: [data?.repair_aggregates ?? null],
+            modernization_aggregates: [data?.modernization_aggregates ?? null],
             water_level_m: [data?.water_level_m ?? null],
             water_volume_mln_m3: [data?.water_volume_mln_m3 ?? null],
             water_head_m: [data?.water_head_m ?? null],
@@ -298,6 +333,8 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
         const fields: (keyof GesDailyDataPayload)[] = [
             'daily_production_mln_kwh',
             'working_aggregates',
+            'repair_aggregates',
+            'modernization_aggregates',
             'water_level_m',
             'water_volume_mln_m3',
             'water_head_m',
