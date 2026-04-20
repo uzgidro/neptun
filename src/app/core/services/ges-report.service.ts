@@ -71,14 +71,10 @@ export class GesReportService extends ApiService {
     exportReport(opts: {
         date: string;
         format: 'excel' | 'pdf';
-        modernization: number;
-        repair: number;
     }): Observable<HttpResponse<Blob>> {
         const params = new HttpParams()
             .set('date', opts.date)
-            .set('format', opts.format)
-            .set('modernization', opts.modernization)
-            .set('repair', opts.repair);
+            .set('format', opts.format);
         return this.http.get(`${this.BASE_URL}${GES_REPORT}/export`, {
             params, responseType: 'blob', observe: 'response'
         });
