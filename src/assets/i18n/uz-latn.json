@@ -247,7 +247,9 @@
     "JOINT_AGREEMENTS": "Qo'shma kelishuvlar (NDA)",
     "OTHER_DOCS": "Boshqa hujjatlar",
     "SNOW_COVER": "MODSNOW",
-    "INFRA_EVENTS": "Infratuzilma"
+    "INFRA_EVENTS": "Infratuzilma",
+    "GES_DAILY_REPORT": "Kunlik hisobot",
+    "ORGANIZATION_TYPES": "Tashkilot turlari"
   },
   "GES_REPORT": {
     "BATCH_FAILED_AT": "{{station}} stantsiyasida xatolik",
@@ -549,7 +551,23 @@
       "ERROR_CREATE": "Tashkilotni yaratib bo'lmadi",
       "ERROR_UPDATE": "Tashkilotni yangilab bo'lmadi",
       "ERROR_DELETE": "Tashkilotni o'chirib bo'lmadi",
-      "SELF_PARENT_WARNING": "Tashkilot o'ziga asosiy bo'lolmaydi"
+      "SELF_PARENT_WARNING": "Tashkilot o'ziga asosiy bo'lolmaydi",
+      "NAME": "Nomi",
+      "TYPES": "Turlar"
+    },
+    "ORGANIZATION_TYPES": {
+      "TITLE": "Tashkilot turlari",
+      "DESCRIPTION": "Tavsif",
+      "NAME": "Nomi",
+      "NAME_REQUIRED": "Nomi talab qilinadi",
+      "NEW_TYPE": "Yangi tur",
+      "NOTHING_FOUND": "Hech narsa topilmadi",
+      "LOADING": "Yuklanmoqda. Kuting...",
+      "DELETE_CONFIRM": "Tashkilot turini o'chirishni xohlaysizmi?",
+      "ERROR_CREATE": "Tashkilot turini yaratib bo'lmadi",
+      "ERROR_DELETE": "Tashkilot turini o'chirib bo'lmadi",
+      "SUCCESS_CREATED": "Tashkilot turi muvaffaqiyatli yaratildi",
+      "SUCCESS_DELETED": "Tashkilot turi muvaffaqiyatli o'chirildi"
     },
     "BIRTHDAYS": {
       "TITLE": "Xodimlar tug'ilgan kunlari",
