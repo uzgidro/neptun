@@ -33,8 +33,8 @@ describe('InfraEventsComponent', () => {
         authService = jasmine.createSpyObj('AuthService', ['isSc']);
         authService.isSc.and.returnValue(true);
 
-        const orgSpy = jasmine.createSpyObj('OrganizationService', ['getCascades']);
-        orgSpy.getCascades.and.returnValue(of([]));
+        const orgSpy = jasmine.createSpyObj('OrganizationService', ['getOrganizationsFlat']);
+        orgSpy.getOrganizationsFlat.and.returnValue(of([]));
 
         await TestBed.configureTestingModule({
             imports: [InfraEventsComponent, TranslateModule.forRoot()],
