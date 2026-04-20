@@ -35,7 +35,7 @@ const mockEvent: InfraEvent = {
 };
 
 const mockOrganizations = [
-    { label: 'Cascade 1', items: [{ id: 42, name: 'GES-34' }] }
+    { id: 42, name: 'GES-34' }
 ];
 
 describe('EventTableComponent', () => {
@@ -54,8 +54,8 @@ describe('EventTableComponent', () => {
 
         apiService = jasmine.createSpyObj('ApiService', ['uploadFiles']);
 
-        const orgSpy = jasmine.createSpyObj('OrganizationService', ['getCascades']);
-        orgSpy.getCascades.and.returnValue(of(mockOrganizations));
+        const orgSpy = jasmine.createSpyObj('OrganizationService', ['getOrganizationsFlat']);
+        orgSpy.getOrganizationsFlat.and.returnValue(of(mockOrganizations));
 
         authService = jasmine.createSpyObj('AuthService', ['isSc']);
         authService.isSc.and.returnValue(true);
