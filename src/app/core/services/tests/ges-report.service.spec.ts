@@ -161,7 +161,9 @@ describe('GesReportService', () => {
                 date: '2026-03-13', cascades: [],
                 grand_total: {
                     installed_capacity_mwt: 100, total_aggregates: 10,
-                    working_aggregates: 8, power_mwt: 50,
+                    working_aggregates: 8, repair_aggregates: 0,
+                    modernization_aggregates: 0, reserve_aggregates: 2,
+                    power_mwt: 50,
                     daily_production_mln_kwh: 1.2, production_change_mln_kwh: 0.1,
                     mtd_production_mln_kwh: 15, ytd_production_mln_kwh: 150,
                     monthly_plan_mln_kwh: 50, quarterly_plan_mln_kwh: 150,
