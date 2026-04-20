@@ -247,7 +247,9 @@
     "INCIDENTS": "Incidents",
     "VISITS": "Visits",
     "SNOW_COVER": "MODSNOW",
-    "INFRA_EVENTS": "Infrastructure"
+    "INFRA_EVENTS": "Infrastructure",
+    "GES_DAILY_REPORT": "Daily report",
+    "ORGANIZATION_TYPES": "Organization Types"
   },
   "GES_REPORT": {
     "BATCH_FAILED_AT": "Batch failed at station {{station}}",
@@ -549,7 +551,23 @@
       "ERROR_CREATE": "Failed to create organization",
       "ERROR_UPDATE": "Failed to update organization",
       "ERROR_DELETE": "Failed to delete organization",
-      "SELF_PARENT_WARNING": "Organization cannot be its own parent"
+      "SELF_PARENT_WARNING": "Organization cannot be its own parent",
+      "NAME": "Name",
+      "TYPES": "Types"
+    },
+    "ORGANIZATION_TYPES": {
+      "TITLE": "Organization Types",
+      "DESCRIPTION": "Description",
+      "NAME": "Name",
+      "NAME_REQUIRED": "Name is required",
+      "NEW_TYPE": "New type",
+      "NOTHING_FOUND": "Nothing found",
+      "LOADING": "Loading. Please wait...",
+      "DELETE_CONFIRM": "Are you sure you want to delete the organization type",
+      "ERROR_CREATE": "Failed to create organization type",
+      "ERROR_DELETE": "Failed to delete organization type",
+      "SUCCESS_CREATED": "Organization type created successfully",
+      "SUCCESS_DELETED": "Organization type deleted successfully"
     },
     "BIRTHDAYS": {
       "TITLE": "Employee Birthdays",
