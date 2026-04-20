@@ -6,7 +6,6 @@ import { AuthService } from '@/core/services/auth.service';
 import { ConfigTabComponent } from './config-tab/config-tab.component';
 import { DataEntryTabComponent } from './data-entry-tab/data-entry-tab.component';
 import { PlansTabComponent } from './plans-tab/plans-tab.component';
-import { ReportTabComponent } from './report-tab/report-tab.component';
 import { HasUnsavedChanges } from '@/core/guards/auth.guard';
 
 interface TabDef {
@@ -23,8 +22,7 @@ interface TabDef {
         Tabs, TabList, Tab, TabPanels, TabPanel,
         ConfigTabComponent,
         DataEntryTabComponent,
-        PlansTabComponent,
-        ReportTabComponent
+        PlansTabComponent
     ],
     templateUrl: './daily-report.component.html'
 })
@@ -40,8 +38,7 @@ export class DailyReportComponent implements HasUnsavedChanges, OnInit {
     allTabs: TabDef[] = [
         { key: 'config', label: 'GES_REPORT.CONFIG', requiresScRais: true },
         { key: 'data-entry', label: 'GES_REPORT.DATA_ENTRY' },
-        { key: 'plans', label: 'GES_REPORT.PLANS', requiresScRais: true },
-        { key: 'report', label: 'GES_REPORT.REPORT' }
+        { key: 'plans', label: 'GES_REPORT.PLANS', requiresScRais: true }
     ];
 
     get tabs(): TabDef[] {

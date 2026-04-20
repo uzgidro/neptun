@@ -1,6 +1,7 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { forkJoin, of, Subject } from 'rxjs';
 import { catchError, takeUntil } from 'rxjs/operators';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -14,8 +15,10 @@ import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
 import { GesReportService } from '@/core/services/ges-report.service';
 import { TimeService } from '@/core/services/time.service';
+import { AuthService } from '@/core/services/auth.service';
 import { GesConfigResponse, GesCascadeConfig, GesDailyData, GesDailyDataPayload, ReportIdleDischarge, ReportWeather } from '@/core/interfaces/ges-report';
 import { HasUnsavedChanges } from '@/core/guards/auth.guard';
+import { downloadBlob } from '@/core/utils/download';
 import { CascadeWeatherComponent } from '../shared/cascade-weather.component';
 
 export class DataEntryRow {
@@ -67,6 +70,7 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
     private fb = inject(FormBuilder);
     private messageService = inject(MessageService);
     private translate = inject(TranslateService);
+    private authService = inject(AuthService);
     private destroy$ = new Subject<void>();
 
     selectedDate: Date = new Date();
@@ -76,6 +80,8 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
     collapsedCascades = new Set<number>();
     loading = false;
     savingAll = false;
+    canExport = this.authService.isScOrRais();
+    downloading: 'excel' | 'pdf' | null = null;
 
     ngOnInit(): void {
         this.loadData();
@@ -84,6 +90,46 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
     ngOnDestroy(): void {
         this.destroy$.next();
         this.destroy$.complete();
+    }
+
+    download(format: 'excel' | 'pdf'): void {
+        if (this.downloading) return;
+        const date = this.timeService.dateToYMD(this.selectedDate);
+        this.downloading = format;
+        this.gesReportService.exportReport({ date, format }).pipe(
+            takeUntil(this.destroy$)
+        ).subscribe({
+            next: (response) => {
+                const ext = format === 'pdf' ? 'pdf' : 'xlsx';
+                const filename = this.parseFilename(response) ?? `GES-${date}.${ext}`;
+                downloadBlob(response.body!, filename);
+                this.downloading = null;
+            },
+            error: (err) => { this.downloading = null; this.handleExportError(err); }
+        });
+    }
+
+    private async handleExportError(err: HttpErrorResponse): Promise<void> {
+        let detail = this.translate.instant('ERRORS.BAD_REQUEST');
+        if (err.status === 400 && err.error instanceof Blob) {
+            try {
+                const body = JSON.parse(await err.error.text()) as { message?: string };
+                if (body.message) detail = body.message;
+            } catch {
+                /* keep fallback */
+            }
+        }
+        this.messageService.add({
+            severity: 'error',
+            summary: this.translate.instant('COMMON.ERROR'),
+            detail
+        });
+    }
+
+    private parseFilename(response: HttpResponse<Blob>): string | null {
+        const cd = response.headers.get('Content-Disposition');
+        const m = cd?.match(/filename="([^"]+)"/);
+        return m ? m[1] : null;
     }
 
     loadData(): void {

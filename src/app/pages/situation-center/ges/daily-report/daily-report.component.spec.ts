@@ -62,12 +62,11 @@ describe('DailyReportComponent', () => {
         expect(keys).not.toContain('config');
         expect(keys).not.toContain('plans');
         expect(keys).toContain('data-entry');
-        expect(keys).toContain('report');
     });
 
     it('shows all tabs for sc/rais user', async () => {
         await createComponent(true);
         const keys = component.tabs.map(t => t.key);
-        expect(keys).toEqual(['config', 'data-entry', 'plans', 'report']);
+        expect(keys).toEqual(['config', 'data-entry', 'plans']);
     });
 });
