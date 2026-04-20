@@ -14,7 +14,6 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
 import { TextareaComponent } from '@/layout/component/dialog/textarea/textarea.component';
-import { GroupSelectComponent } from '@/layout/component/dialog/group-select/group-select.component';
 import { FileUploadComponent } from '@/layout/component/dialog/file-upload/file-upload.component';
 import { FileViewerComponent } from '@/layout/component/dialog/file-viewer/file-viewer.component';
 import { FileListComponent } from '@/layout/component/dialog/file-list/file-list.component';
@@ -44,7 +43,6 @@ import { Organization } from '@/core/interfaces/organizations';
         DialogComponent,
         DatePickerComponent,
         TextareaComponent,
-        GroupSelectComponent,
         FileUploadComponent,
         FileViewerComponent,
         FileListComponent,
@@ -123,7 +121,7 @@ export class EventTableComponent implements OnInit, OnChanges, OnDestroy {
     private loadOrganizations(): void {
         this.orgsLoading = true;
         this.organizationService
-            .getCascades()
+            .getOrganizationsFlat()
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (data) => (this.organizations = data),
@@ -155,14 +153,7 @@ export class EventTableComponent implements OnInit, OnChanges, OnDestroy {
         this.existingFilesToKeep = event.files?.map((f) => f.id) || [];
         this.filesDirty = false;
 
-        let organizationToSet: any = null;
-        for (const cascade of this.organizations) {
-            const foundOrg = cascade.items?.find((org: any) => org.id === event.organization_id);
-            if (foundOrg) {
-                organizationToSet = foundOrg;
-                break;
-            }
-        }
+        const organizationToSet = this.organizations.find((org: any) => org.id === event.organization_id) ?? null;
 
         const categoryToSet = this.categories.find((c) => c.id === event.category_id) || this.category;
 
