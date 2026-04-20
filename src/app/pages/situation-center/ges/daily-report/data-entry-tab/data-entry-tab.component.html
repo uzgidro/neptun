@@ -16,6 +16,25 @@
             [disabled]="savingAll || !rows.length"
             (onClick)="saveAll()">
         </p-button>
+
+        @if (canExport) {
+            <p-button
+                [label]="'GES_REPORT.DOWNLOAD_EXCEL' | translate"
+                icon="pi pi-file-excel"
+                severity="success"
+                [disabled]="downloading !== null"
+                [loading]="downloading === 'excel'"
+                (onClick)="download('excel')">
+            </p-button>
+            <p-button
+                [label]="'GES_REPORT.DOWNLOAD_PDF' | translate"
+                icon="pi pi-file-pdf"
+                severity="danger"
+                [disabled]="downloading !== null"
+                [loading]="downloading === 'pdf'"
+                (onClick)="download('pdf')">
+            </p-button>
+        }
     </div>
 
     @if (loading) {
