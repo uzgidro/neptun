@@ -47,7 +47,8 @@ function makeStation(orgId: number, name: string): ReportStation {
             mtd_production_mln_kwh: 40, ytd_production_mln_kwh: 310
         },
         yoy: { growth_rate: -0.0968, difference_mln_kwh: -30 },
-        idle_discharge: null
+        idle_discharge: null,
+        previous_day: null
     };
 }
 
