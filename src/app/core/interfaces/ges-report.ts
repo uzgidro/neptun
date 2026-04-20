@@ -44,6 +44,8 @@ export interface GesDailyDataPayload {
     date: string;
     daily_production_mln_kwh?: number | null;
     working_aggregates?: number | null;
+    repair_aggregates?: number | null;
+    modernization_aggregates?: number | null;
     water_level_m?: number | null;
     water_volume_mln_m3?: number | null;
     water_head_m?: number | null;
@@ -113,6 +115,9 @@ export interface ReportCurrent {
     daily_production_mln_kwh: number;
     power_mwt: number;
     working_aggregates: number;
+    repair_aggregates: number;
+    modernization_aggregates: number;
+    reserve_aggregates: number;
     water_level_m: number | null;
     water_volume_mln_m3: number | null;
     water_head_m: number | null;
@@ -171,6 +176,9 @@ export interface ReportGrandTotal {
     installed_capacity_mwt: number;
     total_aggregates: number;
     working_aggregates: number;
+    repair_aggregates: number;
+    modernization_aggregates: number;
+    reserve_aggregates: number;
     power_mwt: number;
     daily_production_mln_kwh: number;
     production_change_mln_kwh: number;
