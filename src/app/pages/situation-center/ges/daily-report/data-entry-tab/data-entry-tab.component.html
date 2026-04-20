@@ -49,6 +49,8 @@
                             <th class="text-left text-xs text-color-secondary font-normal px-2 pb-1 whitespace-nowrap">{{ 'GES_REPORT.STATION' | translate }}</th>
                             <th class="text-left text-xs text-color-secondary font-normal px-2 pb-1">{{ 'GES_REPORT.PRODUCTION' | translate }}</th>
                             <th class="text-left text-xs text-color-secondary font-normal px-2 pb-1">{{ 'GES_REPORT.WORKING_AGGREGATES' | translate }}</th>
+                            <th class="text-left text-xs text-color-secondary font-normal px-2 pb-1">{{ 'GES_REPORT.REPAIR_AGGREGATES' | translate }}</th>
+                            <th class="text-left text-xs text-color-secondary font-normal px-2 pb-1">{{ 'GES_REPORT.MODERNIZATION_AGGREGATES' | translate }}</th>
                             <th class="text-left text-xs text-color-secondary font-normal px-2 pb-1">{{ 'GES_REPORT.WATER_HEAD' | translate }}</th>
                             <th class="text-left text-xs text-color-secondary font-normal px-2 pb-1">{{ 'GES_REPORT.RESERVOIR_INCOME' | translate }}</th>
                             <th class="text-left text-xs text-color-secondary font-normal px-2 pb-1">{{ 'GES_REPORT.TOTAL_OUTFLOW' | translate }}</th>
@@ -61,7 +63,7 @@
                     </thead>
                     <tbody>
                         @for (row of group.rows; track row.config.organization_id) {
-                        <tr [formGroup]="row.form" class="border-t border-surface">
+                        <tr [formGroup]="row.form" class="border-t border-surface" [class.sum-overflow]="sumExceedsTotal(row)">
                             <td class="px-2 py-2 whitespace-nowrap align-middle">
                                 <div class="flex flex-col">
                                     <span class="font-semibold text-sm">{{ row.config.organization_name }}</span>
@@ -83,6 +85,28 @@
                                     formControlName="working_aggregates"
                                     [min]="0"
                                     [max]="row.config.total_aggregates"
+                                    [minFractionDigits]="0"
+                                    [maxFractionDigits]="0"
+                                    [useGrouping]="false"
+                                    styleClass="w-full"
+                                    inputStyleClass="w-full">
+                                </p-inputNumber>
+                            </td>
+                            <td class="px-2 py-2 align-middle">
+                                <p-inputNumber
+                                    formControlName="repair_aggregates"
+                                    [min]="0"
+                                    [minFractionDigits]="0"
+                                    [maxFractionDigits]="0"
+                                    [useGrouping]="false"
+                                    styleClass="w-full"
+                                    inputStyleClass="w-full">
+                                </p-inputNumber>
+                            </td>
+                            <td class="px-2 py-2 align-middle">
+                                <p-inputNumber
+                                    formControlName="modernization_aggregates"
+                                    [min]="0"
                                     [minFractionDigits]="0"
                                     [maxFractionDigits]="0"
                                     [useGrouping]="false"
@@ -180,6 +204,16 @@
                                 </div>
                             </td>
                         </tr>
+                        @if (sumExceedsTotal(row)) {
+                        <tr class="sum-overflow-warn">
+                            <td [attr.colspan]="13">
+                                <small class="text-red-500 px-2">
+                                    {{ 'GES_REPORT.AGGREGATES_SUM_EXCEEDS_TOTAL' | translate }}
+                                    ({{ sumAggregates(row) }} > {{ row.config.total_aggregates }})
+                                </small>
+                            </td>
+                        </tr>
+                        }
                         }
                     </tbody>
                 </table>
@@ -188,3 +222,7 @@
         }
     }
 </div>
+
+<style>
+    tr.sum-overflow td { background-color: var(--p-red-50, #fef2f2); }
+</style>

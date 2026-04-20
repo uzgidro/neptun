@@ -21,6 +21,7 @@ function makeConfig(orgId: number, name: string, hasReservoir = true): GesConfig
 function makeGrandTotal(): ReportGrandTotal {
     return {
         installed_capacity_mwt: 100, total_aggregates: 10, working_aggregates: 8,
+        repair_aggregates: 0, modernization_aggregates: 0, reserve_aggregates: 2,
         power_mwt: 50, daily_production_mln_kwh: 1.2, production_change_mln_kwh: 0.1,
         mtd_production_mln_kwh: 15, ytd_production_mln_kwh: 150,
         monthly_plan_mln_kwh: 50, quarterly_plan_mln_kwh: 150,
@@ -328,5 +329,61 @@ describe('DataEntryTabComponent', () => {
         const imgs = fixture.nativeElement.querySelectorAll('img') as NodeListOf<HTMLImageElement>;
         const owmImgs = Array.from(imgs).filter(img => img.src.includes('openweathermap.org'));
         expect(owmImgs.length).toBe(0);
+    }));
+
+    it('buildPayload includes repair_aggregates and modernization_aggregates when dirty', fakeAsync(() => {
+        const configs = [makeConfig(10, 'ГЭС-1')];
+        gesReportService.getConfigs.and.returnValue(of(configs));
+        gesReportService.getDailyData.and.returnValue(throwError(() => ({ status: 404 })));
+        fixture.detectChanges();
+        tick();
+        const row = component.rows[0];
+        row.form.get('repair_aggregates')!.setValue(2);
+        row.form.get('repair_aggregates')!.markAsDirty();
+        const payload = (component as unknown as { buildPayload: (r: typeof row) => Record<string, unknown> }).buildPayload(row);
+        expect(payload['repair_aggregates']).toBe(2);
+    }));
+
+    it('blocks save when working + repair + modernization > total_aggregates', fakeAsync(() => {
+        const configs = [makeConfig(10, 'ГЭС-1')];
+        gesReportService.getConfigs.and.returnValue(of(configs));
+        gesReportService.getDailyData.and.returnValue(throwError(() => ({ status: 404 })));
+        gesReportService.upsertDailyData.and.returnValue(of({ status: 'OK' }));
+        fixture.detectChanges();
+        tick();
+        const row = component.rows[0];
+        row.config.total_aggregates = 4;
+        row.form.patchValue({ working_aggregates: 3, repair_aggregates: 1, modernization_aggregates: 1 });
+        row.form.markAsDirty();
+        row.form.get('working_aggregates')!.markAsDirty();
+        const messageService = TestBed.inject(MessageService);
+        const addSpy = spyOn(messageService, 'add');
+        component.saveRow(row);
+        tick();
+        expect(gesReportService.upsertDailyData).not.toHaveBeenCalled();
+        expect(addSpy).toHaveBeenCalledWith(jasmine.objectContaining({ severity: 'error' }));
+    }));
+
+    it('surfaces 400 aggregates sum exceeds total error from backend', fakeAsync(() => {
+        const configs = [makeConfig(10, 'ГЭС-1')];
+        gesReportService.getConfigs.and.returnValue(of(configs));
+        gesReportService.getDailyData.and.returnValue(throwError(() => ({ status: 404 })));
+        gesReportService.upsertDailyData.and.returnValue(
+            throwError(() => ({ status: 400, error: { message: 'aggregates sum exceeds total for organization_id=10: 4+2+1=7 > 6' } }))
+        );
+        fixture.detectChanges();
+        tick();
+        const row = component.rows[0];
+        row.config.total_aggregates = 10; // so client-side guard passes
+        row.form.patchValue({ working_aggregates: 1 });
+        row.form.get('working_aggregates')!.markAsDirty();
+        row.form.markAsDirty();
+        const messageService = TestBed.inject(MessageService);
+        const addSpy = spyOn(messageService, 'add');
+        component.saveRow(row);
+        tick();
+        expect(addSpy).toHaveBeenCalledWith(jasmine.objectContaining({
+            severity: 'error'
+        }));
     }));
 });

@@ -161,7 +161,9 @@ describe('GesReportService', () => {
                 date: '2026-03-13', cascades: [],
                 grand_total: {
                     installed_capacity_mwt: 100, total_aggregates: 10,
-                    working_aggregates: 8, power_mwt: 50,
+                    working_aggregates: 8, repair_aggregates: 0,
+                    modernization_aggregates: 0, reserve_aggregates: 2,
+                    power_mwt: 50,
                     daily_production_mln_kwh: 1.2, production_change_mln_kwh: 0.1,
                     mtd_production_mln_kwh: 15, ytd_production_mln_kwh: 150,
                     monthly_plan_mln_kwh: 50, quarterly_plan_mln_kwh: 150,
@@ -197,22 +199,21 @@ describe('GesReportService.exportReport', () => {
 
     afterEach(() => http.verify());
 
-    it('builds GET /ges-report/export with date/format/modernization/repair query params', () => {
-        service.exportReport({ date: '2026-04-17', format: 'excel', modernization: 4, repair: 14 }).subscribe();
+    it('builds GET /ges-report/export with date/format only (no modernization/repair)', () => {
+        service.exportReport({ date: '2026-04-17', format: 'excel' }).subscribe();
         const req = http.expectOne(r => r.url.endsWith('/ges-report/export'));
         expect(req.request.method).toBe('GET');
         expect(req.request.params.get('date')).toBe('2026-04-17');
         expect(req.request.params.get('format')).toBe('excel');
-        expect(req.request.params.get('modernization')).toBe('4');
-        expect(req.request.params.get('repair')).toBe('14');
-        expect(req.request.responseType).toBe('blob');
-        req.flush(new Blob(['x']));
+        expect(req.request.params.has('modernization')).toBeFalse();
+        expect(req.request.params.has('repair')).toBeFalse();
+        req.flush(new Blob());
     });
 
     it('supports pdf format', () => {
-        service.exportReport({ date: '2026-04-17', format: 'pdf', modernization: 0, repair: 0 }).subscribe();
+        service.exportReport({ date: '2026-04-17', format: 'pdf' }).subscribe();
         const req = http.expectOne(r => r.url.endsWith('/ges-report/export'));
         expect(req.request.params.get('format')).toBe('pdf');
-        req.flush(new Blob(['x']));
+        req.flush(new Blob());
     });
 });

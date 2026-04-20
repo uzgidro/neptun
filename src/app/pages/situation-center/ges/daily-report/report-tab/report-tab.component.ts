@@ -1,6 +1,6 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
@@ -8,7 +8,6 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MessageService } from 'primeng/api';
 import { DatePicker } from 'primeng/datepicker';
 import { ButtonModule } from 'primeng/button';
-import { InputNumberModule } from 'primeng/inputnumber';
 import { GesReportService } from '@/core/services/ges-report.service';
 import { TimeService } from '@/core/services/time.service';
 import { AuthService } from '@/core/services/auth.service';
@@ -22,11 +21,9 @@ import { CascadeWeatherComponent } from '../shared/cascade-weather.component';
     imports: [
         CommonModule,
         FormsModule,
-        ReactiveFormsModule,
         TranslateModule,
         DatePicker,
         ButtonModule,
-        InputNumberModule,
         CascadeWeatherComponent
     ],
     templateUrl: './report-tab.component.html'
@@ -44,8 +41,6 @@ export class ReportTabComponent implements OnInit, OnDestroy {
     loading = false;
     canExport = this.authService.isScOrRais();
 
-    modernization = new FormControl<number>(0, { nonNullable: true });
-    repair = new FormControl<number>(0, { nonNullable: true });
     downloading: 'excel' | 'pdf' | null = null;
 
     ngOnInit(): void {
@@ -90,9 +85,7 @@ export class ReportTabComponent implements OnInit, OnDestroy {
         const date = this.timeService.dateToYMD(this.selectedDate);
         this.downloading = format;
         this.gesReportService.exportReport({
-            date, format,
-            modernization: this.modernization.value ?? 0,
-            repair: this.repair.value ?? 0
+            date, format
         }).pipe(takeUntil(this.destroy$)).subscribe({
             next: (response) => {
                 const ext = format === 'pdf' ? 'pdf' : 'xlsx';
@@ -109,11 +102,7 @@ export class ReportTabComponent implements OnInit, OnDestroy {
         if (err.status === 400 && err.error instanceof Blob) {
             try {
                 const body = JSON.parse(await err.error.text()) as { message?: string };
-                if (body.message?.includes('reserve')) {
-                    detail = this.translate.instant('GES_REPORT.NEGATIVE_RESERVE_ERROR');
-                } else if (body.message) {
-                    detail = body.message;
-                }
+                if (body.message) detail = body.message;
             } catch {
                 /* keep fallback */
             }
