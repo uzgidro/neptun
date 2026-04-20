@@ -254,7 +254,10 @@
     "DOWNLOAD_PDF": "PDF yuklab olish",
     "MODERNIZATION": "Modernizatsiya",
     "REPAIR": "Ta'mirlash",
-    "NEGATIVE_RESERVE_ERROR": "Zahiradagi agregatlar soni manfiy bo'lishi mumkin emas. «Modernizatsiya» va «Ta'mirlash» maydonlarini tekshiring."
+    "REPAIR_AGGREGATES": "Ta'mirda",
+    "MODERNIZATION_AGGREGATES": "Modernizatsiyada",
+    "RESERVE_AGGREGATES": "Zahirada",
+    "AGGREGATES_SUM_EXCEEDS_TOTAL": "Agregatlar yig'indisi umumiy sondan oshib ketgan"
   },
   "FILTRATION": {
     "TITLE": "Filtratsiya",

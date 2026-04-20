@@ -254,7 +254,10 @@
     "DOWNLOAD_PDF": "PDF юклаб олиш",
     "MODERNIZATION": "Модернизация",
     "REPAIR": "Таъмирлаш",
-    "NEGATIVE_RESERVE_ERROR": "Захирадаги агрегатлар сони манфий бўлиши мумкин эмас. «Модернизация» ва «Таъмирлаш» майдонларини текширинг."
+    "REPAIR_AGGREGATES": "Таъмирда",
+    "MODERNIZATION_AGGREGATES": "Модернизацияда",
+    "RESERVE_AGGREGATES": "Заҳирада",
+    "AGGREGATES_SUM_EXCEEDS_TOTAL": "Агрегатлар йиғиндиси умумий сондан ошиб кетган"
   },
   "FILTRATION": {
     "TITLE": "Филтрация",
