@@ -254,7 +254,10 @@
     "DOWNLOAD_PDF": "Download PDF",
     "MODERNIZATION": "Modernization",
     "REPAIR": "Repair",
-    "NEGATIVE_RESERVE_ERROR": "Reserve aggregates cannot be negative. Check the Modernization and Repair fields."
+    "REPAIR_AGGREGATES": "Under repair",
+    "MODERNIZATION_AGGREGATES": "Modernization",
+    "RESERVE_AGGREGATES": "Reserve",
+    "AGGREGATES_SUM_EXCEEDS_TOTAL": "Aggregates sum exceeds total"
   },
   "FILTRATION": {
     "TITLE": "Filtration",
