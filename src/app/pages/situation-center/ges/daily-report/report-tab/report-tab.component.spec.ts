@@ -13,6 +13,7 @@ import { GesDailyReport, ReportStation, ReportGrandTotal, ReportWeather } from '
 function makeGrandTotal(): ReportGrandTotal {
     return {
         installed_capacity_mwt: 100, total_aggregates: 10, working_aggregates: 8,
+        repair_aggregates: 0, modernization_aggregates: 0, reserve_aggregates: 2,
         power_mwt: 50, daily_production_mln_kwh: 1.2, production_change_mln_kwh: 0.1,
         mtd_production_mln_kwh: 15, ytd_production_mln_kwh: 150,
         monthly_plan_mln_kwh: 50, quarterly_plan_mln_kwh: 150,
@@ -28,6 +29,7 @@ function makeStation(orgId: number, name: string): ReportStation {
         config: { installed_capacity_mwt: 50, total_aggregates: 4, has_reservoir: true },
         current: {
             daily_production_mln_kwh: 3.389, power_mwt: 141.208, working_aggregates: 3,
+            repair_aggregates: 0, modernization_aggregates: 0, reserve_aggregates: 1,
             water_level_m: 846.05, water_volume_mln_m3: 634, water_head_m: 104,
             reservoir_income_m3s: 85.5, total_outflow_m3s: 95, ges_flow_m3s: 85,
             idle_discharge_m3s: 10
@@ -75,13 +77,16 @@ function makeReport(weather: ReportWeather | null = makeWeather()): GesDailyRepo
 describe('ReportTabComponent', () => {
     let component: ReportTabComponent;
     let fixture: ComponentFixture<ReportTabComponent>;
+    let localFixture: ComponentFixture<ReportTabComponent>;
     let gesReportServiceSpy: jasmine.SpyObj<GesReportService>;
+    let exportSpy: jasmine.Spy;
     let authSpy: jasmine.SpyObj<AuthService>;
     let messageServiceSpy: jasmine.SpyObj<MessageService>;
 
     beforeEach(async () => {
         gesReportServiceSpy = jasmine.createSpyObj('GesReportService', ['getReport', 'exportReport']);
         gesReportServiceSpy.getReport.and.returnValue(of(makeReport()));
+        exportSpy = gesReportServiceSpy.exportReport;
         authSpy = jasmine.createSpyObj('AuthService', ['isScOrRais']);
         authSpy.isScOrRais.and.returnValue(true);
         messageServiceSpy = jasmine.createSpyObj('MessageService', ['add']);
@@ -196,33 +201,41 @@ describe('ReportTabComponent', () => {
         expect(srcs.some(s => s.includes('01d'))).toBeFalse();
     }));
 
-    it('renders modernization/repair inputs and two export buttons for sc/rais', () => {
+    it('download("excel") calls exportReport with just date/format', () => {
+        exportSpy.and.returnValue(of(new HttpResponse({ body: new Blob(), headers: new HttpHeaders() })));
         authSpy.isScOrRais.and.returnValue(true);
-        const localFixture = TestBed.createComponent(ReportTabComponent);
-        localFixture.detectChanges();
-        expect(localFixture.nativeElement.querySelector('[data-testid="modernization-input"]')).not.toBeNull();
-        expect(localFixture.nativeElement.querySelector('[data-testid="repair-input"]')).not.toBeNull();
-        expect(localFixture.nativeElement.querySelector('[data-testid="export-excel"]')).not.toBeNull();
-        expect(localFixture.nativeElement.querySelector('[data-testid="export-pdf"]')).not.toBeNull();
+        localFixture = TestBed.createComponent(ReportTabComponent);
+        const c = localFixture.componentInstance;
+        c.report = { grand_total: {}, cascades: [], date: '2026-04-20' } as any;
+        c.download('excel');
+        expect(exportSpy).toHaveBeenCalledWith({ date: jasmine.any(String), format: 'excel' });
     });
 
-    it('download("excel") calls exportReport with current date/modernization/repair', () => {
+    it('renders repair/modernization/reserve aggregates in grand total row', () => {
         authSpy.isScOrRais.and.returnValue(true);
-        const response = new HttpResponse({ body: new Blob(['xlsx']), headers: new HttpHeaders() });
-        gesReportServiceSpy.exportReport = jasmine.createSpy().and.returnValue(of(response));
-        // Also stub report getter so the button isn't disabled:
-        gesReportServiceSpy.getReport.and.returnValue(of({ date: '2026-04-17', cascades: [], grand_total: {} as any }));
-        const localFixture = TestBed.createComponent(ReportTabComponent);
+        const reportFixture = {
+            cascades: [], date: '2026-04-20',
+            grand_total: {
+                installed_capacity_mwt: 0, total_aggregates: 10, working_aggregates: 6,
+                repair_aggregates: 2, modernization_aggregates: 1, reserve_aggregates: 1,
+                power_mwt: 0, daily_production_mln_kwh: 0, production_change_mln_kwh: 0,
+                mtd_production_mln_kwh: 0, ytd_production_mln_kwh: 0,
+                monthly_plan_mln_kwh: 0, quarterly_plan_mln_kwh: 0, fulfillment_pct: 0,
+                difference_mln_kwh: 0, prev_year_ytd_mln_kwh: 0, yoy_growth_rate: 0,
+                yoy_difference_mln_kwh: 0, idle_discharge_total_m3s: 0
+            }
+        } as any;
+        gesReportServiceSpy.getReport.and.returnValue(of(reportFixture));
+        localFixture = TestBed.createComponent(ReportTabComponent);
         const c = localFixture.componentInstance;
-        c.selectedDate = new Date('2026-04-17T00:00:00Z');
+        c.report = reportFixture;
         localFixture.detectChanges();
-        // Wait for report to arrive (ngOnInit subscribes), then set form values and trigger:
-        c.modernization.setValue(4);
-        c.repair.setValue(14);
-        c.download('excel');
-        expect(gesReportServiceSpy.exportReport).toHaveBeenCalledWith({
-            date: '2026-04-17', format: 'excel', modernization: 4, repair: 14
-        });
+        const row = localFixture.nativeElement.querySelector('.grand-total-row');
+        expect(row).not.toBeNull();
+        const cells = Array.from(row.querySelectorAll('td')).map((td: any) => td.textContent.trim());
+        expect(cells).toContain('2'); // repair
+        // modernization = 1, reserve = 1 → expect that cell appears (duplicate ok)
+        expect(cells.filter(v => v === '1').length).toBeGreaterThanOrEqual(2);
     });
 
     it('toasts translated error when backend returns 400 reserve-negative', (done) => {

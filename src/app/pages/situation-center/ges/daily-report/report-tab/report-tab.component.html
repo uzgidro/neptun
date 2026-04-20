@@ -9,12 +9,6 @@
         />
         @if (canExport) {
             <div class="flex items-center gap-2 flex-wrap">
-                <label class="text-sm">{{ 'GES_REPORT.MODERNIZATION' | translate }}</label>
-                <p-inputNumber data-testid="modernization-input" [formControl]="modernization"
-                    [min]="0" [step]="1" [showButtons]="false" inputStyleClass="w-20" />
-                <label class="text-sm">{{ 'GES_REPORT.REPAIR' | translate }}</label>
-                <p-inputNumber data-testid="repair-input" [formControl]="repair"
-                    [min]="0" [step]="1" [showButtons]="false" inputStyleClass="w-20" />
                 <p-button data-testid="export-excel" [label]="'GES_REPORT.DOWNLOAD_EXCEL' | translate"
                     icon="pi pi-file-excel" severity="success"
                     [disabled]="!report || loading || downloading !== null"
@@ -40,6 +34,9 @@
                     <th rowspan="2">{{ 'GES_REPORT.INSTALLED_CAPACITY' | translate }}<br/><small>МВт</small></th>
                     <th rowspan="2">{{ 'GES_REPORT.TOTAL_AGGREGATES' | translate }}</th>
                     <th rowspan="2">{{ 'GES_REPORT.WORKING_AGGREGATES' | translate }}</th>
+                    <th rowspan="2">{{ 'GES_REPORT.REPAIR_AGGREGATES' | translate }}</th>
+                    <th rowspan="2">{{ 'GES_REPORT.MODERNIZATION_AGGREGATES' | translate }}</th>
+                    <th rowspan="2">{{ 'GES_REPORT.RESERVE_AGGREGATES' | translate }}</th>
                     <th colspan="2">{{ 'GES_REPORT.POWER' | translate }}<br/><small>МВт</small></th>
                     <th colspan="2">{{ 'GES_REPORT.DAILY_PRODUCTION' | translate }}<br/><small>млн кВт·ч</small></th>
                     <th colspan="3">{{ 'GES_REPORT.WATER_LEVEL' | translate }}<br/><small>м</small></th>
@@ -82,7 +79,7 @@
                 @for (cascade of report.cascades; track cascade.cascade_id) {
                     <!-- Cascade header -->
                     <tr class="cascade-header-row">
-                        <td class="sticky-col cascade-name" colspan="33">
+                        <td class="sticky-col cascade-name" colspan="36">
                             <div class="flex items-center justify-between gap-4">
                                 <span>{{ cascade.cascade_name }}</span>
                                 <app-cascade-weather [weather]="cascade.weather" />
@@ -96,6 +93,9 @@
                         <td>{{ formatNum(station.config.installed_capacity_mwt) }}</td>
                         <td>{{ station.config.total_aggregates }}</td>
                         <td>{{ station.current.working_aggregates }}</td>
+                        <td>{{ station.current.repair_aggregates }}</td>
+                        <td>{{ station.current.modernization_aggregates }}</td>
+                        <td>{{ station.current.reserve_aggregates }}</td>
                         <!-- Power -->
                         <td>{{ formatNum(station.current.power_mwt) }}</td>
                         <td [class.negative]="isNegative(station.diffs.power_change_mwt)" [class.positive]="!isNegative(station.diffs.power_change_mwt) && station.diffs.power_change_mwt != null">
@@ -162,6 +162,9 @@
                         <td>{{ formatNum(cascade.summary.installed_capacity_mwt) }}</td>
                         <td>{{ cascade.summary.total_aggregates }}</td>
                         <td>{{ cascade.summary.working_aggregates }}</td>
+                        <td>{{ cascade.summary.repair_aggregates }}</td>
+                        <td>{{ cascade.summary.modernization_aggregates }}</td>
+                        <td>{{ cascade.summary.reserve_aggregates }}</td>
                         <td>{{ formatNum(cascade.summary.power_mwt) }}</td>
                         <td>—</td>
                         <td>{{ formatNum(cascade.summary.daily_production_mln_kwh, 3) }}</td>
@@ -194,6 +197,9 @@
                     <td>{{ formatNum(report.grand_total.installed_capacity_mwt) }}</td>
                     <td>{{ report.grand_total.total_aggregates }}</td>
                     <td>{{ report.grand_total.working_aggregates }}</td>
+                    <td>{{ report.grand_total.repair_aggregates }}</td>
+                    <td>{{ report.grand_total.modernization_aggregates }}</td>
+                    <td>{{ report.grand_total.reserve_aggregates }}</td>
                     <td>{{ formatNum(report.grand_total.power_mwt) }}</td>
                     <td>—</td>
                     <td>{{ formatNum(report.grand_total.daily_production_mln_kwh, 3) }}</td>
