@@ -89,7 +89,7 @@
                     <!-- Station rows -->
                     @for (station of cascade.stations; track station.organization_id) {
                     <tr class="station-row">
-                        <td class="sticky-col station-name">{{ station.name }}</td>
+                        <td class="sticky-col station-name" [attr.rowspan]="2">{{ station.name }}</td>
                         <td>{{ formatNum(station.config.installed_capacity_mwt) }}</td>
                         <td>{{ station.config.total_aggregates }}</td>
                         <td>{{ station.current.working_aggregates }}</td>
@@ -154,6 +154,57 @@
                         <td [class.negative]="isNegative(station.yoy.difference_mln_kwh)" [class.positive]="!isNegative(station.yoy.difference_mln_kwh) && station.yoy.difference_mln_kwh != null">
                             {{ formatNum(station.yoy.difference_mln_kwh) }}
                         </td>
+                    </tr>
+                    <tr class="station-previous-day-row">
+                        <!-- installed_capacity slot — used as the "вчера" label -->
+                        <td><small class="italic">{{ 'GES_REPORT.YESTERDAY' | translate }}</small></td>
+                        <!-- total_aggregates -->
+                        <td>—</td>
+                        <!-- working / repair / modernization / reserve -->
+                        <td>{{ station.previous_day?.working_aggregates ?? '—' }}</td>
+                        <td>{{ station.previous_day?.repair_aggregates ?? '—' }}</td>
+                        <td>{{ station.previous_day?.modernization_aggregates ?? '—' }}</td>
+                        <td>{{ station.previous_day?.reserve_aggregates ?? '—' }}</td>
+                        <!-- Power: current, change -->
+                        <td>{{ formatNum(station.previous_day?.power_mwt) }}</td>
+                        <td>—</td>
+                        <!-- Daily production: current, change -->
+                        <td>{{ formatNum(station.previous_day?.daily_production_mln_kwh, 3) }}</td>
+                        <td>—</td>
+                        <!-- Water level: current, change_cm, prev_year -->
+                        <td>{{ formatNum(station.previous_day?.water_level_m, 2) }}</td>
+                        <td>—</td>
+                        <td>—</td>
+                        <!-- Water volume: current, change, prev_year -->
+                        <td>{{ formatNum(station.previous_day?.water_volume_mln_m3, 0) }}</td>
+                        <td>—</td>
+                        <td>—</td>
+                        <!-- Water head: current, —, prev_year -->
+                        <td>{{ formatNum(station.previous_day?.water_head_m, 0) }}</td>
+                        <td>—</td>
+                        <td>—</td>
+                        <!-- Income: current, change, prev_year -->
+                        <td>{{ formatNum(station.previous_day?.reservoir_income_m3s) }}</td>
+                        <td>—</td>
+                        <td>—</td>
+                        <!-- GES flow: current, change, prev_year -->
+                        <td>{{ formatNum(station.previous_day?.ges_flow_m3s) }}</td>
+                        <td>—</td>
+                        <td>—</td>
+                        <!-- Idle discharge -->
+                        <td>{{ formatNum(station.previous_day?.idle_discharge_m3s) }}</td>
+                        <!-- MTD / YTD production -->
+                        <td>—</td>
+                        <td>—</td>
+                        <!-- Plan: monthly, quarterly, fulfillment, difference -->
+                        <td>—</td>
+                        <td>—</td>
+                        <td>—</td>
+                        <td>—</td>
+                        <!-- YoY: prev_year_ytd, growth, diff -->
+                        <td>—</td>
+                        <td>—</td>
+                        <td>—</td>
                     </tr>
                     }
                     <!-- Cascade summary row -->
@@ -299,6 +350,12 @@
 
 .station-name {
     font-weight: 500;
+}
+
+.station-previous-day-row td {
+    background-color: var(--p-surface-50, #f9fafb);
+    font-style: italic;
+    color: var(--p-text-muted-color, #6b7280);
 }
 
 .cascade-summary-row td {
