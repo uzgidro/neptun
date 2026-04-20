@@ -247,7 +247,9 @@
     "INCIDENTS": "Ҳодисалар",
     "VISITS": "Ташрифлар",
     "SNOW_COVER": "MODSNOW",
-    "INFRA_EVENTS": "Инфратузилма"
+    "INFRA_EVENTS": "Инфратузилма",
+    "GES_DAILY_REPORT": "Кунлик ҳисобот",
+    "ORGANIZATION_TYPES": "Ташкилот турлари"
   },
   "GES_REPORT": {
     "BATCH_FAILED_AT": "{{station}} станциясида хатолик",
@@ -549,7 +551,23 @@
       "ERROR_CREATE": "Ташкилотни яратиб бўлмади",
       "ERROR_UPDATE": "Ташкилотни янгилаб бўлмади",
       "ERROR_DELETE": "Ташкилотни ўчириб бўлмади",
-      "SELF_PARENT_WARNING": "Ташкилот ўзига асосий бўлолмайди"
+      "SELF_PARENT_WARNING": "Ташкилот ўзига асосий бўлолмайди",
+      "NAME": "Номи",
+      "TYPES": "Турлар"
+    },
+    "ORGANIZATION_TYPES": {
+      "TITLE": "Ташкилот турлари",
+      "DESCRIPTION": "Тавсиф",
+      "NAME": "Номи",
+      "NAME_REQUIRED": "Номи талаб қилинади",
+      "NEW_TYPE": "Янги тур",
+      "NOTHING_FOUND": "Ҳеч нарса топилмади",
+      "LOADING": "Юкланмоқда. Кутинг...",
+      "DELETE_CONFIRM": "Ташкилот турини ўчиришни хоҳлайсизми?",
+      "ERROR_CREATE": "Ташкилот турини яратиб бўлмади",
+      "ERROR_DELETE": "Ташкилот турини ўчириб бўлмади",
+      "SUCCESS_CREATED": "Ташкилот тури муваффақиятли яратилди",
+      "SUCCESS_DELETED": "Ташкилот тури муваффақиятли ўчирилди"
     },
     "BIRTHDAYS": {
       "TITLE": "Ходимлар туғилган кунлари",
