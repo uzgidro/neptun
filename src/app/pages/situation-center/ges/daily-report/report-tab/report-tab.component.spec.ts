@@ -23,9 +23,28 @@ function makeGrandTotal(): ReportGrandTotal {
     };
 }
 
-function makeStation(orgId: number, name: string): ReportStation {
+function makeCurrent(overrides: Partial<any> = {}) {
     return {
-        organization_id: orgId, name,
+        daily_production_mln_kwh: 0,
+        power_mwt: 0,
+        working_aggregates: 0,
+        repair_aggregates: 0,
+        modernization_aggregates: 0,
+        reserve_aggregates: 0,
+        water_level_m: null,
+        water_volume_mln_m3: null,
+        water_head_m: null,
+        reservoir_income_m3s: null,
+        total_outflow_m3s: null,
+        ges_flow_m3s: null,
+        idle_discharge_m3s: null,
+        ...overrides
+    };
+}
+
+function makeStation(overrides: Partial<ReportStation> = {}): ReportStation {
+    return {
+        organization_id: 10, name: 'ГЭС-1',
         config: { installed_capacity_mwt: 50, total_aggregates: 4, has_reservoir: true },
         current: {
             daily_production_mln_kwh: 3.389, power_mwt: 141.208, working_aggregates: 3,
@@ -47,7 +66,9 @@ function makeStation(orgId: number, name: string): ReportStation {
             mtd_production_mln_kwh: 40, ytd_production_mln_kwh: 310
         },
         yoy: { growth_rate: -0.0968, difference_mln_kwh: -30 },
-        idle_discharge: null
+        idle_discharge: null,
+        previous_day: null,
+        ...overrides
     };
 }
 
@@ -68,7 +89,7 @@ function makeReport(weather: ReportWeather | null = makeWeather()): GesDailyRepo
             cascade_id: 5, cascade_name: 'Ўрта Чирчиқ каскади',
             weather,
             summary: makeGrandTotal(),
-            stations: [makeStation(10, 'ГЭС-1'), makeStation(20, 'ГЭС-2')]
+            stations: [makeStation({ organization_id: 10, name: 'ГЭС-1' }), makeStation({ organization_id: 20, name: 'ГЭС-2' })]
         }],
         grand_total: makeGrandTotal()
     };
@@ -251,5 +272,57 @@ describe('ReportTabComponent', () => {
             expect(messageServiceSpy.add).toHaveBeenCalledWith(jasmine.objectContaining({ severity: 'error' }));
             done();
         }, 50);
+    });
+
+    describe('previous_day row', () => {
+        function setupFixtureWithPrevDay(prevDay: any) {
+            authSpy.isScOrRais.and.returnValue(true);
+            const station = makeStation({
+                previous_day: prevDay
+            });
+            const report = {
+                date: '2026-04-20',
+                cascades: [{
+                    cascade_id: 1, cascade_name: 'C1', weather: null,
+                    summary: makeGrandTotal(),
+                    stations: [station]
+                }],
+                grand_total: makeGrandTotal()
+            } as any;
+            gesReportServiceSpy.getReport.and.returnValue(of(report));
+            const fix = TestBed.createComponent(ReportTabComponent);
+            fix.detectChanges();
+            return fix;
+        }
+
+        it('renders previous_day row with yesterday data under each station', () => {
+            const prev = makeCurrent({
+                daily_production_mln_kwh: 3.2,
+                working_aggregates: 2,
+                repair_aggregates: 1,
+                modernization_aggregates: 0,
+                reserve_aggregates: 1
+            });
+            const fix = setupFixtureWithPrevDay(prev);
+            const prevRow = fix.nativeElement.querySelector('.station-previous-day-row');
+            expect(prevRow).not.toBeNull();
+            const cells = Array.from(prevRow.querySelectorAll('td')).map((td: any) => td.textContent.trim());
+            expect(cells.join(' ')).toContain('3.200');
+            expect(cells.join(' ')).toContain('2');
+        });
+
+        it('shows previous_day row with dashes when previous_day is null', () => {
+            const fix = setupFixtureWithPrevDay(null);
+            const prevRow = fix.nativeElement.querySelector('.station-previous-day-row');
+            expect(prevRow).not.toBeNull();
+            expect(prevRow.textContent).toContain('—');
+        });
+
+        it('station name cell spans 2 rows (rowspan=2)', () => {
+            const prev = makeCurrent({});
+            const fix = setupFixtureWithPrevDay(prev);
+            const stationNameCell = fix.nativeElement.querySelector('.station-row td.station-name');
+            expect(stationNameCell.getAttribute('rowspan')).toBe('2');
+        });
     });
 });

@@ -109,6 +109,7 @@ export interface ReportStation {
     previous_year: ReportPreviousYear;
     yoy: ReportYoY;
     idle_discharge: ReportIdleDischarge | null;
+    previous_day: ReportCurrent | null;
 }
 
 export interface ReportCurrent {
