@@ -1,6 +1,7 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin, of, Subject } from 'rxjs';
 import { catchError, finalize, takeUntil } from 'rxjs/operators';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -39,9 +40,11 @@ export class PlansTabComponent implements OnInit, OnDestroy {
     private gesReportService = inject(GesReportService);
     private messageService = inject(MessageService);
     private translate = inject(TranslateService);
+    private route = inject(ActivatedRoute);
+    private router = inject(Router);
     private destroy$ = new Subject<void>();
 
-    selectedYear: number = new Date().getFullYear();
+    selectedYear: number = this.readYearFromUrl() ?? new Date().getFullYear();
     planRows: PlanRow[] = [];
     planItems: PlanItem[] = [];
     collapsedCascades = new Set<string>();
@@ -98,7 +101,19 @@ export class PlansTabComponent implements OnInit, OnDestroy {
     }
 
     onYearChange(): void {
+        this.router.navigate([], {
+            relativeTo: this.route,
+            queryParams: { year: this.selectedYear },
+            queryParamsHandling: 'merge'
+        });
         this.loadData();
+    }
+
+    private readYearFromUrl(): number | null {
+        const raw = this.route.snapshot.queryParamMap.get('year');
+        if (!raw) return null;
+        const y = Number(raw);
+        return Number.isInteger(y) && y >= 2020 && y <= 2100 ? y : null;
     }
 
     onMonthChange(row: PlanRow, monthIndex: number): void {
