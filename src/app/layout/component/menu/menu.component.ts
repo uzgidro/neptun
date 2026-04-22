@@ -5,6 +5,7 @@ import { MenuitemComponent } from '../menuitem/menuitem.component';
 import { WeatherWidget } from '@/pages/dashboard/components/weather/weather.widget';
 import { MenuItems } from '@/core/interfaces/menuitems';
 import { TranslateService } from '@ngx-translate/core';
+import { AuthService } from '@/core/services/auth.service';
 
 @Component({
     selector: 'app-menu',
@@ -15,6 +16,7 @@ import { TranslateService } from '@ngx-translate/core';
 export class MenuComponent implements OnInit {
     model: MenuItems[] = [];
     private translate = inject(TranslateService);
+    private authService = inject(AuthService);
 
     ngOnInit() {
         this.buildMenu();
@@ -28,6 +30,17 @@ export class MenuComponent implements OnInit {
     }
 
     private buildMenu() {
+        if (this.authService.isCascade()) {
+            this.model = [
+                {
+                    items: [
+                        { label: this.t('MENU.CASCADE_REPORT'), routerLink: ['/ges-daily-report'] }
+                    ]
+                }
+            ];
+            return;
+        }
+
         this.model = [
             {
                 items: [

@@ -4,7 +4,7 @@ import { Dashboard } from '@/pages/dashboard/dashboard';
 import { Notfound } from '@/pages/notfound/notfound';
 import { ScDashboardComponent } from '@/pages/situation-center/sc-dashboard/sc-dashboard.component';
 
-import { adminGuard, authGuard, filtrationGuard, gesReportGuard, hrmGuard, positionsGuard, raisGuard, scGuard, unsavedChangesGuard } from '@/core/guards/auth.guard';
+import { adminGuard, authGuard, cascadeOnlyGuard, filtrationGuard, gesReportGuard, hrmGuard, positionsGuard, raisGuard, scGuard, unsavedChangesGuard } from '@/core/guards/auth.guard';
 
 
 export const appRoutes: Routes = [
@@ -16,7 +16,7 @@ export const appRoutes: Routes = [
     {
         path: '',
         component: AppLayout,
-        canActivate: [authGuard],
+        canActivate: [authGuard, cascadeOnlyGuard],
         children: [
             { path: 'monitoring', component: Dashboard },
             { path: 'users', loadComponent: () => import('./app/pages/hrm/users/user.component').then(m => m.User), canActivate: [adminGuard] },
@@ -81,8 +81,8 @@ export const appRoutes: Routes = [
             { path: 'ges/:id', loadComponent: () => import('./app/pages/situation-center/ges/ges-detail/ges-detail.component').then(m => m.GesDetailComponent), canActivate: [raisGuard] }
         ]
     },
-    { path: 'dashboard', component: ScDashboardComponent, canActivate: [authGuard] },
-    { path: 'notfound', component: Notfound },
+    { path: 'dashboard', component: ScDashboardComponent, canActivate: [authGuard, cascadeOnlyGuard] },
+    { path: 'notfound', component: Notfound, canActivate: [cascadeOnlyGuard] },
     { path: 'auth', loadChildren: () => import('./app/pages/auth/auth.routes') },
     { path: '**', redirectTo: '/notfound' }
 ];

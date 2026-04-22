@@ -2,6 +2,7 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin, of, Subject } from 'rxjs';
 import { catchError, takeUntil } from 'rxjs/operators';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -71,9 +72,11 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
     private messageService = inject(MessageService);
     private translate = inject(TranslateService);
     private authService = inject(AuthService);
+    private route = inject(ActivatedRoute);
+    private router = inject(Router);
     private destroy$ = new Subject<void>();
 
-    selectedDate: Date = new Date();
+    selectedDate: Date = this.readDateFromUrl() ?? new Date();
     rows: DataEntryRow[] = [];
     cascadeGroups: { cascade_id: number; cascade_name: string; weather: ReportWeather | null; rows: DataEntryRow[] }[] = [];
     private cascadeWeatherMap = new Map<number, ReportWeather | null>();
@@ -198,7 +201,21 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
 
     onDateChange(date: Date): void {
         this.selectedDate = date;
+        this.router.navigate([], {
+            relativeTo: this.route,
+            queryParams: { date: this.timeService.dateToYMD(date) },
+            queryParamsHandling: 'merge'
+        });
         this.loadData();
+    }
+
+    private readDateFromUrl(): Date | null {
+        const raw = this.route.snapshot.queryParamMap.get('date');
+        if (!raw) return null;
+        const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(raw);
+        if (!m) return null;
+        const d = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+        return isNaN(d.getTime()) ? null : d;
     }
 
     sumAggregates(row: DataEntryRow): number {

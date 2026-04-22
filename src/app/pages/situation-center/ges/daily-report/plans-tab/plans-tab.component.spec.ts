@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testin
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
+import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
 import { MessageService } from 'primeng/api';
@@ -37,6 +38,7 @@ describe('PlansTabComponent', () => {
                 provideHttpClient(),
                 provideHttpClientTesting(),
                 provideNoopAnimations(),
+                provideRouter([]),
                 { provide: GesReportService, useValue: spy },
                 MessageService
             ]
