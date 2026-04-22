@@ -14,6 +14,20 @@ export const authGuard: CanActivateFn = (): boolean | UrlTree => {
     return authService.isAuthenticated() ? true : router.createUrlTree(['/auth/login']);
 };
 
+export const cascadeOnlyGuard: CanActivateFn = (_route, state): boolean | UrlTree => {
+    const authService = inject(AuthService);
+    const router = inject(Router);
+
+    if (!authService.isCascade()) {
+        return true;
+    }
+
+    const allowedPath = '/ges-daily-report';
+    const targetPath = state.url.split('?')[0];
+
+    return targetPath === allowedPath ? true : router.createUrlTree([allowedPath]);
+};
+
 export const adminGuard: CanActivateFn = (): boolean | UrlTree => {
     const authService = inject(AuthService);
     const router = inject(Router);

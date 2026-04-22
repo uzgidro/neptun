@@ -59,6 +59,8 @@ import { TranslateModule } from '@ngx-translate/core';
                         {{ 'MENU.TABLET_INVESTMENT' | translate }}
                     } @else if (authService.hasRole('sc')) {
                         {{ 'MENU.TABLET_DUTY' | translate }}
+                    } @else if (authService.hasRole('cascade')) {
+                        {{ 'MENU.TABLET_CASCADE' | translate }}
                     } @else {
                         {{ 'MENU.TABLET' | translate }}
                     }
