@@ -1963,6 +1963,8 @@
     },
     "SHUTDOWN": {
       "TITLE": "Emergency Shutdowns",
+      "ERROR_FORBIDDEN": "No access to the organization",
+      "ERROR_NOT_FOUND": "Record not found or deleted",
       "ADD_INCIDENT": "Add Incident",
       "ADD_SHUTDOWN": "Add Emergency Shutdown",
       "ADD_EMERGENCY_SHUTDOWN": "Add Emergency Shutdown",

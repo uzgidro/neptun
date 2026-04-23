@@ -1,5 +1,5 @@
 <div class="flex justify-between items-center mb-6">
-    @if (authService.isSc()) {
+    @if (canWriteShutdown) {
         <p-button [label]="'SITUATION_CENTER.SHUTDOWN.ADD_EMERGENCY_SHUTDOWN' | translate" icon="pi pi-plus" (click)="openNew()" />
     } @else {
         <div></div>
@@ -77,7 +77,7 @@
                 {{ 'SITUATION_CENTER.COMMON.FILES' | translate }}
             </th>
 
-            @if (authService.isSc()) {
+            @if (canWriteShutdown) {
                 <th style="width: 10%">{{ 'SITUATION_CENTER.COMMON.ACTIONS' | translate }}</th>
             }
         </tr>
@@ -124,7 +124,7 @@
                     <span class="text-color-secondary">—</span>
                 }
             </td>
-            @if (authService.isSc()) {
+            @if (canWriteShutdown) {
                 <td>
                     <p-button
                         icon="pi pi-pencil"
@@ -149,7 +149,7 @@
 
     <ng-template pTemplate="emptymessage">
         <tr>
-            <td [attr.colspan]="authService.isSc() ? 9 : 8" class="text-center">
+            <td [attr.colspan]="canWriteShutdown ? 9 : 8" class="text-center">
                 {{ 'SITUATION_CENTER.SHUTDOWN.NO_EMERGENCY_SHUTDOWNS' | translate }}
             </td>
         </tr>
@@ -213,7 +213,7 @@
                 {{ 'SITUATION_CENTER.COMMON.FILES' | translate }}
             </th>
 
-            @if (authService.isSc()) {
+            @if (canWriteShutdown) {
                 <th style="width: 10%">{{ 'SITUATION_CENTER.COMMON.ACTIONS' | translate }}</th>
             }
         </tr>
@@ -260,7 +260,7 @@
                     <span class="text-color-secondary">—</span>
                 }
             </td>
-            @if (authService.isSc()) {
+            @if (canWriteShutdown) {
                 <td>
                     <p-button
                         icon="pi pi-pencil"
@@ -285,7 +285,7 @@
 
     <ng-template pTemplate="emptymessage">
         <tr>
-            <td [attr.colspan]="authService.isSc() ? 9 : 8" class="text-center">
+            <td [attr.colspan]="canWriteShutdown ? 9 : 8" class="text-center">
                 {{ 'SITUATION_CENTER.SHUTDOWN.NO_EMERGENCY_SHUTDOWNS' | translate }}
             </td>
         </tr>
@@ -349,7 +349,7 @@
                 {{ 'SITUATION_CENTER.COMMON.FILES' | translate }}
             </th>
 
-            @if (authService.isSc()) {
+            @if (canWriteShutdown) {
                 <th style="width: 10%">{{ 'SITUATION_CENTER.COMMON.ACTIONS' | translate }}</th>
             }
         </tr>
@@ -396,7 +396,7 @@
                     <span class="text-color-secondary">—</span>
                 }
             </td>
-            @if (authService.isSc()) {
+            @if (canWriteShutdown) {
                 <td>
                     <p-button
                         icon="pi pi-pencil"
@@ -421,7 +421,7 @@
 
     <ng-template pTemplate="emptymessage">
         <tr>
-            <td [attr.colspan]="authService.isSc() ? 9 : 8" class="text-center">
+            <td [attr.colspan]="canWriteShutdown ? 9 : 8" class="text-center">
                 {{ 'SITUATION_CENTER.SHUTDOWN.NO_EMERGENCY_SHUTDOWNS' | translate }}
             </td>
         </tr>
