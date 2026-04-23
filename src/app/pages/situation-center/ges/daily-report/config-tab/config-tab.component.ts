@@ -69,7 +69,8 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
         installed_capacity_mwt: [null],
         total_aggregates: [null],
         has_reservoir: [false],
-        sort_order: [null]
+        sort_order: [null],
+        max_daily_production_mln_kwh: [0, [Validators.min(0)]]
     });
 
     cascadeDialogVisible = false;
@@ -175,7 +176,8 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
             installed_capacity_mwt: config.installed_capacity_mwt,
             total_aggregates: config.total_aggregates,
             has_reservoir: config.has_reservoir,
-            sort_order: config.sort_order
+            sort_order: config.sort_order,
+            max_daily_production_mln_kwh: config.max_daily_production_mln_kwh ?? 0
         });
         this.updateAvailableCascades();
         this.dialogVisible = true;
@@ -191,7 +193,8 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
             installed_capacity_mwt: formVal.installed_capacity_mwt,
             total_aggregates: formVal.total_aggregates,
             has_reservoir: formVal.has_reservoir,
-            sort_order: formVal.sort_order
+            sort_order: formVal.sort_order,
+            max_daily_production_mln_kwh: formVal.max_daily_production_mln_kwh ?? 0
         };
         this.saving = true;
 

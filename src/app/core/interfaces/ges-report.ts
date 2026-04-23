@@ -6,6 +6,7 @@ export interface GesConfigPayload {
     total_aggregates?: number;
     has_reservoir?: boolean;
     sort_order?: number;
+    max_daily_production_mln_kwh?: number;
 }
 
 export interface GesConfigResponse {
@@ -18,6 +19,7 @@ export interface GesConfigResponse {
     total_aggregates: number;
     has_reservoir: boolean;
     sort_order: number;
+    max_daily_production_mln_kwh: number;
 }
 
 // --- Cascade Config ---

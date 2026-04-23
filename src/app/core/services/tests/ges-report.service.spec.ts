@@ -47,7 +47,8 @@ describe('GesReportService', () => {
             const mockConfigs: GesConfigResponse[] = [{
                 id: 1, organization_id: 10, organization_name: 'ГЭС-1',
                 cascade_id: 5, cascade_name: 'Каскад', installed_capacity_mwt: 50,
-                total_aggregates: 4, has_reservoir: true, sort_order: 1
+                total_aggregates: 4, has_reservoir: true, sort_order: 1,
+                max_daily_production_mln_kwh: 0
             }];
             service.getConfigs().subscribe(result => {
                 expect(result).toEqual(mockConfigs);

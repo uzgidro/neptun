@@ -1,6 +1,6 @@
 import { Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin, merge, of, Subject } from 'rxjs';
@@ -198,7 +198,8 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
                     next: (results) => {
                         this.rows = configs.map((config, i) => {
                             const data = results[i];
-                            const form = this.createForm(data);
+                            const cap = config.max_daily_production_mln_kwh ?? 0;
+                            const form = this.createForm(data, cap);
                             const row = new DataEntryRow(config, form, data !== null);
                             row.idleDischarge = idleDischargeMap.get(config.organization_id) ?? null;
                             return row;
@@ -253,6 +254,13 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
         return this.sumAggregates(row) > row.config.total_aggregates;
     }
 
+    productionExceedsMax(row: DataEntryRow): boolean {
+        const cap = row.config.max_daily_production_mln_kwh ?? 0;
+        if (cap <= 0) return false;
+        const value = Number(row.form.get('daily_production_mln_kwh')?.value ?? 0) || 0;
+        return value > cap;
+    }
+
     saveAll(): void {
         const dirtyRows = this.rows.filter(r => r.dirty);
         if (!dirtyRows.length) return;
@@ -262,6 +270,15 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
                 severity: 'error',
                 summary: this.translate.instant('COMMON.ERROR'),
                 detail: this.translate.instant('GES_REPORT.AGGREGATES_SUM_EXCEEDS_TOTAL')
+            });
+            return;
+        }
+
+        if (dirtyRows.some(r => this.productionExceedsMax(r))) {
+            this.messageService.add({
+                severity: 'error',
+                summary: this.translate.instant('COMMON.ERROR'),
+                detail: this.translate.instant('GES_REPORT.PRODUCTION_EXCEEDS_MAX_GENERIC')
             });
             return;
         }
@@ -294,9 +311,12 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
             error: (err) => {
                 this.savingAll = false;
                 const idx = err?.error?.item_index;
-                const msg = err?.error?.message ?? '';
+                const msg = err?.error?.message ?? err?.error?.error ?? '';
                 let detail: string;
-                if (typeof idx === 'number' && pairs[idx]) {
+                const capDetail = this.parseProductionCapError(msg);
+                if (capDetail) {
+                    detail = capDetail;
+                } else if (typeof idx === 'number' && pairs[idx]) {
                     detail = this.translate.instant('GES_REPORT.BATCH_FAILED_AT', {
                         station: pairs[idx].row.config.organization_name
                     });
@@ -323,6 +343,14 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
             });
             return;
         }
+        if (this.productionExceedsMax(row)) {
+            this.messageService.add({
+                severity: 'error',
+                summary: this.translate.instant('COMMON.ERROR'),
+                detail: this.translate.instant('GES_REPORT.PRODUCTION_EXCEEDS_MAX_GENERIC')
+            });
+            return;
+        }
         const payload = this.buildPayload(row);
         if (Object.keys(payload).length <= 2) {
             row.form.markAsPristine();
@@ -343,16 +371,35 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
             },
             error: (err) => {
                 row.saving = false;
-                const msg = err?.error?.message ?? '';
-                const detail = msg.includes('aggregates sum exceeds total')
-                    ? this.translate.instant('GES_REPORT.AGGREGATES_SUM_EXCEEDS_TOTAL')
-                    : (msg || err?.message || '');
+                const msg = err?.error?.message ?? err?.error?.error ?? '';
+                const capDetail = this.parseProductionCapError(msg);
+                const detail = capDetail
+                    ? capDetail
+                    : msg.includes('aggregates sum exceeds total')
+                        ? this.translate.instant('GES_REPORT.AGGREGATES_SUM_EXCEEDS_TOTAL')
+                        : (msg || err?.message || '');
                 this.messageService.add({
                     severity: 'error',
                     summary: this.translate.instant('COMMON.ERROR'),
                     detail
                 });
             }
+        });
+    }
+
+    private parseProductionCapError(msg: unknown): string | null {
+        if (typeof msg !== 'string') return null;
+        if (!msg.includes('daily_production_mln_kwh exceeds max')) return null;
+        const m = /organization_id=(\d+):\s*([\d.]+)\s*>\s*([\d.]+)/.exec(msg);
+        if (!m) return null;
+        const orgId = +m[1];
+        const value = +m[2];
+        const max = +m[3];
+        const station = this.rows.find(r => r.config.organization_id === orgId);
+        return this.translate.instant('GES_REPORT.PRODUCTION_EXCEEDS_MAX_SERVER', {
+            station: station?.config.organization_name ?? `#${orgId}`,
+            value,
+            max
         });
     }
 
@@ -451,9 +498,12 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
         };
     }
 
-    private createForm(data: GesDailyData | null): FormGroup {
+    private createForm(data: GesDailyData | null, cap: number): FormGroup {
+        const productionValidators = cap > 0
+            ? [Validators.min(0), Validators.max(cap)]
+            : [Validators.min(0)];
         return this.fb.group({
-            daily_production_mln_kwh: [data?.daily_production_mln_kwh ?? null],
+            daily_production_mln_kwh: [data?.daily_production_mln_kwh ?? null, productionValidators],
             working_aggregates: [data?.working_aggregates ?? null],
             repair_aggregates: [data?.repair_aggregates ?? null],
             modernization_aggregates: [data?.modernization_aggregates ?? null],
