@@ -38,7 +38,7 @@
     </div>
 
     @if (!loading && rows.length) {
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
             <div class="totals-card totals-card--accent">
                 <div class="totals-card__label">{{ 'GES_REPORT.PRODUCTION' | translate }}</div>
                 <div class="totals-card__value totals-card__value--accent">
@@ -46,12 +46,16 @@
                 </div>
             </div>
             <div class="totals-card">
+                <div class="totals-card__label">{{ 'GES_REPORT.POWER' | translate }}</div>
+                <div class="totals-card__value">{{ totals().powerMwt | number:'1.0-2' }}</div>
+            </div>
+            <div class="totals-card">
                 <div class="totals-card__label">{{ 'GES_REPORT.INSTALLED_CAPACITY' | translate }}</div>
                 <div class="totals-card__value">{{ totals().installedCapacity | number:'1.0-0' }}</div>
             </div>
             <div class="totals-card">
-                <div class="totals-card__label">{{ 'GES_REPORT.TOTAL_AGGREGATES' | translate }}</div>
-                <div class="flex items-center gap-1 mt-1 flex-wrap">
+                <div class="totals-card__label">{{ 'GES_REPORT.TOTAL_AGGREGATES' | translate }}: {{ totals().totalAggregates }}</div>
+                <div class="flex items-center gap-1 mt-2 flex-wrap">
                     <p-tag [value]="totals().working.toString()" severity="success"
                            [pTooltip]="'GES_REPORT.WORKING_AGGREGATES' | translate" />
                     <p-tag [value]="totals().repair.toString()" severity="warn"
@@ -61,39 +65,6 @@
                     <p-tag [value]="totals().reserve.toString()" severity="secondary"
                            [pTooltip]="'GES_REPORT.RESERVE_AGGREGATES' | translate" />
                 </div>
-                <div class="totals-card__label mt-1">{{ 'GES_REPORT.GRAND_TOTAL' | translate }}: {{ totals().totalAggregates }}</div>
-            </div>
-            <div class="totals-card">
-                <div class="totals-card__label">{{ 'GES_REPORT.WATER_HEAD' | translate }}</div>
-                <div class="totals-card__value">{{ totals().waterHead | number:'1.0-2' }}</div>
-            </div>
-            <div class="totals-card">
-                <div class="totals-card__label">{{ 'GES_REPORT.RESERVOIR_INCOME' | translate }}</div>
-                <div class="totals-card__value">{{ totals().income | number:'1.0-2' }}</div>
-            </div>
-            <div class="totals-card">
-                <div class="totals-card__label">{{ 'GES_REPORT.TOTAL_OUTFLOW' | translate }}</div>
-                <div class="totals-card__value">{{ totals().outflow | number:'1.0-2' }}</div>
-            </div>
-            <div class="totals-card">
-                <div class="totals-card__label">{{ 'GES_REPORT.GES_FLOW' | translate }}</div>
-                <div class="totals-card__value">{{ totals().gesFlow | number:'1.0-2' }}</div>
-            </div>
-            @if (totals().idleDischarge > 0) {
-                <div class="totals-card totals-card--danger">
-                    <div class="totals-card__label">{{ 'GES_REPORT.IDLE_DISCHARGE' | translate }}</div>
-                    <div class="totals-card__value totals-card__value--danger">
-                        {{ totals().idleDischarge | number:'1.0-2' }}
-                    </div>
-                </div>
-            }
-            <div class="totals-card">
-                <div class="totals-card__label">{{ 'GES_REPORT.WATER_LEVEL' | translate }}</div>
-                <div class="totals-card__value">{{ totals().waterLevel | number:'1.0-2' }}</div>
-            </div>
-            <div class="totals-card">
-                <div class="totals-card__label">{{ 'GES_REPORT.WATER_VOLUME' | translate }}</div>
-                <div class="totals-card__value">{{ totals().waterVolume | number:'1.0-2' }}</div>
             </div>
         </div>
     }

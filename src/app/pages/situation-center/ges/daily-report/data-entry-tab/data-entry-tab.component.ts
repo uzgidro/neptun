@@ -27,17 +27,11 @@ export interface GesTotals {
     installedCapacity: number;
     totalAggregates: number;
     production: number;
+    powerMwt: number;
     working: number;
     repair: number;
     mod: number;
     reserve: number;
-    waterHead: number;
-    waterLevel: number;
-    waterVolume: number;
-    income: number;
-    outflow: number;
-    gesFlow: number;
-    idleDischarge: number;
 }
 
 export class DataEntryRow {
@@ -406,8 +400,6 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
     private calculateTotals(_tick: number): GesTotals {
         let installedCapacity = 0, totalAggregates = 0;
         let production = 0, working = 0, repair = 0, mod = 0;
-        let waterHead = 0, waterLevel = 0, waterVolume = 0;
-        let income = 0, outflow = 0, idleDischarge = 0, gesFlow = 0;
 
         for (const row of this.rows) {
             installedCapacity += row.config.installed_capacity_mwt || 0;
@@ -418,24 +410,13 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
             working += Number(v.working_aggregates ?? 0) || 0;
             repair += Number(v.repair_aggregates ?? 0) || 0;
             mod += Number(v.modernization_aggregates ?? 0) || 0;
-            waterHead += Number(v.water_head_m ?? 0) || 0;
-            waterLevel += Number(v.water_level_m ?? 0) || 0;
-            waterVolume += Number(v.water_volume_mln_m3 ?? 0) || 0;
-
-            income += Number(v.reservoir_income_m3s ?? 0) || 0;
-            const outflowRow = Number(v.total_outflow_m3s ?? 0) || 0;
-            outflow += outflowRow;
-
-            const idleRow = row.idleDischarge?.flow_rate_m3s ?? 0;
-            idleDischarge += idleRow;
-            gesFlow += outflowRow - idleRow;
         }
 
         const reserve = Math.max(0, totalAggregates - working - repair - mod);
+        const powerMwt = production * 1000 / 24;
         return {
-            installedCapacity, totalAggregates, production, working,
-            repair, mod, reserve, waterHead, waterLevel, waterVolume,
-            income, outflow, gesFlow, idleDischarge
+            installedCapacity, totalAggregates, production, powerMwt,
+            working, repair, mod, reserve
         };
     }
 
