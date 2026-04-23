@@ -30,7 +30,7 @@ export class MenuComponent implements OnInit {
     }
 
     private buildMenu() {
-        if (this.authService.isCascade()) {
+        if (this.authService.isOnlyCascade()) {
             this.model = [
                 {
                     items: [

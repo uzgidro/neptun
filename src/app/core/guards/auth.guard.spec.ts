@@ -48,7 +48,7 @@ describe('cascadeOnlyGuard', () => {
     let routerSpy: jasmine.SpyObj<Router>;
 
     beforeEach(() => {
-        authServiceSpy = jasmine.createSpyObj('AuthService', ['isCascade']);
+        authServiceSpy = jasmine.createSpyObj('AuthService', ['isOnlyCascade']);
         routerSpy = jasmine.createSpyObj('Router', ['createUrlTree']);
 
         TestBed.configureTestingModule({
@@ -65,7 +65,7 @@ describe('cascadeOnlyGuard', () => {
         );
 
     it('allows non-cascade on any URL', () => {
-        authServiceSpy.isCascade.and.returnValue(false);
+        authServiceSpy.isOnlyCascade.and.returnValue(false);
         expect(run('/monitoring')).toBeTrue();
         expect(run('/hrm/dashboard')).toBeTrue();
         expect(run('/ges-daily-report')).toBeTrue();
@@ -73,31 +73,31 @@ describe('cascadeOnlyGuard', () => {
     });
 
     it('allows cascade on /ges-daily-report', () => {
-        authServiceSpy.isCascade.and.returnValue(true);
+        authServiceSpy.isOnlyCascade.and.returnValue(true);
         expect(run('/ges-daily-report')).toBeTrue();
         expect(routerSpy.createUrlTree).not.toHaveBeenCalled();
     });
 
     it('allows cascade on /ges-daily-report with query params', () => {
-        authServiceSpy.isCascade.and.returnValue(true);
+        authServiceSpy.isOnlyCascade.and.returnValue(true);
         expect(run('/ges-daily-report?tab=data-entry&date=2026-04-22')).toBeTrue();
         expect(routerSpy.createUrlTree).not.toHaveBeenCalled();
     });
 
     it('allows cascade on /shutdowns', () => {
-        authServiceSpy.isCascade.and.returnValue(true);
+        authServiceSpy.isOnlyCascade.and.returnValue(true);
         expect(run('/shutdowns')).toBeTrue();
         expect(routerSpy.createUrlTree).not.toHaveBeenCalled();
     });
 
     it('allows cascade on /shutdowns with query params', () => {
-        authServiceSpy.isCascade.and.returnValue(true);
+        authServiceSpy.isOnlyCascade.and.returnValue(true);
         expect(run('/shutdowns?filter=xxx')).toBeTrue();
         expect(routerSpy.createUrlTree).not.toHaveBeenCalled();
     });
 
     it('redirects cascade from lookalike /shutdowns-evil to /ges-daily-report (strict allowlist)', () => {
-        authServiceSpy.isCascade.and.returnValue(true);
+        authServiceSpy.isOnlyCascade.and.returnValue(true);
         const fakeTree = {} as any;
         routerSpy.createUrlTree.and.returnValue(fakeTree);
         expect(run('/shutdowns-evil')).toBe(fakeTree);
@@ -105,7 +105,7 @@ describe('cascadeOnlyGuard', () => {
     });
 
     it('redirects cascade from /monitoring to /ges-daily-report', () => {
-        authServiceSpy.isCascade.and.returnValue(true);
+        authServiceSpy.isOnlyCascade.and.returnValue(true);
         const fakeTree = {} as any;
         routerSpy.createUrlTree.and.returnValue(fakeTree);
         expect(run('/monitoring')).toBe(fakeTree);
@@ -113,7 +113,7 @@ describe('cascadeOnlyGuard', () => {
     });
 
     it('redirects cascade from /notfound to /ges-daily-report', () => {
-        authServiceSpy.isCascade.and.returnValue(true);
+        authServiceSpy.isOnlyCascade.and.returnValue(true);
         const fakeTree = {} as any;
         routerSpy.createUrlTree.and.returnValue(fakeTree);
         expect(run('/notfound')).toBe(fakeTree);
