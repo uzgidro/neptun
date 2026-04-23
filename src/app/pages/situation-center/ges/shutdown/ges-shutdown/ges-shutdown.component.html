@@ -4,22 +4,24 @@
     } @else {
         <div></div>
     }
-    <div class="flex gap-2">
-        <p-button
-            label="Excel"
-            icon="pi pi-file-excel"
-            severity="success"
-            [loading]="isExcelLoading"
-            (onClick)="download('excel')">
-        </p-button>
-        <p-button
-            label="PDF"
-            icon="pi pi-file-pdf"
-            severity="danger"
-            [loading]="isPdfLoading"
-            (onClick)="download('pdf')">
-        </p-button>
-    </div>
+    @if (canExportShutdown) {
+        <div class="flex gap-2">
+            <p-button
+                label="Excel"
+                icon="pi pi-file-excel"
+                severity="success"
+                [loading]="isExcelLoading"
+                (onClick)="download('excel')">
+            </p-button>
+            <p-button
+                label="PDF"
+                icon="pi pi-file-pdf"
+                severity="danger"
+                [loading]="isPdfLoading"
+                (onClick)="download('pdf')">
+            </p-button>
+        </div>
+    }
 </div>
 
 <div class="table-section ges-section">

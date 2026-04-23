@@ -96,6 +96,15 @@ export class GesShutdownComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
+     * UX gate: кому показывать кнопки экспорта (Excel/PDF).
+     * Cascade намеренно исключён — у него нет потребности в сводном экспорте
+     * по всем каскадам; экспорт — привилегия sc/rais.
+     */
+    get canExportShutdown(): boolean {
+        return this.authService.hasRole(['sc', 'rais']);
+    }
+
+    /**
      * Унифицированный обработчик ошибок shutdown-запросов.
      * Важно: 403 и 404 используют одинаково generic тексты, чтобы не
      * раскрыть cascade различие «чужая запись vs её не существует»
