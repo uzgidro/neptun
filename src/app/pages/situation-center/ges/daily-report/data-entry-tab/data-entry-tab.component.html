@@ -114,7 +114,7 @@
                     </thead>
                     <tbody>
                         @for (row of group.rows; track row.config.organization_id) {
-                        <tr [formGroup]="row.form" class="border-t border-surface" [class.sum-overflow]="sumExceedsTotal(row)">
+                        <tr [formGroup]="row.form" class="border-t border-surface" [class.sum-overflow]="sumExceedsTotal(row) || productionExceedsMax(row)">
                             <td class="px-2 py-2 whitespace-nowrap align-middle">
                                 <div class="flex flex-col">
                                     <span class="font-semibold text-sm">{{ row.config.organization_name }}</span>
@@ -122,14 +122,28 @@
                                 </div>
                             </td>
                             <td class="px-2 py-2 align-middle">
-                                <p-inputNumber
-                                    formControlName="daily_production_mln_kwh"
-                                    [minFractionDigits]="0"
-                                    [maxFractionDigits]="6"
-                                    [useGrouping]="false"
-                                    styleClass="w-full"
-                                    inputStyleClass="w-full">
-                                </p-inputNumber>
+                                @if (row.config.max_daily_production_mln_kwh > 0) {
+                                    <p-inputNumber
+                                        formControlName="daily_production_mln_kwh"
+                                        [min]="0"
+                                        [max]="row.config.max_daily_production_mln_kwh"
+                                        [minFractionDigits]="0"
+                                        [maxFractionDigits]="6"
+                                        [useGrouping]="false"
+                                        styleClass="w-full"
+                                        inputStyleClass="w-full">
+                                    </p-inputNumber>
+                                } @else {
+                                    <p-inputNumber
+                                        formControlName="daily_production_mln_kwh"
+                                        [min]="0"
+                                        [minFractionDigits]="0"
+                                        [maxFractionDigits]="6"
+                                        [useGrouping]="false"
+                                        styleClass="w-full"
+                                        inputStyleClass="w-full">
+                                    </p-inputNumber>
+                                }
                             </td>
                             <td class="px-2 py-2 align-middle">
                                 <p-inputNumber
@@ -261,6 +275,18 @@
                                 <small class="text-red-500 px-2">
                                     {{ 'GES_REPORT.AGGREGATES_SUM_EXCEEDS_TOTAL' | translate }}
                                     ({{ sumAggregates(row) }} > {{ row.config.total_aggregates }})
+                                </small>
+                            </td>
+                        </tr>
+                        }
+                        @if (productionExceedsMax(row)) {
+                        <tr class="sum-overflow-warn">
+                            <td [attr.colspan]="13">
+                                <small class="text-red-500 px-2">
+                                    {{ 'GES_REPORT.PRODUCTION_EXCEEDS_MAX' | translate:{
+                                        value: (row.form.value.daily_production_mln_kwh | number:'1.0-6'),
+                                        max: (row.config.max_daily_production_mln_kwh | number:'1.0-6')
+                                    } }}
                                 </small>
                             </td>
                         </tr>

@@ -15,7 +15,8 @@ function makeConfig(id: number, orgId: number, orgName: string): GesConfigRespon
         id, organization_id: orgId, organization_name: orgName,
         cascade_id: 1, cascade_name: 'Каскад',
         installed_capacity_mwt: 50, total_aggregates: 4,
-        has_reservoir: true, sort_order: id
+        has_reservoir: true, sort_order: id,
+        max_daily_production_mln_kwh: 0
     };
 }
 
@@ -91,12 +92,14 @@ describe('ConfigTabComponent', () => {
         component.form.patchValue({
             organization: { id: 10, name: 'ГЭС-1', contacts: [] },
             installed_capacity_mwt: 50,
-            total_aggregates: 4, has_reservoir: true, sort_order: 1
+            total_aggregates: 4, has_reservoir: true, sort_order: 1,
+            max_daily_production_mln_kwh: 0
         });
         component.saveConfig();
         expect(gesReportService.upsertConfig).toHaveBeenCalledWith({
             organization_id: 10, installed_capacity_mwt: 50,
-            total_aggregates: 4, has_reservoir: true, sort_order: 1
+            total_aggregates: 4, has_reservoir: true, sort_order: 1,
+            max_daily_production_mln_kwh: 0
         });
     });
 

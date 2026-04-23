@@ -15,7 +15,8 @@ function makeConfig(orgId: number, name: string): GesConfigResponse {
         id: orgId, organization_id: orgId, organization_name: name,
         cascade_id: 1, cascade_name: 'Каскад',
         installed_capacity_mwt: 50, total_aggregates: 4,
-        has_reservoir: true, sort_order: orgId
+        has_reservoir: true, sort_order: orgId,
+        max_daily_production_mln_kwh: 0
     };
 }
 
