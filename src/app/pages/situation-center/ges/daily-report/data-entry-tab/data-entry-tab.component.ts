@@ -208,6 +208,8 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
                             row.form.valueChanges
                                 .pipe(takeUntil(merge(this.destroy$, this.rowsReset$)))
                                 .subscribe(() => this.formsTick.update(t => t + 1));
+
+                            this.wireGesFlowAutoFill(row);
                         }
                         this.formsTick.update(t => t + 1);
                         this.loading = false;
@@ -395,6 +397,35 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
             map.get(id)!.rows.push(row);
         }
         this.cascadeGroups = Array.from(map.values());
+    }
+
+    private wireGesFlowAutoFill(row: DataEntryRow): void {
+        const outflowCtrl = row.form.get('total_outflow_m3s');
+        const gesFlowCtrl = row.form.get('ges_flow_m3s');
+        if (!outflowCtrl || !gesFlowCtrl) return;
+
+        let userTouched = false;
+
+        gesFlowCtrl.valueChanges
+            .pipe(takeUntil(merge(this.destroy$, this.rowsReset$)))
+            .subscribe(() => { userTouched = true; });
+
+        outflowCtrl.valueChanges
+            .pipe(takeUntil(merge(this.destroy$, this.rowsReset$)))
+            .subscribe((outflow: number | null) => {
+                if (userTouched) return;
+                const idle = row.idleDischarge?.flow_rate_m3s ?? 0;
+                const computed = outflow != null ? outflow - idle : null;
+                gesFlowCtrl.setValue(computed, { emitEvent: false });
+                gesFlowCtrl.markAsDirty();
+            });
+
+        const initialOutflow = outflowCtrl.value;
+        if (initialOutflow != null && gesFlowCtrl.value == null) {
+            const idle = row.idleDischarge?.flow_rate_m3s ?? 0;
+            gesFlowCtrl.setValue(initialOutflow - idle, { emitEvent: false });
+            gesFlowCtrl.markAsPristine();
+        }
     }
 
     private calculateTotals(_tick: number): GesTotals {
