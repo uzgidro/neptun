@@ -27,9 +27,10 @@ describe('GesShutdownComponent - 409 Conflict handling', () => {
         const orgSpy = jasmine.createSpyObj('OrganizationService', ['getCascades']);
         orgSpy.getCascades.and.returnValue(of([]));
 
-        const authSpy = jasmine.createSpyObj('AuthService', ['hasPermission', 'isSc']);
+        const authSpy = jasmine.createSpyObj('AuthService', ['hasPermission', 'isSc', 'hasRole']);
         authSpy.hasPermission.and.returnValue(true);
         authSpy.isSc.and.returnValue(true);
+        authSpy.hasRole.and.returnValue(true);
 
         const scSpy = jasmine.createSpyObj('ScService', ['downloadScReport']);
 

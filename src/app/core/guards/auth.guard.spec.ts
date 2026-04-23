@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { AuthService } from '@/core/services/auth.service';
-import { cascadeOnlyGuard, gesReportGuard } from './auth.guard';
+import { cascadeOnlyGuard, gesReportGuard, raisGuard } from './auth.guard';
 
 describe('gesReportGuard', () => {
     let authServiceSpy: jasmine.SpyObj<AuthService>;
@@ -84,6 +84,26 @@ describe('cascadeOnlyGuard', () => {
         expect(routerSpy.createUrlTree).not.toHaveBeenCalled();
     });
 
+    it('allows cascade on /shutdowns', () => {
+        authServiceSpy.isCascade.and.returnValue(true);
+        expect(run('/shutdowns')).toBeTrue();
+        expect(routerSpy.createUrlTree).not.toHaveBeenCalled();
+    });
+
+    it('allows cascade on /shutdowns with query params', () => {
+        authServiceSpy.isCascade.and.returnValue(true);
+        expect(run('/shutdowns?filter=xxx')).toBeTrue();
+        expect(routerSpy.createUrlTree).not.toHaveBeenCalled();
+    });
+
+    it('redirects cascade from lookalike /shutdowns-evil to /ges-daily-report (strict allowlist)', () => {
+        authServiceSpy.isCascade.and.returnValue(true);
+        const fakeTree = {} as any;
+        routerSpy.createUrlTree.and.returnValue(fakeTree);
+        expect(run('/shutdowns-evil')).toBe(fakeTree);
+        expect(routerSpy.createUrlTree).toHaveBeenCalledWith(['/ges-daily-report']);
+    });
+
     it('redirects cascade from /monitoring to /ges-daily-report', () => {
         authServiceSpy.isCascade.and.returnValue(true);
         const fakeTree = {} as any;
@@ -98,5 +118,47 @@ describe('cascadeOnlyGuard', () => {
         routerSpy.createUrlTree.and.returnValue(fakeTree);
         expect(run('/notfound')).toBe(fakeTree);
         expect(routerSpy.createUrlTree).toHaveBeenCalledWith(['/ges-daily-report']);
+    });
+});
+
+describe('raisGuard', () => {
+    let authServiceSpy: jasmine.SpyObj<AuthService>;
+    let routerSpy: jasmine.SpyObj<Router>;
+
+    beforeEach(() => {
+        authServiceSpy = jasmine.createSpyObj('AuthService', ['hasRole']);
+        routerSpy = jasmine.createSpyObj('Router', ['createUrlTree']);
+
+        TestBed.configureTestingModule({
+            providers: [
+                { provide: AuthService, useValue: authServiceSpy },
+                { provide: Router, useValue: routerSpy }
+            ]
+        });
+    });
+
+    const run = () =>
+        TestBed.runInInjectionContext(() => raisGuard({} as any, {} as any));
+
+    it('allows cascade role (so they can reach /shutdowns)', () => {
+        authServiceSpy.hasRole.and.callFake((r: string | string[]) =>
+            Array.isArray(r) ? r.includes('cascade') : r === 'cascade'
+        );
+        expect(run()).toBeTrue();
+    });
+
+    it('allows sc role (regression)', () => {
+        authServiceSpy.hasRole.and.callFake((r: string | string[]) =>
+            Array.isArray(r) ? r.includes('sc') : r === 'sc'
+        );
+        expect(run()).toBeTrue();
+    });
+
+    it('denies role outside whitelist', () => {
+        authServiceSpy.hasRole.and.returnValue(false);
+        const fakeTree = {} as any;
+        routerSpy.createUrlTree.and.returnValue(fakeTree);
+        expect(run()).toBe(fakeTree);
+        expect(routerSpy.createUrlTree).toHaveBeenCalledWith(['/notfound']);
     });
 });

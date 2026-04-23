@@ -21,7 +21,7 @@ import { FileViewerComponent } from '@/layout/component/dialog/file-viewer/file-
 import { FileListComponent } from '@/layout/component/dialog/file-list/file-list.component';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ScService } from '@/core/services/sc.service';
-import { HttpResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { finalize, Subject, takeUntil } from 'rxjs';
 import { downloadBlob } from '@/core/utils/download';
 
@@ -85,6 +85,44 @@ export class GesShutdownComponent implements OnInit, OnChanges, OnDestroy {
     selectedShutdownForFiles: ShutdownDto | null = null;
     existingFilesToKeep: number[] = [];
     filesDirty = false;
+
+    /**
+     * UX gate: кому показывать кнопки Create/Edit/Delete АО.
+     * Source of truth — бэкенд (ACL через claims.OrganizationID + cascadefilter).
+     * Если cascade через DevTools обойдёт этот флаг, бэк всё равно ответит 403/404.
+     */
+    get canWriteShutdown(): boolean {
+        return this.authService.hasRole(['sc', 'rais', 'cascade']);
+    }
+
+    /**
+     * Унифицированный обработчик ошибок shutdown-запросов.
+     * Важно: 403 и 404 используют одинаково generic тексты, чтобы не
+     * раскрыть cascade различие «чужая запись vs её не существует»
+     * (IDOR enumeration защита — см. docs/plans/.../Security §2).
+     */
+    private handleShutdownError(err: HttpErrorResponse, fallbackSummaryKey: string): void {
+        if (err.status === 403) {
+            this.messageService.add({
+                severity: 'error',
+                summary: this.translate.instant('COMMON.ERROR'),
+                detail: this.translate.instant('SITUATION_CENTER.SHUTDOWN.ERROR_FORBIDDEN')
+            });
+        } else if (err.status === 404) {
+            this.messageService.add({
+                severity: 'warn',
+                summary: this.translate.instant('COMMON.WARNING'),
+                detail: this.translate.instant('SITUATION_CENTER.SHUTDOWN.ERROR_NOT_FOUND')
+            });
+            this.loadShutdowns();
+        } else {
+            this.messageService.add({
+                severity: 'error',
+                summary: this.translate.instant(fallbackSummaryKey),
+                detail: err.error?.message || this.translate.instant(fallbackSummaryKey)
+            });
+        }
+    }
 
     ngOnInit(): void {
         this.form = this.fb.group({
@@ -160,8 +198,8 @@ export class GesShutdownComponent implements OnInit, OnChanges, OnDestroy {
                         this.closeDialog();
                         this.shutdownSaved.emit();
                     },
-                    error: (err) => {
-                        this.messageService.add({ severity: 'error', summary: this.translate.instant('SITUATION_CENTER.SHUTDOWN.EVENT_UPDATE_ERROR'), detail: err.message });
+                    error: (err: HttpErrorResponse) => {
+                        this.handleShutdownError(err, 'SITUATION_CENTER.SHUTDOWN.EVENT_UPDATE_ERROR');
                         this.isLoading = false;
                     },
                     complete: () => {
@@ -178,7 +216,7 @@ export class GesShutdownComponent implements OnInit, OnChanges, OnDestroy {
                         this.closeDialog();
                         this.shutdownSaved.emit();
                     },
-                    error: (err) => {
+                    error: (err: HttpErrorResponse) => {
                         if (err.status === 409 && !force) {
                             const msg = err.error?.error || this.translate.instant('SITUATION_CENTER.SHUTDOWN.CONFLICT_EXISTS');
                             if (confirm(msg + '\n' + this.translate.instant('COMMON.FORCE_CONFIRM'))) {
@@ -188,7 +226,7 @@ export class GesShutdownComponent implements OnInit, OnChanges, OnDestroy {
                                 this.submitted = false;
                             }
                         } else {
-                            this.messageService.add({ severity: 'error', summary: this.translate.instant('SITUATION_CENTER.SHUTDOWN.EVENT_CREATE_ERROR'), detail: err.error?.message || this.translate.instant('SITUATION_CENTER.SHUTDOWN.EVENT_CREATE_ERROR') });
+                            this.handleShutdownError(err, 'SITUATION_CENTER.SHUTDOWN.EVENT_CREATE_ERROR');
                             this.isLoading = false;
                         }
                     },
@@ -310,8 +348,8 @@ export class GesShutdownComponent implements OnInit, OnChanges, OnDestroy {
                     this.loadShutdowns();
                     this.shutdownSaved.emit();
                 },
-                error: (err) => {
-                    this.messageService.add({ severity: 'error', summary: this.translate.instant('SITUATION_CENTER.SHUTDOWN.EVENT_DELETE_ERROR'), detail: err.message });
+                error: (err: HttpErrorResponse) => {
+                    this.handleShutdownError(err, 'SITUATION_CENTER.SHUTDOWN.EVENT_DELETE_ERROR');
                 }
             });
         }

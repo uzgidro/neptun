@@ -1963,6 +1963,8 @@
     },
     "SHUTDOWN": {
       "TITLE": "Favqulodda o'chirishlar",
+      "ERROR_FORBIDDEN": "Tashkilotga kirish huquqi yo'q",
+      "ERROR_NOT_FOUND": "Yozuv topilmadi yoki o'chirilgan",
       "ADD_INCIDENT": "Hodisa qo'shish",
       "ADD_SHUTDOWN": "Favqulodda o'chirish qo'shish",
       "ADD_EMERGENCY_SHUTDOWN": "Favqulodda o'chirish qo'shish",

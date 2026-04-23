@@ -22,10 +22,11 @@ export const cascadeOnlyGuard: CanActivateFn = (_route, state): boolean | UrlTre
         return true;
     }
 
-    const allowedPath = '/ges-daily-report';
+    const allowedPaths = ['/ges-daily-report', '/shutdowns'];
+    const fallbackPath = '/ges-daily-report';
     const targetPath = state.url.split('?')[0];
 
-    return targetPath === allowedPath ? true : router.createUrlTree([allowedPath]);
+    return allowedPaths.includes(targetPath) ? true : router.createUrlTree([fallbackPath]);
 };
 
 export const adminGuard: CanActivateFn = (): boolean | UrlTree => {
@@ -46,7 +47,7 @@ export const raisGuard: CanActivateFn = (): boolean | UrlTree => {
     const authService = inject(AuthService);
     const router = inject(Router);
 
-    return authService.hasRole(['sc', 'assistant', 'rais', 'investment', 'chancellery']) ? true : router.createUrlTree(['/notfound']);
+    return authService.hasRole(['sc', 'assistant', 'rais', 'investment', 'chancellery', 'cascade']) ? true : router.createUrlTree(['/notfound']);
 }
 
 export const gesReportGuard: CanActivateFn = (): boolean | UrlTree => {

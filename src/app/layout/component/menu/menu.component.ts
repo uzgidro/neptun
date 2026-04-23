@@ -34,7 +34,8 @@ export class MenuComponent implements OnInit {
             this.model = [
                 {
                     items: [
-                        { label: this.t('MENU.CASCADE_REPORT'), routerLink: ['/ges-daily-report'] }
+                        { label: this.t('MENU.CASCADE_REPORT'), routerLink: ['/ges-daily-report'] },
+                        { label: this.t('MENU.EMERGENCY_SHUTDOWN'), routerLink: ['/shutdowns'] }
                     ]
                 }
             ];
