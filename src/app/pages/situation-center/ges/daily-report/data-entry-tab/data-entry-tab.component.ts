@@ -1,9 +1,9 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
-import { forkJoin, of, Subject } from 'rxjs';
+import { forkJoin, merge, of, Subject } from 'rxjs';
 import { catchError, takeUntil } from 'rxjs/operators';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MessageService } from 'primeng/api';
@@ -13,6 +13,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
 import { InputTextModule } from 'primeng/inputtext';
+import { TooltipModule } from 'primeng/tooltip';
 import { FormsModule } from '@angular/forms';
 import { GesReportService } from '@/core/services/ges-report.service';
 import { TimeService } from '@/core/services/time.service';
@@ -21,6 +22,23 @@ import { GesConfigResponse, GesCascadeConfig, GesDailyData, GesDailyDataPayload,
 import { HasUnsavedChanges } from '@/core/guards/auth.guard';
 import { downloadBlob } from '@/core/utils/download';
 import { CascadeWeatherComponent } from '../shared/cascade-weather.component';
+
+export interface GesTotals {
+    installedCapacity: number;
+    totalAggregates: number;
+    production: number;
+    working: number;
+    repair: number;
+    mod: number;
+    reserve: number;
+    waterHead: number;
+    waterLevel: number;
+    waterVolume: number;
+    income: number;
+    outflow: number;
+    gesFlow: number;
+    idleDischarge: number;
+}
 
 export class DataEntryRow {
     config: GesConfigResponse;
@@ -61,6 +79,7 @@ export class DataEntryRow {
         ButtonModule,
         TagModule,
         InputTextModule,
+        TooltipModule,
         CascadeWeatherComponent
     ],
     templateUrl: './data-entry-tab.component.html'
@@ -75,6 +94,7 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
     private route = inject(ActivatedRoute);
     private router = inject(Router);
     private destroy$ = new Subject<void>();
+    private rowsReset$ = new Subject<void>();
 
     selectedDate: Date = this.readDateFromUrl() ?? new Date();
     rows: DataEntryRow[] = [];
@@ -85,6 +105,9 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
     savingAll = false;
     canExport = this.authService.isScOrRais();
     downloading: 'excel' | 'pdf' | null = null;
+
+    private formsTick = signal(0);
+    readonly totals = computed<GesTotals>(() => this.calculateTotals(this.formsTick()));
 
     ngOnInit(): void {
         this.loadData();
@@ -137,6 +160,7 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
 
     loadData(): void {
         this.loading = true;
+        this.rowsReset$.next();
         this.rows = [];
 
         const dateStr = this.timeService.dateToYMD(this.selectedDate);
@@ -186,6 +210,12 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
                             return row;
                         });
                         this.buildCascadeGroups();
+                        for (const row of this.rows) {
+                            row.form.valueChanges
+                                .pipe(takeUntil(merge(this.destroy$, this.rowsReset$)))
+                                .subscribe(() => this.formsTick.update(t => t + 1));
+                        }
+                        this.formsTick.update(t => t + 1);
                         this.loading = false;
                     },
                     error: () => {
@@ -371,6 +401,42 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
             map.get(id)!.rows.push(row);
         }
         this.cascadeGroups = Array.from(map.values());
+    }
+
+    private calculateTotals(_tick: number): GesTotals {
+        let installedCapacity = 0, totalAggregates = 0;
+        let production = 0, working = 0, repair = 0, mod = 0;
+        let waterHead = 0, waterLevel = 0, waterVolume = 0;
+        let income = 0, outflow = 0, idleDischarge = 0, gesFlow = 0;
+
+        for (const row of this.rows) {
+            installedCapacity += row.config.installed_capacity_mwt || 0;
+            totalAggregates += row.config.total_aggregates || 0;
+
+            const v = row.form.value;
+            production += Number(v.daily_production_mln_kwh ?? 0) || 0;
+            working += Number(v.working_aggregates ?? 0) || 0;
+            repair += Number(v.repair_aggregates ?? 0) || 0;
+            mod += Number(v.modernization_aggregates ?? 0) || 0;
+            waterHead += Number(v.water_head_m ?? 0) || 0;
+            waterLevel += Number(v.water_level_m ?? 0) || 0;
+            waterVolume += Number(v.water_volume_mln_m3 ?? 0) || 0;
+
+            income += Number(v.reservoir_income_m3s ?? 0) || 0;
+            const outflowRow = Number(v.total_outflow_m3s ?? 0) || 0;
+            outflow += outflowRow;
+
+            const idleRow = row.idleDischarge?.flow_rate_m3s ?? 0;
+            idleDischarge += idleRow;
+            gesFlow += outflowRow - idleRow;
+        }
+
+        const reserve = Math.max(0, totalAggregates - working - repair - mod);
+        return {
+            installedCapacity, totalAggregates, production, working,
+            repair, mod, reserve, waterHead, waterLevel, waterVolume,
+            income, outflow, gesFlow, idleDischarge
+        };
     }
 
     private createForm(data: GesDailyData | null): FormGroup {

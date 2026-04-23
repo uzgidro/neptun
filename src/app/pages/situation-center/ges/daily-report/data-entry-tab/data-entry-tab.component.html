@@ -37,6 +37,77 @@
         }
     </div>
 
+    @if (!loading && rows.length) {
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2">
+            <div class="p-3 rounded-md border"
+                 style="background: var(--p-primary-50, #eff6ff); border-color: var(--p-primary-200);">
+                <div class="text-xs text-color-secondary">{{ 'GES_REPORT.PRODUCTION' | translate }}</div>
+                <div class="text-lg font-bold" style="color: var(--p-primary-600)">
+                    {{ totals().production | number:'1.0-6' }}
+                </div>
+            </div>
+            <div class="p-3 rounded-md border"
+                 style="background: var(--p-primary-50, #eff6ff); border-color: var(--p-primary-200);">
+                <div class="text-xs text-color-secondary">{{ 'GES_REPORT.INSTALLED_CAPACITY' | translate }}</div>
+                <div class="text-lg font-bold">{{ totals().installedCapacity | number:'1.0-0' }}</div>
+            </div>
+            <div class="p-3 rounded-md border"
+                 style="background: var(--p-primary-50, #eff6ff); border-color: var(--p-primary-200);">
+                <div class="text-xs text-color-secondary">{{ 'GES_REPORT.TOTAL_AGGREGATES' | translate }}</div>
+                <div class="flex items-center gap-1 mt-1 flex-wrap">
+                    <p-tag [value]="totals().working.toString()" severity="success"
+                           [pTooltip]="'GES_REPORT.WORKING_AGGREGATES' | translate" />
+                    <p-tag [value]="totals().repair.toString()" severity="warn"
+                           [pTooltip]="'GES_REPORT.REPAIR_AGGREGATES' | translate" />
+                    <p-tag [value]="totals().mod.toString()" severity="info"
+                           [pTooltip]="'GES_REPORT.MODERNIZATION_AGGREGATES' | translate" />
+                    <p-tag [value]="totals().reserve.toString()" severity="secondary"
+                           [pTooltip]="'GES_REPORT.RESERVE_AGGREGATES' | translate" />
+                </div>
+                <div class="text-xs text-color-secondary mt-1">{{ 'GES_REPORT.GRAND_TOTAL' | translate }}: {{ totals().totalAggregates }}</div>
+            </div>
+            <div class="p-3 rounded-md border"
+                 style="background: var(--p-primary-50, #eff6ff); border-color: var(--p-primary-200);">
+                <div class="text-xs text-color-secondary">{{ 'GES_REPORT.WATER_HEAD' | translate }}</div>
+                <div class="text-lg font-bold">{{ totals().waterHead | number:'1.0-2' }}</div>
+            </div>
+            <div class="p-3 rounded-md border"
+                 style="background: var(--p-primary-50, #eff6ff); border-color: var(--p-primary-200);">
+                <div class="text-xs text-color-secondary">{{ 'GES_REPORT.RESERVOIR_INCOME' | translate }}</div>
+                <div class="text-lg font-bold">{{ totals().income | number:'1.0-2' }}</div>
+            </div>
+            <div class="p-3 rounded-md border"
+                 style="background: var(--p-primary-50, #eff6ff); border-color: var(--p-primary-200);">
+                <div class="text-xs text-color-secondary">{{ 'GES_REPORT.TOTAL_OUTFLOW' | translate }}</div>
+                <div class="text-lg font-bold">{{ totals().outflow | number:'1.0-2' }}</div>
+            </div>
+            <div class="p-3 rounded-md border"
+                 style="background: var(--p-primary-50, #eff6ff); border-color: var(--p-primary-200);">
+                <div class="text-xs text-color-secondary">{{ 'GES_REPORT.GES_FLOW' | translate }}</div>
+                <div class="text-lg font-bold">{{ totals().gesFlow | number:'1.0-2' }}</div>
+            </div>
+            @if (totals().idleDischarge > 0) {
+                <div class="p-3 rounded-md border"
+                     style="background: var(--p-red-50, #fef2f2); border-color: var(--p-red-200);">
+                    <div class="text-xs text-color-secondary">{{ 'GES_REPORT.IDLE_DISCHARGE' | translate }}</div>
+                    <div class="text-lg font-bold" style="color: var(--p-red-600)">
+                        {{ totals().idleDischarge | number:'1.0-2' }}
+                    </div>
+                </div>
+            }
+            <div class="p-3 rounded-md border"
+                 style="background: var(--p-primary-50, #eff6ff); border-color: var(--p-primary-200);">
+                <div class="text-xs text-color-secondary">{{ 'GES_REPORT.WATER_LEVEL' | translate }}</div>
+                <div class="text-lg font-bold">{{ totals().waterLevel | number:'1.0-2' }}</div>
+            </div>
+            <div class="p-3 rounded-md border"
+                 style="background: var(--p-primary-50, #eff6ff); border-color: var(--p-primary-200);">
+                <div class="text-xs text-color-secondary">{{ 'GES_REPORT.WATER_VOLUME' | translate }}</div>
+                <div class="text-lg font-bold">{{ totals().waterVolume | number:'1.0-2' }}</div>
+            </div>
+        </div>
+    }
+
     @if (loading) {
         <div class="flex justify-center p-8">
             <i class="pi pi-spin pi-spinner text-4xl"></i>
