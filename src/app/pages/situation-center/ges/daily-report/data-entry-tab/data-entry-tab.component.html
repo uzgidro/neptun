@@ -93,7 +93,7 @@
                                 <p-inputNumber
                                     formControlName="daily_production_mln_kwh"
                                     [minFractionDigits]="0"
-                                    [maxFractionDigits]="4"
+                                    [maxFractionDigits]="6"
                                     [useGrouping]="false"
                                     styleClass="w-full"
                                     inputStyleClass="w-full">
@@ -137,7 +137,7 @@
                                 <p-inputNumber
                                     formControlName="water_head_m"
                                     [minFractionDigits]="0"
-                                    [maxFractionDigits]="2"
+                                    [maxFractionDigits]="6"
                                     [useGrouping]="false"
                                     styleClass="w-full"
                                     inputStyleClass="w-full">
@@ -147,7 +147,7 @@
                                 <p-inputNumber
                                     formControlName="reservoir_income_m3s"
                                     [minFractionDigits]="0"
-                                    [maxFractionDigits]="1"
+                                    [maxFractionDigits]="6"
                                     [useGrouping]="false"
                                     styleClass="w-full"
                                     inputStyleClass="w-full">
@@ -157,7 +157,7 @@
                                 <p-inputNumber
                                     formControlName="total_outflow_m3s"
                                     [minFractionDigits]="0"
-                                    [maxFractionDigits]="1"
+                                    [maxFractionDigits]="6"
                                     [useGrouping]="false"
                                     styleClass="w-full"
                                     inputStyleClass="w-full">
@@ -165,14 +165,14 @@
                             </td>
                             <td class="px-2 py-2 align-middle">
                                 @if (row.form.value.total_outflow_m3s != null) {
-                                    <span class="text-sm">{{ (row.form.value.total_outflow_m3s - (row.idleDischarge?.flow_rate_m3s ?? 0)) | number:'1.0-2' }}</span>
+                                    <span class="text-sm">{{ (row.form.value.total_outflow_m3s - (row.idleDischarge?.flow_rate_m3s ?? 0)) | number:'1.0-6' }}</span>
                                 } @else {
                                     <span class="text-color-secondary">—</span>
                                 }
                             </td>
                             <td class="px-2 py-2 align-middle">
                                 @if (row.idleDischarge) {
-                                    <span class="text-sm">{{ row.idleDischarge.flow_rate_m3s | number:'1.0-2' }}</span>
+                                    <span class="text-sm">{{ row.idleDischarge.flow_rate_m3s | number:'1.0-6' }}</span>
                                 } @else {
                                     <span class="text-color-secondary">—</span>
                                 }
@@ -182,7 +182,7 @@
                                     <p-inputNumber
                                         formControlName="water_level_m"
                                         [minFractionDigits]="0"
-                                        [maxFractionDigits]="2"
+                                        [maxFractionDigits]="6"
                                         [useGrouping]="false"
                                         styleClass="w-full"
                                         inputStyleClass="w-full">
@@ -196,7 +196,7 @@
                                     <p-inputNumber
                                         formControlName="water_volume_mln_m3"
                                         [minFractionDigits]="0"
-                                        [maxFractionDigits]="2"
+                                        [maxFractionDigits]="6"
                                         [useGrouping]="false"
                                         styleClass="w-full"
                                         inputStyleClass="w-full">
