@@ -42,7 +42,7 @@
             <div class="totals-card totals-card--accent">
                 <div class="totals-card__label">{{ 'GES_REPORT.PRODUCTION' | translate }}</div>
                 <div class="totals-card__value totals-card__value--accent">
-                    {{ totals().production | number:'1.0-6' }}
+                    {{ totals().production | number:'1.0-3' }}
                 </div>
             </div>
             <div class="totals-card">
@@ -51,7 +51,7 @@
             </div>
             <div class="totals-card">
                 <div class="totals-card__label">{{ 'GES_REPORT.INSTALLED_CAPACITY' | translate }}</div>
-                <div class="totals-card__value">{{ totals().installedCapacity | number:'1.0-0' }}</div>
+                <div class="totals-card__value">{{ totals().installedCapacity | number:'1.0-2' }}</div>
             </div>
             <div class="totals-card">
                 <div class="totals-card__label">{{ 'GES_REPORT.TOTAL_AGGREGATES' | translate }}: {{ totals().totalAggregates }}</div>
