@@ -48,6 +48,15 @@ export class AuthService {
         return this.hasRole('cascade');
     }
 
+    isOnlyCascade(): boolean {
+        const decodedToken = this.jwtService.getDecodedToken();
+        if (!decodedToken || !Array.isArray(decodedToken.roles)) {
+            return false;
+        }
+        const roles: string[] = decodedToken.roles;
+        return roles.length === 1 && roles[0] === 'cascade';
+    }
+
     isScOrRais(): boolean {
         return this.hasRole(['sc', 'rais']);
     }

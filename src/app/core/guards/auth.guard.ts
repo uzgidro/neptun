@@ -18,7 +18,7 @@ export const cascadeOnlyGuard: CanActivateFn = (_route, state): boolean | UrlTre
     const authService = inject(AuthService);
     const router = inject(Router);
 
-    if (!authService.isCascade()) {
+    if (!authService.isOnlyCascade()) {
         return true;
     }
 

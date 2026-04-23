@@ -45,4 +45,29 @@ describe('AuthService', () => {
         jwtServiceSpy.getDecodedToken.and.returnValue({ roles: ['cascade'] } as any);
         expect(service.isScOrRais()).toBeFalse();
     });
+
+    it('isOnlyCascade returns true when roles is exactly ["cascade"]', () => {
+        jwtServiceSpy.getDecodedToken.and.returnValue({ roles: ['cascade'] } as any);
+        expect(service.isOnlyCascade()).toBeTrue();
+    });
+
+    it('isOnlyCascade returns false when cascade is combined with another role', () => {
+        jwtServiceSpy.getDecodedToken.and.returnValue({ roles: ['sc', 'cascade'] } as any);
+        expect(service.isOnlyCascade()).toBeFalse();
+    });
+
+    it('isOnlyCascade returns false when roles does not include cascade', () => {
+        jwtServiceSpy.getDecodedToken.and.returnValue({ roles: ['sc'] } as any);
+        expect(service.isOnlyCascade()).toBeFalse();
+    });
+
+    it('isOnlyCascade returns false when token is missing', () => {
+        jwtServiceSpy.getDecodedToken.and.returnValue(null as any);
+        expect(service.isOnlyCascade()).toBeFalse();
+    });
+
+    it('isOnlyCascade returns false when roles field is absent', () => {
+        jwtServiceSpy.getDecodedToken.and.returnValue({} as any);
+        expect(service.isOnlyCascade()).toBeFalse();
+    });
 });
