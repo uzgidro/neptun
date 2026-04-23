@@ -196,11 +196,15 @@
                                 </p-inputNumber>
                             </td>
                             <td class="px-2 py-2 align-middle">
-                                @if (row.form.value.total_outflow_m3s != null) {
-                                    <span class="text-sm">{{ (row.form.value.total_outflow_m3s - (row.idleDischarge?.flow_rate_m3s ?? 0)) | number:'1.0-6' }}</span>
-                                } @else {
-                                    <span class="text-color-secondary">—</span>
-                                }
+                                <p-inputNumber
+                                    formControlName="ges_flow_m3s"
+                                    [min]="0"
+                                    [minFractionDigits]="0"
+                                    [maxFractionDigits]="6"
+                                    [useGrouping]="false"
+                                    styleClass="w-full"
+                                    inputStyleClass="w-full">
+                                </p-inputNumber>
                             </td>
                             <td class="px-2 py-2 align-middle">
                                 @if (row.idleDischarge) {
