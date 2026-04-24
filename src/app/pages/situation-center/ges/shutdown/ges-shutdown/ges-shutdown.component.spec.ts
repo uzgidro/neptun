@@ -274,3 +274,126 @@ describe('GesShutdownComponent - canEditShutdown (ownership gate)', () => {
         expect(component.canEditShutdown(makeShutdown(null))).toBeFalse();
     });
 });
+
+describe('GesShutdownComponent - 403 handling (creator vs org-denied)', () => {
+    let component: GesShutdownComponent;
+    let fixture: ComponentFixture<GesShutdownComponent>;
+    let gesShutdownService: jasmine.SpyObj<GesShutdownService>;
+    let messageService: jasmine.SpyObj<MessageService>;
+    let translate: TranslateService;
+
+    beforeEach(async () => {
+        const shutdownSpy = jasmine.createSpyObj('GesShutdownService', [
+            'addShutdown', 'getShutdowns', 'editShutdown', 'deleteShutdown'
+        ]);
+        shutdownSpy.getShutdowns.and.returnValue(of({ ges: [], mini: [], micro: [] }));
+
+        const orgSpy = jasmine.createSpyObj('OrganizationService', ['getCascades']);
+        orgSpy.getCascades.and.returnValue(of([]));
+
+        const authSpy = jasmine.createSpyObj('AuthService', ['hasRole', 'isOnlyCascade', 'getUserId']);
+        authSpy.hasRole.and.returnValue(true);
+        authSpy.isOnlyCascade.and.returnValue(false);
+        authSpy.getUserId.and.returnValue(99);
+
+        const scSpy = jasmine.createSpyObj('ScService', ['downloadScReport']);
+        const msgSpy = jasmine.createSpyObj('MessageService', ['add']);
+
+        await TestBed.configureTestingModule({
+            imports: [GesShutdownComponent, TranslateModule.forRoot()],
+            providers: [
+                provideHttpClient(),
+                provideHttpClientTesting(),
+                provideNoopAnimations(),
+                { provide: GesShutdownService, useValue: shutdownSpy },
+                { provide: OrganizationService, useValue: orgSpy },
+                { provide: AuthService, useValue: authSpy },
+                { provide: ScService, useValue: scSpy },
+                { provide: MessageService, useValue: msgSpy }
+            ]
+        }).compileComponents();
+
+        fixture = TestBed.createComponent(GesShutdownComponent);
+        component = fixture.componentInstance;
+        gesShutdownService = TestBed.inject(GesShutdownService) as jasmine.SpyObj<GesShutdownService>;
+        messageService = TestBed.inject(MessageService) as jasmine.SpyObj<MessageService>;
+        translate = TestBed.inject(TranslateService);
+        fixture.detectChanges();
+    });
+
+    afterEach(() => {
+        TestBed.resetTestingModule();
+    });
+
+    function make403Error(body: string): HttpErrorResponse {
+        return new HttpErrorResponse({ status: 403, statusText: 'Forbidden', error: { error: body } });
+    }
+
+    it('edit: 403 with "creator" text shows creator-specific detail', () => {
+        component.isEditMode = true;
+        component.currentShutdownId = 1;
+        component.form.patchValue({
+            organization: { id: 1, name: 'Test Org' },
+            start_time: new Date('2026-04-01')
+        });
+        gesShutdownService.editShutdown.and.returnValue(
+            throwError(() => make403Error('only the creator can edit this record'))
+        );
+
+        component.onSubmit();
+
+        const call = messageService.add.calls.mostRecent();
+        expect(call.args[0].severity).toBe('error');
+        expect(call.args[0].detail).toBe(
+            translate.instant('SITUATION_CENTER.SHUTDOWN.ERROR_ONLY_CREATOR_EDIT')
+        );
+    });
+
+    it('edit: 403 without "creator" text shows org-denied detail', () => {
+        component.isEditMode = true;
+        component.currentShutdownId = 1;
+        component.form.patchValue({
+            organization: { id: 1, name: 'Test Org' },
+            start_time: new Date('2026-04-01')
+        });
+        gesShutdownService.editShutdown.and.returnValue(
+            throwError(() => make403Error('access to target organization denied'))
+        );
+
+        component.onSubmit();
+
+        const call = messageService.add.calls.mostRecent();
+        expect(call.args[0].detail).toBe(
+            translate.instant('SITUATION_CENTER.SHUTDOWN.ERROR_FORBIDDEN')
+        );
+    });
+
+    it('delete: 403 with "creator" text shows creator-specific delete detail', () => {
+        gesShutdownService.deleteShutdown.and.returnValue(
+            throwError(() => make403Error('only the creator can delete this record'))
+        );
+        spyOn(window, 'confirm').and.returnValue(true);
+
+        component.deleteShutdown(42);
+
+        const call = messageService.add.calls.mostRecent();
+        expect(call.args[0].severity).toBe('error');
+        expect(call.args[0].detail).toBe(
+            translate.instant('SITUATION_CENTER.SHUTDOWN.ERROR_ONLY_CREATOR_DELETE')
+        );
+    });
+
+    it('delete: 403 without "creator" text falls back to org-denied', () => {
+        gesShutdownService.deleteShutdown.and.returnValue(
+            throwError(() => make403Error('access to target organization denied'))
+        );
+        spyOn(window, 'confirm').and.returnValue(true);
+
+        component.deleteShutdown(42);
+
+        const call = messageService.add.calls.mostRecent();
+        expect(call.args[0].detail).toBe(
+            translate.instant('SITUATION_CENTER.SHUTDOWN.ERROR_FORBIDDEN')
+        );
+    });
+});
