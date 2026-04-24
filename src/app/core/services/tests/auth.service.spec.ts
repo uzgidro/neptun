@@ -70,4 +70,26 @@ describe('AuthService', () => {
         jwtServiceSpy.getDecodedToken.and.returnValue({} as any);
         expect(service.isOnlyCascade()).toBeFalse();
     });
+
+    describe('getUserId', () => {
+        it('returns null when token is missing', () => {
+            jwtServiceSpy.getDecodedToken.and.returnValue(null as any);
+            expect(service.getUserId()).toBeNull();
+        });
+
+        it('returns null when uid claim is absent', () => {
+            jwtServiceSpy.getDecodedToken.and.returnValue({ roles: ['sc'] } as any);
+            expect(service.getUserId()).toBeNull();
+        });
+
+        it('returns the numeric uid when present', () => {
+            jwtServiceSpy.getDecodedToken.and.returnValue({ uid: 42, roles: ['cascade'] } as any);
+            expect(service.getUserId()).toBe(42);
+        });
+
+        it('returns null when uid is not a number (defensive)', () => {
+            jwtServiceSpy.getDecodedToken.and.returnValue({ uid: '42' } as any);
+            expect(service.getUserId()).toBeNull();
+        });
+    });
 });

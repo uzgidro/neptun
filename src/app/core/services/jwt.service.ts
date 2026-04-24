@@ -4,6 +4,10 @@ import { jwtDecode } from 'jwt-decode';
 interface JwtPayload {
     exp?: number;
     roles?: string[];
+    contact_id?: number;
+    uid?: number;
+    org_id?: number;
+    name?: string;
     [key: string]: any;
 }
 

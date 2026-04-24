@@ -79,6 +79,12 @@ export class AuthService {
         return this.currentContact$;
     }
 
+    getUserId(): number | null {
+        const decoded = this.jwtService.getDecodedToken();
+        const id = decoded?.['uid'];
+        return typeof id === 'number' ? id : null;
+    }
+
     hasRole(expectedRole: string | string[]): boolean {
         const decodedToken = this.jwtService.getDecodedToken();
 
