@@ -37,7 +37,7 @@ export interface ShutdownResponse {
     started_at: string;
     ended_at: string | null;
     reason: string | null;
-    created_by: UserShortInfo;
+    created_by: UserShortInfo | null;
     generation_loss: number | null;
     created_at: string;
     idle_discharge_volume: number | null;
@@ -58,7 +58,7 @@ export interface ShutdownDto {
     started_at: Date;
     ended_at: Date | null;
     reason: string | null;
-    created_by: UserShortInfo;
+    created_by: UserShortInfo | null;
     generation_loss: number | null;
     created_at: Date;
     idle_discharge_volume: number | null;

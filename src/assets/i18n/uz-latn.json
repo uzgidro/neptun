@@ -1971,6 +1971,8 @@
       "TITLE": "Favqulodda o'chirishlar",
       "ERROR_FORBIDDEN": "Tashkilotga kirish huquqi yo'q",
       "ERROR_NOT_FOUND": "Yozuv topilmadi yoki o'chirilgan",
+      "ERROR_ONLY_CREATOR_EDIT": "Faqat yozuv yaratuvchisi uni tahrirlashi mumkin",
+      "ERROR_ONLY_CREATOR_DELETE": "Faqat yozuv yaratuvchisi uni o'chirishi mumkin",
       "ADD_INCIDENT": "Hodisa qo'shish",
       "ADD_SHUTDOWN": "Favqulodda o'chirish qo'shish",
       "ADD_EMERGENCY_SHUTDOWN": "Favqulodda o'chirish qo'shish",

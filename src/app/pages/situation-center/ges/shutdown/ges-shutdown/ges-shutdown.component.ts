@@ -114,16 +114,27 @@ export class GesShutdownComponent implements OnInit, OnChanges, OnDestroy {
 
     /**
      * Унифицированный обработчик ошибок shutdown-запросов.
-     * Важно: 403 и 404 используют одинаково generic тексты, чтобы не
-     * раскрыть cascade различие «чужая запись vs её не существует»
-     * (IDOR enumeration защита — см. docs/plans/.../Security §2).
+     * Для 403 с текстом «only the creator can edit/delete this record»
+     * показываем специфичный toast; остальные 403 остаются generic
+     * «Нет доступа к организации» (IDOR-safe).
      */
-    private handleShutdownError(err: HttpErrorResponse, fallbackSummaryKey: string): void {
+    private handleShutdownError(
+        err: HttpErrorResponse,
+        fallbackSummaryKey: string,
+        operation: 'edit' | 'delete' | 'create' = 'edit'
+    ): void {
         if (err.status === 403) {
+            const body = typeof err.error?.error === 'string' ? err.error.error : '';
+            const creatorViolation = body.includes('creator');
+            const key = creatorViolation
+                ? (operation === 'delete'
+                    ? 'SITUATION_CENTER.SHUTDOWN.ERROR_ONLY_CREATOR_DELETE'
+                    : 'SITUATION_CENTER.SHUTDOWN.ERROR_ONLY_CREATOR_EDIT')
+                : 'SITUATION_CENTER.SHUTDOWN.ERROR_FORBIDDEN';
             this.messageService.add({
                 severity: 'error',
                 summary: this.translate.instant('COMMON.ERROR'),
-                detail: this.translate.instant('SITUATION_CENTER.SHUTDOWN.ERROR_FORBIDDEN')
+                detail: this.translate.instant(key)
             });
         } else if (err.status === 404) {
             this.messageService.add({
@@ -216,7 +227,7 @@ export class GesShutdownComponent implements OnInit, OnChanges, OnDestroy {
                         this.shutdownSaved.emit();
                     },
                     error: (err: HttpErrorResponse) => {
-                        this.handleShutdownError(err, 'SITUATION_CENTER.SHUTDOWN.EVENT_UPDATE_ERROR');
+                        this.handleShutdownError(err, 'SITUATION_CENTER.SHUTDOWN.EVENT_UPDATE_ERROR', 'edit');
                         this.isLoading = false;
                     },
                     complete: () => {
@@ -243,7 +254,7 @@ export class GesShutdownComponent implements OnInit, OnChanges, OnDestroy {
                                 this.submitted = false;
                             }
                         } else {
-                            this.handleShutdownError(err, 'SITUATION_CENTER.SHUTDOWN.EVENT_CREATE_ERROR');
+                            this.handleShutdownError(err, 'SITUATION_CENTER.SHUTDOWN.EVENT_CREATE_ERROR', 'create');
                             this.isLoading = false;
                         }
                     },
@@ -366,7 +377,7 @@ export class GesShutdownComponent implements OnInit, OnChanges, OnDestroy {
                     this.shutdownSaved.emit();
                 },
                 error: (err: HttpErrorResponse) => {
-                    this.handleShutdownError(err, 'SITUATION_CENTER.SHUTDOWN.EVENT_DELETE_ERROR');
+                    this.handleShutdownError(err, 'SITUATION_CENTER.SHUTDOWN.EVENT_DELETE_ERROR', 'delete');
                 }
             });
         }
