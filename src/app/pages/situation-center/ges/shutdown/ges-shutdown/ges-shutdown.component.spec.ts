@@ -181,3 +181,96 @@ describe('GesShutdownComponent - 409 Conflict handling', () => {
         expect(component.isLoading).toBeFalse();
     });
 });
+
+describe('GesShutdownComponent - canEditShutdown (ownership gate)', () => {
+    let component: GesShutdownComponent;
+    let fixture: ComponentFixture<GesShutdownComponent>;
+    let authSpy: jasmine.SpyObj<AuthService>;
+
+    function makeShutdown(createdById: number | null): any {
+        return {
+            id: 1,
+            organization_id: 10,
+            organization_name: 'ГЭС-1',
+            started_at: '2026-04-01T00:00:00Z',
+            ended_at: null,
+            reason: null,
+            created_by: createdById === null ? null : { id: createdById, name: 'u' },
+            generation_loss: null,
+            created_at: '2026-04-01T00:00:00Z',
+            idle_discharge_volume: null,
+            viewed: false
+        };
+    }
+
+    async function setupWith(authOverrides: Partial<Record<keyof AuthService, any>>): Promise<void> {
+        const shutdownSpy = jasmine.createSpyObj('GesShutdownService', [
+            'addShutdown', 'getShutdowns', 'editShutdown', 'deleteShutdown'
+        ]);
+        shutdownSpy.getShutdowns.and.returnValue(of({ ges: [], mini: [], micro: [] }));
+
+        const orgSpy = jasmine.createSpyObj('OrganizationService', ['getCascades']);
+        orgSpy.getCascades.and.returnValue(of([]));
+
+        authSpy = jasmine.createSpyObj('AuthService', ['hasRole', 'isOnlyCascade', 'getUserId']);
+        authSpy.hasRole.and.returnValue(authOverrides['hasRole'] ?? true);
+        authSpy.isOnlyCascade.and.returnValue(authOverrides['isOnlyCascade'] ?? false);
+        authSpy.getUserId.and.returnValue(authOverrides['getUserId'] ?? null);
+
+        const scSpy = jasmine.createSpyObj('ScService', ['downloadScReport']);
+        const msgSpy = jasmine.createSpyObj('MessageService', ['add']);
+
+        await TestBed.configureTestingModule({
+            imports: [GesShutdownComponent, TranslateModule.forRoot()],
+            providers: [
+                provideHttpClient(),
+                provideHttpClientTesting(),
+                provideNoopAnimations(),
+                { provide: GesShutdownService, useValue: shutdownSpy },
+                { provide: OrganizationService, useValue: orgSpy },
+                { provide: AuthService, useValue: authSpy },
+                { provide: ScService, useValue: scSpy },
+                { provide: MessageService, useValue: msgSpy }
+            ]
+        }).compileComponents();
+
+        fixture = TestBed.createComponent(GesShutdownComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    }
+
+    afterEach(() => {
+        TestBed.resetTestingModule();
+    });
+
+    it('returns false when canWriteShutdown is false (viewer)', async () => {
+        await setupWith({ hasRole: false });
+        expect(component.canEditShutdown(makeShutdown(10))).toBeFalse();
+    });
+
+    it('returns true for sc/rais (multi-role) regardless of ownership', async () => {
+        await setupWith({ hasRole: true, isOnlyCascade: false, getUserId: 99 });
+        expect(component.canEditShutdown(makeShutdown(10))).toBeTrue();
+        expect(component.canEditShutdown(makeShutdown(20))).toBeTrue();
+    });
+
+    it('returns true for only-cascade when uid matches created_by.id', async () => {
+        await setupWith({ hasRole: true, isOnlyCascade: true, getUserId: 10 });
+        expect(component.canEditShutdown(makeShutdown(10))).toBeTrue();
+    });
+
+    it('returns false for only-cascade when uid differs from created_by.id', async () => {
+        await setupWith({ hasRole: true, isOnlyCascade: true, getUserId: 10 });
+        expect(component.canEditShutdown(makeShutdown(20))).toBeFalse();
+    });
+
+    it('returns false for only-cascade when getUserId returns null (fail-closed)', async () => {
+        await setupWith({ hasRole: true, isOnlyCascade: true, getUserId: null });
+        expect(component.canEditShutdown(makeShutdown(10))).toBeFalse();
+    });
+
+    it('returns false for only-cascade when created_by is missing', async () => {
+        await setupWith({ hasRole: true, isOnlyCascade: true, getUserId: 10 });
+        expect(component.canEditShutdown(makeShutdown(null))).toBeFalse();
+    });
+});

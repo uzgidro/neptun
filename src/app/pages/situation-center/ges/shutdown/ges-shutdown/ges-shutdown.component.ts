@@ -104,6 +104,14 @@ export class GesShutdownComponent implements OnInit, OnChanges, OnDestroy {
         return this.authService.hasRole(['sc', 'rais']);
     }
 
+    canEditShutdown(shutdown: ShutdownDto): boolean {
+        if (!this.canWriteShutdown) return false;
+        if (!this.authService.isOnlyCascade()) return true;
+        const myId = this.authService.getUserId();
+        if (myId == null) return false;
+        return shutdown.created_by?.id === myId;
+    }
+
     /**
      * Унифицированный обработчик ошибок shutdown-запросов.
      * Важно: 403 и 404 используют одинаково generic тексты, чтобы не

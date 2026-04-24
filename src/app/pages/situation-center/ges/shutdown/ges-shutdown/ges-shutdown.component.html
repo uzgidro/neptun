@@ -128,22 +128,24 @@
             </td>
             @if (canWriteShutdown) {
                 <td>
-                    <p-button
-                        icon="pi pi-pencil"
-                        severity="info"
-                        [text]="true"
-                        [rounded]="true"
-                        (click)="editShutdown(shutdown)"
-                        [pTooltip]="'SITUATION_CENTER.COMMON.EDIT' | translate"
-                    />
-                    <p-button
-                        icon="pi pi-trash"
-                        severity="danger"
-                        [text]="true"
-                        [rounded]="true"
-                        (click)="deleteShutdown(shutdown.id)"
-                        [pTooltip]="'SITUATION_CENTER.COMMON.DELETE' | translate"
-                    />
+                    @if (canEditShutdown(shutdown)) {
+                        <p-button
+                            icon="pi pi-pencil"
+                            severity="info"
+                            [text]="true"
+                            [rounded]="true"
+                            (click)="editShutdown(shutdown)"
+                            [pTooltip]="'SITUATION_CENTER.COMMON.EDIT' | translate"
+                        />
+                        <p-button
+                            icon="pi pi-trash"
+                            severity="danger"
+                            [text]="true"
+                            [rounded]="true"
+                            (click)="deleteShutdown(shutdown.id)"
+                            [pTooltip]="'SITUATION_CENTER.COMMON.DELETE' | translate"
+                        />
+                    }
                 </td>
             }
         </tr>
@@ -264,22 +266,24 @@
             </td>
             @if (canWriteShutdown) {
                 <td>
-                    <p-button
-                        icon="pi pi-pencil"
-                        severity="info"
-                        [text]="true"
-                        [rounded]="true"
-                        (click)="editShutdown(shutdown)"
-                        [pTooltip]="'SITUATION_CENTER.COMMON.EDIT' | translate"
-                    />
-                    <p-button
-                        icon="pi pi-trash"
-                        severity="danger"
-                        [text]="true"
-                        [rounded]="true"
-                        (click)="deleteShutdown(shutdown.id)"
-                        [pTooltip]="'SITUATION_CENTER.COMMON.DELETE' | translate"
-                    />
+                    @if (canEditShutdown(shutdown)) {
+                        <p-button
+                            icon="pi pi-pencil"
+                            severity="info"
+                            [text]="true"
+                            [rounded]="true"
+                            (click)="editShutdown(shutdown)"
+                            [pTooltip]="'SITUATION_CENTER.COMMON.EDIT' | translate"
+                        />
+                        <p-button
+                            icon="pi pi-trash"
+                            severity="danger"
+                            [text]="true"
+                            [rounded]="true"
+                            (click)="deleteShutdown(shutdown.id)"
+                            [pTooltip]="'SITUATION_CENTER.COMMON.DELETE' | translate"
+                        />
+                    }
                 </td>
             }
         </tr>
@@ -400,22 +404,24 @@
             </td>
             @if (canWriteShutdown) {
                 <td>
-                    <p-button
-                        icon="pi pi-pencil"
-                        severity="info"
-                        [text]="true"
-                        [rounded]="true"
-                        (click)="editShutdown(shutdown)"
-                        [pTooltip]="'SITUATION_CENTER.COMMON.EDIT' | translate"
-                    />
-                    <p-button
-                        icon="pi pi-trash"
-                        severity="danger"
-                        [text]="true"
-                        [rounded]="true"
-                        (click)="deleteShutdown(shutdown.id)"
-                        [pTooltip]="'SITUATION_CENTER.COMMON.DELETE' | translate"
-                    />
+                    @if (canEditShutdown(shutdown)) {
+                        <p-button
+                            icon="pi pi-pencil"
+                            severity="info"
+                            [text]="true"
+                            [rounded]="true"
+                            (click)="editShutdown(shutdown)"
+                            [pTooltip]="'SITUATION_CENTER.COMMON.EDIT' | translate"
+                        />
+                        <p-button
+                            icon="pi pi-trash"
+                            severity="danger"
+                            [text]="true"
+                            [rounded]="true"
+                            (click)="deleteShutdown(shutdown.id)"
+                            [pTooltip]="'SITUATION_CENTER.COMMON.DELETE' | translate"
+                        />
+                    }
                 </td>
             }
         </tr>
