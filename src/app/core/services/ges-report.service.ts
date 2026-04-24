@@ -9,12 +9,16 @@ import {
     GesProductionPlan, GesProductionPlanPayload,
     GesDailyReport
 } from '@/core/interfaces/ges-report';
+import {
+    FrozenDefault, UpsertFrozenDefaultRequest, DeleteFrozenDefaultRequest
+} from '@/core/interfaces/ges-frozen-defaults';
 
 const GES_REPORT = '/ges-report';
 const CONFIG = '/config';
 const DAILY_DATA = '/daily-data';
 const PLANS = '/plans';
 const CASCADE_CONFIG = '/cascade-config';
+const FROZEN_DEFAULTS = '/frozen-defaults';
 
 @Injectable({ providedIn: 'root' })
 export class GesReportService extends ApiService {
@@ -78,5 +82,21 @@ export class GesReportService extends ApiService {
         return this.http.get(`${this.BASE_URL}${GES_REPORT}/export`, {
             params, responseType: 'blob', observe: 'response'
         });
+    }
+
+    listFrozenDefaults(): Observable<FrozenDefault[]> {
+        return this.http.get<FrozenDefault[]>(`${this.BASE_URL}${GES_REPORT}${FROZEN_DEFAULTS}`);
+    }
+
+    upsertFrozenDefault(payload: UpsertFrozenDefaultRequest): Observable<{ status: string }> {
+        return this.http.put<{ status: string }>(
+            `${this.BASE_URL}${GES_REPORT}${FROZEN_DEFAULTS}`, payload
+        );
+    }
+
+    deleteFrozenDefault(payload: DeleteFrozenDefaultRequest): Observable<{ status: string } | null> {
+        return this.http.request<{ status: string } | null>(
+            'DELETE', `${this.BASE_URL}${GES_REPORT}${FROZEN_DEFAULTS}`, { body: payload }
+        );
     }
 }

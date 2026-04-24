@@ -19,9 +19,12 @@ import { GesReportService } from '@/core/services/ges-report.service';
 import { TimeService } from '@/core/services/time.service';
 import { AuthService } from '@/core/services/auth.service';
 import { GesConfigResponse, GesCascadeConfig, GesDailyData, GesDailyDataPayload, ReportIdleDischarge, ReportWeather } from '@/core/interfaces/ges-report';
+import { FrozenMap, FrozenDefault, FreezableField, buildFrozenMap, FREEZABLE_FIELD_LABELS, FIELD_UNITS, NOT_NULL_FREEZABLE_FIELDS } from '@/core/interfaces/ges-frozen-defaults';
+import { parseFrozenDefaultError } from '@/core/services/ges-frozen-defaults-error';
 import { HasUnsavedChanges } from '@/core/guards/auth.guard';
 import { downloadBlob } from '@/core/utils/download';
 import { CascadeWeatherComponent } from '../shared/cascade-weather.component';
+import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
 
 export interface GesTotals {
     installedCapacity: number;
@@ -74,7 +77,8 @@ export class DataEntryRow {
         TagModule,
         InputTextModule,
         TooltipModule,
-        CascadeWeatherComponent
+        CascadeWeatherComponent,
+        DialogComponent
     ],
     templateUrl: './data-entry-tab.component.html'
 })
@@ -98,7 +102,23 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
     loading = false;
     savingAll = false;
     canExport = this.authService.isScOrRais();
+    canFreeze = this.authService.hasRole(['sc', 'rais', 'cascade']);
+    frozenMap: FrozenMap = {};
     downloading: 'excel' | 'pdf' | null = null;
+
+    freezeDialogVisible = false;
+    freezeDialogSubmitting = false;
+    freezeDialogStubForm: FormGroup = this.fb.group({});
+    freezeDialogContext: {
+        row: DataEntryRow;
+        fieldName: FreezableField;
+        fieldLabelKey: string;
+        units: string;
+        currentValue: number | null;
+        frozenValue: number | null;
+        frozenUpdatedAt: string | null;
+        mode: 'freeze' | 'manage';
+    } | null = null;
 
     private formsTick = signal(0);
     readonly totals = computed<GesTotals>(() => this.calculateTotals(this.formsTick()));
@@ -162,9 +182,11 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
         forkJoin({
             configs: this.gesReportService.getConfigs(),
             cascadeConfigs: this.gesReportService.getCascadeConfigs().pipe(catchError(() => of([] as GesCascadeConfig[]))),
-            report: this.gesReportService.getReport(dateStr).pipe(catchError(() => of(null)))
+            report: this.gesReportService.getReport(dateStr).pipe(catchError(() => of(null))),
+            frozen: this.gesReportService.listFrozenDefaults().pipe(catchError(() => of([] as FrozenDefault[])))
         }).pipe(takeUntil(this.destroy$)).subscribe({
-            next: ({ configs, cascadeConfigs, report }) => {
+            next: ({ configs, cascadeConfigs, report, frozen }) => {
+                this.frozenMap = buildFrozenMap(frozen);
                 if (!configs.length) {
                     this.loading = false;
                     return;
@@ -250,6 +272,165 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
         return v('working_aggregates') + v('repair_aggregates') + v('modernization_aggregates');
     }
 
+    isFrozen(row: DataEntryRow, fieldName: FreezableField): boolean {
+        return !!this.frozenMap[row.config.organization_id]?.[fieldName];
+    }
+
+    getFrozenValue(row: DataEntryRow, fieldName: FreezableField): number | null {
+        return this.frozenMap[row.config.organization_id]?.[fieldName]?.frozen_value ?? null;
+    }
+
+    getFrozenPlaceholder(row: DataEntryRow, fieldName: FreezableField): string {
+        const fd = this.frozenMap[row.config.organization_id]?.[fieldName];
+        if (!fd) return '';
+        if (row.form.get(fieldName)?.value != null) return '';
+        return String(fd.frozen_value);
+    }
+
+    getFreezeTooltip(row: DataEntryRow, fieldName: FreezableField): string {
+        const fd = this.frozenMap[row.config.organization_id]?.[fieldName];
+        if (!fd) return this.translate.instant('GES_REPORT.FROZEN.TOOLTIP_NOT_FROZEN');
+        return this.translate.instant('GES_REPORT.FROZEN.TOOLTIP_FROZEN', {
+            value: fd.frozen_value,
+            units: FIELD_UNITS[fieldName] ?? '',
+            updatedAt: fd.updated_at,
+        });
+    }
+
+    shouldShowNotNullHint(row: DataEntryRow, fieldName: FreezableField): boolean {
+        return NOT_NULL_FREEZABLE_FIELDS.has(fieldName) && this.isFrozen(row, fieldName);
+    }
+
+    openFreezeDialog(row: DataEntryRow, fieldName: FreezableField): void {
+        if (!this.canFreeze) return;
+        const ctrl = row.form.get(fieldName);
+        const fd = this.frozenMap[row.config.organization_id]?.[fieldName] ?? null;
+        const raw = ctrl ? ctrl.value : null;
+        const currentValue: number | null = typeof raw === 'number' ? raw : (raw == null ? null : Number(raw));
+        this.freezeDialogContext = {
+            row, fieldName,
+            fieldLabelKey: FREEZABLE_FIELD_LABELS[fieldName],
+            units: FIELD_UNITS[fieldName],
+            currentValue: Number.isFinite(currentValue as number) ? currentValue : null,
+            frozenValue: fd ? fd.frozen_value : null,
+            frozenUpdatedAt: fd ? fd.updated_at : null,
+            mode: fd ? 'manage' : 'freeze',
+        };
+        this.freezeDialogVisible = true;
+    }
+
+    closeFreezeDialog(): void {
+        this.freezeDialogVisible = false;
+        this.freezeDialogContext = null;
+        this.freezeDialogSubmitting = false;
+    }
+
+    confirmFreeze(): void { this.submitFreezeUpsert('freeze'); }
+    confirmUpdateFreeze(): void { this.submitFreezeUpsert('update'); }
+
+    private submitFreezeUpsert(kind: 'freeze' | 'update'): void {
+        const ctx = this.freezeDialogContext;
+        if (!ctx || ctx.currentValue == null) return;
+        this.freezeDialogSubmitting = true;
+        const orgId = ctx.row.config.organization_id;
+        const snapshot = this.applyFrozenUpsert(orgId, ctx.fieldName, ctx.currentValue);
+        this.gesReportService.upsertFrozenDefault({
+            organization_id: orgId,
+            field_name: ctx.fieldName,
+            frozen_value: ctx.currentValue,
+        }).pipe(takeUntil(this.destroy$)).subscribe({
+            next: () => this.handleFreezeSuccess(kind),
+            error: (err: HttpErrorResponse) => {
+                this.rollbackFrozen(orgId, ctx.fieldName, snapshot);
+                this.handleFreezeError(err);
+            },
+        });
+    }
+
+    confirmUnfreeze(): void {
+        const ctx = this.freezeDialogContext;
+        if (!ctx) return;
+        this.freezeDialogSubmitting = true;
+        const orgId = ctx.row.config.organization_id;
+        const snapshot = this.applyFrozenDelete(orgId, ctx.fieldName);
+        this.gesReportService.deleteFrozenDefault({
+            organization_id: orgId,
+            field_name: ctx.fieldName,
+        }).pipe(takeUntil(this.destroy$)).subscribe({
+            next: () => this.handleFreezeSuccess('unfreeze'),
+            error: (err: HttpErrorResponse) => {
+                this.rollbackFrozen(orgId, ctx.fieldName, snapshot);
+                this.handleFreezeError(err);
+            },
+        });
+    }
+
+    private applyFrozenUpsert(orgId: number, fieldName: FreezableField, value: number): FrozenDefault | undefined {
+        const prev = this.frozenMap[orgId]?.[fieldName];
+        const nowIso = new Date().toISOString();
+        if (!this.frozenMap[orgId]) this.frozenMap[orgId] = {};
+        this.frozenMap[orgId]![fieldName] = {
+            organization_id: orgId,
+            cascade_id: prev?.cascade_id ?? null,
+            field_name: fieldName,
+            frozen_value: value,
+            frozen_at: prev?.frozen_at ?? nowIso,
+            updated_at: nowIso,
+        };
+        return prev;
+    }
+
+    private applyFrozenDelete(orgId: number, fieldName: FreezableField): FrozenDefault | undefined {
+        const prev = this.frozenMap[orgId]?.[fieldName];
+        if (this.frozenMap[orgId]) {
+            delete this.frozenMap[orgId]![fieldName];
+            if (Object.keys(this.frozenMap[orgId]!).length === 0) delete this.frozenMap[orgId];
+        }
+        return prev;
+    }
+
+    private rollbackFrozen(orgId: number, fieldName: FreezableField, snap: FrozenDefault | undefined): void {
+        if (snap) {
+            if (!this.frozenMap[orgId]) this.frozenMap[orgId] = {};
+            this.frozenMap[orgId]![fieldName] = snap;
+        } else if (this.frozenMap[orgId]) {
+            delete this.frozenMap[orgId]![fieldName];
+            if (Object.keys(this.frozenMap[orgId]!).length === 0) delete this.frozenMap[orgId];
+        }
+    }
+
+    private handleFreezeSuccess(kind: 'freeze' | 'update' | 'unfreeze'): void {
+        const successKey = kind === 'freeze' ? 'GES_REPORT.FROZEN.SUCCESS_FREEZE'
+                         : kind === 'update' ? 'GES_REPORT.FROZEN.SUCCESS_UPDATE'
+                         :                     'GES_REPORT.FROZEN.SUCCESS_UNFREEZE';
+        this.messageService.add({
+            severity: 'success',
+            summary: this.translate.instant('COMMON.SUCCESS'),
+            detail: this.translate.instant(successKey),
+        });
+        this.closeFreezeDialog();
+        this.formsTick.update(t => t + 1);
+    }
+
+    private handleFreezeError(err: HttpErrorResponse): void {
+        this.freezeDialogSubmitting = false;
+        const { key, params } = parseFrozenDefaultError(err);
+        this.messageService.add({
+            severity: 'error',
+            summary: this.translate.instant('COMMON.ERROR'),
+            detail: this.translate.instant(key, params),
+        });
+    }
+
+    private refreshFrozenAfterSave(): void {
+        this.gesReportService.listFrozenDefaults()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: list => { this.frozenMap = buildFrozenMap(list); },
+                error: () => { /* silent — refreshes on next loadData */ },
+            });
+    }
+
     sumExceedsTotal(row: DataEntryRow): boolean {
         return this.sumAggregates(row) > row.config.total_aggregates;
     }
@@ -302,6 +483,7 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
                     p.row.form.markAsPristine();
                 });
                 this.savingAll = false;
+                this.refreshFrozenAfterSave();
                 this.messageService.add({
                     severity: 'success',
                     summary: this.translate.instant('COMMON.SUCCESS')
@@ -364,6 +546,7 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
                 row.saved = true;
                 row.saving = false;
                 row.form.markAsPristine();
+                this.refreshFrozenAfterSave();
                 this.messageService.add({
                     severity: 'success',
                     summary: this.translate.instant('COMMON.SUCCESS')
