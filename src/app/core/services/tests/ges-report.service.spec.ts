@@ -4,6 +4,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { GesReportService } from '../ges-report.service';
 import { ConfigService } from '../config.service';
 import { GesConfigPayload, GesConfigResponse, GesDailyData, GesDailyDataPayload, GesDailyReport, GesProductionPlan, GesProductionPlanPayload } from '@/core/interfaces/ges-report';
+import { FrozenDefault, UpsertFrozenDefaultRequest, DeleteFrozenDefaultRequest } from '@/core/interfaces/ges-frozen-defaults';
 
 describe('GesReportService', () => {
     let service: GesReportService;
@@ -182,6 +183,121 @@ describe('GesReportService', () => {
             );
             expect(req.request.method).toBe('GET');
             req.flush(mockReport);
+        });
+    });
+
+    describe('frozen defaults', () => {
+        const FROZEN_URL = `${BASE_URL}/ges-report/frozen-defaults`;
+
+        it('listFrozenDefaults() — GETs /ges-report/frozen-defaults and returns parsed array', () => {
+            const mockList: FrozenDefault[] = [
+                {
+                    organization_id: 10,
+                    cascade_id: null,
+                    field_name: 'water_head_m',
+                    frozen_value: 45,
+                    frozen_at: '2026-04-24T00:00:00Z',
+                    updated_at: '2026-04-24T00:00:00Z',
+                },
+                {
+                    organization_id: 20,
+                    cascade_id: 5,
+                    field_name: 'working_aggregates',
+                    frozen_value: 3,
+                    frozen_at: '2026-04-24T00:00:00Z',
+                    updated_at: '2026-04-24T00:00:00Z',
+                },
+            ];
+            let received: FrozenDefault[] | undefined;
+            service.listFrozenDefaults().subscribe(result => {
+                received = result;
+            });
+            const req = httpMock.expectOne(FROZEN_URL);
+            expect(req.request.method).toBe('GET');
+            req.flush(mockList);
+            expect(received).toEqual(mockList);
+        });
+
+        it('listFrozenDefaults() — propagates 500 error', () => {
+            let errorStatus: number | undefined;
+            service.listFrozenDefaults().subscribe({
+                next: () => fail('expected error'),
+                error: (err) => { errorStatus = err.status; }
+            });
+            const req = httpMock.expectOne(FROZEN_URL);
+            expect(req.request.method).toBe('GET');
+            req.flush('server error', { status: 500, statusText: 'Internal Server Error' });
+            expect(errorStatus).toBe(500);
+        });
+
+        it('upsertFrozenDefault(payload) — PUTs with body', () => {
+            const payload: UpsertFrozenDefaultRequest = {
+                organization_id: 10,
+                field_name: 'water_head_m',
+                frozen_value: 45,
+            };
+            let received: { status: string } | undefined;
+            service.upsertFrozenDefault(payload).subscribe(result => {
+                received = result;
+            });
+            const req = httpMock.expectOne(FROZEN_URL);
+            expect(req.request.method).toBe('PUT');
+            expect(req.request.body).toEqual(payload);
+            req.flush({ status: 'OK' });
+            expect(received).toEqual({ status: 'OK' });
+        });
+
+        it('upsertFrozenDefault(payload) — propagates 400 with details', () => {
+            const payload: UpsertFrozenDefaultRequest = {
+                organization_id: 10,
+                field_name: 'water_head_m',
+                frozen_value: 45,
+            };
+            let errorStatus: number | undefined;
+            let errorBody: unknown;
+            service.upsertFrozenDefault(payload).subscribe({
+                next: () => fail('expected error'),
+                error: (err) => {
+                    errorStatus = err.status;
+                    errorBody = err.error;
+                }
+            });
+            const req = httpMock.expectOne(FROZEN_URL);
+            expect(req.request.method).toBe('PUT');
+            req.flush({ error: 'bad' }, { status: 400, statusText: 'Bad Request' });
+            expect(errorStatus).toBe(400);
+            expect(errorBody).toEqual({ error: 'bad' });
+        });
+
+        it('deleteFrozenDefault(payload) — DELETEs with body', () => {
+            const payload: DeleteFrozenDefaultRequest = {
+                organization_id: 10,
+                field_name: 'water_head_m',
+            };
+            service.deleteFrozenDefault(payload).subscribe();
+            const req = httpMock.expectOne(FROZEN_URL);
+            expect(req.request.method).toBe('DELETE');
+            expect(req.request.body).toEqual(payload);
+            req.flush(null, { status: 204, statusText: 'No Content' });
+        });
+
+        it('deleteFrozenDefault(payload) — handles 204 null body', () => {
+            const payload: DeleteFrozenDefaultRequest = {
+                organization_id: 10,
+                field_name: 'water_head_m',
+            };
+            let completed = false;
+            let errored = false;
+            service.deleteFrozenDefault(payload).subscribe({
+                next: () => { /* null body ok */ },
+                error: () => { errored = true; },
+                complete: () => { completed = true; },
+            });
+            const req = httpMock.expectOne(FROZEN_URL);
+            expect(req.request.method).toBe('DELETE');
+            req.flush(null, { status: 204, statusText: 'No Content' });
+            expect(errored).toBeFalse();
+            expect(completed).toBeTrue();
         });
     });
 });

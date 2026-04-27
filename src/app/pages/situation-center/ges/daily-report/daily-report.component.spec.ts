@@ -24,19 +24,22 @@ describe('DailyReportComponent', () => {
     }
 
     beforeEach(async () => {
-        authSpy = jasmine.createSpyObj('AuthService', ['isScOrRais', 'isAdmin']);
+        authSpy = jasmine.createSpyObj('AuthService', ['isScOrRais', 'isAdmin', 'hasRole']);
         authSpy.isAdmin.and.returnValue(false);
+        authSpy.hasRole.and.returnValue(false);
 
         const gesReportSpy = jasmine.createSpyObj('GesReportService', [
             'getConfigs', 'upsertConfig', 'deleteConfig',
             'getCascadeConfigs', 'upsertCascadeConfig', 'deleteCascadeConfig',
-            'getDailyData', 'upsertDailyData', 'getPlans', 'upsertPlan', 'getReport'
+            'getDailyData', 'upsertDailyData', 'getPlans', 'upsertPlan', 'getReport',
+            'listFrozenDefaults', 'upsertFrozenDefault', 'deleteFrozenDefault'
         ]);
         const orgSpy = jasmine.createSpyObj('OrganizationService', ['getOrganizationsFlat', 'getCascades']);
         gesReportSpy.getConfigs.and.returnValue(of([]));
         gesReportSpy.getCascadeConfigs.and.returnValue(of([]));
         gesReportSpy.getDailyData.and.returnValue(of(null));
         gesReportSpy.getPlans.and.returnValue(of([]));
+        gesReportSpy.listFrozenDefaults.and.returnValue(of([]));
         gesReportSpy.getReport.and.returnValue(of({ date: '2026-01-01', cascades: [], grand_total: {} } as unknown as never));
         orgSpy.getOrganizationsFlat.and.returnValue(of([]));
         orgSpy.getCascades.and.returnValue(of([]));

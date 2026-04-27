@@ -9,6 +9,7 @@ import { MessageService } from 'primeng/api';
 import { DataEntryTabComponent } from './data-entry-tab.component';
 import { GesReportService } from '@/core/services/ges-report.service';
 import { GesConfigResponse, GesDailyReport, ReportGrandTotal, ReportWeather } from '@/core/interfaces/ges-report';
+import { HttpErrorResponse } from '@angular/common/http';
 
 function makeConfig(orgId: number, name: string, hasReservoir = true): GesConfigResponse {
     return {
@@ -53,11 +54,13 @@ describe('DataEntryTabComponent', () => {
 
     beforeEach(async () => {
         const spy = jasmine.createSpyObj('GesReportService', [
-            'getConfigs', 'getDailyData', 'upsertDailyData', 'getCascadeConfigs', 'getReport'
+            'getConfigs', 'getDailyData', 'upsertDailyData', 'getCascadeConfigs', 'getReport',
+            'listFrozenDefaults', 'upsertFrozenDefault', 'deleteFrozenDefault'
         ]);
         spy.getConfigs.and.returnValue(of([]));
         spy.getCascadeConfigs.and.returnValue(of([]));
         spy.getReport.and.returnValue(of(null));
+        spy.listFrozenDefaults.and.returnValue(of([]));
 
         await TestBed.configureTestingModule({
             imports: [DataEntryTabComponent, TranslateModule.forRoot()],
@@ -389,4 +392,168 @@ describe('DataEntryTabComponent', () => {
             severity: 'error'
         }));
     }));
+
+    describe('frozen defaults', () => {
+        function loadWithFrozen(orgId = 100, frozen: any[] = []) {
+            const configs = [makeConfig(orgId, `ГЭС-${orgId}`)];
+            gesReportService.getConfigs.and.returnValue(of(configs));
+            gesReportService.getDailyData.and.returnValue(of(null));
+            gesReportService.listFrozenDefaults.and.returnValue(of(frozen));
+            fixture.detectChanges();
+            tick();
+        }
+
+        it('wave-1 loads frozen defaults and populates frozenMap', fakeAsync(() => {
+            loadWithFrozen(100, [{
+                organization_id: 100, cascade_id: 1, field_name: 'water_head_m',
+                frozen_value: 45.0, frozen_at: '2026-04-23T00:00:00Z', updated_at: '2026-04-24T00:00:00Z'
+            }]);
+            expect((component as any).frozenMap[100]?.water_head_m?.frozen_value).toBe(45.0);
+        }));
+
+        it('isFrozen returns false when map empty and true when entry present', fakeAsync(() => {
+            loadWithFrozen(100, [{
+                organization_id: 100, cascade_id: 1, field_name: 'water_head_m',
+                frozen_value: 45.0, frozen_at: 't', updated_at: 't'
+            }]);
+            const row = component.rows[0];
+            expect((component as any).isFrozen(row, 'water_head_m')).toBeTrue();
+            expect((component as any).isFrozen(row, 'water_level_m')).toBeFalse();
+        }));
+
+        it('getFrozenValue returns number when frozen, null otherwise', fakeAsync(() => {
+            loadWithFrozen(100, [{
+                organization_id: 100, cascade_id: 1, field_name: 'water_head_m',
+                frozen_value: 45.0, frozen_at: 't', updated_at: 't'
+            }]);
+            const row = component.rows[0];
+            expect((component as any).getFrozenValue(row, 'water_head_m')).toBe(45.0);
+            expect((component as any).getFrozenValue(row, 'water_level_m')).toBeNull();
+        }));
+
+        it('getFrozenPlaceholder returns frozen value only when form value is null', fakeAsync(() => {
+            loadWithFrozen(100, [{
+                organization_id: 100, cascade_id: 1, field_name: 'water_head_m',
+                frozen_value: 45.0, frozen_at: 't', updated_at: 't'
+            }]);
+            const row = component.rows[0];
+            expect((component as any).getFrozenPlaceholder(row, 'water_head_m')).toBe('45');
+            row.form.get('water_head_m')?.setValue(50);
+            expect((component as any).getFrozenPlaceholder(row, 'water_head_m')).toBe('');
+            expect((component as any).getFrozenPlaceholder(row, 'water_level_m')).toBe('');
+        }));
+
+        it('openFreezeDialog sets context to freeze mode when no frozen entry', fakeAsync(() => {
+            loadWithFrozen(100, []);
+            (component as any).canFreeze = true;
+            const row = component.rows[0];
+            row.form.get('water_head_m')?.setValue(50);
+            (component as any).openFreezeDialog(row, 'water_head_m');
+            expect((component as any).freezeDialogVisible).toBeTrue();
+            expect((component as any).freezeDialogContext?.mode).toBe('freeze');
+            expect((component as any).freezeDialogContext?.currentValue).toBe(50);
+            expect((component as any).freezeDialogContext?.frozenValue).toBeNull();
+        }));
+
+        it('openFreezeDialog sets context to manage mode when frozen entry exists', fakeAsync(() => {
+            loadWithFrozen(100, [{
+                organization_id: 100, cascade_id: 1, field_name: 'water_head_m',
+                frozen_value: 45.0, frozen_at: 't', updated_at: 't'
+            }]);
+            (component as any).canFreeze = true;
+            const row = component.rows[0];
+            (component as any).openFreezeDialog(row, 'water_head_m');
+            expect((component as any).freezeDialogContext?.mode).toBe('manage');
+            expect((component as any).freezeDialogContext?.frozenValue).toBe(45.0);
+        }));
+
+        it('openFreezeDialog no-op when canFreeze is false', fakeAsync(() => {
+            loadWithFrozen(100, []);
+            (component as any).canFreeze = false;
+            const row = component.rows[0];
+            (component as any).openFreezeDialog(row, 'water_head_m');
+            expect((component as any).freezeDialogVisible).toBeFalse();
+        }));
+
+        it('confirmFreeze success updates frozenMap and closes dialog', fakeAsync(() => {
+            loadWithFrozen(100, []);
+            gesReportService.upsertFrozenDefault.and.returnValue(of({ status: 'OK' }));
+            (component as any).canFreeze = true;
+            const row = component.rows[0];
+            row.form.get('water_head_m')?.setValue(50);
+            (component as any).openFreezeDialog(row, 'water_head_m');
+            (component as any).confirmFreeze();
+            tick();
+            expect(gesReportService.upsertFrozenDefault).toHaveBeenCalledWith({
+                organization_id: 100, field_name: 'water_head_m', frozen_value: 50
+            });
+            expect((component as any).isFrozen(row, 'water_head_m')).toBeTrue();
+            expect((component as any).frozenMap[100]?.water_head_m?.frozen_value).toBe(50);
+            expect((component as any).freezeDialogVisible).toBeFalse();
+        }));
+
+        it('confirmFreeze error rolls back optimistic update and keeps dialog open', fakeAsync(() => {
+            loadWithFrozen(100, []);
+            gesReportService.upsertFrozenDefault.and.returnValue(
+                throwError(() => new HttpErrorResponse({ status: 403 }))
+            );
+            (component as any).canFreeze = true;
+            const row = component.rows[0];
+            row.form.get('water_head_m')?.setValue(50);
+            (component as any).openFreezeDialog(row, 'water_head_m');
+            const addSpy = spyOn(TestBed.inject(MessageService), 'add');
+            (component as any).confirmFreeze();
+            tick();
+            expect((component as any).isFrozen(row, 'water_head_m')).toBeFalse();
+            expect((component as any).freezeDialogVisible).toBeTrue();
+            expect(addSpy).toHaveBeenCalledWith(jasmine.objectContaining({ severity: 'error' }));
+        }));
+
+        it('confirmUnfreeze success removes entry from frozenMap', fakeAsync(() => {
+            loadWithFrozen(100, [{
+                organization_id: 100, cascade_id: 1, field_name: 'water_head_m',
+                frozen_value: 45.0, frozen_at: 't', updated_at: 't'
+            }]);
+            gesReportService.deleteFrozenDefault.and.returnValue(of(null));
+            (component as any).canFreeze = true;
+            const row = component.rows[0];
+            (component as any).openFreezeDialog(row, 'water_head_m');
+            (component as any).confirmUnfreeze();
+            tick();
+            expect(gesReportService.deleteFrozenDefault).toHaveBeenCalledWith({
+                organization_id: 100, field_name: 'water_head_m'
+            });
+            expect((component as any).isFrozen(row, 'water_head_m')).toBeFalse();
+            expect((component as any).freezeDialogVisible).toBeFalse();
+        }));
+
+        it('shouldShowNotNullHint is true only for NOT NULL fields with frozen entry', fakeAsync(() => {
+            loadWithFrozen(100, [
+                { organization_id: 100, cascade_id: 1, field_name: 'water_head_m',
+                  frozen_value: 45, frozen_at: 't', updated_at: 't' },
+                { organization_id: 100, cascade_id: 1, field_name: 'working_aggregates',
+                  frozen_value: 3, frozen_at: 't', updated_at: 't' }
+            ]);
+            const row = component.rows[0];
+            // NOT NULL + frozen → true
+            expect((component as any).shouldShowNotNullHint(row, 'working_aggregates')).toBeTrue();
+            // nullable + frozen → false
+            expect((component as any).shouldShowNotNullHint(row, 'water_head_m')).toBeFalse();
+            // NOT NULL but not frozen → false
+            expect((component as any).shouldShowNotNullHint(row, 'repair_aggregates')).toBeFalse();
+        }));
+
+        it('saveRow success triggers refreshFrozenAfterSave via listFrozenDefaults', fakeAsync(() => {
+            loadWithFrozen(100, []);
+            gesReportService.listFrozenDefaults.calls.reset();
+            gesReportService.upsertDailyData.and.returnValue(of({ status: 'OK' }));
+            gesReportService.listFrozenDefaults.and.returnValue(of([]));
+            const row = component.rows[0];
+            row.form.get('water_head_m')?.setValue(50);
+            row.form.get('water_head_m')?.markAsDirty();
+            component.saveRow(row);
+            tick();
+            expect(gesReportService.listFrozenDefaults).toHaveBeenCalled();
+        }));
+    });
 });
