@@ -250,7 +250,8 @@
     "SNOW_COVER": "MODSNOW",
     "INFRA_EVENTS": "Infrastructure",
     "GES_DAILY_REPORT": "Daily report",
-    "ORGANIZATION_TYPES": "Organization Types"
+    "ORGANIZATION_TYPES": "Organization Types",
+    "RESERVOIR_FLOOD": "Flood Journal"
   },
   "GES_REPORT": {
     "BATCH_FAILED_AT": "Batch failed at station {{station}}",
@@ -2045,6 +2046,38 @@
       "EVENT_CREATE_ERROR": "Error creating event",
       "EVENT_DELETE_ERROR": "Error deleting event",
       "CONFLICT_EXISTS": "An unfinished emergency shutdown already exists for this organization."
+    },
+    "RESERVOIR_FLOOD": {
+      "TITLE": "Flood Journal",
+      "TAB_HOURLY": "Hourly Entry",
+      "TAB_CONFIG": "Configuration",
+      "DATE": "Date",
+      "HOUR": "Hour",
+      "ORGANIZATION": "Reservoir",
+      "WATER_LEVEL_M": "Level, m",
+      "WATER_VOLUME_MLN_M3": "Volume, mln m³",
+      "INFLOW_M3S": "Inflow, m³/s",
+      "OUTFLOW_M3S": "Outflow, m³/s",
+      "GES_FLOW_M3S": "Through HPP, m³/s",
+      "FILTRATION_M3S": "Filtration, m³/s",
+      "IDLE_DISCHARGE_M3S": "Idle Discharge, m³/s",
+      "DUTY_NAME": "Duty Officer (Full Name)",
+      "SAVE_ALL": "Save All",
+      "NO_DATA_FOR_HOUR": "No data for this hour",
+      "NO_FLOOD_CONFIG": "Flood mode is not configured",
+      "BATCH_FAILED_AT": "Error in row: {{station}}",
+      "ERROR_FORBIDDEN_ORG": "No access to this organization",
+      "ERROR_SAVE_FAILED": "Failed to save",
+      "ERROR_DELETE_FAILED": "Failed to delete",
+      "ALREADY_DELETED": "Record already deleted",
+      "SORT_ORDER": "Sort Order",
+      "IS_ACTIVE": "Active",
+      "ADD_ORG": "Add Reservoir",
+      "EDIT": "Edit",
+      "DELETE": "Delete",
+      "CONFIG_SAVED": "Configuration saved",
+      "CONFIG_DELETED": "Record deleted",
+      "DATA_SAVED": "Data saved"
     },
     "DISCHARGE": {
       "TITLE": "Spillway Discharge",

@@ -250,7 +250,8 @@
     "SNOW_COVER": "MODSNOW",
     "INFRA_EVENTS": "Инфратузилма",
     "GES_DAILY_REPORT": "Кунлик ҳисобот",
-    "ORGANIZATION_TYPES": "Ташкилот турлари"
+    "ORGANIZATION_TYPES": "Ташкилот турлари",
+    "RESERVOIR_FLOOD": "Тошқин журнали"
   },
   "GES_REPORT": {
     "BATCH_FAILED_AT": "{{station}} станциясида хатолик",
@@ -2045,6 +2046,38 @@
       "EVENT_CREATE_ERROR": "Воқеани қўшишда хатолик",
       "EVENT_DELETE_ERROR": "Воқеани ўчиришда хатолик",
       "CONFLICT_EXISTS": "Ушбу ташкилот учун тугалланмаган фавқулодда ўчириш мавжуд."
+    },
+    "RESERVOIR_FLOOD": {
+      "TITLE": "Тошқин журнали",
+      "TAB_HOURLY": "Соатлик киритиш",
+      "TAB_CONFIG": "Конфигурация",
+      "DATE": "Сана",
+      "HOUR": "Соат",
+      "ORGANIZATION": "Сув омбори",
+      "WATER_LEVEL_M": "Сув сатҳи, м",
+      "WATER_VOLUME_MLN_M3": "Ҳажм, млн м³",
+      "INFLOW_M3S": "Оқиб келиш, м³/с",
+      "OUTFLOW_M3S": "Сарф, м³/с",
+      "GES_FLOW_M3S": "ГЭС орқали, м³/с",
+      "FILTRATION_M3S": "Фильтрация, м³/с",
+      "IDLE_DISCHARGE_M3S": "Бўш ташлама, м³/с",
+      "DUTY_NAME": "Навбатчи (Ф.И.Ш.)",
+      "SAVE_ALL": "Барчасини сақлаш",
+      "NO_DATA_FOR_HOUR": "Бу соат учун маълумот йўқ",
+      "NO_FLOOD_CONFIG": "Тошқин режими созланмаган",
+      "BATCH_FAILED_AT": "Қаторда хатолик: {{station}}",
+      "ERROR_FORBIDDEN_ORG": "Ушбу ташкилотга кириш ҳуқуқи йўқ",
+      "ERROR_SAVE_FAILED": "Сақлаб бўлмади",
+      "ERROR_DELETE_FAILED": "Ўчириб бўлмади",
+      "ALREADY_DELETED": "Ёзув аллақачон ўчирилган",
+      "SORT_ORDER": "Тартиб",
+      "IS_ACTIVE": "Фаол",
+      "ADD_ORG": "Сув омборини қўшиш",
+      "EDIT": "Таҳрирлаш",
+      "DELETE": "Ўчириш",
+      "CONFIG_SAVED": "Конфигурация сақланди",
+      "CONFIG_DELETED": "Ёзув ўчирилди",
+      "DATA_SAVED": "Маълумотлар сақланди"
     },
     "DISCHARGE": {
       "TITLE": "Бўш сув ташлаб юбориш",

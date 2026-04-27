@@ -4,7 +4,7 @@ import { Dashboard } from '@/pages/dashboard/dashboard';
 import { Notfound } from '@/pages/notfound/notfound';
 import { ScDashboardComponent } from '@/pages/situation-center/sc-dashboard/sc-dashboard.component';
 
-import { adminGuard, authGuard, cascadeOnlyGuard, filtrationGuard, gesReportGuard, hrmGuard, positionsGuard, raisGuard, scGuard, unsavedChangesGuard } from '@/core/guards/auth.guard';
+import { adminGuard, authGuard, cascadeOnlyGuard, filtrationGuard, gesReportGuard, hrmGuard, positionsGuard, raisGuard, reservoirFloodGuard, scGuard, unsavedChangesGuard } from '@/core/guards/auth.guard';
 
 
 export const appRoutes: Routes = [
@@ -60,6 +60,7 @@ export const appRoutes: Routes = [
             { path: 'salary', loadComponent: () => import('./app/pages/financial-block/salary/salary.component').then(m => m.SalaryComponent), canActivate: [raisGuard] },
             { path: 'reservoir-summary/pdf', loadComponent: () => import('./app/pages/situation-center/reservoirs-info/reservoir-summaty-pdf/reservoir-summary-pdf.component').then(m => m.ReservoirSummaryPdfComponent), canActivate: [raisGuard] },
             { path: 'reservoir-summary-hourly', loadComponent: () => import('./app/pages/situation-center/reservoirs-info/reservoir-summary-hourly/reservoir-summary-hourly.component').then(m => m.ReservoirSummaryHourlyComponent), canActivate: [raisGuard] },
+            { path: 'reservoir-flood', loadComponent: () => import('./app/pages/situation-center/reservoirs-info/reservoir-flood/reservoir-flood.component').then(m => m.ReservoirFloodComponent), canActivate: [reservoirFloodGuard], canDeactivate: [unsavedChangesGuard] },
             { path: 'visits', loadComponent: () => import('./app/pages/situation-center/other/visits/visits.component').then(m => m.VisitsComponent), canActivate: [raisGuard] },
             { path: 'incidents', loadComponent: () => import('./app/pages/situation-center/other/incidents/incidents.component').then(m => m.IncidentsComponent), canActivate: [raisGuard] },
             { path: 'infra-events', loadComponent: () => import('./app/pages/situation-center/infra-events/infra-events.component').then(m => m.InfraEventsComponent), canActivate: [raisGuard] },

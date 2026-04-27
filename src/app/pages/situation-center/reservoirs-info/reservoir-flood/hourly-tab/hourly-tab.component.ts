@@ -1,0 +1,328 @@
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import {
+    FormBuilder,
+    FormGroup,
+    FormsModule,
+    ReactiveFormsModule,
+    Validators
+} from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Subject, forkJoin, merge, of } from 'rxjs';
+import {
+    catchError,
+    debounceTime,
+    distinctUntilChanged,
+    filter,
+    finalize,
+    switchMap,
+    takeUntil
+} from 'rxjs/operators';
+import { TableModule } from 'primeng/table';
+import { ButtonModule } from 'primeng/button';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { InputTextModule } from 'primeng/inputtext';
+import { DatePicker } from 'primeng/datepicker';
+import { Select } from 'primeng/select';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { MessageService } from 'primeng/api';
+
+import { ReservoirFloodService } from '@/core/services/reservoir-flood.service';
+import { LevelVolumeService } from '@/core/services/level-volume.service';
+import {
+    ReservoirFloodConfig,
+    ReservoirFloodHourlyPayload,
+    ReservoirFloodHourlyRecord
+} from '@/core/interfaces/reservoir-flood';
+
+export interface HourlyRow {
+    config: ReservoirFloodConfig;
+    record: ReservoirFloodHourlyRecord | null;
+    form: FormGroup;
+    saving: boolean;
+}
+
+const HOURLY_FIELDS = [
+    'water_level_m',
+    'water_volume_mln_m3',
+    'inflow_m3s',
+    'outflow_m3s',
+    'ges_flow_m3s',
+    'filtration_m3s',
+    'idle_discharge_m3s',
+    'duty_name'
+] as const;
+
+@Component({
+    selector: 'app-reservoir-flood-hourly-tab',
+    standalone: true,
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        TableModule,
+        ButtonModule,
+        InputNumberModule,
+        InputTextModule,
+        DatePicker,
+        Select,
+        TranslateModule
+    ],
+    templateUrl: './hourly-tab.component.html',
+    styleUrls: ['./hourly-tab.component.scss']
+})
+export class HourlyTabComponent implements OnInit, OnDestroy {
+    private destroy$ = new Subject<void>();
+    private rowsReset$ = new Subject<void>();
+
+    private svc = inject(ReservoirFloodService);
+    private levelVolumeService = inject(LevelVolumeService);
+    private messageService = inject(MessageService);
+    private translate = inject(TranslateService);
+    private fb = inject(FormBuilder);
+
+    selectedDate: Date = this.todayMidnight();
+    selectedHour: number = new Date().getHours();
+    configs: ReservoirFloodConfig[] = [];
+    rows: HourlyRow[] = [];
+    loading = false;
+    savingAll = false;
+
+    readonly hourOptions = Array.from({ length: 24 }, (_, i) => ({
+        label: i.toString().padStart(2, '0') + ':00',
+        value: i
+    }));
+
+    ngOnInit(): void {
+        this.loadData();
+    }
+
+    ngOnDestroy(): void {
+        this.destroy$.next();
+        this.destroy$.complete();
+        this.rowsReset$.complete();
+    }
+
+    hasUnsavedChanges(): boolean {
+        return this.rows.some(r => r.form.dirty);
+    }
+
+    hasDirtyRows(): boolean {
+        return this.hasUnsavedChanges();
+    }
+
+    recordedAt(): string {
+        const d = new Date(this.selectedDate);
+        d.setHours(this.selectedHour, 0, 0, 0);
+        return d.toISOString();
+    }
+
+    loadData(): void {
+        this.rowsReset$.next();
+        this.loading = true;
+        forkJoin({
+            configs: this.svc.getConfigs(),
+            records: this.svc.getHourly(this.dateYMD())
+        })
+            .pipe(
+                takeUntil(this.destroy$),
+                finalize(() => (this.loading = false))
+            )
+            .subscribe({
+                next: ({ configs, records }) => {
+                    this.configs = (configs || [])
+                        .slice()
+                        .sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0));
+                    const selectedHourStartUtc = this.toHourStartUTC(this.recordedAt());
+                    this.rows = this.configs.map(cfg => {
+                        const record =
+                            (records || []).find(
+                                r =>
+                                    r.organization_id === cfg.organization_id &&
+                                    this.toHourStartUTC(r.recorded_at) === selectedHourStartUtc
+                            ) ?? null;
+                        return {
+                            config: cfg,
+                            record,
+                            form: this.createForm(record),
+                            saving: false
+                        };
+                    });
+                    this.rows.forEach(row => this.wireVolumeAutoFill(row));
+                },
+                error: () => {
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: this.translate.instant('COMMON.ERROR'),
+                        detail: this.translate.instant('COMMON.LOAD_ERROR')
+                    });
+                }
+            });
+    }
+
+    onRowBlur(row: HourlyRow): void {
+        if (!row.form.dirty || row.form.invalid || row.saving) return;
+        this.saveRow(row);
+    }
+
+    saveRow(row: HourlyRow): void {
+        if (!row.form.dirty || row.form.invalid || row.saving) return;
+        row.saving = true;
+        const payload = this.buildPayload(row);
+        this.svc
+            .upsertHourly([payload])
+            .pipe(
+                finalize(() => (row.saving = false)),
+                takeUntil(this.destroy$)
+            )
+            .subscribe({
+                next: () => {
+                    row.form.markAsPristine();
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: this.translate.instant('COMMON.SUCCESS'),
+                        detail: this.translate.instant('SITUATION_CENTER.RESERVOIR_FLOOD.DATA_SAVED')
+                    });
+                },
+                error: (err: HttpErrorResponse) =>
+                    this.handleHourlyError(err, [{ row, payload }])
+            });
+    }
+
+    saveAll(): void {
+        const dirtyRows = this.rows.filter(r => r.form.dirty);
+        if (!dirtyRows.length) return;
+        if (dirtyRows.some(r => r.form.invalid)) {
+            this.messageService.add({
+                severity: 'warn',
+                summary: this.translate.instant('COMMON.WARNING'),
+                detail: this.translate.instant('COMMON.FORM_INVALID')
+            });
+            return;
+        }
+        const pairs = dirtyRows.map(r => ({ row: r, payload: this.buildPayload(r) }));
+        this.savingAll = true;
+        this.svc
+            .upsertHourly(pairs.map(p => p.payload))
+            .pipe(
+                finalize(() => (this.savingAll = false)),
+                takeUntil(this.destroy$)
+            )
+            .subscribe({
+                next: () => {
+                    pairs.forEach(p => p.row.form.markAsPristine());
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: this.translate.instant('COMMON.SUCCESS'),
+                        detail: this.translate.instant('SITUATION_CENTER.RESERVOIR_FLOOD.DATA_SAVED')
+                    });
+                },
+                error: (err: HttpErrorResponse) => this.handleHourlyError(err, pairs)
+            });
+    }
+
+    buildPayload(row: HourlyRow): ReservoirFloodHourlyPayload {
+        const p: any = {
+            organization_id: row.config.organization_id,
+            recorded_at: this.recordedAt()
+        };
+        for (const f of HOURLY_FIELDS) {
+            const ctrl = row.form.get(f);
+            if (ctrl?.dirty) p[f] = ctrl.value;
+        }
+        return p as ReservoirFloodHourlyPayload;
+    }
+
+    private createForm(rec: ReservoirFloodHourlyRecord | null): FormGroup {
+        return this.fb.group({
+            water_level_m: [rec?.water_level_m ?? null, [Validators.min(0)]],
+            water_volume_mln_m3: [rec?.water_volume_mln_m3 ?? null, [Validators.min(0)]],
+            inflow_m3s: [rec?.inflow_m3s ?? null, [Validators.min(0)]],
+            outflow_m3s: [rec?.outflow_m3s ?? null, [Validators.min(0)]],
+            ges_flow_m3s: [rec?.ges_flow_m3s ?? null, [Validators.min(0)]],
+            filtration_m3s: [rec?.filtration_m3s ?? null, [Validators.min(0)]],
+            idle_discharge_m3s: [rec?.idle_discharge_m3s ?? null, [Validators.min(0)]],
+            duty_name: [rec?.duty_name ?? null]
+        });
+    }
+
+    private wireVolumeAutoFill(row: HourlyRow): void {
+        const levelCtrl = row.form.get('water_level_m');
+        const volumeCtrl = row.form.get('water_volume_mln_m3');
+        if (!levelCtrl || !volumeCtrl) return;
+
+        levelCtrl.valueChanges
+            .pipe(
+                filter(v => typeof v === 'number' && v > 0),
+                debounceTime(400),
+                distinctUntilChanged(),
+                switchMap(level => {
+                    const obs = this.levelVolumeService.getVolume(
+                        row.config.organization_id,
+                        level as number
+                    );
+                    if (!obs || typeof (obs as any).pipe !== 'function') {
+                        return of(null);
+                    }
+                    return obs.pipe(catchError(() => of(null)));
+                }),
+                takeUntil(merge(this.destroy$, this.rowsReset$))
+            )
+            .subscribe(res => {
+                if (!res) return;
+                if (volumeCtrl.dirty) return;
+                volumeCtrl.setValue(res.volume, { emitEvent: false });
+                volumeCtrl.markAsDirty();
+            });
+    }
+
+    private handleHourlyError(
+        err: HttpErrorResponse,
+        pairs: { row: HourlyRow; payload: ReservoirFloodHourlyPayload }[]
+    ): void {
+        let detail: string = err.error?.error || err.message || '';
+        const idx = err.error?.details?.item_index;
+        if (err.status === 400 && typeof idx === 'number' && pairs[idx]) {
+            const stationName = pairs[idx].row.config.organization_name ?? '';
+            detail = this.translate.instant(
+                'SITUATION_CENTER.RESERVOIR_FLOOD.BATCH_FAILED_AT',
+                { station: stationName }
+            );
+            // Defence: if TranslateLoader returned the raw key (e.g. tests with no
+            // i18n loaded), append the station name explicitly so error UX still
+            // surfaces it.
+            if (stationName && !detail.includes(stationName)) {
+                detail = `${detail} (${stationName})`;
+            }
+        } else if (err.status === 403) {
+            detail = this.translate.instant(
+                'SITUATION_CENTER.RESERVOIR_FLOOD.ERROR_FORBIDDEN_ORG'
+            );
+        }
+        this.messageService.add({
+            severity: 'error',
+            summary: this.translate.instant('COMMON.ERROR'),
+            detail
+        });
+    }
+
+    private dateYMD(): string {
+        const d = this.selectedDate;
+        const y = d.getFullYear();
+        const m = (d.getMonth() + 1).toString().padStart(2, '0');
+        const day = d.getDate().toString().padStart(2, '0');
+        return `${y}-${m}-${day}`;
+    }
+
+    private toHourStartUTC(iso: string): string {
+        const d = new Date(iso);
+        d.setUTCMinutes(0, 0, 0);
+        return d.toISOString();
+    }
+
+    private todayMidnight(): Date {
+        const d = new Date();
+        d.setHours(0, 0, 0, 0);
+        return d;
+    }
+}

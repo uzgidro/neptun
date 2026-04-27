@@ -55,7 +55,7 @@ export class MenuComponent implements OnInit {
                     },
                     {
                         label: this.t('MENU.SITUATION_CENTER'),
-                        role: ['rais', 'sc'],
+                        role: ['rais', 'sc', 'reservoir_duty'],
                         items: [
                             {
                                 label: this.t('MENU.GES_INFO'),
@@ -101,7 +101,7 @@ export class MenuComponent implements OnInit {
                             },
                             {
                                 label: this.t('MENU.RESERVOIR_INFO'),
-                                role: ['rais', 'sc'],
+                                role: ['rais', 'sc', 'reservoir_duty'],
                                 items: [
                                     {
                                         label: this.t('MENU.RESERVOIR_SUMMARY'),
@@ -117,6 +117,11 @@ export class MenuComponent implements OnInit {
                                         label: this.t('MENU.RESERVOIR_SUMMARY_HOURLY'),
                                         role: ['rais', 'sc'],
                                         routerLink: ['/reservoir-summary-hourly']
+                                    },
+                                    {
+                                        label: this.t('MENU.RESERVOIR_FLOOD'),
+                                        role: ['sc', 'rais', 'reservoir_duty'],
+                                        routerLink: ['/reservoir-flood']
                                     },
                                     {
                                         label: this.t('MENU.HYDRAULIC_STRUCTURES'),

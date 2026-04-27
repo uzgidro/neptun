@@ -1,0 +1,22 @@
+<div class="card">
+    <h2>{{ 'SITUATION_CENTER.RESERVOIR_FLOOD.TITLE' | translate }}</h2>
+
+    <p-tabs [value]="activeTab" (valueChange)="onTabChange($event)">
+        <p-tablist>
+            <p-tab value="hourly">{{ 'SITUATION_CENTER.RESERVOIR_FLOOD.TAB_HOURLY' | translate }}</p-tab>
+            @if (canEditConfig) {
+                <p-tab value="config">{{ 'SITUATION_CENTER.RESERVOIR_FLOOD.TAB_CONFIG' | translate }}</p-tab>
+            }
+        </p-tablist>
+        <p-tabpanels>
+            <p-tabpanel value="hourly">
+                <app-reservoir-flood-hourly-tab />
+            </p-tabpanel>
+            @if (canEditConfig) {
+                <p-tabpanel value="config">
+                    <app-reservoir-flood-config-tab />
+                </p-tabpanel>
+            }
+        </p-tabpanels>
+    </p-tabs>
+</div>
