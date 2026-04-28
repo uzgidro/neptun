@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { AuthService } from '@/core/services/auth.service';
-import { cascadeOnlyGuard, gesReportGuard, raisGuard } from './auth.guard';
+import { cascadeOnlyGuard, gesReportGuard, raisGuard, reservoirDutyOnlyGuard } from './auth.guard';
 
 describe('gesReportGuard', () => {
     let authServiceSpy: jasmine.SpyObj<AuthService>;
@@ -118,6 +118,72 @@ describe('cascadeOnlyGuard', () => {
         routerSpy.createUrlTree.and.returnValue(fakeTree);
         expect(run('/notfound')).toBe(fakeTree);
         expect(routerSpy.createUrlTree).toHaveBeenCalledWith(['/ges-daily-report']);
+    });
+});
+
+describe('reservoirDutyOnlyGuard', () => {
+    let authServiceSpy: jasmine.SpyObj<AuthService>;
+    let routerSpy: jasmine.SpyObj<Router>;
+
+    beforeEach(() => {
+        authServiceSpy = jasmine.createSpyObj('AuthService', ['isOnlyReservoirDuty']);
+        routerSpy = jasmine.createSpyObj('Router', ['createUrlTree']);
+
+        TestBed.configureTestingModule({
+            providers: [
+                { provide: AuthService, useValue: authServiceSpy },
+                { provide: Router, useValue: routerSpy }
+            ]
+        });
+    });
+
+    const run = (url: string) =>
+        TestBed.runInInjectionContext(() =>
+            reservoirDutyOnlyGuard({} as any, { url } as any)
+        );
+
+    it('allows non-duty users on any URL', () => {
+        authServiceSpy.isOnlyReservoirDuty.and.returnValue(false);
+        expect(run('/dashboard')).toBeTrue();
+        expect(run('/reservoir-flood')).toBeTrue();
+        expect(run('/ges-daily-report')).toBeTrue();
+        expect(routerSpy.createUrlTree).not.toHaveBeenCalled();
+    });
+
+    it('allows only-duty user on /reservoir-flood', () => {
+        authServiceSpy.isOnlyReservoirDuty.and.returnValue(true);
+        expect(run('/reservoir-flood')).toBeTrue();
+        expect(routerSpy.createUrlTree).not.toHaveBeenCalled();
+    });
+
+    it('allows only-duty on /reservoir-flood with query params', () => {
+        authServiceSpy.isOnlyReservoirDuty.and.returnValue(true);
+        expect(run('/reservoir-flood?date=2026-04-28&hour=15')).toBeTrue();
+        expect(routerSpy.createUrlTree).not.toHaveBeenCalled();
+    });
+
+    it('redirects only-duty from /dashboard to /reservoir-flood', () => {
+        authServiceSpy.isOnlyReservoirDuty.and.returnValue(true);
+        const fakeTree = {} as any;
+        routerSpy.createUrlTree.and.returnValue(fakeTree);
+        expect(run('/dashboard')).toBe(fakeTree);
+        expect(routerSpy.createUrlTree).toHaveBeenCalledWith(['/reservoir-flood']);
+    });
+
+    it('redirects only-duty from /ges-daily-report to /reservoir-flood', () => {
+        authServiceSpy.isOnlyReservoirDuty.and.returnValue(true);
+        const fakeTree = {} as any;
+        routerSpy.createUrlTree.and.returnValue(fakeTree);
+        expect(run('/ges-daily-report')).toBe(fakeTree);
+        expect(routerSpy.createUrlTree).toHaveBeenCalledWith(['/reservoir-flood']);
+    });
+
+    it('redirects only-duty from /reservoir-flood-evil (lookalike) to /reservoir-flood', () => {
+        authServiceSpy.isOnlyReservoirDuty.and.returnValue(true);
+        const fakeTree = {} as any;
+        routerSpy.createUrlTree.and.returnValue(fakeTree);
+        expect(run('/reservoir-flood-evil')).toBe(fakeTree);
+        expect(routerSpy.createUrlTree).toHaveBeenCalledWith(['/reservoir-flood']);
     });
 });
 

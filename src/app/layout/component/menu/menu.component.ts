@@ -42,6 +42,17 @@ export class MenuComponent implements OnInit {
             return;
         }
 
+        if (this.authService.isOnlyReservoirDuty()) {
+            this.model = [
+                {
+                    items: [
+                        { label: this.t('MENU.RESERVOIR_FLOOD'), routerLink: ['/reservoir-flood'] }
+                    ]
+                }
+            ];
+            return;
+        }
+
         this.model = [
             {
                 items: [
@@ -55,7 +66,7 @@ export class MenuComponent implements OnInit {
                     },
                     {
                         label: this.t('MENU.SITUATION_CENTER'),
-                        role: ['rais', 'sc'],
+                        role: ['rais', 'sc', 'reservoir_duty'],
                         items: [
                             {
                                 label: this.t('MENU.GES_INFO'),
@@ -101,7 +112,7 @@ export class MenuComponent implements OnInit {
                             },
                             {
                                 label: this.t('MENU.RESERVOIR_INFO'),
-                                role: ['rais', 'sc'],
+                                role: ['rais', 'sc', 'reservoir_duty'],
                                 items: [
                                     {
                                         label: this.t('MENU.RESERVOIR_SUMMARY'),
@@ -117,6 +128,11 @@ export class MenuComponent implements OnInit {
                                         label: this.t('MENU.RESERVOIR_SUMMARY_HOURLY'),
                                         role: ['rais', 'sc'],
                                         routerLink: ['/reservoir-summary-hourly']
+                                    },
+                                    {
+                                        label: this.t('MENU.RESERVOIR_FLOOD'),
+                                        role: ['sc', 'rais', 'reservoir_duty'],
+                                        routerLink: ['/reservoir-flood']
                                     },
                                     {
                                         label: this.t('MENU.HYDRAULIC_STRUCTURES'),

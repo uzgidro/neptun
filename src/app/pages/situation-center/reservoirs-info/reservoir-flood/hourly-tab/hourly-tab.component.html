@@ -1,0 +1,116 @@
+<div class="flex flex-col gap-4 p-4">
+    <div class="flex items-center gap-3 flex-wrap">
+        <label class="flex items-center gap-2">
+            <span>{{ 'SITUATION_CENTER.RESERVOIR_FLOOD.DATE' | translate }}</span>
+            <p-datepicker
+                [ngModel]="selectedDate"
+                (onSelect)="onDateChange($event)"
+                dateFormat="dd.mm.yy"
+                [showIcon]="true"
+                appendTo="body">
+            </p-datepicker>
+        </label>
+
+        <label class="flex items-center gap-2">
+            <span>{{ 'SITUATION_CENTER.RESERVOIR_FLOOD.HOUR' | translate }}</span>
+            <p-select
+                [options]="hourOptions"
+                [ngModel]="selectedHour"
+                (onChange)="onHourChange($event.value)"
+                optionLabel="label"
+                optionValue="value"
+                appendTo="body">
+            </p-select>
+        </label>
+
+        <p-button
+            [label]="'SITUATION_CENTER.RESERVOIR_FLOOD.SAVE_ALL' | translate"
+            icon="pi pi-save"
+            [disabled]="!hasDirtyRows() || savingAll"
+            [loading]="savingAll"
+            (onClick)="saveAll()">
+        </p-button>
+    </div>
+
+    @if (!loading && configs.length === 0) {
+        <div class="p-4 text-center">
+            {{ 'SITUATION_CENTER.RESERVOIR_FLOOD.NO_FLOOD_CONFIG' | translate }}
+        </div>
+    }
+
+    @if (configs.length > 0) {
+        <p-table [value]="rows" dataKey="config.organization_id" [responsiveLayout]="'scroll'">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>{{ 'SITUATION_CENTER.RESERVOIR_FLOOD.ORGANIZATION' | translate }}</th>
+                    <th>{{ 'SITUATION_CENTER.RESERVOIR_FLOOD.WATER_LEVEL_M' | translate }}</th>
+                    <th>{{ 'SITUATION_CENTER.RESERVOIR_FLOOD.WATER_VOLUME_MLN_M3' | translate }}</th>
+                    <th>{{ 'SITUATION_CENTER.RESERVOIR_FLOOD.INFLOW_M3S' | translate }}</th>
+                    <th>{{ 'SITUATION_CENTER.RESERVOIR_FLOOD.OUTFLOW_M3S' | translate }}</th>
+                    <th>{{ 'SITUATION_CENTER.RESERVOIR_FLOOD.GES_FLOW_M3S' | translate }}</th>
+                    <th>{{ 'SITUATION_CENTER.RESERVOIR_FLOOD.FILTRATION_M3S' | translate }}</th>
+                    <th>{{ 'SITUATION_CENTER.RESERVOIR_FLOOD.IDLE_DISCHARGE_M3S' | translate }}</th>
+                    <th>{{ 'SITUATION_CENTER.RESERVOIR_FLOOD.DUTY_NAME' | translate }}</th>
+                    <th></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-row>
+                <tr [formGroup]="row.form"
+                    [class.row-empty]="row.record === null && !row.form.dirty"
+                    (focusout)="onRowBlur(row)">
+                    <td>{{ row.config.organization_name }}</td>
+                    <td>
+                        <p-inputNumber formControlName="water_level_m"
+                                       [minFractionDigits]="0" [maxFractionDigits]="3"
+                                       [min]="0">
+                        </p-inputNumber>
+                    </td>
+                    <td>
+                        <p-inputNumber formControlName="water_volume_mln_m3"
+                                       [minFractionDigits]="0" [maxFractionDigits]="3"
+                                       [min]="0">
+                        </p-inputNumber>
+                    </td>
+                    <td>
+                        <p-inputNumber formControlName="inflow_m3s"
+                                       [minFractionDigits]="0" [maxFractionDigits]="3"
+                                       [min]="0">
+                        </p-inputNumber>
+                    </td>
+                    <td>
+                        <p-inputNumber formControlName="outflow_m3s"
+                                       [minFractionDigits]="0" [maxFractionDigits]="3"
+                                       [min]="0">
+                        </p-inputNumber>
+                    </td>
+                    <td>
+                        <p-inputNumber formControlName="ges_flow_m3s"
+                                       [minFractionDigits]="0" [maxFractionDigits]="3"
+                                       [min]="0">
+                        </p-inputNumber>
+                    </td>
+                    <td>
+                        <p-inputNumber formControlName="filtration_m3s"
+                                       [minFractionDigits]="0" [maxFractionDigits]="3"
+                                       [min]="0">
+                        </p-inputNumber>
+                    </td>
+                    <td>
+                        <p-inputNumber formControlName="idle_discharge_m3s"
+                                       [minFractionDigits]="0" [maxFractionDigits]="3"
+                                       [min]="0">
+                        </p-inputNumber>
+                    </td>
+                    <td>
+                        <input pInputText formControlName="duty_name" type="text" />
+                    </td>
+                    <td>
+                        @if (row.saving) {
+                            <i class="pi pi-spin pi-spinner"></i>
+                        }
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    }
+</div>

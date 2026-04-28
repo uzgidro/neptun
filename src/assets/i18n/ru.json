@@ -250,7 +250,8 @@
     "VISITS": "Визиты",
     "SNOW_COVER": "MODSNOW",
     "GES_DAILY_REPORT": "Ежедневная отчётность",
-    "INFRA_EVENTS": "Инфраструктура"
+    "INFRA_EVENTS": "Инфраструктура",
+    "RESERVOIR_FLOOD": "Паводковый журнал"
   },
   "GES_REPORT": {
     "TITLE": "Ежедневная отчётность ГЭС",
@@ -2036,6 +2037,38 @@
       "EVENT_CREATE_ERROR": "Ошибка добавления события",
       "EVENT_DELETE_ERROR": "Ошибка удаления события",
       "CONFLICT_EXISTS": "Для данной организации уже существует незавершённое аварийное отключение."
+    },
+    "RESERVOIR_FLOOD": {
+      "TITLE": "Паводковый журнал",
+      "TAB_HOURLY": "Почасовой ввод",
+      "TAB_CONFIG": "Конфигурация",
+      "DATE": "Дата",
+      "HOUR": "Час",
+      "ORGANIZATION": "Водохранилище",
+      "WATER_LEVEL_M": "Уровень, м",
+      "WATER_VOLUME_MLN_M3": "Объём, млн м³",
+      "INFLOW_M3S": "Приток, м³/с",
+      "OUTFLOW_M3S": "Расход, м³/с",
+      "GES_FLOW_M3S": "Через ГЭС, м³/с",
+      "FILTRATION_M3S": "Фильтрация, м³/с",
+      "IDLE_DISCHARGE_M3S": "Холостой сброс, м³/с",
+      "DUTY_NAME": "Дежурный (ФИО)",
+      "SAVE_ALL": "Сохранить всё",
+      "NO_DATA_FOR_HOUR": "Нет данных за этот час",
+      "NO_FLOOD_CONFIG": "Паводковый режим не настроен",
+      "BATCH_FAILED_AT": "Ошибка в строке: {{station}}",
+      "ERROR_FORBIDDEN_ORG": "Нет доступа к этой организации",
+      "ERROR_SAVE_FAILED": "Не удалось сохранить",
+      "ERROR_DELETE_FAILED": "Не удалось удалить",
+      "ALREADY_DELETED": "Запись уже удалена",
+      "SORT_ORDER": "Порядок",
+      "IS_ACTIVE": "Активно",
+      "ADD_ORG": "Добавить водохранилище",
+      "EDIT": "Редактировать",
+      "DELETE": "Удалить",
+      "CONFIG_SAVED": "Конфигурация сохранена",
+      "CONFIG_DELETED": "Запись удалена",
+      "DATA_SAVED": "Данные сохранены"
     },
     "DISCHARGE": {
       "TITLE": "Холостой водосброс",

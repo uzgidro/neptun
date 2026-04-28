@@ -29,6 +29,21 @@ export const cascadeOnlyGuard: CanActivateFn = (_route, state): boolean | UrlTre
     return allowedPaths.includes(targetPath) ? true : router.createUrlTree([fallbackPath]);
 };
 
+export const reservoirDutyOnlyGuard: CanActivateFn = (_route, state): boolean | UrlTree => {
+    const authService = inject(AuthService);
+    const router = inject(Router);
+
+    if (!authService.isOnlyReservoirDuty()) {
+        return true;
+    }
+
+    const allowedPaths = ['/reservoir-flood'];
+    const fallbackPath = '/reservoir-flood';
+    const targetPath = state.url.split('?')[0];
+
+    return allowedPaths.includes(targetPath) ? true : router.createUrlTree([fallbackPath]);
+};
+
 export const adminGuard: CanActivateFn = (): boolean | UrlTree => {
     const authService = inject(AuthService);
     const router = inject(Router);
@@ -55,6 +70,13 @@ export const gesReportGuard: CanActivateFn = (): boolean | UrlTree => {
     const router = inject(Router);
 
     return authService.hasRole(['sc', 'rais', 'cascade']) ? true : router.createUrlTree(['/notfound']);
+}
+
+export const reservoirFloodGuard: CanActivateFn = (): boolean | UrlTree => {
+    const authService = inject(AuthService);
+    const router = inject(Router);
+
+    return authService.hasRole(['sc', 'rais', 'reservoir_duty']) ? true : router.createUrlTree(['/notfound']);
 }
 
 export const hrmGuard: CanActivateFn = (): boolean | UrlTree => {

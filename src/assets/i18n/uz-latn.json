@@ -250,7 +250,8 @@
     "SNOW_COVER": "MODSNOW",
     "INFRA_EVENTS": "Infratuzilma",
     "GES_DAILY_REPORT": "Kunlik hisobot",
-    "ORGANIZATION_TYPES": "Tashkilot turlari"
+    "ORGANIZATION_TYPES": "Tashkilot turlari",
+    "RESERVOIR_FLOOD": "Toshqin jurnali"
   },
   "GES_REPORT": {
     "BATCH_FAILED_AT": "{{station}} stantsiyasida xatolik",
@@ -2045,6 +2046,38 @@
       "EVENT_CREATE_ERROR": "Voqeani qo'shishda xatolik",
       "EVENT_DELETE_ERROR": "Voqeani o'chirishda xatolik",
       "CONFLICT_EXISTS": "Ushbu tashkilot uchun tugallanmagan favqulodda o'chirish mavjud."
+    },
+    "RESERVOIR_FLOOD": {
+      "TITLE": "Toshqin jurnali",
+      "TAB_HOURLY": "Soatlik kiritish",
+      "TAB_CONFIG": "Konfiguratsiya",
+      "DATE": "Sana",
+      "HOUR": "Soat",
+      "ORGANIZATION": "Suv ombori",
+      "WATER_LEVEL_M": "Suv sathi, m",
+      "WATER_VOLUME_MLN_M3": "Hajm, mln m³",
+      "INFLOW_M3S": "Oqib kelish, m³/s",
+      "OUTFLOW_M3S": "Sarf, m³/s",
+      "GES_FLOW_M3S": "GES orqali, m³/s",
+      "FILTRATION_M3S": "Filtratsiya, m³/s",
+      "IDLE_DISCHARGE_M3S": "Bo'sh tashlama, m³/s",
+      "DUTY_NAME": "Navbatchi (F.I.Sh.)",
+      "SAVE_ALL": "Barchasini saqlash",
+      "NO_DATA_FOR_HOUR": "Bu soat uchun ma'lumot yo'q",
+      "NO_FLOOD_CONFIG": "Toshqin rejimi sozlanmagan",
+      "BATCH_FAILED_AT": "Qatorda xatolik: {{station}}",
+      "ERROR_FORBIDDEN_ORG": "Ushbu tashkilotga kirish huquqi yo'q",
+      "ERROR_SAVE_FAILED": "Saqlab bo'lmadi",
+      "ERROR_DELETE_FAILED": "O'chirib bo'lmadi",
+      "ALREADY_DELETED": "Yozuv allaqachon o'chirilgan",
+      "SORT_ORDER": "Tartib",
+      "IS_ACTIVE": "Faol",
+      "ADD_ORG": "Suv omborini qo'shish",
+      "EDIT": "Tahrirlash",
+      "DELETE": "O'chirish",
+      "CONFIG_SAVED": "Konfiguratsiya saqlandi",
+      "CONFIG_DELETED": "Yozuv o'chirildi",
+      "DATA_SAVED": "Ma'lumotlar saqlandi"
     },
     "DISCHARGE": {
       "TITLE": "Bo'sh suv tashlab yuborish",

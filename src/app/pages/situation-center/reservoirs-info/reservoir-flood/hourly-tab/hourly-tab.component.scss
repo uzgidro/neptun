@@ -1,0 +1,3 @@
+tr.row-empty td {
+    background: color-mix(in srgb, var(--surface-border, transparent) 30%, var(--surface-card, transparent));
+}

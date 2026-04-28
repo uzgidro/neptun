@@ -57,6 +57,15 @@ export class AuthService {
         return roles.length === 1 && roles[0] === 'cascade';
     }
 
+    isOnlyReservoirDuty(): boolean {
+        const decodedToken = this.jwtService.getDecodedToken();
+        if (!decodedToken || !Array.isArray(decodedToken.roles)) {
+            return false;
+        }
+        const roles: string[] = decodedToken.roles;
+        return roles.length === 1 && roles[0] === 'reservoir_duty';
+    }
+
     isScOrRais(): boolean {
         return this.hasRole(['sc', 'rais']);
     }
