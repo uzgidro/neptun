@@ -3,8 +3,8 @@
         <label class="flex items-center gap-2">
             <span>{{ 'SITUATION_CENTER.RESERVOIR_FLOOD.DATE' | translate }}</span>
             <p-datepicker
-                [(ngModel)]="selectedDate"
-                (onSelect)="loadData()"
+                [ngModel]="selectedDate"
+                (onSelect)="onDateChange($event)"
                 dateFormat="dd.mm.yy"
                 [showIcon]="true"
                 appendTo="body">
@@ -15,8 +15,8 @@
             <span>{{ 'SITUATION_CENTER.RESERVOIR_FLOOD.HOUR' | translate }}</span>
             <p-select
                 [options]="hourOptions"
-                [(ngModel)]="selectedHour"
-                (onChange)="loadData()"
+                [ngModel]="selectedHour"
+                (onChange)="onHourChange($event.value)"
                 optionLabel="label"
                 optionValue="value"
                 appendTo="body">

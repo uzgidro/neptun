@@ -33,7 +33,7 @@ export class ReservoirFloodComponent implements HasUnsavedChanges {
     activeTab: string = 'hourly';
 
     get canEditConfig(): boolean {
-        return this.authService.hasRole(['sc', 'rais']);
+        return this.authService.hasRole('sc');
     }
 
     canDeactivate(): boolean {

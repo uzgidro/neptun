@@ -2,7 +2,8 @@ import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testin
 import { provideHttpClient, HttpErrorResponse } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
-import { of, throwError } from 'rxjs';
+import { ActivatedRoute, Router, convertToParamMap } from '@angular/router';
+import { BehaviorSubject, of, throwError } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
 import { MessageService } from 'primeng/api';
 
@@ -36,17 +37,23 @@ describe('HourlyTabComponent', () => {
     let svc: jasmine.SpyObj<ReservoirFloodService>;
     let levelVolume: jasmine.SpyObj<LevelVolumeService>;
     let messageService: jasmine.SpyObj<MessageService>;
+    let router: jasmine.SpyObj<Router>;
+    let queryParamMap$: BehaviorSubject<ReturnType<typeof convertToParamMap>>;
 
-    beforeEach(async () => {
+    function setupBed(initialQueryParams: Record<string, string> = {}): void {
         svc = jasmine.createSpyObj('ReservoirFloodService',
             ['getConfigs', 'getHourly', 'upsertHourly', 'upsertConfig', 'deleteConfig']);
         levelVolume = jasmine.createSpyObj('LevelVolumeService', ['getVolume']);
         messageService = jasmine.createSpyObj('MessageService', ['add']);
+        router = jasmine.createSpyObj('Router', ['navigate']);
+        router.navigate.and.resolveTo(true);
 
         svc.getConfigs.and.returnValue(of([]));
         svc.getHourly.and.returnValue(of([]));
 
-        await TestBed.configureTestingModule({
+        queryParamMap$ = new BehaviorSubject(convertToParamMap(initialQueryParams));
+
+        TestBed.configureTestingModule({
             imports: [HourlyTabComponent, TranslateModule.forRoot()],
             providers: [
                 provideHttpClient(),
@@ -54,12 +61,25 @@ describe('HourlyTabComponent', () => {
                 provideNoopAnimations(),
                 { provide: ReservoirFloodService, useValue: svc },
                 { provide: LevelVolumeService, useValue: levelVolume },
-                { provide: MessageService, useValue: messageService }
+                { provide: MessageService, useValue: messageService },
+                { provide: Router, useValue: router },
+                {
+                    provide: ActivatedRoute,
+                    useValue: { queryParamMap: queryParamMap$.asObservable() }
+                }
             ]
-        }).compileComponents();
+        });
+    }
 
+    beforeEach(async () => {
+        setupBed();
+        await TestBed.compileComponents();
         fixture = TestBed.createComponent(HourlyTabComponent);
         component = fixture.componentInstance;
+    });
+
+    afterEach(() => {
+        TestBed.resetTestingModule();
     });
 
     it('should create', () => {
@@ -185,5 +205,131 @@ describe('HourlyTabComponent', () => {
         expect(row.form.get('water_level_m')!.value).toBe(815.4);
         expect(row.form.get('duty_name')!.value).toBe('Иванов');
         expect(row.form.dirty).toBeFalse();
+    }));
+});
+
+describe('HourlyTabComponent — URL query params (date, hour)', () => {
+    let component: HourlyTabComponent;
+    let fixture: ComponentFixture<HourlyTabComponent>;
+    let svc: jasmine.SpyObj<ReservoirFloodService>;
+    let router: jasmine.SpyObj<Router>;
+    let queryParamMap$: BehaviorSubject<ReturnType<typeof convertToParamMap>>;
+
+    function setupAndInit(initialQueryParams: Record<string, string>): void {
+        svc = jasmine.createSpyObj('ReservoirFloodService',
+            ['getConfigs', 'getHourly', 'upsertHourly', 'upsertConfig', 'deleteConfig']);
+        const levelVolume = jasmine.createSpyObj('LevelVolumeService', ['getVolume']);
+        const messageService = jasmine.createSpyObj('MessageService', ['add']);
+        router = jasmine.createSpyObj('Router', ['navigate']);
+        router.navigate.and.resolveTo(true);
+
+        svc.getConfigs.and.returnValue(of([]));
+        svc.getHourly.and.returnValue(of([]));
+
+        queryParamMap$ = new BehaviorSubject(convertToParamMap(initialQueryParams));
+
+        TestBed.configureTestingModule({
+            imports: [HourlyTabComponent, TranslateModule.forRoot()],
+            providers: [
+                provideHttpClient(),
+                provideHttpClientTesting(),
+                provideNoopAnimations(),
+                { provide: ReservoirFloodService, useValue: svc },
+                { provide: LevelVolumeService, useValue: levelVolume },
+                { provide: MessageService, useValue: messageService },
+                { provide: Router, useValue: router },
+                {
+                    provide: ActivatedRoute,
+                    useValue: { queryParamMap: queryParamMap$.asObservable() }
+                }
+            ]
+        });
+        fixture = TestBed.createComponent(HourlyTabComponent);
+        component = fixture.componentInstance;
+    }
+
+    afterEach(() => TestBed.resetTestingModule());
+
+    it('reads date and hour from URL on init', fakeAsync(() => {
+        setupAndInit({ date: '2026-04-28', hour: '15' });
+        fixture.detectChanges();
+        tick();
+        expect(component.selectedHour).toBe(15);
+        expect(component.selectedDate.getFullYear()).toBe(2026);
+        expect(component.selectedDate.getMonth()).toBe(3); // 0-indexed → April
+        expect(component.selectedDate.getDate()).toBe(28);
+        // getHourly called with the date from URL
+        expect(svc.getHourly).toHaveBeenCalledWith('2026-04-28');
+    }));
+
+    it('falls back to today + current hour when URL has no params, and writes them back to URL (replaceUrl)', fakeAsync(() => {
+        setupAndInit({});
+        fixture.detectChanges();
+        tick();
+        expect(component.selectedHour).toBeGreaterThanOrEqual(0);
+        expect(component.selectedHour).toBeLessThanOrEqual(23);
+        // expected to call router.navigate with current values, replaceUrl true
+        expect(router.navigate).toHaveBeenCalled();
+        const args = router.navigate.calls.mostRecent().args;
+        const extras = args[1] as any;
+        expect(extras?.queryParams?.date).toBeTruthy();
+        expect(extras?.queryParams?.hour).toBeDefined();
+        expect(extras?.replaceUrl).toBeTrue();
+        expect(extras?.queryParamsHandling).toBe('merge');
+    }));
+
+    it('navigates with new query params when selectedHour changes via onHourChange', fakeAsync(() => {
+        setupAndInit({ date: '2026-04-28', hour: '10' });
+        fixture.detectChanges();
+        tick();
+        router.navigate.calls.reset();
+        component.onHourChange(11);
+        tick();
+        expect(router.navigate).toHaveBeenCalled();
+        const extras = router.navigate.calls.mostRecent().args[1] as any;
+        expect(extras?.queryParams?.hour).toBe(11);
+        expect(extras?.queryParamsHandling).toBe('merge');
+    }));
+
+    it('navigates with new query params when selectedDate changes via onDateChange', fakeAsync(() => {
+        setupAndInit({ date: '2026-04-28', hour: '10' });
+        fixture.detectChanges();
+        tick();
+        router.navigate.calls.reset();
+        component.onDateChange(new Date(2026, 3, 29));
+        tick();
+        expect(router.navigate).toHaveBeenCalled();
+        const extras = router.navigate.calls.mostRecent().args[1] as any;
+        expect(extras?.queryParams?.date).toBe('2026-04-29');
+    }));
+
+    it('reloads data when URL changes externally (e.g., browser back)', fakeAsync(() => {
+        setupAndInit({ date: '2026-04-28', hour: '10' });
+        fixture.detectChanges();
+        tick();
+        const initialHourlyCalls = svc.getHourly.calls.count();
+        // simulate URL change (browser back/forward, share-link load)
+        queryParamMap$.next(convertToParamMap({ date: '2026-04-25', hour: '8' }));
+        tick();
+        expect(component.selectedHour).toBe(8);
+        expect(svc.getHourly.calls.count()).toBeGreaterThan(initialHourlyCalls);
+    }));
+
+    it('clamps invalid hour values to current hour', fakeAsync(() => {
+        setupAndInit({ date: '2026-04-28', hour: '99' });
+        fixture.detectChanges();
+        tick();
+        // 99 → clamped (treated as invalid → fallback to current hour)
+        expect(component.selectedHour).toBeGreaterThanOrEqual(0);
+        expect(component.selectedHour).toBeLessThanOrEqual(23);
+    }));
+
+    it('ignores malformed date and uses today', fakeAsync(() => {
+        setupAndInit({ date: 'not-a-date', hour: '12' });
+        fixture.detectChanges();
+        tick();
+        expect(component.selectedHour).toBe(12);
+        // selectedDate is today (recent year)
+        expect(component.selectedDate.getFullYear()).toBeGreaterThanOrEqual(2026);
     }));
 });

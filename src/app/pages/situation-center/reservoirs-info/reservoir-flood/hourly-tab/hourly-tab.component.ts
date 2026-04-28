@@ -8,6 +8,7 @@ import {
     Validators
 } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, forkJoin, merge, of } from 'rxjs';
 import {
     catchError,
@@ -80,6 +81,8 @@ export class HourlyTabComponent implements OnInit, OnDestroy {
     private messageService = inject(MessageService);
     private translate = inject(TranslateService);
     private fb = inject(FormBuilder);
+    private route = inject(ActivatedRoute);
+    private router = inject(Router);
 
     selectedDate: Date = this.todayMidnight();
     selectedHour: number = new Date().getHours();
@@ -94,7 +97,74 @@ export class HourlyTabComponent implements OnInit, OnDestroy {
     }));
 
     ngOnInit(): void {
-        this.loadData();
+        this.route.queryParamMap.pipe(takeUntil(this.destroy$)).subscribe(qp => {
+            const dateParam = qp.get('date');
+            const hourParam = qp.get('hour');
+            const parsedDate = this.parseDateParam(dateParam);
+            const parsedHour = this.parseHourParam(hourParam);
+            const hadValidParams = parsedDate !== null && parsedHour !== null;
+
+            this.selectedDate = parsedDate ?? this.todayMidnight();
+            this.selectedHour = parsedHour ?? new Date().getHours();
+
+            if (!hadValidParams) {
+                this.router.navigate([], {
+                    relativeTo: this.route,
+                    queryParams: {
+                        date: this.dateYMD(),
+                        hour: this.selectedHour
+                    },
+                    queryParamsHandling: 'merge',
+                    replaceUrl: true
+                });
+            }
+            this.loadData();
+        });
+    }
+
+    onHourChange(hour: number): void {
+        if (hour === this.selectedHour) return;
+        this.router.navigate([], {
+            relativeTo: this.route,
+            queryParams: { hour },
+            queryParamsHandling: 'merge'
+        });
+    }
+
+    onDateChange(date: Date): void {
+        if (!(date instanceof Date) || isNaN(date.getTime())) return;
+        if (
+            this.selectedDate instanceof Date &&
+            date.getFullYear() === this.selectedDate.getFullYear() &&
+            date.getMonth() === this.selectedDate.getMonth() &&
+            date.getDate() === this.selectedDate.getDate()
+        ) {
+            return;
+        }
+        const ymd = this.formatYMD(date);
+        this.router.navigate([], {
+            relativeTo: this.route,
+            queryParams: { date: ymd },
+            queryParamsHandling: 'merge'
+        });
+    }
+
+    private parseDateParam(s: string | null): Date | null {
+        if (!s) return null;
+        const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s);
+        if (!m) return null;
+        const y = +m[1], mo = +m[2] - 1, d = +m[3];
+        const date = new Date(y, mo, d, 0, 0, 0, 0);
+        if (isNaN(date.getTime())) return null;
+        if (date.getFullYear() !== y || date.getMonth() !== mo || date.getDate() !== d) return null;
+        return date;
+    }
+
+    private parseHourParam(s: string | null): number | null {
+        if (s === null) return null;
+        const n = parseInt(s, 10);
+        if (isNaN(n) || n < 0 || n > 23) return null;
+        return n;
     }
 
     ngOnDestroy(): void {
@@ -307,7 +377,10 @@ export class HourlyTabComponent implements OnInit, OnDestroy {
     }
 
     private dateYMD(): string {
-        const d = this.selectedDate;
+        return this.formatYMD(this.selectedDate);
+    }
+
+    private formatYMD(d: Date): string {
         const y = d.getFullYear();
         const m = (d.getMonth() + 1).toString().padStart(2, '0');
         const day = d.getDate().toString().padStart(2, '0');

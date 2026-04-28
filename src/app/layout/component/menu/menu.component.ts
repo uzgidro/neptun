@@ -42,6 +42,17 @@ export class MenuComponent implements OnInit {
             return;
         }
 
+        if (this.authService.isOnlyReservoirDuty()) {
+            this.model = [
+                {
+                    items: [
+                        { label: this.t('MENU.RESERVOIR_FLOOD'), routerLink: ['/reservoir-flood'] }
+                    ]
+                }
+            ];
+            return;
+        }
+
         this.model = [
             {
                 items: [
