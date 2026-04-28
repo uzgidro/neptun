@@ -13,6 +13,8 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
 import { InputTextModule } from 'primeng/inputtext';
+import { IconField } from 'primeng/iconfield';
+import { InputIcon } from 'primeng/inputicon';
 import { TooltipModule } from 'primeng/tooltip';
 import { FormsModule } from '@angular/forms';
 import { GesReportService } from '@/core/services/ges-report.service';
@@ -76,6 +78,8 @@ export class DataEntryRow {
         ButtonModule,
         TagModule,
         InputTextModule,
+        IconField,
+        InputIcon,
         TooltipModule,
         CascadeWeatherComponent,
         DialogComponent
