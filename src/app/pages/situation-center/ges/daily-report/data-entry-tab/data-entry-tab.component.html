@@ -149,6 +149,7 @@
                                     }
                                     @if (canFreeze) {
                                         <p-inputicon class="freeze-trigger"
+                                            (mousedown)="$event.preventDefault()"
                                             [class.freeze-trigger--frozen]="isFrozen(row, 'daily_production_mln_kwh')"
                                             [pTooltip]="getFreezeTooltip(row, 'daily_production_mln_kwh')" tooltipPosition="top"
                                             (click)="openFreezeDialog(row, 'daily_production_mln_kwh')">
@@ -178,6 +179,7 @@
                                     </p-inputNumber>
                                     @if (canFreeze) {
                                         <p-inputicon class="freeze-trigger"
+                                            (mousedown)="$event.preventDefault()"
                                             [class.freeze-trigger--frozen]="isFrozen(row, 'working_aggregates')"
                                             [pTooltip]="getFreezeTooltip(row, 'working_aggregates')" tooltipPosition="top"
                                             (click)="openFreezeDialog(row, 'working_aggregates')">
@@ -206,6 +208,7 @@
                                     </p-inputNumber>
                                     @if (canFreeze) {
                                         <p-inputicon class="freeze-trigger"
+                                            (mousedown)="$event.preventDefault()"
                                             [class.freeze-trigger--frozen]="isFrozen(row, 'repair_aggregates')"
                                             [pTooltip]="getFreezeTooltip(row, 'repair_aggregates')" tooltipPosition="top"
                                             (click)="openFreezeDialog(row, 'repair_aggregates')">
@@ -234,6 +237,7 @@
                                     </p-inputNumber>
                                     @if (canFreeze) {
                                         <p-inputicon class="freeze-trigger"
+                                            (mousedown)="$event.preventDefault()"
                                             [class.freeze-trigger--frozen]="isFrozen(row, 'modernization_aggregates')"
                                             [pTooltip]="getFreezeTooltip(row, 'modernization_aggregates')" tooltipPosition="top"
                                             (click)="openFreezeDialog(row, 'modernization_aggregates')">
@@ -261,6 +265,7 @@
                                     </p-inputNumber>
                                     @if (canFreeze) {
                                         <p-inputicon class="freeze-trigger"
+                                            (mousedown)="$event.preventDefault()"
                                             [class.freeze-trigger--frozen]="isFrozen(row, 'water_head_m')"
                                             [pTooltip]="getFreezeTooltip(row, 'water_head_m')" tooltipPosition="top"
                                             (click)="openFreezeDialog(row, 'water_head_m')">
@@ -285,6 +290,7 @@
                                     </p-inputNumber>
                                     @if (canFreeze) {
                                         <p-inputicon class="freeze-trigger"
+                                            (mousedown)="$event.preventDefault()"
                                             [class.freeze-trigger--frozen]="isFrozen(row, 'reservoir_income_m3s')"
                                             [pTooltip]="getFreezeTooltip(row, 'reservoir_income_m3s')" tooltipPosition="top"
                                             (click)="openFreezeDialog(row, 'reservoir_income_m3s')">
@@ -309,6 +315,7 @@
                                     </p-inputNumber>
                                     @if (canFreeze) {
                                         <p-inputicon class="freeze-trigger"
+                                            (mousedown)="$event.preventDefault()"
                                             [class.freeze-trigger--frozen]="isFrozen(row, 'total_outflow_m3s')"
                                             [pTooltip]="getFreezeTooltip(row, 'total_outflow_m3s')" tooltipPosition="top"
                                             (click)="openFreezeDialog(row, 'total_outflow_m3s')">
@@ -334,6 +341,7 @@
                                     </p-inputNumber>
                                     @if (canFreeze) {
                                         <p-inputicon class="freeze-trigger"
+                                            (mousedown)="$event.preventDefault()"
                                             [class.freeze-trigger--frozen]="isFrozen(row, 'ges_flow_m3s')"
                                             [pTooltip]="getFreezeTooltip(row, 'ges_flow_m3s')" tooltipPosition="top"
                                             (click)="openFreezeDialog(row, 'ges_flow_m3s')">
@@ -366,6 +374,7 @@
                                         </p-inputNumber>
                                         @if (canFreeze) {
                                             <p-inputicon class="freeze-trigger"
+                                            (mousedown)="$event.preventDefault()"
                                                 [class.freeze-trigger--frozen]="isFrozen(row, 'water_level_m')"
                                                 [pTooltip]="getFreezeTooltip(row, 'water_level_m')" tooltipPosition="top"
                                                 (click)="openFreezeDialog(row, 'water_level_m')">
@@ -394,6 +403,7 @@
                                         </p-inputNumber>
                                         @if (canFreeze) {
                                             <p-inputicon class="freeze-trigger"
+                                            (mousedown)="$event.preventDefault()"
                                                 [class.freeze-trigger--frozen]="isFrozen(row, 'water_volume_mln_m3')"
                                                 [pTooltip]="getFreezeTooltip(row, 'water_volume_mln_m3')" tooltipPosition="top"
                                                 (click)="openFreezeDialog(row, 'water_volume_mln_m3')">
