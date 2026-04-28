@@ -122,7 +122,7 @@
                                 </div>
                             </td>
                             <td class="px-2 py-2 align-middle">
-                                <div class="freeze-cell">
+                                <p-iconfield class="freeze-field" [class.freeze-field--frozen]="isFrozen(row, 'daily_production_mln_kwh')">
                                     @if (row.config.max_daily_production_mln_kwh > 0) {
                                         <p-inputNumber
                                             formControlName="daily_production_mln_kwh"
@@ -132,8 +132,8 @@
                                             [maxFractionDigits]="6"
                                             [useGrouping]="false"
                                             [placeholder]="getFrozenPlaceholder(row, 'daily_production_mln_kwh')"
-                                            styleClass="freeze-cell__input"
-                                            inputStyleClass="w-full">
+                                            styleClass="freeze-field__input"
+                                            inputStyleClass="freeze-field__inputbox w-full">
                                         </p-inputNumber>
                                     } @else {
                                         <p-inputNumber
@@ -143,29 +143,28 @@
                                             [maxFractionDigits]="6"
                                             [useGrouping]="false"
                                             [placeholder]="getFrozenPlaceholder(row, 'daily_production_mln_kwh')"
-                                            styleClass="freeze-cell__input"
-                                            inputStyleClass="w-full">
+                                            styleClass="freeze-field__input"
+                                            inputStyleClass="freeze-field__inputbox w-full">
                                         </p-inputNumber>
                                     }
-                                    @if (canFreeze && shouldShowNotNullHint(row, 'daily_production_mln_kwh')) {
-                                        <i class="pi pi-info-circle freeze-info" [pTooltip]="'GES_REPORT.FROZEN.NOT_NULL_HINT' | translate" tooltipPosition="top"></i>
-                                    }
                                     @if (canFreeze) {
-                                        <button type="button" class="freeze-icon"
-                                            [class.freeze-icon--frozen]="isFrozen(row, 'daily_production_mln_kwh')"
-                                            [class.freeze-icon--unfrozen]="!isFrozen(row, 'daily_production_mln_kwh')"
+                                        <p-inputicon class="freeze-trigger"
+                                            [class.freeze-trigger--frozen]="isFrozen(row, 'daily_production_mln_kwh')"
                                             [pTooltip]="getFreezeTooltip(row, 'daily_production_mln_kwh')" tooltipPosition="top"
                                             (click)="openFreezeDialog(row, 'daily_production_mln_kwh')">
                                             <i class="pi" [class.pi-lock]="isFrozen(row, 'daily_production_mln_kwh')" [class.pi-lock-open]="!isFrozen(row, 'daily_production_mln_kwh')"></i>
-                                        </button>
+                                        </p-inputicon>
                                     }
-                                </div>
+                                </p-iconfield>
+                                @if (canFreeze && shouldShowNotNullHint(row, 'daily_production_mln_kwh')) {
+                                    <i class="pi pi-info-circle freeze-info" [pTooltip]="'GES_REPORT.FROZEN.NOT_NULL_HINT' | translate" tooltipPosition="top"></i>
+                                }
                                 @if (isFrozen(row, 'daily_production_mln_kwh') && row.form.get('daily_production_mln_kwh')?.value == null) {
                                     <small class="frozen-hint">{{ 'GES_REPORT.FROZEN.FROM_DEFAULT' | translate }}</small>
                                 }
                             </td>
                             <td class="px-2 py-2 align-middle">
-                                <div class="freeze-cell">
+                                <p-iconfield class="freeze-field" [class.freeze-field--frozen]="isFrozen(row, 'working_aggregates')">
                                     <p-inputNumber
                                         formControlName="working_aggregates"
                                         [min]="0"
@@ -174,28 +173,27 @@
                                         [maxFractionDigits]="0"
                                         [useGrouping]="false"
                                         [placeholder]="getFrozenPlaceholder(row, 'working_aggregates')"
-                                        styleClass="freeze-cell__input"
-                                        inputStyleClass="w-full">
+                                        styleClass="freeze-field__input"
+                                        inputStyleClass="freeze-field__inputbox w-full">
                                     </p-inputNumber>
-                                    @if (canFreeze && shouldShowNotNullHint(row, 'working_aggregates')) {
-                                        <i class="pi pi-info-circle freeze-info" [pTooltip]="'GES_REPORT.FROZEN.NOT_NULL_HINT' | translate" tooltipPosition="top"></i>
-                                    }
                                     @if (canFreeze) {
-                                        <button type="button" class="freeze-icon"
-                                            [class.freeze-icon--frozen]="isFrozen(row, 'working_aggregates')"
-                                            [class.freeze-icon--unfrozen]="!isFrozen(row, 'working_aggregates')"
+                                        <p-inputicon class="freeze-trigger"
+                                            [class.freeze-trigger--frozen]="isFrozen(row, 'working_aggregates')"
                                             [pTooltip]="getFreezeTooltip(row, 'working_aggregates')" tooltipPosition="top"
                                             (click)="openFreezeDialog(row, 'working_aggregates')">
                                             <i class="pi" [class.pi-lock]="isFrozen(row, 'working_aggregates')" [class.pi-lock-open]="!isFrozen(row, 'working_aggregates')"></i>
-                                        </button>
+                                        </p-inputicon>
                                     }
-                                </div>
+                                </p-iconfield>
+                                @if (canFreeze && shouldShowNotNullHint(row, 'working_aggregates')) {
+                                    <i class="pi pi-info-circle freeze-info" [pTooltip]="'GES_REPORT.FROZEN.NOT_NULL_HINT' | translate" tooltipPosition="top"></i>
+                                }
                                 @if (isFrozen(row, 'working_aggregates') && row.form.get('working_aggregates')?.value == null) {
                                     <small class="frozen-hint">{{ 'GES_REPORT.FROZEN.FROM_DEFAULT' | translate }}</small>
                                 }
                             </td>
                             <td class="px-2 py-2 align-middle">
-                                <div class="freeze-cell">
+                                <p-iconfield class="freeze-field" [class.freeze-field--frozen]="isFrozen(row, 'repair_aggregates')">
                                     <p-inputNumber
                                         formControlName="repair_aggregates"
                                         [min]="0"
@@ -203,28 +201,27 @@
                                         [maxFractionDigits]="0"
                                         [useGrouping]="false"
                                         [placeholder]="getFrozenPlaceholder(row, 'repair_aggregates')"
-                                        styleClass="freeze-cell__input"
-                                        inputStyleClass="w-full">
+                                        styleClass="freeze-field__input"
+                                        inputStyleClass="freeze-field__inputbox w-full">
                                     </p-inputNumber>
-                                    @if (canFreeze && shouldShowNotNullHint(row, 'repair_aggregates')) {
-                                        <i class="pi pi-info-circle freeze-info" [pTooltip]="'GES_REPORT.FROZEN.NOT_NULL_HINT' | translate" tooltipPosition="top"></i>
-                                    }
                                     @if (canFreeze) {
-                                        <button type="button" class="freeze-icon"
-                                            [class.freeze-icon--frozen]="isFrozen(row, 'repair_aggregates')"
-                                            [class.freeze-icon--unfrozen]="!isFrozen(row, 'repair_aggregates')"
+                                        <p-inputicon class="freeze-trigger"
+                                            [class.freeze-trigger--frozen]="isFrozen(row, 'repair_aggregates')"
                                             [pTooltip]="getFreezeTooltip(row, 'repair_aggregates')" tooltipPosition="top"
                                             (click)="openFreezeDialog(row, 'repair_aggregates')">
                                             <i class="pi" [class.pi-lock]="isFrozen(row, 'repair_aggregates')" [class.pi-lock-open]="!isFrozen(row, 'repair_aggregates')"></i>
-                                        </button>
+                                        </p-inputicon>
                                     }
-                                </div>
+                                </p-iconfield>
+                                @if (canFreeze && shouldShowNotNullHint(row, 'repair_aggregates')) {
+                                    <i class="pi pi-info-circle freeze-info" [pTooltip]="'GES_REPORT.FROZEN.NOT_NULL_HINT' | translate" tooltipPosition="top"></i>
+                                }
                                 @if (isFrozen(row, 'repair_aggregates') && row.form.get('repair_aggregates')?.value == null) {
                                     <small class="frozen-hint">{{ 'GES_REPORT.FROZEN.FROM_DEFAULT' | translate }}</small>
                                 }
                             </td>
                             <td class="px-2 py-2 align-middle">
-                                <div class="freeze-cell">
+                                <p-iconfield class="freeze-field" [class.freeze-field--frozen]="isFrozen(row, 'modernization_aggregates')">
                                     <p-inputNumber
                                         formControlName="modernization_aggregates"
                                         [min]="0"
@@ -232,103 +229,99 @@
                                         [maxFractionDigits]="0"
                                         [useGrouping]="false"
                                         [placeholder]="getFrozenPlaceholder(row, 'modernization_aggregates')"
-                                        styleClass="freeze-cell__input"
-                                        inputStyleClass="w-full">
+                                        styleClass="freeze-field__input"
+                                        inputStyleClass="freeze-field__inputbox w-full">
                                     </p-inputNumber>
-                                    @if (canFreeze && shouldShowNotNullHint(row, 'modernization_aggregates')) {
-                                        <i class="pi pi-info-circle freeze-info" [pTooltip]="'GES_REPORT.FROZEN.NOT_NULL_HINT' | translate" tooltipPosition="top"></i>
-                                    }
                                     @if (canFreeze) {
-                                        <button type="button" class="freeze-icon"
-                                            [class.freeze-icon--frozen]="isFrozen(row, 'modernization_aggregates')"
-                                            [class.freeze-icon--unfrozen]="!isFrozen(row, 'modernization_aggregates')"
+                                        <p-inputicon class="freeze-trigger"
+                                            [class.freeze-trigger--frozen]="isFrozen(row, 'modernization_aggregates')"
                                             [pTooltip]="getFreezeTooltip(row, 'modernization_aggregates')" tooltipPosition="top"
                                             (click)="openFreezeDialog(row, 'modernization_aggregates')">
                                             <i class="pi" [class.pi-lock]="isFrozen(row, 'modernization_aggregates')" [class.pi-lock-open]="!isFrozen(row, 'modernization_aggregates')"></i>
-                                        </button>
+                                        </p-inputicon>
                                     }
-                                </div>
+                                </p-iconfield>
+                                @if (canFreeze && shouldShowNotNullHint(row, 'modernization_aggregates')) {
+                                    <i class="pi pi-info-circle freeze-info" [pTooltip]="'GES_REPORT.FROZEN.NOT_NULL_HINT' | translate" tooltipPosition="top"></i>
+                                }
                                 @if (isFrozen(row, 'modernization_aggregates') && row.form.get('modernization_aggregates')?.value == null) {
                                     <small class="frozen-hint">{{ 'GES_REPORT.FROZEN.FROM_DEFAULT' | translate }}</small>
                                 }
                             </td>
                             <td class="px-2 py-2 align-middle">
-                                <div class="freeze-cell">
+                                <p-iconfield class="freeze-field" [class.freeze-field--frozen]="isFrozen(row, 'water_head_m')">
                                     <p-inputNumber
                                         formControlName="water_head_m"
                                         [minFractionDigits]="0"
                                         [maxFractionDigits]="6"
                                         [useGrouping]="false"
                                         [placeholder]="getFrozenPlaceholder(row, 'water_head_m')"
-                                        styleClass="freeze-cell__input"
-                                        inputStyleClass="w-full">
+                                        styleClass="freeze-field__input"
+                                        inputStyleClass="freeze-field__inputbox w-full">
                                     </p-inputNumber>
                                     @if (canFreeze) {
-                                        <button type="button" class="freeze-icon"
-                                            [class.freeze-icon--frozen]="isFrozen(row, 'water_head_m')"
-                                            [class.freeze-icon--unfrozen]="!isFrozen(row, 'water_head_m')"
+                                        <p-inputicon class="freeze-trigger"
+                                            [class.freeze-trigger--frozen]="isFrozen(row, 'water_head_m')"
                                             [pTooltip]="getFreezeTooltip(row, 'water_head_m')" tooltipPosition="top"
                                             (click)="openFreezeDialog(row, 'water_head_m')">
                                             <i class="pi" [class.pi-lock]="isFrozen(row, 'water_head_m')" [class.pi-lock-open]="!isFrozen(row, 'water_head_m')"></i>
-                                        </button>
+                                        </p-inputicon>
                                     }
-                                </div>
+                                </p-iconfield>
                                 @if (isFrozen(row, 'water_head_m') && row.form.get('water_head_m')?.value == null) {
                                     <small class="frozen-hint">{{ 'GES_REPORT.FROZEN.FROM_DEFAULT' | translate }}</small>
                                 }
                             </td>
                             <td class="px-2 py-2 align-middle">
-                                <div class="freeze-cell">
+                                <p-iconfield class="freeze-field" [class.freeze-field--frozen]="isFrozen(row, 'reservoir_income_m3s')">
                                     <p-inputNumber
                                         formControlName="reservoir_income_m3s"
                                         [minFractionDigits]="0"
                                         [maxFractionDigits]="6"
                                         [useGrouping]="false"
                                         [placeholder]="getFrozenPlaceholder(row, 'reservoir_income_m3s')"
-                                        styleClass="freeze-cell__input"
-                                        inputStyleClass="w-full">
+                                        styleClass="freeze-field__input"
+                                        inputStyleClass="freeze-field__inputbox w-full">
                                     </p-inputNumber>
                                     @if (canFreeze) {
-                                        <button type="button" class="freeze-icon"
-                                            [class.freeze-icon--frozen]="isFrozen(row, 'reservoir_income_m3s')"
-                                            [class.freeze-icon--unfrozen]="!isFrozen(row, 'reservoir_income_m3s')"
+                                        <p-inputicon class="freeze-trigger"
+                                            [class.freeze-trigger--frozen]="isFrozen(row, 'reservoir_income_m3s')"
                                             [pTooltip]="getFreezeTooltip(row, 'reservoir_income_m3s')" tooltipPosition="top"
                                             (click)="openFreezeDialog(row, 'reservoir_income_m3s')">
                                             <i class="pi" [class.pi-lock]="isFrozen(row, 'reservoir_income_m3s')" [class.pi-lock-open]="!isFrozen(row, 'reservoir_income_m3s')"></i>
-                                        </button>
+                                        </p-inputicon>
                                     }
-                                </div>
+                                </p-iconfield>
                                 @if (isFrozen(row, 'reservoir_income_m3s') && row.form.get('reservoir_income_m3s')?.value == null) {
                                     <small class="frozen-hint">{{ 'GES_REPORT.FROZEN.FROM_DEFAULT' | translate }}</small>
                                 }
                             </td>
                             <td class="px-2 py-2 align-middle">
-                                <div class="freeze-cell">
+                                <p-iconfield class="freeze-field" [class.freeze-field--frozen]="isFrozen(row, 'total_outflow_m3s')">
                                     <p-inputNumber
                                         formControlName="total_outflow_m3s"
                                         [minFractionDigits]="0"
                                         [maxFractionDigits]="6"
                                         [useGrouping]="false"
                                         [placeholder]="getFrozenPlaceholder(row, 'total_outflow_m3s')"
-                                        styleClass="freeze-cell__input"
-                                        inputStyleClass="w-full">
+                                        styleClass="freeze-field__input"
+                                        inputStyleClass="freeze-field__inputbox w-full">
                                     </p-inputNumber>
                                     @if (canFreeze) {
-                                        <button type="button" class="freeze-icon"
-                                            [class.freeze-icon--frozen]="isFrozen(row, 'total_outflow_m3s')"
-                                            [class.freeze-icon--unfrozen]="!isFrozen(row, 'total_outflow_m3s')"
+                                        <p-inputicon class="freeze-trigger"
+                                            [class.freeze-trigger--frozen]="isFrozen(row, 'total_outflow_m3s')"
                                             [pTooltip]="getFreezeTooltip(row, 'total_outflow_m3s')" tooltipPosition="top"
                                             (click)="openFreezeDialog(row, 'total_outflow_m3s')">
                                             <i class="pi" [class.pi-lock]="isFrozen(row, 'total_outflow_m3s')" [class.pi-lock-open]="!isFrozen(row, 'total_outflow_m3s')"></i>
-                                        </button>
+                                        </p-inputicon>
                                     }
-                                </div>
+                                </p-iconfield>
                                 @if (isFrozen(row, 'total_outflow_m3s') && row.form.get('total_outflow_m3s')?.value == null) {
                                     <small class="frozen-hint">{{ 'GES_REPORT.FROZEN.FROM_DEFAULT' | translate }}</small>
                                 }
                             </td>
                             <td class="px-2 py-2 align-middle">
-                                <div class="freeze-cell">
+                                <p-iconfield class="freeze-field" [class.freeze-field--frozen]="isFrozen(row, 'ges_flow_m3s')">
                                     <p-inputNumber
                                         formControlName="ges_flow_m3s"
                                         [min]="0"
@@ -336,19 +329,18 @@
                                         [maxFractionDigits]="6"
                                         [useGrouping]="false"
                                         [placeholder]="getFrozenPlaceholder(row, 'ges_flow_m3s')"
-                                        styleClass="freeze-cell__input"
-                                        inputStyleClass="w-full">
+                                        styleClass="freeze-field__input"
+                                        inputStyleClass="freeze-field__inputbox w-full">
                                     </p-inputNumber>
                                     @if (canFreeze) {
-                                        <button type="button" class="freeze-icon"
-                                            [class.freeze-icon--frozen]="isFrozen(row, 'ges_flow_m3s')"
-                                            [class.freeze-icon--unfrozen]="!isFrozen(row, 'ges_flow_m3s')"
+                                        <p-inputicon class="freeze-trigger"
+                                            [class.freeze-trigger--frozen]="isFrozen(row, 'ges_flow_m3s')"
                                             [pTooltip]="getFreezeTooltip(row, 'ges_flow_m3s')" tooltipPosition="top"
                                             (click)="openFreezeDialog(row, 'ges_flow_m3s')">
                                             <i class="pi" [class.pi-lock]="isFrozen(row, 'ges_flow_m3s')" [class.pi-lock-open]="!isFrozen(row, 'ges_flow_m3s')"></i>
-                                        </button>
+                                        </p-inputicon>
                                     }
-                                </div>
+                                </p-iconfield>
                                 @if (isFrozen(row, 'ges_flow_m3s') && row.form.get('ges_flow_m3s')?.value == null) {
                                     <small class="frozen-hint">{{ 'GES_REPORT.FROZEN.FROM_DEFAULT' | translate }}</small>
                                 }
@@ -362,26 +354,25 @@
                             </td>
                             <td class="px-2 py-2 align-middle">
                                 @if (row.config.has_reservoir) {
-                                    <div class="freeze-cell">
+                                    <p-iconfield class="freeze-field" [class.freeze-field--frozen]="isFrozen(row, 'water_level_m')">
                                         <p-inputNumber
                                             formControlName="water_level_m"
                                             [minFractionDigits]="0"
                                             [maxFractionDigits]="6"
                                             [useGrouping]="false"
                                             [placeholder]="getFrozenPlaceholder(row, 'water_level_m')"
-                                            styleClass="freeze-cell__input"
-                                            inputStyleClass="w-full">
+                                            styleClass="freeze-field__input"
+                                            inputStyleClass="freeze-field__inputbox w-full">
                                         </p-inputNumber>
                                         @if (canFreeze) {
-                                            <button type="button" class="freeze-icon"
-                                                [class.freeze-icon--frozen]="isFrozen(row, 'water_level_m')"
-                                                [class.freeze-icon--unfrozen]="!isFrozen(row, 'water_level_m')"
+                                            <p-inputicon class="freeze-trigger"
+                                                [class.freeze-trigger--frozen]="isFrozen(row, 'water_level_m')"
                                                 [pTooltip]="getFreezeTooltip(row, 'water_level_m')" tooltipPosition="top"
                                                 (click)="openFreezeDialog(row, 'water_level_m')">
                                                 <i class="pi" [class.pi-lock]="isFrozen(row, 'water_level_m')" [class.pi-lock-open]="!isFrozen(row, 'water_level_m')"></i>
-                                            </button>
+                                            </p-inputicon>
                                         }
-                                    </div>
+                                    </p-iconfield>
                                     @if (isFrozen(row, 'water_level_m') && row.form.get('water_level_m')?.value == null) {
                                         <small class="frozen-hint">{{ 'GES_REPORT.FROZEN.FROM_DEFAULT' | translate }}</small>
                                     }
@@ -391,26 +382,25 @@
                             </td>
                             <td class="px-2 py-2 align-middle">
                                 @if (row.config.has_reservoir) {
-                                    <div class="freeze-cell">
+                                    <p-iconfield class="freeze-field" [class.freeze-field--frozen]="isFrozen(row, 'water_volume_mln_m3')">
                                         <p-inputNumber
                                             formControlName="water_volume_mln_m3"
                                             [minFractionDigits]="0"
                                             [maxFractionDigits]="6"
                                             [useGrouping]="false"
                                             [placeholder]="getFrozenPlaceholder(row, 'water_volume_mln_m3')"
-                                            styleClass="freeze-cell__input"
-                                            inputStyleClass="w-full">
+                                            styleClass="freeze-field__input"
+                                            inputStyleClass="freeze-field__inputbox w-full">
                                         </p-inputNumber>
                                         @if (canFreeze) {
-                                            <button type="button" class="freeze-icon"
-                                                [class.freeze-icon--frozen]="isFrozen(row, 'water_volume_mln_m3')"
-                                                [class.freeze-icon--unfrozen]="!isFrozen(row, 'water_volume_mln_m3')"
+                                            <p-inputicon class="freeze-trigger"
+                                                [class.freeze-trigger--frozen]="isFrozen(row, 'water_volume_mln_m3')"
                                                 [pTooltip]="getFreezeTooltip(row, 'water_volume_mln_m3')" tooltipPosition="top"
                                                 (click)="openFreezeDialog(row, 'water_volume_mln_m3')">
                                                 <i class="pi" [class.pi-lock]="isFrozen(row, 'water_volume_mln_m3')" [class.pi-lock-open]="!isFrozen(row, 'water_volume_mln_m3')"></i>
-                                            </button>
+                                            </p-inputicon>
                                         }
-                                    </div>
+                                    </p-iconfield>
                                     @if (isFrozen(row, 'water_volume_mln_m3') && row.form.get('water_volume_mln_m3')?.value == null) {
                                         <small class="frozen-hint">{{ 'GES_REPORT.FROZEN.FROM_DEFAULT' | translate }}</small>
                                     }
@@ -557,36 +547,30 @@
         color: var(--p-red-500);
     }
 
-    .freeze-cell {
-        display: flex;
-        align-items: center;
-        gap: 0.25rem;
+    .freeze-field {
+        display: block;
+        width: 100%;
     }
-    .freeze-cell__input {
-        flex: 1 1 auto;
-        min-width: 0;
+    .freeze-field .p-inputnumber,
+    .freeze-field .p-inputnumber-input {
+        width: 100%;
     }
-
-    .freeze-icon {
-        background: transparent;
-        border: 0;
-        padding: 0.25rem;
+    .freeze-field .freeze-trigger {
         cursor: pointer;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
+        color: var(--text-color-secondary, var(--p-text-muted-color));
+        pointer-events: auto;
         border-radius: 0.25rem;
-        line-height: 1;
     }
-    .freeze-icon:hover {
+    .freeze-field .freeze-trigger:hover {
         background: var(--p-content-hover-background, color-mix(in srgb, var(--p-primary-color) 8%, transparent));
     }
-    .freeze-icon:focus-visible {
-        outline: 2px solid var(--p-primary-color);
-        outline-offset: 1px;
+    .freeze-field .freeze-trigger--frozen {
+        color: var(--p-primary-color);
     }
-    .freeze-icon--frozen { color: var(--p-primary-color); }
-    .freeze-icon--unfrozen { color: var(--text-color-secondary, var(--p-text-muted-color)); }
+    .freeze-field--frozen .freeze-field__inputbox {
+        border-color: var(--p-primary-color);
+        box-shadow: 0 0 0 1px var(--p-primary-color);
+    }
 
     .freeze-info {
         color: var(--p-orange-500);
