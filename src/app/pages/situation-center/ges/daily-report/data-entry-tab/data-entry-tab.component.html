@@ -564,6 +564,12 @@
         color: var(--text-color-secondary, var(--p-text-muted-color));
         pointer-events: auto;
         border-radius: 0.25rem;
+        visibility: hidden;
+    }
+    .freeze-field:hover .freeze-trigger,
+    .freeze-field:focus-within .freeze-trigger,
+    .freeze-field .freeze-trigger--frozen {
+        visibility: visible;
     }
     .freeze-field .freeze-trigger:hover {
         background: var(--p-content-hover-background, color-mix(in srgb, var(--p-primary-color) 8%, transparent));
