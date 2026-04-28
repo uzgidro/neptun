@@ -549,11 +549,20 @@
 
     .freeze-field {
         display: block;
+        position: relative;
         width: 100%;
     }
     .freeze-field .p-inputnumber,
     .freeze-field .p-inputnumber-input {
         width: 100%;
+    }
+    .freeze-field:focus-within {
+        position: absolute;
+        width: 14rem;
+        z-index: 5;
+        background: var(--surface-card, var(--p-content-background));
+        box-shadow: 0 4px 12px color-mix(in srgb, var(--surface-shadow, #000) 18%, transparent);
+        border-radius: 0.25rem;
     }
     .freeze-field .freeze-trigger {
         cursor: pointer;
