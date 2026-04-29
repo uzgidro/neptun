@@ -32,13 +32,12 @@ describe('ConfigTabComponent (solar)', () => {
         const solarSpy = jasmine.createSpyObj('SolarReportService', [
             'getConfigs', 'upsertConfig', 'deleteConfig'
         ]);
-        const orgSpy = jasmine.createSpyObj('OrganizationService', ['getOrganizationsFlat', 'getCascades']);
+        const orgSpy = jasmine.createSpyObj('OrganizationService', ['getOrganizationsFlat']);
         authSpy = jasmine.createSpyObj('AuthService', ['isScOrRais']);
         authSpy.isScOrRais.and.returnValue(true);
 
         solarSpy.getConfigs.and.returnValue(of([]));
         orgSpy.getOrganizationsFlat.and.returnValue(of([]));
-        orgSpy.getCascades.and.returnValue(of([]));
 
         await TestBed.configureTestingModule({
             imports: [ConfigTabComponent, TranslateModule.forRoot()],

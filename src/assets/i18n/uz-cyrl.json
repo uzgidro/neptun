@@ -411,7 +411,8 @@
     "DATE_LABEL": "Сана",
     "UNIT_KW": "кВт",
     "UNIT_KWH": "кВт·соат",
-    "NO_DATA": "Маълумот йўқ"
+    "NO_DATA": "Маълумот йўқ",
+    "SELECT_ORG": "Ташкилотни танланг"
   },
   "FILTRATION": {
     "TITLE": "Филтрация",

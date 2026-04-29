@@ -411,7 +411,8 @@
     "DATE_LABEL": "Sana",
     "UNIT_KW": "kVt",
     "UNIT_KWH": "kVt·soat",
-    "NO_DATA": "Ma'lumot yo'q"
+    "NO_DATA": "Ma'lumot yo'q",
+    "SELECT_ORG": "Tashkilotni tanlang"
   },
   "FILTRATION": {
     "TITLE": "Filtratsiya",

@@ -411,7 +411,8 @@
     "DATE_LABEL": "Date",
     "UNIT_KW": "kW",
     "UNIT_KWH": "kWh",
-    "NO_DATA": "No data"
+    "NO_DATA": "No data",
+    "SELECT_ORG": "Select organization"
   },
   "FILTRATION": {
     "TITLE": "Filtration",

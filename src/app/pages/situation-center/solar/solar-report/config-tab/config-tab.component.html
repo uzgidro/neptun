@@ -68,14 +68,22 @@
     (onHide)="hideDialog()">
     <form [formGroup]="form" class="flex flex-col gap-4 pt-2">
         @if (!isEditMode) {
-            <app-group-select
-                [label]="'SOLAR_REPORT.STATION_NAME' | translate"
-                formControlName="organization"
-                [items]="availableCascades"
-                [loading]="orgsLoading"
-                [submitted]="submitted"
-                [errorMessage]="'SOLAR_REPORT.SELECT_ORG' | translate">
-            </app-group-select>
+            <div class="flex flex-col gap-1">
+                <label class="font-medium">{{ 'SOLAR_REPORT.STATION_NAME' | translate }}</label>
+                <p-select
+                    formControlName="organization"
+                    [options]="availableOrgs"
+                    optionLabel="name"
+                    [filter]="true"
+                    filterBy="name"
+                    [loading]="orgsLoading"
+                    [placeholder]="'SOLAR_REPORT.SELECT_ORG' | translate"
+                    appendTo="body"
+                    styleClass="w-full" />
+                @if (submitted && form.get('organization')?.invalid) {
+                    <small class="p-error">{{ 'SOLAR_REPORT.SELECT_ORG' | translate }}</small>
+                }
+            </div>
         } @else {
             <div class="flex flex-col gap-1">
                 <label class="font-medium">{{ 'SOLAR_REPORT.STATION_NAME' | translate }}</label>

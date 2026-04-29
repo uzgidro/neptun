@@ -402,7 +402,8 @@
     "DATE_LABEL": "Дата",
     "UNIT_KW": "кВт",
     "UNIT_KWH": "кВтч",
-    "NO_DATA": "Нет данных"
+    "NO_DATA": "Нет данных",
+    "SELECT_ORG": "Выберите организацию"
   },
   "FILTRATION": {
     "TITLE": "Фильтрация",

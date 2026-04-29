@@ -8,6 +8,7 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { Select } from 'primeng/select';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MessageService } from 'primeng/api';
 import { AuthService } from '@/core/services/auth.service';
@@ -15,7 +16,6 @@ import { SolarReportService } from '@/core/services/solar-report.service';
 import { OrganizationService } from '@/core/services/organization.service';
 import { SolarConfig, SolarConfigPayload } from '@/core/interfaces/solar-report';
 import { Organization } from '@/core/interfaces/organizations';
-import { GroupSelectComponent } from '@/layout/component/dialog/group-select/group-select.component';
 
 @Component({
     selector: 'app-solar-config-tab',
@@ -28,8 +28,8 @@ import { GroupSelectComponent } from '@/layout/component/dialog/group-select/gro
         ButtonModule,
         DialogModule,
         InputNumberModule,
-        TranslateModule,
-        GroupSelectComponent
+        Select,
+        TranslateModule
     ],
     templateUrl: './config-tab.component.html'
 })
@@ -45,8 +45,8 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
     isScOrRais = this.authService.isScOrRais();
 
     configs: SolarConfig[] = [];
-    cascades: Organization[] = [];
-    availableCascades: Organization[] = [];
+    organizations: Organization[] = [];
+    availableOrgs: Organization[] = [];
     orgsLoading = false;
     loading = false;
     saving = false;
@@ -63,7 +63,7 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
     });
 
     ngOnInit(): void {
-        this.loadCascades();
+        this.loadOrganizations();
         this.loadConfigs();
     }
 
@@ -72,11 +72,16 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
         this.destroy$.complete();
     }
 
-    private loadCascades(): void {
+    private loadOrganizations(): void {
         this.orgsLoading = true;
-        this.organizationService.getCascades()
+        this.organizationService.getOrganizationsFlat()
             .pipe(takeUntil(this.destroy$), finalize(() => this.orgsLoading = false))
-            .subscribe(cascades => { this.cascades = cascades; this.updateAvailableCascades(); });
+            .subscribe(orgs => {
+                this.organizations = [...orgs].sort((a, b) =>
+                    (a.name ?? '').localeCompare(b.name ?? '')
+                );
+                this.updateAvailableOrgs();
+            });
     }
 
     loadConfigs(): void {
@@ -91,7 +96,7 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
             .subscribe({
                 next: ({ configs }) => {
                     this.configs = configs.sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0));
-                    this.updateAvailableCascades();
+                    this.updateAvailableOrgs();
                 },
                 error: () => {
                     this.messageService.add({
@@ -108,7 +113,7 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
         this.editingConfig = null;
         this.submitted = false;
         this.form.reset({ sort_order: 0 });
-        this.updateAvailableCascades();
+        this.updateAvailableOrgs();
         this.dialogVisible = true;
     }
 
@@ -118,19 +123,14 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
         this.submitted = false;
         this.form.reset();
 
-        // Find the org object in cascades to set GroupSelect value
-        let foundOrg: Organization | null = null;
-        for (const cascade of this.cascades) {
-            foundOrg = cascade.items?.find(o => o.id === config.organization_id) ?? null;
-            if (foundOrg) break;
-        }
+        const foundOrg = this.organizations.find(o => o.id === config.organization_id) ?? null;
 
         this.form.patchValue({
             organization: foundOrg,
             installed_capacity_kw: config.installed_capacity_kw,
             sort_order: config.sort_order
         });
-        this.updateAvailableCascades();
+        this.updateAvailableOrgs();
         this.dialogVisible = true;
     }
 
@@ -195,18 +195,13 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
             });
     }
 
-    private updateAvailableCascades(): void {
+    private updateAvailableOrgs(): void {
         const usedIds = new Set(this.configs.map(c => c.organization_id));
         const editingId = this.isEditMode ? this.editingConfig?.organization_id : null;
 
-        this.availableCascades = this.cascades
-            .map(cascade => {
-                const filtered = (cascade.items || []).filter(
-                    org => !usedIds.has(org.id) || org.id === editingId
-                );
-                return filtered.length ? { ...cascade, items: filtered } : null;
-            })
-            .filter((c): c is Organization & { items: Organization[] } => c !== null);
+        this.availableOrgs = this.organizations.filter(
+            org => !usedIds.has(org.id) || org.id === editingId
+        );
     }
 
     hideDialog(): void {
