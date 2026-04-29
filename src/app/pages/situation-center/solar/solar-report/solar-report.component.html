@@ -1,0 +1,26 @@
+<div class="card">
+    <h2>{{ 'SOLAR_REPORT.TITLE' | translate }}</h2>
+
+    <p-tabs [value]="activeTab" (valueChange)="onTabChange($event)">
+        <p-tablist>
+            @for (tab of tabs; track tab.key) {
+                <p-tab [value]="tab.key">{{ tab.label | translate }}</p-tab>
+            }
+        </p-tablist>
+        <p-tabpanels>
+            @if (isScOrRais) {
+                <p-tabpanel value="config">
+                    <app-solar-config-tab />
+                </p-tabpanel>
+            }
+            <p-tabpanel value="data-entry">
+                <app-solar-data-entry-tab />
+            </p-tabpanel>
+            @if (isScOrRais) {
+                <p-tabpanel value="plans">
+                    <app-solar-plans-tab />
+                </p-tabpanel>
+            }
+        </p-tabpanels>
+    </p-tabs>
+</div>

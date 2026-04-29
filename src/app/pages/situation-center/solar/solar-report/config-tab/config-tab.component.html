@@ -1,0 +1,118 @@
+<div class="flex flex-col gap-4">
+    <div class="flex justify-between items-center">
+        <h3 class="text-lg font-semibold m-0">{{ 'SOLAR_REPORT.CONFIG' | translate }}</h3>
+        @if (isScOrRais) {
+            <p-button
+                [label]="'COMMON.ADD' | translate"
+                icon="pi pi-plus"
+                (onClick)="openNew()" />
+        }
+    </div>
+
+    <p-table
+        [value]="configs"
+        [loading]="loading"
+        [scrollable]="true"
+        scrollHeight="500px"
+        styleClass="p-datatable-sm p-datatable-gridlines">
+
+        <ng-template #header>
+            <tr>
+                <th style="width: 60px">№</th>
+                <th>{{ 'SOLAR_REPORT.STATION_NAME' | translate }}</th>
+                <th>{{ 'SOLAR_REPORT.INSTALLED_CAPACITY_KW' | translate }}</th>
+                <th>{{ 'SOLAR_REPORT.SORT_ORDER' | translate }}</th>
+                @if (isScOrRais) {
+                    <th style="width: 100px">{{ 'COMMON.ACTIONS' | translate }}</th>
+                }
+            </tr>
+        </ng-template>
+        <ng-template #body let-config let-i="rowIndex">
+            <tr>
+                <td>{{ i + 1 }}</td>
+                <td>{{ config.organization_name }}</td>
+                <td>{{ config.installed_capacity_kw }}</td>
+                <td>{{ config.sort_order }}</td>
+                @if (isScOrRais) {
+                    <td>
+                        <div class="flex gap-2">
+                            <p-button
+                                icon="pi pi-pencil"
+                                [rounded]="true"
+                                [text]="true"
+                                (onClick)="editConfig(config)" />
+                            <p-button
+                                icon="pi pi-trash"
+                                [rounded]="true"
+                                [text]="true"
+                                severity="danger"
+                                (onClick)="deleteConfig(config.organization_id)" />
+                        </div>
+                    </td>
+                }
+            </tr>
+        </ng-template>
+        <ng-template #emptymessage>
+            <tr>
+                <td [attr.colspan]="isScOrRais ? 5 : 4" class="text-center p-4">{{ 'SOLAR_REPORT.NO_DATA' | translate }}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog
+    [(visible)]="dialogVisible"
+    [header]="(isEditMode ? 'SOLAR_REPORT.EDIT' : 'SOLAR_REPORT.ADD') | translate"
+    [modal]="true"
+    [style]="{ width: '500px' }"
+    (onHide)="hideDialog()">
+    <form [formGroup]="form" class="flex flex-col gap-4 pt-2">
+        @if (!isEditMode) {
+            <app-group-select
+                [label]="'SOLAR_REPORT.STATION_NAME' | translate"
+                formControlName="organization"
+                [items]="availableCascades"
+                [loading]="orgsLoading"
+                [submitted]="submitted"
+                [errorMessage]="'SOLAR_REPORT.SELECT_ORG' | translate">
+            </app-group-select>
+        } @else {
+            <div class="flex flex-col gap-1">
+                <label class="font-medium">{{ 'SOLAR_REPORT.STATION_NAME' | translate }}</label>
+                <div class="font-semibold">{{ editingConfig?.organization_name }}</div>
+            </div>
+        }
+
+        <div class="flex flex-col gap-1">
+            <label class="font-medium">{{ 'SOLAR_REPORT.INSTALLED_CAPACITY_KW' | translate }}</label>
+            <p-inputNumber
+                formControlName="installed_capacity_kw"
+                [min]="0"
+                [minFractionDigits]="0"
+                [maxFractionDigits]="2"
+                [useGrouping]="false"
+                class="w-full" />
+        </div>
+
+        <div class="flex flex-col gap-1">
+            <label class="font-medium">{{ 'SOLAR_REPORT.SORT_ORDER' | translate }}</label>
+            <p-inputNumber
+                formControlName="sort_order"
+                [min]="0"
+                [useGrouping]="false"
+                class="w-full" />
+        </div>
+    </form>
+
+    <ng-template #footer>
+        <p-button
+            [label]="'COMMON.CANCEL' | translate"
+            severity="secondary"
+            (onClick)="hideDialog()" />
+        <p-button
+            [label]="'COMMON.SAVE' | translate"
+            [loading]="saving"
+            [disabled]="form.invalid"
+            (onClick)="saveConfig()" />
+    </ng-template>
+</p-dialog>

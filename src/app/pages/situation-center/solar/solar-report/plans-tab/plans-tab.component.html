@@ -1,0 +1,62 @@
+<div class="flex align-items-center gap-3 mb-3">
+    <p-inputNumber
+        [(ngModel)]="selectedYear"
+        [showButtons]="true"
+        [min]="2020"
+        [max]="2100"
+        [useGrouping]="false"
+        (ngModelChange)="onYearChange()"
+    />
+    @if (isScOrRais) {
+        <p-button
+            [label]="'SOLAR_REPORT.SAVE' | translate"
+            icon="pi pi-save"
+            [loading]="saving"
+            [disabled]="!hasChanges || saving"
+            (onClick)="savePlans()"
+        />
+    }
+</div>
+
+<p-table
+    [value]="planRows"
+    [loading]="loading"
+    styleClass="p-datatable-sm p-datatable-gridlines"
+    [scrollable]="true"
+    scrollHeight="flex"
+>
+    <ng-template pTemplate="header">
+        <tr>
+            <th style="min-width: 160px">{{ 'SOLAR_REPORT.STATION_NAME' | translate }}</th>
+            <th *ngFor="let key of monthKeys" style="min-width: 100px; text-align: center">
+                {{ ('COMMON.MONTHS.' + key) | translate }}
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-row>
+        <tr>
+            <td>{{ row.config.organization_name }}</td>
+            <td *ngFor="let key of monthKeys; let i = index" style="padding: 4px 8px">
+                <p-inputNumber
+                    [(ngModel)]="row.months[i]"
+                    [min]="0"
+                    [minFractionDigits]="0"
+                    [maxFractionDigits]="3"
+                    [useGrouping]="false"
+                    [readonly]="!isScOrRais"
+                    [style]="{ width: '100%' }"
+                    [inputStyleClass]="row.dirty[i] ? 'cell-dirty w-full' : 'w-full'"
+                    (onInput)="onMonthChange(row, i)"
+                    (onBlur)="onMonthChange(row, i)"
+                />
+            </td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+        <tr>
+            <td [attr.colspan]="13" class="text-center">
+                {{ 'SOLAR_REPORT.NO_DATA' | translate }}
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
