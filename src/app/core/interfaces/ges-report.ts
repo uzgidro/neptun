@@ -54,6 +54,7 @@ export interface GesDailyDataPayload {
     reservoir_income_m3s?: number | null;
     total_outflow_m3s?: number | null;
     ges_flow_m3s?: number | null;
+    own_consumption_kwh?: number | null;
 }
 
 export interface GesDailyData extends GesDailyDataPayload {
@@ -142,6 +143,8 @@ export interface ReportDiffs {
 export interface ReportAggregations {
     mtd_production_mln_kwh: number;
     ytd_production_mln_kwh: number;
+    mtd_own_consumption_kwh: number;
+    ytd_own_consumption_kwh: number;
 }
 
 export interface ReportPlan {

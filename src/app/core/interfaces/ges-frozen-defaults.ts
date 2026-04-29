@@ -8,7 +8,8 @@ export type FreezableField =
     | 'water_head_m'
     | 'reservoir_income_m3s'
     | 'total_outflow_m3s'
-    | 'ges_flow_m3s';
+    | 'ges_flow_m3s'
+    | 'own_consumption_kwh';
 
 export interface FrozenDefault {
     organization_id: number;
@@ -59,6 +60,7 @@ export const FREEZABLE_FIELD_LABELS: Record<FreezableField, string> = {
     reservoir_income_m3s:     'GES_REPORT.RESERVOIR_INCOME',
     total_outflow_m3s:        'GES_REPORT.TOTAL_OUTFLOW',
     ges_flow_m3s:             'GES_REPORT.GES_FLOW',
+    own_consumption_kwh:      'GES_REPORT.OWN_CONSUMPTION',
 };
 
 export const FIELD_UNITS: Record<FreezableField, string> = {
@@ -72,4 +74,5 @@ export const FIELD_UNITS: Record<FreezableField, string> = {
     reservoir_income_m3s:     'м³/с',
     total_outflow_m3s:        'м³/с',
     ges_flow_m3s:             'м³/с',
+    own_consumption_kwh:       'кВт·ч',
 };

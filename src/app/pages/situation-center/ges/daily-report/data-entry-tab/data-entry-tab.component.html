@@ -99,6 +99,7 @@
                         <tr>
                             <th class="text-left text-xs text-color-secondary font-normal px-2 pb-1 whitespace-nowrap">{{ 'GES_REPORT.STATION' | translate }}</th>
                             <th class="text-left text-xs text-color-secondary font-normal px-2 pb-1">{{ 'GES_REPORT.PRODUCTION' | translate }}</th>
+                            <th class="text-left text-xs text-color-secondary font-normal px-2 pb-1">{{ 'GES_REPORT.OWN_CONSUMPTION' | translate }}</th>
                             <th class="text-left text-xs text-color-secondary font-normal px-2 pb-1">{{ 'GES_REPORT.WORKING_AGGREGATES' | translate }}</th>
                             <th class="text-left text-xs text-color-secondary font-normal px-2 pb-1">{{ 'GES_REPORT.REPAIR_AGGREGATES' | translate }}</th>
                             <th class="text-left text-xs text-color-secondary font-normal px-2 pb-1">{{ 'GES_REPORT.MODERNIZATION_AGGREGATES' | translate }}</th>
@@ -161,6 +162,35 @@
                                     <i class="pi pi-info-circle freeze-info" [pTooltip]="'GES_REPORT.FROZEN.NOT_NULL_HINT' | translate" tooltipPosition="top"></i>
                                 }
                                 @if (isFrozen(row, 'daily_production_mln_kwh') && row.form.get('daily_production_mln_kwh')?.value == null) {
+                                    <small class="frozen-hint">{{ 'GES_REPORT.FROZEN.FROM_DEFAULT' | translate }}</small>
+                                }
+                            </td>
+                            <td class="px-2 py-2 align-middle">
+                                <p-iconfield class="freeze-field" [class.freeze-field--frozen]="isFrozen(row, 'own_consumption_kwh')">
+                                    <p-inputNumber
+                                        formControlName="own_consumption_kwh"
+                                        [min]="0"
+                                        [minFractionDigits]="0"
+                                        [maxFractionDigits]="3"
+                                        [useGrouping]="false"
+                                        [placeholder]="getFrozenPlaceholder(row, 'own_consumption_kwh')"
+                                        styleClass="freeze-field__input"
+                                        inputStyleClass="freeze-field__inputbox w-full">
+                                    </p-inputNumber>
+                                    @if (canFreeze) {
+                                        <p-inputicon class="freeze-trigger"
+                                            (mousedown)="$event.preventDefault()"
+                                            [class.freeze-trigger--frozen]="isFrozen(row, 'own_consumption_kwh')"
+                                            [pTooltip]="getFreezeTooltip(row, 'own_consumption_kwh')" tooltipPosition="top"
+                                            (click)="openFreezeDialog(row, 'own_consumption_kwh')">
+                                            <i class="pi" [class.pi-lock]="isFrozen(row, 'own_consumption_kwh')" [class.pi-lock-open]="!isFrozen(row, 'own_consumption_kwh')"></i>
+                                        </p-inputicon>
+                                    }
+                                </p-iconfield>
+                                @if (canFreeze && shouldShowNotNullHint(row, 'own_consumption_kwh')) {
+                                    <i class="pi pi-info-circle freeze-info" [pTooltip]="'GES_REPORT.FROZEN.NOT_NULL_HINT' | translate" tooltipPosition="top"></i>
+                                }
+                                @if (isFrozen(row, 'own_consumption_kwh') && row.form.get('own_consumption_kwh')?.value == null) {
                                     <small class="frozen-hint">{{ 'GES_REPORT.FROZEN.FROM_DEFAULT' | translate }}</small>
                                 }
                             </td>
@@ -438,7 +468,7 @@
                         </tr>
                         @if (sumExceedsTotal(row)) {
                         <tr class="sum-overflow-warn">
-                            <td [attr.colspan]="13">
+                            <td [attr.colspan]="14">
                                 <small class="text-red-500 px-2">
                                     {{ 'GES_REPORT.AGGREGATES_SUM_EXCEEDS_TOTAL' | translate }}
                                     ({{ sumAggregates(row) }} > {{ row.config.total_aggregates }})
@@ -448,7 +478,7 @@
                         }
                         @if (productionExceedsMax(row)) {
                         <tr class="sum-overflow-warn">
-                            <td [attr.colspan]="13">
+                            <td [attr.colspan]="14">
                                 <small class="text-red-500 px-2">
                                     {{ 'GES_REPORT.PRODUCTION_EXCEEDS_MAX' | translate:{
                                         value: (row.form.value.daily_production_mln_kwh | number:'1.0-6'),
