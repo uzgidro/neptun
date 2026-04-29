@@ -46,6 +46,7 @@ export const appRoutes: Routes = [
             { path: 'discharges', loadComponent: () => import('./app/pages/situation-center/ges/discharges/discharges.component').then(m => m.DischargesComponent), canActivate: [raisGuard] },
             { path: 'shutdowns', loadComponent: () => import('./app/pages/situation-center/ges/shutdown/shutdown.component').then(m => m.ShutdownComponent), canActivate: [raisGuard] },
             { path: 'ges-daily-report', loadComponent: () => import('./app/pages/situation-center/ges/daily-report/daily-report.component').then(m => m.DailyReportComponent), canActivate: [gesReportGuard], canDeactivate: [unsavedChangesGuard] },
+            { path: 'solar-report', loadComponent: () => import('./app/pages/situation-center/solar/solar-report/solar-report.component').then(m => m.SolarReportComponent), canActivate: [gesReportGuard] },
             { path: 'construction', loadComponent: () => import('./app/pages/situation-center/construction/construction.component').then(m => m.ConstructionComponent), canActivate: [raisGuard] },
             { path: 'planning/events', loadComponent: () => import('./app/pages/planning/events/events.component').then(m => m.EventsComponent), canActivate: [raisGuard] },
             { path: 'planning/reception', loadComponent: () => import('./app/pages/planning/reception/reception.component').then(m => m.ReceptionComponent), canActivate: [raisGuard] },

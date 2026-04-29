@@ -35,6 +35,7 @@ export class MenuComponent implements OnInit {
                 {
                     items: [
                         { label: this.t('MENU.CASCADE_REPORT'), routerLink: ['/ges-daily-report'] },
+                        { label: this.t('MENU.SOLAR_REPORT'), routerLink: ['/solar-report'] },
                         { label: this.t('MENU.EMERGENCY_SHUTDOWN'), routerLink: ['/shutdowns'] }
                     ]
                 }
@@ -107,6 +108,11 @@ export class MenuComponent implements OnInit {
                                         label: this.t('MENU.GES_DAILY_REPORT'),
                                         role: ['rais', 'sc'],
                                         routerLink: ['/ges-daily-report']
+                                    },
+                                    {
+                                        label: this.t('MENU.SOLAR_REPORT'),
+                                        role: ['rais', 'sc'],
+                                        routerLink: ['/solar-report']
                                     }
                                 ]
                             },
@@ -281,6 +287,7 @@ export class MenuComponent implements OnInit {
                     },
                     { label: this.t('MENU.FILTRATION'), role: ['reservoir'], routerLink: ['/manual-comparison-entry'] },
                     { label: this.t('MENU.CASCADE_REPORT'), role: ['cascade'], routerLink: ['/ges-daily-report'] },
+                    { label: this.t('MENU.SOLAR_REPORT'), role: ['cascade'], routerLink: ['/solar-report'] },
                     { label: this.t('MENU.CALLS'), role: ['rais'], routerLink: ['/calls'] },
                     { label: this.t('MENU.PRESS_SERVICE'), routerLink: ['/uzgidro-news'] }
                 ]
