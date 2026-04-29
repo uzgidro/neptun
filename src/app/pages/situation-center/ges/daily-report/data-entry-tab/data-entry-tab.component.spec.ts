@@ -393,6 +393,60 @@ describe('DataEntryTabComponent', () => {
         }));
     }));
 
+    describe('own_consumption_kwh field', () => {
+        it('createForm includes own_consumption_kwh control with default null', fakeAsync(() => {
+            const configs = [makeConfig(10, 'ГЭС-1')];
+            gesReportService.getConfigs.and.returnValue(of(configs));
+            gesReportService.getDailyData.and.returnValue(throwError(() => ({ status: 404 })));
+            fixture.detectChanges();
+            tick();
+            const row = component.rows[0];
+            const ctrl = row.form.get('own_consumption_kwh');
+            expect(ctrl).toBeTruthy();
+            expect(ctrl!.value).toBeNull();
+        }));
+
+        it('buildPayload omits own_consumption_kwh when not dirty', fakeAsync(() => {
+            const configs = [makeConfig(10, 'ГЭС-1')];
+            gesReportService.getConfigs.and.returnValue(of(configs));
+            gesReportService.getDailyData.and.returnValue(throwError(() => ({ status: 404 })));
+            fixture.detectChanges();
+            tick();
+            const row = component.rows[0];
+            row.form.get('daily_production_mln_kwh')!.setValue(5.0);
+            row.form.get('daily_production_mln_kwh')!.markAsDirty();
+            const payload = (component as unknown as { buildPayload: (r: typeof row) => Record<string, unknown> }).buildPayload(row);
+            expect('own_consumption_kwh' in payload).toBeFalse();
+        }));
+
+        it('buildPayload includes own_consumption_kwh when set and dirty', fakeAsync(() => {
+            const configs = [makeConfig(10, 'ГЭС-1')];
+            gesReportService.getConfigs.and.returnValue(of(configs));
+            gesReportService.getDailyData.and.returnValue(throwError(() => ({ status: 404 })));
+            fixture.detectChanges();
+            tick();
+            const row = component.rows[0];
+            row.form.get('own_consumption_kwh')!.setValue(1250.0);
+            row.form.get('own_consumption_kwh')!.markAsDirty();
+            const payload = (component as unknown as { buildPayload: (r: typeof row) => Record<string, unknown> }).buildPayload(row);
+            expect(payload['own_consumption_kwh']).toBe(1250.0);
+        }));
+
+        it('buildPayload includes own_consumption_kwh:null when explicitly cleared', fakeAsync(() => {
+            const configs = [makeConfig(10, 'ГЭС-1')];
+            gesReportService.getConfigs.and.returnValue(of(configs));
+            gesReportService.getDailyData.and.returnValue(throwError(() => ({ status: 404 })));
+            fixture.detectChanges();
+            tick();
+            const row = component.rows[0];
+            row.form.get('own_consumption_kwh')!.setValue(null);
+            row.form.get('own_consumption_kwh')!.markAsDirty();
+            const payload = (component as unknown as { buildPayload: (r: typeof row) => Record<string, unknown> }).buildPayload(row);
+            expect('own_consumption_kwh' in payload).toBeTrue();
+            expect(payload['own_consumption_kwh']).toBeNull();
+        }));
+    });
+
     describe('frozen defaults', () => {
         function loadWithFrozen(orgId = 100, frozen: any[] = []) {
             const configs = [makeConfig(orgId, `ГЭС-${orgId}`)];

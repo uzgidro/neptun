@@ -699,7 +699,8 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
             water_head_m: [data?.water_head_m ?? null],
             reservoir_income_m3s: [data?.reservoir_income_m3s ?? null],
             total_outflow_m3s: [data?.total_outflow_m3s ?? null],
-            ges_flow_m3s: [data?.ges_flow_m3s ?? null]
+            ges_flow_m3s: [data?.ges_flow_m3s ?? null],
+            own_consumption_kwh: [data?.own_consumption_kwh ?? null, [Validators.min(0)]]
         });
     }
 
@@ -718,7 +719,8 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
             'water_head_m',
             'reservoir_income_m3s',
             'total_outflow_m3s',
-            'ges_flow_m3s'
+            'ges_flow_m3s',
+            'own_consumption_kwh'
         ];
         for (const f of fields) {
             const ctrl = row.form.get(f);
