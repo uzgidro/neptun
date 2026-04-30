@@ -84,6 +84,18 @@ export class GesReportService extends ApiService {
         });
     }
 
+    exportOwnNeeds(opts: {
+        date: string;
+        format: 'excel' | 'pdf';
+    }): Observable<HttpResponse<Blob>> {
+        const params = new HttpParams()
+            .set('date', opts.date)
+            .set('format', opts.format);
+        return this.http.get(`${this.BASE_URL}${GES_REPORT}/own-needs/export`, {
+            params, responseType: 'blob', observe: 'response'
+        });
+    }
+
     listFrozenDefaults(): Observable<FrozenDefault[]> {
         return this.http.get<FrozenDefault[]>(`${this.BASE_URL}${GES_REPORT}${FROZEN_DEFAULTS}`);
     }

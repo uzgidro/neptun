@@ -333,4 +333,20 @@ describe('GesReportService.exportReport', () => {
         expect(req.request.params.get('format')).toBe('pdf');
         req.flush(new Blob());
     });
+
+    it('builds GET /ges-report/own-needs/export with date/format', () => {
+        service.exportOwnNeeds({ date: '2026-04-20', format: 'excel' }).subscribe();
+        const req = http.expectOne(r => r.url.endsWith('/ges-report/own-needs/export'));
+        expect(req.request.method).toBe('GET');
+        expect(req.request.params.get('date')).toBe('2026-04-20');
+        expect(req.request.params.get('format')).toBe('excel');
+        req.flush(new Blob());
+    });
+
+    it('exportOwnNeeds supports pdf format', () => {
+        service.exportOwnNeeds({ date: '2026-04-20', format: 'pdf' }).subscribe();
+        const req = http.expectOne(r => r.url.endsWith('/ges-report/own-needs/export'));
+        expect(req.request.params.get('format')).toBe('pdf');
+        req.flush(new Blob());
+    });
 });

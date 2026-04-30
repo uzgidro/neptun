@@ -34,6 +34,22 @@
                 [loading]="downloading === 'pdf'"
                 (onClick)="download('pdf')">
             </p-button>
+            <p-button
+                [label]="'GES_REPORT.OWN_NEEDS_EXPORT' | translate"
+                icon="pi pi-download"
+                severity="secondary"
+                [disabled]="downloadingOwnNeeds !== null"
+                [loading]="downloadingOwnNeeds !== null"
+                (onClick)="ownNeedsMenu.toggle($event)">
+            </p-button>
+            <p-menu #ownNeedsMenu [model]="ownNeedsExportItems" [popup]="true" appendTo="body">
+                <ng-template #item let-item>
+                    <a class="flex items-center p-menu-item-link">
+                        <span [class]="item.icon"></span>
+                        <span class="ml-2">{{ item.label | translate }}</span>
+                    </a>
+                </ng-template>
+            </p-menu>
         }
     </div>
 

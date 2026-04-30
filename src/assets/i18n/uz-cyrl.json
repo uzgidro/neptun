@@ -257,6 +257,7 @@
   "GES_REPORT": {
     "BATCH_FAILED_AT": "{{station}} станциясида хатолик",
     "DOWNLOAD_PDF": "PDF юклаб олиш",
+    "OWN_NEEDS_EXPORT": "Хусусий эҳтиёжларни экспорт қилиш",
     "MODERNIZATION": "Модернизация",
     "REPAIR": "Таъмирлаш",
     "YESTERDAY": "кеча",

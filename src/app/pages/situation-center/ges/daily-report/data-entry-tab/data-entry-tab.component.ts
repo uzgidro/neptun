@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin, merge, of, Subject } from 'rxjs';
 import { catchError, takeUntil } from 'rxjs/operators';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { MessageService } from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
 import { DatePicker } from 'primeng/datepicker';
 import { TableModule } from 'primeng/table';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -16,6 +16,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
 import { TooltipModule } from 'primeng/tooltip';
+import { Menu } from 'primeng/menu';
 import { FormsModule } from '@angular/forms';
 import { GesReportService } from '@/core/services/ges-report.service';
 import { TimeService } from '@/core/services/time.service';
@@ -81,6 +82,7 @@ export class DataEntryRow {
         IconField,
         InputIcon,
         TooltipModule,
+        Menu,
         CascadeWeatherComponent,
         DialogComponent
     ],
@@ -109,6 +111,20 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
     canFreeze = this.authService.hasRole(['sc', 'rais', 'cascade']);
     frozenMap: FrozenMap = {};
     downloading: 'excel' | 'pdf' | null = null;
+    downloadingOwnNeeds: 'excel' | 'pdf' | null = null;
+
+    ownNeedsExportItems: MenuItem[] = [
+        {
+            label: 'GES_REPORT.DOWNLOAD_EXCEL',
+            icon: 'pi pi-file-excel',
+            command: () => this.downloadOwnNeeds('excel')
+        },
+        {
+            label: 'GES_REPORT.DOWNLOAD_PDF',
+            icon: 'pi pi-file-pdf',
+            command: () => this.downloadOwnNeeds('pdf')
+        }
+    ];
 
     freezeDialogVisible = false;
     freezeDialogSubmitting = false;
@@ -150,6 +166,23 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
                 this.downloading = null;
             },
             error: (err) => { this.downloading = null; this.handleExportError(err); }
+        });
+    }
+
+    downloadOwnNeeds(format: 'excel' | 'pdf'): void {
+        if (this.downloadingOwnNeeds) return;
+        const date = this.timeService.dateToYMD(this.selectedDate);
+        this.downloadingOwnNeeds = format;
+        this.gesReportService.exportOwnNeeds({ date, format }).pipe(
+            takeUntil(this.destroy$)
+        ).subscribe({
+            next: (response) => {
+                const ext = format === 'pdf' ? 'pdf' : 'xlsx';
+                const filename = this.parseFilename(response) ?? `GES-own-needs-${date}.${ext}`;
+                downloadBlob(response.body!, filename);
+                this.downloadingOwnNeeds = null;
+            },
+            error: (err) => { this.downloadingOwnNeeds = null; this.handleExportError(err); }
         });
     }
 
