@@ -257,6 +257,7 @@
   "GES_REPORT": {
     "BATCH_FAILED_AT": "Batch failed at station {{station}}",
     "DOWNLOAD_PDF": "Download PDF",
+    "OWN_NEEDS_EXPORT": "Export own needs",
     "MODERNIZATION": "Modernization",
     "REPAIR": "Repair",
     "YESTERDAY": "yesterday",

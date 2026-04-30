@@ -257,6 +257,7 @@
   "GES_REPORT": {
     "BATCH_FAILED_AT": "{{station}} stantsiyasida xatolik",
     "DOWNLOAD_PDF": "PDF yuklab olish",
+    "OWN_NEEDS_EXPORT": "Xususiy ehtiyojlarni eksport qilish",
     "MODERNIZATION": "Modernizatsiya",
     "REPAIR": "Ta'mirlash",
     "YESTERDAY": "kecha",
