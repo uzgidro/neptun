@@ -30,6 +30,25 @@
             [loading]="savingAll"
             (onClick)="saveAll()">
         </p-button>
+
+        @if (canExport) {
+            <p-button
+                [label]="'SITUATION_CENTER.RESERVOIR_FLOOD.SEL_EXPORT' | translate"
+                icon="pi pi-download"
+                severity="secondary"
+                [disabled]="downloadingSel !== null"
+                [loading]="downloadingSel !== null"
+                (onClick)="selExportMenu.toggle($event)">
+            </p-button>
+            <p-menu #selExportMenu [model]="selExportItems" [popup]="true" appendTo="body">
+                <ng-template #item let-item>
+                    <a class="flex items-center p-menu-item-link">
+                        <span [class]="item.icon"></span>
+                        <span class="ml-2">{{ item.label | translate }}</span>
+                    </a>
+                </ng-template>
+            </p-menu>
+        }
     </div>
 
     @if (!loading && configs.length === 0) {
@@ -51,6 +70,9 @@
                     <th>{{ 'SITUATION_CENTER.RESERVOIR_FLOOD.FILTRATION_M3S' | translate }}</th>
                     <th>{{ 'SITUATION_CENTER.RESERVOIR_FLOOD.IDLE_DISCHARGE_M3S' | translate }}</th>
                     <th>{{ 'SITUATION_CENTER.RESERVOIR_FLOOD.DUTY_NAME' | translate }}</th>
+                    <th>{{ 'SITUATION_CENTER.RESERVOIR_FLOOD.CAPACITY_MWT' | translate }}</th>
+                    <th>{{ 'SITUATION_CENTER.RESERVOIR_FLOOD.WEATHER_CONDITION' | translate }}</th>
+                    <th>{{ 'SITUATION_CENTER.RESERVOIR_FLOOD.TEMPERATURE_C' | translate }}</th>
                     <th></th>
                 </tr>
             </ng-template>
@@ -103,6 +125,20 @@
                     </td>
                     <td>
                         <input pInputText formControlName="duty_name" type="text" />
+                    </td>
+                    <td>
+                        <p-inputNumber formControlName="capacity_mwt"
+                                       [minFractionDigits]="0" [maxFractionDigits]="2"
+                                       [min]="0">
+                        </p-inputNumber>
+                    </td>
+                    <td>
+                        <input pInputText formControlName="weather_condition" type="text" />
+                    </td>
+                    <td>
+                        <p-inputNumber formControlName="temperature_c"
+                                       [minFractionDigits]="0" [maxFractionDigits]="1">
+                        </p-inputNumber>
                     </td>
                     <td>
                         @if (row.saving) {

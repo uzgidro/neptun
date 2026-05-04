@@ -7,7 +7,7 @@ import {
     ReactiveFormsModule,
     Validators
 } from '@angular/forms';
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, forkJoin, merge, of } from 'rxjs';
 import {
@@ -25,11 +25,14 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { DatePicker } from 'primeng/datepicker';
 import { Select } from 'primeng/select';
+import { Menu } from 'primeng/menu';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { MessageService } from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
 
 import { ReservoirFloodService } from '@/core/services/reservoir-flood.service';
 import { LevelVolumeService } from '@/core/services/level-volume.service';
+import { AuthService } from '@/core/services/auth.service';
+import { downloadBlob } from '@/core/utils/download';
 import {
     ReservoirFloodConfig,
     ReservoirFloodHourlyPayload,
@@ -51,7 +54,10 @@ const HOURLY_FIELDS = [
     'ges_flow_m3s',
     'filtration_m3s',
     'idle_discharge_m3s',
-    'duty_name'
+    'duty_name',
+    'capacity_mwt',
+    'weather_condition',
+    'temperature_c'
 ] as const;
 
 @Component({
@@ -67,6 +73,7 @@ const HOURLY_FIELDS = [
         InputTextModule,
         DatePicker,
         Select,
+        Menu,
         TranslateModule
     ],
     templateUrl: './hourly-tab.component.html',
@@ -83,6 +90,7 @@ export class HourlyTabComponent implements OnInit, OnDestroy {
     private fb = inject(FormBuilder);
     private route = inject(ActivatedRoute);
     private router = inject(Router);
+    private authService = inject(AuthService);
 
     selectedDate: Date = this.todayMidnight();
     selectedHour: number = new Date().getHours();
@@ -90,6 +98,22 @@ export class HourlyTabComponent implements OnInit, OnDestroy {
     rows: HourlyRow[] = [];
     loading = false;
     savingAll = false;
+
+    canExport = this.authService.isScOrRais();
+    downloadingSel: 'excel' | 'pdf' | null = null;
+
+    selExportItems: MenuItem[] = [
+        {
+            label: 'SITUATION_CENTER.RESERVOIR_FLOOD.DOWNLOAD_EXCEL',
+            icon: 'pi pi-file-excel',
+            command: () => this.downloadSel('excel')
+        },
+        {
+            label: 'SITUATION_CENTER.RESERVOIR_FLOOD.DOWNLOAD_PDF',
+            icon: 'pi pi-file-pdf',
+            command: () => this.downloadSel('pdf')
+        }
+    ];
 
     readonly hourOptions = Array.from({ length: 24 }, (_, i) => ({
         label: i.toString().padStart(2, '0') + ':00',
@@ -291,6 +315,51 @@ export class HourlyTabComponent implements OnInit, OnDestroy {
             });
     }
 
+    downloadSel(format: 'excel' | 'pdf'): void {
+        if (this.downloadingSel) return;
+        const date = this.dateYMD();
+        const hour = this.selectedHour;
+        this.downloadingSel = format;
+        this.svc.exportSel({ date, hour, format }).pipe(
+            takeUntil(this.destroy$)
+        ).subscribe({
+            next: (response) => {
+                const ext = format === 'pdf' ? 'pdf' : 'xlsx';
+                const hh = String(hour).padStart(2, '0');
+                const fallback = `ТЕЗКОР-МАЪЛУМОТ-${date}-${hh}.${ext}`;
+                const filename = this.parseFilename(response) ?? fallback;
+                if (response.body) downloadBlob(response.body, filename);
+                this.downloadingSel = null;
+            },
+            error: (err: HttpErrorResponse) => {
+                this.downloadingSel = null;
+                this.handleExportError(err);
+            }
+        });
+    }
+
+    private parseFilename(
+        response: HttpResponse<Blob> | { headers: { get(name: string): string | null } }
+    ): string | null {
+        const cd = response.headers.get('Content-Disposition');
+        const m = cd?.match(/filename="([^"]+)"/);
+        return m ? m[1] : null;
+    }
+
+    private handleExportError(err: HttpErrorResponse): void {
+        let detail: string = this.translate.instant('COMMON.ERROR');
+        if (err.status === 403) {
+            detail = this.translate.instant(
+                'SITUATION_CENTER.RESERVOIR_FLOOD.ERROR_FORBIDDEN_ORG'
+            );
+        }
+        this.messageService.add({
+            severity: 'error',
+            summary: this.translate.instant('COMMON.ERROR'),
+            detail
+        });
+    }
+
     buildPayload(row: HourlyRow): ReservoirFloodHourlyPayload {
         const p: any = {
             organization_id: row.config.organization_id,
@@ -312,7 +381,10 @@ export class HourlyTabComponent implements OnInit, OnDestroy {
             ges_flow_m3s: [rec?.ges_flow_m3s ?? null, [Validators.min(0)]],
             filtration_m3s: [rec?.filtration_m3s ?? null, [Validators.min(0)]],
             idle_discharge_m3s: [rec?.idle_discharge_m3s ?? null, [Validators.min(0)]],
-            duty_name: [rec?.duty_name ?? null]
+            duty_name: [rec?.duty_name ?? null],
+            capacity_mwt: [rec?.capacity_mwt ?? null, [Validators.min(0)]],
+            weather_condition: [rec?.weather_condition ?? null],
+            temperature_c: [rec?.temperature_c ?? null]
         });
     }
 

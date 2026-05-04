@@ -2114,7 +2114,13 @@
       "DELETE": "Delete",
       "CONFIG_SAVED": "Configuration saved",
       "CONFIG_DELETED": "Record deleted",
-      "DATA_SAVED": "Data saved"
+      "DATA_SAVED": "Data saved",
+      "CAPACITY_MWT": "Capacity, MW",
+      "WEATHER_CONDITION": "Weather",
+      "TEMPERATURE_C": "Temperature, °C",
+      "SEL_EXPORT": "Sel export",
+      "DOWNLOAD_EXCEL": "Download Excel",
+      "DOWNLOAD_PDF": "Download PDF"
     },
     "DISCHARGE": {
       "TITLE": "Spillway Discharge",

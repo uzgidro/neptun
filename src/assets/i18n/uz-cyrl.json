@@ -2114,7 +2114,13 @@
       "DELETE": "Ўчириш",
       "CONFIG_SAVED": "Конфигурация сақланди",
       "CONFIG_DELETED": "Ёзув ўчирилди",
-      "DATA_SAVED": "Маълумотлар сақланди"
+      "DATA_SAVED": "Маълумотлар сақланди",
+      "CAPACITY_MWT": "Қувват, МВт",
+      "WEATHER_CONDITION": "Об-ҳаво",
+      "TEMPERATURE_C": "Ҳарорат, °C",
+      "SEL_EXPORT": "Тезкор маълумот",
+      "DOWNLOAD_EXCEL": "Excel юклаб олиш",
+      "DOWNLOAD_PDF": "PDF юклаб олиш"
     },
     "DISCHARGE": {
       "TITLE": "Бўш сув ташлаб юбориш",
