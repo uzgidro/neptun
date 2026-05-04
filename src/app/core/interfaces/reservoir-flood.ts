@@ -26,6 +26,9 @@ export interface ReservoirFloodHourlyRecord {
     filtration_m3s: number | null;
     idle_discharge_m3s: number | null;
     duty_name: string | null;
+    capacity_mwt: number | null;
+    weather_condition: string | null;
+    temperature_c: number | null;
     created_by_user_id?: number | null;
     updated_at: string;
 }
@@ -42,4 +45,7 @@ export interface ReservoirFloodHourlyPayload {
     filtration_m3s?: number | null;
     idle_discharge_m3s?: number | null;
     duty_name?: string | null;
+    capacity_mwt?: number | null;
+    weather_condition?: string | null;
+    temperature_c?: number | null;
 }

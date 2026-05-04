@@ -108,4 +108,36 @@ describe('ReservoirFloodService', () => {
             req.flush({ status: 'OK' });
         });
     });
+
+    describe('exportSel', () => {
+        it('GETs /reservoir-flood/export with date+hour+format=excel', () => {
+            service.exportSel({ date: '2026-05-04', hour: 15, format: 'excel' }).subscribe();
+            const req = httpMock.expectOne(r => r.url === `${BASE_URL}/reservoir-flood/export`);
+            expect(req.request.method).toBe('GET');
+            expect(req.request.params.get('date')).toBe('2026-05-04');
+            expect(req.request.params.get('hour')).toBe('15');
+            expect(req.request.params.get('format')).toBe('excel');
+            req.flush(new Blob());
+        });
+
+        it('GETs /reservoir-flood/export with format=pdf', () => {
+            service.exportSel({ date: '2026-05-04', hour: 0, format: 'pdf' }).subscribe();
+            const req = httpMock.expectOne(r => r.url === `${BASE_URL}/reservoir-flood/export`);
+            expect(req.request.params.get('format')).toBe('pdf');
+            expect(req.request.params.get('hour')).toBe('0');
+            req.flush(new Blob());
+        });
+
+        it('propagates 403 forbidden', () => {
+            let errorStatus: number | undefined;
+            service.exportSel({ date: '2026-05-04', hour: 15, format: 'excel' }).subscribe({
+                next: () => fail('expected error'),
+                error: (err) => { errorStatus = err.status; }
+            });
+            const req = httpMock.expectOne(r => r.url === `${BASE_URL}/reservoir-flood/export`);
+            req.flush(new Blob([JSON.stringify({ error: 'forbidden' })], { type: 'application/json' }),
+                { status: 403, statusText: 'Forbidden' });
+            expect(errorStatus).toBe(403);
+        });
+    });
 });

@@ -29,7 +29,8 @@ describe('ReservoirFloodComponent — config-tab visibility', () => {
         const router = jasmine.createSpyObj('Router', ['navigate']);
         router.navigate.and.resolveTo(true);
 
-        authSpy = jasmine.createSpyObj('AuthService', ['hasRole']);
+        authSpy = jasmine.createSpyObj('AuthService', ['hasRole', 'isScOrRais']);
+        authSpy.isScOrRais.and.returnValue(true);
 
         TestBed.configureTestingModule({
             imports: [ReservoirFloodComponent, TranslateModule.forRoot()],

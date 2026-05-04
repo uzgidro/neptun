@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { HttpParams } from '@angular/common/http';
+import { HttpParams, HttpResponse } from '@angular/common/http';
 import { ApiService } from './api.service';
 import {
     ReservoirFloodConfig,
@@ -12,6 +12,7 @@ import {
 const RESERVOIR_FLOOD = '/reservoir-flood';
 const CONFIG = '/config';
 const HOURLY = '/hourly';
+const EXPORT = '/export';
 
 @Injectable({ providedIn: 'root' })
 export class ReservoirFloodService extends ApiService {
@@ -39,5 +40,19 @@ export class ReservoirFloodService extends ApiService {
 
     upsertHourly(payload: ReservoirFloodHourlyPayload[]): Observable<{ status: string }> {
         return this.http.post<{ status: string }>(`${this.BASE_URL}${RESERVOIR_FLOOD}${HOURLY}`, payload);
+    }
+
+    exportSel(opts: {
+        date: string;
+        hour: number;
+        format: 'excel' | 'pdf';
+    }): Observable<HttpResponse<Blob>> {
+        const params = new HttpParams()
+            .set('date', opts.date)
+            .set('hour', opts.hour)
+            .set('format', opts.format);
+        return this.http.get(`${this.BASE_URL}${RESERVOIR_FLOOD}${EXPORT}`, {
+            params, responseType: 'blob', observe: 'response'
+        });
     }
 }

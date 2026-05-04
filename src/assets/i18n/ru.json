@@ -2105,7 +2105,13 @@
       "DELETE": "Удалить",
       "CONFIG_SAVED": "Конфигурация сохранена",
       "CONFIG_DELETED": "Запись удалена",
-      "DATA_SAVED": "Данные сохранены"
+      "DATA_SAVED": "Данные сохранены",
+      "CAPACITY_MWT": "Мощность, МВт",
+      "WEATHER_CONDITION": "Погода",
+      "TEMPERATURE_C": "Температура, °C",
+      "SEL_EXPORT": "Тезкор маълумот",
+      "DOWNLOAD_EXCEL": "Скачать Excel",
+      "DOWNLOAD_PDF": "Скачать PDF"
     },
     "DISCHARGE": {
       "TITLE": "Холостой водосброс",

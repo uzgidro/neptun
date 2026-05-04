@@ -2114,7 +2114,13 @@
       "DELETE": "O'chirish",
       "CONFIG_SAVED": "Konfiguratsiya saqlandi",
       "CONFIG_DELETED": "Yozuv o'chirildi",
-      "DATA_SAVED": "Ma'lumotlar saqlandi"
+      "DATA_SAVED": "Ma'lumotlar saqlandi",
+      "CAPACITY_MWT": "Quvvat, MVt",
+      "WEATHER_CONDITION": "Ob-havo",
+      "TEMPERATURE_C": "Harorat, °C",
+      "SEL_EXPORT": "Tezkor ma'lumot",
+      "DOWNLOAD_EXCEL": "Excelni yuklab olish",
+      "DOWNLOAD_PDF": "PDF yuklab olish"
     },
     "DISCHARGE": {
       "TITLE": "Bo'sh suv tashlab yuborish",
