@@ -55,45 +55,39 @@
     <ng-template pTemplate="header">
         <tr>
             <th style="width: 4rem">№</th>
-            <th pSortableColumn="started_at" style="min-width: 12rem">
+            <th style="min-width: 12rem">
                 <div class="flex items-center gap-2">
                     {{ 'SITUATION_CENTER.SHUTDOWN.START' | translate }}
-                    <p-sortIcon field="started_at" />
                     <p-columnFilter type="date" field="started_at" display="menu" />
                 </div>
             </th>
-            <th pSortableColumn="ended_at" style="min-width: 12rem">
+            <th style="min-width: 12rem">
                 <div class="flex items-center gap-2">
                     {{ 'SITUATION_CENTER.SHUTDOWN.END' | translate }}
-                    <p-sortIcon field="ended_at" />
                     <p-columnFilter type="date" field="ended_at" display="menu" />
                 </div>
             </th>
-            <th pSortableColumn="flow_rate" style="min-width: 10rem">
+            <th style="min-width: 10rem">
                 <div class="flex items-center gap-2">
                     {{ 'SITUATION_CENTER.DISCHARGE.FLOW_RATE' | translate }}
-                    <p-sortIcon field="flow_rate" />
                     <p-columnFilter type="numeric" field="flow_rate" display="menu" />
                 </div>
             </th>
-            <th pSortableColumn="total_volume" style="min-width: 10rem">
+            <th style="min-width: 10rem">
                 <div class="flex items-center gap-2">
                     {{ 'SITUATION_CENTER.DISCHARGE.TOTAL_VOLUME' | translate }}
-                    <p-sortIcon field="total_volume" />
                     <p-columnFilter type="numeric" field="total_volume" display="menu" />
                 </div>
             </th>
-            <th pSortableColumn="reason" style="min-width: 12rem">
+            <th style="min-width: 12rem">
                 <div class="flex items-center gap-2">
                     {{ 'SITUATION_CENTER.SHUTDOWN.REASON' | translate }}
-                    <p-sortIcon field="reason" />
                     <p-columnFilter type="text" field="reason" display="menu" />
                 </div>
             </th>
-            <th pSortableColumn="created_by.name" style="min-width: 10rem">
+            <th style="min-width: 10rem">
                 <div class="flex items-center gap-2">
                     {{ 'SITUATION_CENTER.COMMON.CREATED_BY' | translate }}
-                    <p-sortIcon field="created_by.name" />
                     <p-columnFilter type="text" field="created_by.name" display="menu" />
                 </div>
             </th>
