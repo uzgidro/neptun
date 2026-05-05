@@ -25,10 +25,12 @@ import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { DateWidget } from '@/layout/component/widget/date/date.widget';
-import { finalize, Subject, takeUntil } from 'rxjs';
+import { catchError, finalize, forkJoin, of, Subject, takeUntil } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
 import { downloadBlob } from '@/core/utils/download';
 import { ScService } from '@/core/services/sc.service';
+import { GesReportService } from '@/core/services/ges-report.service';
+import { GesConfigResponse } from '@/core/interfaces/ges-report';
 
 @Component({
     selector: 'app-shutdown-discharge',
@@ -79,6 +81,7 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges, OnDestroy 
     private fb: FormBuilder = inject(FormBuilder);
     private organizationService: OrganizationService = inject(OrganizationService);
     private dischargeService: DischargeService = inject(DischargeService);
+    private gesReportService: GesReportService = inject(GesReportService);
     private apiService: ApiService = inject(ApiService);
     private scService: ScService = inject(ScService);
     private messageService: MessageService = inject(MessageService);
@@ -132,15 +135,40 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges, OnDestroy 
     loadDischarges() {
         this.loading = true;
         const dateToUse = this.date || new Date();
-        this.dischargeService.getFlatDischarges(dateToUse).pipe(takeUntil(this.destroy$)).subscribe({
-            next: (data) => {
-                this.discharges = data;
+        forkJoin({
+            discharges: this.dischargeService.getFlatDischarges(dateToUse),
+            // Configs feed sort_order. If the request fails we fall back to an
+            // empty list, which preserves backend ordering instead of dropping
+            // discharges entirely.
+            configs: this.gesReportService.getConfigs().pipe(catchError(() => of([] as GesConfigResponse[])))
+        }).pipe(takeUntil(this.destroy$)).subscribe({
+            next: ({ discharges, configs }) => {
+                this.discharges = this.sortByConfigOrder(discharges, configs);
             },
             error: (err) => {
                 this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: err.message });
                 this.loading = false;
             },
             complete: () => (this.loading = false)
+        });
+    }
+
+    private sortByConfigOrder(discharges: IdleDischargeResponse[], configs: GesConfigResponse[]): IdleDischargeResponse[] {
+        // Stations missing from ges_config sort to the end (Number.MAX_SAFE_INTEGER),
+        // grouped alphabetically by name as a deterministic tiebreaker.
+        const orderByOrgId = new Map<number, number>();
+        for (const cfg of configs) {
+            orderByOrgId.set(cfg.organization_id, cfg.sort_order ?? Number.MAX_SAFE_INTEGER);
+        }
+        return [...discharges].sort((a, b) => {
+            const aOrder = orderByOrgId.get(a.organization.id) ?? Number.MAX_SAFE_INTEGER;
+            const bOrder = orderByOrgId.get(b.organization.id) ?? Number.MAX_SAFE_INTEGER;
+            if (aOrder !== bOrder) return aOrder - bOrder;
+            // Same station → preserve start time order so subheader rows stay intact.
+            const aName = a.organization.name ?? '';
+            const bName = b.organization.name ?? '';
+            if (aName !== bName) return aName.localeCompare(bName);
+            return new Date(a.started_at).getTime() - new Date(b.started_at).getTime();
         });
     }
 
