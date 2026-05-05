@@ -303,7 +303,7 @@ describe('ShutdownDischargeComponent - station ordering', () => {
         expect(component.discharges.map(d => d.organization.name)).toEqual(['Andijan', 'Charvak']);
     });
 
-    it('attaches _sortKey to each discharge for PrimeNG subheader sort', () => {
+    it('attaches configSortKey to each discharge for PrimeNG subheader sort', () => {
         dischargeService.getFlatDischarges.and.returnValue(of([
             makeDischarge(1, 10, 'Charvak', '2026-04-01T08:00:00Z'),
             makeDischarge(2, 99, 'Unknown', '2026-04-01T09:00:00Z')
@@ -311,8 +311,8 @@ describe('ShutdownDischargeComponent - station ordering', () => {
         gesReportService.getConfigs.and.returnValue(of([makeConfig(10, 5)]));
 
         fixture.detectChanges();
-        expect((component.discharges[0] as any)._sortKey).toBe(5);
-        expect((component.discharges[1] as any)._sortKey).toBe(Number.MAX_SAFE_INTEGER);
+        expect((component.discharges[0] as any).configSortKey).toBe(5);
+        expect((component.discharges[1] as any).configSortKey).toBe(Number.MAX_SAFE_INTEGER);
     });
 
     it('preserves multiple discharges of same station ordered by started_at', () => {

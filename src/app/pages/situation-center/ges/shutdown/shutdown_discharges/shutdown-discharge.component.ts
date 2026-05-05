@@ -32,7 +32,7 @@ import { ScService } from '@/core/services/sc.service';
 import { GesReportService } from '@/core/services/ges-report.service';
 import { GesConfigResponse } from '@/core/interfaces/ges-report';
 
-type SortableDischarge = IdleDischargeResponse & { _sortKey: number };
+type SortableDischarge = IdleDischargeResponse & { configSortKey: number };
 
 @Component({
     selector: 'app-shutdown-discharge',
@@ -167,10 +167,10 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges, OnDestroy 
         return [...discharges]
             .map(d => ({
                 ...d,
-                _sortKey: orderByOrgId.get(d.organization.id) ?? Number.MAX_SAFE_INTEGER
+                configSortKey: orderByOrgId.get(d.organization.id) ?? Number.MAX_SAFE_INTEGER
             }))
             .sort((a, b) => {
-                if (a._sortKey !== b._sortKey) return a._sortKey - b._sortKey;
+                if (a.configSortKey !== b.configSortKey) return a.configSortKey - b.configSortKey;
                 // Same station → preserve start time order so subheader rows stay intact.
                 const aName = a.organization.name ?? '';
                 const bName = b.organization.name ?? '';
