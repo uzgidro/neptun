@@ -1,6 +1,6 @@
 import { Component, EventEmitter, inject, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { DatePipe, DecimalPipe } from '@angular/common';
-import { MessageService, PrimeTemplate } from 'primeng/api';
+import { MessageService, PrimeTemplate, SortEvent } from 'primeng/api';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { DischargeService } from '@/core/services/discharge.service';
@@ -25,10 +25,14 @@ import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { DateWidget } from '@/layout/component/widget/date/date.widget';
-import { finalize, Subject, takeUntil } from 'rxjs';
+import { catchError, finalize, forkJoin, of, Subject, takeUntil } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
 import { downloadBlob } from '@/core/utils/download';
 import { ScService } from '@/core/services/sc.service';
+import { GesReportService } from '@/core/services/ges-report.service';
+import { GesConfigResponse } from '@/core/interfaces/ges-report';
+
+type SortableDischarge = IdleDischargeResponse & { configSortKey: number };
 
 @Component({
     selector: 'app-shutdown-discharge',
@@ -63,7 +67,7 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges, OnDestroy 
 
     selectedDate: Date | null = null;
 
-    discharges: IdleDischargeResponse[] = [];
+    discharges: SortableDischarge[] = [];
     loading: boolean = false;
     isFormOpen = false;
     submitted = false;
@@ -79,6 +83,7 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges, OnDestroy 
     private fb: FormBuilder = inject(FormBuilder);
     private organizationService: OrganizationService = inject(OrganizationService);
     private dischargeService: DischargeService = inject(DischargeService);
+    private gesReportService: GesReportService = inject(GesReportService);
     private apiService: ApiService = inject(ApiService);
     private scService: ScService = inject(ScService);
     private messageService: MessageService = inject(MessageService);
@@ -132,15 +137,47 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges, OnDestroy 
     loadDischarges() {
         this.loading = true;
         const dateToUse = this.date || new Date();
-        this.dischargeService.getFlatDischarges(dateToUse).pipe(takeUntil(this.destroy$)).subscribe({
-            next: (data) => {
-                this.discharges = data;
+        forkJoin({
+            discharges: this.dischargeService.getFlatDischarges(dateToUse),
+            configs: this.gesReportService.getConfigs().pipe(catchError(() => of([] as GesConfigResponse[])))
+        }).pipe(takeUntil(this.destroy$)).subscribe({
+            next: ({ discharges, configs }) => {
+                this.discharges = this.sortByConfigOrder(discharges, configs);
             },
             error: (err) => {
                 this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: err.message });
                 this.loading = false;
             },
             complete: () => (this.loading = false)
+        });
+    }
+
+    private sortByConfigOrder(discharges: IdleDischargeResponse[], configs: GesConfigResponse[]): SortableDischarge[] {
+        const orderByOrgId = new Map<number, number>();
+        for (const cfg of configs) {
+            orderByOrgId.set(cfg.organization_id, cfg.sort_order ?? Number.MAX_SAFE_INTEGER);
+        }
+        return discharges.map(d => ({
+            ...d,
+            configSortKey: orderByOrgId.get(d.organization.id) ?? Number.MAX_SAFE_INTEGER
+        }));
+    }
+
+    customSort(event: SortEvent) {
+        // PrimeNG в rowGroupMode="subheader" сам кластеризует строки по groupRowsBy
+        // (organization.name) алфавитом и игнорирует порядок входного массива.
+        // Перехватываем sort: упорядочиваем по configSortKey (ges_config.sort_order),
+        // tie-breaker — started_at для нескольких записей одной станции.
+        event.data?.sort((a: SortableDischarge, b: SortableDischarge) => {
+            if (a.configSortKey !== b.configSortKey) return a.configSortKey - b.configSortKey;
+            // Без вторичного key по имени строки разных станций с одинаковым
+            // configSortKey (например, обе вне ges_config → MAX_SAFE_INTEGER)
+            // могут интерливаться по started_at, и subheader отрендерит
+            // дубликаты заголовка одной станции.
+            const aName = a.organization.name ?? '';
+            const bName = b.organization.name ?? '';
+            if (aName !== bName) return aName.localeCompare(bName);
+            return new Date(a.started_at).getTime() - new Date(b.started_at).getTime();
         });
     }
 
