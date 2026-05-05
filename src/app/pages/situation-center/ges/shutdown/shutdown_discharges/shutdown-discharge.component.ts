@@ -170,6 +170,13 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges, OnDestroy 
         // tie-breaker — started_at для нескольких записей одной станции.
         event.data?.sort((a: SortableDischarge, b: SortableDischarge) => {
             if (a.configSortKey !== b.configSortKey) return a.configSortKey - b.configSortKey;
+            // Без вторичного key по имени строки разных станций с одинаковым
+            // configSortKey (например, обе вне ges_config → MAX_SAFE_INTEGER)
+            // могут интерливаться по started_at, и subheader отрендерит
+            // дубликаты заголовка одной станции.
+            const aName = a.organization.name ?? '';
+            const bName = b.organization.name ?? '';
+            if (aName !== bName) return aName.localeCompare(bName);
             return new Date(a.started_at).getTime() - new Date(b.started_at).getTime();
         });
     }
