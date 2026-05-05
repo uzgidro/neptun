@@ -1,6 +1,6 @@
 import { Component, EventEmitter, inject, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { DatePipe, DecimalPipe } from '@angular/common';
-import { MessageService, PrimeTemplate } from 'primeng/api';
+import { MessageService, PrimeTemplate, SortEvent } from 'primeng/api';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { DischargeService } from '@/core/services/discharge.service';
@@ -139,9 +139,6 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges, OnDestroy 
         const dateToUse = this.date || new Date();
         forkJoin({
             discharges: this.dischargeService.getFlatDischarges(dateToUse),
-            // Configs feed sort_order. If the request fails we fall back to an
-            // empty list, which preserves backend ordering instead of dropping
-            // discharges entirely.
             configs: this.gesReportService.getConfigs().pipe(catchError(() => of([] as GesConfigResponse[])))
         }).pipe(takeUntil(this.destroy$)).subscribe({
             next: ({ discharges, configs }) => {
@@ -156,27 +153,25 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges, OnDestroy 
     }
 
     private sortByConfigOrder(discharges: IdleDischargeResponse[], configs: GesConfigResponse[]): SortableDischarge[] {
-        // Stations missing from ges_config sort to the end (Number.MAX_SAFE_INTEGER).
-        // _sortKey is exposed to PrimeNG's [sortField] so that rowGroupMode="subheader"
-        // groups appear in ges_config order instead of PrimeNG's default alphabetical
-        // pre-sort by groupRowsBy field.
         const orderByOrgId = new Map<number, number>();
         for (const cfg of configs) {
             orderByOrgId.set(cfg.organization_id, cfg.sort_order ?? Number.MAX_SAFE_INTEGER);
         }
-        return [...discharges]
-            .map(d => ({
-                ...d,
-                configSortKey: orderByOrgId.get(d.organization.id) ?? Number.MAX_SAFE_INTEGER
-            }))
-            .sort((a, b) => {
-                if (a.configSortKey !== b.configSortKey) return a.configSortKey - b.configSortKey;
-                // Same station → preserve start time order so subheader rows stay intact.
-                const aName = a.organization.name ?? '';
-                const bName = b.organization.name ?? '';
-                if (aName !== bName) return aName.localeCompare(bName);
-                return new Date(a.started_at).getTime() - new Date(b.started_at).getTime();
-            });
+        return discharges.map(d => ({
+            ...d,
+            configSortKey: orderByOrgId.get(d.organization.id) ?? Number.MAX_SAFE_INTEGER
+        }));
+    }
+
+    customSort(event: SortEvent) {
+        // PrimeNG в rowGroupMode="subheader" сам кластеризует строки по groupRowsBy
+        // (organization.name) алфавитом и игнорирует порядок входного массива.
+        // Перехватываем sort: упорядочиваем по configSortKey (ges_config.sort_order),
+        // tie-breaker — started_at для нескольких записей одной станции.
+        event.data?.sort((a: SortableDischarge, b: SortableDischarge) => {
+            if (a.configSortKey !== b.configSortKey) return a.configSortKey - b.configSortKey;
+            return new Date(a.started_at).getTime() - new Date(b.started_at).getTime();
+        });
     }
 
     private loadOrganizations() {

@@ -15,6 +15,8 @@
     [tableStyle]="{ 'min-width': '60rem' }"
     rowGroupMode="subheader"
     groupRowsBy="organization.name"
+    [customSort]="true"
+    (sortFunction)="customSort($event)"
     sortField="configSortKey"
     [sortOrder]="1"
     [globalFilterFields]="['organization.name', 'reason', 'created_by.name']"
