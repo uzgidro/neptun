@@ -32,6 +32,8 @@ import { ScService } from '@/core/services/sc.service';
 import { GesReportService } from '@/core/services/ges-report.service';
 import { GesConfigResponse } from '@/core/interfaces/ges-report';
 
+type SortableDischarge = IdleDischargeResponse & { _sortKey: number };
+
 @Component({
     selector: 'app-shutdown-discharge',
     imports: [
@@ -65,7 +67,7 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges, OnDestroy 
 
     selectedDate: Date | null = null;
 
-    discharges: IdleDischargeResponse[] = [];
+    discharges: SortableDischarge[] = [];
     loading: boolean = false;
     isFormOpen = false;
     submitted = false;
@@ -153,23 +155,28 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges, OnDestroy 
         });
     }
 
-    private sortByConfigOrder(discharges: IdleDischargeResponse[], configs: GesConfigResponse[]): IdleDischargeResponse[] {
-        // Stations missing from ges_config sort to the end (Number.MAX_SAFE_INTEGER),
-        // grouped alphabetically by name as a deterministic tiebreaker.
+    private sortByConfigOrder(discharges: IdleDischargeResponse[], configs: GesConfigResponse[]): SortableDischarge[] {
+        // Stations missing from ges_config sort to the end (Number.MAX_SAFE_INTEGER).
+        // _sortKey is exposed to PrimeNG's [sortField] so that rowGroupMode="subheader"
+        // groups appear in ges_config order instead of PrimeNG's default alphabetical
+        // pre-sort by groupRowsBy field.
         const orderByOrgId = new Map<number, number>();
         for (const cfg of configs) {
             orderByOrgId.set(cfg.organization_id, cfg.sort_order ?? Number.MAX_SAFE_INTEGER);
         }
-        return [...discharges].sort((a, b) => {
-            const aOrder = orderByOrgId.get(a.organization.id) ?? Number.MAX_SAFE_INTEGER;
-            const bOrder = orderByOrgId.get(b.organization.id) ?? Number.MAX_SAFE_INTEGER;
-            if (aOrder !== bOrder) return aOrder - bOrder;
-            // Same station → preserve start time order so subheader rows stay intact.
-            const aName = a.organization.name ?? '';
-            const bName = b.organization.name ?? '';
-            if (aName !== bName) return aName.localeCompare(bName);
-            return new Date(a.started_at).getTime() - new Date(b.started_at).getTime();
-        });
+        return [...discharges]
+            .map(d => ({
+                ...d,
+                _sortKey: orderByOrgId.get(d.organization.id) ?? Number.MAX_SAFE_INTEGER
+            }))
+            .sort((a, b) => {
+                if (a._sortKey !== b._sortKey) return a._sortKey - b._sortKey;
+                // Same station → preserve start time order so subheader rows stay intact.
+                const aName = a.organization.name ?? '';
+                const bName = b.organization.name ?? '';
+                if (aName !== bName) return aName.localeCompare(bName);
+                return new Date(a.started_at).getTime() - new Date(b.started_at).getTime();
+            });
     }
 
     private loadOrganizations() {

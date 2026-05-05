@@ -15,6 +15,7 @@
     [tableStyle]="{ 'min-width': '60rem' }"
     rowGroupMode="subheader"
     groupRowsBy="organization.name"
+    [sortField]="'_sortKey'"
     [globalFilterFields]="['organization.name', 'reason', 'created_by.name']"
 >
     <ng-template #caption>
