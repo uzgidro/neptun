@@ -33,9 +33,9 @@ export class SolarReportComponent implements OnInit {
     isScOrRais = this.authService.isScOrRais();
 
     allTabs: TabDef[] = [
-        { key: 'config', label: 'SOLAR_REPORT.CONFIG', requiresScRais: true },
         { key: 'data-entry', label: 'SOLAR_REPORT.DATA_ENTRY' },
-        { key: 'plans', label: 'SOLAR_REPORT.PLANS', requiresScRais: true }
+        { key: 'plans', label: 'SOLAR_REPORT.PLANS', requiresScRais: true },
+        { key: 'config', label: 'SOLAR_REPORT.CONFIG', requiresScRais: true }
     ];
 
     get tabs(): TabDef[] {

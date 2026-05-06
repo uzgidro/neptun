@@ -36,9 +36,9 @@ export class DailyReportComponent implements HasUnsavedChanges, OnInit {
     isScOrRais = this.authService.isScOrRais();
 
     allTabs: TabDef[] = [
-        { key: 'config', label: 'GES_REPORT.CONFIG', requiresScRais: true },
         { key: 'data-entry', label: 'GES_REPORT.DATA_ENTRY' },
-        { key: 'plans', label: 'GES_REPORT.PLANS', requiresScRais: true }
+        { key: 'plans', label: 'GES_REPORT.PLANS', requiresScRais: true },
+        { key: 'config', label: 'GES_REPORT.CONFIG', requiresScRais: true }
     ];
 
     get tabs(): TabDef[] {
