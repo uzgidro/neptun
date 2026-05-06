@@ -78,6 +78,22 @@ export class AuthService {
         return this.hasRole('admin');
     }
 
+    canSeeOverview(): boolean {
+        return this.hasRole(['admin', 'sc', 'rais']);
+    }
+
+    getHomeRoute(): string {
+        if (this.hasRole(['admin', 'sc', 'rais'])) return '/dashboard';
+        if (this.hasRole('cascade')) return '/ges-daily-report';
+        if (this.hasRole('reservoir_duty')) return '/reservoir-flood';
+        if (this.hasRole(['hrm_admin', 'hrm_manager', 'hrm_employee'])) return '/hrm/dashboard';
+        if (this.hasRole('chancellery')) return '/chancellery/orders';
+        if (this.hasRole('reservoir')) return '/manual-comparison-entry';
+        if (this.hasRole('investment')) return '/invest-active';
+        if (this.hasRole('assistant')) return '/planning/events';
+        return '/notfound';
+    }
+
     getCurrentContact(): Observable<Contact> | null {
         const decoded = this.jwtService.getDecodedToken();
         const id = decoded?.['contact_id'];

@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { AuthService } from '@/core/services/auth.service';
-import { cascadeOnlyGuard, gesReportGuard, raisGuard, reservoirDutyOnlyGuard } from './auth.guard';
+import { cascadeOnlyGuard, dashboardGuard, gesReportGuard, raisGuard, reservoirDutyOnlyGuard } from './auth.guard';
 
 describe('gesReportGuard', () => {
     let authServiceSpy: jasmine.SpyObj<AuthService>;
@@ -222,6 +222,92 @@ describe('raisGuard', () => {
 
     it('denies role outside whitelist', () => {
         authServiceSpy.hasRole.and.returnValue(false);
+        const fakeTree = {} as any;
+        routerSpy.createUrlTree.and.returnValue(fakeTree);
+        expect(run()).toBe(fakeTree);
+        expect(routerSpy.createUrlTree).toHaveBeenCalledWith(['/notfound']);
+    });
+});
+
+describe('dashboardGuard', () => {
+    let authServiceSpy: jasmine.SpyObj<AuthService>;
+    let routerSpy: jasmine.SpyObj<Router>;
+
+    beforeEach(() => {
+        authServiceSpy = jasmine.createSpyObj('AuthService', ['hasRole', 'getHomeRoute']);
+        routerSpy = jasmine.createSpyObj('Router', ['createUrlTree']);
+
+        TestBed.configureTestingModule({
+            providers: [
+                { provide: AuthService, useValue: authServiceSpy },
+                { provide: Router, useValue: routerSpy }
+            ]
+        });
+    });
+
+    const run = () =>
+        TestBed.runInInjectionContext(() => dashboardGuard({} as any, {} as any));
+
+    it('allows admin', () => {
+        authServiceSpy.hasRole.and.callFake((r: string | string[]) =>
+            Array.isArray(r) ? r.includes('admin') : r === 'admin'
+        );
+        expect(run()).toBeTrue();
+    });
+
+    it('allows sc', () => {
+        authServiceSpy.hasRole.and.callFake((r: string | string[]) =>
+            Array.isArray(r) ? r.includes('sc') : r === 'sc'
+        );
+        expect(run()).toBeTrue();
+    });
+
+    it('allows rais', () => {
+        authServiceSpy.hasRole.and.callFake((r: string | string[]) =>
+            Array.isArray(r) ? r.includes('rais') : r === 'rais'
+        );
+        expect(run()).toBeTrue();
+    });
+
+    it('redirects cascade to /ges-daily-report (via getHomeRoute)', () => {
+        authServiceSpy.hasRole.and.returnValue(false);
+        authServiceSpy.getHomeRoute.and.returnValue('/ges-daily-report');
+        const fakeTree = {} as any;
+        routerSpy.createUrlTree.and.returnValue(fakeTree);
+        expect(run()).toBe(fakeTree);
+        expect(routerSpy.createUrlTree).toHaveBeenCalledWith(['/ges-daily-report']);
+    });
+
+    it('redirects reservoir_duty to /reservoir-flood', () => {
+        authServiceSpy.hasRole.and.returnValue(false);
+        authServiceSpy.getHomeRoute.and.returnValue('/reservoir-flood');
+        const fakeTree = {} as any;
+        routerSpy.createUrlTree.and.returnValue(fakeTree);
+        expect(run()).toBe(fakeTree);
+        expect(routerSpy.createUrlTree).toHaveBeenCalledWith(['/reservoir-flood']);
+    });
+
+    it('redirects hrm_admin to /hrm/dashboard', () => {
+        authServiceSpy.hasRole.and.returnValue(false);
+        authServiceSpy.getHomeRoute.and.returnValue('/hrm/dashboard');
+        const fakeTree = {} as any;
+        routerSpy.createUrlTree.and.returnValue(fakeTree);
+        expect(run()).toBe(fakeTree);
+        expect(routerSpy.createUrlTree).toHaveBeenCalledWith(['/hrm/dashboard']);
+    });
+
+    it('redirects investment to /invest-active', () => {
+        authServiceSpy.hasRole.and.returnValue(false);
+        authServiceSpy.getHomeRoute.and.returnValue('/invest-active');
+        const fakeTree = {} as any;
+        routerSpy.createUrlTree.and.returnValue(fakeTree);
+        expect(run()).toBe(fakeTree);
+        expect(routerSpy.createUrlTree).toHaveBeenCalledWith(['/invest-active']);
+    });
+
+    it('redirects unknown role to /notfound', () => {
+        authServiceSpy.hasRole.and.returnValue(false);
+        authServiceSpy.getHomeRoute.and.returnValue('/notfound');
         const fakeTree = {} as any;
         routerSpy.createUrlTree.and.returnValue(fakeTree);
         expect(run()).toBe(fakeTree);

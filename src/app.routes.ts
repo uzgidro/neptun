@@ -1,24 +1,26 @@
+import { inject } from '@angular/core';
 import { Routes } from '@angular/router';
 import { AppLayout } from '@/layout/component/app.layout';
 import { Dashboard } from '@/pages/dashboard/dashboard';
 import { Notfound } from '@/pages/notfound/notfound';
 import { ScDashboardComponent } from '@/pages/situation-center/sc-dashboard/sc-dashboard.component';
+import { AuthService } from '@/core/services/auth.service';
 
-import { adminGuard, authGuard, cascadeOnlyGuard, filtrationGuard, gesReportGuard, hrmGuard, positionsGuard, raisGuard, reservoirDutyOnlyGuard, reservoirFloodGuard, scGuard, unsavedChangesGuard } from '@/core/guards/auth.guard';
+import { adminGuard, authGuard, cascadeOnlyGuard, dashboardGuard, filtrationGuard, gesReportGuard, hrmGuard, positionsGuard, raisGuard, reservoirDutyOnlyGuard, reservoirFloodGuard, scGuard, unsavedChangesGuard } from '@/core/guards/auth.guard';
 
 
 export const appRoutes: Routes = [
     {
         path: '',
-        redirectTo: 'dashboard',
-        pathMatch: 'full'
+        pathMatch: 'full',
+        redirectTo: () => inject(AuthService).getHomeRoute()
     },
     {
         path: '',
         component: AppLayout,
         canActivate: [authGuard, cascadeOnlyGuard, reservoirDutyOnlyGuard],
         children: [
-            { path: 'monitoring', component: Dashboard },
+            { path: 'monitoring', component: Dashboard, canActivate: [dashboardGuard] },
             { path: 'users', loadComponent: () => import('./app/pages/hrm/users/user.component').then(m => m.User), canActivate: [adminGuard] },
             { path: 'roles', loadComponent: () => import('./app/pages/hrm/roles/roles').then(m => m.Role), canActivate: [adminGuard] },
             { path: 'categories', loadComponent: () => import('./app/pages/categories/categories.component').then(m => m.CategoriesComponent), canActivate: [scGuard] },
@@ -75,15 +77,15 @@ export const appRoutes: Routes = [
             { path: 'chancellery/reports', loadComponent: () => import('./app/pages/chancellery/reports/reports.component').then(m => m.ReportsComponent), canActivate: [raisGuard] },
             { path: 'chancellery/letters', loadComponent: () => import('./app/pages/chancellery/letters/letters.component').then(m => m.LettersComponent), canActivate: [raisGuard] },
             { path: 'chancellery/instructions', loadComponent: () => import('./app/pages/chancellery/instructions/instructions.component').then(m => m.InstructionsComponent), canActivate: [raisGuard] },
-            { path: 'legal-documents', loadComponent: () => import('./app/pages/legal-documents/legal-documents.component').then(m => m.LegalDocumentsComponent), canActivate: [raisGuard] },
-            { path: 'lex-search', loadComponent: () => import('./app/pages/lex-search/lex-search.component').then(m => m.LexSearchComponent), canActivate: [raisGuard] },
+            { path: 'legal-documents', loadComponent: () => import('./app/pages/legal-documents/legal-documents.component').then(m => m.LegalDocumentsComponent), canActivate: [dashboardGuard] },
+            { path: 'lex-search', loadComponent: () => import('./app/pages/lex-search/lex-search.component').then(m => m.LexSearchComponent), canActivate: [dashboardGuard] },
             { path: 'calls', loadComponent: () => import('./app/pages/calls/calls.component').then(m => m.CallsComponent), canActivate: [raisGuard] },
             { path: 'media/news', loadComponent: () => import('./app/pages/media/news/news.component').then(m => m.NewsComponent), canActivate: [raisGuard] },
-            { path: 'uzgidro-news', loadComponent: () => import('./app/pages/uzgidro-news/uzgidro-news.component').then(m => m.UzgidroNewsComponent), canActivate: [raisGuard] },
+            { path: 'uzgidro-news', loadComponent: () => import('./app/pages/uzgidro-news/uzgidro-news.component').then(m => m.UzgidroNewsComponent), canActivate: [dashboardGuard] },
             { path: 'ges/:id', loadComponent: () => import('./app/pages/situation-center/ges/ges-detail/ges-detail.component').then(m => m.GesDetailComponent), canActivate: [raisGuard] }
         ]
     },
-    { path: 'dashboard', component: ScDashboardComponent, canActivate: [authGuard, cascadeOnlyGuard] },
+    { path: 'dashboard', component: ScDashboardComponent, canActivate: [authGuard, dashboardGuard] },
     { path: 'notfound', component: Notfound, canActivate: [cascadeOnlyGuard] },
     { path: 'auth', loadChildren: () => import('./app/pages/auth/auth.routes') },
     { path: '**', redirectTo: '/notfound' }

@@ -18,6 +18,10 @@ export class MenuComponent implements OnInit {
     private translate = inject(TranslateService);
     private authService = inject(AuthService);
 
+    get canSeeOverview(): boolean {
+        return this.authService.canSeeOverview();
+    }
+
     ngOnInit() {
         this.buildMenu();
         this.translate.onLangChange.subscribe(() => {
@@ -59,15 +63,17 @@ export class MenuComponent implements OnInit {
                 items: [
                     {
                         label: this.t('MENU.HOME'),
+                        role: ['admin', 'sc', 'rais'],
                         routerLink: ['/dashboard']
                     },
                     {
                         label: this.t('MENU.OPERATIONAL_MONITORING'),
+                        role: ['admin', 'sc', 'rais'],
                         routerLink: ['/monitoring']
                     },
                     {
                         label: this.t('MENU.SITUATION_CENTER'),
-                        role: ['rais', 'sc', 'reservoir_duty'],
+                        role: ['rais', 'sc'],
                         items: [
                             {
                                 label: this.t('MENU.GES_INFO'),
@@ -269,6 +275,7 @@ export class MenuComponent implements OnInit {
                     },
                     {
                         label: this.t('MENU.LEGAL_LIBRARY'),
+                        role: ['admin', 'sc', 'rais'],
                         items: [
                             { label: this.t('MENU.LEX_SEARCH'), icon: 'pi pi-globe', routerLink: ['/lex-search'] },
                             { label: this.t('MENU.LEGAL_LIBRARY_ALL'), routerLink: ['/legal-documents'], routerLinkActiveOptions: { exact: true, queryParams: 'exact' } },
@@ -285,11 +292,12 @@ export class MenuComponent implements OnInit {
                             { label: this.t('MENU.LEGAL_LIBRARY_UHE_PROTOCOLS'), routerLink: ['/legal-documents'], queryParams: { type_id: 11 }, routerLinkActiveOptions: { queryParams: 'exact' } }
                         ]
                     },
+                    { label: this.t('MENU.RESERVOIR_FLOOD'), role: ['reservoir_duty'], routerLink: ['/reservoir-flood'] },
                     { label: this.t('MENU.FILTRATION'), role: ['reservoir'], routerLink: ['/manual-comparison-entry'] },
                     { label: this.t('MENU.CASCADE_REPORT'), role: ['cascade'], routerLink: ['/ges-daily-report'] },
                     { label: this.t('MENU.SOLAR_REPORT'), role: ['cascade'], routerLink: ['/solar-report'] },
                     { label: this.t('MENU.CALLS'), role: ['rais'], routerLink: ['/calls'] },
-                    { label: this.t('MENU.PRESS_SERVICE'), routerLink: ['/uzgidro-news'] }
+                    { label: this.t('MENU.PRESS_SERVICE'), role: ['admin', 'sc', 'rais'], routerLink: ['/uzgidro-news'] }
                 ]
             }
         ];
