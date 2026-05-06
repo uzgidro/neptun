@@ -18,6 +18,10 @@ export class MenuComponent implements OnInit {
     private translate = inject(TranslateService);
     private authService = inject(AuthService);
 
+    get canSeeOverview(): boolean {
+        return this.authService.canSeeOverview();
+    }
+
     ngOnInit() {
         this.buildMenu();
         this.translate.onLangChange.subscribe(() => {
@@ -59,10 +63,12 @@ export class MenuComponent implements OnInit {
                 items: [
                     {
                         label: this.t('MENU.HOME'),
+                        role: ['admin', 'sc', 'rais'],
                         routerLink: ['/dashboard']
                     },
                     {
                         label: this.t('MENU.OPERATIONAL_MONITORING'),
+                        role: ['admin', 'sc', 'rais'],
                         routerLink: ['/monitoring']
                     },
                     {
@@ -289,7 +295,7 @@ export class MenuComponent implements OnInit {
                     { label: this.t('MENU.CASCADE_REPORT'), role: ['cascade'], routerLink: ['/ges-daily-report'] },
                     { label: this.t('MENU.SOLAR_REPORT'), role: ['cascade'], routerLink: ['/solar-report'] },
                     { label: this.t('MENU.CALLS'), role: ['rais'], routerLink: ['/calls'] },
-                    { label: this.t('MENU.PRESS_SERVICE'), routerLink: ['/uzgidro-news'] }
+                    { label: this.t('MENU.PRESS_SERVICE'), role: ['admin', 'sc', 'rais'], routerLink: ['/uzgidro-news'] }
                 ]
             }
         ];
