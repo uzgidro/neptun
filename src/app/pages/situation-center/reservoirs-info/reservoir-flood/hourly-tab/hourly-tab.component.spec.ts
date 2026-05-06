@@ -388,6 +388,28 @@ describe('HourlyTabComponent', () => {
             expect(parsed).toBe('custom-from-server.xlsx');
         }));
 
+        it('parseFilename decodes RFC 5987 filename* (UTF-8 percent-encoded)', () => {
+            fixture.detectChanges();
+            const cd = "attachment; filename=\"fallback.pdf\"; filename*=UTF-8''%D0%A2%D0%95%D0%97%D0%9A%D0%9E%D0%A0-2026-05-06.pdf";
+            const parsed = (component as any).parseFilename({
+                headers: new HttpHeaders({ 'Content-Disposition': cd })
+            });
+            expect(parsed).toBe('ТЕЗКОР-2026-05-06.pdf');
+        });
+
+        it('parseFilename recovers UTF-8-as-Latin-1 mojibake from plain filename=', () => {
+            fixture.detectChanges();
+            // "ТЕЗКОР" UTF-8 bytes interpreted as Latin-1 → mojibake the server
+            // would emit if it just dumped raw UTF-8 into a quoted filename.
+            const utf8Bytes = new TextEncoder().encode('ТЕЗКОР-2026.pdf');
+            const mojibake = Array.from(utf8Bytes, b => String.fromCharCode(b)).join('');
+            const cd = `attachment; filename="${mojibake}"`;
+            const parsed = (component as any).parseFilename({
+                headers: new HttpHeaders({ 'Content-Disposition': cd })
+            });
+            expect(parsed).toBe('ТЕЗКОР-2026.pdf');
+        });
+
         it('downloadSel guards against double-click (downloadingSel guard)', fakeAsync(() => {
             // Stall response so that downloadingSel stays set across both calls
             svc.exportSel.and.returnValue(new Subject<HttpResponse<Blob>>().asObservable());

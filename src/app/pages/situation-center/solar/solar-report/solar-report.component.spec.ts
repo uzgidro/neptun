@@ -66,6 +66,6 @@ describe('SolarReportComponent', () => {
     it('shows all tabs for sc/rais user', async () => {
         await createComponent(true);
         const keys = component.tabs.map(t => t.key);
-        expect(keys).toEqual(['config', 'data-entry', 'plans']);
+        expect(keys).toEqual(['data-entry', 'plans', 'config']);
     });
 });

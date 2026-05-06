@@ -342,8 +342,33 @@ export class HourlyTabComponent implements OnInit, OnDestroy {
         response: HttpResponse<Blob> | { headers: { get(name: string): string | null } }
     ): string | null {
         const cd = response.headers.get('Content-Disposition');
-        const m = cd?.match(/filename="([^"]+)"/);
-        return m ? m[1] : null;
+        if (!cd) return null;
+        // RFC 5987: filename*=UTF-8''<percent-encoded>. Prefer this over the
+        // plain filename="..." form because the latter is Latin-1 by spec, so
+        // raw UTF-8 bytes there render as mojibake (e.g. "ТЕЗКОР" → "Ð¢Ð_...").
+        const star = cd.match(/filename\*\s*=\s*([^']*)'[^']*'([^;]+)/i);
+        if (star) {
+            try {
+                return decodeURIComponent(star[2].trim());
+            } catch {
+                // fall through to plain filename
+            }
+        }
+        const plain = cd.match(/filename\s*=\s*"?([^";]+)"?/i);
+        if (!plain) return null;
+        const value = plain[1].trim();
+        // Heuristic: if the plain filename looks like raw UTF-8 misread as
+        // Latin-1, recover via escape→decodeURIComponent. Latin-1 letters in
+        // the C1/extended range (0x80+) are the tell — pure ASCII passes
+        // through unchanged.
+        if (/[-ÿ]/.test(value)) {
+            try {
+                return decodeURIComponent(escape(value));
+            } catch {
+                return value;
+            }
+        }
+        return value;
     }
 
     private handleExportError(err: HttpErrorResponse): void {
