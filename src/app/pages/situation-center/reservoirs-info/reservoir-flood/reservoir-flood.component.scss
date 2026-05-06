@@ -1,3 +1,28 @@
 :host {
     display: block;
 }
+
+// Делаем карточку «прибитой» к высоте вьюпорта так, чтобы скроллилось
+// содержимое (таблица почасового ввода), а не вся страница.
+:host > .card {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 8rem);
+    min-height: 0;
+    padding: 1.25rem;
+    margin-bottom: 0;
+}
+
+:host > .card ::ng-deep {
+    p-tabs,
+    .p-tabs,
+    p-tabpanels,
+    .p-tabpanels,
+    p-tabpanel,
+    .p-tabpanel {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 auto;
+        min-height: 0;
+    }
+}

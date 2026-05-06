@@ -1,3 +1,44 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+.hourly-tab-root {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+.hourly-tab-root ::ng-deep p-table {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
 tr.row-empty td {
     background: color-mix(in srgb, var(--surface-border, transparent) 30%, var(--surface-card, transparent));
+}
+
+:host ::ng-deep {
+    .p-datatable th,
+    .p-datatable td {
+        padding: 0.4rem 0.5rem;
+    }
+
+    td {
+        .p-inputnumber,
+        .p-inputnumber input,
+        input[pInputText] {
+            width: 8rem;
+        }
+
+        .p-inputnumber input,
+        input[pInputText] {
+            padding: 0.35rem 0.5rem;
+        }
+    }
 }

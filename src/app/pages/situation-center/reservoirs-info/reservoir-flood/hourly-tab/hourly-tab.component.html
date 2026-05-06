@@ -1,4 +1,4 @@
-<div class="flex flex-col gap-4 p-4">
+<div class="hourly-tab-root flex flex-col gap-3">
     <div class="flex items-center gap-3 flex-wrap">
         <label class="flex items-center gap-2">
             <span>{{ 'SITUATION_CENTER.RESERVOIR_FLOOD.DATE' | translate }}</span>
@@ -58,7 +58,8 @@
     }
 
     @if (configs.length > 0) {
-        <p-table [value]="rows" dataKey="config.organization_id" [responsiveLayout]="'scroll'">
+        <p-table [value]="rows" dataKey="config.organization_id"
+                 [scrollable]="true" scrollHeight="flex">
             <ng-template pTemplate="header">
                 <tr>
                     <th>{{ 'SITUATION_CENTER.RESERVOIR_FLOOD.ORGANIZATION' | translate }}</th>
