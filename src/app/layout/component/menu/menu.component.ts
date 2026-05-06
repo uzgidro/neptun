@@ -275,6 +275,7 @@ export class MenuComponent implements OnInit {
                     },
                     {
                         label: this.t('MENU.LEGAL_LIBRARY'),
+                        role: ['admin', 'sc', 'rais'],
                         items: [
                             { label: this.t('MENU.LEX_SEARCH'), icon: 'pi pi-globe', routerLink: ['/lex-search'] },
                             { label: this.t('MENU.LEGAL_LIBRARY_ALL'), routerLink: ['/legal-documents'], routerLinkActiveOptions: { exact: true, queryParams: 'exact' } },
