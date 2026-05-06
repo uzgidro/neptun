@@ -8,17 +8,15 @@
             }
         </p-tablist>
         <p-tabpanels>
-            @if (isScOrRais) {
-                <p-tabpanel value="config">
-                    <app-solar-config-tab />
-                </p-tabpanel>
-            }
             <p-tabpanel value="data-entry">
                 <app-solar-data-entry-tab />
             </p-tabpanel>
             @if (isScOrRais) {
                 <p-tabpanel value="plans">
                     <app-solar-plans-tab />
+                </p-tabpanel>
+                <p-tabpanel value="config">
+                    <app-solar-config-tab />
                 </p-tabpanel>
             }
         </p-tabpanels>
