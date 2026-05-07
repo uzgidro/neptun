@@ -68,7 +68,6 @@
                     <th>{{ 'SITUATION_CENTER.RESERVOIR_FLOOD.INFLOW_M3S' | translate }}</th>
                     <th>{{ 'SITUATION_CENTER.RESERVOIR_FLOOD.OUTFLOW_M3S' | translate }}</th>
                     <th>{{ 'SITUATION_CENTER.RESERVOIR_FLOOD.GES_FLOW_M3S' | translate }}</th>
-                    <th>{{ 'SITUATION_CENTER.RESERVOIR_FLOOD.FILTRATION_M3S' | translate }}</th>
                     <th>{{ 'SITUATION_CENTER.RESERVOIR_FLOOD.IDLE_DISCHARGE_M3S' | translate }}</th>
                     <th>{{ 'SITUATION_CENTER.RESERVOIR_FLOOD.DUTY_NAME' | translate }}</th>
                     <th>{{ 'SITUATION_CENTER.RESERVOIR_FLOOD.CAPACITY_MWT' | translate }}</th>
@@ -108,12 +107,6 @@
                     </td>
                     <td>
                         <p-inputNumber formControlName="ges_flow_m3s"
-                                       [minFractionDigits]="0" [maxFractionDigits]="3"
-                                       [min]="0">
-                        </p-inputNumber>
-                    </td>
-                    <td>
-                        <p-inputNumber formControlName="filtration_m3s"
                                        [minFractionDigits]="0" [maxFractionDigits]="3"
                                        [min]="0">
                         </p-inputNumber>
