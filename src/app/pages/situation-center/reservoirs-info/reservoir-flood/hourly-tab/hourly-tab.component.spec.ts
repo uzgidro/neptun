@@ -278,13 +278,13 @@ describe('HourlyTabComponent', () => {
             const row = component.rows[0];
             row.form.get('capacity_mwt')!.setValue(100.5);
             row.form.get('capacity_mwt')!.markAsDirty();
-            row.form.get('weather_condition')!.setValue('ясно');
+            row.form.get('weather_condition')!.setValue('очиқ');
             row.form.get('weather_condition')!.markAsDirty();
             row.form.get('temperature_c')!.setValue(-3.5);
             row.form.get('temperature_c')!.markAsDirty();
             const payload: any = (component as any).buildPayload(row);
             expect(payload.capacity_mwt).toBe(100.5);
-            expect(payload.weather_condition).toBe('ясно');
+            expect(payload.weather_condition).toBe('очиқ');
             expect(payload.temperature_c).toBe(-3.5);
         }));
 
@@ -326,6 +326,19 @@ describe('HourlyTabComponent', () => {
             expect('temperature_c' in payload).toBeTrue();
             expect(payload.temperature_c).toBeNull();
         }));
+
+        it('weatherOptions exposes the 8 standardized cyrillic values', () => {
+            expect(component.weatherOptions).toEqual([
+                'очиқ',
+                'кам булут',
+                'булут',
+                'кам ёмғир',
+                'ёмғир',
+                'туман',
+                'кам қор',
+                'қор'
+            ]);
+        });
     });
 
     // ─── Sel-export (Тезкор маълумот Excel/PDF) ───

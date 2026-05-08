@@ -119,6 +119,17 @@ export class HourlyTabComponent implements OnInit, OnDestroy {
         value: i
     }));
 
+    readonly weatherOptions: string[] = [
+        'очиқ',
+        'кам булут',
+        'булут',
+        'кам ёмғир',
+        'ёмғир',
+        'туман',
+        'кам қор',
+        'қор'
+    ];
+
     ngOnInit(): void {
         this.route.queryParamMap.pipe(takeUntil(this.destroy$)).subscribe(qp => {
             const dateParam = qp.get('date');
