@@ -2099,6 +2099,8 @@
       "FILTRATION_M3S": "Filtration, m³/s",
       "IDLE_DISCHARGE_M3S": "Idle Discharge, m³/s",
       "DUTY_NAME": "Duty Officer (Full Name)",
+      "DUTY_NAME_CYRILLIC_HINT": "Enter full name in Cyrillic (e.g. А.Эргашев)",
+      "DUTY_NAME_CYRILLIC_ERROR": "Cyrillic only. Latin letters are not allowed.",
       "SAVE_ALL": "Save All",
       "NO_DATA_FOR_HOUR": "No data for this hour",
       "NO_FLOOD_CONFIG": "Flood mode is not configured",

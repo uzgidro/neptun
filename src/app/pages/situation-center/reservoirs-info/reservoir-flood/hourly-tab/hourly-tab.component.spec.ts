@@ -214,6 +214,64 @@ describe('HourlyTabComponent', () => {
         expect(row.form.dirty).toBeFalse();
     }));
 
+    // ─── duty_name Cyrillic-only validator ───
+
+    describe('duty_name Cyrillic validator', () => {
+        function dutyControl() {
+            svc.getConfigs.and.returnValue(of([makeConfig(42, 'Чарвак')]));
+            svc.getHourly.and.returnValue(of([]));
+            fixture.detectChanges();
+            tick();
+            return component.rows[0].form.get('duty_name')!;
+        }
+
+        it('accepts plain Cyrillic name', fakeAsync(() => {
+            const c = dutyControl();
+            c.setValue('Иванов');
+            expect(c.valid).toBeTrue();
+        }));
+
+        it('accepts Cyrillic with dot, dash, space (А.Эргашев / Ю. Мухаммад-Бобур)', fakeAsync(() => {
+            const c = dutyControl();
+            c.setValue('А.Эргашев');
+            expect(c.valid).toBeTrue();
+            c.setValue('Ю. Мухаммад-Бобур');
+            expect(c.valid).toBeTrue();
+        }));
+
+        it('accepts Uzbek-specific Cyrillic letters (Қ Ғ Ҳ Ў)', fakeAsync(() => {
+            const c = dutyControl();
+            c.setValue('Тошпўлатов Қодиров');
+            expect(c.valid).toBeTrue();
+        }));
+
+        it('accepts empty value (field is optional)', fakeAsync(() => {
+            const c = dutyControl();
+            c.setValue('');
+            expect(c.valid).toBeTrue();
+            c.setValue(null);
+            expect(c.valid).toBeTrue();
+        }));
+
+        it('rejects Latin letters (Ivanov)', fakeAsync(() => {
+            const c = dutyControl();
+            c.setValue('Ivanov');
+            expect(c.valid).toBeFalse();
+        }));
+
+        it('rejects mixed Latin/Cyrillic (Иванoв with Latin "o")', fakeAsync(() => {
+            const c = dutyControl();
+            c.setValue('Иванoв');
+            expect(c.valid).toBeFalse();
+        }));
+
+        it('rejects digits in name', fakeAsync(() => {
+            const c = dutyControl();
+            c.setValue('Иванов 1');
+            expect(c.valid).toBeFalse();
+        }));
+    });
+
     // ─── New fields (capacity_mwt, weather_condition, temperature_c) ───
 
     describe('new fields (capacity_mwt, weather_condition, temperature_c)', () => {
