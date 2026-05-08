@@ -32,7 +32,8 @@ tr.row-empty td {
     td {
         .p-inputnumber,
         .p-inputnumber input,
-        input[pInputText] {
+        input[pInputText],
+        .p-select {
             width: 8rem;
         }
 

@@ -127,7 +127,12 @@
                         </p-inputNumber>
                     </td>
                     <td>
-                        <input pInputText formControlName="weather_condition" type="text" />
+                        <p-select formControlName="weather_condition"
+                                  [options]="weatherOptions"
+                                  [showClear]="true"
+                                  appendTo="body"
+                                  styleClass="w-full">
+                        </p-select>
                     </td>
                     <td>
                         <p-inputNumber formControlName="temperature_c"
