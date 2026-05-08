@@ -2099,6 +2099,8 @@
       "FILTRATION_M3S": "Filtratsiya, m³/s",
       "IDLE_DISCHARGE_M3S": "Bo'sh tashlama, m³/s",
       "DUTY_NAME": "Navbatchi (F.I.Sh.)",
+      "DUTY_NAME_CYRILLIC_HINT": "F.I.Sh.ni kirill alifbosida kiriting (masalan: А.Эргашев)",
+      "DUTY_NAME_CYRILLIC_ERROR": "Faqat kirill alifbosi. Lotin harflari ruxsat etilmagan.",
       "SAVE_ALL": "Barchasini saqlash",
       "NO_DATA_FOR_HOUR": "Bu soat uchun ma'lumot yo'q",
       "NO_FLOOD_CONFIG": "Toshqin rejimi sozlanmagan",

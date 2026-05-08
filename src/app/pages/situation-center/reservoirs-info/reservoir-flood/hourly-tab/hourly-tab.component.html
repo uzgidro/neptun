@@ -118,7 +118,16 @@
                         </p-inputNumber>
                     </td>
                     <td>
-                        <input pInputText formControlName="duty_name" type="text" />
+                        <input pInputText formControlName="duty_name" type="text"
+                               [pTooltip]="'SITUATION_CENTER.RESERVOIR_FLOOD.DUTY_NAME_CYRILLIC_HINT' | translate"
+                               tooltipPosition="bottom"
+                               [class.ng-invalid]="row.form.get('duty_name')?.invalid && row.form.get('duty_name')?.dirty"
+                               [class.ng-dirty]="row.form.get('duty_name')?.dirty" />
+                        @if (row.form.get('duty_name')?.invalid && row.form.get('duty_name')?.dirty) {
+                            <small class="text-red-500 block">
+                                {{ 'SITUATION_CENTER.RESERVOIR_FLOOD.DUTY_NAME_CYRILLIC_ERROR' | translate }}
+                            </small>
+                        }
                     </td>
                     <td>
                         <p-inputNumber formControlName="capacity_mwt"

@@ -26,6 +26,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { DatePicker } from 'primeng/datepicker';
 import { Select } from 'primeng/select';
 import { Menu } from 'primeng/menu';
+import { TooltipModule } from 'primeng/tooltip';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MenuItem, MessageService } from 'primeng/api';
 
@@ -45,6 +46,12 @@ export interface HourlyRow {
     form: FormGroup;
     saving: boolean;
 }
+
+// Cyrillic letters (U+0400–U+04FF covers Russian + Uzbek Қ Ғ Ҳ Ў), plus
+// punctuation common in ФИО ("А.Эргашев", "Ю. Мухаммад-Бобур"). Empty
+// string allowed because the field is optional. Latin letters and digits
+// are rejected.
+const CYRILLIC_NAME_PATTERN = /^[Ѐ-ӿ\s.\-,'`’"()]*$/;
 
 const HOURLY_FIELDS = [
     'water_level_m',
@@ -73,6 +80,7 @@ const HOURLY_FIELDS = [
         DatePicker,
         Select,
         Menu,
+        TooltipModule,
         TranslateModule
     ],
     templateUrl: './hourly-tab.component.html',
@@ -404,7 +412,7 @@ export class HourlyTabComponent implements OnInit, OnDestroy {
             outflow_m3s: [rec?.outflow_m3s ?? null, [Validators.min(0)]],
             ges_flow_m3s: [rec?.ges_flow_m3s ?? null, [Validators.min(0)]],
             idle_discharge_m3s: [rec?.idle_discharge_m3s ?? null, [Validators.min(0)]],
-            duty_name: [rec?.duty_name ?? null],
+            duty_name: [rec?.duty_name ?? null, [Validators.pattern(CYRILLIC_NAME_PATTERN)]],
             capacity_mwt: [rec?.capacity_mwt ?? null, [Validators.min(0)]],
             weather_condition: [rec?.weather_condition ?? null],
             temperature_c: [rec?.temperature_c ?? null]
