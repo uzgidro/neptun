@@ -30,8 +30,13 @@ export class ReservoirFloodService extends ApiService {
         return this.http.delete<void>(`${this.BASE_URL}${RESERVOIR_FLOOD}${CONFIG}`, { params });
     }
 
-    getHourly(date: string, organizationId?: number): Observable<ReservoirFloodHourlyRecord[]> {
+    getHourly(date: string, hour?: number, organizationId?: number): Observable<ReservoirFloodHourlyRecord[]> {
         let params = new HttpParams().set('date', date);
+        if (hour !== undefined) {
+            // Backend accepts both "7" and "07"; emit zero-padded for log readability
+            // and to match doc examples (reservoir-flood-hourly.md section 2).
+            params = params.set('hour', String(hour).padStart(2, '0'));
+        }
         if (organizationId !== undefined) {
             params = params.set('organization_id', organizationId);
         }

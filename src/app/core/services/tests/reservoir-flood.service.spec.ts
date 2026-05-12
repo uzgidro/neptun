@@ -70,24 +70,38 @@ describe('ReservoirFloodService', () => {
     });
 
     describe('getHourly', () => {
-        it('GETs /reservoir-flood/hourly with date and organization_id', () => {
+        it('GETs /reservoir-flood/hourly with date and zero-padded hour', () => {
             const mock: ReservoirFloodHourlyRecord[] = [];
-            service.getHourly('2026-04-27', 42).subscribe(r => expect(r).toEqual(mock));
+            service.getHourly('2026-04-27', 7).subscribe(r => expect(r).toEqual(mock));
             const req = httpMock.expectOne(r =>
                 r.method === 'GET' &&
                 r.url === `${BASE_URL}/reservoir-flood/hourly` &&
                 r.params.get('date') === '2026-04-27' &&
-                r.params.get('organization_id') === '42'
+                r.params.get('hour') === '07' &&
+                !r.params.has('organization_id')
             );
             req.flush(mock);
         });
 
-        it('GETs /reservoir-flood/hourly with only date when organization_id omitted', () => {
-            service.getHourly('2026-04-27').subscribe();
+        it('GETs /reservoir-flood/hourly with date + hour + organization_id', () => {
+            service.getHourly('2026-04-27', 15, 42).subscribe();
             const req = httpMock.expectOne(r =>
                 r.method === 'GET' &&
                 r.url === `${BASE_URL}/reservoir-flood/hourly` &&
                 r.params.get('date') === '2026-04-27' &&
+                r.params.get('hour') === '15' &&
+                r.params.get('organization_id') === '42'
+            );
+            req.flush([]);
+        });
+
+        it('GETs /reservoir-flood/hourly with only date when hour and organization_id are omitted', () => {
+            service.getHourly('2026-04-27').subscribe(r => expect(r).toEqual([]));
+            const req = httpMock.expectOne(r =>
+                r.method === 'GET' &&
+                r.url === `${BASE_URL}/reservoir-flood/hourly` &&
+                r.params.get('date') === '2026-04-27' &&
+                !r.params.has('hour') &&
                 !r.params.has('organization_id')
             );
             req.flush([]);

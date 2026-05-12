@@ -259,9 +259,12 @@ export class HourlyTabComponent implements OnInit, OnDestroy {
     loadData(): void {
         this.rowsReset$.next();
         this.loading = true;
+        // Server-side hour filter — backend returns at most one record per
+        // organization for the requested [hour:00, hour:00+1h) window, so the
+        // earlier post-filter via toHourStartUTC is no longer needed.
         forkJoin({
             configs: this.svc.getConfigs(),
-            records: this.svc.getHourly(this.dateYMD())
+            records: this.svc.getHourly(this.dateYMD(), this.selectedHour)
         })
             .pipe(
                 takeUntil(this.destroy$),
@@ -272,14 +275,10 @@ export class HourlyTabComponent implements OnInit, OnDestroy {
                     this.configs = (configs || [])
                         .slice()
                         .sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0));
-                    const selectedHourStartUtc = this.toHourStartUTC(this.recordedAt());
                     this.rows = this.configs.map(cfg => {
-                        const record =
-                            (records || []).find(
-                                r =>
-                                    r.organization_id === cfg.organization_id &&
-                                    this.toHourStartUTC(r.recorded_at) === selectedHourStartUtc
-                            ) ?? null;
+                        const record = (records || []).find(
+                            r => r.organization_id === cfg.organization_id
+                        ) ?? null;
                         return {
                             config: cfg,
                             record,
@@ -526,12 +525,6 @@ export class HourlyTabComponent implements OnInit, OnDestroy {
         // calendar date in Asia/Tashkent regardless of browser TZ.
         const { y, m, day } = tashkentDateParts(d);
         return `${String(y)}-${String(m).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-    }
-
-    private toHourStartUTC(iso: string): string {
-        const d = new Date(iso);
-        d.setUTCMinutes(0, 0, 0);
-        return d.toISOString();
     }
 
     private todayMidnight(): Date {
