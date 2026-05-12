@@ -39,6 +39,12 @@ export class LoginComponent implements OnInit {
     }
 
     signIn() {
+        // Trim accidental whitespace from paste-from-Excel/Word/chat. Assign
+        // back to the bound model so the form input visibly reflects what was
+        // sent — important when the request fails (user sees the actual value
+        // that hit the server, not their original input with hidden spaces).
+        this.username = this.username.trim();
+        this.password = this.password.trim();
         this.loading = true;
         this.errorMessage = null;
 
