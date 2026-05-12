@@ -729,8 +729,8 @@ describe('HourlyTabComponent — URL query params (date, hour)', () => {
             timeZone: 'Asia/Tashkent', year: 'numeric', month: '2-digit', day: '2-digit'
         });
         expect(fmt.format(component.selectedDate)).toBe('2026-04-28');
-        // getHourly called with the date from URL
-        expect(svc.getHourly).toHaveBeenCalledWith('2026-04-28');
+        // getHourly called with the date AND hour from URL
+        expect(svc.getHourly).toHaveBeenCalledWith('2026-04-28', 15);
     }));
 
     it('falls back to today + current hour when URL has no params, and writes them back to URL (replaceUrl)', fakeAsync(() => {
@@ -785,6 +785,18 @@ describe('HourlyTabComponent — URL query params (date, hour)', () => {
         tick();
         expect(component.selectedHour).toBe(8);
         expect(svc.getHourly.calls.count()).toBeGreaterThan(initialHourlyCalls);
+    }));
+
+    it('passes selectedHour to getHourly so backend filters by hour server-side', fakeAsync(() => {
+        setupAndInit({ date: '2026-04-28', hour: '10' });
+        fixture.detectChanges();
+        tick();
+        expect(svc.getHourly).toHaveBeenCalledWith('2026-04-28', 10);
+        // Subsequent hour change must also pass the new hour
+        svc.getHourly.calls.reset();
+        queryParamMap$.next(convertToParamMap({ date: '2026-04-28', hour: '15' }));
+        tick();
+        expect(svc.getHourly).toHaveBeenCalledWith('2026-04-28', 15);
     }));
 
     it('clamps invalid hour values to current hour', fakeAsync(() => {
