@@ -531,6 +531,146 @@ describe('HourlyTabComponent', () => {
             expect(fx.componentInstance.canExport).toBeFalse();
         });
     });
+
+    // ─── Asia/Tashkent timezone handling ───
+
+    describe('Asia/Tashkent timezone handling', () => {
+        it('recordedAt emits ISO with +05:00 regardless of browser TZ', () => {
+            fixture.detectChanges();
+            // Tashkent midnight 2026-05-12 = UTC 2026-05-11T19:00Z
+            component.selectedDate = new Date(Date.UTC(2026, 4, 12, 0, 0, 0) - 5 * 3600 * 1000);
+            component.selectedHour = 7;
+            expect((component as any).recordedAt()).toBe('2026-05-12T07:00:00+05:00');
+        });
+
+        it('recordedAt zero-pads month/day/hour', () => {
+            fixture.detectChanges();
+            component.selectedDate = new Date(Date.UTC(2026, 0, 3, 0, 0, 0) - 5 * 3600 * 1000);
+            component.selectedHour = 5;
+            expect((component as any).recordedAt()).toBe('2026-01-03T05:00:00+05:00');
+        });
+
+        it('buildPayload.recorded_at includes +05:00 offset (end-to-end)', fakeAsync(() => {
+            svc.getConfigs.and.returnValue(of([makeConfig(42, 'Чарвак')]));
+            svc.getHourly.and.returnValue(of([]));
+            fixture.detectChanges();
+            tick();
+            component.selectedDate = new Date(Date.UTC(2026, 4, 12, 0, 0, 0) - 5 * 3600 * 1000);
+            component.selectedHour = 7;
+            const row = component.rows[0];
+            row.form.get('water_level_m')!.setValue(123);
+            row.form.get('water_level_m')!.markAsDirty();
+            const payload: any = (component as any).buildPayload(row);
+            expect(payload.recorded_at).toBe('2026-05-12T07:00:00+05:00');
+        }));
+
+        it('binds backend Z-formatted record to selected Tashkent hour', fakeAsync(() => {
+            svc.getConfigs.and.returnValue(of([makeConfig(42, 'Чарвак')]));
+            // Backend returns 02:00Z = Tashkent 07:00
+            svc.getHourly.and.returnValue(of([
+                makeRecord(42, '2026-05-12T02:00:00Z', { water_level_m: 815 })
+            ]));
+            fixture.detectChanges();
+            tick();
+            component.selectedDate = new Date(Date.UTC(2026, 4, 12, 0, 0, 0) - 5 * 3600 * 1000);
+            component.selectedHour = 7;
+            component.loadData();
+            tick();
+            expect(component.rows[0].record).not.toBeNull();
+            expect(component.rows[0].form.get('water_level_m')!.value).toBe(815);
+        }));
+
+        it('onHourChange writes zero-padded hour to query params', () => {
+            fixture.detectChanges();
+            component.selectedHour = 0;
+            component.onHourChange(7);
+            expect(router.navigate).toHaveBeenCalledWith(
+                jasmine.any(Array),
+                jasmine.objectContaining({ queryParams: { hour: '07' } })
+            );
+        });
+
+        it('todayMidnight resolves to Tashkent calendar date (sanity)', () => {
+            fixture.detectChanges();
+            const t = (component as any).todayMidnight() as Date;
+            const fmt = new Intl.DateTimeFormat('en-CA', {
+                timeZone: 'Asia/Tashkent', year: 'numeric', month: '2-digit', day: '2-digit'
+            });
+            expect(fmt.format(t)).toBe(fmt.format(new Date()));
+        });
+
+        it('todayMidnight resolves to "today Tashkent" at 18:59Z (still 12 May local)', () => {
+            jasmine.clock().install();
+            try {
+                jasmine.clock().mockDate(new Date('2026-05-12T18:59:00Z'));
+                fixture.detectChanges();
+                const t = (component as any).todayMidnight() as Date;
+                const fmt = new Intl.DateTimeFormat('en-CA', {
+                    timeZone: 'Asia/Tashkent', year: 'numeric', month: '2-digit', day: '2-digit'
+                });
+                expect(fmt.format(t)).toBe('2026-05-12');
+            } finally {
+                jasmine.clock().uninstall();
+            }
+        });
+
+        it('todayMidnight resolves to next-day Tashkent at 19:00Z (already 13 May)', () => {
+            jasmine.clock().install();
+            try {
+                jasmine.clock().mockDate(new Date('2026-05-12T19:00:00Z'));
+                fixture.detectChanges();
+                const t = (component as any).todayMidnight() as Date;
+                const fmt = new Intl.DateTimeFormat('en-CA', {
+                    timeZone: 'Asia/Tashkent', year: 'numeric', month: '2-digit', day: '2-digit'
+                });
+                expect(fmt.format(t)).toBe('2026-05-13');
+            } finally {
+                jasmine.clock().uninstall();
+            }
+        });
+
+        it('onDateChange skips navigate when selected Tashkent date already matches', () => {
+            fixture.detectChanges();
+            const may12Tashkent = new Date(Date.UTC(2026, 4, 12, 0, 0, 0) - 5 * 3600 * 1000);
+            component.selectedDate = may12Tashkent;
+            router.navigate.calls.reset();
+            // Same Tashkent date, different JS Date instance (different UTC instant)
+            const sameDateDifferentInstant = new Date(Date.UTC(2026, 4, 12, 8, 0, 0) - 5 * 3600 * 1000);
+            component.onDateChange(sameDateDifferentInstant);
+            expect(router.navigate).not.toHaveBeenCalled();
+        });
+
+        it('onDateChange navigates when Tashkent date differs', () => {
+            fixture.detectChanges();
+            component.selectedDate = new Date(Date.UTC(2026, 4, 12, 0, 0, 0) - 5 * 3600 * 1000);
+            router.navigate.calls.reset();
+            const may13 = new Date(Date.UTC(2026, 4, 13, 0, 0, 0) - 5 * 3600 * 1000);
+            component.onDateChange(may13);
+            expect(router.navigate).toHaveBeenCalledWith(
+                jasmine.any(Array),
+                jasmine.objectContaining({ queryParams: { date: '2026-05-13' } })
+            );
+        });
+    });
+
+    describe('Asia/Tashkent — ngOnInit defaults', () => {
+        beforeEach(async () => {
+            TestBed.resetTestingModule();
+            setupBed({}); // no query params → ngOnInit writes defaults
+            await TestBed.compileComponents();
+            fixture = TestBed.createComponent(HourlyTabComponent);
+            component = fixture.componentInstance;
+        });
+
+        it('writes zero-padded hour default when query params absent', fakeAsync(() => {
+            fixture.detectChanges();
+            tick();
+            const call = router.navigate.calls.mostRecent();
+            const qp = call.args[1]?.queryParams as any;
+            expect(typeof qp.hour).toBe('string');
+            expect(qp.hour.length).toBe(2);
+        }));
+    });
 });
 
 describe('HourlyTabComponent — URL query params (date, hour)', () => {
@@ -583,9 +723,12 @@ describe('HourlyTabComponent — URL query params (date, hour)', () => {
         fixture.detectChanges();
         tick();
         expect(component.selectedHour).toBe(15);
-        expect(component.selectedDate.getFullYear()).toBe(2026);
-        expect(component.selectedDate.getMonth()).toBe(3); // 0-indexed → April
-        expect(component.selectedDate.getDate()).toBe(28);
+        // selectedDate is now a Tashkent-midnight UTC instant. Verify via Intl
+        // (TZ-safe regardless of CI runner's local timezone).
+        const fmt = new Intl.DateTimeFormat('en-CA', {
+            timeZone: 'Asia/Tashkent', year: 'numeric', month: '2-digit', day: '2-digit'
+        });
+        expect(fmt.format(component.selectedDate)).toBe('2026-04-28');
         // getHourly called with the date from URL
         expect(svc.getHourly).toHaveBeenCalledWith('2026-04-28');
     }));
@@ -615,7 +758,7 @@ describe('HourlyTabComponent — URL query params (date, hour)', () => {
         tick();
         expect(router.navigate).toHaveBeenCalled();
         const extras = router.navigate.calls.mostRecent().args[1] as any;
-        expect(extras?.queryParams?.hour).toBe(11);
+        expect(extras?.queryParams?.hour).toBe('11');
         expect(extras?.queryParamsHandling).toBe('merge');
     }));
 
@@ -624,7 +767,8 @@ describe('HourlyTabComponent — URL query params (date, hour)', () => {
         fixture.detectChanges();
         tick();
         router.navigate.calls.reset();
-        component.onDateChange(new Date(2026, 3, 29));
+        // Tashkent midnight 2026-04-29 = UTC 2026-04-28T19:00Z (TZ-safe)
+        component.onDateChange(new Date(Date.UTC(2026, 3, 29, 0, 0, 0) - 5 * 3600 * 1000));
         tick();
         expect(router.navigate).toHaveBeenCalled();
         const extras = router.navigate.calls.mostRecent().args[1] as any;
