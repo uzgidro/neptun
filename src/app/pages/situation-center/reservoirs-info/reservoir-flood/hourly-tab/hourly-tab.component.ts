@@ -47,6 +47,26 @@ export interface HourlyRow {
     saving: boolean;
 }
 
+// Asia/Tashkent timezone helpers. Uzbekistan has not observed DST since
+// the 2004 cabmin decree, so a hardcoded +05:00 offset is safe.
+// TODO: extract to core/utils/tashkent-time.ts when a second consumer appears.
+const TASHKENT_OFFSET = '+05:00';
+
+function tashkentDateParts(d: Date): { y: number; m: number; day: number } {
+    const fmt = new Intl.DateTimeFormat('en-CA', {
+        timeZone: 'Asia/Tashkent',
+        year: 'numeric', month: '2-digit', day: '2-digit'
+    });
+    const parts = Object.fromEntries(fmt.formatToParts(d).map(p => [p.type, p.value]));
+    return { y: +parts['year'], m: +parts['month'], day: +parts['day'] };
+}
+
+function tashkentMidnight(y: number, m: number, day: number): Date {
+    // Tashkent midnight 00:00 = UTC 19:00 previous day. Build a moment that
+    // any further tashkentDateParts() call resolves back to (y, m, day).
+    return new Date(Date.UTC(y, m - 1, day, 0, 0, 0) - 5 * 3600 * 1000);
+}
+
 // Cyrillic letters (U+0400–U+04FF covers Russian + Uzbek Қ Ғ Ҳ Ў), plus
 // punctuation common in ФИО ("А.Эргашев", "Ю. Мухаммад-Бобур"). Empty
 // string allowed because the field is optional. Latin letters and digits
@@ -154,7 +174,7 @@ export class HourlyTabComponent implements OnInit, OnDestroy {
                     relativeTo: this.route,
                     queryParams: {
                         date: this.dateYMD(),
-                        hour: this.selectedHour
+                        hour: String(this.selectedHour).padStart(2, '0')
                     },
                     queryParamsHandling: 'merge',
                     replaceUrl: true
@@ -168,22 +188,20 @@ export class HourlyTabComponent implements OnInit, OnDestroy {
         if (hour === this.selectedHour) return;
         this.router.navigate([], {
             relativeTo: this.route,
-            queryParams: { hour },
+            queryParams: { hour: String(hour).padStart(2, '0') },
             queryParamsHandling: 'merge'
         });
     }
 
     onDateChange(date: Date): void {
         if (!(date instanceof Date) || isNaN(date.getTime())) return;
-        if (
-            this.selectedDate instanceof Date &&
-            date.getFullYear() === this.selectedDate.getFullYear() &&
-            date.getMonth() === this.selectedDate.getMonth() &&
-            date.getDate() === this.selectedDate.getDate()
-        ) {
-            return;
+        if (this.selectedDate instanceof Date) {
+            const a = tashkentDateParts(date);
+            const b = tashkentDateParts(this.selectedDate);
+            if (a.y === b.y && a.m === b.m && a.day === b.day) return;
         }
-        const ymd = this.formatYMD(date);
+        const { y, m, day } = tashkentDateParts(date);
+        const ymd = `${String(y)}-${String(m).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
         this.router.navigate([], {
             relativeTo: this.route,
             queryParams: { date: ymd },
@@ -195,10 +213,12 @@ export class HourlyTabComponent implements OnInit, OnDestroy {
         if (!s) return null;
         const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s);
         if (!m) return null;
-        const y = +m[1], mo = +m[2] - 1, d = +m[3];
-        const date = new Date(y, mo, d, 0, 0, 0, 0);
+        const y = +m[1], mo = +m[2], d = +m[3];
+        const date = tashkentMidnight(y, mo, d);
         if (isNaN(date.getTime())) return null;
-        if (date.getFullYear() !== y || date.getMonth() !== mo || date.getDate() !== d) return null;
+        // Sanity check: round-trip through tashkentDateParts catches month=13, day=32, etc.
+        const parts = tashkentDateParts(date);
+        if (parts.y !== y || parts.m !== mo || parts.day !== d) return null;
         return date;
     }
 
@@ -224,9 +244,16 @@ export class HourlyTabComponent implements OnInit, OnDestroy {
     }
 
     recordedAt(): string {
-        const d = new Date(this.selectedDate);
-        d.setHours(this.selectedHour, 0, 0, 0);
-        return d.toISOString();
+        // Build ISO string with explicit Asia/Tashkent offset. Backend will
+        // normalize via .UTC().Truncate(time.Hour). Avoids browser-local
+        // setHours()+toISOString() drift when the user's machine is not in
+        // UTC+5 (travel, mismatched OS settings, remote sessions).
+        const { y, m, day } = tashkentDateParts(this.selectedDate ?? new Date());
+        const yy = String(y);
+        const mm = String(m).padStart(2, '0');
+        const dd = String(day).padStart(2, '0');
+        const hh = String(this.selectedHour).padStart(2, '0');
+        return `${yy}-${mm}-${dd}T${hh}:00:00${TASHKENT_OFFSET}`;
     }
 
     loadData(): void {
@@ -491,14 +518,14 @@ export class HourlyTabComponent implements OnInit, OnDestroy {
     }
 
     private dateYMD(): string {
-        return this.formatYMD(this.selectedDate);
+        return this.formatYMD(this.selectedDate ?? new Date());
     }
 
     private formatYMD(d: Date): string {
-        const y = d.getFullYear();
-        const m = (d.getMonth() + 1).toString().padStart(2, '0');
-        const day = d.getDate().toString().padStart(2, '0');
-        return `${y}-${m}-${day}`;
+        // Tashkent-aware so that exports / API params reflect the user's
+        // calendar date in Asia/Tashkent regardless of browser TZ.
+        const { y, m, day } = tashkentDateParts(d);
+        return `${String(y)}-${String(m).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
     }
 
     private toHourStartUTC(iso: string): string {
@@ -508,8 +535,11 @@ export class HourlyTabComponent implements OnInit, OnDestroy {
     }
 
     private todayMidnight(): Date {
-        const d = new Date();
-        d.setHours(0, 0, 0, 0);
-        return d;
+        // "Today Tashkent" — use the calendar date as seen in Asia/Tashkent
+        // right now, then materialize Tashkent midnight as a UTC instant. The
+        // same instant representation is used by parseDateParam so that the
+        // onDateChange same-date guard can compare them via tashkentDateParts.
+        const { y, m, day } = tashkentDateParts(new Date());
+        return tashkentMidnight(y, m, day);
     }
 }
