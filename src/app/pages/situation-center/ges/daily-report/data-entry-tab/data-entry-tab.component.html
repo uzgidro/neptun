@@ -352,10 +352,10 @@
                             <td class="px-1 py-2 align-middle text-center">
                                 <p-button
                                     [icon]="row.outflowLockedToIncome ? 'pi pi-link' : 'pi pi-link-slash'"
+                                    [severity]="row.outflowLockedToIncome ? null : 'contrast'"
                                     size="small"
                                     [rounded]="true"
-                                    [outlined]="row.outflowLockedToIncome"
-                                    [text]="!row.outflowLockedToIncome"
+                                    [outlined]="true"
                                     [pTooltip]="(row.outflowLockedToIncome
                                         ? 'GES_REPORT.OUTFLOW_UNLINK_FROM_INCOME'
                                         : 'GES_REPORT.OUTFLOW_LINK_TO_INCOME') | translate"
