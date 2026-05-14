@@ -352,6 +352,8 @@
     "QUARTERLY_PLAN": "Quarterly plan",
     "REPORT": "Report",
     "RESERVOIR_INCOME": "Reservoir inflow, m³/s",
+    "OUTFLOW_LINK_TO_INCOME": "Link outflow to inflow",
+    "OUTFLOW_UNLINK_FROM_INCOME": "Unlink outflow",
     "SAVE": "Save",
     "SAVED": "Data saved",
     "SAVE_ALL": "Save all",

@@ -21,7 +21,7 @@ import { FormsModule } from '@angular/forms';
 import { GesReportService } from '@/core/services/ges-report.service';
 import { TimeService } from '@/core/services/time.service';
 import { AuthService } from '@/core/services/auth.service';
-import { GesConfigResponse, GesCascadeConfig, GesDailyData, GesDailyDataPayload, ReportIdleDischarge, ReportWeather } from '@/core/interfaces/ges-report';
+import { GesConfigResponse, GesCascadeConfig, GesDailyData, GesDailyDataPayload, ReportCurrent, ReportIdleDischarge, ReportWeather } from '@/core/interfaces/ges-report';
 import { FrozenMap, FrozenDefault, FreezableField, buildFrozenMap, FREEZABLE_FIELD_LABELS, FIELD_UNITS, NOT_NULL_FREEZABLE_FIELDS } from '@/core/interfaces/ges-frozen-defaults';
 import { parseFrozenDefaultError } from '@/core/services/ges-frozen-defaults-error';
 import { HasUnsavedChanges } from '@/core/guards/auth.guard';
@@ -46,6 +46,8 @@ export class DataEntryRow {
     saved: boolean;
     saving: boolean;
     idleDischarge: ReportIdleDischarge | null = null;
+    previousDay: ReportCurrent | null = null;
+    outflowLockedToIncome: boolean = false;
 
     constructor(config: GesConfigResponse, form: FormGroup, saved: boolean) {
         this.config = config;
@@ -237,12 +239,14 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
                 });
 
                 const idleDischargeMap = new Map<number, ReportIdleDischarge | null>();
+                const previousDayMap = new Map<number, ReportCurrent | null>();
                 this.cascadeWeatherMap.clear();
                 if (report) {
                     for (const cascade of report.cascades) {
                         this.cascadeWeatherMap.set(cascade.cascade_id, cascade.weather);
                         for (const station of cascade.stations) {
                             idleDischargeMap.set(station.organization_id, station.idle_discharge);
+                            previousDayMap.set(station.organization_id, station.previous_day);
                         }
                     }
                 }
@@ -261,6 +265,7 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
                             const form = this.createForm(data, cap);
                             const row = new DataEntryRow(config, form, data !== null);
                             row.idleDischarge = idleDischargeMap.get(config.organization_id) ?? null;
+                            row.previousDay = previousDayMap.get(config.organization_id) ?? null;
                             return row;
                         });
                         this.buildCascadeGroups();
@@ -270,6 +275,8 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
                                 .subscribe(() => this.formsTick.update(t => t + 1));
 
                             this.wireGesFlowAutoFill(row);
+                            this.wireOutflowMirror(row);
+                            this.initOutflowLock(row);
                         }
                         this.formsTick.update(t => t + 1);
                         this.loading = false;
@@ -693,6 +700,60 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
             gesFlowCtrl.setValue(initialOutflow - idle, { emitEvent: false });
             gesFlowCtrl.markAsPristine();
         }
+    }
+
+    toggleOutflowLock(row: DataEntryRow): void {
+        if (row.outflowLockedToIncome) {
+            this.unlockOutflow(row);
+        } else {
+            this.lockOutflow(row);
+        }
+    }
+
+    private lockOutflow(row: DataEntryRow): void {
+        const incomeCtrl = row.form.get('reservoir_income_m3s');
+        const outflowCtrl = row.form.get('total_outflow_m3s');
+        if (!incomeCtrl || !outflowCtrl) return;
+        row.outflowLockedToIncome = true;
+        const income = incomeCtrl.value;
+        if (income !== outflowCtrl.value) {
+            // emitEvent: true → wireGesFlowAutoFill picks the change and recomputes ges_flow
+            outflowCtrl.setValue(income);
+            outflowCtrl.markAsDirty();
+        }
+        outflowCtrl.disable({ emitEvent: false });
+    }
+
+    private unlockOutflow(row: DataEntryRow): void {
+        const outflowCtrl = row.form.get('total_outflow_m3s');
+        if (!outflowCtrl) return;
+        row.outflowLockedToIncome = false;
+        outflowCtrl.enable({ emitEvent: false });
+    }
+
+    private wireOutflowMirror(row: DataEntryRow): void {
+        const incomeCtrl = row.form.get('reservoir_income_m3s');
+        const outflowCtrl = row.form.get('total_outflow_m3s');
+        if (!incomeCtrl || !outflowCtrl) return;
+
+        incomeCtrl.valueChanges
+            .pipe(takeUntil(merge(this.destroy$, this.rowsReset$)))
+            .subscribe((income: number | null) => {
+                if (!row.outflowLockedToIncome) return;
+                if (outflowCtrl.value === income) return; // no-op (avoid feedback loops)
+                outflowCtrl.setValue(income);
+                outflowCtrl.markAsDirty();
+            });
+    }
+
+    private initOutflowLock(row: DataEntryRow): void {
+        const prev = row.previousDay;
+        if (!prev) return;
+        if (prev.reservoir_income_m3s == null || prev.total_outflow_m3s == null) return;
+        if (prev.reservoir_income_m3s !== prev.total_outflow_m3s) return;
+        // Yesterday's pattern was outflow == income → start today already linked.
+        // lockOutflow handles "copy income into outflow if value differs".
+        this.lockOutflow(row);
     }
 
     private calculateTotals(_tick: number): GesTotals {
