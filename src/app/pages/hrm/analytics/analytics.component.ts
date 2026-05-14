@@ -85,41 +85,35 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
         // Gender chart
         if (this.dashboard.gender_distribution) {
             this.genderChartData = {
-                labels: ['Мужчины', 'Женщины'],
-                datasets: [
-                    {
-                        data: [this.dashboard.gender_distribution.male, this.dashboard.gender_distribution.female],
-                        backgroundColor: ['#42A5F5', '#EC407A']
-                    }
-                ]
+                labels: [this.translate.instant('HRM.ANALYTICS.MALE'), this.translate.instant('HRM.ANALYTICS.FEMALE')],
+                datasets: [{
+                    data: [this.dashboard.gender_distribution.male, this.dashboard.gender_distribution.female],
+                    backgroundColor: ['#42A5F5', '#EC407A']
+                }]
             };
         }
 
         // Age chart
         if (this.dashboard.age_distribution.length) {
             this.ageChartData = {
-                labels: this.dashboard.age_distribution.map((a) => a.label),
-                datasets: [
-                    {
-                        label: 'Количество',
-                        data: this.dashboard.age_distribution.map((a) => a.count),
-                        backgroundColor: '#66BB6A'
-                    }
-                ]
+                labels: this.dashboard.age_distribution.map(a => a.label),
+                datasets: [{
+                    label: this.translate.instant('HRM.ANALYTICS.COUNT'),
+                    data: this.dashboard.age_distribution.map(a => a.count),
+                    backgroundColor: '#66BB6A'
+                }]
             };
         }
 
         // Tenure chart
         if (this.dashboard.tenure_distribution.length) {
             this.tenureChartData = {
-                labels: this.dashboard.tenure_distribution.map((t) => t.label),
-                datasets: [
-                    {
-                        label: 'Количество',
-                        data: this.dashboard.tenure_distribution.map((t) => t.count),
-                        backgroundColor: '#7E57C2'
-                    }
-                ]
+                labels: this.dashboard.tenure_distribution.map(t => t.label),
+                datasets: [{
+                    label: this.translate.instant('HRM.ANALYTICS.COUNT'),
+                    data: this.dashboard.tenure_distribution.map(t => t.count),
+                    backgroundColor: '#7E57C2'
+                }]
             };
         }
     }

@@ -356,7 +356,7 @@ export class EmployeeCabinetComponent implements OnInit, OnDestroy {
     formatCurrency(value: number): string {
         const lang = this.translate.currentLang || 'ru';
         const locale = lang === 'uz-latn' ? 'uz' : lang === 'uz-cyrl' ? 'uz' : lang;
-        return new Intl.NumberFormat(locale).format(value) + ' сум';
+        return new Intl.NumberFormat(locale).format(value) + ' ' + this.translate.instant('HRM.EMPLOYEE_CABINET.CURRENCY_SUM');
     }
 
     getVacationTypeLabel(type: string): string {

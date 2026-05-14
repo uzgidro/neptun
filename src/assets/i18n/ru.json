@@ -705,7 +705,8 @@
       "MONTH_10": "Октябрь",
       "MONTH_11": "Ноябрь",
       "MONTH_12": "Декабрь",
-      "UNTIL_DATE": "до"
+      "UNTIL_DATE": "до",
+      "CURRENCY_SUM": "сум"
     },
     "ORG_STRUCTURE": {
       "TITLE": "Организационная структура",
@@ -965,7 +966,10 @@
       "BY_TENURE": "Распределение по стажу",
       "HEADCOUNT_BY_DEPARTMENT": "Численность по отделам",
       "HEADCOUNT": "Численность",
-      "PERCENT_OF_TOTAL": "% от общего"
+      "PERCENT_OF_TOTAL": "% от общего",
+      "MALE": "Мужчины",
+      "FEMALE": "Женщины",
+      "COUNT": "Количество"
     },
     "TRAINING": {
       "TITLE": "Обучение и развитие",
@@ -1022,7 +1026,13 @@
       "UPDATE_SUCCESS": "Запись обновлена",
       "UPDATE_ERROR": "Не удалось обновить запись",
       "DELETE_SUCCESS": "Запись удалена",
-      "DELETE_ERROR": "Не удалось удалить запись"
+      "DELETE_ERROR": "Не удалось удалить запись",
+      "CONTRACT_PERMANENT": "Бессрочный",
+      "CONTRACT_TEMPORARY": "Срочный",
+      "CONTRACT_CONTRACT": "Контракт",
+      "STATUS_ACTIVE": "Активный",
+      "STATUS_ON_LEAVE": "В отпуске",
+      "STATUS_DISMISSED": "Уволен"
     },
     "DOCUMENTS": {
       "TITLE": "HR-документы",
@@ -1170,6 +1180,22 @@
       "VACANCY_UPDATED": "Вакансия обновлена",
       "CANDIDATE_CREATED": "Кандидат добавлен",
       "CANDIDATE_UPDATED": "Кандидат обновлен",
+      "CANDIDATE_CREATE_ERROR": "Не удалось добавить кандидата",
+      "CANDIDATE_REJECTED": "Кандидат отклонён, уведомление отправлено",
+      "VACANCY_UPDATE_ERROR": "Не удалось обновить вакансию",
+      "VACANCY_CREATE_ERROR": "Не удалось создать вакансию",
+      "SCREENING_PASSED": "Кандидат прошёл первичный отбор",
+      "INTERVIEW_SCHEDULED": "Собеседование запланировано",
+      "INTERVIEW_SCHEDULE_ERROR": "Не удалось запланировать собеседование",
+      "FEEDBACK_SAVED": "Обратная связь сохранена",
+      "REFERENCE_ADDED": "Рекомендация добавлена",
+      "REFERENCE_CHECK_COMPLETED": "Проверка рекомендации завершена",
+      "OFFER_SENT": "Оффер отправлен кандидату",
+      "OFFER_SEND_ERROR": "Не удалось отправить оффер",
+      "OFFER_ACCEPTED": "Кандидат принял предложение",
+      "EMPLOYEE_HIRED": "Сотрудник успешно принят на работу",
+      "MENTOR_ASSIGNED": "Наставник назначен",
+      "TASK_COMPLETED": "Задача выполнена",
       "NOT_ASSIGNED": "Не назначен",
       "ONBOARDING": {
         "STATUS_IN_PROGRESS": "В процессе",
@@ -1477,7 +1503,23 @@
       "CALCULATION_SUCCESS": "Зарплата рассчитана",
       "CALCULATION_ERROR": "Не удалось рассчитать зарплату",
       "APPROVAL_SUCCESS": "Зарплата утверждена",
-      "REJECTION_SUCCESS": "Зарплата отклонена"
+      "REJECTION_SUCCESS": "Зарплата отклонена",
+      "BATCH_CALCULATION_SUCCESS": "Рассчитано {{successful}} из {{total}} зарплат",
+      "SUBMITTED_FOR_APPROVAL": "Зарплата {{name}} отправлена на утверждение",
+      "BATCH_SUBMITTED": "{{count}} записей отправлено на утверждение",
+      "APPROVAL_SUCCESS_NAME": "Зарплата {{name}} утверждена",
+      "BATCH_APPROVED": "{{count}} записей утверждено",
+      "REJECTION_SUCCESS_NAME": "Зарплата {{name}} отклонена",
+      "PAID_SUCCESS": "Зарплата {{name}} отмечена как выплаченная",
+      "BATCH_PAID": "{{count}} записей отмечено как выплаченные",
+      "GENERATING": "Формирование",
+      "PAYSLIP_GENERATING": "Расчётный лист для {{name}} формируется...",
+      "PAYROLL_REPORT_GENERATING": "Реестр зарплаты формируется...",
+      "TAX_REPORT_GENERATING": "Отчёт в налоговую формируется...",
+      "SOCIAL_FUND_REPORT_GENERATING": "Отчёт в соцфонд формируется...",
+      "DELETE_SUCCESS": "Запись удалена",
+      "EXPORT_SUCCESS": "Расчётные листы экспортированы",
+      "EXPORT_ERROR": "Не удалось экспортировать расчётные листы"
     },
     "VACATION": {
       "TITLE": "Управление отпусками",
@@ -1531,7 +1573,26 @@
       "REQUEST_UPDATED": "Заявка обновлена",
       "REQUEST_APPROVED": "Заявка утверждена",
       "REQUEST_REJECTED": "Заявка отклонена",
-      "REQUEST_CANCELLED": "Заявка отменена"
+      "REQUEST_CANCELLED": "Заявка отменена",
+      "DELETE_SUCCESS": "Заявка удалена",
+      "DELETE_ERROR": "Не удалось удалить заявку",
+      "EDIT_ONLY_DRAFT": "Редактировать можно только черновики и заявки на рассмотрении",
+      "VALIDATION_ERROR": "Ошибка валидации",
+      "INSUFFICIENT_BALANCE": "Недостаточно дней отпуска",
+      "INSUFFICIENT_BALANCE_DETAIL": "Недостаточно дней отпуска. Запрошено: {{requested}}, доступно: {{available}}",
+      "SUBMITTED_FOR_APPROVAL": "Заявка отправлена на согласование",
+      "SUBMIT_ERROR": "Не удалось отправить заявку на согласование",
+      "CREATE_ERROR": "Не удалось создать заявку",
+      "UPDATE_ERROR": "Не удалось обновить заявку",
+      "APPROVE_ERROR": "Не удалось утвердить заявку",
+      "REJECT_ERROR": "Не удалось отклонить заявку",
+      "CANCEL_ONLY_DRAFT": "Отменить можно только черновики и заявки на рассмотрении",
+      "CANCEL_ERROR": "Не удалось отменить заявку",
+      "INVALID_DATES": "Дата начала не может быть позже даты окончания",
+      "DATE_OVERLAP": "У вас уже есть отпуск в этот период ({{start}} - {{end}})",
+      "DEPARTMENT_LIMIT": "Превышен лимит одновременных отпусков в отделе (макс. {{max}})",
+      "DEPARTMENT_OVERLAP": "В этот период в отпуске будут: {{names}}",
+      "SHORT_NOTICE": "Заявка подается менее чем за 14 дней до начала отпуска"
     },
       "MENU": {
           "DASHBOARD": "Главная HRM",

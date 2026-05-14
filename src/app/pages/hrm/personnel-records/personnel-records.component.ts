@@ -65,17 +65,21 @@ export class PersonnelRecordsComponent implements OnInit, OnDestroy {
     departments: Department[] = [];
     positions: Position[] = [];
 
-    contractTypes = [
-        { id: 'permanent', name: 'Бессрочный' },
-        { id: 'temporary', name: 'Срочный' },
-        { id: 'contract', name: 'Контракт' }
-    ];
+    get contractTypes() {
+        return [
+            { id: 'permanent', name: this.translate.instant('HRM.PERSONNEL_RECORDS.CONTRACT_PERMANENT') },
+            { id: 'temporary', name: this.translate.instant('HRM.PERSONNEL_RECORDS.CONTRACT_TEMPORARY') },
+            { id: 'contract', name: this.translate.instant('HRM.PERSONNEL_RECORDS.CONTRACT_CONTRACT') }
+        ];
+    }
 
-    statuses = [
-        { id: 'active', name: 'Активный' },
-        { id: 'on_leave', name: 'В отпуске' },
-        { id: 'dismissed', name: 'Уволен' }
-    ];
+    get statuses() {
+        return [
+            { id: 'active', name: this.translate.instant('HRM.PERSONNEL_RECORDS.STATUS_ACTIVE') },
+            { id: 'on_leave', name: this.translate.instant('HRM.PERSONNEL_RECORDS.STATUS_ON_LEAVE') },
+            { id: 'dismissed', name: this.translate.instant('HRM.PERSONNEL_RECORDS.STATUS_DISMISSED') }
+        ];
+    }
 
     private personnelRecordService = inject(PersonnelRecordService);
     private departmentService = inject(DepartmentService);
