@@ -115,6 +115,30 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
     downloading: 'excel' | 'pdf' | null = null;
     downloadingOwnNeeds: 'excel' | 'pdf' | null = null;
 
+    /**
+     * Returns ngx-translate interpolation params for GES_REPORT.DAILY_REPORT_HEADER.
+     * Months are pulled from i18n key GES_REPORT.MONTHS_GENITIVE.<1..12> so each
+     * language can supply the correct grammatical form (Russian needs the genitive
+     * case "мая" instead of nominative "май").
+     */
+    dailyHeaderParams(): {
+        reportDay: number; reportMonth: string; reportYear: number;
+        entryDay: number; entryMonth: string; entryYear: number;
+    } {
+        const reportDate = this.selectedDate;
+        const entryDate = new Date(reportDate);
+        entryDate.setDate(entryDate.getDate() + 1);
+        const monthKey = (d: Date) => `GES_REPORT.MONTHS_GENITIVE.${d.getMonth() + 1}`;
+        return {
+            reportDay: reportDate.getDate(),
+            reportMonth: this.translate.instant(monthKey(reportDate)),
+            reportYear: reportDate.getFullYear(),
+            entryDay: entryDate.getDate(),
+            entryMonth: this.translate.instant(monthKey(entryDate)),
+            entryYear: entryDate.getFullYear()
+        };
+    }
+
     ownNeedsExportItems: MenuItem[] = [
         {
             label: 'GES_REPORT.DOWNLOAD_EXCEL',
