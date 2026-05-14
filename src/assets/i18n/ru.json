@@ -297,6 +297,8 @@
     "WATER_VOLUME": "Объём воды, млн.м³",
     "WATER_HEAD": "Напор воды, м",
     "RESERVOIR_INCOME": "Приток к водохранилищу, м³/с",
+    "OUTFLOW_LINK_TO_INCOME": "Связать попуск с притоком",
+    "OUTFLOW_UNLINK_FROM_INCOME": "Развязать попуск",
     "TOTAL_OUTFLOW": "Попуск из водохранилища, м³/с",
     "GES_FLOW": "Расход через ГЭС, м³/с",
     "TEMPERATURE": "Температура, °C",

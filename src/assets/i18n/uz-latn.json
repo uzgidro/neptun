@@ -352,6 +352,8 @@
     "QUARTERLY_PLAN": "Choraklik reja",
     "REPORT": "Hisobot",
     "RESERVOIR_INCOME": "Omborga kelgan suv, m³/s",
+    "OUTFLOW_LINK_TO_INCOME": "Chiqishni kelish bilan bog'lash",
+    "OUTFLOW_UNLINK_FROM_INCOME": "Chiqishni ajratish",
     "SAVE": "Saqlash",
     "SAVED": "Ma'lumot saqlandi",
     "SAVE_ALL": "Barchasini saqlash",

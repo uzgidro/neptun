@@ -121,6 +121,7 @@
                             <th class="text-left text-xs text-color-secondary font-normal px-2 pb-1">{{ 'GES_REPORT.MODERNIZATION_AGGREGATES' | translate }}</th>
                             <th class="text-left text-xs text-color-secondary font-normal px-2 pb-1">{{ 'GES_REPORT.WATER_HEAD' | translate }}</th>
                             <th class="text-left text-xs text-color-secondary font-normal px-2 pb-1">{{ 'GES_REPORT.RESERVOIR_INCOME' | translate }}</th>
+                            <th class="text-center text-xs text-color-secondary font-normal px-1 pb-1" style="width: 2.5rem"></th>
                             <th class="text-left text-xs text-color-secondary font-normal px-2 pb-1">{{ 'GES_REPORT.TOTAL_OUTFLOW' | translate }}</th>
                             <th class="text-left text-xs text-color-secondary font-normal px-2 pb-1">{{ 'GES_REPORT.GES_FLOW' | translate }}</th>
                             <th class="text-left text-xs text-color-secondary font-normal px-2 pb-1">{{ 'GES_REPORT.IDLE_DISCHARGE' | translate }}</th>
@@ -348,6 +349,22 @@
                                     <small class="frozen-hint">{{ 'GES_REPORT.FROZEN.FROM_DEFAULT' | translate }}</small>
                                 }
                             </td>
+                            <td class="px-1 py-2 align-middle text-center">
+                                <p-button
+                                    [severity]="row.outflowLockedToIncome ? null : 'contrast'"
+                                    size="small"
+                                    [rounded]="true"
+                                    [outlined]="true"
+                                    [pTooltip]="(row.outflowLockedToIncome
+                                        ? 'GES_REPORT.OUTFLOW_UNLINK_FROM_INCOME'
+                                        : 'GES_REPORT.OUTFLOW_LINK_TO_INCOME') | translate"
+                                    tooltipPosition="top"
+                                    (onClick)="toggleOutflowLock(row)">
+                                    <ng-template #icon>
+                                        <span class="material-symbols-outlined" style="font-size: 1.1rem; line-height: 1;">{{ row.outflowLockedToIncome ? 'link' : 'link_off' }}</span>
+                                    </ng-template>
+                                </p-button>
+                            </td>
                             <td class="px-2 py-2 align-middle">
                                 <p-iconfield class="freeze-field" [class.freeze-field--frozen]="isFrozen(row, 'total_outflow_m3s')">
                                     <p-inputNumber
@@ -484,7 +501,7 @@
                         </tr>
                         @if (sumExceedsTotal(row)) {
                         <tr class="sum-overflow-warn">
-                            <td [attr.colspan]="14">
+                            <td [attr.colspan]="15">
                                 <small class="text-red-500 px-2">
                                     {{ 'GES_REPORT.AGGREGATES_SUM_EXCEEDS_TOTAL' | translate }}
                                     ({{ sumAggregates(row) }} > {{ row.config.total_aggregates }})
@@ -494,7 +511,7 @@
                         }
                         @if (productionExceedsMax(row)) {
                         <tr class="sum-overflow-warn">
-                            <td [attr.colspan]="14">
+                            <td [attr.colspan]="15">
                                 <small class="text-red-500 px-2">
                                     {{ 'GES_REPORT.PRODUCTION_EXCEEDS_MAX' | translate:{
                                         value: (row.form.value.daily_production_mln_kwh | number:'1.0-6'),

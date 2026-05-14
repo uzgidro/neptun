@@ -352,6 +352,8 @@
     "QUARTERLY_PLAN": "Чораклик режа",
     "REPORT": "Ҳисобот",
     "RESERVOIR_INCOME": "Омборга келган сув, м³/с",
+    "OUTFLOW_LINK_TO_INCOME": "Чиқишни келиш билан боғлаш",
+    "OUTFLOW_UNLINK_FROM_INCOME": "Чиқишни ажратиш",
     "SAVE": "Сақлаш",
     "SAVED": "Маълумот сақланди",
     "SAVE_ALL": "Барчасини сақлаш",

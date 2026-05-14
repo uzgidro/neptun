@@ -8,7 +8,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MessageService } from 'primeng/api';
 import { DataEntryTabComponent } from './data-entry-tab.component';
 import { GesReportService } from '@/core/services/ges-report.service';
-import { GesConfigResponse, GesDailyReport, ReportGrandTotal, ReportWeather } from '@/core/interfaces/ges-report';
+import { GesConfigResponse, GesDailyReport, ReportCurrent, ReportGrandTotal, ReportStation, ReportWeather } from '@/core/interfaces/ges-report';
 import { HttpErrorResponse } from '@angular/common/http';
 
 function makeConfig(orgId: number, name: string, hasReservoir = true): GesConfigResponse {
@@ -42,6 +42,46 @@ function makeReportWithWeather(weather: ReportWeather | null): GesDailyReport {
             weather,
             summary: makeGrandTotal(),
             stations: []
+        }],
+        grand_total: makeGrandTotal()
+    };
+}
+
+function makeReportCurrent(overrides: Partial<ReportCurrent> = {}): ReportCurrent {
+    return {
+        daily_production_mln_kwh: 0, power_mwt: 0,
+        working_aggregates: 0, repair_aggregates: 0,
+        modernization_aggregates: 0, reserve_aggregates: 0,
+        water_level_m: null, water_volume_mln_m3: null, water_head_m: null,
+        reservoir_income_m3s: null, total_outflow_m3s: null,
+        ges_flow_m3s: null, idle_discharge_m3s: null,
+        ...overrides
+    };
+}
+
+function makeStation(orgId: number, previousDay: ReportCurrent | null): ReportStation {
+    return {
+        organization_id: orgId, name: `ГЭС-${orgId}`,
+        config: { installed_capacity_mwt: 50, total_aggregates: 4, has_reservoir: true },
+        current: makeReportCurrent(),
+        diffs: {} as any,
+        aggregations: {} as any,
+        plan: {} as any,
+        previous_year: {} as any,
+        yoy: {} as any,
+        idle_discharge: null,
+        previous_day: previousDay
+    };
+}
+
+function makeReportWithStation(orgId: number, previousDay: ReportCurrent | null): GesDailyReport {
+    return {
+        date: '2026-03-30',
+        cascades: [{
+            cascade_id: 1, cascade_name: 'Каскад',
+            weather: null,
+            summary: makeGrandTotal(),
+            stations: [makeStation(orgId, previousDay)]
         }],
         grand_total: makeGrandTotal()
     };
@@ -608,6 +648,222 @@ describe('DataEntryTabComponent', () => {
             component.saveRow(row);
             tick();
             expect(gesReportService.listFrozenDefaults).toHaveBeenCalled();
+        }));
+    });
+
+    // ─── outflow=income lock toggle ───
+
+    describe('toggleOutflowLock (manual)', () => {
+        beforeEach(() => {
+            gesReportService.getConfigs.and.returnValue(of([makeConfig(10, 'ГЭС-1')]));
+            gesReportService.getDailyData.and.returnValue(of(null));
+            gesReportService.getReport.and.returnValue(of(null as any));
+        });
+
+        it('lock copies income into outflow, disables outflow control, marks row dirty', fakeAsync(() => {
+            fixture.detectChanges();
+            tick();
+            const row = component.rows[0];
+            row.form.get('reservoir_income_m3s')?.setValue(150);
+            (component as any).toggleOutflowLock(row);
+            expect((row as any).outflowLockedToIncome).toBeTrue();
+            const outflow = row.form.get('total_outflow_m3s')!;
+            expect(outflow.value).toBe(150);
+            expect(outflow.disabled).toBeTrue();
+            expect(outflow.dirty).toBeTrue();
+        }));
+
+        it('lock when income is null mirrors null into outflow and disables it', fakeAsync(() => {
+            fixture.detectChanges();
+            tick();
+            const row = component.rows[0];
+            row.form.get('total_outflow_m3s')?.setValue(99);
+            // income stays null
+            (component as any).toggleOutflowLock(row);
+            const outflow = row.form.get('total_outflow_m3s')!;
+            expect((row as any).outflowLockedToIncome).toBeTrue();
+            expect(outflow.value).toBeNull();
+            expect(outflow.disabled).toBeTrue();
+            expect(outflow.dirty).toBeTrue();
+        }));
+
+        it('unlock re-enables outflow control without changing the value', fakeAsync(() => {
+            fixture.detectChanges();
+            tick();
+            const row = component.rows[0];
+            row.form.get('reservoir_income_m3s')?.setValue(150);
+            (component as any).toggleOutflowLock(row); // lock → outflow=150 disabled
+            (component as any).toggleOutflowLock(row); // unlock
+            const outflow = row.form.get('total_outflow_m3s')!;
+            expect((row as any).outflowLockedToIncome).toBeFalse();
+            expect(outflow.enabled).toBeTrue();
+            expect(outflow.value).toBe(150);
+        }));
+
+        it('lock triggers ges_flow recompute (outflow - idle)', fakeAsync(() => {
+            fixture.detectChanges();
+            tick();
+            const row = component.rows[0];
+            row.idleDischarge = { flow_rate_m3s: 5 } as any;
+            row.form.get('reservoir_income_m3s')?.setValue(150);
+            (component as any).toggleOutflowLock(row);
+            expect(row.form.get('ges_flow_m3s')!.value).toBe(145);
+        }));
+    });
+
+    describe('wireOutflowMirror (live)', () => {
+        beforeEach(() => {
+            gesReportService.getConfigs.and.returnValue(of([makeConfig(10, 'ГЭС-1')]));
+            gesReportService.getDailyData.and.returnValue(of(null));
+            gesReportService.getReport.and.returnValue(of(null as any));
+        });
+
+        it('mirrors income changes into outflow when locked', fakeAsync(() => {
+            fixture.detectChanges();
+            tick();
+            const row = component.rows[0];
+            row.form.get('reservoir_income_m3s')?.setValue(150);
+            (component as any).toggleOutflowLock(row);
+            row.form.get('reservoir_income_m3s')?.setValue(200);
+            const outflow = row.form.get('total_outflow_m3s')!;
+            expect(outflow.value).toBe(200);
+            expect(outflow.dirty).toBeTrue();
+        }));
+
+        it('does NOT mirror when unlocked', fakeAsync(() => {
+            fixture.detectChanges();
+            tick();
+            const row = component.rows[0];
+            row.form.get('total_outflow_m3s')?.setValue(99);
+            row.form.get('reservoir_income_m3s')?.setValue(200);
+            expect(row.form.get('total_outflow_m3s')!.value).toBe(99);
+        }));
+
+        it('mirror triggers ges_flow recompute', fakeAsync(() => {
+            fixture.detectChanges();
+            tick();
+            const row = component.rows[0];
+            row.idleDischarge = { flow_rate_m3s: 5 } as any;
+            row.form.get('reservoir_income_m3s')?.setValue(150);
+            (component as any).toggleOutflowLock(row);
+            row.form.get('reservoir_income_m3s')?.setValue(300);
+            expect(row.form.get('ges_flow_m3s')!.value).toBe(295);
+        }));
+    });
+
+    describe('initOutflowLock from previous_day', () => {
+        it('auto-locks when yesterday income === outflow (both non-null)', fakeAsync(() => {
+            gesReportService.getConfigs.and.returnValue(of([makeConfig(10, 'ГЭС-1')]));
+            gesReportService.getDailyData.and.returnValue(of(null));
+            gesReportService.getReport.and.returnValue(of(makeReportWithStation(10,
+                makeReportCurrent({ reservoir_income_m3s: 100, total_outflow_m3s: 100 })
+            )));
+            fixture.detectChanges();
+            tick();
+            const row = component.rows[0];
+            expect((row as any).outflowLockedToIncome).toBeTrue();
+            expect(row.form.get('total_outflow_m3s')!.disabled).toBeTrue();
+        }));
+
+        it('auto-locks and copies today income into outflow when today outflow empty', fakeAsync(() => {
+            gesReportService.getConfigs.and.returnValue(of([makeConfig(10, 'ГЭС-1')]));
+            gesReportService.getDailyData.and.returnValue(of({
+                id: 1, organization_id: 10, date: '2026-03-30',
+                reservoir_income_m3s: 120, total_outflow_m3s: null
+            } as any));
+            gesReportService.getReport.and.returnValue(of(makeReportWithStation(10,
+                makeReportCurrent({ reservoir_income_m3s: 100, total_outflow_m3s: 100 })
+            )));
+            fixture.detectChanges();
+            tick();
+            const row = component.rows[0];
+            const outflow = row.form.get('total_outflow_m3s')!;
+            expect(outflow.value).toBe(120);
+            expect(outflow.dirty).toBeTrue();
+            expect(outflow.disabled).toBeTrue();
+        }));
+
+        it('auto-locks and leaves matching today outflow untouched (not dirty)', fakeAsync(() => {
+            gesReportService.getConfigs.and.returnValue(of([makeConfig(10, 'ГЭС-1')]));
+            gesReportService.getDailyData.and.returnValue(of({
+                id: 1, organization_id: 10, date: '2026-03-30',
+                reservoir_income_m3s: 120, total_outflow_m3s: 120
+            } as any));
+            gesReportService.getReport.and.returnValue(of(makeReportWithStation(10,
+                makeReportCurrent({ reservoir_income_m3s: 100, total_outflow_m3s: 100 })
+            )));
+            fixture.detectChanges();
+            tick();
+            const row = component.rows[0];
+            const outflow = row.form.get('total_outflow_m3s')!;
+            expect(outflow.value).toBe(120);
+            expect(outflow.dirty).toBeFalse();
+            expect(outflow.disabled).toBeTrue();
+        }));
+
+        it('does NOT auto-lock when yesterday income !== outflow', fakeAsync(() => {
+            gesReportService.getConfigs.and.returnValue(of([makeConfig(10, 'ГЭС-1')]));
+            gesReportService.getDailyData.and.returnValue(of(null));
+            gesReportService.getReport.and.returnValue(of(makeReportWithStation(10,
+                makeReportCurrent({ reservoir_income_m3s: 100, total_outflow_m3s: 90 })
+            )));
+            fixture.detectChanges();
+            tick();
+            const row = component.rows[0];
+            expect((row as any).outflowLockedToIncome).toBeFalse();
+            expect(row.form.get('total_outflow_m3s')!.enabled).toBeTrue();
+        }));
+
+        it('does NOT auto-lock when previous_day is null', fakeAsync(() => {
+            gesReportService.getConfigs.and.returnValue(of([makeConfig(10, 'ГЭС-1')]));
+            gesReportService.getDailyData.and.returnValue(of(null));
+            gesReportService.getReport.and.returnValue(of(makeReportWithStation(10, null)));
+            fixture.detectChanges();
+            tick();
+            expect((component.rows[0] as any).outflowLockedToIncome).toBeFalse();
+        }));
+
+        it('does NOT auto-lock when yesterday income is null', fakeAsync(() => {
+            gesReportService.getConfigs.and.returnValue(of([makeConfig(10, 'ГЭС-1')]));
+            gesReportService.getDailyData.and.returnValue(of(null));
+            gesReportService.getReport.and.returnValue(of(makeReportWithStation(10,
+                makeReportCurrent({ reservoir_income_m3s: null, total_outflow_m3s: 100 })
+            )));
+            fixture.detectChanges();
+            tick();
+            expect((component.rows[0] as any).outflowLockedToIncome).toBeFalse();
+        }));
+
+        it('does NOT auto-lock when yesterday outflow is null', fakeAsync(() => {
+            gesReportService.getConfigs.and.returnValue(of([makeConfig(10, 'ГЭС-1')]));
+            gesReportService.getDailyData.and.returnValue(of(null));
+            gesReportService.getReport.and.returnValue(of(makeReportWithStation(10,
+                makeReportCurrent({ reservoir_income_m3s: 100, total_outflow_m3s: null })
+            )));
+            fixture.detectChanges();
+            tick();
+            expect((component.rows[0] as any).outflowLockedToIncome).toBeFalse();
+        }));
+    });
+
+    describe('persistence (saveRow with locked outflow)', () => {
+        it('saveRow includes total_outflow_m3s even when control is disabled (locked)', fakeAsync(() => {
+            gesReportService.getConfigs.and.returnValue(of([makeConfig(10, 'ГЭС-1')]));
+            gesReportService.getDailyData.and.returnValue(of(null));
+            gesReportService.getReport.and.returnValue(of(null as any));
+            gesReportService.upsertDailyData.and.returnValue(of({ status: 'ok' } as any));
+            fixture.detectChanges();
+            tick();
+            const row = component.rows[0];
+            row.form.get('reservoir_income_m3s')?.setValue(150);
+            row.form.get('reservoir_income_m3s')?.markAsDirty();
+            (component as any).toggleOutflowLock(row);
+            component.saveRow(row);
+            tick();
+            const args = gesReportService.upsertDailyData.calls.mostRecent().args[0] as any;
+            // upsertDailyData accepts an array of payloads
+            const payload = Array.isArray(args) ? args[0] : args;
+            expect(payload.total_outflow_m3s).toBe(150);
         }));
     });
 });
