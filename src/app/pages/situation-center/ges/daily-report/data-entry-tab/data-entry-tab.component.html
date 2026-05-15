@@ -131,6 +131,7 @@
                             <th class="text-left text-xs text-color-secondary font-normal px-2 pb-1">{{ 'GES_REPORT.TOTAL_OUTFLOW' | translate }}</th>
                             <th class="text-left text-xs text-color-secondary font-normal px-2 pb-1">{{ 'GES_REPORT.GES_FLOW' | translate }}</th>
                             <th class="text-left text-xs text-color-secondary font-normal px-2 pb-1">{{ 'GES_REPORT.IDLE_DISCHARGE' | translate }}</th>
+                            <th class="text-left text-xs text-color-secondary font-normal px-2 pb-1">{{ 'GES_REPORT.CONSUMPTION_M3_S' | translate }}</th>
                             <th class="text-left text-xs text-color-secondary font-normal px-2 pb-1">{{ 'GES_REPORT.WATER_LEVEL' | translate }}</th>
                             <th class="text-left text-xs text-color-secondary font-normal px-2 pb-1">{{ 'GES_REPORT.WATER_VOLUME' | translate }}</th>
                             <th class="px-2 pb-1"></th>
@@ -430,6 +431,32 @@
                                 }
                             </td>
                             <td class="px-2 py-2 align-middle">
+                                <p-iconfield class="freeze-field" [class.freeze-field--frozen]="isFrozen(row, 'consumption_m3_s')">
+                                    <p-inputNumber
+                                        formControlName="consumption_m3_s"
+                                        [min]="0"
+                                        [minFractionDigits]="0"
+                                        [maxFractionDigits]="6"
+                                        [useGrouping]="false"
+                                        [placeholder]="getFrozenPlaceholder(row, 'consumption_m3_s')"
+                                        styleClass="freeze-field__input"
+                                        inputStyleClass="freeze-field__inputbox w-full">
+                                    </p-inputNumber>
+                                    @if (canFreeze) {
+                                        <p-inputicon class="freeze-trigger"
+                                            (mousedown)="$event.preventDefault()"
+                                            [class.freeze-trigger--frozen]="isFrozen(row, 'consumption_m3_s')"
+                                            [pTooltip]="getFreezeTooltip(row, 'consumption_m3_s')" tooltipPosition="top"
+                                            (click)="openFreezeDialog(row, 'consumption_m3_s')">
+                                            <i class="pi" [class.pi-lock]="isFrozen(row, 'consumption_m3_s')" [class.pi-lock-open]="!isFrozen(row, 'consumption_m3_s')"></i>
+                                        </p-inputicon>
+                                    }
+                                </p-iconfield>
+                                @if (isFrozen(row, 'consumption_m3_s') && row.form.get('consumption_m3_s')?.value == null) {
+                                    <small class="frozen-hint">{{ 'GES_REPORT.FROZEN.FROM_DEFAULT' | translate }}</small>
+                                }
+                            </td>
+                            <td class="px-2 py-2 align-middle">
                                 @if (row.config.has_reservoir) {
                                     <p-iconfield class="freeze-field" [class.freeze-field--frozen]="isFrozen(row, 'water_level_m')">
                                         <p-inputNumber
@@ -507,7 +534,7 @@
                         </tr>
                         @if (sumExceedsTotal(row)) {
                         <tr class="sum-overflow-warn">
-                            <td [attr.colspan]="15">
+                            <td [attr.colspan]="16">
                                 <small class="text-red-500 px-2">
                                     {{ 'GES_REPORT.AGGREGATES_SUM_EXCEEDS_TOTAL' | translate }}
                                     ({{ sumAggregates(row) }} > {{ row.config.total_aggregates }})
@@ -517,7 +544,7 @@
                         }
                         @if (productionExceedsMax(row)) {
                         <tr class="sum-overflow-warn">
-                            <td [attr.colspan]="15">
+                            <td [attr.colspan]="16">
                                 <small class="text-red-500 px-2">
                                     {{ 'GES_REPORT.PRODUCTION_EXCEEDS_MAX' | translate:{
                                         value: (row.form.value.daily_production_mln_kwh | number:'1.0-6'),

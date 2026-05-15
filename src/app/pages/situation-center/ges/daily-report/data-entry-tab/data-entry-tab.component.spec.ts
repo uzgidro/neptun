@@ -54,7 +54,7 @@ function makeReportCurrent(overrides: Partial<ReportCurrent> = {}): ReportCurren
         modernization_aggregates: 0, reserve_aggregates: 0,
         water_level_m: null, water_volume_mln_m3: null, water_head_m: null,
         reservoir_income_m3s: null, total_outflow_m3s: null,
-        ges_flow_m3s: null, idle_discharge_m3s: null,
+        ges_flow_m3s: null, consumption_m3_s: null, idle_discharge_m3s: null,
         ...overrides
     };
 }
@@ -864,6 +864,250 @@ describe('DataEntryTabComponent', () => {
             // upsertDailyData accepts an array of payloads
             const payload = Array.isArray(args) ? args[0] : args;
             expect(payload.total_outflow_m3s).toBe(150);
+        }));
+    });
+
+    describe('consumption_m3_s field', () => {
+        it('loads consumption_m3_s from server into the form', fakeAsync(() => {
+            gesReportService.getConfigs.and.returnValue(of([makeConfig(10, 'ГЭС-1')]));
+            gesReportService.getDailyData.and.returnValue(of({
+                id: 1, organization_id: 10, date: '2026-03-30',
+                consumption_m3_s: 1.5
+            } as any));
+            fixture.detectChanges();
+            tick();
+            expect(component.rows[0].form.get('consumption_m3_s')?.value).toBe(1.5);
+        }));
+
+        it('includes consumption_m3_s in buildPayload when dirty', fakeAsync(() => {
+            gesReportService.getConfigs.and.returnValue(of([makeConfig(10, 'ГЭС-1')]));
+            gesReportService.getDailyData.and.returnValue(throwError(() => ({ status: 404 })));
+            gesReportService.upsertDailyData.and.returnValue(of({ status: 'OK' }));
+            fixture.detectChanges();
+            tick();
+            const row = component.rows[0];
+            row.form.get('consumption_m3_s')?.setValue(2.5);
+            row.form.get('consumption_m3_s')?.markAsDirty();
+            component.saveRow(row);
+            tick();
+            const arg = gesReportService.upsertDailyData.calls.mostRecent().args[0];
+            const item = (arg as unknown as Record<string, unknown>[])[0];
+            expect(item['consumption_m3_s']).toBe(2.5);
+        }));
+
+        it('omits consumption_m3_s from buildPayload when pristine', fakeAsync(() => {
+            gesReportService.getConfigs.and.returnValue(of([makeConfig(10, 'ГЭС-1')]));
+            gesReportService.getDailyData.and.returnValue(throwError(() => ({ status: 404 })));
+            gesReportService.upsertDailyData.and.returnValue(of({ status: 'OK' }));
+            fixture.detectChanges();
+            tick();
+            const row = component.rows[0];
+            row.form.get('daily_production_mln_kwh')?.setValue(5.0);
+            row.form.get('daily_production_mln_kwh')?.markAsDirty();
+            // consumption_m3_s left untouched (pristine)
+            component.saveRow(row);
+            tick();
+            const arg = gesReportService.upsertDailyData.calls.mostRecent().args[0];
+            const item = (arg as unknown as Record<string, unknown>[])[0];
+            expect('consumption_m3_s' in item).toBeFalse();
+        }));
+    });
+
+    describe('parseStructuredError', () => {
+        function makeErr(body: unknown): HttpErrorResponse {
+            return new HttpErrorResponse({ status: 400, error: body });
+        }
+
+        it('returns null when response has no code', () => {
+            const result = (component as any).parseStructuredError(makeErr({ error: 'plain text' }));
+            expect(result).toBeNull();
+        });
+
+        it('returns null when there is no error body at all', () => {
+            const result = (component as any).parseStructuredError({} as HttpErrorResponse);
+            expect(result).toBeNull();
+        });
+
+        it('formats save.field_negative with field label and value', () => {
+            const translate = TestBed.inject(TranslateService);
+            spyOn(translate, 'instant').and.callFake((key: string | string[], params?: any) => {
+                if (key === 'GES_REPORT.FIELD_LABELS.consumption_m3_s') return 'Полезный попуск';
+                if (key === 'GES_REPORT.ERRORS.FIELD_NEGATIVE') return `NEG ${params.field}=${params.value}`;
+                return key as string;
+            });
+            const result = (component as any).parseStructuredError(makeErr({
+                error: '...', code: 'save.field_negative',
+                details: [{ organization_id: 16, field: 'consumption_m3_s', value: -1.5 }]
+            }));
+            expect(result).toBe('NEG Полезный попуск=-1.5');
+        });
+
+        it('falls back to raw field name when FIELD_LABELS key is missing', () => {
+            const translate = TestBed.inject(TranslateService);
+            spyOn(translate, 'instant').and.callFake((key: string | string[], params?: any) => {
+                if (key === 'GES_REPORT.ERRORS.FIELD_NEGATIVE') return `NEG ${params.field}=${params.value}`;
+                return key as string; // mimic missing key: returns key string unchanged
+            });
+            const result = (component as any).parseStructuredError(makeErr({
+                error: '...', code: 'save.field_negative',
+                details: [{ field: 'unknown_field', value: -1 }]
+            }));
+            expect(result).toBe('NEG unknown_field=-1');
+        });
+
+        it('formats save.aggregates_exceed_total with all numbers', () => {
+            const translate = TestBed.inject(TranslateService);
+            spyOn(translate, 'instant').and.callFake((key: string | string[], params?: any) => {
+                if (key === 'GES_REPORT.ERRORS.AGGREGATES_EXCEED_TOTAL') {
+                    return `AGG ${params.working}+${params.repair}+${params.modernization}>${params.total}`;
+                }
+                return key as string;
+            });
+            const result = (component as any).parseStructuredError(makeErr({
+                error: '...', code: 'save.aggregates_exceed_total',
+                details: [{ organization_id: 10, working: 4, repair: 1, modernization: 0, sum: 5, total: 4 }]
+            }));
+            expect(result).toBe('AGG 4+1+0>4');
+        });
+
+        it('formats save.production_exceeds_max with station name', fakeAsync(() => {
+            gesReportService.getConfigs.and.returnValue(of([makeConfig(7, 'ГЭС-Семь')]));
+            gesReportService.getDailyData.and.returnValue(throwError(() => ({ status: 404 })));
+            fixture.detectChanges();
+            tick();
+            const translate = TestBed.inject(TranslateService);
+            spyOn(translate, 'instant').and.callFake((key: string | string[], params?: any) => {
+                if (key === 'GES_REPORT.PRODUCTION_EXCEEDS_MAX_SERVER') {
+                    return `MAX ${params.station} ${params.value}>${params.max}`;
+                }
+                return key as string;
+            });
+            const result = (component as any).parseStructuredError(makeErr({
+                error: '...', code: 'save.production_exceeds_max',
+                details: [{ organization_id: 7, field: 'daily_production_mln_kwh', value: 10, max: 5 }]
+            }));
+            expect(result).toBe('MAX ГЭС-Семь 10>5');
+        }));
+
+        it('joins multiple report.consumption_exceeds_idle rows with "; "', () => {
+            const translate = TestBed.inject(TranslateService);
+            spyOn(translate, 'instant').and.callFake((key: string | string[], params?: any) => {
+                if (key === 'GES_REPORT.ERRORS.CONSUMPTION_EXCEEDS_IDLE_ROW') {
+                    return `${params.station}: ${params.consumption}>${params.idle}`;
+                }
+                return key as string;
+            });
+            const result = (component as any).parseStructuredError(makeErr({
+                error: '...', code: 'report.consumption_exceeds_idle',
+                details: [
+                    { organization_id: 16, organization_name: 'ГЭС-1', idle_m3_s: 2, consumption_m3_s: 5 },
+                    { organization_id: 17, organization_name: 'ГЭС-2', idle_m3_s: 1, consumption_m3_s: 3 }
+                ]
+            }));
+            expect(result).toBe('ГЭС-1: 5>2; ГЭС-2: 3>1');
+        });
+
+        it('returns null for unknown code', () => {
+            const result = (component as any).parseStructuredError(makeErr({
+                error: '...', code: 'some.unknown.code', details: []
+            }));
+            expect(result).toBeNull();
+        });
+    });
+
+    describe('saveRow with structured error', () => {
+        it('shows structured-error toast on 400 save.field_negative', fakeAsync(() => {
+            gesReportService.getConfigs.and.returnValue(of([makeConfig(10, 'ГЭС-1')]));
+            gesReportService.getDailyData.and.returnValue(throwError(() => ({ status: 404 })));
+            const errResp = new HttpErrorResponse({
+                status: 400,
+                error: {
+                    error: 'consumption_m3_s must be >= 0 for organization_id=10, got -1',
+                    code: 'save.field_negative',
+                    details: [{ organization_id: 10, field: 'consumption_m3_s', value: -1 }]
+                }
+            });
+            gesReportService.upsertDailyData.and.returnValue(throwError(() => errResp));
+            fixture.detectChanges();
+            tick();
+            const translate = TestBed.inject(TranslateService);
+            spyOn(translate, 'instant').and.callFake((key: string | string[], params?: any) => {
+                if (key === 'GES_REPORT.ERRORS.FIELD_NEGATIVE') return `NEG ${params.value}`;
+                return key as string;
+            });
+            const msgService = TestBed.inject(MessageService);
+            const addSpy = spyOn(msgService, 'add');
+            const row = component.rows[0];
+            row.form.get('consumption_m3_s')?.setValue(-1);
+            row.form.get('consumption_m3_s')?.markAsDirty();
+            component.saveRow(row);
+            tick();
+            expect(addSpy).toHaveBeenCalled();
+            const call = addSpy.calls.mostRecent().args[0];
+            expect(call.severity).toBe('error');
+            expect(call.detail).toBe('NEG -1');
+        }));
+
+        it('falls back to legacy parseProductionCapError when no code in envelope', fakeAsync(() => {
+            gesReportService.getConfigs.and.returnValue(of([makeConfig(10, 'ГЭС-1')]));
+            gesReportService.getDailyData.and.returnValue(throwError(() => ({ status: 404 })));
+            const errResp = new HttpErrorResponse({
+                status: 400,
+                error: { message: 'daily_production_mln_kwh exceeds max for organization_id=10: 10 > 5' }
+            });
+            gesReportService.upsertDailyData.and.returnValue(throwError(() => errResp));
+            fixture.detectChanges();
+            tick();
+            const translate = TestBed.inject(TranslateService);
+            spyOn(translate, 'instant').and.callFake((key: string | string[], params?: any) => {
+                if (key === 'GES_REPORT.PRODUCTION_EXCEEDS_MAX_SERVER') {
+                    return `MAX ${params.station} ${params.value}>${params.max}`;
+                }
+                return key as string;
+            });
+            const msgService = TestBed.inject(MessageService);
+            const addSpy = spyOn(msgService, 'add');
+            const row = component.rows[0];
+            row.form.get('daily_production_mln_kwh')?.setValue(10);
+            row.form.get('daily_production_mln_kwh')?.markAsDirty();
+            component.saveRow(row);
+            tick();
+            const call = addSpy.calls.mostRecent().args[0];
+            expect(call.detail).toBe('MAX ГЭС-1 10>5');
+        }));
+    });
+
+    describe('loadData with report.consumption_exceeds_idle', () => {
+        it('shows warn toast and continues to load configs/data on 400 with structured code', fakeAsync(() => {
+            gesReportService.getConfigs.and.returnValue(of([makeConfig(10, 'ГЭС-1')]));
+            gesReportService.getDailyData.and.returnValue(throwError(() => ({ status: 404 })));
+            const errResp = new HttpErrorResponse({
+                status: 400,
+                error: {
+                    error: 'useful consumption exceeds idle discharge',
+                    code: 'report.consumption_exceeds_idle',
+                    details: [
+                        { organization_id: 10, organization_name: 'ГЭС-1', idle_m3_s: 1, consumption_m3_s: 3 }
+                    ]
+                }
+            });
+            gesReportService.getReport.and.returnValue(throwError(() => errResp));
+            const translate = TestBed.inject(TranslateService);
+            spyOn(translate, 'instant').and.callFake((key: string | string[], params?: any) => {
+                if (key === 'GES_REPORT.ERRORS.CONSUMPTION_EXCEEDS_IDLE_ROW') {
+                    return `${params.station}:${params.consumption}>${params.idle}`;
+                }
+                return key as string;
+            });
+            const msgService = TestBed.inject(MessageService);
+            const addSpy = spyOn(msgService, 'add');
+            fixture.detectChanges();
+            tick();
+            expect(component.rows.length).toBe(1); // still built from configs
+            expect(addSpy).toHaveBeenCalled();
+            const warnCall = addSpy.calls.allArgs().find(a => a[0].severity === 'warn');
+            expect(warnCall).toBeDefined();
+            expect(warnCall![0].detail).toBe('ГЭС-1:3>1');
         }));
     });
 });

@@ -96,9 +96,9 @@ describe('ges-frozen-defaults', () => {
     });
 
     describe('FREEZABLE_FIELD_LABELS', () => {
-        it('has all 11 freezable field labels', () => {
+        it('has all 12 freezable field labels', () => {
             const keys = Object.keys(FREEZABLE_FIELD_LABELS);
-            expect(keys.length).toBe(11);
+            expect(keys.length).toBe(12);
             const expected = [
                 'daily_production_mln_kwh',
                 'working_aggregates',
@@ -111,6 +111,7 @@ describe('ges-frozen-defaults', () => {
                 'total_outflow_m3s',
                 'ges_flow_m3s',
                 'own_consumption_kwh',
+                'consumption_m3_s',
             ];
             for (const k of expected) {
                 expect(keys).toContain(k);
@@ -119,9 +120,9 @@ describe('ges-frozen-defaults', () => {
     });
 
     describe('FIELD_UNITS', () => {
-        it('has all 11 freezable field units', () => {
+        it('has all 12 freezable field units', () => {
             const keys = Object.keys(FIELD_UNITS);
-            expect(keys.length).toBe(11);
+            expect(keys.length).toBe(12);
             const expected = [
                 'daily_production_mln_kwh',
                 'working_aggregates',
@@ -134,6 +135,7 @@ describe('ges-frozen-defaults', () => {
                 'total_outflow_m3s',
                 'ges_flow_m3s',
                 'own_consumption_kwh',
+                'consumption_m3_s',
             ];
             for (const k of expected) {
                 expect(keys).toContain(k);

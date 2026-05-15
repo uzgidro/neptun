@@ -327,6 +327,19 @@
     "GRAND_TOTAL": "ЖАМИ",
     "HAS_RESERVOIR": "Сув омбори",
     "IDLE_DISCHARGE": "Салт ташлама, м³/с",
+    "CONSUMPTION_M3_S": "Сув олиш, м³/с",
+    "FIELD_LABELS": {
+        "working_aggregates": "Ишлаётган агрегатлар",
+        "repair_aggregates": "Таъмирдаги агрегатлар",
+        "modernization_aggregates": "Модернизациядаги агрегатлар",
+        "own_consumption_kwh": "Ўз эҳтиёжи",
+        "consumption_m3_s": "Сув олиш"
+    },
+    "ERRORS": {
+        "FIELD_NEGATIVE": "«{{field}}» майдони ≥ 0 бўлиши керак (олинди: {{value}})",
+        "AGGREGATES_EXCEED_TOTAL": "Агрегатлар йиғиндиси умумий сондан ошади: {{working}}+{{repair}}+{{modernization}} > {{total}}",
+        "CONSUMPTION_EXCEEDS_IDLE_ROW": "{{station}}: сув олиш {{consumption}} > салт {{idle}}"
+    },
     "INCOME": "Кириш",
     "INSTALLED_CAPACITY": "Ўрн. қуввати, МВт",
     "JAN": "Янв",

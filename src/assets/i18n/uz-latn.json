@@ -327,6 +327,19 @@
     "GRAND_TOTAL": "JAMI",
     "HAS_RESERVOIR": "Suv ombori",
     "IDLE_DISCHARGE": "Salt tashlama, m³/s",
+    "CONSUMPTION_M3_S": "Suv olish, m³/s",
+    "FIELD_LABELS": {
+        "working_aggregates": "Ishlayotgan agregatlar",
+        "repair_aggregates": "Ta'mirdagi agregatlar",
+        "modernization_aggregates": "Modernizatsiyadagi agregatlar",
+        "own_consumption_kwh": "O'z ehtiyoji",
+        "consumption_m3_s": "Suv olish"
+    },
+    "ERRORS": {
+        "FIELD_NEGATIVE": "«{{field}}» maydoni ≥ 0 bo'lishi kerak (olindi: {{value}})",
+        "AGGREGATES_EXCEED_TOTAL": "Agregatlar yig'indisi umumiy sondan oshadi: {{working}}+{{repair}}+{{modernization}} > {{total}}",
+        "CONSUMPTION_EXCEEDS_IDLE_ROW": "{{station}}: suv olish {{consumption}} > salt {{idle}}"
+    },
     "INCOME": "Kirish",
     "INSTALLED_CAPACITY": "O'rn. quvvati, MVt",
     "JAN": "Yan",

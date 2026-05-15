@@ -327,6 +327,19 @@
     "GRAND_TOTAL": "Grand total",
     "HAS_RESERVOIR": "Reservoir",
     "IDLE_DISCHARGE": "Idle discharge, m³/s",
+    "CONSUMPTION_M3_S": "Withdrawal, m³/s",
+    "FIELD_LABELS": {
+        "working_aggregates": "Working aggregates",
+        "repair_aggregates": "Aggregates under repair",
+        "modernization_aggregates": "Aggregates under modernization",
+        "own_consumption_kwh": "Own consumption",
+        "consumption_m3_s": "Withdrawal"
+    },
+    "ERRORS": {
+        "FIELD_NEGATIVE": "Field \"{{field}}\" must be ≥ 0 (received {{value}})",
+        "AGGREGATES_EXCEED_TOTAL": "Aggregate sum exceeds total: {{working}}+{{repair}}+{{modernization}} > {{total}}",
+        "CONSUMPTION_EXCEEDS_IDLE_ROW": "{{station}}: withdrawal {{consumption}} > idle {{idle}}"
+    },
     "INCOME": "Inflow",
     "INSTALLED_CAPACITY": "Installed capacity, MW",
     "JAN": "Jan",
