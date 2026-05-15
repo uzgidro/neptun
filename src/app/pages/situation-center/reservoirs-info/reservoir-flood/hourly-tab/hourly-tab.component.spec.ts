@@ -26,7 +26,7 @@ function makeRecord(orgId: number, recordedAt: string, overrides: Partial<Reserv
         recorded_at: recordedAt,
         water_level_m: null, water_volume_mln_m3: null,
         inflow_m3s: null, outflow_m3s: null, ges_flow_m3s: null,
-        filtration_m3s: null, idle_discharge_m3s: null,
+        idle_discharge_m3s: null,
         duty_name: null,
         capacity_mwt: null, weather_condition: null, temperature_c: null,
         updated_at: recordedAt,

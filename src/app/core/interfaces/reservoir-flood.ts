@@ -23,7 +23,6 @@ export interface ReservoirFloodHourlyRecord {
     inflow_m3s: number | null;
     outflow_m3s: number | null;
     ges_flow_m3s: number | null;
-    filtration_m3s: number | null;
     idle_discharge_m3s: number | null;
     duty_name: string | null;
     capacity_mwt: number | null;
@@ -42,7 +41,6 @@ export interface ReservoirFloodHourlyPayload {
     inflow_m3s?: number | null;
     outflow_m3s?: number | null;
     ges_flow_m3s?: number | null;
-    filtration_m3s?: number | null;
     idle_discharge_m3s?: number | null;
     duty_name?: string | null;
     capacity_mwt?: number | null;
