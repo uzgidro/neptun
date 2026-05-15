@@ -320,6 +320,19 @@
     "WEATHER": "Погода",
     "POWER": "Мощность, МВт",
     "IDLE_DISCHARGE": "Холостой водосброс, м³/с",
+    "CONSUMPTION_M3_S": "Отбор, м³/с",
+    "FIELD_LABELS": {
+        "working_aggregates": "Работающие агрегаты",
+        "repair_aggregates": "Агрегаты в ремонте",
+        "modernization_aggregates": "Агрегаты на модернизации",
+        "own_consumption_kwh": "Собственные нужды",
+        "consumption_m3_s": "Отбор"
+    },
+    "ERRORS": {
+        "FIELD_NEGATIVE": "Поле «{{field}}» должно быть ≥ 0 (получено {{value}})",
+        "AGGREGATES_EXCEED_TOTAL": "Сумма агрегатов превышает общее количество: {{working}}+{{repair}}+{{modernization}} > {{total}}",
+        "CONSUMPTION_EXCEEDS_IDLE_ROW": "{{station}}: отбор {{consumption}} > холостого {{idle}}"
+    },
     "MTD": "С начала месяца",
     "YTD": "С начала года",
     "MONTHLY_PLAN": "Месячный план",

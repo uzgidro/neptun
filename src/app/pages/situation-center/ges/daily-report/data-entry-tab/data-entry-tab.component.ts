@@ -21,7 +21,7 @@ import { FormsModule } from '@angular/forms';
 import { GesReportService } from '@/core/services/ges-report.service';
 import { TimeService } from '@/core/services/time.service';
 import { AuthService } from '@/core/services/auth.service';
-import { GesConfigResponse, GesCascadeConfig, GesDailyData, GesDailyDataPayload, ReportCurrent, ReportIdleDischarge, ReportWeather } from '@/core/interfaces/ges-report';
+import { GesConfigResponse, GesCascadeConfig, GesDailyData, GesDailyDataPayload, GesErrorEnvelope, ReportCurrent, ReportIdleDischarge, ReportWeather } from '@/core/interfaces/ges-report';
 import { FrozenMap, FrozenDefault, FreezableField, buildFrozenMap, FREEZABLE_FIELD_LABELS, FIELD_UNITS, NOT_NULL_FREEZABLE_FIELDS } from '@/core/interfaces/ges-frozen-defaults';
 import { parseFrozenDefaultError } from '@/core/services/ges-frozen-defaults-error';
 import { HasUnsavedChanges } from '@/core/guards/auth.guard';
@@ -245,7 +245,18 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
         forkJoin({
             configs: this.gesReportService.getConfigs(),
             cascadeConfigs: this.gesReportService.getCascadeConfigs().pipe(catchError(() => of([] as GesCascadeConfig[]))),
-            report: this.gesReportService.getReport(dateStr).pipe(catchError(() => of(null))),
+            report: this.gesReportService.getReport(dateStr).pipe(catchError((err: HttpErrorResponse) => {
+                const detail = this.parseStructuredError(err);
+                if (detail) {
+                    this.messageService.add({
+                        severity: 'warn',
+                        summary: this.translate.instant('COMMON.WARNING'),
+                        detail,
+                        life: 8000
+                    });
+                }
+                return of(null);
+            })),
             frozen: this.gesReportService.listFrozenDefaults().pipe(catchError(() => of([] as FrozenDefault[])))
         }).pipe(takeUntil(this.destroy$)).subscribe({
             next: ({ configs, cascadeConfigs, report, frozen }) => {
@@ -560,6 +571,15 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
             // atomic rollback: do NOT mark any row pristine on error
             error: (err) => {
                 this.savingAll = false;
+                const structured = this.parseStructuredError(err);
+                if (structured) {
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: this.translate.instant('COMMON.ERROR'),
+                        detail: structured
+                    });
+                    return;
+                }
                 const idx = err?.error?.item_index;
                 const msg = err?.error?.message ?? err?.error?.error ?? '';
                 let detail: string;
@@ -622,6 +642,15 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
             },
             error: (err) => {
                 row.saving = false;
+                const structured = this.parseStructuredError(err);
+                if (structured) {
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: this.translate.instant('COMMON.ERROR'),
+                        detail: structured
+                    });
+                    return;
+                }
                 const msg = err?.error?.message ?? err?.error?.error ?? '';
                 const capDetail = this.parseProductionCapError(msg);
                 const detail = capDetail
@@ -636,6 +665,53 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
                 });
             }
         });
+    }
+
+    private findStationName(orgId: number): string {
+        const row = this.rows.find(r => r.config.organization_id === orgId);
+        return row?.config.organization_name ?? `#${orgId}`;
+    }
+
+    private parseStructuredError(err: HttpErrorResponse): string | null {
+        const body = err?.error as GesErrorEnvelope | undefined;
+        if (!body || !body.code) return null;
+        const details = body.details ?? [];
+        const first = details[0] ?? {};
+        switch (body.code) {
+            case 'save.field_negative': {
+                const rawField = String(first['field'] ?? '');
+                const fieldKey = `GES_REPORT.FIELD_LABELS.${rawField}`;
+                const translated = this.translate.instant(fieldKey);
+                const label = translated === fieldKey ? rawField : translated;
+                return this.translate.instant('GES_REPORT.ERRORS.FIELD_NEGATIVE', {
+                    field: label,
+                    value: first['value']
+                });
+            }
+            case 'save.aggregates_exceed_total':
+                return this.translate.instant('GES_REPORT.ERRORS.AGGREGATES_EXCEED_TOTAL', {
+                    working: first['working'],
+                    repair: first['repair'],
+                    modernization: first['modernization'],
+                    total: first['total']
+                });
+            case 'save.production_exceeds_max':
+                return this.translate.instant('GES_REPORT.PRODUCTION_EXCEEDS_MAX_SERVER', {
+                    station: this.findStationName(Number(first['organization_id'])),
+                    value: first['value'],
+                    max: first['max']
+                });
+            case 'report.consumption_exceeds_idle':
+                return details
+                    .map(d => this.translate.instant('GES_REPORT.ERRORS.CONSUMPTION_EXCEEDS_IDLE_ROW', {
+                        station: d['organization_name'] || `#${d['organization_id']}`,
+                        consumption: d['consumption_m3_s'],
+                        idle: d['idle_m3_s']
+                    }))
+                    .join('; ');
+            default:
+                return null;
+        }
     }
 
     private parseProductionCapError(msg: unknown): string | null {
@@ -818,7 +894,8 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
             reservoir_income_m3s: [data?.reservoir_income_m3s ?? null],
             total_outflow_m3s: [data?.total_outflow_m3s ?? null],
             ges_flow_m3s: [data?.ges_flow_m3s ?? null],
-            own_consumption_kwh: [data?.own_consumption_kwh ?? null, [Validators.min(0)]]
+            own_consumption_kwh: [data?.own_consumption_kwh ?? null, [Validators.min(0)]],
+            consumption_m3_s: [data?.consumption_m3_s ?? null, [Validators.min(0)]]
         });
     }
 
@@ -838,7 +915,8 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
             'reservoir_income_m3s',
             'total_outflow_m3s',
             'ges_flow_m3s',
-            'own_consumption_kwh'
+            'own_consumption_kwh',
+            'consumption_m3_s'
         ];
         for (const f of fields) {
             const ctrl = row.form.get(f);

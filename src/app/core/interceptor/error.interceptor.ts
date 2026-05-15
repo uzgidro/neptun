@@ -43,6 +43,12 @@ export const errorInterceptor: HttpInterceptorFn = (
  * Get user-friendly error message based on HTTP status
  */
 function getErrorMessage(error: HttpErrorResponse, translate: TranslateService): string {
+    // Suppress the interceptor toast when the response carries a structured
+    // error code — the calling component is expected to surface a localized
+    // message itself (see GesErrorEnvelope), and a second toast would dupe.
+    if (error.error?.code) {
+        return '';
+    }
     // Try to get message from response body
     if (error.error?.message) {
         return error.error.message;

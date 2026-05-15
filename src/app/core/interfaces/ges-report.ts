@@ -55,6 +55,7 @@ export interface GesDailyDataPayload {
     total_outflow_m3s?: number | null;
     ges_flow_m3s?: number | null;
     own_consumption_kwh?: number | null;
+    consumption_m3_s?: number | null;
 }
 
 export interface GesDailyData extends GesDailyDataPayload {
@@ -128,7 +129,14 @@ export interface ReportCurrent {
     reservoir_income_m3s: number | null;
     total_outflow_m3s: number | null;
     ges_flow_m3s: number | null;
+    consumption_m3_s: number | null;
     idle_discharge_m3s: number | null;
+}
+
+export interface GesErrorEnvelope {
+    error: string;
+    code?: string;
+    details?: Record<string, unknown>[];
 }
 
 export interface ReportDiffs {
