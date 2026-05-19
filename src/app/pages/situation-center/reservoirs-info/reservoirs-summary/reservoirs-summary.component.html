@@ -95,7 +95,7 @@
                         <td></td>
                     }
                     <!--Volume-->
-                    @if (authService.isSc() && index !== 6 && index !== 7) {
+                    @if (authService.isSc() && index !== 7) {
                         <td [pEditableColumn]="reservoir.volume" pEditableColumnField="current" class="text-nowrap"
                             [ngClass]="{'bg-yellow-100 dark:bg-yellow-900': reservoir.volume.is_edited}">
                             <p-cellEditor>
