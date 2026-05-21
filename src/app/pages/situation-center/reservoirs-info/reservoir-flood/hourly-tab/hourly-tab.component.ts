@@ -50,7 +50,6 @@ export interface HourlyRow {
 // Asia/Tashkent timezone helpers. Uzbekistan has not observed DST since
 // the 2004 cabmin decree, so a hardcoded +05:00 offset is safe.
 // TODO: extract to core/utils/tashkent-time.ts when a second consumer appears.
-const TASHKENT_OFFSET = '+05:00';
 
 function tashkentDateParts(d: Date): { y: number; m: number; day: number } {
     const fmt = new Intl.DateTimeFormat('en-CA', {
@@ -244,16 +243,15 @@ export class HourlyTabComponent implements OnInit, OnDestroy {
     }
 
     recordedAt(): string {
-        // Build ISO string with explicit Asia/Tashkent offset. Backend will
-        // normalize via .UTC().Truncate(time.Hour). Avoids browser-local
-        // setHours()+toISOString() drift when the user's machine is not in
-        // UTC+5 (travel, mismatched OS settings, remote sessions).
+        // The selected hour is a wall-clock hour in Asia/Tashkent. Build the
+        // corresponding UTC instant: Tashkent midnight (already a UTC instant)
+        // plus the selected hour, then emit the canonical "...Z" form. For
+        // hours 00:00–04:59 this correctly rolls the UTC date back one day.
+        // Avoids browser-local drift when the user's machine is not in UTC+5.
         const { y, m, day } = tashkentDateParts(this.selectedDate ?? new Date());
-        const yy = String(y);
-        const mm = String(m).padStart(2, '0');
-        const dd = String(day).padStart(2, '0');
-        const hh = String(this.selectedHour).padStart(2, '0');
-        return `${yy}-${mm}-${dd}T${hh}:00:00${TASHKENT_OFFSET}`;
+        const midnight = tashkentMidnight(y, m, day);
+        const instant = new Date(midnight.getTime() + this.selectedHour * 3600 * 1000);
+        return instant.toISOString();
     }
 
     loadData(): void {

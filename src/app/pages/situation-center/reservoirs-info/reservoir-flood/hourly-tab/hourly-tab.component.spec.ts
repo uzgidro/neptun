@@ -535,22 +535,32 @@ describe('HourlyTabComponent', () => {
     // ─── Asia/Tashkent timezone handling ───
 
     describe('Asia/Tashkent timezone handling', () => {
-        it('recordedAt emits ISO with +05:00 regardless of browser TZ', () => {
+        it('recordedAt emits ISO in UTC regardless of browser TZ', () => {
             fixture.detectChanges();
-            // Tashkent midnight 2026-05-12 = UTC 2026-05-11T19:00Z
+            // Tashkent midnight 2026-05-12 = UTC 2026-05-11T19:00Z.
+            // Tashkent 07:00 = UTC 02:00 the same day.
             component.selectedDate = new Date(Date.UTC(2026, 4, 12, 0, 0, 0) - 5 * 3600 * 1000);
             component.selectedHour = 7;
-            expect((component as any).recordedAt()).toBe('2026-05-12T07:00:00+05:00');
+            expect((component as any).recordedAt()).toBe('2026-05-12T02:00:00.000Z');
         });
 
         it('recordedAt zero-pads month/day/hour', () => {
             fixture.detectChanges();
+            // Tashkent 05:00 = UTC 00:00 the same day.
             component.selectedDate = new Date(Date.UTC(2026, 0, 3, 0, 0, 0) - 5 * 3600 * 1000);
             component.selectedHour = 5;
-            expect((component as any).recordedAt()).toBe('2026-01-03T05:00:00+05:00');
+            expect((component as any).recordedAt()).toBe('2026-01-03T00:00:00.000Z');
         });
 
-        it('buildPayload.recorded_at includes +05:00 offset (end-to-end)', fakeAsync(() => {
+        it('recordedAt rolls UTC date back for early Tashkent hours', () => {
+            fixture.detectChanges();
+            // 02:00 Tashkent 21 May = 21:00 UTC 20 May (previous calendar day).
+            component.selectedDate = new Date(Date.UTC(2026, 4, 21, 0, 0, 0) - 5 * 3600 * 1000);
+            component.selectedHour = 2;
+            expect((component as any).recordedAt()).toBe('2026-05-20T21:00:00.000Z');
+        });
+
+        it('buildPayload.recorded_at is UTC (end-to-end)', fakeAsync(() => {
             svc.getConfigs.and.returnValue(of([makeConfig(42, 'Чарвак')]));
             svc.getHourly.and.returnValue(of([]));
             fixture.detectChanges();
@@ -561,7 +571,7 @@ describe('HourlyTabComponent', () => {
             row.form.get('water_level_m')!.setValue(123);
             row.form.get('water_level_m')!.markAsDirty();
             const payload: any = (component as any).buildPayload(row);
-            expect(payload.recorded_at).toBe('2026-05-12T07:00:00+05:00');
+            expect(payload.recorded_at).toBe('2026-05-12T02:00:00.000Z');
         }));
 
         it('binds backend Z-formatted record to selected Tashkent hour', fakeAsync(() => {
