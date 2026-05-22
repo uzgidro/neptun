@@ -278,7 +278,7 @@ describe('dashboardGuard', () => {
         expect(routerSpy.createUrlTree).toHaveBeenCalledWith(['/ges-daily-report']);
     });
 
-    it('redirects reservoir_duty to /reservoir-flood', () => {
+    it('redirects reservoir_flood to /reservoir-flood', () => {
         authServiceSpy.hasRole.and.returnValue(false);
         authServiceSpy.getHomeRoute.and.returnValue('/reservoir-flood');
         const fakeTree = {} as any;

@@ -63,7 +63,7 @@ export class AuthService {
             return false;
         }
         const roles: string[] = decodedToken.roles;
-        return roles.length === 1 && roles[0] === 'reservoir_duty';
+        return roles.length === 1 && roles[0] === 'reservoir_flood';
     }
 
     isScOrRais(): boolean {
@@ -85,7 +85,7 @@ export class AuthService {
     getHomeRoute(): string {
         if (this.hasRole(['admin', 'sc', 'rais'])) return '/dashboard';
         if (this.hasRole('cascade')) return '/ges-daily-report';
-        if (this.hasRole('reservoir_duty')) return '/reservoir-flood';
+        if (this.hasRole('reservoir_flood')) return '/reservoir-flood';
         if (this.hasRole(['hrm_admin', 'hrm_manager', 'hrm_employee'])) return '/hrm/dashboard';
         if (this.hasRole('chancellery')) return '/chancellery/orders';
         if (this.hasRole('reservoir')) return '/manual-comparison-entry';

@@ -1,6 +1,6 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Table, TableModule } from 'primeng/table';
-import { Users, UserCreatePayload, UserUpdatePayload } from '@/core/interfaces/users';
+import { Users, UserCreatePayload, UserUpdatePayload, CreatedUserResponse } from '@/core/interfaces/users';
 import { ApiService } from '@/core/services/api.service';
 import { UserService } from '@/core/services/user.service';
 import { ContactService } from '@/core/services/contact.service';
@@ -20,6 +20,7 @@ import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModu
 import { Roles } from '@/core/interfaces/roles';
 import { MessageService } from 'primeng/api';
 import { of, Subject, switchMap, takeUntil } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { Password } from 'primeng/password';
 import { MultiSelectComponent } from '@/layout/component/dialog/multi-select/multi-select.component';
 import { InputTextComponent } from '@/layout/component/dialog/input-text/input-text.component';
@@ -97,6 +98,7 @@ export class User implements OnInit, OnDestroy {
             login: ['', Validators.required],
             password: ['', [Validators.required, Validators.minLength(8)]],
             roles: [[], [(c: AbstractControl): ValidationErrors | null => (!c.value || c.value.length === 0) ? { required: true } : null]],
+            organization_ids: [[]],
             // Contact selection
             contact_id: [null],
             // NewContactRequest fields
@@ -146,7 +148,7 @@ export class User implements OnInit, OnDestroy {
         this.submitted = false;
         this.contactMode = 'new';
         this.selectedFiles = [];
-        this.userForm.reset({ roles: [], contact_id: null });
+        this.userForm.reset({ roles: [], contact_id: null, organization_ids: [] });
         this.userForm.get('login')?.enable();
         this.userForm.get('password')?.setValidators([Validators.required, Validators.minLength(8)]);
         this.userForm.get('password')?.updateValueAndValidity();
@@ -209,7 +211,8 @@ export class User implements OnInit, OnDestroy {
             external_organization_name: user.contact?.external_organization_name || '',
             organization_id: selectedOrg || null,
             department_id: selectedDept || null,
-            position_id: selectedPos || null
+            position_id: selectedPos || null,
+            organization_ids: user.organization_ids ?? []
         });
 
         this.userForm.get('login')?.enable();
@@ -275,10 +278,24 @@ export class User implements OnInit, OnDestroy {
                 }
                 return this.userService.createUser(payload);
             }),
+            switchMap((created: CreatedUserResponse) => {
+                const ids: number[] = formValue.organization_ids ?? [];
+                return ids.length
+                    ? this.userService.setUserOrganizations(created.id, ids).pipe(
+                          map(() => ({ created, orgError: false })),
+                          catchError(() => of({ created, orgError: true }))
+                      )
+                    : of({ created, orgError: false });
+            }),
             takeUntil(this.destroy$)
         ).subscribe({
-            next: () => {
+            next: ({ orgError }) => {
+                // The user account itself was created — always confirm that.
                 this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('HRM.USERS.SUCCESS_CREATED') });
+                if (orgError) {
+                    // ...but the separate org-binding PUT failed: surface it as a warning.
+                    this.messageService.add({ severity: 'warn', summary: this.translate.instant('COMMON.WARNING'), detail: this.translate.instant('HRM.USERS.ERROR_SET_ORGANIZATIONS') });
+                }
                 this.loadUsers();
                 this.closeDialog();
             },
@@ -314,10 +331,22 @@ export class User implements OnInit, OnDestroy {
                 }
                 return this.userService.editUser(this.selectedUser!.id, payload);
             }),
+            switchMap(() => {
+                const ids: number[] = formValue.organization_ids ?? [];
+                return this.userService.setUserOrganizations(this.selectedUser!.id, ids).pipe(
+                    map(() => ({ orgError: false })),
+                    catchError(() => of({ orgError: true }))
+                );
+            }),
             takeUntil(this.destroy$)
         ).subscribe({
-            next: () => {
+            next: ({ orgError }) => {
+                // The user record itself was updated — always confirm that.
                 this.messageService.add({ severity: 'success', summary: this.translate.instant('COMMON.SUCCESS'), detail: this.translate.instant('HRM.USERS.SUCCESS_UPDATED') });
+                if (orgError) {
+                    // ...but the separate org-binding PUT failed: surface it as a warning.
+                    this.messageService.add({ severity: 'warn', summary: this.translate.instant('COMMON.WARNING'), detail: this.translate.instant('HRM.USERS.ERROR_SET_ORGANIZATIONS') });
+                }
                 this.loadUsers();
                 this.closeDialog();
             },

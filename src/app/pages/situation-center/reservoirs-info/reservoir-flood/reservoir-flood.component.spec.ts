@@ -75,10 +75,10 @@ describe('ReservoirFloodComponent — config-tab visibility', () => {
         expect(component.canEditConfig).toBeFalse();
     });
 
-    it('canEditConfig is false for reservoir_duty', () => {
+    it('canEditConfig is false for reservoir_flood', () => {
         setupBed();
         authSpy.hasRole.and.callFake((roles: string | string[]) =>
-            Array.isArray(roles) ? roles.includes('reservoir_duty') : roles === 'reservoir_duty'
+            Array.isArray(roles) ? roles.includes('reservoir_flood') : roles === 'reservoir_flood'
         );
         const component = fixture.componentInstance;
         expect(component.canEditConfig).toBeFalse();

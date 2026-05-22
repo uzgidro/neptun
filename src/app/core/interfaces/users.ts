@@ -7,6 +7,7 @@ export interface Users {
     is_active: boolean;
     roles: string[];
     role_ids: number[];
+    organization_ids?: number[];
     contact?: Contact;
 }
 
@@ -57,4 +58,14 @@ export interface UserUpdatePayload {
     role_ids?: number[] | null;
     is_active?: boolean;
     icon_id?: number;
+}
+
+// Тело PUT /users/{id}/organizations — заменяет весь список организаций пользователя.
+export interface SetUserOrganizationsRequest {
+    organization_ids: number[];
+}
+
+// Ответ POST /users — 201 { "id": 42 }
+export interface CreatedUserResponse {
+    id: number;
 }
