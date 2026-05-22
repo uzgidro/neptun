@@ -6,7 +6,7 @@ interface JwtPayload {
     roles?: string[];
     contact_id?: number;
     uid?: number;
-    org_id?: number;
+    org_ids?: number[];
     name?: string;
     [key: string]: any;
 }

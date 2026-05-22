@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '@/core/services/api.service';
 import { Observable } from 'rxjs';
-import { Users, UserCreatePayload, UserUpdatePayload } from '@/core/interfaces/users';
+import { Users, UserCreatePayload, UserUpdatePayload, CreatedUserResponse, SetUserOrganizationsRequest } from '@/core/interfaces/users';
 
 const USERS = '/users'
 
@@ -9,8 +9,15 @@ const USERS = '/users'
     providedIn: 'root'
 })
 export class UserService extends ApiService {
-    createUser(payload: UserCreatePayload): Observable<any> {
-        return this.http.post(this.BASE_URL + USERS, payload);
+    createUser(payload: UserCreatePayload): Observable<CreatedUserResponse> {
+        return this.http.post<CreatedUserResponse>(this.BASE_URL + USERS, payload);
+    }
+
+    setUserOrganizations(id: number, organizationIds: number[]): Observable<void> {
+        return this.http.put<void>(
+            `${this.BASE_URL}${USERS}/${id}/organizations`,
+            { organization_ids: organizationIds } as SetUserOrganizationsRequest
+        );
     }
 
     getUserById(id: number): Observable<Users> {

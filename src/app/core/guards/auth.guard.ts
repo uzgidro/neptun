@@ -85,7 +85,7 @@ export const reservoirFloodGuard: CanActivateFn = (): boolean | UrlTree => {
     const authService = inject(AuthService);
     const router = inject(Router);
 
-    return authService.hasRole(['sc', 'rais', 'reservoir_duty']) ? true : router.createUrlTree(['/notfound']);
+    return authService.hasRole(['sc', 'rais', 'reservoir_flood']) ? true : router.createUrlTree(['/notfound']);
 }
 
 export const hrmGuard: CanActivateFn = (): boolean | UrlTree => {

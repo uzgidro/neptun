@@ -124,7 +124,7 @@ export class MenuComponent implements OnInit {
                             },
                             {
                                 label: this.t('MENU.RESERVOIR_INFO'),
-                                role: ['rais', 'sc', 'reservoir_duty'],
+                                role: ['rais', 'sc', 'reservoir_flood'],
                                 items: [
                                     {
                                         label: this.t('MENU.RESERVOIR_SUMMARY'),
@@ -143,7 +143,7 @@ export class MenuComponent implements OnInit {
                                     },
                                     {
                                         label: this.t('MENU.RESERVOIR_FLOOD'),
-                                        role: ['sc', 'rais', 'reservoir_duty'],
+                                        role: ['sc', 'rais', 'reservoir_flood'],
                                         routerLink: ['/reservoir-flood']
                                     },
                                     {
@@ -292,7 +292,7 @@ export class MenuComponent implements OnInit {
                             { label: this.t('MENU.LEGAL_LIBRARY_UHE_PROTOCOLS'), routerLink: ['/legal-documents'], queryParams: { type_id: 11 }, routerLinkActiveOptions: { queryParams: 'exact' } }
                         ]
                     },
-                    { label: this.t('MENU.RESERVOIR_FLOOD'), role: ['reservoir_duty'], routerLink: ['/reservoir-flood'] },
+                    { label: this.t('MENU.RESERVOIR_FLOOD'), role: ['reservoir_flood'], routerLink: ['/reservoir-flood'] },
                     { label: this.t('MENU.FILTRATION'), role: ['reservoir'], routerLink: ['/manual-comparison-entry'] },
                     { label: this.t('MENU.CASCADE_REPORT'), role: ['cascade'], routerLink: ['/ges-daily-report'] },
                     { label: this.t('MENU.SOLAR_REPORT'), role: ['cascade'], routerLink: ['/solar-report'] },

@@ -72,17 +72,17 @@ describe('AuthService', () => {
     });
 
     describe('isOnlyReservoirDuty', () => {
-        it('returns true when roles is exactly ["reservoir_duty"]', () => {
-            jwtServiceSpy.getDecodedToken.and.returnValue({ roles: ['reservoir_duty'] } as any);
+        it('returns true when roles is exactly ["reservoir_flood"]', () => {
+            jwtServiceSpy.getDecodedToken.and.returnValue({ roles: ['reservoir_flood'] } as any);
             expect(service.isOnlyReservoirDuty()).toBeTrue();
         });
 
-        it('returns false when reservoir_duty is combined with another role', () => {
-            jwtServiceSpy.getDecodedToken.and.returnValue({ roles: ['sc', 'reservoir_duty'] } as any);
+        it('returns false when reservoir_flood is combined with another role', () => {
+            jwtServiceSpy.getDecodedToken.and.returnValue({ roles: ['sc', 'reservoir_flood'] } as any);
             expect(service.isOnlyReservoirDuty()).toBeFalse();
         });
 
-        it('returns false when roles does not include reservoir_duty', () => {
+        it('returns false when roles does not include reservoir_flood', () => {
             jwtServiceSpy.getDecodedToken.and.returnValue({ roles: ['sc'] } as any);
             expect(service.isOnlyReservoirDuty()).toBeFalse();
         });
@@ -129,8 +129,8 @@ describe('AuthService', () => {
             expect(service.getHomeRoute()).toBe('/dashboard');
         });
 
-        it('returns /reservoir-flood for reservoir_duty', () => {
-            jwtServiceSpy.getDecodedToken.and.returnValue({ roles: ['reservoir_duty'] } as any);
+        it('returns /reservoir-flood for reservoir_flood', () => {
+            jwtServiceSpy.getDecodedToken.and.returnValue({ roles: ['reservoir_flood'] } as any);
             expect(service.getHomeRoute()).toBe('/reservoir-flood');
         });
 

@@ -144,6 +144,13 @@
                         <small class="p-error">{{ 'HRM.USERS.ROLES_REQUIRED' | translate }}</small>
                     }
                 </div>
+                <div class="flex flex-col gap-2">
+                    <label>{{ 'HRM.USERS.ORGANIZATIONS' | translate }}</label>
+                    <app-multi-select [items]="organizations" formControlName="organization_ids"
+                                      optionLabel="name" optionValue="id"
+                                      [placeholder]="'HRM.USERS.SELECT_ORGANIZATIONS' | translate"
+                                      [required]="false"></app-multi-select>
+                </div>
 
                 <!-- Contact Information -->
                 <div class="font-semibold text-lg mb-2 mt-4">{{ 'HRM.USERS.CONTACT_INFO' | translate }}</div>
