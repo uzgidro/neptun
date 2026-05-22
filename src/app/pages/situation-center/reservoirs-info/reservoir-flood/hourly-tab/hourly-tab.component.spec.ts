@@ -385,6 +385,46 @@ describe('HourlyTabComponent', () => {
             expect(payload.temperature_c).toBeNull();
         }));
 
+        it('buildPayload sends null (not "") when duty_name is emptied', fakeAsync(() => {
+            // An emptied <input> yields '' — the backend would store it verbatim
+            // as an empty string. We want the column cleared, so '' → null.
+            svc.getConfigs.and.returnValue(of([makeConfig(42, 'Чарвак')]));
+            svc.getHourly.and.returnValue(of([makeRecord(42, '2026-05-22T09:00:00Z', { duty_name: 'Иванов' })]));
+            fixture.detectChanges();
+            tick();
+            const row = component.rows[0];
+            row.form.get('duty_name')!.setValue('');
+            row.form.get('duty_name')!.markAsDirty();
+            const payload: any = (component as any).buildPayload(row);
+            expect('duty_name' in payload).toBeTrue();
+            expect(payload.duty_name).toBeNull();
+        }));
+
+        it('buildPayload sends null (not "") when weather_condition is emptied', fakeAsync(() => {
+            svc.getConfigs.and.returnValue(of([makeConfig(42, 'Чарвак')]));
+            svc.getHourly.and.returnValue(of([]));
+            fixture.detectChanges();
+            tick();
+            const row = component.rows[0];
+            row.form.get('weather_condition')!.setValue('');
+            row.form.get('weather_condition')!.markAsDirty();
+            const payload: any = (component as any).buildPayload(row);
+            expect('weather_condition' in payload).toBeTrue();
+            expect(payload.weather_condition).toBeNull();
+        }));
+
+        it('buildPayload keeps a non-empty duty_name verbatim', fakeAsync(() => {
+            svc.getConfigs.and.returnValue(of([makeConfig(42, 'Чарвак')]));
+            svc.getHourly.and.returnValue(of([]));
+            fixture.detectChanges();
+            tick();
+            const row = component.rows[0];
+            row.form.get('duty_name')!.setValue('Иванов');
+            row.form.get('duty_name')!.markAsDirty();
+            const payload: any = (component as any).buildPayload(row);
+            expect(payload.duty_name).toBe('Иванов');
+        }));
+
         it('weatherOptions exposes the 8 standardized cyrillic values', () => {
             expect(component.weatherOptions).toEqual([
                 'очиқ',

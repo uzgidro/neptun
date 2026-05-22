@@ -436,7 +436,14 @@ export class HourlyTabComponent implements OnInit, OnDestroy {
         };
         for (const f of HOURLY_FIELDS) {
             const ctrl = row.form.get(f);
-            if (ctrl?.dirty) p[f] = ctrl.value;
+            if (ctrl?.dirty) {
+                // An emptied text input yields '' — send null instead so the
+                // backend clears the column (three-state contract: omitted =
+                // keep, null = clear, value = write). '' would be written
+                // verbatim as an empty string, not as "no data".
+                const v = ctrl.value;
+                p[f] = v === '' ? null : v;
+            }
         }
         return p as ReservoirFloodHourlyPayload;
     }
