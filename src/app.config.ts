@@ -15,7 +15,7 @@ import { provideTranslateService } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { GlobalErrorHandler } from '@/core/services/global-error-handler.service';
 import { RESERVOIR_SUMMARY_CONFIG_SOURCE } from '@/core/services/reservoir-summary-config.source';
-import { MockReservoirSummaryConfigService } from '@/core/services/reservoir-summary-config.mock';
+import { ReservoirSummaryConfigApiService } from '@/core/services/reservoir-summary-config-api.service';
 registerLocaleData(localeRu);
 
 export const appConfig: ApplicationConfig = {
@@ -38,8 +38,8 @@ export const appConfig: ApplicationConfig = {
         MessageService,
         { provide: LOCALE_ID, useValue: 'ru' },
         { provide: ErrorHandler, useClass: GlobalErrorHandler },
-        // Phase A: mock data source for reservoir-summary config admin UI.
-        // Phase B: swap useClass to ReservoirSummaryConfigApiService once visual is approved.
-        { provide: RESERVOIR_SUMMARY_CONFIG_SOURCE, useClass: MockReservoirSummaryConfigService }
+        // Reservoir-summary config admin data source — real HTTP API.
+        // (Phase A used MockReservoirSummaryConfigService; kept in repo for local dev.)
+        { provide: RESERVOIR_SUMMARY_CONFIG_SOURCE, useClass: ReservoirSummaryConfigApiService }
     ]
 };
