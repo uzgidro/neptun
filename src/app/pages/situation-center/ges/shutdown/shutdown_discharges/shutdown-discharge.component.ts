@@ -102,6 +102,12 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges, OnDestroy 
     isExcelLoading = false;
     isPdfLoading = false;
 
+    /** Stations whose completed periods are currently expanded (toggle off). */
+    expandedOrgIds: Set<number> = new Set<number>();
+
+    /** Threshold for collapsing — never hide less than this many rows. */
+    private static readonly MIN_HIDE_THRESHOLD = 2;
+
     get dateYMD(): string {
         const date = this.selectedDate || new Date();
         return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
@@ -136,6 +142,7 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges, OnDestroy 
 
     loadDischarges() {
         this.loading = true;
+        this.expandedOrgIds.clear();
         const dateToUse = this.date || new Date();
         forkJoin({
             discharges: this.dischargeService.getFlatDischarges(dateToUse),
@@ -421,6 +428,63 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges, OnDestroy 
         const orgDischarges = this.discharges.filter((d) => d.organization.name === discharge.organization.name);
         const indexInOrg = orgDischarges.findIndex((d) => d.id === discharge.id) + 1;
         return `${orgIndex}.${indexInOrg}`;
+    }
+
+    /** Toggle the expanded/collapsed state of a station's completed periods. */
+    toggleOrgExpansion(orgId: number): void {
+        if (this.expandedOrgIds.has(orgId)) {
+            this.expandedOrgIds.delete(orgId);
+        } else {
+            this.expandedOrgIds.add(orgId);
+        }
+    }
+
+    /**
+     * id of the completed record with max started_at for the given station,
+     * or null if no completed records exist. Used to keep the last completed
+     * period visible when the station has no ongoing periods.
+     */
+    private getLastCompletedId(orgId: number): number | null {
+        let bestId: number | null = null;
+        let bestTs = -Infinity;
+        for (const d of this.discharges) {
+            if (d.organization.id !== orgId) continue;
+            if (d.ended_at === null) continue;
+            const ts = new Date(d.started_at).getTime();
+            if (ts > bestTs) { bestTs = ts; bestId = d.id; }
+        }
+        return bestId;
+    }
+
+    /**
+     * Number of rows that would be hidden if the station were collapsed.
+     * - has ongoing → all completed are hidden;
+     * - no ongoing → all completed except the last (max started_at) are hidden.
+     */
+    getHiddenCount(orgId: number): number {
+        const orgRows = this.discharges.filter(d => d.organization.id === orgId);
+        const completed = orgRows.filter(d => d.ended_at !== null);
+        if (completed.length === 0) return 0;
+        const hasOngoing = orgRows.some(d => d.ended_at === null);
+        return hasOngoing ? completed.length : completed.length - 1;
+    }
+
+    /**
+     * Hide a row when:
+     *   - it is completed (ongoing never hidden), AND
+     *   - the station is currently collapsed, AND
+     *   - getHiddenCount(orgId) >= MIN_HIDE_THRESHOLD (otherwise collapsing is pointless), AND
+     *   - the row is NOT the "last completed" when there is no ongoing.
+     */
+    isRowHidden(discharge: IdleDischargeResponse): boolean {
+        if (discharge.ended_at === null) return false;
+        const orgId = discharge.organization.id;
+        if (this.expandedOrgIds.has(orgId)) return false;
+        if (this.getHiddenCount(orgId) < ShutdownDischargeComponent.MIN_HIDE_THRESHOLD) return false;
+        const orgRows = this.discharges.filter(d => d.organization.id === orgId);
+        const hasOngoing = orgRows.some(d => d.ended_at === null);
+        if (!hasOngoing && discharge.id === this.getLastCompletedId(orgId)) return false;
+        return true;
     }
 
     download(format: 'excel' | 'pdf') {
