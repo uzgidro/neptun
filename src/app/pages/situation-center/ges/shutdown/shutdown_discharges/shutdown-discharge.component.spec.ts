@@ -305,3 +305,156 @@ describe('ShutdownDischargeComponent - station ordering', () => {
     });
 });
 
+describe('ShutdownDischargeComponent - expandable completed periods', () => {
+    let component: ShutdownDischargeComponent;
+    let fixture: ComponentFixture<ShutdownDischargeComponent>;
+    let dischargeService: jasmine.SpyObj<DischargeService>;
+
+    function makeDischarge(
+        id: number,
+        orgId: number,
+        orgName: string,
+        startedAt: string,
+        endedAt: string | null
+    ): any {
+        return {
+            id,
+            organization: { id: orgId, name: orgName },
+            started_at: startedAt,
+            ended_at: endedAt,
+            flow_rate: 1, total_volume: 1, reason: '',
+            files: [], created_by: { id: 1, name: 'Tester' }
+        };
+    }
+
+    // Fixture:
+    // A (id=1, 'Чарвак'): 3 completed (04:00, 06:00, 08:00) + 1 ongoing
+    // B (id=2, 'Гиссарак'): 1 completed
+    // C (id=3, 'Андижан'): 1 ongoing
+    // D (id=4, 'ГЭС-4'): 2 completed (05:00, 07:00), 0 ongoing
+    // E (id=5, 'ГЭС-18'): 3 completed (04:00, 09:00, 11:55), 0 ongoing
+    const fixtureData = [
+        // A
+        makeDischarge(101, 1, 'Чарвак', '2026-04-01T04:00:00Z', '2026-04-01T05:00:00Z'),
+        makeDischarge(102, 1, 'Чарвак', '2026-04-01T06:00:00Z', '2026-04-01T07:00:00Z'),
+        makeDischarge(103, 1, 'Чарвак', '2026-04-01T08:00:00Z', '2026-04-01T09:00:00Z'),
+        makeDischarge(104, 1, 'Чарвак', '2026-04-01T10:00:00Z', null),
+        // B
+        makeDischarge(201, 2, 'Гиссарак', '2026-04-01T05:00:00Z', '2026-04-01T06:00:00Z'),
+        // C
+        makeDischarge(301, 3, 'Андижан', '2026-04-01T08:00:00Z', null),
+        // D
+        makeDischarge(401, 4, 'ГЭС-4', '2026-04-01T05:00:00Z', '2026-04-01T06:00:00Z'),
+        makeDischarge(402, 4, 'ГЭС-4', '2026-04-01T07:00:00Z', '2026-04-01T08:00:00Z'),
+        // E
+        makeDischarge(501, 5, 'ГЭС-18', '2026-04-01T04:00:00Z', '2026-04-01T05:00:00Z'),
+        makeDischarge(502, 5, 'ГЭС-18', '2026-04-01T09:00:00Z', '2026-04-01T10:00:00Z'),
+        makeDischarge(503, 5, 'ГЭС-18', '2026-04-01T11:55:00Z', '2026-04-01T12:30:00Z')
+    ];
+
+    beforeEach(async () => {
+        const dischargeSpy = jasmine.createSpyObj('DischargeService',
+            ['addDischarge', 'getFlatDischarges', 'editDischarge', 'deleteDischarge']);
+        dischargeSpy.getFlatDischarges.and.returnValue(of(fixtureData));
+
+        const orgSpy = jasmine.createSpyObj('OrganizationService', ['getCascades']);
+        orgSpy.getCascades.and.returnValue(of([]));
+        const authSpy = jasmine.createSpyObj('AuthService', ['hasPermission', 'isSc']);
+        authSpy.hasPermission.and.returnValue(true);
+        authSpy.isSc.and.returnValue(true);
+        const scSpy = jasmine.createSpyObj('ScService', ['downloadScReport']);
+        const gesReportSpy = jasmine.createSpyObj('GesReportService', ['getConfigs']);
+        gesReportSpy.getConfigs.and.returnValue(of([]));
+        const msgSpy = jasmine.createSpyObj('MessageService', ['add']);
+
+        await TestBed.configureTestingModule({
+            imports: [ShutdownDischargeComponent, TranslateModule.forRoot()],
+            providers: [
+                provideHttpClient(),
+                provideHttpClientTesting(),
+                provideNoopAnimations(),
+                { provide: DischargeService, useValue: dischargeSpy },
+                { provide: OrganizationService, useValue: orgSpy },
+                { provide: AuthService, useValue: authSpy },
+                { provide: ScService, useValue: scSpy },
+                { provide: GesReportService, useValue: gesReportSpy },
+                { provide: MessageService, useValue: msgSpy },
+                { provide: ActivatedRoute, useValue: { queryParams: of({}), snapshot: { queryParamMap: { get: () => null } } } },
+                { provide: Router, useValue: { navigate: jasmine.createSpy('navigate') } },
+                { provide: TimeService, useValue: { getServerDate: () => of(new Date()) } }
+            ]
+        }).compileComponents();
+
+        fixture = TestBed.createComponent(ShutdownDischargeComponent);
+        component = fixture.componentInstance;
+        dischargeService = TestBed.inject(DischargeService) as jasmine.SpyObj<DischargeService>;
+
+        fixture.detectChanges();
+    });
+
+    it('getHiddenCount returns all completed when station has ongoing', () => {
+        // A: 3 completed + 1 ongoing → all 3 completed get hidden
+        expect(component.getHiddenCount(1)).toBe(3);
+    });
+
+    it('getHiddenCount returns completed minus 1 when no ongoing', () => {
+        // E: 3 completed, 0 ongoing → 3 - 1 = 2 hidden (last completed stays)
+        expect(component.getHiddenCount(5)).toBe(2);
+    });
+
+    it('getHiddenCount returns 0 when station has only 1 completed and no ongoing', () => {
+        // B: 1 completed, 0 ongoing → 0 hidden
+        expect(component.getHiddenCount(2)).toBe(0);
+    });
+
+    it('isRowHidden hides completed when station has ongoing', () => {
+        const aCompleted = component.discharges.find(d => d.id === 101)!;
+        const aOngoing = component.discharges.find(d => d.id === 104)!;
+        expect(component.isRowHidden(aCompleted)).toBeTrue();
+        expect(component.isRowHidden(aOngoing)).toBeFalse();
+    });
+
+    it('isRowHidden keeps last completed visible when no ongoing and >= 3 completed', () => {
+        // E: max started_at is 11:55 → id 503 visible; others (501, 502) hidden
+        const eLast = component.discharges.find(d => d.id === 503)!;
+        const eOther1 = component.discharges.find(d => d.id === 501)!;
+        const eOther2 = component.discharges.find(d => d.id === 502)!;
+        expect(component.isRowHidden(eLast)).toBeFalse();
+        expect(component.isRowHidden(eOther1)).toBeTrue();
+        expect(component.isRowHidden(eOther2)).toBeTrue();
+    });
+
+    it('isRowHidden keeps both visible when no ongoing and 2 completed', () => {
+        // D: 2 completed, would hide only 1 → below threshold, no hiding
+        const d1 = component.discharges.find(d => d.id === 401)!;
+        const d2 = component.discharges.find(d => d.id === 402)!;
+        expect(component.isRowHidden(d1)).toBeFalse();
+        expect(component.isRowHidden(d2)).toBeFalse();
+    });
+
+    it('isRowHidden keeps the only completed visible when 1 completed and no ongoing', () => {
+        // B: 1 completed only → nothing to hide
+        const b = component.discharges.find(d => d.id === 201)!;
+        expect(component.isRowHidden(b)).toBeFalse();
+    });
+
+    it('isRowHidden returns false for all rows after toggleOrgExpansion', () => {
+        // E rows initially have some hidden; after expansion, none are hidden
+        component.toggleOrgExpansion(5);
+        const eRows = component.discharges.filter(d => d.organization.id === 5);
+        for (const row of eRows) {
+            expect(component.isRowHidden(row)).toBeFalse();
+        }
+    });
+
+    it('loadDischarges resets expandedOrgIds', () => {
+        // Expand a station, then reload — set should be cleared.
+        component.toggleOrgExpansion(5);
+        expect(component.expandedOrgIds.has(5)).toBeTrue();
+
+        component.loadDischarges();
+
+        expect(component.expandedOrgIds.size).toBe(0);
+    });
+});
+

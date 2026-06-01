@@ -116,7 +116,20 @@
             <td class="bg-gray-200 dark:bg-gray-900 font-semibold">
                 {{ getTotalVolume(discharge.organization.name) | number: '1.0-2' }}
             </td>
-            <td class="bg-gray-200 dark:bg-gray-900" colspan="3"></td>
+            <td class="bg-gray-200 dark:bg-gray-900" colspan="3">
+                @if (getHiddenCount(discharge.organization.id) >= 2) {
+                    <p-button
+                        [label]="expandedOrgIds.has(discharge.organization.id)
+                            ? ('SITUATION_CENTER.COMMON.COLLAPSE' | translate)
+                            : (('SITUATION_CENTER.COMMON.EXPAND' | translate) + ' (' + getHiddenCount(discharge.organization.id) + ')')"
+                        [icon]="expandedOrgIds.has(discharge.organization.id) ? 'pi pi-chevron-up' : 'pi pi-chevron-down'"
+                        severity="info"
+                        [text]="true"
+                        size="small"
+                        (click)="toggleOrgExpansion(discharge.organization.id)"
+                    />
+                }
+            </td>
             @if (authService.isSc()) {
                 <td class="bg-gray-200 dark:bg-gray-900"></td>
             }
@@ -124,49 +137,51 @@
     </ng-template>
 
     <ng-template pTemplate="body" let-discharge>
-        <tr>
-            <td>{{ getRowIndex(discharge) }}</td>
-            <td>{{ discharge.started_at | date:'yyyy-MM-dd HH:mm' }}</td>
-            <td>{{ discharge.ended_at ? (discharge.ended_at | date:'yyyy-MM-dd HH:mm') : '-' }}</td>
-            <td>{{ discharge.flow_rate | number: '1.0-2' }}</td>
-            <td>{{ discharge.total_volume | number: '1.2-2' }}</td>
-            <td>{{ discharge.reason || '-' }}</td>
-            <td>{{ discharge.created_by?.name }}</td>
-            <td>
-                @if (discharge.files && discharge.files.length > 0) {
-                    <p-button
-                        [label]="discharge.files.length.toString()"
-                        icon="pi pi-paperclip"
-                        severity="secondary"
-                        [text]="true"
-                        (click)="showFiles(discharge)"
-                        [pTooltip]="'SITUATION_CENTER.COMMON.VIEW_FILES' | translate"
-                    />
-                } @else {
-                    <span class="text-color-secondary">—</span>
-                }
-            </td>
-            @if (authService.isSc()) {
+        @if (!isRowHidden(discharge)) {
+            <tr>
+                <td>{{ getRowIndex(discharge) }}</td>
+                <td>{{ discharge.started_at | date:'yyyy-MM-dd HH:mm' }}</td>
+                <td>{{ discharge.ended_at ? (discharge.ended_at | date:'yyyy-MM-dd HH:mm') : '-' }}</td>
+                <td>{{ discharge.flow_rate | number: '1.0-2' }}</td>
+                <td>{{ discharge.total_volume | number: '1.2-2' }}</td>
+                <td>{{ discharge.reason || '-' }}</td>
+                <td>{{ discharge.created_by?.name }}</td>
                 <td>
-                    <p-button
-                        icon="pi pi-pencil"
-                        severity="info"
-                        [text]="true"
-                        [rounded]="true"
-                        (click)="editDischarge(discharge)"
-                        [pTooltip]="'SITUATION_CENTER.COMMON.EDIT' | translate"
-                    />
-                    <p-button
-                        icon="pi pi-trash"
-                        severity="danger"
-                        [text]="true"
-                        [rounded]="true"
-                        (click)="deleteDischarge(discharge)"
-                        [pTooltip]="'SITUATION_CENTER.COMMON.DELETE' | translate"
-                    />
+                    @if (discharge.files && discharge.files.length > 0) {
+                        <p-button
+                            [label]="discharge.files.length.toString()"
+                            icon="pi pi-paperclip"
+                            severity="secondary"
+                            [text]="true"
+                            (click)="showFiles(discharge)"
+                            [pTooltip]="'SITUATION_CENTER.COMMON.VIEW_FILES' | translate"
+                        />
+                    } @else {
+                        <span class="text-color-secondary">—</span>
+                    }
                 </td>
-            }
-        </tr>
+                @if (authService.isSc()) {
+                    <td>
+                        <p-button
+                            icon="pi pi-pencil"
+                            severity="info"
+                            [text]="true"
+                            [rounded]="true"
+                            (click)="editDischarge(discharge)"
+                            [pTooltip]="'SITUATION_CENTER.COMMON.EDIT' | translate"
+                        />
+                        <p-button
+                            icon="pi pi-trash"
+                            severity="danger"
+                            [text]="true"
+                            [rounded]="true"
+                            (click)="deleteDischarge(discharge)"
+                            [pTooltip]="'SITUATION_CENTER.COMMON.DELETE' | translate"
+                        />
+                    </td>
+                }
+            </tr>
+        }
     </ng-template>
 
     <ng-template pTemplate="emptymessage">
