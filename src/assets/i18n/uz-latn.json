@@ -2195,7 +2195,9 @@
       "UPDATED": "Suv tashlab yuborish yozuvi yangilandi",
       "UPDATE_ERROR": "Ma'lumotlarni yangilab bo'lmadi",
       "CREATED": "Yangi suv tashlab yuborish yozuvi qo'shildi",
-      "CREATE_ERROR": "Ma'lumotlarni saqlab bo'lmadi"
+      "CREATE_ERROR": "Ma'lumotlarni saqlab bo'lmadi",
+      "EXPAND_COMPLETED": "Tugallanganlarni ko'rsatish ({{count}})",
+      "COLLAPSE_COMPLETED": "Tugallanganlarni yashirish"
     },
     "VISIT": {
       "TITLE": "Tashriflar - Tashrif buyurishlar",

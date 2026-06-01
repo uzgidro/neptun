@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
@@ -303,5 +303,145 @@ describe('ShutdownDischargeComponent - station ordering', () => {
         // Within each station, ordered by started_at.
         expect(component.discharges.map(d => d.id)).toEqual([2, 4, 1, 3]);
     });
+});
+
+describe('ShutdownDischargeComponent - expandable completed periods', () => {
+    let component: ShutdownDischargeComponent;
+    let fixture: ComponentFixture<ShutdownDischargeComponent>;
+    let dischargeService: jasmine.SpyObj<DischargeService>;
+
+    function makeRecord(
+        id: number,
+        orgId: number,
+        orgName: string,
+        startedAt: string,
+        endedAt: string | null
+    ): any {
+        return {
+            id,
+            organization: { id: orgId, name: orgName, parent_organization_id: null, types: [] },
+            created_by: { id: 1, name: 'Tester' },
+            approved_by: null,
+            started_at: startedAt,
+            ended_at: endedAt,
+            flow_rate: 1,
+            total_volume: 1,
+            reason: '',
+            is_ongoing: endedAt === null,
+            approved: null,
+            files: []
+        };
+    }
+
+    // Station A: 3 completed + 1 ongoing
+    const stationA_completed_1 = makeRecord(1, 1, 'Чарвак', '2026-04-01T08:00:00Z', '2026-04-01T10:00:00Z');
+    const stationA_completed_2 = makeRecord(2, 1, 'Чарвак', '2026-04-01T11:00:00Z', '2026-04-01T13:00:00Z');
+    const stationA_completed_3 = makeRecord(3, 1, 'Чарвак', '2026-04-01T14:00:00Z', '2026-04-01T16:00:00Z');
+    const stationA_ongoing     = makeRecord(4, 1, 'Чарвак', '2026-04-01T17:00:00Z', null);
+    // Station B: 1 completed
+    const stationB_completed   = makeRecord(5, 2, 'Гиссарак', '2026-04-01T08:00:00Z', '2026-04-01T10:00:00Z');
+    // Station C: 1 ongoing
+    const stationC_ongoing     = makeRecord(6, 3, 'Андижан', '2026-04-01T08:00:00Z', null);
+
+    const seedRecords = [
+        stationA_completed_1,
+        stationA_completed_2,
+        stationA_completed_3,
+        stationA_ongoing,
+        stationB_completed,
+        stationC_ongoing
+    ];
+
+    beforeEach(async () => {
+        const dischargeSpy = jasmine.createSpyObj('DischargeService',
+            ['addDischarge', 'getFlatDischarges', 'editDischarge', 'deleteDischarge']);
+        dischargeSpy.getFlatDischarges.and.returnValue(of(seedRecords));
+
+        const orgSpy = jasmine.createSpyObj('OrganizationService', ['getCascades']);
+        orgSpy.getCascades.and.returnValue(of([]));
+        const authSpy = jasmine.createSpyObj('AuthService', ['hasPermission', 'isSc']);
+        authSpy.hasPermission.and.returnValue(true);
+        authSpy.isSc.and.returnValue(true);
+        const scSpy = jasmine.createSpyObj('ScService', ['downloadScReport']);
+        const gesReportSpy = jasmine.createSpyObj('GesReportService', ['getConfigs']);
+        gesReportSpy.getConfigs.and.returnValue(of([]));
+        const msgSpy = jasmine.createSpyObj('MessageService', ['add']);
+
+        await TestBed.configureTestingModule({
+            imports: [ShutdownDischargeComponent, TranslateModule.forRoot()],
+            providers: [
+                provideHttpClient(),
+                provideHttpClientTesting(),
+                provideNoopAnimations(),
+                { provide: DischargeService, useValue: dischargeSpy },
+                { provide: OrganizationService, useValue: orgSpy },
+                { provide: AuthService, useValue: authSpy },
+                { provide: ScService, useValue: scSpy },
+                { provide: GesReportService, useValue: gesReportSpy },
+                { provide: MessageService, useValue: msgSpy },
+                { provide: ActivatedRoute, useValue: { queryParams: of({}), snapshot: { queryParamMap: { get: () => null } } } },
+                { provide: Router, useValue: { navigate: jasmine.createSpy('navigate') } },
+                { provide: TimeService, useValue: { getServerDate: () => of(new Date()), dateToYMD: (d: Date) => '2026-04-01' } }
+            ]
+        }).compileComponents();
+
+        fixture = TestBed.createComponent(ShutdownDischargeComponent);
+        component = fixture.componentInstance;
+        dischargeService = TestBed.inject(DischargeService) as jasmine.SpyObj<DischargeService>;
+    });
+
+    it('getCompletedCount returns the count of records with ended_at !== null for a given orgId', () => {
+        fixture.detectChanges();
+
+        expect(component.getCompletedCount(1)).toBe(3);
+        expect(component.getCompletedCount(2)).toBe(1);
+        expect(component.getCompletedCount(3)).toBe(0);
+    });
+
+    it('isRowHidden hides completed rows by default when station has >= 2 completed', () => {
+        fixture.detectChanges();
+
+        const completedA = component.discharges.find(d => d.id === stationA_completed_1.id)!;
+        const ongoingA = component.discharges.find(d => d.id === stationA_ongoing.id)!;
+
+        expect(component.isRowHidden(completedA)).toBeTrue();
+        expect(component.isRowHidden(ongoingA)).toBeFalse();
+    });
+
+    it('isRowHidden reveals completed rows after toggleOrgExpansion(orgId)', () => {
+        fixture.detectChanges();
+
+        const completedA = component.discharges.find(d => d.id === stationA_completed_1.id)!;
+        expect(component.isRowHidden(completedA)).toBeTrue();
+
+        component.toggleOrgExpansion(1);
+
+        expect(component.isRowHidden(completedA)).toBeFalse();
+    });
+
+    it('isRowHidden does not hide when station has only 1 completed period', () => {
+        fixture.detectChanges();
+
+        const completedB = component.discharges.find(d => d.id === stationB_completed.id)!;
+
+        expect(component.isRowHidden(completedB)).toBeFalse();
+
+        component.toggleOrgExpansion(2);
+        expect(component.isRowHidden(completedB)).toBeFalse();
+    });
+
+    it('loadDischarges resets expandedOrgIds', fakeAsync(() => {
+        fixture.detectChanges();
+        tick();
+
+        component.toggleOrgExpansion(1);
+        expect(component.expandedOrgIds.has(1)).toBeTrue();
+
+        component.loadDischarges();
+        tick();
+
+        expect(component.expandedOrgIds.size).toBe(0);
+        expect(component.expandedOrgIds.has(1)).toBeFalse();
+    }));
 });
 

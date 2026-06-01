@@ -102,6 +102,8 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges, OnDestroy 
     isExcelLoading = false;
     isPdfLoading = false;
 
+    expandedOrgIds = new Set<number>();
+
     get dateYMD(): string {
         const date = this.selectedDate || new Date();
         return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
@@ -135,6 +137,7 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges, OnDestroy 
     }
 
     loadDischarges() {
+        this.expandedOrgIds.clear();
         this.loading = true;
         const dateToUse = this.date || new Date();
         forkJoin({
@@ -421,6 +424,39 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges, OnDestroy 
         const orgDischarges = this.discharges.filter((d) => d.organization.name === discharge.organization.name);
         const indexInOrg = orgDischarges.findIndex((d) => d.id === discharge.id) + 1;
         return `${orgIndex}.${indexInOrg}`;
+    }
+
+    toggleOrgExpansion(orgId: number): void {
+        if (this.expandedOrgIds.has(orgId)) {
+            this.expandedOrgIds.delete(orgId);
+        } else {
+            this.expandedOrgIds.add(orgId);
+        }
+    }
+
+    /**
+     * Number of completed periods (ended_at !== null) for the given station.
+     * Keyed by organization.id - name-based lookup would diverge if two
+     * records ever share a station name.
+     */
+    getCompletedCount(orgId: number): number {
+        return this.discharges
+            .filter(d => d.organization.id === orgId && d.ended_at !== null)
+            .length;
+    }
+
+    /**
+     * Hide a data row when:
+     *   1. its station has >= 2 completed periods, AND
+     *   2. the station's group is currently collapsed, AND
+     *   3. this row is itself completed (ongoing rows always visible).
+     */
+    isRowHidden(discharge: IdleDischargeResponse): boolean {
+        if (discharge.ended_at === null) return false;
+        const orgId = discharge.organization.id;
+        if (this.expandedOrgIds.has(orgId)) return false;
+        if (this.getCompletedCount(orgId) < 2) return false;
+        return true;
     }
 
     download(format: 'excel' | 'pdf') {

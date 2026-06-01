@@ -2195,7 +2195,9 @@
       "UPDATED": "Discharge record updated",
       "UPDATE_ERROR": "Failed to update data",
       "CREATED": "New discharge record added",
-      "CREATE_ERROR": "Failed to save data"
+      "CREATE_ERROR": "Failed to save data",
+      "EXPAND_COMPLETED": "Show completed ({{count}})",
+      "COLLAPSE_COMPLETED": "Hide completed"
     },
     "VISIT": {
       "TITLE": "Visits",

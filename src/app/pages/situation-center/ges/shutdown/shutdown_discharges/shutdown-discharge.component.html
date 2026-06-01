@@ -116,7 +116,25 @@
             <td class="bg-gray-200 dark:bg-gray-900 font-semibold">
                 {{ getTotalVolume(discharge.organization.name) | number: '1.0-2' }}
             </td>
-            <td class="bg-gray-200 dark:bg-gray-900" colspan="3"></td>
+            <td class="bg-gray-200 dark:bg-gray-900" colspan="3">
+                @if (getCompletedCount(discharge.organization.id) >= 2) {
+                    <button type="button"
+                            class="inline-flex items-center gap-2 cursor-pointer text-sm"
+                            style="color: var(--p-primary-color); background: none; border: 0;"
+                            (click)="toggleOrgExpansion(discharge.organization.id)">
+                        <i class="pi text-xs"
+                           [class.pi-chevron-right]="!expandedOrgIds.has(discharge.organization.id)"
+                           [class.pi-chevron-down]="expandedOrgIds.has(discharge.organization.id)"></i>
+                        <span>
+                            @if (expandedOrgIds.has(discharge.organization.id)) {
+                                {{ 'SITUATION_CENTER.DISCHARGE.COLLAPSE_COMPLETED' | translate }}
+                            } @else {
+                                {{ 'SITUATION_CENTER.DISCHARGE.EXPAND_COMPLETED' | translate:{count: getCompletedCount(discharge.organization.id)} }}
+                            }
+                        </span>
+                    </button>
+                }
+            </td>
             @if (authService.isSc()) {
                 <td class="bg-gray-200 dark:bg-gray-900"></td>
             }
@@ -124,7 +142,7 @@
     </ng-template>
 
     <ng-template pTemplate="body" let-discharge>
-        <tr>
+        <tr [style.display]="isRowHidden(discharge) ? 'none' : ''">
             <td>{{ getRowIndex(discharge) }}</td>
             <td>{{ discharge.started_at | date:'yyyy-MM-dd HH:mm' }}</td>
             <td>{{ discharge.ended_at ? (discharge.ended_at | date:'yyyy-MM-dd HH:mm') : '-' }}</td>
