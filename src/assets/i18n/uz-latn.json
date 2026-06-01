@@ -2261,7 +2261,22 @@
       "RELEASE": "Chiqarish, m³/s",
       "PREVIOUS_YEARS": "Oldingi yillar",
       "INFLOW_TO_DATE": "Bugungi kunga oqib kirish, mln. m³",
-      "MODSNOW": "MODSNOW, qor qoplami %"
+      "MODSNOW": "MODSNOW, qor qoplami %",
+      "TAB_DATA": "Jadval",
+      "TAB_CONFIG": "Tarkibni sozlash",
+      "ADD_ORG": "Tashkilot qo'shish",
+      "EDIT": "Tahrirlash",
+      "ORGANIZATION": "Tashkilot",
+      "SORT_ORDER": "Tartib",
+      "INCLUDE_IN_TOTAL": "JAMIga qo'shish",
+      "CONFIG_SAVED": "Konfiguratsiya saqlandi",
+      "CONFIG_DELETED": "Yozuv o'chirildi",
+      "CONFIG_CAPACITY_REACHED": "8 ta yozuv chegarasiga yetildi. Yangi qo'shish uchun keraksizini o'chiring.",
+      "SLOT3_WARNING_BODY": "Diqqat: Excel shablon cheklanishi. 3-pozitsiya uchun modsnow qatori qattiq o'tkazib yuboriladi. Agar Sardobani boshqa joyga ko'chirsangiz yoki 3-pozitsiyaga boshqa obyektni qo'ysangiz — uning modsnow qiymati Excel hisobotga tushmaydi. Davom etish kerakmi?",
+      "DELETE": "Tashkilotni jadvaldan olib tashlang?",
+      "ALREADY_DELETED": "Yozuv avval o'chirilgan",
+      "ERROR_SAVE_FAILED": "Saqlab bo'lmadi",
+      "ERROR_DELETE_FAILED": "O'chirib bo'lmadi"
     },
     "RESERVOIR_SUMMARY_HOURLY": {
       "TITLE": "Suv omborlari bo'yicha tezkor ma'lumot"
