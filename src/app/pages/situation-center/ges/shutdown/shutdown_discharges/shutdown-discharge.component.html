@@ -116,15 +116,14 @@
             <td class="bg-gray-200 dark:bg-gray-900 font-semibold">
                 {{ getTotalVolume(discharge.organization.name) | number: '1.0-2' }}
             </td>
-            <td class="bg-gray-200 dark:bg-gray-900" colspan="2"></td>
-            <td class="bg-gray-200 dark:bg-gray-900">
+            <td class="bg-gray-200 dark:bg-gray-900" colspan="3">
                 @if (getHiddenCount(discharge.organization.id) >= 2) {
                     <p-button
                         [label]="expandedOrgIds.has(discharge.organization.id)
                             ? ('SITUATION_CENTER.COMMON.COLLAPSE' | translate)
                             : (('SITUATION_CENTER.COMMON.EXPAND' | translate) + ' (' + getHiddenCount(discharge.organization.id) + ')')"
                         [icon]="expandedOrgIds.has(discharge.organization.id) ? 'pi pi-chevron-up' : 'pi pi-chevron-down'"
-                        severity="secondary"
+                        severity="info"
                         [text]="true"
                         size="small"
                         (click)="toggleOrgExpansion(discharge.organization.id)"
