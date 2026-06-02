@@ -2261,7 +2261,22 @@
       "RELEASE": "Release, m³/s",
       "PREVIOUS_YEARS": "Previous Years",
       "INFLOW_TO_DATE": "Inflow to Date, mln m³",
-      "MODSNOW": "MODSNOW, snow cover %"
+      "MODSNOW": "MODSNOW, snow cover %",
+      "TAB_DATA": "Summary",
+      "TAB_CONFIG": "Composition",
+      "ADD_ORG": "Add organization",
+      "EDIT": "Edit",
+      "ORGANIZATION": "Organization",
+      "SORT_ORDER": "Order",
+      "INCLUDE_IN_TOTAL": "Include in TOTAL",
+      "CONFIG_SAVED": "Configuration saved",
+      "CONFIG_DELETED": "Entry deleted",
+      "CONFIG_CAPACITY_REACHED": "Capacity reached (8 entries). Remove existing ones to add new.",
+      "SLOT3_WARNING_BODY": "Warning: Excel template limitation. Slot 3 has a hardcoded skip for the modsnow row. Moving Sardoba away or placing another organization at slot 3 will cause its modsnow value to be dropped from the Excel report. Continue?",
+      "DELETE": "Remove organization from the summary?",
+      "ALREADY_DELETED": "Entry already deleted",
+      "ERROR_SAVE_FAILED": "Failed to save",
+      "ERROR_DELETE_FAILED": "Failed to delete"
     },
     "RESERVOIR_SUMMARY_HOURLY": {
       "TITLE": "Operative Reservoir Summary"

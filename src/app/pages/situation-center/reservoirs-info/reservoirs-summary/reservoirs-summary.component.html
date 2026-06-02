@@ -1,6 +1,16 @@
 <div class="card">
     <h3 class="text-center mb-3">Сводка по водохранилищам</h3>
 
+    <p-tabs [value]="activeTab" (valueChange)="onTabChange($event)">
+        <p-tablist>
+            <p-tab value="data">{{ 'SITUATION_CENTER.RESERVOIRS_SUMMARY.TAB_DATA' | translate }}</p-tab>
+            @if (authService.isScOrRais()) {
+                <p-tab value="config">{{ 'SITUATION_CENTER.RESERVOIRS_SUMMARY.TAB_CONFIG' | translate }}</p-tab>
+            }
+        </p-tablist>
+        <p-tabpanels>
+            <p-tabpanel value="data">
+
     <div class="flex justify-between items-baseline gap-4">
         <div class="w-full md:w-1/4">
             <app-date (dateChange)="onDateChange($event)"></app-date>
@@ -302,4 +312,13 @@
             </div>
         }
     }
+
+            </p-tabpanel>
+            @if (authService.isScOrRais()) {
+                <p-tabpanel value="config">
+                    <app-reservoir-summary-config-tab />
+                </p-tabpanel>
+            }
+        </p-tabpanels>
+    </p-tabs>
 </div>

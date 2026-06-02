@@ -17,12 +17,31 @@ import { LevelVolumeService } from '@/core/services/level-volume.service';
 import { LevelVolume } from '@/core/interfaces/level-volume';
 import { DateWidget } from '@/layout/component/widget/date/date.widget';
 import { TooltipModule } from 'primeng/tooltip';
+import { Tab, TabList, TabPanel, TabPanels, Tabs } from 'primeng/tabs';
+import { TranslateModule } from '@ngx-translate/core';
+import { ReservoirSummaryConfigTabComponent } from './config-tab/config-tab.component';
 
 registerLocaleData(localeRu);
 
 @Component({
     selector: 'app-reservoirs-summary',
-    imports: [CommonModule, ReactiveFormsModule, FormsModule, TableModule, InputText, ButtonModule, DateWidget, TooltipModule],
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        FormsModule,
+        TableModule,
+        InputText,
+        ButtonModule,
+        DateWidget,
+        TooltipModule,
+        TranslateModule,
+        Tabs,
+        TabList,
+        Tab,
+        TabPanels,
+        TabPanel,
+        ReservoirSummaryConfigTabComponent
+    ],
     templateUrl: './reservoirs-summary.component.html',
     styleUrl: './reservoirs-summary.component.scss'
 })
@@ -41,6 +60,12 @@ export class ReservoirsSummaryComponent implements OnInit {
 
     isExcelLoading = false;
     isPdfLoading = false;
+
+    activeTab: string = 'data';
+
+    onTabChange(key: string | number): void {
+        this.activeTab = String(key);
+    }
 
     get dateYMD(): string {
         return this.selectedDate ? `${this.selectedDate.getFullYear()}-${String(this.selectedDate.getMonth() + 1).padStart(2, '0')}-${String(this.selectedDate.getDate()).padStart(2, '0')}` : '';
