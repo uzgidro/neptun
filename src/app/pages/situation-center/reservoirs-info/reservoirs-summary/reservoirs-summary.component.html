@@ -81,7 +81,7 @@
                     <!--Label-->
                     <td rowspan="2">{{ reservoir.organization_name }}</td>
                     <!--Level-->
-                    @if (index !== 6) {
+                    @if (reservoir.organization_id !== null) {
                         @if (authService.isSc()) {
                             <td [pEditableColumn]="reservoir.level" pEditableColumnField="current"
                                 class="text-nowrap"
@@ -105,7 +105,7 @@
                         <td></td>
                     }
                     <!--Volume-->
-                    @if (authService.isSc() && index !== 6) {
+                    @if (authService.isSc() && reservoir.organization_id !== null) {
                         <td [pEditableColumn]="reservoir.volume" pEditableColumnField="current" class="text-nowrap"
                             [ngClass]="{'bg-yellow-100 dark:bg-yellow-900': reservoir.volume.is_edited}">
                             <p-cellEditor>
@@ -149,7 +149,7 @@
                     <td>{{ reservoir.income.year_ago !== null ? (reservoir.income.year_ago | number: '1.0-1') : 'N/A' }}</td>
                     <td>{{ reservoir.income.two_years_ago !== null ? (reservoir.income.two_years_ago | number: '1.0-1') : 'N/A' }}</td>
                     <!--Release-->
-                    @if (authService.isSc() && index !== 6) {
+                    @if (authService.isSc() && reservoir.organization_id !== null) {
                         <td [pEditableColumn]="reservoir.release" pEditableColumnField="current" class="text-nowrap"
                             [ngClass]="{'bg-yellow-100 dark:bg-yellow-900': reservoir.release.is_edited}">
                             <p-cellEditor>
@@ -170,7 +170,7 @@
                     <!--Past years release-->
                     <td>{{ reservoir.release.year_ago !== null ? (reservoir.release.year_ago | number: '1.0-1') : 'N/A' }}</td>
                     <td>{{ reservoir.release.two_years_ago !== null ? (reservoir.release.two_years_ago | number: '1.0-1') : 'N/A' }}</td>
-                    @if (authService.isAdmin() && index !== 6) {
+                    @if (authService.isAdmin() && reservoir.organization_id !== null) {
                         <td [pEditableColumn]="reservoir" pEditableColumnField="incoming_volume" class="text-nowrap"
                             [ngClass]="{'bg-blue-100 dark:bg-blue-900': reservoir.incoming_volume_is_calculated, 'bg-green-100 dark:bg-green-900': reservoir.incoming_volume_is_reset}"
                             [pTooltip]="getIncomingVolumeTooltip(reservoir)" tooltipPosition="top">
