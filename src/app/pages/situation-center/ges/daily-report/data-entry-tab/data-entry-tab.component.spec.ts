@@ -2,7 +2,8 @@ import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testin
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
-import { provideRouter } from '@angular/router';
+import { provideRouter, ActivatedRoute } from '@angular/router';
+import { convertToParamMap } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MessageService } from 'primeng/api';
@@ -1109,5 +1110,62 @@ describe('DataEntryTabComponent', () => {
             expect(warnCall).toBeDefined();
             expect(warnCall![0].detail).toBe('ГЭС-1:3>1');
         }));
+    });
+});
+
+describe('DataEntryTabComponent — date constraints', () => {
+    function buildWith(dateParam: string | null): DataEntryTabComponent {
+        const spy = jasmine.createSpyObj('GesReportService', [
+            'getConfigs', 'getDailyData', 'upsertDailyData', 'getCascadeConfigs', 'getReport',
+            'listFrozenDefaults', 'upsertFrozenDefault', 'deleteFrozenDefault'
+        ]);
+        spy.getConfigs.and.returnValue(of([]));
+        spy.getCascadeConfigs.and.returnValue(of([]));
+        spy.getReport.and.returnValue(of(null));
+        spy.listFrozenDefaults.and.returnValue(of([]));
+
+        const queryParamMap = convertToParamMap(dateParam ? { date: dateParam } : {});
+
+        TestBed.configureTestingModule({
+            imports: [DataEntryTabComponent, TranslateModule.forRoot()],
+            providers: [
+                provideHttpClient(),
+                provideHttpClientTesting(),
+                provideNoopAnimations(),
+                provideRouter([]),
+                { provide: GesReportService, useValue: spy },
+                { provide: ActivatedRoute, useValue: { snapshot: { queryParamMap } } },
+                MessageService
+            ]
+        });
+        return TestBed.createComponent(DataEntryTabComponent).componentInstance;
+    }
+
+    afterEach(() => TestBed.resetTestingModule());
+
+    function startOfDay(d: Date): number {
+        return new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+    }
+
+    it('maxDate is set to today', () => {
+        const component = buildWith(null);
+        expect(startOfDay(component.maxDate)).toBe(startOfDay(new Date()));
+    });
+
+    it('clamps a future URL date down to today', () => {
+        const component = buildWith('2099-01-01');
+        expect(startOfDay(component.selectedDate)).toBe(startOfDay(new Date()));
+    });
+
+    it('keeps a past URL date as-is', () => {
+        const component = buildWith('2020-05-15');
+        expect(component.selectedDate.getFullYear()).toBe(2020);
+        expect(component.selectedDate.getMonth()).toBe(4);
+        expect(component.selectedDate.getDate()).toBe(15);
+    });
+
+    it('defaults to today when no URL date is present', () => {
+        const component = buildWith(null);
+        expect(startOfDay(component.selectedDate)).toBe(startOfDay(new Date()));
     });
 });

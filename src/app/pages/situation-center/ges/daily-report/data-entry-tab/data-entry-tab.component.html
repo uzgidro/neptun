@@ -5,6 +5,7 @@
             [(ngModel)]="selectedDate"
             (ngModelChange)="onDateChange($event)"
             dateFormat="dd.mm.yy"
+            [maxDate]="maxDate"
             [showIcon]="true"
             appendTo="body">
         </p-datepicker>
