@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input } from '@angular/core';
+import { Component, EventEmitter, forwardRef, Input, Output } from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -28,6 +28,8 @@ export class InputNumberdComponent implements ControlValueAccessor {
     @Input() required: boolean = false;
     @Input() showButtons: boolean = true;
     @Input() mode: 'decimal' | 'currency' = 'decimal';
+    /** Emits the new value on user input — for side effects beyond the form control (e.g. derived fields). */
+    @Output() valueChange = new EventEmitter<number | null>();
 
     uniqueId: string;
     internalValue: number | null = null;
@@ -59,5 +61,6 @@ export class InputNumberdComponent implements ControlValueAccessor {
     onValueChange(newValue: number) {
         this.internalValue = newValue;
         this.onChange(newValue);
+        this.valueChange.emit(newValue);
     }
 }

@@ -11,6 +11,8 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { ReservoirSummaryService } from '@/core/services/reservoir-summary.service';
 import { ReservoirSummaryRequest, ReservoirSummaryResponse } from '@/core/interfaces/reservoir-summary';
+import { LevelVolumeService } from '@/core/services/level-volume.service';
+import { LevelVolume } from '@/core/interfaces/level-volume';
 import { TimeService } from '@/core/services/time.service';
 import { InputNumberdComponent } from '@/layout/component/dialog/input-number/input-number.component';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
@@ -40,6 +42,7 @@ interface DutyCard {
 export class ReservoirDutyEntryComponent implements OnInit, OnDestroy {
     private destroy$ = new Subject<void>();
     private svc = inject(ReservoirSummaryService);
+    private levelVolumeService = inject(LevelVolumeService);
     private messageService = inject(MessageService);
     private translate = inject(TranslateService);
     private timeService = inject(TimeService);
@@ -96,11 +99,23 @@ export class ReservoirDutyEntryComponent implements OnInit, OnDestroy {
             saving: false,
             form: this.fb.group({
                 level: [r.level?.current ?? null],
+                volume: [r.volume?.current ?? null],
                 income: [r.income?.current ?? null],
                 release: [r.release?.current ?? null],
                 modsnow_current: [r.modsnow?.current ?? null]
             })
         };
+    }
+
+    /** Recompute volume from the level/volume curve when level changes (curve is per-organization). */
+    onLevelChange(card: DutyCard): void {
+        const level = card.form.get('level')?.value;
+        if (level === null || level === undefined) return;
+        this.levelVolumeService.getVolume(card.organization_id, level)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: (lv: LevelVolume) => card.form.get('volume')?.setValue(lv.volume)
+            });
     }
 
     saveCard(card: DutyCard): void {
@@ -110,6 +125,7 @@ export class ReservoirDutyEntryComponent implements OnInit, OnDestroy {
             date: this.timeService.dateToYMD(this.selectedDate)
         };
         if (v.level !== null && v.level !== undefined) payload.level = v.level;
+        if (v.volume !== null && v.volume !== undefined) payload.volume = v.volume;
         if (v.income !== null && v.income !== undefined) payload.income = v.income;
         if (v.release !== null && v.release !== undefined) payload.release = v.release;
         if (v.modsnow_current !== null && v.modsnow_current !== undefined) {

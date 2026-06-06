@@ -2285,6 +2285,7 @@
     "RESERVOIR_DUTY": {
       "TITLE": "Suv omborlari bo'yicha xulosa",
       "LEVEL": "Daraja, m",
+      "VOLUME": "Hajm, mln. m³",
       "INCOME": "Oqib kirish, m³/s",
       "RELEASE": "Chiqarish, m³/s",
       "MODSNOW": "MODSNOW, qor qoplami %",
