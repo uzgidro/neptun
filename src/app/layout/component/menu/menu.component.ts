@@ -294,6 +294,7 @@ export class MenuComponent implements OnInit {
                     },
                     { label: this.t('MENU.RESERVOIR_FLOOD'), role: ['reservoir_flood'], routerLink: ['/reservoir-flood'] },
                     { label: this.t('MENU.FILTRATION'), role: ['reservoir'], routerLink: ['/manual-comparison-entry'] },
+                    { label: this.t('MENU.RESERVOIR_DUTY_SUMMARY'), role: ['reservoir'], routerLink: ['/reservoir-duty-entry'] },
                     { label: this.t('MENU.CASCADE_REPORT'), role: ['cascade'], routerLink: ['/ges-daily-report'] },
                     { label: this.t('MENU.SOLAR_REPORT'), role: ['cascade'], routerLink: ['/solar-report'] },
                     { label: this.t('MENU.CALLS'), role: ['rais'], routerLink: ['/calls'] },

@@ -244,6 +244,7 @@
     "RESERVOIR_SUMMARY": "Summary",
     "RESERVOIR_SUMMARY_PDF": "Summary PDF",
     "RESERVOIR_SUMMARY_HOURLY": "Operative Summary",
+    "RESERVOIR_DUTY_SUMMARY": "Reservoirs Summary",
     "HYDRAULIC_STRUCTURES": "Hydraulic Structures",
     "INCIDENTS": "Incidents",
     "VISITS": "Visits",
@@ -2280,6 +2281,17 @@
     },
     "RESERVOIR_SUMMARY_HOURLY": {
       "TITLE": "Operative Reservoir Summary"
+    },
+    "RESERVOIR_DUTY": {
+      "TITLE": "Reservoirs Summary",
+      "LEVEL": "Level, m",
+      "INCOME": "Inflow, m³/s",
+      "RELEASE": "Release, m³/s",
+      "MODSNOW": "MODSNOW, snow cover %",
+      "SAVED": "Data saved",
+      "SAVE_FAILED": "Failed to save",
+      "ACCESS_DENIED": "No access to this organization",
+      "NO_ORGANIZATION": "Your account is not linked to any organization"
     },
     "DASHBOARD": {
       "HEADER": {

@@ -221,6 +221,7 @@
     "RESERVOIR_SUMMARY": "Xulosa",
     "RESERVOIR_SUMMARY_PDF": "Xulosa PDF",
     "RESERVOIR_SUMMARY_HOURLY": "Tezkor ma'lumot",
+    "RESERVOIR_DUTY_SUMMARY": "Suv omborlari xulosasi",
     "HYDRAULIC_STRUCTURES": "Gidrotexnik inshootlar",
     "INCIDENTS": "Hodisalar",
     "VISITS": "Tashriflar",
@@ -2280,6 +2281,17 @@
     },
     "RESERVOIR_SUMMARY_HOURLY": {
       "TITLE": "Suv omborlari bo'yicha tezkor ma'lumot"
+    },
+    "RESERVOIR_DUTY": {
+      "TITLE": "Suv omborlari bo'yicha xulosa",
+      "LEVEL": "Daraja, m",
+      "INCOME": "Oqib kirish, m³/s",
+      "RELEASE": "Chiqarish, m³/s",
+      "MODSNOW": "MODSNOW, qor qoplami %",
+      "SAVED": "Ma'lumotlar saqlandi",
+      "SAVE_FAILED": "Saqlab bo'lmadi",
+      "ACCESS_DENIED": "Bu tashkilotga ruxsat yo'q",
+      "NO_ORGANIZATION": "Sizning hisobingiz tashkilotga bog'lanmagan"
     },
     "DASHBOARD": {
       "HEADER": {

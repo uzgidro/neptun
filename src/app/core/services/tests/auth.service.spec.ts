@@ -212,6 +212,45 @@ describe('AuthService', () => {
         });
     });
 
+    describe('isReservoir', () => {
+        it('returns true when token has reservoir role', () => {
+            jwtServiceSpy.getDecodedToken.and.returnValue({ roles: ['reservoir'] } as any);
+            expect(service.isReservoir()).toBeTrue();
+        });
+
+        it('returns true when reservoir is combined with other roles', () => {
+            jwtServiceSpy.getDecodedToken.and.returnValue({ roles: ['sc', 'reservoir'] } as any);
+            expect(service.isReservoir()).toBeTrue();
+        });
+
+        it('returns false when reservoir is absent', () => {
+            jwtServiceSpy.getDecodedToken.and.returnValue({ roles: ['sc'] } as any);
+            expect(service.isReservoir()).toBeFalse();
+        });
+
+        it('returns false when token is missing', () => {
+            jwtServiceSpy.getDecodedToken.and.returnValue(null as any);
+            expect(service.isReservoir()).toBeFalse();
+        });
+    });
+
+    describe('getOrganizationIds', () => {
+        it('returns org_ids from the token', () => {
+            jwtServiceSpy.getDecodedToken.and.returnValue({ roles: ['reservoir'], org_ids: [103, 104] } as any);
+            expect(service.getOrganizationIds()).toEqual([103, 104]);
+        });
+
+        it('returns empty array when org_ids claim is absent', () => {
+            jwtServiceSpy.getDecodedToken.and.returnValue({ roles: ['reservoir'] } as any);
+            expect(service.getOrganizationIds()).toEqual([]);
+        });
+
+        it('returns empty array when token is missing', () => {
+            jwtServiceSpy.getDecodedToken.and.returnValue(null as any);
+            expect(service.getOrganizationIds()).toEqual([]);
+        });
+    });
+
     describe('getUserId', () => {
         it('returns null when token is missing', () => {
             jwtServiceSpy.getDecodedToken.and.returnValue(null as any);
