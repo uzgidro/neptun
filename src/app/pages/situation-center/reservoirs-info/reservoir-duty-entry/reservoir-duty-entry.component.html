@@ -34,7 +34,14 @@
                                 class="lg:flex-1"
                                 [label]="'SITUATION_CENTER.RESERVOIR_DUTY.LEVEL' | translate"
                                 [showButtons]="false"
-                                formControlName="level">
+                                formControlName="level"
+                                (valueChange)="onLevelChange(card)">
+                            </app-input-number>
+                            <app-input-number
+                                class="lg:flex-1"
+                                [label]="'SITUATION_CENTER.RESERVOIR_DUTY.VOLUME' | translate"
+                                [showButtons]="false"
+                                formControlName="volume">
                             </app-input-number>
                             <app-input-number
                                 class="lg:flex-1"

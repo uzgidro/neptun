@@ -2285,6 +2285,7 @@
     "RESERVOIR_DUTY": {
       "TITLE": "Reservoirs Summary",
       "LEVEL": "Level, m",
+      "VOLUME": "Volume, mln m³",
       "INCOME": "Inflow, m³/s",
       "RELEASE": "Release, m³/s",
       "MODSNOW": "MODSNOW, snow cover %",
