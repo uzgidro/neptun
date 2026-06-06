@@ -103,6 +103,8 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
     private rowsReset$ = new Subject<void>();
 
     selectedDate: Date = this.readDateFromUrl() ?? new Date();
+    // Report can only be filled for the current day or earlier — never for the future.
+    readonly maxDate: Date = new Date();
     rows: DataEntryRow[] = [];
     cascadeGroups: { cascade_id: number; cascade_name: string; weather: ReportWeather | null; rows: DataEntryRow[] }[] = [];
     private cascadeWeatherMap = new Map<number, ReportWeather | null>();
@@ -343,7 +345,10 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
         const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(raw);
         if (!m) return null;
         const d = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
-        return isNaN(d.getTime()) ? null : d;
+        if (isNaN(d.getTime())) return null;
+        // Never allow a future date from the URL — the report is for today or earlier.
+        const today = new Date();
+        return d.getTime() > today.getTime() ? today : d;
     }
 
     sumAggregates(row: DataEntryRow): number {
