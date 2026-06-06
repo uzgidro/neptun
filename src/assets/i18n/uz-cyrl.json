@@ -244,6 +244,7 @@
     "RESERVOIR_SUMMARY": "Хулоса",
     "RESERVOIR_SUMMARY_PDF": "Хулоса PDF",
     "RESERVOIR_SUMMARY_HOURLY": "Тезкор маълумот",
+    "RESERVOIR_DUTY_SUMMARY": "Сув омборлари хулосаси",
     "HYDRAULIC_STRUCTURES": "Гидротехник иншоотлар",
     "INCIDENTS": "Ҳодисалар",
     "VISITS": "Ташрифлар",
@@ -2280,6 +2281,17 @@
     },
     "RESERVOIR_SUMMARY_HOURLY": {
       "TITLE": "Сув омборлари бўйича тезкор маълумот"
+    },
+    "RESERVOIR_DUTY": {
+      "TITLE": "Сув омборлари бўйича хулоса",
+      "LEVEL": "Даража, м",
+      "INCOME": "Оқиб кириш, м³/с",
+      "RELEASE": "Чиқариш, м³/с",
+      "MODSNOW": "MODSNOW, қор қоплами %",
+      "SAVED": "Маълумотлар сақланди",
+      "SAVE_FAILED": "Сақлаб бўлмади",
+      "ACCESS_DENIED": "Бу ташкилотга рухсат йўқ",
+      "NO_ORGANIZATION": "Сизнинг ҳисобингиз ташкилотга боғланмаган"
     },
     "DASHBOARD": {
       "HEADER": {

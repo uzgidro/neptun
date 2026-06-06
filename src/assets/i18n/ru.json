@@ -245,6 +245,7 @@
     "RESERVOIR_SUMMARY": "Сводка",
     "RESERVOIR_SUMMARY_PDF": "Сводка PDF",
     "RESERVOIR_SUMMARY_HOURLY": "Оперативная сводка",
+    "RESERVOIR_DUTY_SUMMARY": "Сводка водохранилищ",
     "HYDRAULIC_STRUCTURES": "Гидротехнические сооружения",
     "INCIDENTS": "Инциденты",
     "VISITS": "Визиты",
@@ -2271,6 +2272,17 @@
     },
     "RESERVOIR_SUMMARY_HOURLY": {
       "TITLE": "Оперативная сводка по водохранилищам"
+    },
+    "RESERVOIR_DUTY": {
+      "TITLE": "Сводка по водохранилищам",
+      "LEVEL": "Уровень, м",
+      "INCOME": "Приток, м³/с",
+      "RELEASE": "Попуск, м³/с",
+      "MODSNOW": "MODSNOW, снежный покров %",
+      "SAVED": "Данные сохранены",
+      "SAVE_FAILED": "Не удалось сохранить",
+      "ACCESS_DENIED": "Нет доступа к этой организации",
+      "NO_ORGANIZATION": "У вашей учётной записи нет привязки к организации"
     },
     "DASHBOARD": {
       "HEADER": {

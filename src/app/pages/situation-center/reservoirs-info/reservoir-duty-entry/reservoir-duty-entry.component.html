@@ -1,0 +1,66 @@
+<div class="card">
+    <h2 class="text-xl font-semibold mb-4">
+        {{ 'SITUATION_CENTER.RESERVOIR_DUTY.TITLE' | translate }}
+    </h2>
+
+    <div class="mb-4 max-w-xs">
+        <app-date-picker
+            [label]="'SITUATION_CENTER.COMMON.DATE' | translate"
+            [showTime]="false"
+            [maxDate]="maxDate"
+            [required]="false"
+            [ngModel]="selectedDate"
+            [ngModelOptions]="{ standalone: true }"
+            (ngModelChange)="onDateChange($event)">
+        </app-date-picker>
+    </div>
+
+    @if (hasNoOrganization) {
+        <div class="p-6 text-center text-color-secondary">
+            {{ 'SITUATION_CENTER.RESERVOIR_DUTY.NO_ORGANIZATION' | translate }}
+        </div>
+    } @else {
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+            @for (card of cards; track card.organization_id) {
+                <p-card>
+                    <ng-template pTemplate="header">
+                        <div class="px-4 pt-4">
+                            <h3 class="text-lg font-semibold m-0">{{ card.organization_name }}</h3>
+                        </div>
+                    </ng-template>
+
+                    <form [formGroup]="card.form" class="flex flex-col gap-4 pt-2">
+                        <app-input-number
+                            [label]="'SITUATION_CENTER.RESERVOIR_DUTY.LEVEL' | translate"
+                            [showButtons]="false"
+                            formControlName="level">
+                        </app-input-number>
+                        <app-input-number
+                            [label]="'SITUATION_CENTER.RESERVOIR_DUTY.INCOME' | translate"
+                            [showButtons]="false"
+                            formControlName="income">
+                        </app-input-number>
+                        <app-input-number
+                            [label]="'SITUATION_CENTER.RESERVOIR_DUTY.RELEASE' | translate"
+                            [showButtons]="false"
+                            formControlName="release">
+                        </app-input-number>
+                        <app-input-number
+                            [label]="'SITUATION_CENTER.RESERVOIR_DUTY.MODSNOW' | translate"
+                            [showButtons]="false"
+                            formControlName="modsnow_current">
+                        </app-input-number>
+
+                        <p-button
+                            [label]="'COMMON.SAVE' | translate"
+                            icon="pi pi-save"
+                            [loading]="card.saving"
+                            styleClass="w-full"
+                            (onClick)="saveCard(card)">
+                        </p-button>
+                    </form>
+                </p-card>
+            }
+        </div>
+    }
+</div>

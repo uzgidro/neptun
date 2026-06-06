@@ -109,6 +109,13 @@ export const filtrationGuard: CanActivateFn = (): boolean | UrlTree => {
     return authService.hasRole(['sc', 'rais', 'reservoir']) ? true : router.createUrlTree(['/notfound']);
 }
 
+export const reservoirSummaryEntryGuard: CanActivateFn = (): boolean | UrlTree => {
+    const authService = inject(AuthService);
+    const router = inject(Router);
+
+    return authService.hasRole(['sc', 'rais', 'reservoir']) ? true : router.createUrlTree(['/notfound']);
+}
+
 export const unsavedChangesGuard: CanDeactivateFn<HasUnsavedChanges> = (component) => {
     return component.canDeactivate ? component.canDeactivate() : true;
 }

@@ -48,6 +48,16 @@ export class AuthService {
         return this.hasRole('cascade');
     }
 
+    isReservoir(): boolean {
+        return this.hasRole('reservoir');
+    }
+
+    /** Organization IDs the user is bound to (from JWT `org_ids` claim). Empty if none. */
+    getOrganizationIds(): number[] {
+        const decoded = this.jwtService.getDecodedToken();
+        return Array.isArray(decoded?.org_ids) ? decoded.org_ids : [];
+    }
+
     isOnlyCascade(): boolean {
         const decodedToken = this.jwtService.getDecodedToken();
         if (!decodedToken || !Array.isArray(decodedToken.roles)) {
