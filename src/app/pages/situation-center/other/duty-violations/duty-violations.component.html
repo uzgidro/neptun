@@ -1,0 +1,157 @@
+<div class="flex justify-between items-center mb-6 gap-4">
+    @if (authService.isSc()) {
+        <p-button [label]="'SITUATION_CENTER.DUTY_VIOLATION.ADD' | translate" icon="pi pi-plus" (click)="openNew()" />
+    } @else {
+        <div></div>
+    }
+    <app-date [date]="selectedDate" (dateChange)="onDateChange($event)"></app-date>
+</div>
+
+<p-table
+    [value]="violations"
+    dataKey="id"
+    [loading]="loading"
+    [scrollable]="true"
+    scrollHeight="60rem"
+    [tableStyle]="{ 'min-width': '60rem' }"
+    rowGroupMode="subheader"
+    groupRowsBy="organization_name"
+>
+    <ng-template #caption>
+        <div class="text-lg font-bold">{{ 'SITUATION_CENTER.DUTY_VIOLATION.TITLE' | translate }}</div>
+    </ng-template>
+    <ng-template pTemplate="header">
+        <tr>
+            <th style="width: 5rem">№</th>
+            <th style="min-width: 11rem">{{ 'SITUATION_CENTER.DUTY_VIOLATION.START_TIME' | translate }}</th>
+            <th style="min-width: 11rem">{{ 'SITUATION_CENTER.DUTY_VIOLATION.END_TIME' | translate }}</th>
+            <th style="min-width: 10rem">{{ 'SITUATION_CENTER.DUTY_VIOLATION.OFFICER' | translate }}</th>
+            <th>{{ 'SITUATION_CENTER.DUTY_VIOLATION.REASON' | translate }}</th>
+            @if (authService.isSc()) {
+                <th style="width: 10%">{{ 'SITUATION_CENTER.COMMON.ACTIONS' | translate }}</th>
+            }
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="groupheader" let-violation>
+        <tr>
+            <td class="bg-gray-200 dark:bg-gray-900">
+                <span class="font-bold text-lg">{{ getOrganizationIndex(violation.organization_name) }}</span>
+            </td>
+            <td class="bg-gray-200 dark:bg-gray-900" [attr.colspan]="authService.isSc() ? 5 : 4">
+                <span class="font-bold text-lg">{{ violation.organization_name }}</span>
+            </td>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-violation>
+        <tr>
+            <td>{{ getRowIndex(violation) }}</td>
+            <td>{{ violation.start_time | date: 'yyyy-MM-dd HH:mm' }}</td>
+            <td>{{ violation.end_time ? (violation.end_time | date: 'yyyy-MM-dd HH:mm') : '-' }}</td>
+            <td>{{ violation.duty_officer_name }}</td>
+            <td>{{ violation.reason }}</td>
+            @if (authService.isSc()) {
+                <td>
+                    <p-button
+                        icon="pi pi-pencil"
+                        severity="info"
+                        [text]="true"
+                        [rounded]="true"
+                        (click)="editViolation(violation)"
+                        [pTooltip]="'SITUATION_CENTER.COMMON.EDIT' | translate"
+                    />
+                    <p-button
+                        icon="pi pi-trash"
+                        severity="danger"
+                        [text]="true"
+                        [rounded]="true"
+                        (click)="deleteViolation(violation.id)"
+                        [pTooltip]="'SITUATION_CENTER.COMMON.DELETE' | translate"
+                    />
+                </td>
+            }
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+        <tr>
+            <td [attr.colspan]="authService.isSc() ? 6 : 5" class="text-center">
+                {{ 'SITUATION_CENTER.DUTY_VIOLATION.NO_VIOLATIONS' | translate }}
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+
+<app-dialog
+    [(visible)]="isFormOpen"
+    [header]="isEditMode ? ('SITUATION_CENTER.DUTY_VIOLATION.EDIT' | translate) : ('SITUATION_CENTER.DUTY_VIOLATION.NEW' | translate)"
+    [form]="form"
+    [submitting]="isLoading"
+    (save)="onSubmit()"
+    (cancel)="closeDialog()"
+>
+    <form class="p-4" [formGroup]="form" (ngSubmit)="onSubmit()">
+
+        <app-group-select
+            [label]="'SITUATION_CENTER.COMMON.OBJECT' | translate"
+            formControlName="organization"
+            [items]="organizations"
+            [loading]="orgsLoading"
+            [submitted]="submitted"
+            [errorMessage]="'SITUATION_CENTER.COMMON.SELECT_ORGANIZATION' | translate">
+        </app-group-select>
+
+        <app-date-picker
+            [label]="'SITUATION_CENTER.DUTY_VIOLATION.START_TIME' | translate"
+            formControlName="start_time"
+            [showTime]="true"
+            [submitted]="submitted"
+            [errorMessage]="'SITUATION_CENTER.COMMON.SPECIFY_DATE' | translate">
+        </app-date-picker>
+
+        <app-date-picker
+            [label]="'SITUATION_CENTER.DUTY_VIOLATION.END_TIME' | translate"
+            formControlName="end_time"
+            [showTime]="true"
+            [required]="false"
+            [submitted]="submitted">
+        </app-date-picker>
+
+        @if (submitted && form.errors?.['endBeforeStart']) {
+            <p-message class="mb-4" severity="error" variant="simple" size="small">
+                {{ 'SITUATION_CENTER.DUTY_VIOLATION.END_BEFORE_START' | translate }}
+            </p-message>
+        }
+
+        <app-input-text
+            [label]="'SITUATION_CENTER.DUTY_VIOLATION.OFFICER' | translate"
+            formControlName="duty_officer_name"
+            [submitted]="submitted"
+            [errorMessage]="'SITUATION_CENTER.DUTY_VIOLATION.SPECIFY_OFFICER' | translate">
+        </app-input-text>
+
+        <app-textarea
+            [label]="'SITUATION_CENTER.DUTY_VIOLATION.REASON' | translate"
+            formControlName="reason"
+            [submitted]="submitted"
+            [errorMessage]="'SITUATION_CENTER.DUTY_VIOLATION.SPECIFY_REASON' | translate">
+        </app-textarea>
+
+        @if (isEditMode && currentViolation?.files && (currentViolation?.files?.length ?? 0) > 0) {
+            <app-file-list
+                [files]="currentViolation?.files || []"
+                (removeFile)="removeExistingFile($event)">
+            </app-file-list>
+        }
+
+        <app-file-upload
+            [label]="isEditMode ? ('SITUATION_CENTER.COMMON.ADD_NEW_FILES' | translate) : ('SITUATION_CENTER.COMMON.ATTACH_FILES' | translate)"
+            [files]="selectedFiles"
+            (filesChange)="onFileSelect($event)"
+            (removeFile)="removeFile($event)">
+        </app-file-upload>
+
+    </form>
+
+</app-dialog>

@@ -67,6 +67,7 @@ export const appRoutes: Routes = [
             { path: 'reservoir-duty-entry', loadComponent: () => import('./app/pages/situation-center/reservoirs-info/reservoir-duty-entry/reservoir-duty-entry.component').then(m => m.ReservoirDutyEntryComponent), canActivate: [reservoirSummaryEntryGuard] },
             { path: 'visits', loadComponent: () => import('./app/pages/situation-center/other/visits/visits.component').then(m => m.VisitsComponent), canActivate: [raisGuard] },
             { path: 'incidents', loadComponent: () => import('./app/pages/situation-center/other/incidents/incidents.component').then(m => m.IncidentsComponent), canActivate: [raisGuard] },
+            { path: 'duty-violations', loadComponent: () => import('./app/pages/situation-center/other/duty-violations/duty-violations.component').then(m => m.DutyViolationsComponent), canActivate: [raisGuard] },
             { path: 'infra-events', loadComponent: () => import('./app/pages/situation-center/infra-events/infra-events.component').then(m => m.InfraEventsComponent), canActivate: [raisGuard] },
             { path: 'reservoir-device', loadComponent: () => import('./app/pages/situation-center/reservoirs-info/reservoirs-device/reservoirs-device.component').then(m => m.ReservoirsDeviceComponent), canActivate: [raisGuard] },
             { path: 'snow-cover', loadComponent: () => import('./app/pages/situation-center/reservoirs-info/snow-cover/snow-cover.component').then(m => m.SnowCoverComponent), canActivate: [raisGuard] },
