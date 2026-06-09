@@ -189,6 +189,11 @@ export class MenuComponent implements OnInit {
                                         routerLink: ['/visits']
                                     },
                                     {
+                                        label: this.t('MENU.DUTY_VIOLATIONS'),
+                                        role: ['rais', 'sc'],
+                                        routerLink: ['/duty-violations']
+                                    },
+                                    {
                                         label: this.t('MENU.INFRA_EVENTS'),
                                         role: ['rais', 'sc'],
                                         routerLink: ['/infra-events']
