@@ -141,7 +141,14 @@ export class DutyViolationsComponent implements OnInit, OnDestroy {
 
         if (raw.organization) payload.organization_id = raw.organization.id;
         if (raw.start_time) payload.start_time = new Date(raw.start_time).toISOString();
-        if (raw.end_time) payload.end_time = new Date(raw.end_time).toISOString();
+        if (raw.end_time) {
+            payload.end_time = new Date(raw.end_time).toISOString();
+        } else if (this.isEditMode) {
+            // On edit, an empty end must be sent explicitly as null to reset a
+            // closed shift back to ongoing (omitting = "leave unchanged"). On
+            // create we omit it entirely (the backend defaults to ongoing).
+            payload.end_time = null;
+        }
         if (raw.duty_officer_name) payload.duty_officer_name = raw.duty_officer_name;
         if (raw.reason) payload.reason = raw.reason;
 

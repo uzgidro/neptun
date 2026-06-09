@@ -37,8 +37,8 @@ export interface DutyViolationDto {
 
 export interface DutyViolationCreatePayload {
     organization_id: number;
-    start_time: string;  // ISO 8601
-    end_time?: string;   // ISO 8601, optional — open shift when omitted
+    start_time: string;          // ISO 8601
+    end_time?: string | null;    // ISO 8601; omit (create) or null (edit) = ongoing
     duty_officer_name: string;
     reason: string;
     file_ids?: number[];

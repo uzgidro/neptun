@@ -125,7 +125,7 @@ describe('DutyViolationsComponent', () => {
         expect(component.form.valid).toBeTrue();
     });
 
-    it('onSubmit omits end_time when not provided', fakeAsync(() => {
+    it('onSubmit (create) omits end_time when not provided', fakeAsync(() => {
         fixture.detectChanges();
         component.openNew();
         component.form.patchValue({
@@ -139,6 +139,31 @@ describe('DutyViolationsComponent', () => {
         const body = svc.addViolation.calls.mostRecent().args[0] as any;
         expect('end_time' in body).toBeFalse();
         expect(body.start_time).toBeTruthy();
+    }));
+
+    it('onSubmit (edit) sends end_time:null when a previously-set end is cleared', fakeAsync(() => {
+        fixture.detectChanges();
+        const v = makeViolation(7);
+        v.end_time = new Date('2026-06-08T20:00:00'); // closed shift
+        component.editViolation(v);
+        component.form.patchValue({ end_time: null }); // user clears it
+        component.onSubmit();
+        tick();
+        const body = svc.editViolation.calls.mostRecent().args[1] as any;
+        expect('end_time' in body).toBeTrue();
+        expect(body.end_time).toBeNull();
+    }));
+
+    it('onSubmit (edit) sends ISO end_time when end is filled', fakeAsync(() => {
+        fixture.detectChanges();
+        const v = makeViolation(7);
+        component.editViolation(v);
+        const end = new Date('2026-06-08T21:00:00');
+        component.form.patchValue({ end_time: end });
+        component.onSubmit();
+        tick();
+        const body = svc.editViolation.calls.mostRecent().args[1] as any;
+        expect(body.end_time).toBe(end.toISOString());
     }));
 
     it('form is valid when end_time > start_time and all fields filled', () => {
