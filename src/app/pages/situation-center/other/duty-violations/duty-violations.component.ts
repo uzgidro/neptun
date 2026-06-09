@@ -15,7 +15,6 @@ import { TextareaComponent } from '@/layout/component/dialog/textarea/textarea.c
 import { InputTextComponent } from '@/layout/component/dialog/input-text/input-text.component';
 import { SelectComponent } from '@/layout/component/dialog/select/select.component';
 import { FileUploadComponent } from '@/layout/component/dialog/file-upload/file-upload.component';
-import { FileViewerComponent } from '@/layout/component/dialog/file-viewer/file-viewer.component';
 import { FileListComponent } from '@/layout/component/dialog/file-list/file-list.component';
 import { DateWidget } from '@/layout/component/widget/date/date.widget';
 
@@ -56,7 +55,6 @@ function endAfterStartValidator(group: AbstractControl): ValidationErrors | null
         InputTextComponent,
         SelectComponent,
         FileUploadComponent,
-        FileViewerComponent,
         FileListComponent,
         DateWidget
     ],
@@ -90,8 +88,6 @@ export class DutyViolationsComponent implements OnInit, OnDestroy {
     // File handling
     selectedFiles: File[] = [];
     currentViolation: DutyViolationDto | null = null;
-    showFilesDialog = false;
-    selectedViolationForFiles: DutyViolationDto | null = null;
     existingFilesToKeep: number[] = [];
     filesDirty = false;
 
@@ -265,11 +261,6 @@ export class DutyViolationsComponent implements OnInit, OnDestroy {
         if (this.currentViolation?.files) {
             this.currentViolation.files = this.currentViolation.files.filter((f) => f.id !== fileId);
         }
-    }
-
-    showFiles(v: DutyViolationDto): void {
-        this.selectedViolationForFiles = v;
-        this.showFilesDialog = true;
     }
 
     deleteViolation(id: number): void {
