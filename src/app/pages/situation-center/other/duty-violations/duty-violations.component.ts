@@ -13,7 +13,7 @@ import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-
 import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
 import { TextareaComponent } from '@/layout/component/dialog/textarea/textarea.component';
 import { InputTextComponent } from '@/layout/component/dialog/input-text/input-text.component';
-import { SelectComponent } from '@/layout/component/dialog/select/select.component';
+import { GroupSelectComponent } from '@/layout/component/dialog/group-select/group-select.component';
 import { FileUploadComponent } from '@/layout/component/dialog/file-upload/file-upload.component';
 import { FileListComponent } from '@/layout/component/dialog/file-list/file-list.component';
 import { DateWidget } from '@/layout/component/widget/date/date.widget';
@@ -53,7 +53,7 @@ function endAfterStartValidator(group: AbstractControl): ValidationErrors | null
         DialogComponent,
         TextareaComponent,
         InputTextComponent,
-        SelectComponent,
+        GroupSelectComponent,
         FileUploadComponent,
         FileListComponent,
         DateWidget
@@ -80,7 +80,7 @@ export class DutyViolationsComponent implements OnInit, OnDestroy {
 
     form!: FormGroup;
 
-    organizations: Organization[] = [];
+    organizations: any[] = [];
     violations: DutyViolationDto[] = [];
     loading = false;
     orgsLoading = false;
@@ -103,7 +103,7 @@ export class DutyViolationsComponent implements OnInit, OnDestroy {
         this.loadViolations();
 
         this.orgsLoading = true;
-        this.organizationService.getOrganizationsFlat().pipe(takeUntil(this.destroy$)).subscribe({
+        this.organizationService.getCascades().pipe(takeUntil(this.destroy$)).subscribe({
             next: (data) => (this.organizations = data),
             complete: () => (this.orgsLoading = false)
         });
@@ -234,7 +234,12 @@ export class DutyViolationsComponent implements OnInit, OnDestroy {
         this.selectedFiles = [];
         this.existingFilesToKeep = v.files?.map((f) => f.id) ?? [];
 
-        const foundOrg = this.organizations.find((o) => o.id === v.organization_id) ?? null;
+        // Organizations are grouped by cascade — search inside each cascade's items.
+        let foundOrg: any = null;
+        for (const cascade of this.organizations) {
+            const match = cascade.items?.find((o: any) => o.id === v.organization_id);
+            if (match) { foundOrg = match; break; }
+        }
 
         this.form.patchValue({
             organization: foundOrg,

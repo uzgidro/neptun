@@ -37,7 +37,7 @@ describe('DutyViolationsComponent', () => {
 
     beforeEach(async () => {
         svc = jasmine.createSpyObj('DutyViolationService', ['getViolations', 'addViolation', 'editViolation', 'deleteViolation']);
-        orgSvc = jasmine.createSpyObj('OrganizationService', ['getOrganizationsFlat']);
+        orgSvc = jasmine.createSpyObj('OrganizationService', ['getCascades']);
         apiService = jasmine.createSpyObj('ApiService', ['uploadFiles']);
         const authSpy = jasmine.createSpyObj('AuthService', ['isSc', 'isAuthenticated']);
         authSpy.isSc.and.returnValue(true);
@@ -47,7 +47,10 @@ describe('DutyViolationsComponent', () => {
         svc.addViolation.and.returnValue(of({}));
         svc.editViolation.and.returnValue(of({}));
         svc.deleteViolation.and.returnValue(of({}));
-        orgSvc.getOrganizationsFlat.and.returnValue(of([{ id: 103, name: 'Пском' } as any]));
+        // Cascade structure: each cascade is a group with `items` (organizations).
+        orgSvc.getCascades.and.returnValue(of([
+            { id: 1, name: 'Каскад А', items: [{ id: 103, name: 'Пском' }] }
+        ] as any));
 
         await TestBed.configureTestingModule({
             imports: [DutyViolationsComponent, TranslateModule.forRoot()],
@@ -142,6 +145,16 @@ describe('DutyViolationsComponent', () => {
         expect(body.duty_officer_name).toBe('Иванов И.И.');
         expect(body.reason).toBe('Не вышел');
     }));
+
+    it('editViolation resolves organization from the cascade structure', () => {
+        fixture.detectChanges();
+        const v = makeViolation(7);
+        v.organization_id = 103;
+        component.editViolation(v);
+        const org = component.form.get('organization')?.value as any;
+        expect(org?.id).toBe(103);
+        expect(org?.name).toBe('Пском');
+    });
 
     it('onSubmit (edit) calls editViolation with id', fakeAsync(() => {
         fixture.detectChanges();
