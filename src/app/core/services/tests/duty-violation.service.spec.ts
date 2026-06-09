@@ -3,7 +3,7 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { provideHttpClient } from '@angular/common/http';
 import { DutyViolationService } from '../duty-violation.service';
 import { ConfigService } from '../config.service';
-import { DutyViolationCreatePayload, DutyViolationResponse } from '@/core/interfaces/duty-violations';
+import { DutyViolationCreatePayload, DutyViolationGroupResponse, DutyViolationResponse } from '@/core/interfaces/duty-violations';
 
 describe('DutyViolationService', () => {
     let service: DutyViolationService;
@@ -24,12 +24,12 @@ describe('DutyViolationService', () => {
 
     afterEach(() => httpMock.verify());
 
-    function makeResponse(id: number): DutyViolationResponse {
+    function makeResponse(id: number, orgId = 103, orgName = 'Пском', start = '2026-06-08T08:00:00+05:00'): DutyViolationResponse {
         return {
             id,
-            organization_id: 103,
-            organization_name: 'Пском',
-            start_time: '2026-06-08T08:00:00+05:00',
+            organization_id: orgId,
+            organization_name: orgName,
+            start_time: start,
             end_time: '2026-06-08T20:00:00+05:00',
             duty_officer_name: 'Иванов И.И.',
             reason: 'Не вышел на смену',
@@ -39,12 +39,16 @@ describe('DutyViolationService', () => {
         };
     }
 
+    function makeGroup(orgId: number, name: string, violations: DutyViolationResponse[]): DutyViolationGroupResponse {
+        return { id: orgId, name, violations };
+    }
+
     describe('getViolations', () => {
         it('GETs /duty-violations without params when no date', () => {
             service.getViolations().subscribe(res => expect(res.length).toBe(1));
             const req = httpMock.expectOne(r =>
                 r.method === 'GET' && r.url === `${BASE_URL}/duty-violations` && !r.params.has('date'));
-            req.flush([makeResponse(7)]);
+            req.flush([makeGroup(103, 'Пском', [makeResponse(7)])]);
         });
 
         it('GETs /duty-violations?date=YYYY-MM-DD when date provided', () => {
@@ -56,6 +60,28 @@ describe('DutyViolationService', () => {
             req.flush([]);
         });
 
+        it('flattens grouped response into a single ordered list, preserving group + intra-group order', () => {
+            service.getViolations().subscribe(res => {
+                expect(res.length).toBe(3);
+                // group order (Андижон before Пском) then intra-group order preserved
+                expect(res.map(v => v.id)).toEqual([7, 3, 5]);
+            });
+            const req = httpMock.expectOne(`${BASE_URL}/duty-violations`);
+            req.flush([
+                makeGroup(100, 'Андижон ГЭС', [makeResponse(7, 100, 'Андижон ГЭС'), makeResponse(3, 100, 'Андижон ГЭС')]),
+                makeGroup(103, 'Пском', [makeResponse(5, 103, 'Пском')])
+            ]);
+        });
+
+        it('fills organization_name on each flattened record from the group', () => {
+            service.getViolations().subscribe(res => {
+                expect(res[0].organization_name).toBe('Андижон ГЭС');
+                expect(res[0].organization_id).toBe(100);
+            });
+            const req = httpMock.expectOne(`${BASE_URL}/duty-violations`);
+            req.flush([makeGroup(100, 'Андижон ГЭС', [makeResponse(7, 100, 'Андижон ГЭС')])]);
+        });
+
         it('maps date strings to Date objects', () => {
             service.getViolations().subscribe(res => {
                 expect(res[0].start_time instanceof Date).toBeTrue();
@@ -63,13 +89,19 @@ describe('DutyViolationService', () => {
                 expect(res[0].created_at instanceof Date).toBeTrue();
             });
             const req = httpMock.expectOne(`${BASE_URL}/duty-violations`);
-            req.flush([makeResponse(7)]);
+            req.flush([makeGroup(103, 'Пском', [makeResponse(7)])]);
         });
 
         it('returns [] when backend returns null', () => {
             service.getViolations().subscribe(res => expect(res).toEqual([]));
             const req = httpMock.expectOne(`${BASE_URL}/duty-violations`);
             req.flush(null);
+        });
+
+        it('returns [] when backend returns empty group array', () => {
+            service.getViolations().subscribe(res => expect(res).toEqual([]));
+            const req = httpMock.expectOne(`${BASE_URL}/duty-violations`);
+            req.flush([]);
         });
     });
 

@@ -10,47 +10,43 @@
 <p-table
     [value]="violations"
     dataKey="id"
-    stripedRows
     [loading]="loading"
     [scrollable]="true"
     scrollHeight="60rem"
     [tableStyle]="{ 'min-width': '60rem' }"
-    [sortField]="'start_time'"
-    [sortOrder]="-1"
+    rowGroupMode="subheader"
+    groupRowsBy="organization_name"
 >
     <ng-template #caption>
         <div class="text-lg font-bold">{{ 'SITUATION_CENTER.DUTY_VIOLATION.TITLE' | translate }}</div>
     </ng-template>
     <ng-template pTemplate="header">
         <tr>
-            <th style="width: 4rem">№</th>
-            <th pSortableColumn="organization_name">
-                {{ 'SITUATION_CENTER.COMMON.OBJECT_NAME' | translate }} <p-sortIcon field="organization_name"></p-sortIcon>
-            </th>
-            <th pSortableColumn="start_time">
-                {{ 'SITUATION_CENTER.DUTY_VIOLATION.START_TIME' | translate }} <p-sortIcon field="start_time"></p-sortIcon>
-            </th>
-            <th pSortableColumn="end_time">
-                {{ 'SITUATION_CENTER.DUTY_VIOLATION.END_TIME' | translate }} <p-sortIcon field="end_time"></p-sortIcon>
-            </th>
-            <th pSortableColumn="duty_officer_name">
-                {{ 'SITUATION_CENTER.DUTY_VIOLATION.OFFICER' | translate }} <p-sortIcon field="duty_officer_name"></p-sortIcon>
-            </th>
-            <th>
-                {{ 'SITUATION_CENTER.DUTY_VIOLATION.REASON' | translate }}
-            </th>
+            <th style="width: 5rem">№</th>
+            <th style="min-width: 11rem">{{ 'SITUATION_CENTER.DUTY_VIOLATION.START_TIME' | translate }}</th>
+            <th style="min-width: 11rem">{{ 'SITUATION_CENTER.DUTY_VIOLATION.END_TIME' | translate }}</th>
+            <th style="min-width: 10rem">{{ 'SITUATION_CENTER.DUTY_VIOLATION.OFFICER' | translate }}</th>
+            <th>{{ 'SITUATION_CENTER.DUTY_VIOLATION.REASON' | translate }}</th>
             @if (authService.isSc()) {
-                <th style="width: 10%">
-                    {{ 'SITUATION_CENTER.COMMON.ACTIONS' | translate }}
-                </th>
+                <th style="width: 10%">{{ 'SITUATION_CENTER.COMMON.ACTIONS' | translate }}</th>
             }
         </tr>
     </ng-template>
 
-    <ng-template pTemplate="body" let-violation let-i="rowIndex">
+    <ng-template pTemplate="groupheader" let-violation>
         <tr>
-            <td>{{ i + 1 }}</td>
-            <td>{{ violation.organization_name }}</td>
+            <td class="bg-gray-200 dark:bg-gray-900">
+                <span class="font-bold text-lg">{{ getOrganizationIndex(violation.organization_name) }}</span>
+            </td>
+            <td class="bg-gray-200 dark:bg-gray-900" [attr.colspan]="authService.isSc() ? 5 : 4">
+                <span class="font-bold text-lg">{{ violation.organization_name }}</span>
+            </td>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-violation>
+        <tr>
+            <td>{{ getRowIndex(violation) }}</td>
             <td>{{ violation.start_time | date: 'yyyy-MM-dd HH:mm' }}</td>
             <td>{{ violation.end_time | date: 'yyyy-MM-dd HH:mm' }}</td>
             <td>{{ violation.duty_officer_name }}</td>
@@ -80,7 +76,7 @@
 
     <ng-template pTemplate="emptymessage">
         <tr>
-            <td [attr.colspan]="authService.isSc() ? 7 : 6" class="text-center">
+            <td [attr.colspan]="authService.isSc() ? 6 : 5" class="text-center">
                 {{ 'SITUATION_CENTER.DUTY_VIOLATION.NO_VIOLATIONS' | translate }}
             </td>
         </tr>

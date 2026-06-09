@@ -75,6 +75,26 @@ describe('DutyViolationsComponent', () => {
         expect(component.violations.length).toBe(2);
     });
 
+    it('getOrganizationIndex returns 1-based org position', () => {
+        const a = makeViolation(7); a.organization_name = 'Андижон';
+        const b = makeViolation(3); b.organization_name = 'Пском';
+        svc.getViolations.and.returnValue(of([a, b]));
+        fixture.detectChanges();
+        expect(component.getOrganizationIndex('Андижон')).toBe(1);
+        expect(component.getOrganizationIndex('Пском')).toBe(2);
+    });
+
+    it('getRowIndex returns "orgIndex.indexInOrg"', () => {
+        const a1 = makeViolation(7); a1.organization_name = 'Андижон';
+        const a2 = makeViolation(8); a2.organization_name = 'Андижон';
+        const b1 = makeViolation(3); b1.organization_name = 'Пском';
+        svc.getViolations.and.returnValue(of([a1, a2, b1]));
+        fixture.detectChanges();
+        expect(component.getRowIndex(a1)).toBe('1.1');
+        expect(component.getRowIndex(a2)).toBe('1.2');
+        expect(component.getRowIndex(b1)).toBe('2.1');
+    });
+
     it('form is invalid when end_time <= start_time', () => {
         fixture.detectChanges();
         component.openNew();

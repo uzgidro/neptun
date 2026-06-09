@@ -263,6 +263,20 @@ export class DutyViolationsComponent implements OnInit, OnDestroy {
         }
     }
 
+    /** 1-based index of an organization among the (already grouped) violations list. */
+    getOrganizationIndex(organizationName?: string): number {
+        const uniqueOrgs = [...new Set(this.violations.map((v) => v.organization_name))];
+        return uniqueOrgs.indexOf(organizationName) + 1;
+    }
+
+    /** Composite row index "orgIndex.indexInOrg" (e.g. "1.2"). */
+    getRowIndex(violation: DutyViolationDto): string {
+        const orgIndex = this.getOrganizationIndex(violation.organization_name);
+        const orgRows = this.violations.filter((v) => v.organization_name === violation.organization_name);
+        const indexInOrg = orgRows.findIndex((v) => v.id === violation.id) + 1;
+        return `${orgIndex}.${indexInOrg}`;
+    }
+
     deleteViolation(id: number): void {
         if (confirm(this.translate.instant('COMMON.CONFIRM_DELETE'))) {
             this.violationService.deleteViolation(id).pipe(takeUntil(this.destroy$)).subscribe({
