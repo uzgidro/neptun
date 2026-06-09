@@ -38,7 +38,7 @@ export class DutyViolationService extends ApiService {
             organization_id: r.organization_id ?? group.id,
             organization_name: r.organization_name ?? group.name,
             start_time: new Date(r.start_time),
-            end_time: new Date(r.end_time),
+            end_time: r.end_time ? new Date(r.end_time) : null,
             created_at: new Date(r.created_at)
         };
     }

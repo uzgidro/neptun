@@ -95,7 +95,7 @@ export class DutyViolationsComponent implements OnInit, OnDestroy {
         this.form = this.fb.group({
             organization: this.fb.control<Organization | null>(null, [Validators.required]),
             start_time: this.fb.control<Date | null>(null, [Validators.required]),
-            end_time: this.fb.control<Date | null>(null, [Validators.required]),
+            end_time: this.fb.control<Date | null>(null),
             duty_officer_name: this.fb.control<string | null>(null, [Validators.required]),
             reason: this.fb.control<string | null>(null, [Validators.required])
         }, { validators: endAfterStartValidator });

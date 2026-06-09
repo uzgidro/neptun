@@ -112,6 +112,35 @@ describe('DutyViolationsComponent', () => {
         expect(component.form.errors?.['endBeforeStart']).toBeTrue();
     });
 
+    it('form is valid when end_time is empty (optional)', () => {
+        fixture.detectChanges();
+        component.openNew();
+        component.form.patchValue({
+            organization: { id: 103, name: 'Пском' },
+            start_time: new Date('2026-06-08T08:00:00'),
+            end_time: null,
+            duty_officer_name: 'И.И.',
+            reason: 'причина'
+        });
+        expect(component.form.valid).toBeTrue();
+    });
+
+    it('onSubmit omits end_time when not provided', fakeAsync(() => {
+        fixture.detectChanges();
+        component.openNew();
+        component.form.patchValue({
+            organization: { id: 103, name: 'Пском' },
+            start_time: new Date('2026-06-08T08:00:00'),
+            end_time: null,
+            duty_officer_name: 'И.И.', reason: 'причина'
+        });
+        component.onSubmit();
+        tick();
+        const body = svc.addViolation.calls.mostRecent().args[0] as any;
+        expect('end_time' in body).toBeFalse();
+        expect(body.start_time).toBeTruthy();
+    }));
+
     it('form is valid when end_time > start_time and all fields filled', () => {
         fixture.detectChanges();
         component.openNew();

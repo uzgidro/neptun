@@ -48,7 +48,7 @@
         <tr>
             <td>{{ getRowIndex(violation) }}</td>
             <td>{{ violation.start_time | date: 'yyyy-MM-dd HH:mm' }}</td>
-            <td>{{ violation.end_time | date: 'yyyy-MM-dd HH:mm' }}</td>
+            <td>{{ violation.end_time ? (violation.end_time | date: 'yyyy-MM-dd HH:mm') : '-' }}</td>
             <td>{{ violation.duty_officer_name }}</td>
             <td>{{ violation.reason }}</td>
             @if (authService.isSc()) {
@@ -114,8 +114,8 @@
             [label]="'SITUATION_CENTER.DUTY_VIOLATION.END_TIME' | translate"
             formControlName="end_time"
             [showTime]="true"
-            [submitted]="submitted"
-            [errorMessage]="'SITUATION_CENTER.COMMON.SPECIFY_DATE' | translate">
+            [required]="false"
+            [submitted]="submitted">
         </app-date-picker>
 
         @if (submitted && form.errors?.['endBeforeStart']) {

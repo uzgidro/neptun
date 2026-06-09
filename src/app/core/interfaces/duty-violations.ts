@@ -4,8 +4,8 @@ export interface DutyViolationResponse {
     id: number;
     organization_id: number;
     organization_name?: string;
-    start_time: string; // ISO 8601
-    end_time: string;   // ISO 8601
+    start_time: string;      // ISO 8601
+    end_time: string | null; // ISO 8601, null for an open shift
     duty_officer_name: string;
     reason: string;
     files?: FileResponse[];
@@ -27,7 +27,7 @@ export interface DutyViolationDto {
     organization_id: number;
     organization_name?: string;
     start_time: Date;
-    end_time: Date;
+    end_time: Date | null;
     duty_officer_name: string;
     reason: string;
     files?: FileResponse[];
@@ -37,8 +37,8 @@ export interface DutyViolationDto {
 
 export interface DutyViolationCreatePayload {
     organization_id: number;
-    start_time: string; // ISO 8601
-    end_time: string;   // ISO 8601
+    start_time: string;  // ISO 8601
+    end_time?: string;   // ISO 8601, optional — open shift when omitted
     duty_officer_name: string;
     reason: string;
     file_ids?: number[];

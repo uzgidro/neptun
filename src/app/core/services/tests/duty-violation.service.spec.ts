@@ -92,6 +92,17 @@ describe('DutyViolationService', () => {
             req.flush([makeGroup(103, 'Пском', [makeResponse(7)])]);
         });
 
+        it('maps null end_time to null (open shift)', () => {
+            const open = makeResponse(7);
+            open.end_time = null;
+            service.getViolations().subscribe(res => {
+                expect(res[0].end_time).toBeNull();
+                expect(res[0].start_time instanceof Date).toBeTrue();
+            });
+            const req = httpMock.expectOne(`${BASE_URL}/duty-violations`);
+            req.flush([makeGroup(103, 'Пском', [open])]);
+        });
+
         it('returns [] when backend returns null', () => {
             service.getViolations().subscribe(res => expect(res).toEqual([]));
             const req = httpMock.expectOne(`${BASE_URL}/duty-violations`);
