@@ -2219,13 +2219,13 @@
       "DELETE_ERROR": "Error deleting visit"
     },
     "DUTY_VIOLATION": {
-      "TITLE": "Duty violations",
+      "TITLE": "Violations at facilities of JSC \"Uzbekgidroenergo\"",
       "ADD": "Add violation",
       "NEW": "New violation",
       "EDIT": "Edit violation",
       "START_TIME": "Violation start",
       "END_TIME": "Violation end",
-      "OFFICER": "Violator",
+      "OFFICER": "Violator (position)",
       "SPECIFY_OFFICER": "Specify the violator",
       "REASON": "Details",
       "SPECIFY_REASON": "Specify the details",

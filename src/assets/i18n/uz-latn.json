@@ -2219,13 +2219,13 @@
       "DELETE_ERROR": "Tashrifni o'chirishda xatolik"
     },
     "DUTY_VIOLATION": {
-      "TITLE": "Navbatchilar qoidabuzarliklari",
+      "TITLE": "\"O'zbekgidroenergo\" AJ tasarrufidagi obyektlardagi qoidabuzarliklar",
       "ADD": "Qoidabuzarlik qo'shish",
       "NEW": "Yangi qoidabuzarlik",
       "EDIT": "Qoidabuzarlikni tahrirlash",
       "START_TIME": "Qoidabuzarlik boshi",
       "END_TIME": "Qoidabuzarlik oxiri",
-      "OFFICER": "Qoidabuzar",
+      "OFFICER": "Qoidabuzar (lavozimi)",
       "SPECIFY_OFFICER": "Qoidabuzarni ko'rsating",
       "REASON": "Tafsilotlar",
       "SPECIFY_REASON": "Tafsilotlarni ko'rsating",
