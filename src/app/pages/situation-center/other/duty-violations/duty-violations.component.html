@@ -27,6 +27,7 @@
             <th style="min-width: 11rem">{{ 'SITUATION_CENTER.DUTY_VIOLATION.END_TIME' | translate }}</th>
             <th style="min-width: 10rem">{{ 'SITUATION_CENTER.DUTY_VIOLATION.OFFICER' | translate }}</th>
             <th>{{ 'SITUATION_CENTER.DUTY_VIOLATION.REASON' | translate }}</th>
+            <th style="width: 8%">{{ 'SITUATION_CENTER.COMMON.FILES' | translate }}</th>
             @if (authService.isSc()) {
                 <th style="width: 10%">{{ 'SITUATION_CENTER.COMMON.ACTIONS' | translate }}</th>
             }
@@ -38,7 +39,7 @@
             <td class="bg-gray-200 dark:bg-gray-900">
                 <span class="font-bold text-lg">{{ getOrganizationIndex(violation.organization_name) }}</span>
             </td>
-            <td class="bg-gray-200 dark:bg-gray-900" [attr.colspan]="authService.isSc() ? 5 : 4">
+            <td class="bg-gray-200 dark:bg-gray-900" [attr.colspan]="authService.isSc() ? 6 : 5">
                 <span class="font-bold text-lg">{{ violation.organization_name }}</span>
             </td>
         </tr>
@@ -51,6 +52,20 @@
             <td>{{ violation.end_time ? (violation.end_time | date: 'yyyy-MM-dd HH:mm') : '-' }}</td>
             <td>{{ violation.duty_officer_name }}</td>
             <td>{{ violation.reason }}</td>
+            <td>
+                @if (violation.files && violation.files.length > 0) {
+                    <p-button
+                        [label]="violation.files.length.toString()"
+                        icon="pi pi-paperclip"
+                        severity="secondary"
+                        [text]="true"
+                        (click)="showFiles(violation)"
+                        [pTooltip]="'SITUATION_CENTER.COMMON.VIEW_FILES' | translate"
+                    />
+                } @else {
+                    <span class="text-color-secondary">—</span>
+                }
+            </td>
             @if (authService.isSc()) {
                 <td>
                     <p-button
@@ -76,7 +91,7 @@
 
     <ng-template pTemplate="emptymessage">
         <tr>
-            <td [attr.colspan]="authService.isSc() ? 6 : 5" class="text-center">
+            <td [attr.colspan]="authService.isSc() ? 7 : 6" class="text-center">
                 {{ 'SITUATION_CENTER.DUTY_VIOLATION.NO_VIOLATIONS' | translate }}
             </td>
         </tr>
@@ -155,3 +170,9 @@
     </form>
 
 </app-dialog>
+
+<app-file-viewer
+    [(visible)]="showFilesDialog"
+    [header]="'SITUATION_CENTER.DUTY_VIOLATION.FILES' | translate"
+    [files]="selectedViolationForFiles?.files || []">
+</app-file-viewer>
