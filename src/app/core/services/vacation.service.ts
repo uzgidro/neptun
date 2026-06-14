@@ -31,6 +31,10 @@ export class VacationService extends ApiService {
     }
 
     // Vacation status actions
+    submitVacation(id: number): Observable<Vacation> {
+        return this.http.post<Vacation>(BASE_URL + VACATIONS + '/' + id + '/submit', {});
+    }
+
     approveVacation(id: number): Observable<Vacation> {
         return this.http.post<Vacation>(BASE_URL + VACATIONS + '/' + id + '/approve', {});
     }

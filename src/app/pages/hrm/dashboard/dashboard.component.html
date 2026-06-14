@@ -277,7 +277,7 @@
                                     } @else if (birthday.days_until === 1) {
                                         <p-tag [value]="'HRM.DASHBOARD.TOMORROW' | translate" severity="warn"></p-tag>
                                     } @else {
-                                        <span class="text-sm text-gray-500">{{ 'HRM.DASHBOARD.IN_DAYS' | translate:{ days: birthday.days_until } }}</span>
+                                        <span class="text-sm text-gray-500">{{ getInDaysText(birthday.days_until) }}</span>
                                     }
                                 </div>
                             </div>

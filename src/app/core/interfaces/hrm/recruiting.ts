@@ -443,6 +443,14 @@ export const CANDIDATE_STATUSES: { value: CandidateStatus; label: string }[] = [
     { value: 'withdrawn', label: 'Отказ кандидата' }
 ];
 
+export const ONBOARDING_STATUSES: { value: OnboardingStatus; label: string }[] = [
+    { value: 'not_started', label: 'Не начат' },
+    { value: 'in_progress', label: 'В процессе' },
+    { value: 'completed', label: 'Завершён' },
+    { value: 'extended', label: 'Продлён' },
+    { value: 'terminated', label: 'Прерван' }
+];
+
 export const RECRUITING_STAGES: { value: RecruitingStage; label: string; order: number }[] = [
     { value: 'application', label: 'Заявка', order: 1 },
     { value: 'screening', label: 'Отбор', order: 2 },

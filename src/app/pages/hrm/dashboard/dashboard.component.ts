@@ -123,6 +123,11 @@ export class HRMDashboardComponent implements OnInit, OnDestroy {
         }
     }
 
+    getInDaysText(days: number | undefined | null): string {
+        if (days == null) return '';
+        return this.translate.instant('HRM.DASHBOARD.IN_DAYS', { days: Number(days) });
+    }
+
     formatDate(dateStr: string): string {
         const date = new Date(dateStr);
         const lang = this.translate.currentLang || 'ru';

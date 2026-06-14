@@ -2,7 +2,12 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { BASE_URL } from '@/core/services/api.service';
-import { Salary, SalaryPayload, SalaryStructure, SalaryDeduction, SalaryBonus } from '@/core/interfaces/hrm/salary';
+import { Salary, EmployeeSalaryStructure, EmployeeDeduction, EmployeeBonus } from '@/core/interfaces/hrm/salary';
+
+type SalaryPayload = Partial<Salary>;
+type SalaryStructure = EmployeeSalaryStructure;
+type SalaryDeduction = EmployeeDeduction;
+type SalaryBonus = EmployeeBonus;
 
 const API_URL = BASE_URL + '/hrm/salaries';
 

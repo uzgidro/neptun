@@ -118,6 +118,7 @@ export class PersonnelRecordsComponent implements OnInit, OnDestroy {
                     this.records = data;
                 },
                 error: (err) => {
+                    this.loading = false;
                     this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('HRM.PERSONNEL_RECORDS.LOAD_ERROR') });
                     console.error(err);
                 },

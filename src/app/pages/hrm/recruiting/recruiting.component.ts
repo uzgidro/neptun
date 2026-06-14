@@ -43,7 +43,8 @@ import {
     VacancyStatus,
     CandidateStatus,
     OnboardingStatus,
-    RecruitingStage
+    RecruitingStage,
+    ONBOARDING_STATUSES
 } from '@/core/interfaces/hrm/recruiting';
 
 @Component({
@@ -123,6 +124,7 @@ export class RecruitingComponent implements OnInit, OnDestroy {
 
     vacancyStatuses = VACANCY_STATUSES;
     candidateStatuses = CANDIDATE_STATUSES;
+    onboardingStatuses = ONBOARDING_STATUSES;
     employmentTypes = EMPLOYMENT_TYPES;
     vacancyPriorities = VACANCY_PRIORITIES;
     interviewTypes = INTERVIEW_TYPES;
@@ -906,6 +908,7 @@ export class RecruitingComponent implements OnInit, OnDestroy {
         let list: { value: string; label: string }[] = [];
         if (type === 'vacancy') list = this.vacancyStatuses;
         else if (type === 'candidate') list = this.candidateStatuses;
+        else if (type === 'onboarding') list = this.onboardingStatuses;
         const found = list.find((s) => s.value === status);
         return found ? found.label : status;
     }

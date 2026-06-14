@@ -258,7 +258,7 @@ export class EmployeeCabinetComponent implements OnInit, OnDestroy {
                     link.href = url;
                     link.download = `payslip_${payment.period_month}_${payment.period_year}.pdf`;
                     link.click();
-                    window.URL.revokeObjectURL(url);
+                    setTimeout(() => window.URL.revokeObjectURL(url), 1000);
                 },
                 error: (err) => {
                     console.error('Error downloading:', err);
@@ -277,7 +277,7 @@ export class EmployeeCabinetComponent implements OnInit, OnDestroy {
                     link.href = url;
                     link.download = doc.name;
                     link.click();
-                    window.URL.revokeObjectURL(url);
+                    setTimeout(() => window.URL.revokeObjectURL(url), 1000);
                 },
                 error: (err) => {
                     console.error('Error downloading:', err);
@@ -353,6 +353,11 @@ export class EmployeeCabinetComponent implements OnInit, OnDestroy {
         return date.toLocaleDateString(locale, { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
     }
 
+    getOfDaysText(total: number | undefined | null): string {
+        if (total == null) return '';
+        return this.translate.instant('HRM.EMPLOYEE_CABINET.OF_DAYS', { total: Number(total) });
+    }
+
     formatCurrency(value: number): string {
         const lang = this.translate.currentLang || 'ru';
         const locale = lang === 'uz-latn' ? 'uz' : lang === 'uz-cyrl' ? 'uz' : lang;
@@ -395,6 +400,7 @@ export class EmployeeCabinetComponent implements OnInit, OnDestroy {
         const date = new Date(timestamp);
         const now = new Date();
         const diffMs = now.getTime() - date.getTime();
+        if (diffMs < 0) return this.translate.instant('HRM.EMPLOYEE_CABINET.YESTERDAY');
         const diffMins = Math.floor(diffMs / 60000);
         const diffHours = Math.floor(diffMs / 3600000);
         const diffDays = Math.floor(diffMs / 86400000);

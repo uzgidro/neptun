@@ -145,6 +145,7 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
                     this.vacations = data;
                 },
                 error: (err) => {
+                    this.loading = false;
                     this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('HRM.VACATION.LOAD_ERROR') });
                     console.error(err);
                 },
@@ -391,8 +392,7 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
             }
         }
 
-        // Update vacation status via API
-        this.vacationService.updateVacation(vacation.id, { ...vacation } as VacationPayload)
+        this.vacationService.submitVacation(vacation.id)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: () => {
@@ -559,7 +559,7 @@ export class VacationManagementComponent implements OnInit, OnDestroy {
             .subscribe({
                 next: () => {
                     this.messageService.add({
-                        severity: 'info',
+                        severity: 'success',
                         summary: this.translate.instant('COMMON.SUCCESS'),
                         detail: this.translate.instant('HRM.VACATION.REQUEST_CANCELLED')
                     });

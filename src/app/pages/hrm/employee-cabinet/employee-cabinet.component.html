@@ -72,9 +72,9 @@
                             <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4">
                                 <div class="text-sm text-gray-500 mb-1">{{ 'HRM.EMPLOYEE_CABINET.ANNUAL_LEAVE' | translate }}</div>
                                 <div class="text-2xl font-bold text-blue-600">{{ leaveBalance.annual_leave_remaining }}</div>
-                                <div class="text-xs text-gray-400">{{ 'HRM.EMPLOYEE_CABINET.OF_DAYS' | translate:{ total: leaveBalance.annual_leave_total } }}</div>
+                                <div class="text-xs text-gray-400">{{ getOfDaysText(leaveBalance.annual_leave_total) }}</div>
                                 <p-progressBar
-                                    [value]="(leaveBalance.annual_leave_remaining / leaveBalance.annual_leave_total) * 100"
+                                    [value]="leaveBalance.annual_leave_total > 0 ? (leaveBalance.annual_leave_remaining / leaveBalance.annual_leave_total) * 100 : 0"
                                     [showValue]="false"
                                     [style]="{ height: '4px' }"
                                     class="mt-2">
@@ -84,9 +84,9 @@
                             <div class="bg-green-50 dark:bg-green-900/20 rounded-lg p-4">
                                 <div class="text-sm text-gray-500 mb-1">{{ 'HRM.EMPLOYEE_CABINET.ADDITIONAL_LEAVE' | translate }}</div>
                                 <div class="text-2xl font-bold text-green-600">{{ leaveBalance.additional_leave_remaining }}</div>
-                                <div class="text-xs text-gray-400">{{ 'HRM.EMPLOYEE_CABINET.OF_DAYS' | translate:{ total: leaveBalance.additional_leave_total } }}</div>
+                                <div class="text-xs text-gray-400">{{ getOfDaysText(leaveBalance.additional_leave_total) }}</div>
                                 <p-progressBar
-                                    [value]="(leaveBalance.additional_leave_remaining / leaveBalance.additional_leave_total) * 100"
+                                    [value]="leaveBalance.additional_leave_total > 0 ? (leaveBalance.additional_leave_remaining / leaveBalance.additional_leave_total) * 100 : 0"
                                     [showValue]="false"
                                     [style]="{ height: '4px' }"
                                     class="mt-2">
@@ -96,9 +96,9 @@
                             <div class="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-4">
                                 <div class="text-sm text-gray-500 mb-1">{{ 'HRM.EMPLOYEE_CABINET.STUDY_LEAVE' | translate }}</div>
                                 <div class="text-2xl font-bold text-purple-600">{{ leaveBalance.study_leave_remaining }}</div>
-                                <div class="text-xs text-gray-400">{{ 'HRM.EMPLOYEE_CABINET.OF_DAYS' | translate:{ total: leaveBalance.study_leave_total } }}</div>
+                                <div class="text-xs text-gray-400">{{ getOfDaysText(leaveBalance.study_leave_total) }}</div>
                                 <p-progressBar
-                                    [value]="(leaveBalance.study_leave_remaining / leaveBalance.study_leave_total) * 100"
+                                    [value]="leaveBalance.study_leave_total > 0 ? (leaveBalance.study_leave_remaining / leaveBalance.study_leave_total) * 100 : 0"
                                     [showValue]="false"
                                     [style]="{ height: '4px' }"
                                     class="mt-2">
@@ -128,7 +128,7 @@
                                             </div>
                                             <div class="flex items-center gap-2">
                                                 <p-tag [value]="getVacationStatusLabel(request.status)" [severity]="getVacationStatusSeverity(request.status)"></p-tag>
-                                                @if (request.status === 'pending') {
+                                                @if (request.status === 'pending' || request.status === 'draft') {
                                                     <button pButton icon="pi pi-times" class="p-button-text p-button-danger p-button-sm"
                                                             [pTooltip]="'HRM.EMPLOYEE_CABINET.CANCEL' | translate" (click)="cancelVacationRequest(request)"></button>
                                                 }
@@ -256,7 +256,7 @@
                                         <div class="flex justify-between items-start">
                                             <div>
                                                 <div class="font-medium">{{ course.course_name }}</div>
-                                                <div class="text-sm text-gray-500">{{ 'HRM.EMPLOYEE_CABINET.COMPLETED' | translate }}: {{ formatDate(course.completed_at) }}</div>
+                                                <div class="text-sm text-gray-500">{{ 'HRM.EMPLOYEE_CABINET.COMPLETED_ON' | translate }}: {{ formatDate(course.completed_at) }}</div>
                                                 @if (course.certificate_number) {
                                                     <div class="text-sm text-green-600 mt-1">
                                                         <i class="pi pi-verified mr-1"></i>{{ 'HRM.EMPLOYEE_CABINET.CERTIFICATE' | translate }}: {{ course.certificate_number }}

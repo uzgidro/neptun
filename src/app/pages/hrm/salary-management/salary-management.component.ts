@@ -77,12 +77,12 @@ export class SalaryManagementComponent implements OnInit, OnDestroy {
     // Вычеты сотрудников
     employeeDeductions: EmployeeDeduction[] = [];
 
-    months = [
-        { id: 1, name: 'Январь' }, { id: 2, name: 'Февраль' }, { id: 3, name: 'Март' },
-        { id: 4, name: 'Апрель' }, { id: 5, name: 'Май' }, { id: 6, name: 'Июнь' },
-        { id: 7, name: 'Июль' }, { id: 8, name: 'Август' }, { id: 9, name: 'Сентябрь' },
-        { id: 10, name: 'Октябрь' }, { id: 11, name: 'Ноябрь' }, { id: 12, name: 'Декабрь' }
-    ];
+    get months() {
+        return Array.from({ length: 12 }, (_, i) => ({
+            id: i + 1,
+            name: this.translate.instant(`HRM.EMPLOYEE_CABINET.MONTH_${i + 1}`)
+        }));
+    }
     years = Array.from({ length: 5 }, (_, i) => ({ id: new Date().getFullYear() - i, name: (new Date().getFullYear() - i).toString() }));
 
     salaryStatuses = SALARY_STATUSES.map(s => ({ id: s.value, name: s.label }));
@@ -228,25 +228,30 @@ export class SalaryManagementComponent implements OnInit, OnDestroy {
     }
 
     approveAll(): void {
-        let count = 0;
-        const now = new Date().toISOString();
-        this.salaries = this.salaries.map(s => {
-            if (s.status === 'pending_approval') {
-                count++;
-                return {
-                    ...s,
-                    status: 'approved' as SalaryStatus,
-                    approved_at: now,
-                    approved_by: 'HR Директор'
-                };
-            }
-            return s;
-        });
-        this.messageService.add({
-            severity: 'success',
-            summary: this.translate.instant('COMMON.SUCCESS'),
-            detail: this.translate.instant('HRM.SALARY.BATCH_APPROVED', { count })
-        });
+        this.salaryService.approveSalary(this.selectedMonth, this.selectedYear)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: () => {
+                    let count = 0;
+                    const now = new Date().toISOString();
+                    this.salaries = this.salaries.map(s => {
+                        if (s.status === 'pending_approval') {
+                            count++;
+                            return { ...s, status: 'approved' as SalaryStatus, approved_at: now, approved_by: 'HR Директор' };
+                        }
+                        return s;
+                    });
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: this.translate.instant('COMMON.SUCCESS'),
+                        detail: this.translate.instant('HRM.SALARY.BATCH_APPROVED', { count })
+                    });
+                },
+                error: (err) => {
+                    console.error('Ошибка утверждения:', err);
+                    this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('HRM.SALARY.CALCULATION_ERROR') });
+                }
+            });
     }
 
     openRejectionDialog(salary: Salary): void {

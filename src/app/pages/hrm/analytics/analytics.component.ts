@@ -59,6 +59,7 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
                     this.prepareCharts();
                 },
                 error: (err) => {
+                    this.loading = false;
                     this.messageService.add({ severity: 'error', summary: this.translate.instant('COMMON.ERROR'), detail: this.translate.instant('HRM.DASHBOARD.LOAD_ERROR') });
                     console.error(err);
                 },
