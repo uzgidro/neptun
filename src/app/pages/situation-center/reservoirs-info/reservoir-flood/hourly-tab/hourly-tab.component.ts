@@ -125,6 +125,8 @@ export class HourlyTabComponent implements OnInit, OnDestroy {
     rows: HourlyRow[] = [];
     loading = false;
     savingAll = false;
+    /** Timestamp of the last successful load — drives the "обновлено N назад" label. */
+    lastUpdated: Date | null = null;
 
     canExport = this.authService.isScOrRais();
     downloadingSel: 'excel' | 'pdf' | null = null;
@@ -287,6 +289,7 @@ export class HourlyTabComponent implements OnInit, OnDestroy {
                         };
                     });
                     this.rows.forEach(row => this.wireVolumeAutoFill(row));
+                    this.lastUpdated = new Date();
                 },
                 error: () => {
                     this.messageService.add({
@@ -296,6 +299,22 @@ export class HourlyTabComponent implements OnInit, OnDestroy {
                     });
                 }
             });
+    }
+
+    /** Manual fetch — re-runs loadData with the current date/hour. No auto-refresh. */
+    refresh(): void {
+        this.loadData();
+    }
+
+    /** Relative "обновлено N назад" label from lastUpdated. Reuses DASHBOARD.* keys. */
+    getTimeAgo(): string {
+        if (!this.lastUpdated) return '';
+        const seconds = Math.floor((Date.now() - this.lastUpdated.getTime()) / 1000);
+        if (seconds < 60) return this.translate.instant('DASHBOARD.JUST_NOW');
+        const minutes = Math.floor(seconds / 60);
+        if (minutes < 60) return `${minutes} ${this.translate.instant('DASHBOARD.MINUTES_AGO')}`;
+        const hours = Math.floor(minutes / 60);
+        return `${hours} ${this.translate.instant('DASHBOARD.HOURS_AGO')}`;
     }
 
     onRowBlur(row: HourlyRow): void {

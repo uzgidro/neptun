@@ -31,6 +31,22 @@
             (onClick)="saveAll()">
         </p-button>
 
+        <p-button
+            icon="pi pi-refresh"
+            severity="secondary"
+            [text]="true"
+            [loading]="loading"
+            [disabled]="loading"
+            [pTooltip]="'SITUATION_CENTER.RESERVOIR_FLOOD.REFRESH' | translate"
+            (onClick)="refresh()">
+        </p-button>
+
+        @if (lastUpdated) {
+            <span class="text-color-secondary text-sm">
+                {{ 'DASHBOARD.LAST_UPDATED' | translate }}: {{ getTimeAgo() }}
+            </span>
+        }
+
         @if (canExport) {
             <p-button
                 [label]="'SITUATION_CENTER.RESERVOIR_FLOOD.SEL_EXPORT' | translate"

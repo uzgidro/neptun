@@ -2137,6 +2137,7 @@
       "DUTY_NAME_CYRILLIC_HINT": "Enter full name in Cyrillic (e.g. А.Эргашев)",
       "DUTY_NAME_CYRILLIC_ERROR": "Cyrillic only. Latin letters are not allowed.",
       "SAVE_ALL": "Save All",
+      "REFRESH": "Refresh",
       "NO_DATA_FOR_HOUR": "No data for this hour",
       "NO_FLOOD_CONFIG": "Flood mode is not configured",
       "BATCH_FAILED_AT": "Error in row: {{station}}",
