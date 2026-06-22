@@ -214,6 +214,59 @@ describe('HourlyTabComponent', () => {
         expect(row.form.dirty).toBeFalse();
     }));
 
+    // ─── Manual refresh ───
+
+    describe('manual refresh', () => {
+        it('refresh() re-runs loadData (configs + records fetched again)', fakeAsync(() => {
+            svc.getConfigs.and.returnValue(of([makeConfig(42, 'Чарвак')]));
+            svc.getHourly.and.returnValue(of([]));
+            fixture.detectChanges();
+            tick();
+            const configCalls = svc.getConfigs.calls.count();
+            const hourlyCalls = svc.getHourly.calls.count();
+            component.refresh();
+            tick();
+            expect(svc.getConfigs.calls.count()).toBeGreaterThan(configCalls);
+            expect(svc.getHourly.calls.count()).toBeGreaterThan(hourlyCalls);
+        }));
+
+        it('lastUpdated is set after a successful load', fakeAsync(() => {
+            svc.getConfigs.and.returnValue(of([makeConfig(42, 'Чарвак')]));
+            svc.getHourly.and.returnValue(of([]));
+            fixture.detectChanges();
+            tick();
+            expect(component.lastUpdated).not.toBeNull();
+            expect(component.lastUpdated instanceof Date).toBeTrue();
+        }));
+
+        it('lastUpdated stays null when load fails', fakeAsync(() => {
+            svc.getConfigs.and.returnValue(throwError(() => new HttpErrorResponse({ status: 500 })));
+            svc.getHourly.and.returnValue(of([]));
+            fixture.detectChanges();
+            tick();
+            expect(component.lastUpdated).toBeNull();
+        }));
+
+        it('getTimeAgo returns empty string when never loaded', () => {
+            fixture.detectChanges();
+            component.lastUpdated = null;
+            expect(component.getTimeAgo()).toBe('');
+        });
+
+        it('getTimeAgo returns JUST_NOW translation for a fresh timestamp', () => {
+            fixture.detectChanges();
+            component.lastUpdated = new Date();
+            expect(component.getTimeAgo()).toContain('DASHBOARD.JUST_NOW');
+        });
+
+        it('getTimeAgo returns minutes-ago for an older timestamp', () => {
+            fixture.detectChanges();
+            component.lastUpdated = new Date(Date.now() - 5 * 60 * 1000);
+            expect(component.getTimeAgo()).toContain('5');
+            expect(component.getTimeAgo()).toContain('DASHBOARD.MINUTES_AGO');
+        });
+    });
+
     // ─── duty_name Cyrillic-only validator ───
 
     describe('duty_name Cyrillic validator', () => {
