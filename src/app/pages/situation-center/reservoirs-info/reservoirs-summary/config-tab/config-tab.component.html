@@ -23,57 +23,70 @@
             <tr>
                 <th style="width: 60px">№</th>
                 <th>{{ 'SITUATION_CENTER.RESERVOIRS_SUMMARY.ORGANIZATION' | translate }}</th>
-                <th style="width: 110px">
+                <th style="width: 90px">
                     {{ 'SITUATION_CENTER.RESERVOIRS_SUMMARY.SORT_ORDER' | translate }}
                 </th>
-                <th style="width: 160px">
+                <th style="width: 140px">
                     {{ 'SITUATION_CENTER.RESERVOIRS_SUMMARY.INCLUDE_IN_TOTAL' | translate }}
                 </th>
-                <th style="width: 120px">
+                <th style="width: 110px">
                     {{ 'SITUATION_CENTER.RESERVOIRS_SUMMARY.MODSNOW_ENABLED' | translate }}
                 </th>
-                <th style="width: 200px">
+                <th style="width: 180px">
                     {{ 'SITUATION_CENTER.RESERVOIRS_SUMMARY.VOLUME_SOURCE' | translate }}
                 </th>
-                <th style="width: 140px">{{ 'COMMON.ACTIONS' | translate }}</th>
+                <th style="width: 80px">{{ 'COMMON.ACTIONS' | translate }}</th>
             </tr>
         </ng-template>
         <ng-template #body let-cfg let-i="rowIndex">
-            <tr>
+            <tr [class.opacity-60]="cfg.saving">
                 <td>{{ i + 1 }}</td>
                 <td>{{ cfg.organization_name }}</td>
-                <td>{{ cfg.sort_order }}</td>
                 <td>
-                    <p-tag
-                        [value]="(cfg.include_in_total ? 'COMMON.YES' : 'COMMON.NO') | translate"
-                        [severity]="cfg.include_in_total ? 'success' : 'secondary'" />
+                    <p-inputNumber
+                        [(ngModel)]="cfg.sort_order"
+                        [min]="1"
+                        [showButtons]="false"
+                        [disabled]="cfg.saving"
+                        (onBlur)="saveRow(cfg)"
+                        inputStyleClass="w-16" />
                 </td>
                 <td>
-                    <p-tag
-                        [value]="(cfg.modsnow_enabled ? 'COMMON.YES' : 'COMMON.NO') | translate"
-                        [severity]="cfg.modsnow_enabled ? 'success' : 'secondary'" />
+                    <p-checkbox
+                        [(ngModel)]="cfg.include_in_total"
+                        [binary]="true"
+                        [disabled]="cfg.saving"
+                        (onChange)="saveRow(cfg)" />
                 </td>
                 <td>
-                    {{ (cfg.volume_source === 'level_volume'
-                        ? 'SITUATION_CENTER.RESERVOIRS_SUMMARY.VOLUME_SOURCE_LEVEL'
-                        : 'SITUATION_CENTER.RESERVOIRS_SUMMARY.VOLUME_SOURCE_STATIC') | translate }}
+                    <p-checkbox
+                        [(ngModel)]="cfg.modsnow_enabled"
+                        [binary]="true"
+                        [disabled]="cfg.saving"
+                        (onChange)="saveRow(cfg)" />
                 </td>
                 <td>
-                    <div class="flex gap-2">
-                        <p-button
-                            icon="pi pi-pencil"
-                            [rounded]="true"
-                            [text]="true"
-                            [ariaLabel]="'COMMON.EDIT' | translate"
-                            (onClick)="editConfig(cfg)" />
-                        <p-button
-                            icon="pi pi-trash"
-                            [rounded]="true"
-                            [text]="true"
-                            severity="danger"
-                            [ariaLabel]="'COMMON.DELETE' | translate"
-                            (onClick)="deleteConfig(cfg.organization_id)" />
-                    </div>
+                    <p-select
+                        [(ngModel)]="cfg.volume_source"
+                        [options]="volumeSourceOptions"
+                        optionValue="value"
+                        [disabled]="cfg.saving"
+                        appendTo="body"
+                        styleClass="w-full"
+                        (onChange)="saveRow(cfg)">
+                        <ng-template let-opt #selectedItem>{{ opt.label | translate }}</ng-template>
+                        <ng-template let-opt #item>{{ opt.label | translate }}</ng-template>
+                    </p-select>
+                </td>
+                <td>
+                    <p-button
+                        icon="pi pi-trash"
+                        [rounded]="true"
+                        [text]="true"
+                        severity="danger"
+                        [disabled]="cfg.saving"
+                        [ariaLabel]="'COMMON.DELETE' | translate"
+                        (onClick)="deleteConfig(cfg.organization_id)" />
                 </td>
             </tr>
         </ng-template>
@@ -89,9 +102,7 @@
 
 <p-dialog
     [(visible)]="dialogVisible"
-    [header]="(isEditMode
-        ? 'SITUATION_CENTER.RESERVOIRS_SUMMARY.EDIT'
-        : 'SITUATION_CENTER.RESERVOIRS_SUMMARY.ADD_ORG') | translate"
+    [header]="'SITUATION_CENTER.RESERVOIRS_SUMMARY.ADD_ORG' | translate"
     [modal]="true"
     [style]="{ width: '500px' }"
     (onHide)="hideDialog()">

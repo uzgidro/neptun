@@ -10,7 +10,6 @@ import { DialogModule } from 'primeng/dialog';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { CheckboxModule } from 'primeng/checkbox';
 import { SelectModule } from 'primeng/select';
-import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MessageService } from 'primeng/api';
@@ -28,6 +27,9 @@ import {
 import { Organization } from '@/core/interfaces/organizations';
 import { GroupSelectComponent } from '@/layout/component/dialog/group-select/group-select.component';
 
+/** A config row plus a transient per-row saving flag for inline autosave. */
+type ConfigRow = ReservoirSummaryConfig & { saving?: boolean };
+
 @Component({
     selector: 'app-reservoir-summary-config-tab',
     standalone: true,
@@ -41,7 +43,6 @@ import { GroupSelectComponent } from '@/layout/component/dialog/group-select/gro
         InputNumberModule,
         CheckboxModule,
         SelectModule,
-        TagModule,
         TooltipModule,
         TranslateModule,
         GroupSelectComponent
@@ -58,7 +59,7 @@ export class ReservoirSummaryConfigTabComponent implements OnInit, OnDestroy {
     private translate = inject(TranslateService);
     private fb = inject(FormBuilder);
 
-    configs: ReservoirSummaryConfig[] = [];
+    configs: ConfigRow[] = [];
     organizations: Organization[] = [];
     availableOrganizationGroups: { name: string; items: Organization[] }[] = [];
     orgsLoading = false;
@@ -67,8 +68,6 @@ export class ReservoirSummaryConfigTabComponent implements OnInit, OnDestroy {
     submitted = false;
 
     dialogVisible = false;
-    isEditMode = false;
-    editingConfig: ReservoirSummaryConfig | null = null;
 
     form: FormGroup = this.fb.group({
         organization: [null as Organization | null, Validators.required],
@@ -135,8 +134,6 @@ export class ReservoirSummaryConfigTabComponent implements OnInit, OnDestroy {
     }
 
     openNew(): void {
-        this.isEditMode = false;
-        this.editingConfig = null;
         this.submitted = false;
         const nextSortOrder = this.configs.length
             ? Math.max(...this.configs.map(c => c.sort_order)) + 1
@@ -152,21 +149,42 @@ export class ReservoirSummaryConfigTabComponent implements OnInit, OnDestroy {
         this.dialogVisible = true;
     }
 
-    editConfig(cfg: ReservoirSummaryConfig): void {
-        this.isEditMode = true;
-        this.editingConfig = cfg;
-        this.submitted = false;
-        const foundOrg = this.organizations.find(o => o.id === cfg.organization_id) ?? null;
-        this.form.reset();
-        this.form.patchValue({
-            organization: foundOrg,
-            sort_order: cfg.sort_order,
-            include_in_total: cfg.include_in_total,
-            modsnow_enabled: cfg.modsnow_enabled,
-            volume_source: cfg.volume_source
-        });
-        this.updateAvailableOrganizations();
-        this.dialogVisible = true;
+    /**
+     * Inline autosave: upsert a single row with its current (mutated) values.
+     * Bound to control changes in the table. On error we reload to revert the
+     * optimistic in-cell edit to the authoritative server state.
+     */
+    saveRow(row: ConfigRow): void {
+        if (row.saving) return;
+        row.saving = true;
+
+        const payload: ReservoirSummaryConfigPayload = {
+            organization_id: row.organization_id,
+            sort_order: row.sort_order ?? 0,
+            include_in_total: !!row.include_in_total,
+            modsnow_enabled: !!row.modsnow_enabled,
+            volume_source: row.volume_source ?? 'static'
+        };
+
+        this.src.upsertConfig(payload)
+            .pipe(takeUntil(this.destroy$), finalize(() => row.saving = false))
+            .subscribe({
+                next: () => {
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: this.translate.instant('COMMON.SUCCESS'),
+                        detail: this.translate.instant('SITUATION_CENTER.RESERVOIRS_SUMMARY.CONFIG_SAVED')
+                    });
+                },
+                error: () => {
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: this.translate.instant('COMMON.ERROR'),
+                        detail: this.translate.instant('SITUATION_CENTER.RESERVOIRS_SUMMARY.ERROR_SAVE_FAILED')
+                    });
+                    this.loadConfigs();
+                }
+            });
     }
 
     saveConfig(): void {
@@ -242,16 +260,13 @@ export class ReservoirSummaryConfigTabComponent implements OnInit, OnDestroy {
 
     hideDialog(): void {
         this.dialogVisible = false;
-        this.editingConfig = null;
     }
 
     private updateAvailableOrganizations(): void {
+        // The dialog is add-only now (rows are edited inline), so every already
+        // configured organization is excluded from the picker.
         const usedIds = new Set(this.configs.map(c => c.organization_id));
-        const editingId = this.isEditMode ? this.editingConfig?.organization_id : null;
-
-        const filtered = this.organizations.filter(
-            org => !usedIds.has(org.id) || org.id === editingId
-        );
+        const filtered = this.organizations.filter(org => !usedIds.has(org.id));
         this.availableOrganizationGroups = filtered.length
             ? [{
                 name: this.translate.instant('SITUATION_CENTER.RESERVOIRS_SUMMARY.ORGANIZATION'),

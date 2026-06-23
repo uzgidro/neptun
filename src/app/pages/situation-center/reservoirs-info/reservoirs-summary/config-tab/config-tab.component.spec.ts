@@ -11,7 +11,7 @@ import { RESERVOIR_SUMMARY_CONFIG_SOURCE, ReservoirSummaryConfigSource } from '@
 import { OrganizationService } from '@/core/services/organization.service';
 import { ReservoirSummaryConfig } from '@/core/interfaces/reservoir-summary-config';
 
-function mkCfg(orgId: number, name: string, sort_order: number, include_in_total = true): ReservoirSummaryConfig {
+function mkCfg(orgId: number, name: string, sort_order: number, include_in_total = true): ReservoirSummaryConfig & { saving?: boolean } {
     return {
         id: orgId, organization_id: orgId, organization_name: name, sort_order, include_in_total,
         modsnow_enabled: true, volume_source: 'static'
@@ -60,30 +60,65 @@ describe('ReservoirSummaryConfigTabComponent', () => {
         expect(component.configs.map(c => c.sort_order)).toEqual([1, 2, 3]);
     });
 
-    it('openNew resets form to defaults and shows dialog', () => {
+    it('openNew resets form to defaults and shows the add dialog', () => {
         fixture.detectChanges();
         component.openNew();
         expect(component.dialogVisible).toBeTrue();
-        expect(component.isEditMode).toBeFalse();
         expect(component.form.get('organization')?.value).toBeNull();
         expect(component.form.get('include_in_total')?.value).toBeTrue();
         expect(component.form.get('modsnow_enabled')?.value).toBeTrue();
         expect(component.form.get('volume_source')?.value).toBe('static');
     });
 
-    it('editConfig patches form with cfg values (incl. modsnow_enabled + volume_source)', () => {
+    it('saveRow upserts the row with its current values (inline edit)', fakeAsync(() => {
+        src.upsertConfig.and.returnValue(of({ status: 'OK' }));
+        src.getConfigs.and.returnValue(of([]));
         fixture.detectChanges();
-        const cfg = mkCfg(101, 'Андижон', 1, false);
-        cfg.modsnow_enabled = false;
-        cfg.volume_source = 'level_volume';
-        component.editConfig(cfg);
-        expect(component.dialogVisible).toBeTrue();
-        expect(component.isEditMode).toBeTrue();
-        expect(component.form.get('sort_order')?.value).toBe(1);
-        expect(component.form.get('include_in_total')?.value).toBeFalse();
-        expect(component.form.get('modsnow_enabled')?.value).toBeFalse();
-        expect(component.form.get('volume_source')?.value).toBe('level_volume');
-    });
+        const row = mkCfg(101, 'Андижон', 1, true);
+        row.modsnow_enabled = false;
+        row.volume_source = 'level_volume';
+        component.saveRow(row);
+        tick();
+        expect(src.upsertConfig).toHaveBeenCalledWith({
+            organization_id: 101, sort_order: 1, include_in_total: true,
+            modsnow_enabled: false, volume_source: 'level_volume'
+        });
+    }));
+
+    it('saveRow sets and clears the per-row saving flag', fakeAsync(() => {
+        src.upsertConfig.and.returnValue(of({ status: 'OK' }));
+        src.getConfigs.and.returnValue(of([]));
+        fixture.detectChanges();
+        const row = mkCfg(101, 'Андижон', 1, true);
+        component.saveRow(row);
+        // synchronously set before the async response resolves is hard to assert with `of`;
+        // assert it is cleared after completion
+        tick();
+        expect(row.saving).toBeFalse();
+    }));
+
+    it('saveRow does not upsert when already saving (guard)', fakeAsync(() => {
+        src.upsertConfig.and.returnValue(of({ status: 'OK' }));
+        fixture.detectChanges();
+        const row = mkCfg(101, 'Андижон', 1, true);
+        row.saving = true;
+        component.saveRow(row);
+        tick();
+        expect(src.upsertConfig).not.toHaveBeenCalled();
+    }));
+
+    it('saveRow shows an error toast and reloads on failure (reverts optimistic edit)', fakeAsync(() => {
+        src.upsertConfig.and.returnValue(throwError(() => new HttpErrorResponse({ status: 500 })));
+        src.getConfigs.and.returnValue(of([mkCfg(101, 'Андижон', 1, true)]));
+        fixture.detectChanges();
+        const row = mkCfg(101, 'Андижон', 1, true);
+        component.saveRow(row);
+        tick();
+        const call = messageService.add.calls.mostRecent();
+        expect(call.args[0].severity).toBe('error');
+        // reload re-fetches authoritative state
+        expect(src.getConfigs).toHaveBeenCalled();
+    }));
 
     it('saveConfig sends correct payload (incl. modsnow_enabled + volume_source)', fakeAsync(() => {
         src.upsertConfig.and.returnValue(of({ status: 'OK' }));
