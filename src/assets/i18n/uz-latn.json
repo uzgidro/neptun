@@ -2093,6 +2093,7 @@
       "START": "Boshlanishi",
       "END": "Tugashi",
       "REASON": "Sabab",
+      "SPECIFY_REASON": "Sababini ko'rsating",
       "POWER_LOSS": "Yo'qotilgan quvvat, kVt*soat",
       "IDLE_DISCHARGE": "Bo'sh tashlab yuborish, ming m³",
       "INCIDENTS_NOT_FOUND": "Tanlangan sana uchun hodisalar topilmadi.",

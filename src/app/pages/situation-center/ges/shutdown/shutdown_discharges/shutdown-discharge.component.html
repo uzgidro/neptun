@@ -231,6 +231,7 @@
             [label]="'SITUATION_CENTER.DISCHARGE.FLOW_RATE' | translate"
             formControlName="flow_rate"
             [submitted]="submitted"
+            [required]="true"
             [errorMessage]="'SITUATION_CENTER.DISCHARGE.SPECIFY_FLOW' | translate">
         </app-input-number>
 
@@ -238,7 +239,8 @@
             [label]="'SITUATION_CENTER.SHUTDOWN.REASON' | translate"
             formControlName="reason"
             [submitted]="submitted"
-            [required]="false">
+            [required]="true"
+            [errorMessage]="'SITUATION_CENTER.SHUTDOWN.SPECIFY_REASON' | translate">
         </app-textarea>
 
         @if (isEditMode && currentDischarge?.files && (currentDischarge?.files?.length ?? 0) > 0) {

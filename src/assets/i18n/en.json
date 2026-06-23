@@ -2093,6 +2093,7 @@
       "START": "Start",
       "END": "End",
       "REASON": "Reason",
+      "SPECIFY_REASON": "Specify the reason",
       "POWER_LOSS": "Power Loss, kWh",
       "IDLE_DISCHARGE": "Spillway Discharge, thous. m³",
       "INCIDENTS_NOT_FOUND": "No incidents found for selected date.",

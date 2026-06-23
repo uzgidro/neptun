@@ -122,7 +122,7 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges, OnDestroy 
                 started_at: this.fb.control<Date | null>(null, [Validators.required]),
                 ended_at: this.fb.control<Date | null>(null),
                 flow_rate: this.fb.control<number | null>(null, [Validators.required, Validators.min(0)]),
-                reason: this.fb.control<string | null>(null)
+                reason: this.fb.control<string | null>(null, [Validators.required])
             },
             {
                 validators: [dateRangeValidator()]
