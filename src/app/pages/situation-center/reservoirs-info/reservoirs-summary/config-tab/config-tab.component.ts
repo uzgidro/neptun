@@ -9,6 +9,7 @@ import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { CheckboxModule } from 'primeng/checkbox';
+import { SelectModule } from 'primeng/select';
 import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -21,7 +22,8 @@ import {
 import { OrganizationService } from '@/core/services/organization.service';
 import {
     ReservoirSummaryConfig,
-    ReservoirSummaryConfigPayload
+    ReservoirSummaryConfigPayload,
+    VolumeSource
 } from '@/core/interfaces/reservoir-summary-config';
 import { Organization } from '@/core/interfaces/organizations';
 import { GroupSelectComponent } from '@/layout/component/dialog/group-select/group-select.component';
@@ -38,6 +40,7 @@ import { GroupSelectComponent } from '@/layout/component/dialog/group-select/gro
         DialogModule,
         InputNumberModule,
         CheckboxModule,
+        SelectModule,
         TagModule,
         TooltipModule,
         TranslateModule,
@@ -47,8 +50,6 @@ import { GroupSelectComponent } from '@/layout/component/dialog/group-select/gro
 })
 export class ReservoirSummaryConfigTabComponent implements OnInit, OnDestroy {
     private static readonly MAX_CONFIGS = 8;
-    // Slot 3 hardcodes a `modsnow` skip in res-summary.xlsx (generator.go: `if i == 2 { continue }`).
-    private static readonly EXCEL_BROKEN_SLOT = 3;
 
     private destroy$ = new Subject<void>();
     private src = inject<ReservoirSummaryConfigSource>(RESERVOIR_SUMMARY_CONFIG_SOURCE);
@@ -72,8 +73,15 @@ export class ReservoirSummaryConfigTabComponent implements OnInit, OnDestroy {
     form: FormGroup = this.fb.group({
         organization: [null as Organization | null, Validators.required],
         sort_order: [1, [Validators.required, Validators.min(1)]],
-        include_in_total: [true]
+        include_in_total: [true],
+        modsnow_enabled: [true],
+        volume_source: ['static' as VolumeSource]
     });
+
+    readonly volumeSourceOptions: { value: VolumeSource; label: string }[] = [
+        { value: 'static', label: 'SITUATION_CENTER.RESERVOIRS_SUMMARY.VOLUME_SOURCE_STATIC' },
+        { value: 'level_volume', label: 'SITUATION_CENTER.RESERVOIRS_SUMMARY.VOLUME_SOURCE_LEVEL' }
+    ];
 
     get isAddDisabled(): boolean {
         return this.configs.length >= ReservoirSummaryConfigTabComponent.MAX_CONFIGS;
@@ -136,7 +144,9 @@ export class ReservoirSummaryConfigTabComponent implements OnInit, OnDestroy {
         this.form.reset({
             organization: null,
             sort_order: nextSortOrder,
-            include_in_total: true
+            include_in_total: true,
+            modsnow_enabled: true,
+            volume_source: 'static'
         });
         this.updateAvailableOrganizations();
         this.dialogVisible = true;
@@ -151,21 +161,12 @@ export class ReservoirSummaryConfigTabComponent implements OnInit, OnDestroy {
         this.form.patchValue({
             organization: foundOrg,
             sort_order: cfg.sort_order,
-            include_in_total: cfg.include_in_total
+            include_in_total: cfg.include_in_total,
+            modsnow_enabled: cfg.modsnow_enabled,
+            volume_source: cfg.volume_source
         });
         this.updateAvailableOrganizations();
         this.dialogVisible = true;
-    }
-
-    isSlot3HazardousChange(payload: ReservoirSummaryConfigPayload): boolean {
-        if (payload.sort_order !== ReservoirSummaryConfigTabComponent.EXCEL_BROKEN_SLOT) {
-            return false;
-        }
-        const existingAtSlot = this.configs.find(
-            c => c.sort_order === ReservoirSummaryConfigTabComponent.EXCEL_BROKEN_SLOT
-        );
-        if (!existingAtSlot) return true;
-        return existingAtSlot.organization_id !== payload.organization_id;
     }
 
     saveConfig(): void {
@@ -178,13 +179,10 @@ export class ReservoirSummaryConfigTabComponent implements OnInit, OnDestroy {
         const payload: ReservoirSummaryConfigPayload = {
             organization_id: formVal.organization.id,
             sort_order: formVal.sort_order ?? 0,
-            include_in_total: !!formVal.include_in_total
+            include_in_total: !!formVal.include_in_total,
+            modsnow_enabled: !!formVal.modsnow_enabled,
+            volume_source: formVal.volume_source ?? 'static'
         };
-
-        if (this.isSlot3HazardousChange(payload)) {
-            const warn = this.translate.instant('SITUATION_CENTER.RESERVOIRS_SUMMARY.SLOT3_WARNING_BODY');
-            if (!confirm(warn)) return;
-        }
 
         this.saving = true;
         this.src.upsertConfig(payload)

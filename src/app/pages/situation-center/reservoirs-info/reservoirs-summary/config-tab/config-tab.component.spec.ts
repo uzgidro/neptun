@@ -12,7 +12,10 @@ import { OrganizationService } from '@/core/services/organization.service';
 import { ReservoirSummaryConfig } from '@/core/interfaces/reservoir-summary-config';
 
 function mkCfg(orgId: number, name: string, sort_order: number, include_in_total = true): ReservoirSummaryConfig {
-    return { id: orgId, organization_id: orgId, organization_name: name, sort_order, include_in_total };
+    return {
+        id: orgId, organization_id: orgId, organization_name: name, sort_order, include_in_total,
+        modsnow_enabled: true, volume_source: 'static'
+    };
 }
 
 describe('ReservoirSummaryConfigTabComponent', () => {
@@ -64,19 +67,25 @@ describe('ReservoirSummaryConfigTabComponent', () => {
         expect(component.isEditMode).toBeFalse();
         expect(component.form.get('organization')?.value).toBeNull();
         expect(component.form.get('include_in_total')?.value).toBeTrue();
+        expect(component.form.get('modsnow_enabled')?.value).toBeTrue();
+        expect(component.form.get('volume_source')?.value).toBe('static');
     });
 
-    it('editConfig patches form with cfg values', () => {
+    it('editConfig patches form with cfg values (incl. modsnow_enabled + volume_source)', () => {
         fixture.detectChanges();
         const cfg = mkCfg(101, 'Андижон', 1, false);
+        cfg.modsnow_enabled = false;
+        cfg.volume_source = 'level_volume';
         component.editConfig(cfg);
         expect(component.dialogVisible).toBeTrue();
         expect(component.isEditMode).toBeTrue();
         expect(component.form.get('sort_order')?.value).toBe(1);
         expect(component.form.get('include_in_total')?.value).toBeFalse();
+        expect(component.form.get('modsnow_enabled')?.value).toBeFalse();
+        expect(component.form.get('volume_source')?.value).toBe('level_volume');
     });
 
-    it('saveConfig sends correct payload', fakeAsync(() => {
+    it('saveConfig sends correct payload (incl. modsnow_enabled + volume_source)', fakeAsync(() => {
         src.upsertConfig.and.returnValue(of({ status: 'OK' }));
         src.getConfigs.and.returnValue(of([]));
         fixture.detectChanges();
@@ -84,12 +93,15 @@ describe('ReservoirSummaryConfigTabComponent', () => {
         component.form.patchValue({
             organization: { id: 42, name: 'Чарвак', contacts: [] },
             sort_order: 5,
-            include_in_total: false
+            include_in_total: false,
+            modsnow_enabled: false,
+            volume_source: 'level_volume'
         });
         component.saveConfig();
         tick();
         expect(src.upsertConfig).toHaveBeenCalledWith({
-            organization_id: 42, sort_order: 5, include_in_total: false
+            organization_id: 42, sort_order: 5, include_in_total: false,
+            modsnow_enabled: false, volume_source: 'level_volume'
         });
     }));
 
@@ -108,68 +120,6 @@ describe('ReservoirSummaryConfigTabComponent', () => {
         fixture.detectChanges();
         expect(component.isAddDisabled).toBeFalse();
     });
-
-    it('isSlot3HazardousChange: sort_order!=3 → false', () => {
-        fixture.detectChanges();
-        expect(component.isSlot3HazardousChange({
-            organization_id: 1, sort_order: 4, include_in_total: true
-        })).toBeFalse();
-    });
-
-    it('isSlot3HazardousChange: empty slot 3, placing any org there → true', () => {
-        src.getConfigs.and.returnValue(of([mkCfg(1, 'A', 1), mkCfg(2, 'B', 2)]));
-        fixture.detectChanges();
-        expect(component.isSlot3HazardousChange({
-            organization_id: 7, sort_order: 3, include_in_total: true
-        })).toBeTrue();
-    });
-
-    it('isSlot3HazardousChange: putting different org into slot 3 → true', () => {
-        src.getConfigs.and.returnValue(of([mkCfg(5, 'Сардоба', 3)]));
-        fixture.detectChanges();
-        expect(component.isSlot3HazardousChange({
-            organization_id: 99, sort_order: 3, include_in_total: true
-        })).toBeTrue();
-    });
-
-    it('isSlot3HazardousChange: same org already at slot 3 → false (no-op)', () => {
-        src.getConfigs.and.returnValue(of([mkCfg(5, 'Сардоба', 3)]));
-        fixture.detectChanges();
-        expect(component.isSlot3HazardousChange({
-            organization_id: 5, sort_order: 3, include_in_total: true
-        })).toBeFalse();
-    });
-
-    it('saveConfig blocks upsert when slot-3 warning is rejected', fakeAsync(() => {
-        spyOn(window, 'confirm').and.returnValue(false);
-        src.getConfigs.and.returnValue(of([mkCfg(5, 'Сардоба', 3)]));
-        fixture.detectChanges();
-        component.openNew();
-        component.form.patchValue({
-            organization: { id: 99, name: 'X', contacts: [] },
-            sort_order: 3,
-            include_in_total: true
-        });
-        component.saveConfig();
-        tick();
-        expect(src.upsertConfig).not.toHaveBeenCalled();
-    }));
-
-    it('saveConfig proceeds when slot-3 warning is accepted', fakeAsync(() => {
-        spyOn(window, 'confirm').and.returnValue(true);
-        src.upsertConfig.and.returnValue(of({ status: 'OK' }));
-        src.getConfigs.and.returnValue(of([mkCfg(5, 'Сардоба', 3)]));
-        fixture.detectChanges();
-        component.openNew();
-        component.form.patchValue({
-            organization: { id: 99, name: 'X', contacts: [] },
-            sort_order: 3,
-            include_in_total: true
-        });
-        component.saveConfig();
-        tick();
-        expect(src.upsertConfig).toHaveBeenCalled();
-    }));
 
     it('deleteConfig invokes source.deleteConfig with organization_id when confirmed', () => {
         spyOn(window, 'confirm').and.returnValue(true);
@@ -214,5 +164,20 @@ describe('ReservoirSummaryConfigTabComponent', () => {
         const payload = src.upsertConfig.calls.mostRecent().args[0];
         expect(payload.include_in_total).toBe(false);
         expect(payload.include_in_total).not.toBeNull();
+    }));
+
+    it('payload always carries modsnow_enabled (default true) and volume_source', fakeAsync(() => {
+        src.upsertConfig.and.returnValue(of({ status: 'OK' }));
+        fixture.detectChanges();
+        component.openNew();
+        component.form.patchValue({
+            organization: { id: 7, name: 'Пском', contacts: [] },
+            sort_order: 8
+        });
+        component.saveConfig();
+        tick();
+        const payload = src.upsertConfig.calls.mostRecent().args[0];
+        expect(payload.modsnow_enabled).toBe(true);
+        expect(payload.volume_source).toBe('static');
     }));
 });

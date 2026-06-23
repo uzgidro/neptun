@@ -10,8 +10,13 @@ import localeRu from '@angular/common/locales/ru';
 import { MessageService } from 'primeng/api';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from '@/core/services/auth.service';
-import { finalize } from 'rxjs';
+import { catchError, finalize, forkJoin, of } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
+import {
+    RESERVOIR_SUMMARY_CONFIG_SOURCE,
+    ReservoirSummaryConfigSource
+} from '@/core/services/reservoir-summary-config.source';
+import { ReservoirSummaryConfig } from '@/core/interfaces/reservoir-summary-config';
 import { downloadBlob } from '@/core/utils/download';
 import { LevelVolumeService } from '@/core/services/level-volume.service';
 import { LevelVolume } from '@/core/interfaces/level-volume';
@@ -50,7 +55,11 @@ export class ReservoirsSummaryComponent implements OnInit {
     private messageService: MessageService = inject(MessageService);
     private levelVolumeService: LevelVolumeService = inject(LevelVolumeService);
     private translate: TranslateService = inject(TranslateService);
+    private configSource = inject<ReservoirSummaryConfigSource>(RESERVOIR_SUMMARY_CONFIG_SOURCE);
     authService: AuthService = inject(AuthService);
+
+    /** Per-organization config (modsnow_enabled, volume_source) loaded alongside the data. */
+    private configByOrgId = new Map<number, ReservoirSummaryConfig>();
 
     selectedDate: Date | null = null;
 
@@ -82,17 +91,35 @@ export class ReservoirsSummaryComponent implements OnInit {
 
     private loadData(date: Date) {
         if (date) {
-            this.reservoirService.getReservoirSummary(date).subscribe({
-                next: (response) => {
-                    this.data = response;
+            forkJoin({
+                data: this.reservoirService.getReservoirSummary(date),
+                configs: this.configSource.getConfigs().pipe(
+                    catchError(() => of([] as ReservoirSummaryConfig[]))
+                )
+            }).subscribe({
+                next: ({ data, configs }) => {
+                    this.data = data;
                     // Store a deep copy of the original data
-                    this.originalData = JSON.parse(JSON.stringify(response));
+                    this.originalData = JSON.parse(JSON.stringify(data));
+                    this.configByOrgId = new Map((configs || []).map(c => [c.organization_id, c]));
                 },
                 error: (error) => {
                     console.error('Error loading reservoir summary:', error);
                 }
             });
         }
+    }
+
+    /** modsnow editable/visible for this org? Defaults true when no config row. ИТОГО (null) → false. */
+    isModsnowEnabled(organizationId: number | null): boolean {
+        if (organizationId === null) return false;
+        return this.configByOrgId.get(organizationId)?.modsnow_enabled ?? true;
+    }
+
+    /** Volume derived from the level curve → manual edits are pointless; show a read-only hint. */
+    isVolumeFromLevel(organizationId: number | null): boolean {
+        return organizationId !== null
+            && this.configByOrgId.get(organizationId)?.volume_source === 'level_volume';
     }
 
     getPreviousYear(yearsAgo: number): number {

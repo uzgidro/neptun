@@ -13,15 +13,17 @@ const MOCK_DELAY_MS = 200;
 // the mock would tree-shake into production bundles.
 @Injectable()
 export class MockReservoirSummaryConfigService implements ReservoirSummaryConfigSource {
+    // modsnow_enabled: false only for the slot-3 org (Сардоба) — matches the
+    // backend migration that moved the old Excel slot-3 modsnow skip into the DB.
     private store: ReservoirSummaryConfig[] = [
-        { id: 1, organization_id: 101, organization_name: 'Андижон',     sort_order: 1, include_in_total: true  },
-        { id: 2, organization_id: 102, organization_name: 'Охангарон',   sort_order: 2, include_in_total: true  },
-        { id: 3, organization_id: 103, organization_name: 'Сардоба',     sort_order: 3, include_in_total: true  },
-        { id: 4, organization_id: 104, organization_name: 'Хисорак',     sort_order: 4, include_in_total: true  },
-        { id: 5, organization_id: 105, organization_name: 'Топаланг',    sort_order: 5, include_in_total: true  },
-        { id: 6, organization_id: 106, organization_name: 'Чорвок',      sort_order: 6, include_in_total: true  },
-        { id: 7, organization_id: 107, organization_name: 'Қуйи Чоткол', sort_order: 7, include_in_total: true  },
-        { id: 8, organization_id: 108, organization_name: 'Пском',       sort_order: 8, include_in_total: false }
+        { id: 1, organization_id: 101, organization_name: 'Андижон',     sort_order: 1, include_in_total: true,  modsnow_enabled: true,  volume_source: 'static' },
+        { id: 2, organization_id: 102, organization_name: 'Охангарон',   sort_order: 2, include_in_total: true,  modsnow_enabled: true,  volume_source: 'static' },
+        { id: 3, organization_id: 103, organization_name: 'Сардоба',     sort_order: 3, include_in_total: true,  modsnow_enabled: false, volume_source: 'static' },
+        { id: 4, organization_id: 104, organization_name: 'Хисорак',     sort_order: 4, include_in_total: true,  modsnow_enabled: true,  volume_source: 'static' },
+        { id: 5, organization_id: 105, organization_name: 'Топаланг',    sort_order: 5, include_in_total: true,  modsnow_enabled: true,  volume_source: 'static' },
+        { id: 6, organization_id: 106, organization_name: 'Чорвок',      sort_order: 6, include_in_total: true,  modsnow_enabled: true,  volume_source: 'static' },
+        { id: 7, organization_id: 107, organization_name: 'Қуйи Чоткол', sort_order: 7, include_in_total: true,  modsnow_enabled: true,  volume_source: 'static' },
+        { id: 8, organization_id: 108, organization_name: 'Пском',       sort_order: 8, include_in_total: false, modsnow_enabled: true,  volume_source: 'static' }
     ];
     private nextId = 9;
 
@@ -39,7 +41,9 @@ export class MockReservoirSummaryConfigService implements ReservoirSummaryConfig
             this.store[idx] = {
                 ...this.store[idx],
                 sort_order: p.sort_order,
-                include_in_total: p.include_in_total
+                include_in_total: p.include_in_total,
+                modsnow_enabled: p.modsnow_enabled,
+                volume_source: p.volume_source
             };
         } else {
             this.store.push({
@@ -47,7 +51,9 @@ export class MockReservoirSummaryConfigService implements ReservoirSummaryConfig
                 organization_id: p.organization_id,
                 organization_name: `Org #${p.organization_id}`,
                 sort_order: p.sort_order,
-                include_in_total: p.include_in_total
+                include_in_total: p.include_in_total,
+                modsnow_enabled: p.modsnow_enabled,
+                volume_source: p.volume_source
             });
         }
         return of({ status: 'OK' }).pipe(delay(MOCK_DELAY_MS));

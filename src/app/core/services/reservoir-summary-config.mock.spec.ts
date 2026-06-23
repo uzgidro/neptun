@@ -22,6 +22,17 @@ describe('MockReservoirSummaryConfigService', () => {
         }
     });
 
+    it('seed carries modsnow_enabled and volume_source on every record', async () => {
+        const list = await firstValueFrom(svc.getConfigs());
+        list.forEach(c => {
+            expect(typeof c.modsnow_enabled).toBe('boolean');
+            expect(c.volume_source).toBe('static');
+        });
+        // slot-3 org (Сардоба) has modsnow disabled
+        const sardoba = list.find(c => c.sort_order === 3)!;
+        expect(sardoba.modsnow_enabled).toBeFalse();
+    });
+
     it('getConfigs returns a defensive copy, not the internal array', async () => {
         const a = await firstValueFrom(svc.getConfigs());
         a[0].sort_order = 999;
@@ -35,12 +46,16 @@ describe('MockReservoirSummaryConfigService', () => {
         await firstValueFrom(svc.upsertConfig({
             organization_id: target.organization_id,
             sort_order: target.sort_order,
-            include_in_total: !target.include_in_total
+            include_in_total: !target.include_in_total,
+            modsnow_enabled: !target.modsnow_enabled,
+            volume_source: 'level_volume'
         }));
         const after = await firstValueFrom(svc.getConfigs());
         expect(after.length).toBe(before.length);
         const updated = after.find(c => c.organization_id === target.organization_id)!;
         expect(updated.include_in_total).toBe(!target.include_in_total);
+        expect(updated.modsnow_enabled).toBe(!target.modsnow_enabled);
+        expect(updated.volume_source).toBe('level_volume');
     });
 
     it('upsertConfig inserts a new record with a fresh id', async () => {
@@ -49,13 +64,17 @@ describe('MockReservoirSummaryConfigService', () => {
         await firstValueFrom(svc.upsertConfig({
             organization_id: 999,
             sort_order: 99,
-            include_in_total: true
+            include_in_total: true,
+            modsnow_enabled: true,
+            volume_source: 'level_volume'
         }));
         const after = await firstValueFrom(svc.getConfigs());
         expect(after.length).toBe(before.length + 1);
         const created = after.find(c => c.organization_id === 999)!;
         expect(created).toBeTruthy();
         expect(beforeIds.has(created.id)).toBe(false);
+        expect(created.modsnow_enabled).toBeTrue();
+        expect(created.volume_source).toBe('level_volume');
     });
 
     it('deleteConfig removes a record by organization_id', async () => {
@@ -76,7 +95,9 @@ describe('MockReservoirSummaryConfigService', () => {
         await firstValueFrom(svc.upsertConfig({
             organization_id: 555,
             sort_order: 55,
-            include_in_total: false
+            include_in_total: false,
+            modsnow_enabled: true,
+            volume_source: 'static'
         }));
         const list = await firstValueFrom(svc.getConfigs());
         expect(list.find(c => c.organization_id === 555)?.include_in_total).toBe(false);

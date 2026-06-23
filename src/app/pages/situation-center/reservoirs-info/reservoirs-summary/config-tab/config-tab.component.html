@@ -26,8 +26,14 @@
                 <th style="width: 110px">
                     {{ 'SITUATION_CENTER.RESERVOIRS_SUMMARY.SORT_ORDER' | translate }}
                 </th>
-                <th style="width: 200px">
+                <th style="width: 160px">
                     {{ 'SITUATION_CENTER.RESERVOIRS_SUMMARY.INCLUDE_IN_TOTAL' | translate }}
+                </th>
+                <th style="width: 120px">
+                    {{ 'SITUATION_CENTER.RESERVOIRS_SUMMARY.MODSNOW_ENABLED' | translate }}
+                </th>
+                <th style="width: 200px">
+                    {{ 'SITUATION_CENTER.RESERVOIRS_SUMMARY.VOLUME_SOURCE' | translate }}
                 </th>
                 <th style="width: 140px">{{ 'COMMON.ACTIONS' | translate }}</th>
             </tr>
@@ -41,6 +47,16 @@
                     <p-tag
                         [value]="(cfg.include_in_total ? 'COMMON.YES' : 'COMMON.NO') | translate"
                         [severity]="cfg.include_in_total ? 'success' : 'secondary'" />
+                </td>
+                <td>
+                    <p-tag
+                        [value]="(cfg.modsnow_enabled ? 'COMMON.YES' : 'COMMON.NO') | translate"
+                        [severity]="cfg.modsnow_enabled ? 'success' : 'secondary'" />
+                </td>
+                <td>
+                    {{ (cfg.volume_source === 'level_volume'
+                        ? 'SITUATION_CENTER.RESERVOIRS_SUMMARY.VOLUME_SOURCE_LEVEL'
+                        : 'SITUATION_CENTER.RESERVOIRS_SUMMARY.VOLUME_SOURCE_STATIC') | translate }}
                 </td>
                 <td>
                     <div class="flex gap-2">
@@ -63,7 +79,7 @@
         </ng-template>
         <ng-template #emptymessage>
             <tr>
-                <td colspan="5" class="text-center p-4">
+                <td colspan="7" class="text-center p-4">
                     {{ 'COMMON.NO_DATA' | translate }}
                 </td>
             </tr>
@@ -107,6 +123,31 @@
             <label for="reservoir_summary_include_in_total" class="font-medium">
                 {{ 'SITUATION_CENTER.RESERVOIRS_SUMMARY.INCLUDE_IN_TOTAL' | translate }}
             </label>
+        </div>
+
+        <div class="flex items-center gap-2">
+            <p-checkbox
+                formControlName="modsnow_enabled"
+                [binary]="true"
+                inputId="reservoir_summary_modsnow_enabled" />
+            <label for="reservoir_summary_modsnow_enabled" class="font-medium">
+                {{ 'SITUATION_CENTER.RESERVOIRS_SUMMARY.MODSNOW_ENABLED' | translate }}
+            </label>
+        </div>
+
+        <div class="flex flex-col gap-1">
+            <label class="font-medium">
+                {{ 'SITUATION_CENTER.RESERVOIRS_SUMMARY.VOLUME_SOURCE' | translate }}
+            </label>
+            <p-select
+                formControlName="volume_source"
+                [options]="volumeSourceOptions"
+                optionValue="value"
+                appendTo="body"
+                class="w-full">
+                <ng-template let-opt #selectedItem>{{ opt.label | translate }}</ng-template>
+                <ng-template let-opt #item>{{ opt.label | translate }}</ng-template>
+            </p-select>
         </div>
     </form>
 

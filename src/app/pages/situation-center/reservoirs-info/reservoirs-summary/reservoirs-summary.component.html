@@ -76,7 +76,7 @@
                 </tr>
             </ng-template>
 
-            <ng-template pTemplate="body" let-reservoir let-index="rowIndex">
+            <ng-template pTemplate="body" let-reservoir>
                 <tr>
                     <!--Label-->
                     <td rowspan="2">{{ reservoir.organization_name }}</td>
@@ -105,7 +105,7 @@
                         <td></td>
                     }
                     <!--Volume-->
-                    @if (authService.isSc() && reservoir.organization_id !== null) {
+                    @if (authService.isSc() && reservoir.organization_id !== null && !isVolumeFromLevel(reservoir.organization_id)) {
                         <td [pEditableColumn]="reservoir.volume" pEditableColumnField="current" class="text-nowrap"
                             [ngClass]="{'bg-yellow-100 dark:bg-yellow-900': reservoir.volume.is_edited}">
                             <p-cellEditor>
@@ -119,6 +119,13 @@
                                     <i class="pi pi-pen-to-square ml-2 text-gray-400 text-xs"></i>
                                 </ng-template>
                             </p-cellEditor>
+                        </td>
+                    } @else if (isVolumeFromLevel(reservoir.organization_id)) {
+                        <td class="text-nowrap"
+                            [pTooltip]="'SITUATION_CENTER.RESERVOIRS_SUMMARY.VOLUME_FROM_LEVEL_HINT' | translate"
+                            tooltipPosition="top">
+                            {{ reservoir.volume.current | number: '1.0-2' }}
+                            <i class="pi pi-info-circle ml-2 text-gray-400 text-xs"></i>
                         </td>
                     } @else {
                         <td class="text-nowrap">{{ reservoir.volume.current | number: '1.0-2' }}</td>
@@ -226,7 +233,7 @@
                         </td>
                     }
                     <!--MODSNOW-->
-                    @if (reservoir.organization_id !== null && index !== 2) {
+                    @if (isModsnowEnabled(reservoir.organization_id)) {
                         @if (authService.isSc()) {
                             <td [pEditableColumn]="reservoir.modsnow" pEditableColumnField="current"
                                 class="text-nowrap"
@@ -292,7 +299,7 @@
                         %
                     </td>
                     <td colspan="2"
-                        class="bg-surface-300 dark:bg-surface-800 text-red-500">{{ reservoir.organization_id !== null && index !== 2 ? (reservoir.modsnow.current - reservoir.modsnow.year_ago | number:'1.0-1') : '' }}
+                        class="bg-surface-300 dark:bg-surface-800 text-red-500">{{ isModsnowEnabled(reservoir.organization_id) ? (reservoir.modsnow.current - reservoir.modsnow.year_ago | number:'1.0-1') : '' }}
                     </td>
                 </tr>
             </ng-template>

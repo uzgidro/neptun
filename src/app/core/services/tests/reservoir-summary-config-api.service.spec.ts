@@ -30,7 +30,7 @@ describe('ReservoirSummaryConfigApiService', () => {
         it('GETs /reservoir-summary/config', () => {
             const mock: ReservoirSummaryConfig[] = [{
                 id: 1, organization_id: 101, organization_name: 'Андижон',
-                sort_order: 1, include_in_total: true
+                sort_order: 1, include_in_total: true, modsnow_enabled: true, volume_source: 'static'
             }];
             service.getConfigs().subscribe(res => expect(res).toEqual(mock));
             const req = httpMock.expectOne(`${BASE_URL}/reservoir-summary/config`);
@@ -40,9 +40,10 @@ describe('ReservoirSummaryConfigApiService', () => {
     });
 
     describe('upsertConfig', () => {
-        it('POSTs to /reservoir-summary/config with body', () => {
+        it('POSTs to /reservoir-summary/config with body (incl. modsnow_enabled + volume_source)', () => {
             const payload: ReservoirSummaryConfigPayload = {
-                organization_id: 108, sort_order: 8, include_in_total: false
+                organization_id: 108, sort_order: 8, include_in_total: false,
+                modsnow_enabled: true, volume_source: 'level_volume'
             };
             service.upsertConfig(payload).subscribe(r => expect(r.status).toBe('OK'));
             const req = httpMock.expectOne(`${BASE_URL}/reservoir-summary/config`);
@@ -51,12 +52,15 @@ describe('ReservoirSummaryConfigApiService', () => {
             req.flush({ status: 'OK' });
         });
 
-        it('serializes include_in_total=false (not dropped)', () => {
+        it('serializes include_in_total=false and modsnow_enabled=false (not dropped)', () => {
             service.upsertConfig({
-                organization_id: 108, sort_order: 8, include_in_total: false
+                organization_id: 108, sort_order: 8, include_in_total: false,
+                modsnow_enabled: false, volume_source: 'static'
             }).subscribe();
             const req = httpMock.expectOne(`${BASE_URL}/reservoir-summary/config`);
             expect(req.request.body.include_in_total).toBe(false);
+            expect(req.request.body.modsnow_enabled).toBe(false);
+            expect(req.request.body.volume_source).toBe('static');
             req.flush({ status: 'OK' });
         });
     });
