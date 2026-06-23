@@ -3,7 +3,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
 import { MessageService } from 'primeng/api';
 import { ReservoirsSummaryComponent } from './reservoirs-summary.component';
@@ -31,11 +31,23 @@ function makeReservoir(orgId: number, name: string): ReservoirSummaryResponse {
     };
 }
 
+import { RESERVOIR_SUMMARY_CONFIG_SOURCE, ReservoirSummaryConfigSource } from '@/core/services/reservoir-summary-config.source';
+import { ReservoirSummaryConfig } from '@/core/interfaces/reservoir-summary-config';
+
+function mkConfig(orgId: number, over: Partial<ReservoirSummaryConfig> = {}): ReservoirSummaryConfig {
+    return {
+        id: orgId, organization_id: orgId, organization_name: 'org' + orgId,
+        sort_order: orgId, include_in_total: true, modsnow_enabled: true, volume_source: 'static',
+        ...over
+    };
+}
+
 describe('ReservoirsSummaryComponent', () => {
     let component: ReservoirsSummaryComponent;
     let fixture: ComponentFixture<ReservoirsSummaryComponent>;
     let reservoirService: jasmine.SpyObj<ReservoirSummaryService>;
     let levelVolumeService: jasmine.SpyObj<LevelVolumeService>;
+    let configSource: jasmine.SpyObj<ReservoirSummaryConfigSource>;
 
     beforeEach(async () => {
         const reservoirSpy = jasmine.createSpyObj('ReservoirSummaryService', [
@@ -46,6 +58,9 @@ describe('ReservoirsSummaryComponent', () => {
         authSpy.isSc.and.returnValue(true);
         authSpy.isAdmin.and.returnValue(true);
         authSpy.isAuthenticated.and.returnValue(true);
+        const configSpy = jasmine.createSpyObj('ReservoirSummaryConfigSource',
+            ['getConfigs', 'upsertConfig', 'deleteConfig']);
+        configSpy.getConfigs.and.returnValue(of([]));
 
         reservoirSpy.getReservoirSummary.and.returnValue(of([]));
         reservoirSpy.upsetReservoirData.and.returnValue(of({}));
@@ -60,6 +75,7 @@ describe('ReservoirsSummaryComponent', () => {
                 { provide: ReservoirSummaryService, useValue: reservoirSpy },
                 { provide: LevelVolumeService, useValue: levelVolumeSpy },
                 { provide: AuthService, useValue: authSpy },
+                { provide: RESERVOIR_SUMMARY_CONFIG_SOURCE, useValue: configSpy },
                 MessageService
             ]
         }).compileComponents();
@@ -68,6 +84,7 @@ describe('ReservoirsSummaryComponent', () => {
         component = fixture.componentInstance;
         reservoirService = TestBed.inject(ReservoirSummaryService) as jasmine.SpyObj<ReservoirSummaryService>;
         levelVolumeService = TestBed.inject(LevelVolumeService) as jasmine.SpyObj<LevelVolumeService>;
+        configSource = TestBed.inject(RESERVOIR_SUMMARY_CONFIG_SOURCE) as jasmine.SpyObj<ReservoirSummaryConfigSource>;
     });
 
     it('should create', () => {
@@ -154,4 +171,55 @@ describe('ReservoirsSummaryComponent', () => {
         expect(item.volume).toBeUndefined();
         expect(item.release).toBeUndefined();
     }));
+
+    describe('config effects (modsnow_enabled, volume_source)', () => {
+        it('loadData builds configByOrgId from getConfigs', fakeAsync(() => {
+            reservoirService.getReservoirSummary.and.returnValue(of([makeReservoir(1, 'A')]));
+            configSource.getConfigs.and.returnValue(of([
+                mkConfig(1, { modsnow_enabled: false, volume_source: 'level_volume' })
+            ]));
+            component.onDateChange(new Date('2026-04-13'));
+            tick();
+            expect(component.isModsnowEnabled(1)).toBeFalse();
+            expect(component.isVolumeFromLevel(1)).toBeTrue();
+        }));
+
+        it('isModsnowEnabled defaults to true when no config for org', fakeAsync(() => {
+            reservoirService.getReservoirSummary.and.returnValue(of([makeReservoir(1, 'A')]));
+            configSource.getConfigs.and.returnValue(of([]));
+            component.onDateChange(new Date('2026-04-13'));
+            tick();
+            expect(component.isModsnowEnabled(1)).toBeTrue();
+        }));
+
+        it('isModsnowEnabled is false for the ИТОГО row (organization_id null)', fakeAsync(() => {
+            reservoirService.getReservoirSummary.and.returnValue(of([makeReservoir(1, 'A')]));
+            configSource.getConfigs.and.returnValue(of([]));
+            component.onDateChange(new Date('2026-04-13'));
+            tick();
+            expect(component.isModsnowEnabled(null)).toBeFalse();
+        }));
+
+        it('isVolumeFromLevel is true only when volume_source === level_volume', fakeAsync(() => {
+            reservoirService.getReservoirSummary.and.returnValue(of([makeReservoir(1, 'A'), makeReservoir(2, 'B')]));
+            configSource.getConfigs.and.returnValue(of([
+                mkConfig(1, { volume_source: 'level_volume' }),
+                mkConfig(2, { volume_source: 'static' })
+            ]));
+            component.onDateChange(new Date('2026-04-13'));
+            tick();
+            expect(component.isVolumeFromLevel(1)).toBeTrue();
+            expect(component.isVolumeFromLevel(2)).toBeFalse();
+            expect(component.isVolumeFromLevel(null)).toBeFalse();
+        }));
+
+        it('config load failure does not break data load', fakeAsync(() => {
+            reservoirService.getReservoirSummary.and.returnValue(of([makeReservoir(1, 'A')]));
+            configSource.getConfigs.and.returnValue(throwError(() => new Error('boom')));
+            component.onDateChange(new Date('2026-04-13'));
+            tick();
+            expect(component.data.length).toBe(1);
+            expect(component.isModsnowEnabled(1)).toBeTrue(); // default
+        }));
+    });
 });

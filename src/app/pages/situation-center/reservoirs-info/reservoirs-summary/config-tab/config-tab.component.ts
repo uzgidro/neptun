@@ -9,7 +9,7 @@ import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { CheckboxModule } from 'primeng/checkbox';
-import { TagModule } from 'primeng/tag';
+import { SelectModule } from 'primeng/select';
 import { TooltipModule } from 'primeng/tooltip';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MessageService } from 'primeng/api';
@@ -21,10 +21,14 @@ import {
 import { OrganizationService } from '@/core/services/organization.service';
 import {
     ReservoirSummaryConfig,
-    ReservoirSummaryConfigPayload
+    ReservoirSummaryConfigPayload,
+    VolumeSource
 } from '@/core/interfaces/reservoir-summary-config';
 import { Organization } from '@/core/interfaces/organizations';
 import { GroupSelectComponent } from '@/layout/component/dialog/group-select/group-select.component';
+
+/** A config row plus a transient per-row saving flag for inline autosave. */
+type ConfigRow = ReservoirSummaryConfig & { saving?: boolean };
 
 @Component({
     selector: 'app-reservoir-summary-config-tab',
@@ -38,7 +42,7 @@ import { GroupSelectComponent } from '@/layout/component/dialog/group-select/gro
         DialogModule,
         InputNumberModule,
         CheckboxModule,
-        TagModule,
+        SelectModule,
         TooltipModule,
         TranslateModule,
         GroupSelectComponent
@@ -47,8 +51,6 @@ import { GroupSelectComponent } from '@/layout/component/dialog/group-select/gro
 })
 export class ReservoirSummaryConfigTabComponent implements OnInit, OnDestroy {
     private static readonly MAX_CONFIGS = 8;
-    // Slot 3 hardcodes a `modsnow` skip in res-summary.xlsx (generator.go: `if i == 2 { continue }`).
-    private static readonly EXCEL_BROKEN_SLOT = 3;
 
     private destroy$ = new Subject<void>();
     private src = inject<ReservoirSummaryConfigSource>(RESERVOIR_SUMMARY_CONFIG_SOURCE);
@@ -57,7 +59,7 @@ export class ReservoirSummaryConfigTabComponent implements OnInit, OnDestroy {
     private translate = inject(TranslateService);
     private fb = inject(FormBuilder);
 
-    configs: ReservoirSummaryConfig[] = [];
+    configs: ConfigRow[] = [];
     organizations: Organization[] = [];
     availableOrganizationGroups: { name: string; items: Organization[] }[] = [];
     orgsLoading = false;
@@ -66,14 +68,19 @@ export class ReservoirSummaryConfigTabComponent implements OnInit, OnDestroy {
     submitted = false;
 
     dialogVisible = false;
-    isEditMode = false;
-    editingConfig: ReservoirSummaryConfig | null = null;
 
     form: FormGroup = this.fb.group({
         organization: [null as Organization | null, Validators.required],
         sort_order: [1, [Validators.required, Validators.min(1)]],
-        include_in_total: [true]
+        include_in_total: [true],
+        modsnow_enabled: [true],
+        volume_source: ['static' as VolumeSource]
     });
+
+    readonly volumeSourceOptions: { value: VolumeSource; label: string }[] = [
+        { value: 'static', label: 'SITUATION_CENTER.RESERVOIRS_SUMMARY.VOLUME_SOURCE_STATIC' },
+        { value: 'level_volume', label: 'SITUATION_CENTER.RESERVOIRS_SUMMARY.VOLUME_SOURCE_LEVEL' }
+    ];
 
     get isAddDisabled(): boolean {
         return this.configs.length >= ReservoirSummaryConfigTabComponent.MAX_CONFIGS;
@@ -127,8 +134,6 @@ export class ReservoirSummaryConfigTabComponent implements OnInit, OnDestroy {
     }
 
     openNew(): void {
-        this.isEditMode = false;
-        this.editingConfig = null;
         this.submitted = false;
         const nextSortOrder = this.configs.length
             ? Math.max(...this.configs.map(c => c.sort_order)) + 1
@@ -136,36 +141,50 @@ export class ReservoirSummaryConfigTabComponent implements OnInit, OnDestroy {
         this.form.reset({
             organization: null,
             sort_order: nextSortOrder,
-            include_in_total: true
+            include_in_total: true,
+            modsnow_enabled: true,
+            volume_source: 'static'
         });
         this.updateAvailableOrganizations();
         this.dialogVisible = true;
     }
 
-    editConfig(cfg: ReservoirSummaryConfig): void {
-        this.isEditMode = true;
-        this.editingConfig = cfg;
-        this.submitted = false;
-        const foundOrg = this.organizations.find(o => o.id === cfg.organization_id) ?? null;
-        this.form.reset();
-        this.form.patchValue({
-            organization: foundOrg,
-            sort_order: cfg.sort_order,
-            include_in_total: cfg.include_in_total
-        });
-        this.updateAvailableOrganizations();
-        this.dialogVisible = true;
-    }
+    /**
+     * Inline autosave: upsert a single row with its current (mutated) values.
+     * Bound to control changes in the table. On error we reload to revert the
+     * optimistic in-cell edit to the authoritative server state.
+     */
+    saveRow(row: ConfigRow): void {
+        if (row.saving) return;
+        row.saving = true;
 
-    isSlot3HazardousChange(payload: ReservoirSummaryConfigPayload): boolean {
-        if (payload.sort_order !== ReservoirSummaryConfigTabComponent.EXCEL_BROKEN_SLOT) {
-            return false;
-        }
-        const existingAtSlot = this.configs.find(
-            c => c.sort_order === ReservoirSummaryConfigTabComponent.EXCEL_BROKEN_SLOT
-        );
-        if (!existingAtSlot) return true;
-        return existingAtSlot.organization_id !== payload.organization_id;
+        const payload: ReservoirSummaryConfigPayload = {
+            organization_id: row.organization_id,
+            sort_order: row.sort_order ?? 0,
+            include_in_total: !!row.include_in_total,
+            modsnow_enabled: !!row.modsnow_enabled,
+            volume_source: row.volume_source ?? 'static'
+        };
+
+        this.src.upsertConfig(payload)
+            .pipe(takeUntil(this.destroy$), finalize(() => row.saving = false))
+            .subscribe({
+                next: () => {
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: this.translate.instant('COMMON.SUCCESS'),
+                        detail: this.translate.instant('SITUATION_CENTER.RESERVOIRS_SUMMARY.CONFIG_SAVED')
+                    });
+                },
+                error: () => {
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: this.translate.instant('COMMON.ERROR'),
+                        detail: this.translate.instant('SITUATION_CENTER.RESERVOIRS_SUMMARY.ERROR_SAVE_FAILED')
+                    });
+                    this.loadConfigs();
+                }
+            });
     }
 
     saveConfig(): void {
@@ -178,13 +197,10 @@ export class ReservoirSummaryConfigTabComponent implements OnInit, OnDestroy {
         const payload: ReservoirSummaryConfigPayload = {
             organization_id: formVal.organization.id,
             sort_order: formVal.sort_order ?? 0,
-            include_in_total: !!formVal.include_in_total
+            include_in_total: !!formVal.include_in_total,
+            modsnow_enabled: !!formVal.modsnow_enabled,
+            volume_source: formVal.volume_source ?? 'static'
         };
-
-        if (this.isSlot3HazardousChange(payload)) {
-            const warn = this.translate.instant('SITUATION_CENTER.RESERVOIRS_SUMMARY.SLOT3_WARNING_BODY');
-            if (!confirm(warn)) return;
-        }
 
         this.saving = true;
         this.src.upsertConfig(payload)
@@ -244,16 +260,13 @@ export class ReservoirSummaryConfigTabComponent implements OnInit, OnDestroy {
 
     hideDialog(): void {
         this.dialogVisible = false;
-        this.editingConfig = null;
     }
 
     private updateAvailableOrganizations(): void {
+        // The dialog is add-only now (rows are edited inline), so every already
+        // configured organization is excluded from the picker.
         const usedIds = new Set(this.configs.map(c => c.organization_id));
-        const editingId = this.isEditMode ? this.editingConfig?.organization_id : null;
-
-        const filtered = this.organizations.filter(
-            org => !usedIds.has(org.id) || org.id === editingId
-        );
+        const filtered = this.organizations.filter(org => !usedIds.has(org.id));
         this.availableOrganizationGroups = filtered.length
             ? [{
                 name: this.translate.instant('SITUATION_CENTER.RESERVOIRS_SUMMARY.ORGANIZATION'),
