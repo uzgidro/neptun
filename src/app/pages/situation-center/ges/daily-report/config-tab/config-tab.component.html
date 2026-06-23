@@ -169,7 +169,7 @@
         <p-button
             [label]="'COMMON.SAVE' | translate"
             [loading]="saving"
-            [disabled]="form.invalid"
+            [disabled]="saving"
             (onClick)="saveConfig()" />
     </ng-template>
 </p-dialog>
@@ -189,7 +189,12 @@
                 [minFractionDigits]="0"
                 [maxFractionDigits]="6"
                 [useGrouping]="false"
+                [invalid]="cascadeSubmitted && cascadeForm.get('latitude')?.invalid === true"
                 class="w-full" />
+            @if (cascadeSubmitted && cascadeForm.get('latitude')?.invalid) {
+                <p-message severity="error" variant="simple" size="small">
+                    {{ 'COMMON.FILL_REQUIRED' | translate }}</p-message>
+            }
         </div>
 
         <div class="flex flex-col gap-1">
@@ -199,7 +204,12 @@
                 [minFractionDigits]="0"
                 [maxFractionDigits]="6"
                 [useGrouping]="false"
+                [invalid]="cascadeSubmitted && cascadeForm.get('longitude')?.invalid === true"
                 class="w-full" />
+            @if (cascadeSubmitted && cascadeForm.get('longitude')?.invalid) {
+                <p-message severity="error" variant="simple" size="small">
+                    {{ 'COMMON.FILL_REQUIRED' | translate }}</p-message>
+            }
         </div>
 
         <div class="flex flex-col gap-1">
@@ -227,7 +237,7 @@
         <p-button
             [label]="'COMMON.SAVE' | translate"
             [loading]="cascadeSaving"
-            [disabled]="cascadeForm.invalid"
+            [disabled]="cascadeSaving"
             (onClick)="saveCascadeConfig()" />
     </ng-template>
 </p-dialog>

@@ -10,6 +10,7 @@ import { DialogModule } from 'primeng/dialog';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { CheckboxModule } from 'primeng/checkbox';
+import { Message } from 'primeng/message';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MessageService } from 'primeng/api';
 import { GesReportService } from '@/core/services/ges-report.service';
@@ -32,6 +33,7 @@ import { GroupSelectComponent } from '@/layout/component/dialog/group-select/gro
         InputNumberModule,
         InputTextModule,
         CheckboxModule,
+        Message,
         TranslateModule,
         GroupSelectComponent
     ],
@@ -76,6 +78,7 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
     cascadeDialogVisible = false;
     editingCascadeId: number | null = null;
     cascadeSaving = false;
+    cascadeSubmitted = false;
     cascadeForm: FormGroup = this.fb.group({
         latitude: [null, Validators.required],
         longitude: [null, Validators.required],
@@ -280,6 +283,7 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
 
     editCascadeConfig(cascadeId: number): void {
         this.editingCascadeId = cascadeId;
+        this.cascadeSubmitted = false;
         const existing = this.cascadeConfigMap.get(cascadeId);
         this.cascadeForm.reset({
             latitude: existing?.latitude ?? null,
@@ -290,6 +294,7 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
     }
 
     saveCascadeConfig(): void {
+        this.cascadeSubmitted = true;
         if (this.cascadeForm.invalid || !this.editingCascadeId) return;
 
         const val = this.cascadeForm.value;
@@ -347,6 +352,7 @@ export class ConfigTabComponent implements OnInit, OnDestroy {
     hideCascadeDialog(): void {
         this.cascadeDialogVisible = false;
         this.editingCascadeId = null;
+        this.cascadeSubmitted = false;
     }
 
     // --- Weather ---

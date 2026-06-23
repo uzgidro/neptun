@@ -109,7 +109,7 @@
         <p-button
             [label]="'COMMON.SAVE' | translate"
             [loading]="saving"
-            [disabled]="form.invalid"
+            [disabled]="saving"
             (onClick)="saveConfig()" />
     </ng-template>
 </p-dialog>

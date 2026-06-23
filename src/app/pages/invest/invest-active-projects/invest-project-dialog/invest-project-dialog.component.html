@@ -167,8 +167,9 @@
                 pButton
                 type="button"
                 [label]="isEditMode ? ('INVEST.PROJECT_DIALOG.SAVE' | translate) : ('INVEST.PROJECT_DIALOG.ADD' | translate)"
-                (click)="onSubmit()"
-                [disabled]="submitted && projectForm.invalid">
+                [loading]="saving"
+                [disabled]="saving"
+                (click)="onSubmit()">
             </button>
         </div>
     </ng-template>
