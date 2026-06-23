@@ -8,7 +8,7 @@
             (onSelect)="onValueChange($event)"
             (ngModelChange)="onValueChange($event)"
 
-            [invalid]="submitted && !internalValue"
+            [invalid]="submitted && required && !internalValue"
 
             [showClear]="true"
             [appendTo]="'body'"

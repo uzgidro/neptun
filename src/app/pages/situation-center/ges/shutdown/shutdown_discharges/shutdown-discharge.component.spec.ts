@@ -73,7 +73,8 @@ describe('ShutdownDischargeComponent - 409 Conflict handling', () => {
         component.form.patchValue({
             organization: { id: 1, name: 'Test Org' },
             started_at: new Date('2026-04-01'),
-            flow_rate: 10
+            flow_rate: 10,
+            reason: 'Тестовая причина'
         });
     }
 
