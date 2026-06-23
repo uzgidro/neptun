@@ -140,6 +140,11 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges, OnDestroy 
         this.loadDischarges();
     }
 
+    /** Manual fetch — re-loads discharges for the selected date on demand. */
+    refresh(): void {
+        this.loadDischarges();
+    }
+
     loadDischarges() {
         this.loading = true;
         this.expandedOrgIds.clear();

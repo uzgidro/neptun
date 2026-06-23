@@ -194,6 +194,12 @@ describe('ShutdownDischargeComponent - 409 Conflict handling', () => {
         );
         expect(component.isLoading).toBeFalse();
     });
+
+    it('refresh() re-fetches discharges on demand', () => {
+        dischargeService.getFlatDischarges.calls.reset();
+        component.refresh();
+        expect(dischargeService.getFlatDischarges).toHaveBeenCalled();
+    });
 });
 
 describe('ShutdownDischargeComponent - station ordering', () => {
