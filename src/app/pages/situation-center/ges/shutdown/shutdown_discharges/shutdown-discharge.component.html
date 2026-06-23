@@ -24,6 +24,13 @@
     <ng-template #caption>
         <div class="flex justify-end items-center gap-3">
             <p-button
+                [label]="'COMMON.REFRESH' | translate"
+                icon="pi pi-refresh"
+                severity="info"
+                [loading]="loading"
+                (onClick)="refresh()">
+            </p-button>
+            <p-button
                 label="Excel"
                 icon="pi pi-file-excel"
                 severity="success"
