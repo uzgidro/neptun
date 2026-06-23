@@ -118,4 +118,35 @@ describe('ConfigTabComponent', () => {
         component.deleteConfig(10);
         expect(gesReportService.deleteConfig).not.toHaveBeenCalled();
     });
+
+    describe('cascade dialog validation', () => {
+        it('saveCascadeConfig sets cascadeSubmitted and does not upsert when invalid', () => {
+            fixture.detectChanges();
+            component.editingCascadeId = 5;
+            component.cascadeForm.reset({ latitude: null, longitude: null, sort_order: null });
+            component.saveCascadeConfig();
+            expect(component.cascadeSubmitted).toBeTrue();
+            expect(gesReportService.upsertCascadeConfig).not.toHaveBeenCalled();
+        });
+
+        it('saveCascadeConfig upserts when the form is valid', () => {
+            gesReportService.upsertCascadeConfig.and.returnValue(of(void 0 as any));
+            gesReportService.getConfigs.and.returnValue(of([]));
+            gesReportService.getCascadeConfigs.and.returnValue(of([]));
+            fixture.detectChanges();
+            component.editingCascadeId = 5;
+            component.cascadeForm.reset({ latitude: 41.3, longitude: 69.2, sort_order: 1 });
+            component.saveCascadeConfig();
+            expect(gesReportService.upsertCascadeConfig).toHaveBeenCalledWith(
+                jasmine.objectContaining({ organization_id: 5, latitude: 41.3, longitude: 69.2 })
+            );
+        });
+
+        it('editCascadeConfig resets cascadeSubmitted', () => {
+            fixture.detectChanges();
+            component.cascadeSubmitted = true;
+            component.editCascadeConfig(5);
+            expect(component.cascadeSubmitted).toBeFalse();
+        });
+    });
 });

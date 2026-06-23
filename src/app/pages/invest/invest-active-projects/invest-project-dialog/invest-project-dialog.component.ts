@@ -1,5 +1,6 @@
 import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { finalize } from 'rxjs/operators';
 import { MessageService, PrimeTemplate } from 'primeng/api';
 import { Dialog } from 'primeng/dialog';
 import { FloatLabel } from 'primeng/floatlabel';
@@ -44,6 +45,7 @@ export class InvestProjectDialogComponent implements OnInit, OnChanges {
 
     projectForm!: FormGroup;
     submitted: boolean = false;
+    saving: boolean = false;
 
     private projectService = inject(InvestActiveProjectService);
     private messageService = inject(MessageService);
@@ -106,10 +108,11 @@ export class InvestProjectDialogComponent implements OnInit, OnChanges {
     onSubmit(): void {
         this.submitted = true;
 
-        if (this.projectForm.invalid) {
+        if (this.projectForm.invalid || this.saving) {
             return;
         }
 
+        this.saving = true;
         const rawValue = this.projectForm.getRawValue();
 
         if (this.isEditMode) {
@@ -124,7 +127,9 @@ export class InvestProjectDialogComponent implements OnInit, OnChanges {
             if (rawValue.cost_mln_usd !== null) editData.cost_mln_usd = rawValue.cost_mln_usd;
             if (rawValue.status_text) editData.status_text = rawValue.status_text;
 
-            this.projectService.edit(this.projectToEdit!.id, editData).subscribe({
+            this.projectService.edit(this.projectToEdit!.id, editData)
+                .pipe(finalize(() => this.saving = false))
+                .subscribe({
                 next: () => {
                     this.messageService.add({
                         severity: 'success',
@@ -155,7 +160,9 @@ export class InvestProjectDialogComponent implements OnInit, OnChanges {
             if (rawValue.cost_mln_usd !== null) addData.cost_mln_usd = rawValue.cost_mln_usd;
             if (rawValue.status_text) addData.status_text = rawValue.status_text;
 
-            this.projectService.add(addData).subscribe({
+            this.projectService.add(addData)
+                .pipe(finalize(() => this.saving = false))
+                .subscribe({
                 next: () => {
                     this.messageService.add({
                         severity: 'success',
