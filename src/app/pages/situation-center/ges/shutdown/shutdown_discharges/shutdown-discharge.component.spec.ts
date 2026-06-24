@@ -94,6 +94,13 @@ describe('ShutdownDischargeComponent - 409 Conflict handling', () => {
         });
     }
 
+    it('keeps the form valid when reason is empty (reason is optional)', () => {
+        setupValidForm();
+        component.form.patchValue({ reason: '' });
+
+        expect(component.form.valid).toBeTrue();
+    });
+
     it('should show confirm dialog on 409 and retry with force=true when user confirms', () => {
         setupValidForm();
         component.isEditMode = false;
