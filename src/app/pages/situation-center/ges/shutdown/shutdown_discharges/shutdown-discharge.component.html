@@ -246,8 +246,7 @@
             [label]="'SITUATION_CENTER.SHUTDOWN.REASON' | translate"
             formControlName="reason"
             [submitted]="submitted"
-            [required]="true"
-            [errorMessage]="'SITUATION_CENTER.SHUTDOWN.SPECIFY_REASON' | translate">
+            [required]="false">
         </app-textarea>
 
         @if (isEditMode && currentDischarge?.files && (currentDischarge?.files?.length ?? 0) > 0) {
