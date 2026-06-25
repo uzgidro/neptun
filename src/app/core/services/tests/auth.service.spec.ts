@@ -20,6 +20,9 @@ describe('AuthService', () => {
         });
         service = TestBed.inject(AuthService);
         jwtServiceSpy = TestBed.inject(JwtService) as jasmine.SpyObj<JwtService>;
+        // Default: treat the user as authenticated. Role-based specs only care about
+        // getDecodedToken(); the cold-start spec overrides this to false explicitly.
+        jwtServiceSpy.isAuthenticated.and.returnValue(true);
     });
 
     it('should be created', () => {
@@ -169,14 +172,16 @@ describe('AuthService', () => {
             expect(service.getHomeRoute()).toBe('/planning/events');
         });
 
-        it('returns /notfound when roles is empty', () => {
-            jwtServiceSpy.getDecodedToken.and.returnValue({ roles: [] } as any);
+        it('returns /notfound when authenticated but role is unrecognized', () => {
+            jwtServiceSpy.isAuthenticated.and.returnValue(true);
+            jwtServiceSpy.getDecodedToken.and.returnValue({ roles: ['unknown_role'] } as any);
             expect(service.getHomeRoute()).toBe('/notfound');
         });
 
-        it('returns /notfound when token is missing', () => {
+        it('returns /auth/login when not authenticated (cold start, no token)', () => {
+            jwtServiceSpy.isAuthenticated.and.returnValue(false);
             jwtServiceSpy.getDecodedToken.and.returnValue(null as any);
-            expect(service.getHomeRoute()).toBe('/notfound');
+            expect(service.getHomeRoute()).toBe('/auth/login');
         });
     });
 

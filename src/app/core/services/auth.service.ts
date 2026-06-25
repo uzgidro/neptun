@@ -93,6 +93,9 @@ export class AuthService {
     }
 
     getHomeRoute(): string {
+        // Cold start (e.g. fresh browser session — token lives in sessionStorage and is
+        // gone): send the user to login rather than falling through to /notfound below.
+        if (!this.isAuthenticated()) return '/auth/login';
         if (this.hasRole(['admin', 'sc', 'rais'])) return '/dashboard';
         if (this.hasRole('cascade')) return '/ges-daily-report';
         if (this.hasRole('reservoir_flood')) return '/reservoir-flood';
