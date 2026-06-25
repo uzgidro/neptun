@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, Output, EventEmitter, Input, inject } fro
 import { CommonModule } from '@angular/common';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { DashboardService, ProductionStatsResponse } from '@/core/services/dashboard.service';
+import { AuthService } from '@/core/services/auth.service';
 
 @Component({
     selector: 'app-splash-screen',
@@ -22,6 +23,7 @@ export class SplashScreenComponent implements OnInit, OnDestroy {
     @Output() complete = new EventEmitter<void>();
 
     private dashboardService = inject(DashboardService);
+    private authService = inject(AuthService);
 
     isVisible: boolean = true;
     animationState: 'visible' | 'hidden' = 'visible';
@@ -58,6 +60,14 @@ export class SplashScreenComponent implements OnInit, OnDestroy {
     }
 
     private loadProductionData(): void {
+        // Splash can show on a cold start before login — skip the authenticated
+        // production-stats call (it would 401) and just animate the fallback value.
+        if (!this.authService.isAuthenticated()) {
+            this.targetPower = 2847;
+            this.dataLoaded = true;
+            this.animatePowerCounter();
+            return;
+        }
         this.dashboardService.getProductionStats().subscribe({
             next: (data: ProductionStatsResponse) => {
                 this.dailyPower = data.current.value;

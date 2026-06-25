@@ -52,3 +52,7 @@ comands
 nul
 tmpclaude-*
 neptun
+
+# Playwright MCP browser artifacts
+.playwright-mcp/
+.serena/
