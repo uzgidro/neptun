@@ -102,9 +102,9 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
     private destroy$ = new Subject<void>();
     private rowsReset$ = new Subject<void>();
 
-    selectedDate: Date = this.readDateFromUrl() ?? new Date();
-    // Report can only be filled for the current day or earlier — never for the future.
-    readonly maxDate: Date = new Date();
+    // Report can only be filled up to yesterday — the current day is never selectable.
+    readonly maxDate: Date = DataEntryTabComponent.yesterday();
+    selectedDate: Date = this.readDateFromUrl() ?? DataEntryTabComponent.yesterday();
     rows: DataEntryRow[] = [];
     cascadeGroups: { cascade_id: number; cascade_name: string; weather: ReportWeather | null; rows: DataEntryRow[] }[] = [];
     private cascadeWeatherMap = new Map<number, ReportWeather | null>();
@@ -339,6 +339,14 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
         this.loadData();
     }
 
+    /** Start of yesterday — the latest date a report can be filled for. */
+    private static yesterday(): Date {
+        const d = new Date();
+        d.setDate(d.getDate() - 1);
+        d.setHours(0, 0, 0, 0);
+        return d;
+    }
+
     private readDateFromUrl(): Date | null {
         const raw = this.route.snapshot.queryParamMap.get('date');
         if (!raw) return null;
@@ -346,9 +354,9 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
         if (!m) return null;
         const d = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
         if (isNaN(d.getTime())) return null;
-        // Never allow a future date from the URL — the report is for today or earlier.
-        const today = new Date();
-        return d.getTime() > today.getTime() ? today : d;
+        // Report is for yesterday or earlier — clamp anything later (today/future) down to yesterday.
+        const maxDate = DataEntryTabComponent.yesterday();
+        return d.getTime() > maxDate.getTime() ? maxDate : d;
     }
 
     sumAggregates(row: DataEntryRow): number {

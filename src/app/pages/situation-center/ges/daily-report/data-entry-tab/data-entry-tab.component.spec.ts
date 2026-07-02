@@ -1147,14 +1147,26 @@ describe('DataEntryTabComponent — date constraints', () => {
         return new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
     }
 
-    it('maxDate is set to today', () => {
+    function yesterday(): number {
+        const d = new Date();
+        d.setDate(d.getDate() - 1);
+        return startOfDay(d);
+    }
+
+    it('maxDate is set to yesterday', () => {
         const component = buildWith(null);
-        expect(startOfDay(component.maxDate)).toBe(startOfDay(new Date()));
+        expect(startOfDay(component.maxDate)).toBe(yesterday());
     });
 
-    it('clamps a future URL date down to today', () => {
+    it('clamps a future URL date down to yesterday', () => {
         const component = buildWith('2099-01-01');
-        expect(startOfDay(component.selectedDate)).toBe(startOfDay(new Date()));
+        expect(startOfDay(component.selectedDate)).toBe(yesterday());
+    });
+
+    it('clamps today from the URL down to yesterday', () => {
+        const todayStr = new Date().toISOString().slice(0, 10);
+        const component = buildWith(todayStr);
+        expect(startOfDay(component.selectedDate)).toBe(yesterday());
     });
 
     it('keeps a past URL date as-is', () => {
@@ -1164,8 +1176,8 @@ describe('DataEntryTabComponent — date constraints', () => {
         expect(component.selectedDate.getDate()).toBe(15);
     });
 
-    it('defaults to today when no URL date is present', () => {
+    it('defaults to yesterday when no URL date is present', () => {
         const component = buildWith(null);
-        expect(startOfDay(component.selectedDate)).toBe(startOfDay(new Date()));
+        expect(startOfDay(component.selectedDate)).toBe(yesterday());
     });
 });
