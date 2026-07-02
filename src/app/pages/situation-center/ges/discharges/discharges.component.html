@@ -3,5 +3,26 @@
         <h2 class="text-2xl font-bold m-0">{{ 'SITUATION_CENTER.DISCHARGE.TITLE' | translate }}</h2>
     </div>
 
-    <app-shutdown-discharge [date]="selectedDate" (dateChange)="onDateChange($event)"></app-shutdown-discharge>
+    <p-tabs [value]="activeTab" (valueChange)="onTabChange($event)">
+        <p-tablist>
+            @for (tab of tabs; track tab.key) {
+                <p-tab [value]="tab.key">{{ tab.label | translate }}</p-tab>
+            }
+        </p-tablist>
+        <p-tabpanels>
+            <p-tabpanel value="journal">
+                <app-shutdown-discharge [date]="selectedDate" (dateChange)="onDateChange($event)"></app-shutdown-discharge>
+            </p-tabpanel>
+            @if (isScOrRais) {
+                <p-tabpanel value="summary">
+                    <!-- Гейтим рендер по activeTab, а не полагаемся на p-tabs[lazy]:
+                         иначе getSummary() улетает при заходе на /discharges ещё до
+                         того, как пользователь вообще открыл вкладку «Сводка». -->
+                    @if (activeTab === 'summary') {
+                        <app-discharge-summary />
+                    }
+                </p-tabpanel>
+            }
+        </p-tabpanels>
+    </p-tabs>
 </div>

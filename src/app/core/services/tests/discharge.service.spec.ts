@@ -102,4 +102,39 @@ describe('DischargeService', () => {
             req.flush({}, { status: 200, statusText: 'OK' });
         });
     });
+
+    describe('getSummary', () => {
+        const emptyResponse = {
+            from: '2026-01-01', to: '2026-02-28', granularity: 'month',
+            cascades: [], grand_total: { buckets: [], total: { volume_mln_m3: 0, avg_flow_rate_m3_s: 0, generation_loss_mwh: 0 } }
+        };
+
+        it('should GET /discharges/summary with from, to and granularity params', () => {
+            service.getSummary(new Date(2026, 0, 1), new Date(2026, 1, 28), 'day').subscribe();
+
+            const req = httpMock.expectOne((r) => r.url === `${BASE_URL}/discharges/summary`);
+            expect(req.request.method).toBe('GET');
+            expect(req.request.params.get('from')).toBe('2026-01-01');
+            expect(req.request.params.get('to')).toBe('2026-02-28');
+            expect(req.request.params.get('granularity')).toBe('day');
+            req.flush(emptyResponse);
+        });
+
+        it('should default granularity to month when omitted', () => {
+            service.getSummary(new Date(2026, 0, 1), new Date(2026, 11, 31)).subscribe();
+
+            const req = httpMock.expectOne((r) => r.url === `${BASE_URL}/discharges/summary`);
+            expect(req.request.params.get('granularity')).toBe('month');
+            req.flush(emptyResponse);
+        });
+
+        it('should serialize dates as zero-padded local YYYY-MM-DD', () => {
+            service.getSummary(new Date(2026, 2, 5), new Date(2026, 8, 9), 'year').subscribe();
+
+            const req = httpMock.expectOne((r) => r.url === `${BASE_URL}/discharges/summary`);
+            expect(req.request.params.get('from')).toBe('2026-03-05');
+            expect(req.request.params.get('to')).toBe('2026-09-09');
+            req.flush(emptyResponse);
+        });
+    });
 });

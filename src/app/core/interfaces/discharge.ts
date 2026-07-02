@@ -86,3 +86,46 @@ export interface IdleDischargeResponse {
     approved: boolean | null; // (В JSON `approved` - null, возможно, это boolean)
     files?: FileResponse[];
 }
+
+// --- GET /discharges/summary ---
+
+export type SummaryGranularity = 'day' | 'month' | 'year';
+
+export interface SummaryMetrics {
+    volume_mln_m3: number;
+    avg_flow_rate_m3_s: number;
+    generation_loss_mwh: number;
+}
+
+// period format depends on granularity: day → "2026-01-15", month → "2026-01", year → "2026"
+export interface SummaryBucket extends SummaryMetrics {
+    period: string;
+}
+
+export interface HPPSummary {
+    id: number; // organization_id станции
+    name: string;
+    buckets: SummaryBucket[]; // полная ось бакетов периода, нули включены
+    total: SummaryMetrics;
+}
+
+export interface CascadeSummary {
+    id: number; // 0 = псевдокаскад «станции без каскада», идёт последним
+    name: string; // "" для псевдокаскада
+    buckets: SummaryBucket[];
+    total: SummaryMetrics;
+    hpps: HPPSummary[];
+}
+
+export interface SummaryGrandTotal {
+    buckets: SummaryBucket[];
+    total: SummaryMetrics;
+}
+
+export interface DischargeSummaryResponse {
+    from: string;
+    to: string;
+    granularity: SummaryGranularity;
+    cascades: CascadeSummary[]; // [] если сбросов и станций нет
+    grand_total: SummaryGrandTotal; // всегда присутствует
+}
