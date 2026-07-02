@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '@/core/services/api.service';
-import { Cascade, DischargeCreatePayload, DischargeUpdatePayload, IdleDischargeResponse } from '@/core/interfaces/discharge';
+import { Cascade, DischargeCreatePayload, DischargeSummaryResponse, DischargeUpdatePayload, IdleDischargeResponse, SummaryGranularity } from '@/core/interfaces/discharge';
 import { Observable } from 'rxjs';
 import { HttpParams, HttpResponse } from '@angular/common/http';
 
 const DISCHARGES = '/discharges';
 const FLAT = '/flat';
+const SUMMARY = '/summary';
 
 @Injectable({
     providedIn: 'root'
@@ -26,6 +27,14 @@ export class DischargeService extends ApiService {
             params = params.set('end_date', this.dateToYMD(date));
         }
         return this.http.get<IdleDischargeResponse[]>(this.BASE_URL + DISCHARGES + FLAT, { params: params });
+    }
+
+    getSummary(from: Date, to: Date, granularity: SummaryGranularity = 'month'): Observable<DischargeSummaryResponse> {
+        const params = new HttpParams()
+            .set('from', this.dateToYMD(from))
+            .set('to', this.dateToYMD(to))
+            .set('granularity', granularity);
+        return this.http.get<DischargeSummaryResponse>(this.BASE_URL + DISCHARGES + SUMMARY, { params });
     }
 
     editDischarge(id: number, payload: DischargeUpdatePayload): Observable<any> {

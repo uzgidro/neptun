@@ -2200,7 +2200,26 @@
       "UPDATED": "Discharge record updated",
       "UPDATE_ERROR": "Failed to update data",
       "CREATED": "New discharge record added",
-      "CREATE_ERROR": "Failed to save data"
+      "CREATE_ERROR": "Failed to save data",
+      "TAB_JOURNAL": "Journal",
+      "TAB_SUMMARY": "Summary",
+      "SUMMARY": {
+        "FROM": "From",
+        "TO": "To",
+        "GRANULARITY_DAY": "Day",
+        "GRANULARITY_MONTH": "Month",
+        "GRANULARITY_YEAR": "Year",
+        "METRIC_VOLUME": "Volume, mln m³",
+        "METRIC_AVG_FLOW": "Average intensity, m³/s",
+        "METRIC_GEN_LOSS": "Lost generation, MWh",
+        "TOTAL": "Total",
+        "GRAND_TOTAL": "SYSTEM TOTAL",
+        "NO_CASCADE": "Without cascade",
+        "NO_DATA": "No data for the selected period",
+        "ERR_FROM_AFTER_TO": "Start date cannot be later than end date",
+        "ERR_RANGE_TOO_LONG": "For daily granularity the range cannot exceed 366 days",
+        "LOAD_FAILED": "Failed to load the summary"
+      }
     },
     "VISIT": {
       "TITLE": "Visits",

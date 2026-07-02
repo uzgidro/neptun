@@ -2200,7 +2200,26 @@
       "UPDATED": "Suv tashlab yuborish yozuvi yangilandi",
       "UPDATE_ERROR": "Ma'lumotlarni yangilab bo'lmadi",
       "CREATED": "Yangi suv tashlab yuborish yozuvi qo'shildi",
-      "CREATE_ERROR": "Ma'lumotlarni saqlab bo'lmadi"
+      "CREATE_ERROR": "Ma'lumotlarni saqlab bo'lmadi",
+      "TAB_JOURNAL": "Jurnal",
+      "TAB_SUMMARY": "Xulosa",
+      "SUMMARY": {
+        "FROM": "Dan",
+        "TO": "Gacha",
+        "GRANULARITY_DAY": "Kun",
+        "GRANULARITY_MONTH": "Oy",
+        "GRANULARITY_YEAR": "Yil",
+        "METRIC_VOLUME": "Hajm, mln m³",
+        "METRIC_AVG_FLOW": "O'rtacha jadallik, m³/s",
+        "METRIC_GEN_LOSS": "Yo'qotilgan ishlab chiqarish, MVt·s",
+        "TOTAL": "Jami",
+        "GRAND_TOTAL": "TIZIM BO'YICHA JAMI",
+        "NO_CASCADE": "Kaskadsiz",
+        "NO_DATA": "Tanlangan davr uchun ma'lumot yo'q",
+        "ERR_FROM_AFTER_TO": "Boshlanish sanasi tugash sanasidan keyin bo'lishi mumkin emas",
+        "ERR_RANGE_TOO_LONG": "«Kun» darajasida oraliq 366 kundan oshishi mumkin emas",
+        "LOAD_FAILED": "Xulosani yuklab bo'lmadi"
+      }
     },
     "VISIT": {
       "TITLE": "Tashriflar - Tashrif buyurishlar",
