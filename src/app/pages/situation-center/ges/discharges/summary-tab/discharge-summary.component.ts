@@ -54,20 +54,21 @@ export class DischargeSummaryComponent implements OnInit, OnDestroy {
     rows: SummaryRow[] = [];
     grandTotal: SummaryGrandTotal | null = null;
 
-    granularityOptions: LabeledOption<SummaryGranularity>[] = [];
-    metricOptions: LabeledOption<MetricKey>[] = [];
+    // label — i18n-ключ; перевод делается в шаблоне через | translate, чтобы ярлыки
+    // не застревали как сырые ключи, если бандлы ещё не загружены на момент ngOnInit,
+    // и переводились на лету при смене языка.
+    granularityOptions: LabeledOption<SummaryGranularity>[] = [
+        { label: 'SITUATION_CENTER.DISCHARGE.SUMMARY.GRANULARITY_DAY', value: 'day' },
+        { label: 'SITUATION_CENTER.DISCHARGE.SUMMARY.GRANULARITY_MONTH', value: 'month' },
+        { label: 'SITUATION_CENTER.DISCHARGE.SUMMARY.GRANULARITY_YEAR', value: 'year' }
+    ];
+    metricOptions: LabeledOption<MetricKey>[] = [
+        { label: 'SITUATION_CENTER.DISCHARGE.SUMMARY.METRIC_VOLUME', value: 'volume_mln_m3' },
+        { label: 'SITUATION_CENTER.DISCHARGE.SUMMARY.METRIC_AVG_FLOW', value: 'avg_flow_rate_m3_s' },
+        { label: 'SITUATION_CENTER.DISCHARGE.SUMMARY.METRIC_GEN_LOSS', value: 'generation_loss_mwh' }
+    ];
 
     ngOnInit(): void {
-        this.granularityOptions = [
-            { label: this.translate.instant('SITUATION_CENTER.DISCHARGE.SUMMARY.GRANULARITY_DAY'), value: 'day' },
-            { label: this.translate.instant('SITUATION_CENTER.DISCHARGE.SUMMARY.GRANULARITY_MONTH'), value: 'month' },
-            { label: this.translate.instant('SITUATION_CENTER.DISCHARGE.SUMMARY.GRANULARITY_YEAR'), value: 'year' }
-        ];
-        this.metricOptions = [
-            { label: this.translate.instant('SITUATION_CENTER.DISCHARGE.SUMMARY.METRIC_VOLUME'), value: 'volume_mln_m3' },
-            { label: this.translate.instant('SITUATION_CENTER.DISCHARGE.SUMMARY.METRIC_AVG_FLOW'), value: 'avg_flow_rate_m3_s' },
-            { label: this.translate.instant('SITUATION_CENTER.DISCHARGE.SUMMARY.METRIC_GEN_LOSS'), value: 'generation_loss_mwh' }
-        ];
         this.load();
     }
 

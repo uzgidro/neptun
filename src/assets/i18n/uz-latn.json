@@ -2213,7 +2213,7 @@
         "METRIC_AVG_FLOW": "O'rtacha jadallik, m³/s",
         "METRIC_GEN_LOSS": "Yo'qotilgan ishlab chiqarish, MVt·s",
         "TOTAL": "Jami",
-        "GRAND_TOTAL": "TIZIM BO'YICHA JAMI",
+        "GRAND_TOTAL": "«O'zbekgidroenergo» AJ bo'yicha jami",
         "NO_CASCADE": "Kaskadsiz",
         "NO_DATA": "Tanlangan davr uchun ma'lumot yo'q",
         "ERR_FROM_AFTER_TO": "Boshlanish sanasi tugash sanasidan keyin bo'lishi mumkin emas",
