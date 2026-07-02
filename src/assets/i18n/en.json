@@ -2213,7 +2213,7 @@
         "METRIC_AVG_FLOW": "Average intensity, m³/s",
         "METRIC_GEN_LOSS": "Lost generation, MWh",
         "TOTAL": "Total",
-        "GRAND_TOTAL": "SYSTEM TOTAL",
+        "GRAND_TOTAL": "Total for JSC Uzbekhydroenergo",
         "NO_CASCADE": "Without cascade",
         "NO_DATA": "No data for the selected period",
         "ERR_FROM_AFTER_TO": "Start date cannot be later than end date",
