@@ -61,9 +61,9 @@
                 <p-sortIcon field="reason"></p-sortIcon>
             </th>
 
-            <th pSortableColumn="generation_loss">
+            <th pSortableColumn="generation_loss_kwh">
                 {{ 'SITUATION_CENTER.SHUTDOWN.POWER_LOSS' | translate }}
-                <p-sortIcon field="generation_loss"></p-sortIcon>
+                <p-sortIcon field="generation_loss_kwh"></p-sortIcon>
             </th>
             <th pSortableColumn="idle_discharge_voleme">
                 {{ 'SITUATION_CENTER.SHUTDOWN.IDLE_DISCHARGE' | translate }}
@@ -100,7 +100,7 @@
                 {{ shutdown.reason }}
             </td>
             <td>
-                {{ shutdown.generation_loss ?? '-' }}
+                {{ shutdown.generation_loss_kwh ?? '-' }}
             </td>
             <td>
                 @if (shutdown.idle_discharge_volume != null) {
@@ -199,9 +199,9 @@
                 <p-sortIcon field="reason"></p-sortIcon>
             </th>
 
-            <th pSortableColumn="generation_loss">
+            <th pSortableColumn="generation_loss_kwh">
                 {{ 'SITUATION_CENTER.SHUTDOWN.POWER_LOSS' | translate }}
-                <p-sortIcon field="generation_loss"></p-sortIcon>
+                <p-sortIcon field="generation_loss_kwh"></p-sortIcon>
             </th>
             <th pSortableColumn="idle_discharge_voleme">
                 {{ 'SITUATION_CENTER.SHUTDOWN.IDLE_DISCHARGE' | translate }}
@@ -238,7 +238,7 @@
                 {{ shutdown.reason }}
             </td>
             <td>
-                {{ shutdown.generation_loss ?? '-' }}
+                {{ shutdown.generation_loss_kwh ?? '-' }}
             </td>
             <td>
                 @if (shutdown.idle_discharge_volume != null) {
@@ -337,9 +337,9 @@
                 <p-sortIcon field="reason"></p-sortIcon>
             </th>
 
-            <th pSortableColumn="generation_loss">
+            <th pSortableColumn="generation_loss_kwh">
                 {{ 'SITUATION_CENTER.SHUTDOWN.POWER_LOSS' | translate }}
-                <p-sortIcon field="generation_loss"></p-sortIcon>
+                <p-sortIcon field="generation_loss_kwh"></p-sortIcon>
             </th>
             <th pSortableColumn="idle_discharge_voleme">
                 {{ 'SITUATION_CENTER.SHUTDOWN.IDLE_DISCHARGE' | translate }}
@@ -376,7 +376,7 @@
                 {{ shutdown.reason }}
             </td>
             <td>
-                {{ shutdown.generation_loss ?? '-' }}
+                {{ shutdown.generation_loss_kwh ?? '-' }}
             </td>
             <td>
                 @if (shutdown.idle_discharge_volume != null) {

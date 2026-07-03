@@ -87,7 +87,7 @@ export class ScShutdownsComponent implements OnInit, OnDestroy {
                     reason: shutdown.reason,
                     startTime: shutdown.started_at,
                     endTime: shutdown.ended_at,
-                    lostGeneration: shutdown.generation_loss,
+                    lostGeneration: shutdown.generation_loss_kwh,
                     isOngoing: shutdown.ended_at === null,
                     viewed: shutdown.viewed,
                     createdBy: shutdown.created_by,

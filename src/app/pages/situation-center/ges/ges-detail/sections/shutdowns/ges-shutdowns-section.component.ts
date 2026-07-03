@@ -171,7 +171,7 @@ export class GesShutdownsSectionComponent implements OnInit, OnDestroy {
             start_time: item.started_at ? new Date(item.started_at) : null,
             end_time: item.ended_at ? new Date(item.ended_at) : null,
             reason: item.reason,
-            generation_loss: item.generation_loss,
+            generation_loss: item.generation_loss_kwh,
             idle_discharge_volume: item.idle_discharge_volume
         });
 
@@ -198,7 +198,7 @@ export class GesShutdownsSectionComponent implements OnInit, OnDestroy {
             payload.reason = rawPayload.reason;
         }
         if (rawPayload.generation_loss !== null) {
-            payload.generation_loss = rawPayload.generation_loss;
+            payload.generation_loss_kwh = rawPayload.generation_loss;
         }
         if (rawPayload.idle_discharge_volume !== null) {
             payload.idle_discharge_volume = rawPayload.idle_discharge_volume;

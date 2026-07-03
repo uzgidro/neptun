@@ -212,7 +212,7 @@ export class GesShutdownComponent implements OnInit, OnChanges, OnDestroy {
             payload.reason = rawPayload.reason;
         }
         if (rawPayload.generation_loss) {
-            payload.generation_loss = rawPayload.generation_loss;
+            payload.generation_loss_kwh = rawPayload.generation_loss;
         }
         if (rawPayload.idle_discharge_volume) {
             payload.idle_discharge_volume = rawPayload.idle_discharge_volume;
@@ -338,7 +338,7 @@ export class GesShutdownComponent implements OnInit, OnChanges, OnDestroy {
             start_time: shutdown.started_at,
             end_time: shutdown.ended_at,
             reason: shutdown.reason,
-            generation_loss: shutdown.generation_loss,
+            generation_loss: shutdown.generation_loss_kwh,
             idle_discharge_volume: shutdown.idle_discharge_volume
         });
 

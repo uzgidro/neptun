@@ -11,7 +11,7 @@ import { DischargeService } from '@/core/services/discharge.service';
 import { DischargeSummaryResponse, SummaryBucket, SummaryMetrics } from '@/core/interfaces/discharge';
 
 function metrics(volume: number, avg = 0, loss = 0): SummaryMetrics {
-    return { volume_mln_m3: volume, avg_flow_rate_m3_s: avg, generation_loss_mwh: loss };
+    return { volume_mln_m3: volume, avg_flow_rate_m3_s: avg, generation_loss_kwh: loss };
 }
 
 function bucket(period: string, volume: number, avg = 0, loss = 0): SummaryBucket {
@@ -148,7 +148,7 @@ describe('DischargeSummaryComponent', () => {
         fixture.detectChanges();
         dischargeService.getSummary.calls.reset();
 
-        component.metric = 'generation_loss_mwh';
+        component.metric = 'generation_loss_kwh';
         fixture.detectChanges();
 
         expect(dischargeService.getSummary).not.toHaveBeenCalled();

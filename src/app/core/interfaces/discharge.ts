@@ -94,7 +94,7 @@ export type SummaryGranularity = 'day' | 'month' | 'year';
 export interface SummaryMetrics {
     volume_mln_m3: number;
     avg_flow_rate_m3_s: number;
-    generation_loss_mwh: number;
+    generation_loss_kwh: number;
 }
 
 // period format depends on granularity: day → "2026-01-15", month → "2026-01", year → "2026"

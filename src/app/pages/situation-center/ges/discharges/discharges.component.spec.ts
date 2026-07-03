@@ -25,7 +25,7 @@ describe('DischargesComponent', () => {
 
         const dischargeSpy = jasmine.createSpyObj('DischargeService', ['getSummary', 'getFlatDischarges']);
         dischargeSpy.getSummary.and.returnValue(
-            of({ from: '', to: '', granularity: 'month', cascades: [], grand_total: { buckets: [], total: { volume_mln_m3: 0, avg_flow_rate_m3_s: 0, generation_loss_mwh: 0 } } })
+            of({ from: '', to: '', granularity: 'month', cascades: [], grand_total: { buckets: [], total: { volume_mln_m3: 0, avg_flow_rate_m3_s: 0, generation_loss_kwh: 0 } } })
         );
         dischargeSpy.getFlatDischarges.and.returnValue(of([]));
 

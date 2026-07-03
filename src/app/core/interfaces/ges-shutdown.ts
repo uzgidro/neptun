@@ -6,7 +6,7 @@ export interface GesShutdownPayload {
     start_time?: string;
     end_time?: string;
     reason?: string;
-    generation_loss?: string;
+    generation_loss_kwh?: string;
     idle_discharge_volume?: number;
 }
 
@@ -15,7 +15,7 @@ export interface ShutdownCreatePayload {
     start_time?: string;
     end_time?: string;
     reason?: string;
-    generation_loss?: number;
+    generation_loss_kwh?: number;
     idle_discharge_volume?: number;
     file_ids?: number[];
 }
@@ -25,7 +25,7 @@ export interface ShutdownUpdatePayload {
     start_time?: string;
     end_time?: string;
     reason?: string;
-    generation_loss?: number;
+    generation_loss_kwh?: number;
     idle_discharge_volume?: number;
     file_ids?: number[];
 }
@@ -38,7 +38,7 @@ export interface ShutdownResponse {
     ended_at: string | null;
     reason: string | null;
     created_by: UserShortInfo | null;
-    generation_loss: number | null;
+    generation_loss_kwh: number | null;
     created_at: string;
     idle_discharge_volume: number | null;
     files?: FileResponse[];
@@ -59,7 +59,7 @@ export interface ShutdownDto {
     ended_at: Date | null;
     reason: string | null;
     created_by: UserShortInfo | null;
-    generation_loss: number | null;
+    generation_loss_kwh: number | null;
     created_at: Date;
     idle_discharge_volume: number | null;
     files?: FileResponse[];

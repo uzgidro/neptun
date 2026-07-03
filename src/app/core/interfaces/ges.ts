@@ -38,7 +38,7 @@ export interface GesShutdown {
     ended_at?: string | null;
     reason?: string | null;
     created_by: UserShortInfo;
-    generation_loss?: number | null;
+    generation_loss_kwh?: number | null;
     idle_discharge_volume?: number | null;
     files?: FileResponse[];
 }

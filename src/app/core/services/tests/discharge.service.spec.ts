@@ -106,7 +106,7 @@ describe('DischargeService', () => {
     describe('getSummary', () => {
         const emptyResponse = {
             from: '2026-01-01', to: '2026-02-28', granularity: 'month',
-            cascades: [], grand_total: { buckets: [], total: { volume_mln_m3: 0, avg_flow_rate_m3_s: 0, generation_loss_mwh: 0 } }
+            cascades: [], grand_total: { buckets: [], total: { volume_mln_m3: 0, avg_flow_rate_m3_s: 0, generation_loss_kwh: 0 } }
         };
 
         it('should GET /discharges/summary with from, to and granularity params', () => {
