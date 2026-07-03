@@ -2211,7 +2211,7 @@
         "GRANULARITY_YEAR": "Yil",
         "METRIC_VOLUME": "Hajm, mln m³",
         "METRIC_AVG_FLOW": "O'rtacha jadallik, m³/s",
-        "METRIC_GEN_LOSS": "Yo'qotilgan ishlab chiqarish, MVt·s",
+        "METRIC_GEN_LOSS": "Yo'qotilgan ishlab chiqarish, kVt·s",
         "TOTAL": "Jami",
         "GRAND_TOTAL": "«O'zbekgidroenergo» AJ bo'yicha jami",
         "NO_CASCADE": "Kaskadsiz",

@@ -2202,7 +2202,7 @@
         "GRANULARITY_YEAR": "Год",
         "METRIC_VOLUME": "Объём, млн м³",
         "METRIC_AVG_FLOW": "Средняя интенсивность, м³/с",
-        "METRIC_GEN_LOSS": "Потерянная выработка, МВт·ч",
+        "METRIC_GEN_LOSS": "Потерянная выработка, кВт·ч",
         "TOTAL": "Итого",
         "GRAND_TOTAL": "Итог по АО «Узбекгидроэнерго»",
         "NO_CASCADE": "Без каскада",

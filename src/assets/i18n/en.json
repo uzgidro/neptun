@@ -2211,7 +2211,7 @@
         "GRANULARITY_YEAR": "Year",
         "METRIC_VOLUME": "Volume, mln m³",
         "METRIC_AVG_FLOW": "Average intensity, m³/s",
-        "METRIC_GEN_LOSS": "Lost generation, MWh",
+        "METRIC_GEN_LOSS": "Lost generation, kWh",
         "TOTAL": "Total",
         "GRAND_TOTAL": "Total for JSC Uzbekhydroenergo",
         "NO_CASCADE": "Without cascade",
