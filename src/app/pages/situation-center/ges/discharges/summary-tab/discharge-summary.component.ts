@@ -136,4 +136,14 @@ export class DischargeSummaryComponent implements OnInit, OnDestroy {
         }
         this.rows = rows;
     }
+
+    /**
+     * Значение активной метрики для ячейки. Бэкенд отдаёт generation_loss_mwh
+     * фактически в кВт·ч — переводим в тыс. кВт·ч (делим на 1000). Остальные
+     * метрики показываем как есть.
+     */
+    cellValue(metrics: SummaryMetrics): number {
+        const raw = metrics[this.metric];
+        return this.metric === 'generation_loss_mwh' ? raw / 1000 : raw;
+    }
 }
