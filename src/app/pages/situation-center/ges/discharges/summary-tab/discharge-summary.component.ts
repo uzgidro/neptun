@@ -1,15 +1,18 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { MessageService } from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
 import { TableModule } from 'primeng/table';
 import { Button } from 'primeng/button';
+import { Menu } from 'primeng/menu';
 import { DatePicker } from 'primeng/datepicker';
 import { Select } from 'primeng/select';
 import { SelectButton } from 'primeng/selectbutton';
 import { DischargeService } from '@/core/services/discharge.service';
+import { downloadBlob } from '@/core/utils/download';
 import { DischargeSummaryResponse, SummaryBucket, SummaryGranularity, SummaryGrandTotal, SummaryMetrics } from '@/core/interfaces/discharge';
 
 export type MetricKey = 'volume_mln_m3' | 'avg_flow_rate_m3_s' | 'generation_loss_kwh';
@@ -29,10 +32,11 @@ interface LabeledOption<T> {
 
 const MS_PER_DAY = 86_400_000;
 const MAX_DAY_RANGE = 366;
+const MAX_EXPORT_MONTHS = 24;
 
 @Component({
     selector: 'app-discharge-summary',
-    imports: [DecimalPipe, FormsModule, TranslateModule, TableModule, Button, DatePicker, Select, SelectButton],
+    imports: [DecimalPipe, FormsModule, TranslateModule, TableModule, Button, Menu, DatePicker, Select, SelectButton],
     templateUrl: './discharge-summary.component.html',
     styleUrl: './discharge-summary.component.scss'
 })
@@ -53,6 +57,14 @@ export class DischargeSummaryComponent implements OnInit, OnDestroy {
     columns: string[] = [];
     rows: SummaryRow[] = [];
     grandTotal: SummaryGrandTotal | null = null;
+
+    downloadingExport: 'excel' | 'pdf' | null = null;
+
+    // label — i18n-ключ, переводится в шаблоне (см. granularity/metric опции).
+    exportItems: MenuItem[] = [
+        { label: 'SITUATION_CENTER.DISCHARGE.SUMMARY.DOWNLOAD_EXCEL', icon: 'pi pi-file-excel', command: () => this.export('excel') },
+        { label: 'SITUATION_CENTER.DISCHARGE.SUMMARY.DOWNLOAD_PDF', icon: 'pi pi-file-pdf', command: () => this.export('pdf') }
+    ];
 
     // label — i18n-ключ; перевод делается в шаблоне через | translate, чтобы ярлыки
     // не застревали как сырые ключи, если бандлы ещё не загружены на момент ngOnInit,
@@ -115,6 +127,75 @@ export class DischargeSummaryComponent implements OnInit, OnDestroy {
         const a = new Date(from.getFullYear(), from.getMonth(), from.getDate()).getTime();
         const b = new Date(to.getFullYear(), to.getMonth(), to.getDate()).getTime();
         return Math.floor((b - a) / MS_PER_DAY) + 1;
+    }
+
+    /** Экспорт сводки в xlsx/pdf (всегда месячный, независимо от выбранной гранулярности). */
+    export(format: 'excel' | 'pdf'): void {
+        if (this.downloadingExport) {
+            return;
+        }
+        const err = this.validateExport();
+        if (err) {
+            this.messageService.add({
+                severity: 'warn',
+                summary: this.translate.instant('COMMON.ERROR'),
+                detail: this.translate.instant(err)
+            });
+            return;
+        }
+        this.downloadingExport = format;
+        this.dischargeService
+            .getSummaryExport(this.from, this.to, format)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: (res) => {
+                    const ext = format === 'pdf' ? 'pdf' : 'xlsx';
+                    const fallback = `Холостые-сбросы-сводка-${this.dateYMD(this.from)}_${this.dateYMD(this.to)}.${ext}`;
+                    downloadBlob(res.body!, this.parseFilename(res) ?? fallback);
+                    this.downloadingExport = null;
+                },
+                error: (e) => {
+                    this.downloadingExport = null;
+                    this.handleExportError(e);
+                }
+            });
+    }
+
+    /** Export-only limits: from<=to and at most 24 monthly buckets (edge months count whole). */
+    private validateExport(): string | null {
+        if (!this.from || !this.to || this.from > this.to) {
+            return 'SITUATION_CENTER.DISCHARGE.SUMMARY.ERR_FROM_AFTER_TO';
+        }
+        const buckets = (this.to.getFullYear() * 12 + this.to.getMonth()) - (this.from.getFullYear() * 12 + this.from.getMonth()) + 1;
+        if (buckets > MAX_EXPORT_MONTHS) {
+            return 'SITUATION_CENTER.DISCHARGE.SUMMARY.ERR_EXPORT_TOO_LONG';
+        }
+        return null;
+    }
+
+    private parseFilename(response: HttpResponse<Blob>): string | null {
+        const cd = response.headers.get('Content-Disposition');
+        const m = cd?.match(/filename="([^"]+)"/);
+        return m ? m[1] : null;
+    }
+
+    private async handleExportError(err: HttpErrorResponse): Promise<void> {
+        let detail = this.translate.instant('SITUATION_CENTER.DISCHARGE.SUMMARY.EXPORT_FAILED');
+        if (err.status === 400 && err.error instanceof Blob) {
+            try {
+                const body = JSON.parse(await err.error.text()) as { error?: string };
+                if (body.error) detail = body.error;
+            } catch { /* keep fallback */ }
+        }
+        this.messageService.add({
+            severity: 'error',
+            summary: this.translate.instant('COMMON.ERROR'),
+            detail
+        });
+    }
+
+    private dateYMD(d: Date): string {
+        return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
     }
 
     private buildView(res: DischargeSummaryResponse): void {

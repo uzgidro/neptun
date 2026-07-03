@@ -20,6 +20,22 @@
                 [loading]="loading"
                 (onClick)="load()">
             </p-button>
+            <p-button
+                [label]="'SITUATION_CENTER.DISCHARGE.SUMMARY.EXPORT' | translate"
+                icon="pi pi-download"
+                severity="secondary"
+                [disabled]="downloadingExport !== null"
+                [loading]="downloadingExport !== null"
+                (onClick)="exportMenu.toggle($event)">
+            </p-button>
+            <p-menu #exportMenu [model]="exportItems" [popup]="true" appendTo="body">
+                <ng-template #item let-item>
+                    <a class="flex items-center p-menu-item-link">
+                        <span [class]="item.icon"></span>
+                        <span class="ml-2">{{ item.label | translate }}</span>
+                    </a>
+                </ng-template>
+            </p-menu>
             <p-selectbutton
                 class="ml-auto"
                 [(ngModel)]="metric"

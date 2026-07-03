@@ -3,7 +3,8 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
-import { of, throwError } from 'rxjs';
+import { HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { of, Subject, throwError } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
 import { MessageService } from 'primeng/api';
 import { DischargeSummaryComponent } from './discharge-summary.component';
@@ -86,8 +87,9 @@ describe('DischargeSummaryComponent', () => {
     let messageService: jasmine.SpyObj<MessageService>;
 
     beforeEach(async () => {
-        const dischargeSpy = jasmine.createSpyObj('DischargeService', ['getSummary']);
+        const dischargeSpy = jasmine.createSpyObj('DischargeService', ['getSummary', 'getSummaryExport']);
         dischargeSpy.getSummary.and.returnValue(of(makeResponse()));
+        dischargeSpy.getSummaryExport.and.returnValue(of(new HttpResponse({ body: new Blob() })));
         const messageSpy = jasmine.createSpyObj('MessageService', ['add']);
 
         await TestBed.configureTestingModule({
@@ -209,5 +211,96 @@ describe('DischargeSummaryComponent', () => {
         expect(component.rows.length).toBe(0);
         expect(component.columns).toEqual(['2026-01', '2026-02']);
         expect(component.grandTotal?.total.volume_mln_m3).toBe(0);
+    });
+
+    describe('export', () => {
+        it('requests the export with the selected format and downloads it', () => {
+            fixture.detectChanges();
+            component.from = new Date(2026, 0, 1);
+            component.to = new Date(2026, 5, 30);
+
+            component.export('excel');
+
+            const [from, to, format] = dischargeService.getSummaryExport.calls.mostRecent().args;
+            expect(from).toBe(component.from);
+            expect(to).toBe(component.to);
+            expect(format).toBe('excel');
+            expect(component.downloadingExport).toBeNull(); // reset in next handler
+        });
+
+        it('ignores a second export while one is in flight', () => {
+            fixture.detectChanges();
+            // never-completing observable keeps downloadingExport set
+            dischargeService.getSummaryExport.and.returnValue(new Subject<any>().asObservable());
+            component.export('excel');
+            expect(component.downloadingExport).toBe('excel');
+
+            component.export('pdf');
+            expect(dischargeService.getSummaryExport).toHaveBeenCalledTimes(1);
+        });
+
+        it('blocks export when from is after to (no request)', () => {
+            fixture.detectChanges();
+            dischargeService.getSummaryExport.calls.reset();
+            component.from = new Date(2026, 5, 10);
+            component.to = new Date(2026, 5, 1);
+
+            component.export('excel');
+
+            expect(messageService.add).toHaveBeenCalledWith(
+                jasmine.objectContaining({ detail: 'SITUATION_CENTER.DISCHARGE.SUMMARY.ERR_FROM_AFTER_TO' })
+            );
+            expect(dischargeService.getSummaryExport).not.toHaveBeenCalled();
+        });
+
+        it('blocks export when the period exceeds 24 months (no request)', () => {
+            fixture.detectChanges();
+            dischargeService.getSummaryExport.calls.reset();
+            component.from = new Date(2024, 0, 1);
+            component.to = new Date(2026, 0, 1); // 25 monthly buckets
+
+            component.export('excel');
+
+            expect(messageService.add).toHaveBeenCalledWith(
+                jasmine.objectContaining({ detail: 'SITUATION_CENTER.DISCHARGE.SUMMARY.ERR_EXPORT_TOO_LONG' })
+            );
+            expect(dischargeService.getSummaryExport).not.toHaveBeenCalled();
+        });
+
+        it('allows export at exactly 24 monthly buckets', () => {
+            fixture.detectChanges();
+            dischargeService.getSummaryExport.calls.reset();
+            component.from = new Date(2024, 0, 1);
+            component.to = new Date(2025, 11, 31); // 24 monthly buckets
+
+            component.export('excel');
+
+            expect(dischargeService.getSummaryExport).toHaveBeenCalledTimes(1);
+        });
+
+        it('shows the backend error detail on a 400 blob response', async () => {
+            fixture.detectChanges();
+            const errBlob = new Blob([JSON.stringify({ error: 'Period too long' })], { type: 'application/json' });
+            dischargeService.getSummaryExport.and.returnValue(
+                throwError(() => new HttpErrorResponse({ status: 400, error: errBlob }))
+            );
+
+            component.export('excel');
+            // error handler resets the flag synchronously, then awaits Blob.text() before add()
+            expect(component.downloadingExport).toBeNull();
+            await new Promise((r) => setTimeout(r, 50));
+
+            expect(messageService.add).toHaveBeenCalledWith(
+                jasmine.objectContaining({ severity: 'error', detail: 'Period too long' })
+            );
+        });
+
+        it('parses the filename from Content-Disposition', () => {
+            fixture.detectChanges();
+            const headers = new HttpHeaders({ 'Content-Disposition': 'attachment; filename="report.xlsx"' });
+            dischargeService.getSummaryExport.and.returnValue(of(new HttpResponse({ body: new Blob(), headers })));
+
+            expect(component['parseFilename'](new HttpResponse({ body: new Blob(), headers }))).toBe('report.xlsx');
+        });
     });
 });

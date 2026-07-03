@@ -37,6 +37,17 @@ export class DischargeService extends ApiService {
         return this.http.get<DischargeSummaryResponse>(this.BASE_URL + DISCHARGES + SUMMARY, { params });
     }
 
+    /** Экспорт сводки (xlsx/pdf). granularity не передаётся — экспорт всегда месячный. */
+    getSummaryExport(from: Date, to: Date, format: 'excel' | 'pdf'): Observable<HttpResponse<Blob>> {
+        const params = new HttpParams()
+            .set('from', this.dateToYMD(from))
+            .set('to', this.dateToYMD(to))
+            .set('format', format);
+        return this.http.get(this.BASE_URL + DISCHARGES + SUMMARY + '/export', {
+            params, responseType: 'blob', observe: 'response'
+        });
+    }
+
     editDischarge(id: number, payload: DischargeUpdatePayload): Observable<any> {
         return this.http.patch(this.BASE_URL + DISCHARGES + '/' + id.toString(), payload);
     }

@@ -137,4 +137,27 @@ describe('DischargeService', () => {
             req.flush(emptyResponse);
         });
     });
+
+    describe('getSummaryExport', () => {
+        it('should GET /discharges/summary/export as a blob with from, to and format', () => {
+            service.getSummaryExport(new Date(2026, 0, 1), new Date(2026, 5, 30), 'excel').subscribe();
+
+            const req = httpMock.expectOne((r) => r.url === `${BASE_URL}/discharges/summary/export`);
+            expect(req.request.method).toBe('GET');
+            expect(req.request.params.get('from')).toBe('2026-01-01');
+            expect(req.request.params.get('to')).toBe('2026-06-30');
+            expect(req.request.params.get('format')).toBe('excel');
+            expect(req.request.responseType).toBe('blob');
+            req.flush(new Blob());
+        });
+
+        it('should not send a granularity param (export is always monthly)', () => {
+            service.getSummaryExport(new Date(2026, 0, 1), new Date(2026, 5, 30), 'pdf').subscribe();
+
+            const req = httpMock.expectOne((r) => r.url === `${BASE_URL}/discharges/summary/export`);
+            expect(req.request.params.get('granularity')).toBeNull();
+            expect(req.request.params.get('format')).toBe('pdf');
+            req.flush(new Blob());
+        });
+    });
 });
