@@ -1,6 +1,6 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
-import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -149,9 +149,11 @@ export class DischargeSummaryComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (res) => {
+                    // Имя формируем на клиенте: сервер отдаёт filename в Content-Disposition
+                    // как UTF-8 байты без RFC 5987, что превращается в mojibake при чтении.
                     const ext = format === 'pdf' ? 'pdf' : 'xlsx';
-                    const fallback = `Холостые-сбросы-сводка-${this.dateYMD(this.from)}_${this.dateYMD(this.to)}.${ext}`;
-                    downloadBlob(res.body!, this.parseFilename(res) ?? fallback);
+                    const filename = `Холостые-сбросы-сводка-${this.dateYMD(this.from)}_${this.dateYMD(this.to)}.${ext}`;
+                    downloadBlob(res.body!, filename);
                     this.downloadingExport = null;
                 },
                 error: (e) => {
@@ -171,12 +173,6 @@ export class DischargeSummaryComponent implements OnInit, OnDestroy {
             return 'SITUATION_CENTER.DISCHARGE.SUMMARY.ERR_EXPORT_TOO_LONG';
         }
         return null;
-    }
-
-    private parseFilename(response: HttpResponse<Blob>): string | null {
-        const cd = response.headers.get('Content-Disposition');
-        const m = cd?.match(/filename="([^"]+)"/);
-        return m ? m[1] : null;
     }
 
     private async handleExportError(err: HttpErrorResponse): Promise<void> {

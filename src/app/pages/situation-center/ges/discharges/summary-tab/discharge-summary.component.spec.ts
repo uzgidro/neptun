@@ -295,12 +295,38 @@ describe('DischargeSummaryComponent', () => {
             );
         });
 
-        it('parses the filename from Content-Disposition', () => {
-            fixture.detectChanges();
-            const headers = new HttpHeaders({ 'Content-Disposition': 'attachment; filename="report.xlsx"' });
-            dischargeService.getSummaryExport.and.returnValue(of(new HttpResponse({ body: new Blob(), headers })));
+        // downloadBlob builds an <a download=...> and clicks it; assert the client-side
+        // filename by capturing that anchor (Content-Disposition is intentionally ignored).
+        function captureDownloadName(): () => string | undefined {
+            const anchor = document.createElement('a');
+            spyOn(anchor, 'click');
+            spyOn(document, 'createElement').and.returnValue(anchor);
+            return () => anchor.download;
+        }
 
-            expect(component['parseFilename'](new HttpResponse({ body: new Blob(), headers }))).toBe('report.xlsx');
+        it('downloads with a client-built filename (ignores Content-Disposition mojibake)', () => {
+            fixture.detectChanges();
+            component.from = new Date(2026, 0, 1);
+            component.to = new Date(2026, 2, 31);
+            const headers = new HttpHeaders({ 'Content-Disposition': 'attachment; filename="Ð¥Ð¾.xlsx"' });
+            dischargeService.getSummaryExport.and.returnValue(of(new HttpResponse({ body: new Blob(), headers })));
+            const name = captureDownloadName();
+
+            component.export('excel');
+
+            expect(name()).toBe('Холостые-сбросы-сводка-2026-01-01_2026-03-31.xlsx');
+        });
+
+        it('uses the pdf extension for pdf exports', () => {
+            fixture.detectChanges();
+            component.from = new Date(2026, 0, 1);
+            component.to = new Date(2026, 2, 31);
+            dischargeService.getSummaryExport.and.returnValue(of(new HttpResponse({ body: new Blob() })));
+            const name = captureDownloadName();
+
+            component.export('pdf');
+
+            expect(name()).toBe('Холостые-сбросы-сводка-2026-01-01_2026-03-31.pdf');
         });
     });
 });
