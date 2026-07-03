@@ -12,7 +12,7 @@ import { SelectButton } from 'primeng/selectbutton';
 import { DischargeService } from '@/core/services/discharge.service';
 import { DischargeSummaryResponse, SummaryBucket, SummaryGranularity, SummaryGrandTotal, SummaryMetrics } from '@/core/interfaces/discharge';
 
-export type MetricKey = 'volume_mln_m3' | 'avg_flow_rate_m3_s' | 'generation_loss_mwh';
+export type MetricKey = 'volume_mln_m3' | 'avg_flow_rate_m3_s' | 'generation_loss_kwh';
 
 export interface SummaryRow {
     type: 'cascade' | 'hpp';
@@ -65,7 +65,7 @@ export class DischargeSummaryComponent implements OnInit, OnDestroy {
     metricOptions: LabeledOption<MetricKey>[] = [
         { label: 'SITUATION_CENTER.DISCHARGE.SUMMARY.METRIC_VOLUME', value: 'volume_mln_m3' },
         { label: 'SITUATION_CENTER.DISCHARGE.SUMMARY.METRIC_AVG_FLOW', value: 'avg_flow_rate_m3_s' },
-        { label: 'SITUATION_CENTER.DISCHARGE.SUMMARY.METRIC_GEN_LOSS', value: 'generation_loss_mwh' }
+        { label: 'SITUATION_CENTER.DISCHARGE.SUMMARY.METRIC_GEN_LOSS', value: 'generation_loss_kwh' }
     ];
 
     ngOnInit(): void {
@@ -138,12 +138,11 @@ export class DischargeSummaryComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Значение активной метрики для ячейки. Бэкенд отдаёт generation_loss_mwh
-     * фактически в кВт·ч — переводим в тыс. кВт·ч (делим на 1000). Остальные
-     * метрики показываем как есть.
+     * Значение активной метрики для ячейки. generation_loss_kwh приходит в кВт·ч —
+     * переводим в тыс. кВт·ч (делим на 1000). Остальные метрики показываем как есть.
      */
     cellValue(metrics: SummaryMetrics): number {
         const raw = metrics[this.metric];
-        return this.metric === 'generation_loss_mwh' ? raw / 1000 : raw;
+        return this.metric === 'generation_loss_kwh' ? raw / 1000 : raw;
     }
 }

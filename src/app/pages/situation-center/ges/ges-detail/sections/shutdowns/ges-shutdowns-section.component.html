@@ -89,9 +89,9 @@
                 {{ 'GES_DETAIL.SHUTDOWNS.REASON' | translate }}
                 <p-sortIcon field="reason"></p-sortIcon>
             </th>
-            <th pSortableColumn="generation_loss" style="min-width: 120px">
+            <th pSortableColumn="generation_loss_kwh" style="min-width: 120px">
                 {{ 'GES_DETAIL.SHUTDOWNS.POWER_LOSS' | translate }}
-                <p-sortIcon field="generation_loss"></p-sortIcon>
+                <p-sortIcon field="generation_loss_kwh"></p-sortIcon>
             </th>
             <th pSortableColumn="idle_discharge_volume" style="min-width: 140px">
                 {{ 'GES_DETAIL.SHUTDOWNS.IDLE_DISCHARGE' | translate }}
@@ -120,8 +120,8 @@
             </td>
             <td>{{ item.reason || '—' }}</td>
             <td>
-                @if (item.generation_loss !== null) {
-                    {{ item.generation_loss | number:'1.0-2' }}
+                @if (item.generation_loss_kwh !== null) {
+                    {{ item.generation_loss_kwh | number:'1.0-2' }}
                 } @else {
                     <span class="text-surface-400">—</span>
                 }
