@@ -2218,7 +2218,12 @@
         "NO_DATA": "Tanlangan davr uchun ma'lumot yo'q",
         "ERR_FROM_AFTER_TO": "Boshlanish sanasi tugash sanasidan keyin bo'lishi mumkin emas",
         "ERR_RANGE_TOO_LONG": "«Kun» darajasida oraliq 366 kundan oshishi mumkin emas",
-        "LOAD_FAILED": "Xulosani yuklab bo'lmadi"
+        "LOAD_FAILED": "Xulosani yuklab bo'lmadi",
+        "EXPORT": "Eksport",
+        "DOWNLOAD_EXCEL": "Excel yuklab olish",
+        "DOWNLOAD_PDF": "PDF yuklab olish",
+        "EXPORT_FAILED": "Xulosani eksport qilib bo'lmadi",
+        "ERR_EXPORT_TOO_LONG": "Eksport uchun davr 24 oydan oshishi mumkin emas"
       }
     },
     "VISIT": {

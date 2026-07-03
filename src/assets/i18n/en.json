@@ -2218,7 +2218,12 @@
         "NO_DATA": "No data for the selected period",
         "ERR_FROM_AFTER_TO": "Start date cannot be later than end date",
         "ERR_RANGE_TOO_LONG": "For daily granularity the range cannot exceed 366 days",
-        "LOAD_FAILED": "Failed to load the summary"
+        "LOAD_FAILED": "Failed to load the summary",
+        "EXPORT": "Export",
+        "DOWNLOAD_EXCEL": "Download Excel",
+        "DOWNLOAD_PDF": "Download PDF",
+        "EXPORT_FAILED": "Failed to export the summary",
+        "ERR_EXPORT_TOO_LONG": "The export period cannot exceed 24 months"
       }
     },
     "VISIT": {
