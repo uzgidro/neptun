@@ -254,8 +254,11 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
         let detail = this.translate.instant('ERRORS.BAD_REQUEST');
         if (err.status === 400 && err.error instanceof Blob) {
             try {
-                const body = JSON.parse(await err.error.text()) as { message?: string };
-                if (body.message) detail = body.message;
+                // Error body is a Blob (responseType 'blob'). Envelope differs by
+                // endpoint: mini-micro/discharge use `error`, the main report uses
+                // `message` — read whichever is present so the toast is specific.
+                const body = JSON.parse(await err.error.text()) as { error?: string; message?: string };
+                if (body.error || body.message) detail = (body.error ?? body.message)!;
             } catch {
                 /* keep fallback */
             }

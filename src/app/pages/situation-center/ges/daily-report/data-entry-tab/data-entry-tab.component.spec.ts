@@ -1174,6 +1174,24 @@ describe('DataEntryTabComponent', () => {
 
             expect(gesReportService.exportMiniMicro).not.toHaveBeenCalled();
         }));
+
+        it('surfaces the backend `error` field from a 400 blob and resets the flag', async () => {
+            fixture.detectChanges();
+            component.selectedDate = new Date(2026, 6, 3);
+            const errorBlob = new Blob([JSON.stringify({ error: 'consumption exceeds idle discharge', code: 'report.consumption_exceeds_idle' })]);
+            const httpError = new HttpErrorResponse({ status: 400, error: errorBlob });
+            gesReportService.exportMiniMicro.and.returnValue(throwError(() => httpError));
+            const msgService = TestBed.inject(MessageService);
+            const addSpy = spyOn(msgService, 'add');
+
+            component.downloadMiniMicro('excel');
+            // Flag resets synchronously; the toast detail arrives after Blob.text() resolves.
+            expect(component.downloadingMiniMicro).toBeNull();
+            await new Promise((r) => setTimeout(r, 50));
+
+            expect(addSpy).toHaveBeenCalled();
+            expect(addSpy.calls.mostRecent().args[0].detail).toBe('consumption exceeds idle discharge');
+        });
     });
 });
 
