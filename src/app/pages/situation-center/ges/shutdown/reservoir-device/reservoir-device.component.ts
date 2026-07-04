@@ -1,9 +1,10 @@
 import { Component, inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { Button } from 'primeng/button';
+import { Menu } from 'primeng/menu';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { FormsModule } from '@angular/forms';
-import { MessageService } from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
 import { ReservoirDeviceService } from '@/core/services/reservoir-device.service';
 import { PatchReservoirDeviceSummaryItem, PatchReservoirDeviceSummaryRequest, ReservoirDeviceSummaryResponse } from '@/core/interfaces/reservoir-device';
 import { AuthService } from '@/core/services/auth.service';
@@ -15,7 +16,7 @@ import { downloadBlob } from '@/core/utils/download';
 
 @Component({
   selector: 'app-reservoir-device',
-  imports: [TableModule, Button, InputNumberModule, FormsModule, TranslateModule],
+  imports: [TableModule, Button, Menu, InputNumberModule, FormsModule, TranslateModule],
   templateUrl: './reservoir-device.component.html',
   styleUrl: './reservoir-device.component.scss'
 })
@@ -52,8 +53,12 @@ export class ReservoirDeviceComponent implements OnInit, OnChanges, OnDestroy {
   private destroy$ = new Subject<void>();
 
   // Export
-  isExcelLoading = false;
-  isPdfLoading = false;
+  downloading: 'excel' | 'pdf' | null = null;
+
+  exportItems: MenuItem[] = [
+    { label: 'SITUATION_CENTER.COMMON.DOWNLOAD_EXCEL', icon: 'pi pi-file-excel', command: () => this.download('excel') },
+    { label: 'SITUATION_CENTER.COMMON.DOWNLOAD_PDF', icon: 'pi pi-file-pdf', command: () => this.download('pdf') }
+  ];
 
   ngOnInit(): void {
     this.loadDevices();
@@ -162,8 +167,8 @@ export class ReservoirDeviceComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   download(format: 'excel' | 'pdf') {
-    if (format === 'excel') this.isExcelLoading = true;
-    else this.isPdfLoading = true;
+    if (this.downloading) return;
+    this.downloading = format;
 
     const dateToUse = this.date || new Date();
 
@@ -171,10 +176,7 @@ export class ReservoirDeviceComponent implements OnInit, OnChanges, OnDestroy {
       .downloadScReport(dateToUse, format)
       .pipe(
         takeUntil(this.destroy$),
-        finalize(() => {
-          this.isExcelLoading = false;
-          this.isPdfLoading = false;
-        })
+        finalize(() => (this.downloading = null))
       )
       .subscribe({
         next: (response: HttpResponse<Blob>) => {

@@ -1,12 +1,13 @@
 import { Component, EventEmitter, inject, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { DatePipe, DecimalPipe } from '@angular/common';
-import { MessageService, PrimeTemplate, SortEvent } from 'primeng/api';
+import { MenuItem, MessageService, PrimeTemplate, SortEvent } from 'primeng/api';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { DischargeService } from '@/core/services/discharge.service';
 import { ApiService } from '@/core/services/api.service';
 import { DischargeCreatePayload, DischargeUpdatePayload, IdleDischargeResponse } from '@/core/interfaces/discharge';
 import { Button } from 'primeng/button';
+import { Menu } from 'primeng/menu';
 import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
 import { InputNumberdComponent } from '@/layout/component/dialog/input-number/input-number.component';
@@ -43,6 +44,7 @@ type SortableDischarge = IdleDischargeResponse & { configSortKey: number };
         TableModule,
         DecimalPipe,
         Button,
+        Menu,
         DialogComponent,
         DatePickerComponent,
         InputNumberdComponent,
@@ -99,8 +101,12 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges, OnDestroy 
     filesDirty = false;
 
     // Export
-    isExcelLoading = false;
-    isPdfLoading = false;
+    downloading: 'excel' | 'pdf' | null = null;
+
+    exportItems: MenuItem[] = [
+        { label: 'SITUATION_CENTER.COMMON.DOWNLOAD_EXCEL', icon: 'pi pi-file-excel', command: () => this.download('excel') },
+        { label: 'SITUATION_CENTER.COMMON.DOWNLOAD_PDF', icon: 'pi pi-file-pdf', command: () => this.download('pdf') }
+    ];
 
     /** Stations whose completed periods are currently expanded (toggle off). */
     expandedOrgIds: Set<number> = new Set<number>();
@@ -493,8 +499,8 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges, OnDestroy 
     }
 
     download(format: 'excel' | 'pdf') {
-        if (format === 'excel') this.isExcelLoading = true;
-        else this.isPdfLoading = true;
+        if (this.downloading) return;
+        this.downloading = format;
 
         const dateToUse = this.selectedDate || new Date();
 
@@ -502,10 +508,7 @@ export class ShutdownDischargeComponent implements OnInit, OnChanges, OnDestroy 
             .downloadScReport(dateToUse, format)
             .pipe(
                 takeUntil(this.destroy$),
-                finalize(() => {
-                    this.isExcelLoading = false;
-                    this.isPdfLoading = false;
-                })
+                finalize(() => (this.downloading = null))
             )
             .subscribe({
                 next: (response: HttpResponse<Blob>) => {

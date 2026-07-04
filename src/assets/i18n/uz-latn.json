@@ -259,6 +259,7 @@
   },
   "GES_REPORT": {
     "BATCH_FAILED_AT": "{{station}} stantsiyasida xatolik",
+    "EXPORT": "Eksport",
     "DOWNLOAD_PDF": "PDF yuklab olish",
     "OWN_NEEDS_EXPORT": "Xususiy ehtiyojlarni eksport qilish",
     "MODERNIZATION": "Modernizatsiya",
@@ -2036,6 +2037,9 @@
       "SELECT_DATE": "Sanani tanlang",
       "COLLAPSE": "Yig'ish",
       "EXPAND": "Yoyish",
+      "EXPORT": "Eksport",
+      "DOWNLOAD_EXCEL": "Excel yuklab olish",
+      "DOWNLOAD_PDF": "PDF yuklab olish",
       "EXPORT_EXCEL": "Excelga eksport",
       "SAVE_EXCEL": "Excelga saqlash",
       "ADD": "Qo'shish",

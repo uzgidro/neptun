@@ -20,21 +20,21 @@
 
         @if (canExport) {
             <p-button
-                [label]="'GES_REPORT.DOWNLOAD_EXCEL' | translate"
-                icon="pi pi-file-excel"
-                severity="success"
+                [label]="'GES_REPORT.EXPORT' | translate"
+                icon="pi pi-download"
+                severity="secondary"
                 [disabled]="downloading !== null"
-                [loading]="downloading === 'excel'"
-                (onClick)="download('excel')">
+                [loading]="downloading !== null"
+                (onClick)="reportExportMenu.toggle($event)">
             </p-button>
-            <p-button
-                [label]="'GES_REPORT.DOWNLOAD_PDF' | translate"
-                icon="pi pi-file-pdf"
-                severity="danger"
-                [disabled]="downloading !== null"
-                [loading]="downloading === 'pdf'"
-                (onClick)="download('pdf')">
-            </p-button>
+            <p-menu #reportExportMenu [model]="exportItems" [popup]="true" appendTo="body">
+                <ng-template #item let-item>
+                    <a class="flex items-center p-menu-item-link">
+                        <span [class]="item.icon"></span>
+                        <span class="ml-2">{{ item.label | translate }}</span>
+                    </a>
+                </ng-template>
+            </p-menu>
             <p-button
                 [label]="'GES_REPORT.OWN_NEEDS_EXPORT' | translate"
                 icon="pi pi-download"

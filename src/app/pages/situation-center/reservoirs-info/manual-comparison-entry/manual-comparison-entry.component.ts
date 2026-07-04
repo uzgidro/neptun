@@ -7,11 +7,12 @@ import { Subject, Observable, forkJoin, of } from 'rxjs';
 import { takeUntil, finalize, catchError } from 'rxjs/operators';
 import { DatePickerModule } from 'primeng/datepicker';
 import { ButtonModule } from 'primeng/button';
+import { Menu } from 'primeng/menu';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { CheckboxModule } from 'primeng/checkbox';
 import { MessageModule } from 'primeng/message';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { MessageService } from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
 import { ManualComparisonService } from '@/core/services/manual-comparison.service';
 import { OrganizationService } from '@/core/services/organization.service';
 import { TimeService } from '@/core/services/time.service';
@@ -36,7 +37,7 @@ interface OrgState {
     standalone: true,
     imports: [
         CommonModule, FormsModule, ReactiveFormsModule,
-        DatePickerModule, ButtonModule, InputNumberModule,
+        DatePickerModule, ButtonModule, Menu, InputNumberModule,
         CheckboxModule, MessageModule, TranslateModule
     ],
     templateUrl: './manual-comparison-entry.component.html',
@@ -52,6 +53,11 @@ export class ManualComparisonEntryComponent implements OnInit, OnDestroy, HasUns
     loading = false;
     saving = false;
     downloading: 'excel' | 'pdf' | null = null;
+
+    exportItems: MenuItem[] = [
+        { label: 'SITUATION_CENTER.COMMON.DOWNLOAD_EXCEL', icon: 'pi pi-file-excel', command: () => this.download('excel') },
+        { label: 'SITUATION_CENTER.COMMON.DOWNLOAD_PDF', icon: 'pi pi-file-pdf', command: () => this.download('pdf') }
+    ];
 
     constructor(
         private route: ActivatedRoute,
@@ -330,6 +336,7 @@ export class ManualComparisonEntryComponent implements OnInit, OnDestroy, HasUns
     // --- Export ---
 
     download(format: 'excel' | 'pdf'): void {
+        if (this.downloading) return;
         this.downloading = format;
         const nextDay = new Date(this.selectedDate);
         nextDay.setDate(nextDay.getDate() + 1);

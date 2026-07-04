@@ -7,7 +7,8 @@ import { ButtonModule } from 'primeng/button';
 import { ReservoirSummaryService } from '@/core/services/reservoir-summary.service';
 import { ReservoirSummaryRequest, ReservoirSummaryResponse } from '@/core/interfaces/reservoir-summary';
 import localeRu from '@angular/common/locales/ru';
-import { MessageService } from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
+import { Menu } from 'primeng/menu';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from '@/core/services/auth.service';
 import { catchError, finalize, forkJoin, of } from 'rxjs';
@@ -37,6 +38,7 @@ registerLocaleData(localeRu);
         TableModule,
         InputText,
         ButtonModule,
+        Menu,
         DateWidget,
         TooltipModule,
         TranslateModule,
@@ -67,8 +69,12 @@ export class ReservoirsSummaryComponent implements OnInit {
     originalData: ReservoirSummaryResponse[] = [];
     submitted: boolean = false;
 
-    isExcelLoading = false;
-    isPdfLoading = false;
+    downloading: 'excel' | 'pdf' | null = null;
+
+    exportItems: MenuItem[] = [
+        { label: 'SITUATION_CENTER.COMMON.DOWNLOAD_EXCEL', icon: 'pi pi-file-excel', command: () => this.download('excel') },
+        { label: 'SITUATION_CENTER.COMMON.DOWNLOAD_PDF', icon: 'pi pi-file-pdf', command: () => this.download('pdf') }
+    ];
 
     activeTab: string = 'data';
 
@@ -274,18 +280,13 @@ export class ReservoirsSummaryComponent implements OnInit {
     }
 
     download(format: 'excel' | 'pdf') {
-        // Устанавливаем статус загрузки
-        if (format === 'excel') this.isExcelLoading = true;
-        else this.isPdfLoading = true;
+        if (this.downloading) return;
+        this.downloading = format;
 
         this.reservoirService
             .downloadSummary(this.selectedDate!, format)
             .pipe(
-                finalize(() => {
-                    // Снимаем спиннер в любом случае (успех или ошибка)
-                    this.isExcelLoading = false;
-                    this.isPdfLoading = false;
-                })
+                finalize(() => (this.downloading = null))
             )
             .subscribe({
                 next: (response: HttpResponse<Blob>) => {

@@ -1,8 +1,9 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { finalize, Subject, takeUntil } from 'rxjs';
 import { Button } from 'primeng/button';
+import { Menu } from 'primeng/menu';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { MessageService } from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
 import { HttpResponse } from '@angular/common/http';
 import { DateWidget } from '@/layout/component/widget/date/date.widget';
 import { InfraEventService } from '@/core/services/infra-event.service';
@@ -20,6 +21,7 @@ import { CategoryAdminComponent } from './category-admin/category-admin.componen
     imports: [
         TranslateModule,
         Button,
+        Menu,
         DateWidget,
         EventTableComponent,
         CategoryAdminComponent
@@ -39,8 +41,12 @@ export class InfraEventsComponent implements OnInit, OnDestroy {
     selectedDate: Date = new Date();
     collapsedCategories = new Set<number>();
     showCategoryAdmin = false;
-    isExcelLoading = false;
-    isPdfLoading = false;
+    downloading: 'excel' | 'pdf' | null = null;
+
+    exportItems: MenuItem[] = [
+        { label: 'SITUATION_CENTER.COMMON.DOWNLOAD_EXCEL', icon: 'pi pi-file-excel', command: () => this.download('excel') },
+        { label: 'SITUATION_CENTER.COMMON.DOWNLOAD_PDF', icon: 'pi pi-file-pdf', command: () => this.download('pdf') }
+    ];
 
     private destroy$ = new Subject<void>();
 
@@ -79,17 +85,14 @@ export class InfraEventsComponent implements OnInit, OnDestroy {
     }
 
     download(format: 'excel' | 'pdf'): void {
-        if (format === 'excel') this.isExcelLoading = true;
-        else this.isPdfLoading = true;
+        if (this.downloading) return;
+        this.downloading = format;
 
         this.scService
             .downloadScReport(this.selectedDate, format)
             .pipe(
                 takeUntil(this.destroy$),
-                finalize(() => {
-                    this.isExcelLoading = false;
-                    this.isPdfLoading = false;
-                })
+                finalize(() => (this.downloading = null))
             )
             .subscribe({
                 next: (response: HttpResponse<Blob>) => {
