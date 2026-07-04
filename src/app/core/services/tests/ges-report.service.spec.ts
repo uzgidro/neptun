@@ -349,4 +349,20 @@ describe('GesReportService.exportReport', () => {
         expect(req.request.params.get('format')).toBe('pdf');
         req.flush(new Blob());
     });
+
+    it('builds GET /ges-report/mini-micro/export with date/format', () => {
+        service.exportMiniMicro({ date: '2026-07-04', format: 'excel' }).subscribe();
+        const req = http.expectOne(r => r.url.endsWith('/ges-report/mini-micro/export'));
+        expect(req.request.method).toBe('GET');
+        expect(req.request.params.get('date')).toBe('2026-07-04');
+        expect(req.request.params.get('format')).toBe('excel');
+        req.flush(new Blob());
+    });
+
+    it('exportMiniMicro supports pdf format', () => {
+        service.exportMiniMicro({ date: '2026-07-04', format: 'pdf' }).subscribe();
+        const req = http.expectOne(r => r.url.endsWith('/ges-report/mini-micro/export'));
+        expect(req.request.params.get('format')).toBe('pdf');
+        req.flush(new Blob());
+    });
 });
