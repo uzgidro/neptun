@@ -17,21 +17,21 @@
         </div>
         <div class="flex gap-4">
             <p-button
-                label="Экспорт в Excel"
-                icon="pi pi-file-excel"
-                severity="success"
-                [loading]="isExcelLoading"
-                [disabled]="!data || data.length === 0"
-                (onClick)="download('excel')">
+                [label]="'SITUATION_CENTER.COMMON.EXPORT' | translate"
+                icon="pi pi-download"
+                severity="secondary"
+                [disabled]="downloading !== null || !data || data.length === 0"
+                [loading]="downloading !== null"
+                (onClick)="exportMenu.toggle($event)">
             </p-button>
-            <p-button
-                label="Экспорт в PDF"
-                icon="pi pi-file-pdf"
-                severity="danger"
-                [loading]="isPdfLoading"
-                [disabled]="!data || data.length === 0"
-                (onClick)="download('pdf')">
-            </p-button>
+            <p-menu #exportMenu [model]="exportItems" [popup]="true" appendTo="body">
+                <ng-template #item let-item>
+                    <a class="flex items-center p-menu-item-link">
+                        <span [class]="item.icon"></span>
+                        <span class="ml-2">{{ item.label | translate }}</span>
+                    </a>
+                </ng-template>
+            </p-menu>
         </div>
     </div>
 

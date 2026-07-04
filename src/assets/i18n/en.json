@@ -259,6 +259,7 @@
   },
   "GES_REPORT": {
     "BATCH_FAILED_AT": "Batch failed at station {{station}}",
+    "EXPORT": "Export",
     "DOWNLOAD_PDF": "Download PDF",
     "OWN_NEEDS_EXPORT": "Export own needs",
     "MODERNIZATION": "Modernization",
@@ -2036,6 +2037,9 @@
       "SELECT_DATE": "Select Date",
       "COLLAPSE": "Collapse",
       "EXPAND": "Expand",
+      "EXPORT": "Export",
+      "DOWNLOAD_EXCEL": "Download Excel",
+      "DOWNLOAD_PDF": "Download PDF",
       "EXPORT_EXCEL": "Export to Excel",
       "SAVE_EXCEL": "Save to Excel",
       "ADD": "Add",

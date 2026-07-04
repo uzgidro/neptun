@@ -31,21 +31,21 @@
                 (onClick)="refresh()">
             </p-button>
             <p-button
-                label="Excel"
-                icon="pi pi-file-excel"
-                severity="success"
-                [loading]="isExcelLoading"
-                [disabled]="!discharges || discharges.length === 0"
-                (onClick)="download('excel')">
+                [label]="'SITUATION_CENTER.COMMON.EXPORT' | translate"
+                icon="pi pi-download"
+                severity="secondary"
+                [disabled]="downloading !== null || !discharges || discharges.length === 0"
+                [loading]="downloading !== null"
+                (onClick)="exportMenu.toggle($event)">
             </p-button>
-            <p-button
-                label="PDF"
-                icon="pi pi-file-pdf"
-                severity="danger"
-                [loading]="isPdfLoading"
-                [disabled]="!discharges || discharges.length === 0"
-                (onClick)="download('pdf')">
-            </p-button>
+            <p-menu #exportMenu [model]="exportItems" [popup]="true" appendTo="body">
+                <ng-template #item let-item>
+                    <a class="flex items-center p-menu-item-link">
+                        <span [class]="item.icon"></span>
+                        <span class="ml-2">{{ item.label | translate }}</span>
+                    </a>
+                </ng-template>
+            </p-menu>
             <p-iconfield>
                 <p-inputicon>
                     <i class="pi pi-search"></i>

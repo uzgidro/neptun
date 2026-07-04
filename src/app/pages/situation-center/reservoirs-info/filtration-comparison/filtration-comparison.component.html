@@ -8,19 +8,20 @@
 
         <div class="flex gap-2">
             <p-button
-                [label]="'FILTRATION.EXPORT_EXCEL' | translate"
-                icon="pi pi-file-excel"
+                [label]="'SITUATION_CENTER.COMMON.EXPORT' | translate"
+                icon="pi pi-download"
+                severity="secondary"
                 [disabled]="loadingSimilarDates || downloading !== null || !hasExportDates"
-                [loading]="downloading === 'excel'"
-                severity="success"
-                (onClick)="download('excel')" />
-            <p-button
-                [label]="'FILTRATION.EXPORT_PDF' | translate"
-                icon="pi pi-file-pdf"
-                [disabled]="loadingSimilarDates || downloading !== null || !hasExportDates"
-                [loading]="downloading === 'pdf'"
-                severity="danger"
-                (onClick)="download('pdf')" />
+                [loading]="downloading !== null"
+                (onClick)="exportMenu.toggle($event)" />
+            <p-menu #exportMenu [model]="exportItems" [popup]="true" appendTo="body">
+                <ng-template #item let-item>
+                    <a class="flex items-center p-menu-item-link">
+                        <span [class]="item.icon"></span>
+                        <span class="ml-2">{{ item.label | translate }}</span>
+                    </a>
+                </ng-template>
+            </p-menu>
             <p-button
                 [label]="'COMMON.SAVE' | translate"
                 icon="pi pi-save"

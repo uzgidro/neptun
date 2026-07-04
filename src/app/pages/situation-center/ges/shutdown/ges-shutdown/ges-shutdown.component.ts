@@ -1,9 +1,10 @@
 import { Component, EventEmitter, inject, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Button } from 'primeng/button';
+import { Menu } from 'primeng/menu';
 import { DatePickerComponent } from '@/layout/component/dialog/date-picker/date-picker.component';
 import { DialogComponent } from '@/layout/component/dialog/dialog/dialog.component';
 import { GroupSelectComponent } from '@/layout/component/dialog/group-select/group-select.component';
-import { MessageService, PrimeTemplate } from 'primeng/api';
+import { MenuItem, MessageService, PrimeTemplate } from 'primeng/api';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { TextareaComponent } from '@/layout/component/dialog/textarea/textarea.component';
@@ -29,6 +30,7 @@ import { downloadBlob } from '@/core/utils/download';
     selector: 'app-ges-shutdown',
     imports: [
         Button,
+        Menu,
         DatePickerComponent,
         DialogComponent,
         GroupSelectComponent,
@@ -75,8 +77,12 @@ export class GesShutdownComponent implements OnInit, OnChanges, OnDestroy {
     private destroy$ = new Subject<void>();
 
     // Export
-    isExcelLoading = false;
-    isPdfLoading = false;
+    downloading: 'excel' | 'pdf' | null = null;
+
+    exportItems: MenuItem[] = [
+        { label: 'SITUATION_CENTER.COMMON.DOWNLOAD_EXCEL', icon: 'pi pi-file-excel', command: () => this.download('excel') },
+        { label: 'SITUATION_CENTER.COMMON.DOWNLOAD_PDF', icon: 'pi pi-file-pdf', command: () => this.download('pdf') }
+    ];
 
     // File handling
     selectedFiles: File[] = [];
@@ -400,8 +406,8 @@ export class GesShutdownComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     download(format: 'excel' | 'pdf') {
-        if (format === 'excel') this.isExcelLoading = true;
-        else this.isPdfLoading = true;
+        if (this.downloading) return;
+        this.downloading = format;
 
         const dateToUse = this.date || new Date();
 
@@ -409,10 +415,7 @@ export class GesShutdownComponent implements OnInit, OnChanges, OnDestroy {
             .downloadScReport(dateToUse, format)
             .pipe(
                 takeUntil(this.destroy$),
-                finalize(() => {
-                    this.isExcelLoading = false;
-                    this.isPdfLoading = false;
-                })
+                finalize(() => (this.downloading = null))
             )
             .subscribe({
                 next: (response: HttpResponse<Blob>) => {

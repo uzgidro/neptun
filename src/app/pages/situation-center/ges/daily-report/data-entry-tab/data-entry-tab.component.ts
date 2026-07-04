@@ -117,6 +117,11 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
     downloading: 'excel' | 'pdf' | null = null;
     downloadingOwnNeeds: 'excel' | 'pdf' | null = null;
 
+    exportItems: MenuItem[] = [
+        { label: 'GES_REPORT.DOWNLOAD_EXCEL', icon: 'pi pi-file-excel', command: () => this.download('excel') },
+        { label: 'GES_REPORT.DOWNLOAD_PDF', icon: 'pi pi-file-pdf', command: () => this.download('pdf') }
+    ];
+
     /**
      * Returns ngx-translate interpolation params for GES_REPORT.DAILY_REPORT_HEADER.
      * Months are pulled from i18n key GES_REPORT.MONTHS_GENITIVE.<1..12> so each

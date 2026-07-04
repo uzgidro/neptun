@@ -259,6 +259,7 @@
   },
   "GES_REPORT": {
     "BATCH_FAILED_AT": "{{station}} станциясида хатолик",
+    "EXPORT": "Экспорт",
     "DOWNLOAD_PDF": "PDF юклаб олиш",
     "OWN_NEEDS_EXPORT": "Хусусий эҳтиёжларни экспорт қилиш",
     "MODERNIZATION": "Модернизация",
@@ -2036,6 +2037,9 @@
       "SELECT_DATE": "Санани танланг",
       "COLLAPSE": "Йиғиш",
       "EXPAND": "Ёйиш",
+      "EXPORT": "Экспорт",
+      "DOWNLOAD_EXCEL": "Excel юклаб олиш",
+      "DOWNLOAD_PDF": "PDF юклаб олиш",
       "EXPORT_EXCEL": "Эксэлга экспорт",
       "SAVE_EXCEL": "Эксэлга сақлаш",
       "ADD": "Қўшиш",

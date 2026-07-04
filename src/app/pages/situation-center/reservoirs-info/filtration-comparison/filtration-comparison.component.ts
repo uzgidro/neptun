@@ -8,9 +8,10 @@ import { takeUntil, catchError, finalize } from 'rxjs/operators';
 import { downloadBlob } from '@/core/utils/download';
 import { DatePickerModule } from 'primeng/datepicker';
 import { ButtonModule } from 'primeng/button';
+import { Menu } from 'primeng/menu';
 import { MessageModule } from 'primeng/message';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { MessageService } from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
 import { FiltrationComparisonService } from '@/core/services/filtration-comparison.service';
 import { TimeService } from '@/core/services/time.service';
 import { OrgComparison, ComparisonSnapshot, OrgSimilarDates, UpsertRequest } from '@/core/interfaces/filtration-comparison';
@@ -27,7 +28,7 @@ interface OrgSelection {
     selector: 'app-filtration-comparison',
     standalone: true,
     imports: [
-        CommonModule, FormsModule, ReactiveFormsModule, DatePickerModule, ButtonModule,
+        CommonModule, FormsModule, ReactiveFormsModule, DatePickerModule, ButtonModule, Menu,
         MessageModule, TranslateModule,
         OrgComparisonCardComponent
     ],
@@ -49,6 +50,11 @@ export class FiltrationComparisonComponent implements OnInit, OnDestroy {
     loadingSimilarDates = false;
     saving = false;
     downloading: 'excel' | 'pdf' | null = null;
+
+    exportItems: MenuItem[] = [
+        { label: 'SITUATION_CENTER.COMMON.DOWNLOAD_EXCEL', icon: 'pi pi-file-excel', command: () => this.download('excel') },
+        { label: 'SITUATION_CENTER.COMMON.DOWNLOAD_PDF', icon: 'pi pi-file-pdf', command: () => this.download('pdf') }
+    ];
 
     constructor(
         private route: ActivatedRoute,
@@ -534,6 +540,7 @@ export class FiltrationComparisonComponent implements OnInit, OnDestroy {
     }
 
     download(format: 'excel' | 'pdf'): void {
+        if (this.downloading) return;
         this.downloading = format;
         const nextDay = new Date(this.selectedDate);
         nextDay.setDate(nextDay.getDate() + 1);
