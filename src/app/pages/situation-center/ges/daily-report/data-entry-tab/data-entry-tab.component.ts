@@ -116,6 +116,7 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
     frozenMap: FrozenMap = {};
     downloading: 'excel' | 'pdf' | null = null;
     downloadingOwnNeeds: 'excel' | 'pdf' | null = null;
+    downloadingMiniMicro: 'excel' | 'pdf' | null = null;
 
     exportItems: MenuItem[] = [
         { label: 'GES_REPORT.DOWNLOAD_EXCEL', icon: 'pi pi-file-excel', command: () => this.download('excel') },
@@ -156,6 +157,19 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
             label: 'GES_REPORT.DOWNLOAD_PDF',
             icon: 'pi pi-file-pdf',
             command: () => this.downloadOwnNeeds('pdf')
+        }
+    ];
+
+    miniMicroExportItems: MenuItem[] = [
+        {
+            label: 'GES_REPORT.DOWNLOAD_EXCEL',
+            icon: 'pi pi-file-excel',
+            command: () => this.downloadMiniMicro('excel')
+        },
+        {
+            label: 'GES_REPORT.DOWNLOAD_PDF',
+            icon: 'pi pi-file-pdf',
+            command: () => this.downloadMiniMicro('pdf')
         }
     ];
 
@@ -216,6 +230,23 @@ export class DataEntryTabComponent implements OnInit, OnDestroy, HasUnsavedChang
                 this.downloadingOwnNeeds = null;
             },
             error: (err) => { this.downloadingOwnNeeds = null; this.handleExportError(err); }
+        });
+    }
+
+    downloadMiniMicro(format: 'excel' | 'pdf'): void {
+        if (this.downloadingMiniMicro) return;
+        const date = this.timeService.dateToYMD(this.selectedDate);
+        this.downloadingMiniMicro = format;
+        this.gesReportService.exportMiniMicro({ date, format }).pipe(
+            takeUntil(this.destroy$)
+        ).subscribe({
+            next: (response) => {
+                const ext = format === 'pdf' ? 'pdf' : 'xlsx';
+                const filename = this.parseFilename(response) ?? `GES-mini-micro-${date}.${ext}`;
+                downloadBlob(response.body!, filename);
+                this.downloadingMiniMicro = null;
+            },
+            error: (err) => { this.downloadingMiniMicro = null; this.handleExportError(err); }
         });
     }
 

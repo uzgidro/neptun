@@ -51,6 +51,22 @@
                     </a>
                 </ng-template>
             </p-menu>
+            <p-button
+                [label]="'GES_REPORT.MINI_MICRO_EXPORT' | translate"
+                icon="pi pi-download"
+                severity="secondary"
+                [disabled]="downloadingMiniMicro !== null"
+                [loading]="downloadingMiniMicro !== null"
+                (onClick)="miniMicroMenu.toggle($event)">
+            </p-button>
+            <p-menu #miniMicroMenu [model]="miniMicroExportItems" [popup]="true" appendTo="body">
+                <ng-template #item let-item>
+                    <a class="flex items-center p-menu-item-link">
+                        <span [class]="item.icon"></span>
+                        <span class="ml-2">{{ item.label | translate }}</span>
+                    </a>
+                </ng-template>
+            </p-menu>
         }
     </div>
 

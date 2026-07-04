@@ -10,7 +10,7 @@ import { MessageService } from 'primeng/api';
 import { DataEntryTabComponent } from './data-entry-tab.component';
 import { GesReportService } from '@/core/services/ges-report.service';
 import { GesConfigResponse, GesDailyReport, ReportCurrent, ReportGrandTotal, ReportStation, ReportWeather } from '@/core/interfaces/ges-report';
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 
 function makeConfig(orgId: number, name: string, hasReservoir = true): GesConfigResponse {
     return {
@@ -96,7 +96,7 @@ describe('DataEntryTabComponent', () => {
     beforeEach(async () => {
         const spy = jasmine.createSpyObj('GesReportService', [
             'getConfigs', 'getDailyData', 'upsertDailyData', 'getCascadeConfigs', 'getReport',
-            'listFrozenDefaults', 'upsertFrozenDefault', 'deleteFrozenDefault'
+            'listFrozenDefaults', 'upsertFrozenDefault', 'deleteFrozenDefault', 'exportMiniMicro'
         ]);
         spy.getConfigs.and.returnValue(of([]));
         spy.getCascadeConfigs.and.returnValue(of([]));
@@ -1111,13 +1111,77 @@ describe('DataEntryTabComponent', () => {
             expect(warnCall![0].detail).toBe('ГЭС-1:3>1');
         }));
     });
+
+    describe('downloadMiniMicro', () => {
+        /** Captures the download name assigned to the synthetic <a>. */
+        function captureDownloadName(): () => string | undefined {
+            const anchor = document.createElement('a');
+            spyOn(anchor, 'click');
+            spyOn(document, 'createElement').and.returnValue(anchor);
+            return () => anchor.download;
+        }
+
+        it('calls exportMiniMicro and downloads with client fallback name (excel)', fakeAsync(() => {
+            fixture.detectChanges();
+            tick();
+            component.selectedDate = new Date(2026, 6, 4); // 2026-07-04
+            gesReportService.exportMiniMicro.and.returnValue(of(new HttpResponse({ body: new Blob() })));
+            const name = captureDownloadName();
+
+            component.downloadMiniMicro('excel');
+            tick();
+
+            expect(gesReportService.exportMiniMicro).toHaveBeenCalledWith({ date: '2026-07-04', format: 'excel' });
+            expect(name()).toBe('GES-mini-micro-2026-07-04.xlsx');
+            expect(component.downloadingMiniMicro).toBeNull();
+        }));
+
+        it('uses pdf extension in the fallback name for pdf exports', fakeAsync(() => {
+            fixture.detectChanges();
+            tick();
+            component.selectedDate = new Date(2026, 6, 4);
+            gesReportService.exportMiniMicro.and.returnValue(of(new HttpResponse({ body: new Blob() })));
+            const name = captureDownloadName();
+
+            component.downloadMiniMicro('pdf');
+            tick();
+
+            expect(gesReportService.exportMiniMicro).toHaveBeenCalledWith({ date: '2026-07-04', format: 'pdf' });
+            expect(name()).toBe('GES-mini-micro-2026-07-04.pdf');
+        }));
+
+        it('prefers the Content-Disposition filename when present', fakeAsync(() => {
+            fixture.detectChanges();
+            tick();
+            component.selectedDate = new Date(2026, 6, 4);
+            const headers = new HttpHeaders({ 'Content-Disposition': 'attachment; filename="GES-mini-micro-2026-07-04.xlsx"' });
+            gesReportService.exportMiniMicro.and.returnValue(of(new HttpResponse({ body: new Blob(), headers })));
+            const name = captureDownloadName();
+
+            component.downloadMiniMicro('excel');
+            tick();
+
+            expect(name()).toBe('GES-mini-micro-2026-07-04.xlsx');
+        }));
+
+        it('is a no-op while a mini/micro download is already in flight', fakeAsync(() => {
+            fixture.detectChanges();
+            tick();
+            component.downloadingMiniMicro = 'excel';
+
+            component.downloadMiniMicro('pdf');
+            tick();
+
+            expect(gesReportService.exportMiniMicro).not.toHaveBeenCalled();
+        }));
+    });
 });
 
 describe('DataEntryTabComponent — date constraints', () => {
     function buildWith(dateParam: string | null): DataEntryTabComponent {
         const spy = jasmine.createSpyObj('GesReportService', [
             'getConfigs', 'getDailyData', 'upsertDailyData', 'getCascadeConfigs', 'getReport',
-            'listFrozenDefaults', 'upsertFrozenDefault', 'deleteFrozenDefault'
+            'listFrozenDefaults', 'upsertFrozenDefault', 'deleteFrozenDefault', 'exportMiniMicro'
         ]);
         spy.getConfigs.and.returnValue(of([]));
         spy.getCascadeConfigs.and.returnValue(of([]));
