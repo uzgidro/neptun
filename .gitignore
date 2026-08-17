@@ -50,8 +50,13 @@ Thumbs.db
 comands
 
 nul
+_nul
 tmpclaude-*
 neptun
+
+# Runtime config — mounted at deploy time (/www/configs/neptun/config.yaml),
+# not baked into the image. Keep the tracked template config.example.yaml instead.
+config.yaml
 
 # Playwright MCP browser artifacts
 .playwright-mcp/

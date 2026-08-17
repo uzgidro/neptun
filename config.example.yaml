@@ -1,0 +1,42 @@
+# Runtime configuration for the Neptun SPA.
+#
+# This file is mounted at deploy time (not baked into the image). The Docker
+# entrypoint (inject-config.sh) converts it to JSON and injects it as
+# window.__APP_CONFIG__ into index.html before </head>, so the app reads these
+# values at runtime — no rebuild needed to repoint the SPA.
+#
+# On the server it lives at /www/configs/neptun/config.yaml and is mounted into
+# the container as /config/config.yaml. Copy this file to config.yaml and fill
+# in real values. config.yaml itself is git-ignored.
+
+app:
+  name: "Neptun"
+  version: "1.0.0"
+  environment: "production" # production | development
+
+api:
+  # Base URL the SPA calls. Backend API and SPA share this origin; the reverse
+  # proxy routes backend paths (/ping, /auth/*, /api/v3/*, /flat/*, /debug/*)
+  # to srmt-prime:9010 and everything else to the frontend (nginx :8080).
+  baseUrl: "https://your-domain.example"
+  timeout: 30000
+  retryAttempts: 3
+
+auth:
+  tokenExpiryTime: 3600 # access token lifetime, seconds
+  refreshTokenExpiryTime: 86400 # refresh token lifetime, seconds
+
+features:
+  enableFileUpload: true
+  enableCategories: true
+  maxFileSize: 10485760 # 10MB in bytes
+
+logging:
+  level: "info" # debug | info | warn | error
+  enableConsole: true
+
+adobe:
+  # Adobe PDF Embed API Client ID (per-domain).
+  # Get yours at: https://developer.adobe.com/document-services/apis/pdf-embed-api/
+  clientId: "YOUR_ADOBE_PDF_EMBED_CLIENT_ID"
+  defaultViewMode: "FIT_WIDTH" # FIT_PAGE | FIT_WIDTH | TWO_COLUMN | TWO_COLUMN_FIT_PAGE
