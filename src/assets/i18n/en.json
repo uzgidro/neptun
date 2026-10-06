@@ -136,7 +136,7 @@
     "FORGOT_PASSWORD": "Forgot password",
     "LOGIN_ERROR": "Username and/or password are incorrect",
     "TITLE": "Chairman of the Board Tablet",
-    "COMPANY": "JSC \"Uzbekhydroenergo\""
+    "COMPANY": "JSC \"Thermal Power Plants\""
   },
   "MENU": {
     "HOME": "Home",
@@ -153,6 +153,7 @@
     "DEPARTMENTS": "Departments",
     "USERS": "Users",
     "ROLES": "Roles",
+    "ADMINISTRATION": "Administration",
     "OPERATIONAL_MONITORING": "Operational Monitoring",
     "SITUATION_CENTER": "Situation Center",
     "GES_INFO": "HPP Information",
@@ -232,8 +233,8 @@
     "LEGAL_LIBRARY_DEPT_ACTS": "Departmental Acts",
     "LEGAL_LIBRARY_LEGISLATION": "Legislation Collection",
     "LEGAL_LIBRARY_OTHER": "Other Lists",
-    "LEGAL_LIBRARY_UHE_ORDERS": "Uzbekhydroenergo Orders",
-    "LEGAL_LIBRARY_UHE_PROTOCOLS": "Uzbekhydroenergo Protocols",
+    "LEGAL_LIBRARY_UHE_ORDERS": "TPP Orders",
+    "LEGAL_LIBRARY_UHE_PROTOCOLS": "TPP Protocols",
     "REGULATORY_DOCS": "Regulatory Documentation",
     "LAWS_RUZ": "Laws of the Republic of Uzbekistan",
     "PRESIDENT_RESOLUTIONS": "Presidential Resolutions of RUz",
@@ -2218,7 +2219,7 @@
         "METRIC_AVG_FLOW": "Average flow, m³/s",
         "METRIC_GEN_LOSS": "Lost generation, thousand kWh",
         "TOTAL": "Total",
-        "GRAND_TOTAL": "Total for JSC Uzbekhydroenergo",
+        "GRAND_TOTAL": "Total for JSC \"Thermal Power Plants\"",
         "NO_CASCADE": "Without cascade",
         "NO_DATA": "No data for the selected period",
         "ERR_FROM_AFTER_TO": "Start date cannot be later than end date",
@@ -2251,7 +2252,7 @@
       "DELETE_ERROR": "Error deleting visit"
     },
     "DUTY_VIOLATION": {
-      "TITLE": "Violations at facilities of JSC \"Uzbekgidroenergo\"",
+      "TITLE": "Violations at facilities of JSC \"Thermal Power Plants\"",
       "ADD": "Add violation",
       "NEW": "New violation",
       "EDIT": "Edit violation",

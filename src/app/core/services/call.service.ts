@@ -78,7 +78,7 @@ export class CallService {
             date: '2024-12-24',
             time: '09:00',
             type: 'incoming',
-            callerName: 'Узбекгидроэнерго',
+            callerName: 'АО «Тепловые электрические станции»',
             callerPhone: '+998 71 150 00 00',
             receiverName: 'Заместитель директора',
             duration: 420,

@@ -136,7 +136,7 @@
     "FORGOT_PASSWORD": "Parolni unutdingizmi",
     "LOGIN_ERROR": "Login va/yoki parol noto'g'ri",
     "TITLE": "Boshqaruv raisi plansheti",
-    "COMPANY": "\"O'zbekgidroenergo\" AJ"
+    "COMPANY": "\"Issiqlik elektr stansiyalari\" AJ"
   },
   "MENU": {
     "HOME": "Bosh sahifa",
@@ -153,6 +153,7 @@
     "DEPARTMENTS": "Bo'limlar",
     "USERS": "Foydalanuvchilar",
     "ROLES": "Rollar",
+    "ADMINISTRATION": "Ma'muriyat",
     "SITUATION_CENTER": "Vaziyat markazi",
     "GES_INFO": "GES haqida ma'lumot",
     "GES": "GES",
@@ -241,8 +242,8 @@
     "LEGAL_LIBRARY_DEPT_ACTS": "Idoraviy normativ hujjatlar",
     "LEGAL_LIBRARY_LEGISLATION": "Qonunchilik to'plami",
     "LEGAL_LIBRARY_OTHER": "Boshqa ro'yxatlar",
-    "LEGAL_LIBRARY_UHE_ORDERS": "O'zbekgidroenergo buyruqlari",
-    "LEGAL_LIBRARY_UHE_PROTOCOLS": "O'zbekgidroenergo bayonnomalari",
+    "LEGAL_LIBRARY_UHE_ORDERS": "IES buyruqlari",
+    "LEGAL_LIBRARY_UHE_PROTOCOLS": "IES bayonnomalari",
     "LAWS_RUZ": "O'zbekiston Respublikasi qonunlari",
     "PRESIDENT_RESOLUTIONS": "O'zbekiston Respublikasi Prezidentining qarorlari",
     "PRESIDENT_DECREES": "O'zbekiston Respublikasi Prezidentining farmonlari",
@@ -2218,7 +2219,7 @@
         "METRIC_AVG_FLOW": "O'rtacha oqim, m³/s",
         "METRIC_GEN_LOSS": "Yo'qotilgan ishlab chiqarish, ming kVt·s",
         "TOTAL": "Jami",
-        "GRAND_TOTAL": "«O'zbekgidroenergo» AJ bo'yicha jami",
+        "GRAND_TOTAL": "«Issiqlik elektr stansiyalari» AJ bo'yicha jami",
         "NO_CASCADE": "Kaskadsiz",
         "NO_DATA": "Tanlangan davr uchun ma'lumot yo'q",
         "ERR_FROM_AFTER_TO": "Boshlanish sanasi tugash sanasidan keyin bo'lishi mumkin emas",
@@ -2251,7 +2252,7 @@
       "DELETE_ERROR": "Tashrifni o'chirishda xatolik"
     },
     "DUTY_VIOLATION": {
-      "TITLE": "\"O'zbekgidroenergo\" AJ tasarrufidagi obyektlardagi qoidabuzarliklar",
+      "TITLE": "\"Issiqlik elektr stansiyalari\" AJ tasarrufidagi obyektlardagi qoidabuzarliklar",
       "ADD": "Qoidabuzarlik qo'shish",
       "NEW": "Yangi qoidabuzarlik",
       "EDIT": "Qoidabuzarlikni tahrirlash",

@@ -72,161 +72,11 @@ export class MenuComponent implements OnInit {
                         routerLink: ['/monitoring']
                     },
                     {
-                        label: this.t('MENU.SITUATION_CENTER'),
-                        role: ['rais', 'sc'],
+                        label: this.t('MENU.ADMINISTRATION'),
+                        role: ['admin'],
                         items: [
-                            {
-                                label: this.t('MENU.GES_INFO'),
-                                role: ['rais', 'sc'],
-                                items: [
-                                    {
-                                        label: this.t('MENU.GES'),
-                                        role: ['rais', 'sc'],
-                                        routerLink: ['/viewer'],
-                                        queryParams: { type: 'production' },
-                                        routerLinkActiveOptions: { queryParams: 'exact' }
-                                    },
-                                    {
-                                        label: this.t('MENU.SMALL_GES'),
-                                        role: ['rais', 'sc'],
-                                        routerLink: ['/viewer'],
-                                        queryParams: { type: 'minimicro' },
-                                        routerLinkActiveOptions: { queryParams: 'exact' }
-                                    },
-                                    {
-                                        label: this.t('MENU.SUN'),
-                                        role: ['rais', 'sc'],
-                                        routerLink: ['/viewer'],
-                                        queryParams: { type: 'sun' },
-                                        routerLinkActiveOptions: { queryParams: 'exact' }
-                                    },
-                                    {
-                                        label: this.t('MENU.EMERGENCY_SHUTDOWN'),
-                                        role: ['rais', 'sc'],
-                                        routerLink: ['/shutdowns']
-                                    },
-                                    {
-                                        label: this.t('MENU.DISCHARGE'),
-                                        role: ['rais', 'sc'],
-                                        routerLink: ['/discharges']
-                                    },
-                                    {
-                                        label: this.t('MENU.GES_DAILY_REPORT'),
-                                        role: ['rais', 'sc'],
-                                        routerLink: ['/ges-daily-report']
-                                    },
-                                    {
-                                        label: this.t('MENU.SOLAR_REPORT'),
-                                        role: ['rais', 'sc'],
-                                        routerLink: ['/solar-report']
-                                    }
-                                ]
-                            },
-                            {
-                                label: this.t('MENU.RESERVOIR_INFO'),
-                                role: ['rais', 'sc', 'reservoir_flood'],
-                                items: [
-                                    {
-                                        label: this.t('MENU.RESERVOIR_SUMMARY'),
-                                        role: ['rais', 'sc'],
-                                        routerLink: ['/reservoir-summary']
-                                    },
-                                    {
-                                        label: this.t('MENU.RESERVOIR_SUMMARY_PDF'),
-                                        role: ['rais', 'sc'],
-                                        routerLink: ['/reservoir-summary/pdf']
-                                    },
-                                    {
-                                        label: this.t('MENU.RESERVOIR_SUMMARY_HOURLY'),
-                                        role: ['rais', 'sc'],
-                                        routerLink: ['/reservoir-summary-hourly']
-                                    },
-                                    {
-                                        label: this.t('MENU.RESERVOIR_FLOOD'),
-                                        role: ['sc', 'rais', 'reservoir_flood'],
-                                        routerLink: ['/reservoir-flood']
-                                    },
-                                    {
-                                        label: this.t('MENU.HYDRAULIC_STRUCTURES'),
-                                        role: ['rais', 'sc'],
-                                        routerLink: ['/reservoir-device']
-                                    },
-                                    {
-                                        label: this.t('MENU.SNOW_COVER'),
-                                        role: ['rais', 'sc'],
-                                        routerLink: ['/snow-cover']
-                                    },
-                                    {
-                                        label: this.t('MENU.MANUAL_COMPARISON_ENTRY'),
-                                        role: ['sc', 'rais', 'reservoir'],
-                                        routerLink: ['/manual-comparison-entry']
-                                    },
-                                    {
-                                        label: this.t('MENU.FILTRATION_SETTINGS'),
-                                        role: ['sc'],
-                                        routerLink: ['/filtration-settings']
-                                    }
-                                ]
-                            },
-                            {
-                                label: this.t('MENU.OTHER_INFO'),
-                                role: ['rais', 'sc'],
-                                items: [
-                                    {
-                                        label: this.t('MENU.EARTHQUAKE'),
-                                        role: ['rais', 'sc'],
-                                        url: 'https://soep.uz/',
-                                        target: '_blank'
-                                    },
-                                    {
-                                        label: this.t('MENU.INCIDENTS'),
-                                        role: ['rais', 'sc'],
-                                        routerLink: ['/incidents']
-                                    },
-                                    {
-                                        label: this.t('MENU.VISITS'),
-                                        role: ['rais', 'sc'],
-                                        routerLink: ['/visits']
-                                    },
-                                    {
-                                        label: this.t('MENU.DUTY_VIOLATIONS'),
-                                        role: ['rais', 'sc'],
-                                        routerLink: ['/duty-violations']
-                                    },
-                                    {
-                                        label: this.t('MENU.INFRA_EVENTS'),
-                                        role: ['rais', 'sc'],
-                                        routerLink: ['/infra-events']
-                                    }
-                                ]
-                            },
-                            { label: this.t('MENU.CATEGORIES'), role: ['sc'], routerLink: ['/categories'] },
-                            { label: this.t('MENU.FILES'), role: ['sc'], routerLink: ['/files'] }
-                        ]
-                    },
-                    {
-                        label: this.t('MENU.HRM'),
-                        role: ['hrm_admin', 'hrm_manager', 'hrm_employee', 'rais'],
-                        items: [
-                            { label: this.t('HRM.MENU.DASHBOARD'), icon: 'pi pi-home', role: ['hrm_admin', 'hrm_manager', 'hrm_employee', 'rais'], routerLink: ['/hrm/dashboard'] },
-                            { label: this.t('HRM.MENU.MY_CABINET'), icon: 'pi pi-user', routerLink: ['/hrm/my-cabinet'] },
-                            { label: this.t('HRM.MENU.PERSONNEL_RECORDS'), role: ['hrm_admin', 'hrm_manager', 'hrm_employee', 'rais'], routerLink: ['/hrm/personnel-records'] },
-                            { label: this.t('HRM.MENU.VACATION_MANAGEMENT'), role: ['hrm_admin', 'hrm_manager', 'hrm_employee', 'rais'], routerLink: ['/hrm/vacations'] },
-                            { label: this.t('HRM.MENU.SALARY_MANAGEMENT'), role: ['hrm_admin', 'hrm_manager', 'hrm_employee', 'rais'], routerLink: ['/hrm/salary'] },
-                            { label: this.t('HRM.MENU.RECRUITING'), role: ['hrm_admin', 'hrm_manager', 'hrm_employee', 'rais'], routerLink: ['/hrm/recruiting'] },
-                            { label: this.t('HRM.MENU.TRAINING'), role: ['hrm_admin', 'hrm_manager', 'hrm_employee', 'rais'], routerLink: ['/hrm/training'] },
-                            { label: this.t('HRM.MENU.COMPETENCY_ASSESSMENT'), role: ['hrm_admin', 'hrm_manager', 'hrm_employee', 'rais'], routerLink: ['/hrm/competency'] },
-                            { label: this.t('HRM.MENU.PERFORMANCE_MANAGEMENT'), role: ['hrm_admin', 'hrm_manager', 'hrm_employee', 'rais'], routerLink: ['/hrm/performance'] },
-                            { label: this.t('HRM.MENU.ANALYTICS'), role: ['hrm_admin', 'hrm_manager', 'hrm_employee', 'rais'], routerLink: ['/hrm/analytics'] },
-                            { label: this.t('HRM.MENU.TIMESHEET'), icon: 'pi pi-calendar', role: ['hrm_admin', 'hrm_manager', 'hrm_employee', 'rais'], routerLink: ['/hrm/timesheet'] },
-                            { label: this.t('HRM.MENU.HR_DOCUMENTS'), icon: 'pi pi-file', role: ['hrm_admin', 'hrm_manager', 'hrm_employee', 'rais'], routerLink: ['/hrm/documents'] },
-                            { label: this.t('HRM.MENU.ACCESS_CONTROL'), icon: 'pi pi-lock', role: ['hrm_admin', 'hrm_manager'], routerLink: ['/hrm/access-control'] },
-                            { label: this.t('HRM.MENU.ORG_STRUCTURE'), icon: 'pi pi-sitemap', role: ['hrm_admin', 'hrm_manager', 'hrm_employee', 'rais'], routerLink: ['/hrm/org-structure'] },
                             { label: this.t('MENU.ORGANIZATIONS'), role: ['admin'], routerLink: ['/organizations'] },
                             { label: this.t('MENU.ORGANIZATION_TYPES'), role: ['admin'], routerLink: ['/organization-types'] },
-                            { label: this.t('MENU.EMPLOYEES'), role: ['hrm_admin', 'hrm_manager'], routerLink: ['/employees'] },
-                            { label: this.t('MENU.POSITIONS'), role: ['hrm_admin', 'hrm_manager'], routerLink: ['/positions'] },
-                            { label: this.t('MENU.DEPARTMENTS'), role: ['hrm_admin', 'hrm_manager'], routerLink: ['/departments'] },
                             { label: this.t('MENU.USERS'), role: ['admin'], routerLink: ['/users'] },
                             { label: this.t('MENU.ROLES'), role: ['admin'], routerLink: ['/roles'] }
                         ]
@@ -245,18 +95,6 @@ export class MenuComponent implements OnInit {
                                     { label: this.t('MENU.STATE_GUARANTEE_CREDITS'), role: ['rais', 'investment'], routerLink: ['/invest-perspective'], queryParams: { type_id: 3 }, routerLinkActiveOptions: { queryParams: 'exact' } }
                                 ]
                             }
-                        ]
-                    },
-                    {
-                        label: this.t('MENU.FINANCIAL'),
-                        role: ['rais'],
-                        items: [
-                            { label: this.t('MENU.GENERAL_DASHBOARD'), role: ['rais'], routerLink: ['/financial-dashboard'] },
-                            { label: this.t('MENU.DEBIT_CREDIT'), role: ['rais'], routerLink: ['/debit-credit'] },
-                            { label: this.t('MENU.REPAIR_COSTS'), role: ['rais'], routerLink: ['/repair-costs'] },
-                            { label: this.t('MENU.PROCUREMENT'), role: ['rais'], routerLink: ['/procurement'] },
-                            { label: this.t('MENU.KPI'), role: ['rais'], routerLink: ['/kpi'] },
-                            { label: this.t('MENU.SALARY'), role: ['rais'], routerLink: ['/salary'] }
                         ]
                     },
                     {

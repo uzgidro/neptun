@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
     selector: 'app-footer',
     template: `<div class="layout-footer">
         Планшет Председателя от
-        <a href="https://uzgidro.uz" target="_blank" rel="noopener noreferrer" class="text-primary font-bold hover:underline">АО "Узбекгидроэнерго"</a>
+        <span class="text-primary font-bold">АО «Тепловые электрические станции»</span>
     </div>`
 })
 export class AppFooter {}
