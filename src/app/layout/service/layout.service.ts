@@ -1,5 +1,6 @@
 import { computed, effect, Injectable, signal } from '@angular/core';
 import { Subject } from 'rxjs';
+import { TPP_THEME_NAME } from '@/layout/theme/tpp-theme';
 
 export interface layoutConfig {
     preset?: string;
@@ -28,8 +29,8 @@ interface MenuChangeEvent {
 export class LayoutService {
     _config: layoutConfig = {
         preset: 'Aura',
-        primary: 'sky',
-        surface: 'ocean',
+        primary: TPP_THEME_NAME,
+        surface: TPP_THEME_NAME,
         darkTheme: true,
         menuMode: 'static'
     };

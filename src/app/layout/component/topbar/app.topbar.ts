@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, computed, inject, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { RouterModule } from '@angular/router';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
@@ -16,6 +16,7 @@ import { InboxWidget } from '@/layout/component/topbar/inbox/inbox-widget.compon
 import { LanguageSwitcherComponent } from '@/layout/component/topbar/language-switcher/language-switcher.component';
 import { updateSurfacePalette } from '@primeuix/themes';
 import { AuthService } from '@/core/services/auth.service';
+import { TPP_SURFACE, TPP_THEME_NAME, tppLogo } from '@/layout/theme/tpp-theme';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
@@ -45,7 +46,7 @@ import { TranslateModule } from '@ngx-translate/core';
                 <i class="pi pi-bars"></i>
             </button>
             <a class="layout-topbar-logo" routerLink="/">
-                <img ngSrc="assets/images/logo-x.png" alt="" width="52" height="22" />
+                <img [ngSrc]="logo()" alt="" width="49" height="40" />
                 <span class="text-nowrap">
                     @if (authService.hasRole('admin')) {
                         {{ 'MENU.TABLET_ADMIN' | translate }}
@@ -125,7 +126,7 @@ import { TranslateModule } from '@ngx-translate/core';
 export class AppTopbar implements OnInit {
     layoutService = inject(LayoutService);
     authService = inject(AuthService);
-    configurator = new AppConfigurator();
+    logo = computed(() => tppLogo(this.layoutService.isDarkTheme()));
     userName: string | null = null;
 
     ngOnInit(): void {
@@ -138,21 +139,8 @@ export class AppTopbar implements OnInit {
 
     toggleDarkMode() {
         this.layoutService.layoutConfig.update((state) => {
-            let surfaceName: string;
-            if (!state.darkTheme) {
-                let surface = this.configurator.surfaces.find((value) => {
-                    return value.name == 'ocean';
-                });
-                surfaceName = surface?.name ?? 'ocean';
-                updateSurfacePalette(surface?.palette);
-            } else {
-                let surface = this.configurator.surfaces.find((value) => {
-                    return value.name == 'slate';
-                });
-                surfaceName = surface?.name ?? 'ocean';
-                updateSurfacePalette(surface?.palette);
-            }
-            return { ...state, darkTheme: !state.darkTheme, surface: surfaceName };
+            updateSurfacePalette(TPP_SURFACE);
+            return { ...state, darkTheme: !state.darkTheme, surface: TPP_THEME_NAME };
         });
     }
 }

@@ -9,6 +9,7 @@ import Nora from '@primeuix/themes/nora';
 import { PrimeNG } from 'primeng/config';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { LayoutService } from '../service/layout.service';
+import { TPP_PRIMARY, TPP_SURFACE, TPP_THEME_NAME } from '../theme/tpp-theme';
 
 const presets = {
     Aura,
@@ -122,6 +123,7 @@ export class AppConfigurator implements OnInit{
     }
 
     surfaces: SurfacesType[] = [
+        { name: TPP_THEME_NAME, palette: TPP_SURFACE },
         {
             name: 'slate',
             palette: {
@@ -273,7 +275,7 @@ export class AppConfigurator implements OnInit{
     primaryColors = computed<SurfacesType[]>(() => {
         const presetPalette = presets[this.layoutService.layoutConfig().preset as KeyOfType<typeof presets>].primitive;
         const colors = ['emerald', 'green', 'lime', 'orange', 'amber', 'yellow', 'teal', 'cyan', 'sky', 'blue', 'indigo', 'violet', 'purple', 'fuchsia', 'pink', 'rose'];
-        const palettes: SurfacesType[] = [{ name: 'noir', palette: {} }];
+        const palettes: SurfacesType[] = [{ name: TPP_THEME_NAME, palette: TPP_PRIMARY }, { name: 'noir', palette: {} }];
 
         colors.forEach((color) => {
             palettes.push({

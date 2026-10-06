@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, computed, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
@@ -8,6 +8,8 @@ import { PasswordModule } from 'primeng/password';
 import { RippleModule } from 'primeng/ripple';
 import { AppFloatingConfigurator } from '@/layout/component/app.floatingconfigurator';
 import { AuthService } from '@/core/services/auth.service';
+import { LayoutService } from '@/layout/service/layout.service';
+import { tppLogo } from '@/layout/theme/tpp-theme';
 import { finalize } from 'rxjs';
 import { NgOptimizedImage } from '@angular/common';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -32,6 +34,9 @@ export class LoginComponent implements OnInit {
     private authService: AuthService = inject(AuthService);
     private router: Router = inject(Router);
     private translate: TranslateService = inject(TranslateService);
+    private layoutService = inject(LayoutService);
+
+    logo = computed(() => tppLogo(this.layoutService.isDarkTheme()));
 
     ngOnInit(): void {
         const savedLang = localStorage.getItem('lang') || 'ru';
