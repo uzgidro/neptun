@@ -1,8 +1,6 @@
-import { Component, OnInit, OnDestroy, Output, EventEmitter, Input, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { trigger, state, style, animate, transition } from '@angular/animations';
-import { DashboardService, ProductionStatsResponse } from '@/core/services/dashboard.service';
-import { AuthService } from '@/core/services/auth.service';
 
 @Component({
     selector: 'app-splash-screen',
@@ -22,19 +20,12 @@ export class SplashScreenComponent implements OnInit, OnDestroy {
     @Input() duration: number = 4000;
     @Output() complete = new EventEmitter<void>();
 
-    private dashboardService = inject(DashboardService);
-    private authService = inject(AuthService);
-
     isVisible: boolean = true;
     animationState: 'visible' | 'hidden' = 'visible';
 
-    // Power generation data
+    // Generation counter
     currentPower: number = 0;
     targetPower: number = 0;
-    dailyPower: number = 0;
-    monthlyPower: number = 0;
-    yearlyPower: number = 0;
-    dataLoaded: boolean = false;
 
     // Animation states
     lightningActive: boolean = false;
@@ -59,32 +50,10 @@ export class SplashScreenComponent implements OnInit, OnDestroy {
         this.clearIntervals();
     }
 
+    // Annual output of JSC "Thermal Power Plants" for 2025, bn kWh.
     private loadProductionData(): void {
-        // Splash can show on a cold start before login — skip the authenticated
-        // production-stats call (it would 401) and just animate the fallback value.
-        if (!this.authService.isAuthenticated()) {
-            this.targetPower = 2847;
-            this.dataLoaded = true;
-            this.animatePowerCounter();
-            return;
-        }
-        this.dashboardService.getProductionStats().subscribe({
-            next: (data: ProductionStatsResponse) => {
-                this.dailyPower = data.current.value;
-                this.monthlyPower = data.month_total;
-                this.yearlyPower = data.year_total;
-                // Показываем дневную выработку в МВт (конвертируем из млн кВт/ч)
-                this.targetPower = Math.round(data.current.value * 1000);
-                this.dataLoaded = true;
-                this.animatePowerCounter();
-            },
-            error: () => {
-                // Fallback to default value
-                this.targetPower = 2847;
-                this.dataLoaded = true;
-                this.animatePowerCounter();
-            }
-        });
+        this.targetPower = 30.1;
+        this.animatePowerCounter();
     }
 
     private startAnimations(): void {
@@ -122,7 +91,7 @@ export class SplashScreenComponent implements OnInit, OnDestroy {
                 this.currentPower = this.targetPower;
                 clearInterval(this.powerInterval);
             } else {
-                this.currentPower = Math.round(current);
+                this.currentPower = Math.round(current * 10) / 10;
             }
         }, 35);
     }
